@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Wang Luming
  *
- *  main.cpp is part of Kreogist-Cute-IDE.
+ *  kcitexteditor.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,15 +17,29 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
-#include "mainwindow.h"
+#ifndef TEXTEDITOR_H
+#define TEXTEDITOR_H
 
-int main(int argc, char *argv[])
+#include <QWidget>
+#include <QHBoxLayout>
+
+#include "kcicodeeditor.h"
+#include "kcilinenumpanel.h"
+
+class kciTextEditor : public QWidget
 {
-    QApplication app(argc,argv);
+    Q_OBJECT
+public:
+    explicit kciTextEditor(QWidget *parent = 0);
+    
+signals:
+    
+public slots:
 
-    MainWindow mainwindow;
-    mainwindow.show();
+private:
+    QHBoxLayout *mainLayout;
+    kciCodeEditor *editor;
+    kciLinenumPanel *linePanel;
+};
 
-    return app.exec();
-}
+#endif // TEXTEDITOR_H

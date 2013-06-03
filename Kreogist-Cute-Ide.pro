@@ -13,7 +13,7 @@
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#   along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
 #
 #-------------------------------------------------
 
@@ -27,7 +27,15 @@ QT  += core\
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    kcicodeeditor.cpp \
+    kcitexteditor.cpp \
+    kcipanel.cpp \
+    kcilinenumpanel.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    kcicodeeditor.h \
+    kcitexteditor.h \
+    kcipanel.h \
+    kcilinenumpanel.h

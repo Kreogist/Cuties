@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Wang Luming
  *
- *  main.cpp is part of Kreogist-Cute-IDE.
+ *  kcicodeeditor.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,15 +17,27 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
-#include "mainwindow.h"
+#ifndef CODEEDITOR_H
+#define CODEEDITOR_H
 
-int main(int argc, char *argv[])
+#include <QPlainTextEdit>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextBlock>
+
+class kciCodeEditor : public QPlainTextEdit
 {
-    QApplication app(argc,argv);
+    Q_OBJECT
+public:
+    explicit kciCodeEditor(QWidget *parent = 0);
+    
+signals:
+    
+public slots:
+    void highlightCurrentLine();
 
-    MainWindow mainwindow;
-    mainwindow.show();
+private:
+    QColor lineColor;
+};
 
-    return app.exec();
-}
+#endif // CODEEDITOR_H

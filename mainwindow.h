@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
  *
- *  main.cpp is part of Kreogist-Cute-IDE.
+ *  mainwindow.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,9 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QStatusBar>
+#include <QApplication>
+
+#include "kcitexteditor.h"
 
 class MainWindow : public QMainWindow
 {
@@ -66,7 +69,7 @@ private:
         menu_count  //the number of menus
     };
 
-    QTextEdit *editor;
+    kciTextEditor *editor;
     QAction *act[act_count];
     QMenu *menu[menu_count];
 

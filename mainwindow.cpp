@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Wang Luming
  *
- *  main.cpp is part of Kreogist-Cute-IDE.
+ *  mainwindow.cpp is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "mainwindow.h"
@@ -22,7 +22,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    editor = new QTextEdit(this);
+    editor = new kciTextEditor(this);
     setCentralWidget(editor);
 
     createActions();
@@ -55,6 +55,7 @@ void MainWindow::createActions()
 
     //quit
     act[quit]=new QAction(tr("quit"),this);
+    connect(act[quit],SIGNAL(triggered()),this,SLOT(close()));
 
     //redo
     act[redo]=new QAction(tr("redo"),this);
