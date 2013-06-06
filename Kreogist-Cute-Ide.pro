@@ -31,11 +31,20 @@ SOURCES += \
     kcicodeeditor.cpp \
     kcitexteditor.cpp \
     kcipanel.cpp \
-    kcilinenumpanel.cpp
+    kcilinenumpanel.cpp \
+    highlighterbase.cpp \
+    cpphighlighter.cpp
 
 HEADERS += \
     mainwindow.h \
     kcicodeeditor.h \
     kcitexteditor.h \
     kcipanel.h \
-    kcilinenumpanel.h
+    kcilinenumpanel.h \
+    highlighterbase.h \
+    cpphighlighter.h
+
+# Enable C++11
+CONFIG += c++11
+
+RESOURCES +=

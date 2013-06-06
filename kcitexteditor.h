@@ -25,6 +25,7 @@
 
 #include "kcicodeeditor.h"
 #include "kcilinenumpanel.h"
+#include "cpphighlighter.h"
 
 class kciTextEditor : public QWidget
 {
@@ -40,6 +41,7 @@ private:
     QHBoxLayout *mainLayout;
     kciCodeEditor *editor;
     kciLinenumPanel *linePanel;
+    cppHighlighter *highlighter;
 };
 
 #endif // TEXTEDITOR_H

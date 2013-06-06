@@ -12,7 +12,7 @@ class kciLinenumPanel : public kciPanel
 {
     Q_OBJECT
 public:
-    explicit kciLinenumPanel(QWidget *parent = 0);    
+    explicit kciLinenumPanel(QWidget *parent = 0);
     
 signals:
     

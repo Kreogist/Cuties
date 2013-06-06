@@ -32,4 +32,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     editor=new kciCodeEditor(this);
     linePanel->setPlainTextEdit(editor);
     mainLayout->addWidget(editor);
+
+    highlighter=new cppHighlighter(this);
+    highlighter->setDocument(editor->document());
 }
