@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(editor);
 
     createActions();
+    createToolbar();
     createMenu();
     createStatusbar();
 }
@@ -79,34 +80,52 @@ void MainWindow::createActions()
     act[about_qt]=new QAction(tr("about Qt"),this);
 }
 
+void MainWindow::createToolbar()
+{
+    QToolBar *_toolbar= addToolBar(tr("mainwindow"));
+    _toolbar->setFloatable(false);
+    _toolbar->setMovable(false);
+
+    mainButton=new QToolButton(this);
+    mainButton->setIcon(QIcon(":/img/image/MainMenuButton.png"));
+
+    _toolbar->addWidget(mainButton);
+    _toolbar->addSeparator();
+}
+
 void MainWindow::createMenu()
 {
     int i;
-    QMenuBar *_menubar=menuBar();
+
+    QMenu *_mainMenu=new QMenu;
 
     //file menu
-    menu[file] = _menubar->addMenu(tr("file"));
+    menu[file] = _mainMenu->addMenu(tr("file"));
     //from new_file to quit add into file menu
     for(i=new_file;i<=quit;i++)
         menu[file]->addAction(act[i]);
 
     //edit menu
-    menu[edit]= _menubar->addMenu(tr("edit"));
+    menu[edit] = _mainMenu->addMenu(tr("edit"));
     //from redo to paste add into edit menu
     for(i=redo;i<=paste;i++)
         menu[edit]->addAction(act[i]);
 
     //help menu
-    menu[help]= _menubar->addMenu(tr("help"));
+    menu[help] = _mainMenu->addMenu(tr("help"));
     //from about to about_qt add into help menu
     for(i=about;i<=about_qt;i++)
         menu[help]->addAction(act[i]);
 
+    mainButton->setMenu(_mainMenu);
+    connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
 }
 
 void MainWindow::createStatusbar()
 {
     QStatusBar *statusbar=statusBar();
 
-    //...
+    QPalette pal=statusbar->palette();
+    pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
+    statusbar->setPalette(pal);
 }

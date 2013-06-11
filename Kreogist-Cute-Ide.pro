@@ -33,7 +33,8 @@ SOURCES += \
     kcipanel.cpp \
     kcilinenumpanel.cpp \
     highlighterbase.cpp \
-    cpphighlighter.cpp
+    cpphighlighter.cpp \
+    kreogistcutestyle.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -42,9 +43,14 @@ HEADERS += \
     kcipanel.h \
     kcilinenumpanel.h \
     highlighterbase.h \
-    cpphighlighter.h
+    cpphighlighter.h \
+    kreogistcutestyle.h
 
 # Enable C++11
 CONFIG += c++11
 
-RESOURCES +=
+RESOURCES += \
+    rc.qrc
+
+OTHER_FILES += \
+    image/MainMenuButton.png

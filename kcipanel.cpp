@@ -23,7 +23,7 @@ kciPanel::kciPanel(QWidget *parent) :
     QWidget(parent),
     e(NULL)
 {
-    setFixedWidth(30);
+    setFixedWidth(40);
     setAutoFillBackground(true);
 }
 
@@ -69,7 +69,14 @@ void kciPanel::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
 
+    QBrush brush=painter.background();
+    brush.setColor(QColor(0x53,0x53,0x53));
+    painter.setBackground(brush);
+    painter.fillRect(this->rect(),QColor(0x53,0x53,0x53));
+
     setFont(e->font());
+
+
 
     /*FIXME: It's so ugly. But I can't solve it.I try to find the text layout's
      *       position. But the position of the layout of the QTextBlock is
@@ -96,9 +103,11 @@ void kciPanel::paintEvent(QPaintEvent *event)
         if(block.blockNumber() > top + bottom)
             break;
 
+        painter.save();
         this->draw(&painter, &block,
                    0, block_top, width(), e->fontMetrics().height(),
                    current_line_num==block.blockNumber()?1:0);
+        painter.restore();
 
         block_top += line_hight;
     }

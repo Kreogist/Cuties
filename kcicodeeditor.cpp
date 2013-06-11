@@ -25,7 +25,14 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     connect(this,&kciCodeEditor::cursorPositionChanged,
             this,&kciCodeEditor::highlightCurrentLine);
 
-    lineColor = QColor(Qt::blue).lighter(170);
+    lineColor = QColor(Qt::gray).lighter(80);
+
+    QPalette pal = palette();
+    pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
+    pal.setColor(QPalette::Text,QColor(255,255,255));
+    setPalette(pal);
+
+    setFrameStyle(0);
 }
 
 void kciCodeEditor::highlightCurrentLine()
