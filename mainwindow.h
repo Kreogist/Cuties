@@ -24,9 +24,11 @@
 #include <QTextEdit>
 #include <QAction>
 #include <QMenuBar>
+#include <QToolBar>
 #include <QMenu>
 #include <QStatusBar>
 #include <QApplication>
+#include <QToolButton>
 
 #include "kcitexteditor.h"
 
@@ -72,8 +74,10 @@ private:
     kciTextEditor *editor;
     QAction *act[act_count];
     QMenu *menu[menu_count];
+    QToolButton *mainButton;
 
     void createActions();
+    void createToolbar();
     void createMenu();
     void createStatusbar();
 };

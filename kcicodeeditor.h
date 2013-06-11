@@ -24,6 +24,7 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTextBlock>
+#include <QPalette>
 
 class kciCodeEditor : public QPlainTextEdit
 {

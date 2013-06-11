@@ -3,7 +3,7 @@
 kciLinenumPanel::kciLinenumPanel(QWidget *parent) :
     kciPanel(parent)
 {
-    textColor.setRgb(0,0,0,200);
+    textColor.setRgb(255,255,255,200);
 }
 
 void kciLinenumPanel::draw(QPainter *painter, QTextBlock *block,

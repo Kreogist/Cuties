@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QPalette>
 
 #include "kcicodeeditor.h"
 #include "kcilinenumpanel.h"

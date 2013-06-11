@@ -18,11 +18,26 @@
  */
 
 #include <QApplication>
+#include <QStyle>
+#include <QStyleFactory>
 #include "mainwindow.h"
+#include "kreogistcutestyle.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc,argv);
+
+    QPalette pal=app.palette();
+    pal.setColor(QPalette::Window,QColor(0x53,0x53,0x53));
+    pal.setColor(QPalette::Text,QColor(0,0,0));
+    pal.setColor(QPalette::Highlight,QColor(0xf7,0xcf,0x3d));
+    pal.setColor(QPalette::HighlightedText,QColor(0,0,0));
+    app.setPalette(pal);
+
+    //set style
+    KreogistCuteStyle *cuteStyle=new KreogistCuteStyle;
+    app.setStyle(cuteStyle);
+    //app.setStyle("fusion");
 
     MainWindow mainwindow;
     mainwindow.show();

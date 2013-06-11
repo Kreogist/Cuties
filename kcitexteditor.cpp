@@ -35,4 +35,10 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     highlighter=new cppHighlighter(this);
     highlighter->setDocument(editor->document());
+
+    QPalette pal = palette();
+    pal.setColor(QPalette::Base,QColor(0x53,0x53,0x53));
+    pal.setColor(QPalette::Text,QColor(255,255,255));
+    setPalette(pal);
+
 }
