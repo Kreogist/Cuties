@@ -1,3 +1,6 @@
+
+#include <QApplication>
+
 #include "highlighterbase.h"
 
 QMap<QString, QTextCharFormat> highlighterBase::map;
@@ -8,7 +11,10 @@ highlighterBase::highlighterBase(QObject *parent) :
 {
     if(!isInited)
     {
-        QFile file("default.style");
+        /*--------------Solve the very exotic problem.----------------*/
+        //QFile file("default.style");
+        QFile file(qApp->applicationDirPath() + "/default.style");
+
 
         if(file.open(QFile::ReadOnly| QFile::Text))
         {
@@ -22,8 +28,9 @@ highlighterBase::highlighterBase(QObject *parent) :
             }
 
         }
-        else
+        else{
             qDebug()<<"highlighterBase: Can't not open default.style";
+        }
     }
 }
 

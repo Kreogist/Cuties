@@ -137,7 +137,7 @@ QSize KreogistCuteStyle::sizeFromContents(ContentsType ct,
     case CT_MenuItem:
     {
         QSize ret=style->sizeFromContents(ct,opt,contentsSize,widget);
-        ret *= 1.3;
+        ret *= 1.5;
         return ret;
         break;
     }

@@ -56,6 +56,9 @@ void MainWindow::createActions()
     //closs_all
     act[close_all]=new QAction(tr("close all"),this);
 
+    //close_allother
+    act[close_allother]=new QAction(tr("close all other file"),this);
+
     //quit
     act[quit]=new QAction(tr("quit"),this);
     connect(act[quit],SIGNAL(triggered()),this,SLOT(close()));
@@ -101,9 +104,15 @@ void MainWindow::createMenu()
     int i;
 
     QMenu *_mainMenu=new QMenu;
+    QIcon *MenuIconAddor=new QIcon;
+    QSize *MenuIconSizeor=new QSize;
 
     //file menu
+    MenuIconSizeor->setHeight(100);
+    MenuIconSizeor->setWidth(100);
+    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"),*MenuIconSizeor);
     menu[file] = _mainMenu->addMenu(tr("file"));
+    menu[file]->setIcon(*MenuIconAddor);
     //from new_file to quit add into file menu
     for(i=new_file;i<=quit;i++)
         menu[file]->addAction(act[i]);
@@ -113,6 +122,24 @@ void MainWindow::createMenu()
     //from redo to paste add into edit menu
     for(i=redo;i<=paste;i++)
         menu[edit]->addAction(act[i]);
+
+    //view menu
+    menu[view] = _mainMenu->addMenu(tr("view"));
+
+    //search menu
+    menu[search] = _mainMenu->addMenu(tr("search"));
+
+    //insert menu
+    menu[insert] = _mainMenu->addMenu(tr("insert"));
+
+    //debug menu
+    menu[debug] = _mainMenu->addMenu(tr("debug"));
+
+    //run menu
+    menu[run] = _mainMenu->addMenu(tr("run"));
+
+    //plugins menu
+    menu[plugins] = _mainMenu->addMenu(tr("plugins"));
 
     //help menu
     menu[help] = _mainMenu->addMenu(tr("help"));

@@ -1,5 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Ye Haolei <tomguts@126.com>
  *
  *  mainwindow.h is part of Kreogist-Cute-IDE.
  *
@@ -53,6 +54,7 @@ private:
         save_all,
         close,
         close_all,
+        close_allother,
         quit,
         redo,
         undo,
@@ -68,6 +70,12 @@ private:
     {
         file,
         edit,
+        view,
+        search,
+        insert,
+        debug,
+        run,
+        plugins,
         help,
         menu_count  //the number of menus
     };

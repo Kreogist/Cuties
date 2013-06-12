@@ -18,6 +18,7 @@
  */
 
 #include <QApplication>
+#include <QTranslator>
 #include <QStyle>
 #include <QStyleFactory>
 #include "mainwindow.h"
@@ -26,6 +27,10 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc,argv);
+    QTranslator appTrans;
+
+    appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());
+    app.installTranslator(&appTrans);
 
     QPalette pal=app.palette();
     pal.setColor(QPalette::Window,QColor(0x53,0x53,0x53));
