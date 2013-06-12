@@ -51,85 +51,226 @@
     <message>
         <location filename="mainwindow.cpp" line="67"/>
         <source>redo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">撤销</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="70"/>
         <source>undo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">重做</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="73"/>
         <source>cut</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">剪切</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="76"/>
         <source>copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">复制</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="79"/>
         <source>paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">粘贴</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="82"/>
-        <source>about</source>
-        <translation type="unfinished"></translation>
+        <source>select all</source>
+        <translation type="unfinished">全选</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="85"/>
+        <source>set break point</source>
+        <translation type="unfinished">设置断点</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="88"/>
+        <source>preference</source>
+        <translation type="unfinished">首选项</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="91"/>
+        <source>searchinfile</source>
+        <translation type="unfinished">搜索</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="94"/>
+        <source>searchallfile</source>
+        <translation type="unfinished">搜索所有文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="97"/>
+        <source>replaceinfile</source>
+        <translation type="unfinished">替换</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="100"/>
+        <source>replaceallfile</source>
+        <translation type="unfinished">替换所有文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="103"/>
+        <source>searchonline</source>
+        <translation type="unfinished">在线搜索</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="106"/>
+        <source>gotoline</source>
+        <translation type="unfinished">到指定行</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="109"/>
+        <source>Compile &amp; Run</source>
+        <translation type="unfinished">编译运行</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="112"/>
+        <source>compile</source>
+        <translation type="unfinished">编译</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="115"/>
+        <source>Complie all file</source>
+        <translation type="unfinished">编译所有文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="118"/>
+        <source>Runexe</source>
+        <oldsource>Run</oldsource>
+        <translation type="unfinished">运行</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="121"/>
+        <source>Parameters</source>
+        <translation type="unfinished">带参数运行</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="124"/>
+        <source>Set Input File</source>
+        <translation type="unfinished">设置输入文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="127"/>
+        <source>Show Output file</source>
+        <translation type="unfinished">显示输出文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="130"/>
+        <source>Run And Show Output File</source>
+        <translation type="unfinished">运行显示输出文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="134"/>
+        <source>Set Input, Run and show Output</source>
+        <translation type="unfinished">设置输入文件运行并显示输出文件</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="137"/>
+        <source>Start Debug</source>
+        <translation type="unfinished">开始调试</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="140"/>
+        <source>Pause Debug</source>
+        <translation type="unfinished">暂停调试</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="143"/>
+        <source>Stop execute</source>
+        <translation type="unfinished">停止调试</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="146"/>
+        <source>Next Line</source>
+        <translation type="unfinished">执行下一行</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="149"/>
+        <source>Into Line</source>
+        <translation type="unfinished">进入到下一行</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="152"/>
+        <source>Next Instruction</source>
+        <translation type="unfinished">执行下一个语法块</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="155"/>
+        <source>Into Instruction</source>
+        <translation type="unfinished">进入下一个语法块</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="158"/>
+        <source>skip function</source>
+        <translation type="unfinished">跳过函数</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="161"/>
+        <source>Add Watch</source>
+        <translation type="unfinished">添加查看</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="164"/>
+        <source>Modify Watch</source>
+        <translation type="unfinished">更改查看</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="167"/>
+        <source>Remove Watch</source>
+        <translation type="unfinished">移除查看</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="170"/>
+        <source>about</source>
+        <translation type="unfinished">关于 Kreogist Cure IDE</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="173"/>
         <source>about Qt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">关于Qt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="90"/>
-        <source>mainwindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="108"/>
+        <location filename="mainwindow.cpp" line="203"/>
         <source>file</source>
         <translation type="unfinished">文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="114"/>
+        <location filename="mainwindow.cpp" line="212"/>
         <source>edit</source>
         <translation type="unfinished">编辑</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="120"/>
+        <location filename="mainwindow.cpp" line="220"/>
         <source>view</source>
         <translation type="unfinished">视图</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="123"/>
+        <location filename="mainwindow.cpp" line="223"/>
         <source>search</source>
         <translation type="unfinished">搜索</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="126"/>
+        <location filename="mainwindow.cpp" line="230"/>
         <source>insert</source>
         <translation type="unfinished">插入</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="129"/>
+        <location filename="mainwindow.cpp" line="240"/>
         <source>debug</source>
         <translation type="unfinished">调试</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="132"/>
+        <location filename="mainwindow.cpp" line="233"/>
         <source>run</source>
         <translation type="unfinished">运行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="135"/>
+        <location filename="mainwindow.cpp" line="247"/>
         <source>plugins</source>
         <translation type="unfinished">插件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="138"/>
+        <location filename="mainwindow.cpp" line="250"/>
         <source>help</source>
         <translation type="unfinished">帮助</translation>
     </message>

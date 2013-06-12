@@ -57,6 +57,7 @@ RESOURCES += \
     rc.qrc
 
 OTHER_FILES += \
-    image/MainMenuButton.png
+    image/MainMenuButton.png \
+    image/FileMenuIcon.png
 
 TRANSLATIONS += zh_CN.ts
