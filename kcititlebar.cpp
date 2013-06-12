@@ -6,11 +6,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 {
     setMouseTracking(true);
     setAutoFillBackground(true);
-    //setWindowFlags(Qt::WindowTitleHint);
-
-    /*QPalette pal=palette();
-    pal.setColor(QPalette::Window,QColor(155,155,155));
-    setPalette(pal);*/
 
     windowTitle=parent->windowTitle();
 
@@ -40,7 +35,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     setLayout(hLayout);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
-    //hLayout->addWidget(new QToolBar);
     hLayout->addWidget(mainButton);
     hLayout->addStretch();
     hLayout->addWidget(titleLabel);
@@ -48,7 +42,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addWidget(minimizeButton);
     hLayout->addWidget(maximizeButton);
     hLayout->addWidget(closeButton);
-    //hLayout->addWidget(new QToolBar);
 }
 
 void kciTitleBar::setMenu(QMenu *menu)
@@ -95,4 +88,12 @@ void kciTitleBar::mouseReleaseEvent(QMouseEvent *event)
     }
     else
         event->ignore();
+}
+
+void kciTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        mainWindow->showMaximized();
+    }
 }
