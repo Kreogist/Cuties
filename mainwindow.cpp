@@ -25,8 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
     editor = new kciTextEditor(this);
     setCentralWidget(editor);
 
+    setWindowFlags(Qt::FramelessWindowHint);
+
     createActions();
-    createToolbar();
+    createTitlebar();
     createMenu();
     createStatusbar();
 }
@@ -80,17 +82,18 @@ void MainWindow::createActions()
     act[about_qt]=new QAction(tr("about Qt"),this);
 }
 
-void MainWindow::createToolbar()
+void MainWindow::createTitlebar()
 {
-    QToolBar *_toolbar= addToolBar(tr("mainwindow"));
-    _toolbar->setFloatable(false);
-    _toolbar->setMovable(false);
+    kciTitleBar *_titlebar=new kciTitleBar(this);
+    addToolBar(_titlebar);
+    _titlebar->setFloatable(false);
+    _titlebar->setMovable(false);
 
     mainButton=new QToolButton(this);
     mainButton->setIcon(QIcon(":/img/image/MainMenuButton.png"));
 
-    _toolbar->addWidget(mainButton);
-    _toolbar->addSeparator();
+    _titlebar->addWidget(mainButton);
+    _titlebar->addSeparator();
 }
 
 void MainWindow::createMenu()

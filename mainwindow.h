@@ -31,6 +31,7 @@
 #include <QToolButton>
 
 #include "kcitexteditor.h"
+#include "kcititlebar.h"
 
 class MainWindow : public QMainWindow
 {
@@ -77,7 +78,7 @@ private:
     QToolButton *mainButton;
 
     void createActions();
-    void createToolbar();
+    void createTitlebar();
     void createMenu();
     void createStatusbar();
 };
