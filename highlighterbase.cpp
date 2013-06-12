@@ -30,7 +30,6 @@ highlighterBase::highlighterBase(QObject *parent) :
         }
         else{
             qDebug()<<"highlighterBase: Can't not open default.style";
-            qDebug()<<file.errorString();
         }
     }
 }

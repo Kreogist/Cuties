@@ -54,3 +54,5 @@ RESOURCES += \
 
 OTHER_FILES += \
     image/MainMenuButton.png
+
+TRANSLATIONS += zh_CN.ts

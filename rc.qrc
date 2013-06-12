@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/img">
         <file>image/MainMenuButton.png</file>
+        <file>image/FileMenuIcon.png</file>
     </qresource>
 </RCC>
