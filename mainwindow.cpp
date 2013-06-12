@@ -22,8 +22,12 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    setWindowTitle(tr("Kreogist Cute IDE"));
+
     editor = new kciTextEditor(this);
+    editor->setContentsMargins(0,0,0,0);
     setCentralWidget(editor);
+    setContentsMargins(0,0,0,0);
 
     setWindowFlags(Qt::FramelessWindowHint);
 

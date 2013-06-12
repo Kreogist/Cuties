@@ -9,6 +9,8 @@
 #include <QLabel>
 #include <QIcon>
 #include <QString>
+#include <QToolBar>
+#include <QPalette>
 
 class kciTitleBar : public QWidget
 {

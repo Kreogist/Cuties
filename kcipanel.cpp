@@ -23,7 +23,7 @@ kciPanel::kciPanel(QWidget *parent) :
     QWidget(parent),
     e(NULL)
 {
-    setFixedWidth(40);
+    setFixedWidth(20);
     setAutoFillBackground(true);
 }
 
@@ -89,7 +89,7 @@ void kciPanel::paintEvent(QPaintEvent *event)
     int top=e->verticalScrollBar()->value(),
         bottom=e->height()/line_hight + 1;
 
-    int block_top = (top==0)?e->geometry().y() -1 : 4;
+    int block_top = (top==0)?e->geometry().y() - 2 : 3;
 
     painter.setFont(e->font());
 
