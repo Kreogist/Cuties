@@ -23,7 +23,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     QWidget(parent)
 {
     setContentsMargins(0,0,0,0);
-    setWindowFlags(Qt::AnchorPoint);
+    //setWindowFlags(Qt::AnchorPoint);
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->setSpacing(0);
@@ -31,6 +31,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     linePanel=new kciLinenumPanel(this);
     mainLayout->addWidget(linePanel);
+    mainLayout->setContentsMargins(0,0,0,0);
 
     editor=new kciCodeEditor(this);
     linePanel->setPlainTextEdit(editor);
