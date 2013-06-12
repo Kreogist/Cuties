@@ -5,11 +5,11 @@ cppHighlighter::cppHighlighter(QObject *parent) :
 {
     int i;
     //tpye
-    highlight_rule type;
-    type.regexp.setPattern(
+    highlight_rule datatype;
+    datatype.regexp.setPattern(
          "\\b(bool|char|double|float|int|long|short|signed|unsigned|void|wchar_t|char16_t|char32_t|nullptr)\\b");
-    type.type_name="type";
-    rules<<type;
+    datatype.type_name="datatype";
+    rules<<datatype;
 
     //other keywords
     highlight_rule keywords;
@@ -33,6 +33,7 @@ cppHighlighter::cppHighlighter(QObject *parent) :
     <<"try|typeid|typename"
     <<"using|virtual";
     keywords.type_name="keyword";
+
     for(i=0;i<_keyword.size();i++)
     {
         keywords.regexp.setPattern(QString("\\b(")+_keyword[i]+QString(")\\b"));
