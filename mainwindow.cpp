@@ -87,16 +87,9 @@ void MainWindow::createActions()
 
 void MainWindow::createTitlebar()
 {
-    kciTitleBar *_titlebar=new kciTitleBar(this);
-    addToolBar(_titlebar);
-    _titlebar->setFloatable(false);
-    _titlebar->setMovable(false);
-
-    mainButton=new QToolButton(this);
-    mainButton->setIcon(QIcon(":/img/image/MainMenuButton.png"));
-
-    _titlebar->addWidget(mainButton);
-    _titlebar->addSeparator();
+    titlebar=new kciTitleBar(this);
+    setMenuWidget(titlebar);
+    titlebar->setMainButtonIcon(":/img/image/MainMenuButton.png");
 }
 
 void MainWindow::createMenu()
@@ -147,8 +140,7 @@ void MainWindow::createMenu()
     for(i=about;i<=about_qt;i++)
         menu[help]->addAction(act[i]);
 
-    mainButton->setMenu(_mainMenu);
-    connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
+    titlebar->setMenu(_mainMenu);
 }
 
 void MainWindow::createStatusbar()

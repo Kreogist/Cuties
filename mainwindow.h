@@ -83,7 +83,7 @@ private:
     kciTextEditor *editor;
     QAction *act[act_count];
     QMenu *menu[menu_count];
-    QToolButton *mainButton;
+    kciTitleBar *titlebar;
 
     void createActions();
     void createTitlebar();
