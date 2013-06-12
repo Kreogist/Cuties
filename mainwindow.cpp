@@ -78,6 +78,94 @@ void MainWindow::createActions()
     //paste
     act[paste]=new QAction(tr("paste"),this);
 
+    //select all
+    act[select_all]=new QAction(tr("select all"),this);
+
+    //set_break_point
+    act[set_break_point]=new QAction(tr("set break point"),this);
+
+    //preference
+    act[preference]=new QAction(tr("preference"),this);
+
+    //search in file
+    act[searchinfile]=new QAction(tr("searchinfile"),this);
+
+    //search all file
+    act[searchallfile]=new QAction(tr("searchallfile"),this);
+
+    //replace in file
+    act[replaceinfile]=new QAction(tr("replaceinfile"),this);
+
+    //replace all file
+    act[replaceallfile]=new QAction(tr("replaceallfile"),this);
+
+    //search online
+    act[searchonline]=new QAction(tr("searchonline"),this);
+
+    //go to line
+    act[gotoline]=new QAction(tr("gotoline"),this);
+
+    //compile and run
+    act[compileandrun]=new QAction(tr("Compile & Run"),this);
+
+    //compile
+    act[compile]=new QAction(tr("compile"),this);
+
+    //compile all file
+    act[compileallfile]=new QAction(tr("Complie all file"),this);
+
+    //run
+    act[runexe]=new QAction(tr("Runexe"),this);
+
+    //Parameters
+    act[parameters]=new QAction(tr("Parameters"),this);
+
+    //Set Input file
+    act[setinputfile]=new QAction(tr("Set Input File"),this);
+
+    //Show Output file
+    act[showoutputfile]=new QAction(tr("Show Output file"),this);
+
+    //Run And show
+    act[runshowoutputfile]=new QAction(tr("Run And Show Output File"),this);
+
+    //Set Input, Run and Show Output
+    act[setinputrunshowoutput]=new QAction(
+                tr("Set Input, Run and show Output"), this);
+
+    //debug start
+    act[debugstart]=new QAction(tr("Start Debug"),this);
+
+    //debug pause
+    act[debugcontinue]=new QAction(tr("Pause Debug"),this);
+
+    //Stop Execute
+    act[stopexecute]=new QAction(tr("Stop execute"),this);
+
+    //next line
+    act[nextline]=new QAction(tr("Next Line"),this);
+
+    //Go Into line
+    act[intoline]=new QAction(tr("Into Line"),this);
+
+    //Go Next Instruction
+    act[nextinstruction]=new QAction(tr("Next Instruction"),this);
+
+    //Go Into Instruction
+    act[mnuDebugIntoInstruction]=new QAction(tr("Into Instruction"),this);
+
+    //Skip Function
+    act[skipfunction]=new QAction(tr("skip function"),this);
+
+    //Add Watch
+    act[addwatch]=new QAction(tr("Add Watch"),this);
+
+    //Modify Watch
+    act[modifywatch]=new QAction(tr("Modify Watch"),this);
+
+    //Remove Watch
+    act[removewatch]=new QAction(tr("Remove Watch"),this);
+
     //about
     act[about]=new QAction(tr("about"),this);
 
@@ -103,33 +191,50 @@ void MainWindow::createMenu()
     //file menu
     MenuIconSizeor->setHeight(100);
     MenuIconSizeor->setWidth(100);
-    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"),*MenuIconSizeor);
+    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"),
+                           *MenuIconSizeor);
     menu[file] = _mainMenu->addMenu(tr("file"));
     menu[file]->setIcon(*MenuIconAddor);
     //from new_file to quit add into file menu
     for(i=new_file;i<=quit;i++)
+    {
         menu[file]->addAction(act[i]);
+    }
 
     //edit menu
     menu[edit] = _mainMenu->addMenu(tr("edit"));
     //from redo to paste add into edit menu
-    for(i=redo;i<=paste;i++)
+    for(i=redo;i<=preference;i++)
+    {
         menu[edit]->addAction(act[i]);
+    }
 
     //view menu
     menu[view] = _mainMenu->addMenu(tr("view"));
 
     //search menu
     menu[search] = _mainMenu->addMenu(tr("search"));
+    for(i=searchinfile;i<=gotoline;i++)
+    {
+        menu[search]->addAction(act[i]);
+    }
 
     //insert menu
     menu[insert] = _mainMenu->addMenu(tr("insert"));
 
-    //debug menu
-    menu[debug] = _mainMenu->addMenu(tr("debug"));
-
     //run menu
     menu[run] = _mainMenu->addMenu(tr("run"));
+    for(i=compileandrun;i<=setinputrunshowoutput;i++)
+    {
+        menu[run]->addAction(act[i]);
+    }
+
+    //debug menu
+    menu[debug] = _mainMenu->addMenu(tr("debug"));
+    for(i=debugstart;i<=removewatch;i++)
+    {
+        menu[debug]->addAction(act[i]);
+    }
 
     //plugins menu
     menu[plugins] = _mainMenu->addMenu(tr("plugins"));
@@ -138,7 +243,9 @@ void MainWindow::createMenu()
     menu[help] = _mainMenu->addMenu(tr("help"));
     //from about to about_qt add into help menu
     for(i=about;i<=about_qt;i++)
+    {
         menu[help]->addAction(act[i]);
+    }
 
     titlebar->setMenu(_mainMenu);
 }
