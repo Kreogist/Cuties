@@ -9,19 +9,25 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     windowTitle=parent->windowTitle();
 
-    closeButton = new QToolButton;
+    closeButton = new QToolButton(this);
     closeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
     closeButton->setAutoFillBackground(true);
 
-    maximizeButton = new QToolButton;
-    maximizeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarMaxButton));
-
-    minimizeButton = new QToolButton;
+    minimizeButton = new QToolButton(this);
     minimizeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarMinButton));
 
+    maximizeButton = new QToolButton(this);
+    maximizeButtonIcon=style()->standardIcon(QStyle::SP_TitleBarMaxButton);
+    maximizeButton->setIcon(maximizeButtonIcon);
+    isShowingNormalButton = false;
+
+    normalButtonIcon=style()->standardIcon(QStyle::SP_TitleBarNormalButton);
+
     connect(closeButton,SIGNAL(clicked()),this->parent(),SLOT(close()));
-    connect(maximizeButton,SIGNAL(clicked()),this->parent(),SLOT(showMaximized()));
-    connect(minimizeButton,SIGNAL(clicked()),this->parent(),SLOT(showMinimized()));
+    connect(minimizeButton,SIGNAL(clicked()),
+                            this->parent(),SLOT(showMinimized()));
+    connect(maximizeButton,SIGNAL(clicked()),
+            this,SLOT(_exchange_button_state()));
 
     titleLabel=new QLabel(windowTitle,this);
     QPalette pal=titleLabel->palette();
@@ -42,6 +48,28 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addWidget(minimizeButton);
     hLayout->addWidget(maximizeButton);
     hLayout->addWidget(closeButton);
+
+    /*
+    setMinimumWidth(mainButton->width() + titleLabel->width() + 3 +
+                    minimizeButton->width() + maximizeButton->width() +
+                    closeButton->width());
+    */
+}
+
+void kciTitleBar::_exchange_button_state()
+{
+    if(isShowingNormalButton)
+    {
+        mainWindow->showNormal();
+        maximizeButton->setIcon(maximizeButtonIcon);
+    }
+    else
+    {
+        mainWindow->showMaximized();
+        maximizeButton->setIcon(normalButtonIcon);
+    }
+
+    isShowingNormalButton^=1;   //change the state
 }
 
 void kciTitleBar::setMenu(QMenu *menu)
@@ -94,6 +122,6 @@ void kciTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
     {
-        mainWindow->showMaximized();
+        _exchange_button_state();
     }
 }

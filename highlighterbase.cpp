@@ -93,9 +93,11 @@ bool highlighterBase::parseStyleFileLine(char *str_line)
             {
                 Q_ASSERT(define[i].size()==7);
 
-                int r=define[i].mid(1,2).toInt(),
-                    g=define[i].mid(3,2).toInt(),
-                    b=define[i].mid(5,2).toInt();
+                bool blnHexOk;
+                int r=define[i].mid(1,2).toInt(&blnHexOk, 16),
+                    g=define[i].mid(3,2).toInt(&blnHexOk, 16),
+                    b=define[i].mid(5,2).toInt(&blnHexOk, 16);
+                qDebug()<<r<<" "<<g<<" "<<b;
                 textFormat.setForeground(QBrush(QColor(r,g,b)));
             }
             else

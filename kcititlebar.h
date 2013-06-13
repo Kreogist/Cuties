@@ -24,6 +24,9 @@ signals:
     
 public slots:
 
+private slots:
+    void _exchange_button_state();
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -32,6 +35,7 @@ protected:
 
 private:
     bool hasPressed;
+    bool isShowingNormalButton;   //false when show minimizeButton, true when show normalButton
     QPoint mousePosStart;
     QWidget *mainWindow;
 
@@ -43,7 +47,7 @@ private:
     QString windowTitle;
 
     QToolButton *mainButton;
-    QIcon mainButtonIcon;
+    QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon;
 };
 
 #endif // KCITITLEBAR_H
