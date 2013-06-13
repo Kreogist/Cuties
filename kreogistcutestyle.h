@@ -36,7 +36,7 @@ public:
                           const QSize &contentsSize,
                           const QWidget *widget) const;
 
-    int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
+    virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
     QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = 0) const;
     SubControl hitTestComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
                                      const QPoint &pt, const QWidget *w = 0) const;

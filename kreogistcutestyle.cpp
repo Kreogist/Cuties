@@ -126,6 +126,18 @@ void KreogistCuteStyle::drawComplexControl(ComplexControl cc,
     style->drawComplexControl(cc,opt,p,w);
 }
 
+void KreogistCuteStyle::drawItemText(QPainter *painter,
+                                     const QRect &rect,
+                                     int flags,
+                                     const QPalette &pal,
+                                     bool enabled,
+                                     const QString &text,
+                                     QPalette::ColorRole textRole) const
+{
+    style->drawItemText(painter,rect,flags,pal,enabled,text,textRole);
+
+}
+
 QSize KreogistCuteStyle::sizeFromContents(ContentsType ct,
                                          const QStyleOption *opt,
                                          const QSize &contentsSize,
@@ -134,15 +146,18 @@ QSize KreogistCuteStyle::sizeFromContents(ContentsType ct,
 
     switch(ct)
     {
-    case CT_MenuItem:
-    {
-        QSize ret=style->sizeFromContents(ct,opt,contentsSize,widget);
-        ret *= 1.5;
-        return ret;
-        break;
-    }
-    default:
-        return style->sizeFromContents(ct,opt,contentsSize,widget);
+        case CT_MenuItem:
+        {
+            QSize ret=style->sizeFromContents(ct,opt,contentsSize,widget);
+            ret *= 1.5;
+            ret.setHeight(ret.height()+10);
+            return ret;
+            break;
+        }
+        default:
+        {
+            return style->sizeFromContents(ct,opt,contentsSize,widget);
+        }
     }
 }
 
@@ -150,7 +165,25 @@ int KreogistCuteStyle::pixelMetric(PixelMetric metric,
                                    const QStyleOption *option,
                                    const QWidget *widget) const
 {
-    return style->pixelMetric(metric,option,widget);
+    int pIntValue = style->pixelMetric(metric,option,widget);
+    switch (metric) {
+    case QStyle::PM_SmallIconSize:
+        pIntValue=50;
+        break;
+    case QStyle::PM_LargeIconSize:
+        pIntValue=50;
+        break;
+    case QStyle::PM_ButtonIconSize:
+        pIntValue=25;
+        break;
+    case QStyle::PM_MenuHMargin:
+    case QStyle::PM_MenuVMargin:
+        pIntValue=0;
+        break;
+    default:
+        break;
+    }
+    return pIntValue;
 }
 
 QRect KreogistCuteStyle::subElementRect(SubElement r,
@@ -209,14 +242,7 @@ void KreogistCuteStyle::drawItemPixmap(QPainter *painter, const QRect &rect,
 {
     return style->drawItemPixmap(painter,rect,alignment,pixmap);
 }
-void KreogistCuteStyle::drawItemText(QPainter *painter,
-                                     const QRect &rect,
-                                     int flags, const QPalette &pal,
-                                     bool enabled,const QString &text,
-                                     QPalette::ColorRole textRole) const
-{
-    return style->drawItemText(painter,rect,flags,pal,enabled,text,textRole);
-}
+
 void KreogistCuteStyle::polish(QWidget *widget)
 {
     return style->polish(widget);

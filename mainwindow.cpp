@@ -191,14 +191,10 @@ void MainWindow::createMenu()
 
     QMenu *_mainMenu=new QMenu;
     QIcon *MenuIconAddor=new QIcon;
-    QSize *MenuIconSizeor=new QSize;
-
     //file menu
-    MenuIconSizeor->setHeight(100);
-    MenuIconSizeor->setWidth(100);
-    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"),
-                           *MenuIconSizeor);
+    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menu[file] = _mainMenu->addMenu(tr("file"));
+    //menu[file]->setStyle(cuteStyle);
     menu[file]->setIcon(*MenuIconAddor);
     //from new_file to quit add into file menu
     for(i=new_file;i<=quit;i++)

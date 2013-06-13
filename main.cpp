@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QStyle>
+#include <QFont>
 #include <QStyleFactory>
 #include "mainwindow.h"
 #include "kreogistcutestyle.h"
