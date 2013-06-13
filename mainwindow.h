@@ -1,6 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Ye Haolei <tomguts@126.com>
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
  *  mainwindow.h is part of Kreogist-Cute-IDE.
  *

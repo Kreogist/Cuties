@@ -1,3 +1,23 @@
+/*
+ *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
+ *
+ *
+ *  highlighterBase.cpp is part of Kreogist-Cute-IDE.
+ *
+ *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QApplication>
 
@@ -97,7 +117,6 @@ bool highlighterBase::parseStyleFileLine(char *str_line)
                 int r=define[i].mid(1,2).toInt(&blnHexOk, 16),
                     g=define[i].mid(3,2).toInt(&blnHexOk, 16),
                     b=define[i].mid(5,2).toInt(&blnHexOk, 16);
-                qDebug()<<r<<" "<<g<<" "<<b;
                 textFormat.setForeground(QBrush(QColor(r,g,b)));
             }
             else
