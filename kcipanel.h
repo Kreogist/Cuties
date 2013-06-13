@@ -27,7 +27,8 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QAbstractTextDocumentLayout>
-
+#include <QFont>
+#include <QFontMetrics>
 #include <QDebug>
 
 class kciPanel : public QWidget
