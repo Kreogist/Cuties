@@ -89,7 +89,7 @@ void kciPanel::paintEvent(QPaintEvent *event)
     int top=e->verticalScrollBar()->value(),
         bottom=e->height()/line_hight + 1;
 
-    int block_top = (top==0)?e->geometry().y() + 6 : 3;
+    int block_top = (top==0)?e->geometry().y() + 7 : 3;
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();

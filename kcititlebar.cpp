@@ -1,3 +1,23 @@
+/*
+ *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
+ *
+ *  mainwindow.cpp is part of Kreogist-Cute-IDE.
+ *
+ *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "kcititlebar.h"
 
 kciTitleBar::kciTitleBar(QWidget *parent) :
@@ -6,27 +26,28 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 {
     setMouseTracking(true);
     setAutoFillBackground(true);
-    //setWindowFlags(Qt::WindowTitleHint);
-
-    /*QPalette pal=palette();
-    pal.setColor(QPalette::Window,QColor(155,155,155));
-    setPalette(pal);*/
 
     windowTitle=parent->windowTitle();
 
-    closeButton = new QToolButton;
+    closeButton = new QToolButton(this);
     closeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
     closeButton->setAutoFillBackground(true);
 
-    maximizeButton = new QToolButton;
-    maximizeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarMaxButton));
-
-    minimizeButton = new QToolButton;
+    minimizeButton = new QToolButton(this);
     minimizeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarMinButton));
 
+    maximizeButton = new QToolButton(this);
+    maximizeButtonIcon=style()->standardIcon(QStyle::SP_TitleBarMaxButton);
+    maximizeButton->setIcon(maximizeButtonIcon);
+    isShowingNormalButton = false;
+
+    normalButtonIcon=style()->standardIcon(QStyle::SP_TitleBarNormalButton);
+
     connect(closeButton,SIGNAL(clicked()),this->parent(),SLOT(close()));
-    connect(maximizeButton,SIGNAL(clicked()),this->parent(),SLOT(showMaximized()));
-    connect(minimizeButton,SIGNAL(clicked()),this->parent(),SLOT(showMinimized()));
+    connect(minimizeButton,SIGNAL(clicked()),
+                            this->parent(),SLOT(showMinimized()));
+    connect(maximizeButton,SIGNAL(clicked()),
+            this,SLOT(_exchange_button_state()));
 
     titleLabel=new QLabel(windowTitle,this);
     QPalette pal=titleLabel->palette();
@@ -40,7 +61,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     setLayout(hLayout);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
-    //hLayout->addWidget(new QToolBar);
     hLayout->addWidget(mainButton);
     hLayout->addStretch();
     hLayout->addWidget(titleLabel);
@@ -48,7 +68,28 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addWidget(minimizeButton);
     hLayout->addWidget(maximizeButton);
     hLayout->addWidget(closeButton);
-    //hLayout->addWidget(new QToolBar);
+
+    /*
+    setMinimumWidth(mainButton->width() + titleLabel->width() + 3 +
+                    minimizeButton->width() + maximizeButton->width() +
+                    closeButton->width());
+    */
+}
+
+void kciTitleBar::_exchange_button_state()
+{
+    if(isShowingNormalButton)
+    {
+        mainWindow->showNormal();
+        maximizeButton->setIcon(maximizeButtonIcon);
+    }
+    else
+    {
+        mainWindow->showMaximized();
+        maximizeButton->setIcon(normalButtonIcon);
+    }
+
+    isShowingNormalButton^=1;   //change the state
 }
 
 void kciTitleBar::setMenu(QMenu *menu)
@@ -95,4 +136,12 @@ void kciTitleBar::mouseReleaseEvent(QMouseEvent *event)
     }
     else
         event->ignore();
+}
+
+void kciTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        _exchange_button_state();
+    }
 }

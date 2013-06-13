@@ -45,4 +45,159 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     pal.setColor(QPalette::Text,QColor(255,255,255));
     setPalette(pal);
 
+    filePath.clear();
+    fileError=QFileDevice::NoError;
+}
+
+bool kciTextEditor::open()
+{
+    filePath=QFileDialog::getOpenFileName(this,tr("open"));
+    if(!filePath.isEmpty())
+        return open(filePath);
+    else
+        return false;
+}
+
+bool kciTextEditor::open(const QString &fileName)
+{
+    QFile _file(fileName);
+
+    if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
+    {
+        QTextStream _textIn(&_file);
+
+        editor->clear();
+        editor->insertPlainText(QString(_textIn.readAll()));
+
+        QFileInfo _fileInfo(_file);
+        editor->setDocumentTitle(_fileInfo.fileName());
+
+        filePath=fileName;
+        fileError=QFileDevice::NoError;
+        return true;
+    }
+    else
+    {
+        fileError=_file.error();
+        return false;
+    }
+}
+
+QFileDevice::FileError kciTextEditor::error()
+{
+    return fileError;
+}
+
+bool kciTextEditor::save()
+{
+    if(!filePath.isEmpty())
+    {
+        return saveAs(filePath);
+    }
+    else
+    {
+        filePath=QFileDialog::getSaveFileName(this,tr("save"));
+        if(!filePath.isEmpty())
+        {
+            return saveAs(filePath);
+        }
+        else
+        {
+            fileError=QFileDevice::AbortError;
+            return false;
+        }
+    }
+}
+
+bool kciTextEditor::saveAs()
+{
+    QString _filePath=QFileDialog::getSaveFileName(this,tr("save"));
+    if(!_filePath.isEmpty())
+    {
+        return saveAs(filePath);
+    }
+    else
+    {
+        fileError=QFileDevice::AbortError;
+        return false;
+    }
+}
+
+bool kciTextEditor::saveAs(const QString &fileName)
+{
+
+    QFile _file(fileName);
+
+    if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
+    {
+        QTextStream _textOut(&_file);
+
+        _textOut<<editor->toPlainText()<<flush;
+
+        QFileInfo _fileInfo(_file);
+        editor->setDocumentTitle(_fileInfo.fileName());
+
+        filePath=fileName;
+        fileError=QFileDevice::NoError;
+        editor->document()->setModified(false);
+        return true;
+    }
+    else
+    {
+        fileError=_file.error();
+        return false;
+    }
+}
+
+void kciTextEditor::closeEvent(QCloseEvent *e)
+{
+    if(editor->document()->isModified())
+    {
+        QMessageBox msgbox(this);
+
+        msgbox.setText(tr("The document has been modified."));
+        msgbox.setInformativeText(tr("Do you want to save your changes?"));
+        msgbox.setStandardButtons(QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
+        msgbox.setDefaultButton(QMessageBox::Save);
+
+        int ret=msgbox.exec();
+
+        switch (ret)
+        {
+        case QMessageBox::Save:
+            // Save was clicked
+            if(!save())
+            {
+                //Save file failed
+                msgbox.setText(tr("Saving file failed!"));
+                msgbox.setInformativeText(tr("Please save it again"));
+                msgbox.setStandardButtons(QMessageBox::Ok);
+                msgbox.setDefaultButton(QMessageBox::Ok);
+                msgbox.setIcon(QMessageBox::Warning);
+
+                msgbox.exec();
+                e->ignore();
+            }
+
+            break;
+        case QMessageBox::Discard:
+            // Don't Save was clicked
+            e->accept();
+
+            break;
+        case QMessageBox::Cancel:
+            // Cancel was clicked
+            e->ignore();
+
+            break;
+        default:
+            // should never be reached
+            qWarning("codeeditor.cpp: switch(ret) reached an unexcepted line!");
+            break;
+        }
+    }
+    else
+        e->accept();
+
+    return ;
 }
