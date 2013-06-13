@@ -44,6 +44,9 @@ signals:
     
 public slots:
 
+protected:
+    void closeEvent(QCloseEvent *e);
+
 private:
     enum MainWindowActions
     {

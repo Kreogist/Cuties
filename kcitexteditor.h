@@ -23,6 +23,14 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QPalette>
+#include <QFile>
+#include <QPlainTextEdit>
+#include <QFileInfo>
+#include <QFileDevice>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QString>
+#include <QMessageBox>
 
 #include "kcicodeeditor.h"
 #include "kcilinenumpanel.h"
@@ -33,16 +41,29 @@ class kciTextEditor : public QWidget
     Q_OBJECT
 public:
     explicit kciTextEditor(QWidget *parent = 0);
+
+    QFileDevice::FileError error();
     
 signals:
     
 public slots:
+    bool open();
+    bool open(const QString& fileName);
+    bool save();
+    bool saveAs();
+    bool saveAs(const QString& fileName);
+
+protected:
+    void closeEvent(QCloseEvent *e);
 
 private:
     QHBoxLayout *mainLayout;
     kciCodeEditor *editor;
     kciLinenumPanel *linePanel;
     cppHighlighter *highlighter;
+
+    QString filePath;
+    QFileDevice::FileError fileError;
 };
 
 #endif // TEXTEDITOR_H

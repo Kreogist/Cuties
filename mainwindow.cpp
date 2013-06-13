@@ -45,12 +45,15 @@ void MainWindow::createActions()
 
     //open
     act[open]=new QAction(tr("open"),this);
+    connect(act[open],SIGNAL(triggered()),editor,SLOT(open()));
 
     //save
     act[save]=new QAction(tr("save"),this);
+    connect(act[save],SIGNAL(triggered()),editor,SLOT(save()));
 
     //save_as
     act[save_as]=new QAction(tr("save as"),this);
+    connect(act[save_as],SIGNAL(triggered()),editor,SLOT(saveAs()));
 
     //save_all
     act[save_all]=new QAction(tr("save all"),this);
@@ -262,4 +265,16 @@ void MainWindow::createStatusbar()
     QPalette pal=statusbar->palette();
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
     statusbar->setPalette(pal);
+}
+
+void MainWindow::closeEvent(QCloseEvent *e)
+{
+    if(editor->close())
+    {
+        e->accept();
+    }
+    else
+    {
+        e->ignore();
+    }
 }
