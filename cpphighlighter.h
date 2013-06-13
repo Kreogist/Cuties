@@ -2,6 +2,7 @@
 #define CPPHIGHLIGHTER_H
 
 #include <QList>
+#include <QFont>
 #include <QRegularExpression>
 #include "highlighterbase.h"
 

@@ -71,21 +71,20 @@ cppHighlighter::cppHighlighter(QObject *parent) :
     hlrSpTypes.regexp.setPattern(QString("^[[:blank:]]*#([[:blank:]]*[[:word:]]*)"));
     rules<<hlrSpTypes;
 
-    /*
-    hlrPreProc.type_name="preprocestring";
+    //TODO
+    hlrSpTypes.type_name="todo";
+    hlrSpTypes.regexp.setPattern(QString("(TODO|FIXME|BUG)([:]?)"));
+    rules<<hlrSpTypes;
 
-    highlight_rule label;
-    label.type_name="label";
-    label.regexp.setPattern("^[[:blank:]]*[[:alnum:]]+:[[:blank:]]*\\z");
-    rules<<label;
+    //String
+    hlrSpTypes.type_name="string";
+    hlrSpTypes.regexp.setPattern("\"([^\"']*)\"");
+    rules<<hlrSpTypes;
 
-
-
-    highlight_rule todo;
-    todo.type_name="todo";
-    todo.regexp.setPattern("(TODO|FIXME|BUG)([:]?)");
-    rules<<todo;*/
-
+    //Single Line Comments, this must be the last one
+    hlrSpTypes.type_name="comment";
+    hlrSpTypes.regexp.setPattern(QString("//.{0,}"));
+    rules<<hlrSpTypes;
 
 }
 
@@ -95,16 +94,14 @@ void cppHighlighter::highlightBlock(const QString &text)
     {
         QRegularExpressionMatch match=rules[i].regexp.match(
                     text,
-                    0,
-                    QRegularExpression::PartialPreferFirstMatch);
+                    0);
         while (match.hasMatch()) {
             setFormat(match.capturedStart(),
                       match.capturedLength(),
                       this->getTextCharFormat(rules[i].type_name));
             match=rules[i].regexp.match(
                         text,
-                        match.capturedEnd(),
-                        QRegularExpression::PartialPreferFirstMatch);
+                        match.capturedEnd());
         }
     }
 }
