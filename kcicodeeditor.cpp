@@ -22,7 +22,6 @@
 kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
-    setContentsMargins(0,0,0,0);
     setFrameStyle(QFrame::NoFrame);
     connect(this,&kciCodeEditor::cursorPositionChanged,
             this,&kciCodeEditor::highlightCurrentLine);

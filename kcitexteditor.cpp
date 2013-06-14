@@ -23,7 +23,6 @@
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QWidget(parent)
 {
-    setContentsMargins(0,0,0,0);
     //setWindowFlags(Qt::AnchorPoint);
 
     mainLayout=new QHBoxLayout(this);
@@ -32,7 +31,6 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     linePanel=new kciLinenumPanel(this);
     mainLayout->addWidget(linePanel);
-    mainLayout->setContentsMargins(0,0,0,0);
 
     editor=new kciCodeEditor(this);
     linePanel->setPlainTextEdit(editor);
@@ -181,10 +179,14 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
     {
         QMessageBox msgbox(this);
 
-        msgbox.setText(tr("The document has been modified."));
-        msgbox.setInformativeText(tr("Do you want to save your changes?"));
+        msgbox.setText("<FONT COLOR='#FFFFFF'>" + tr("The document has been modified.") + "</FONT>");
+        msgbox.setInformativeText("<FONT COLOR='#FFFFFF'>" + tr("Do you want to save your changes?") + "</FONT>");
+
         msgbox.setStandardButtons(QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
         msgbox.setDefaultButton(QMessageBox::Save);
+        msgbox.setButtonText(QMessageBox::Save,tr("Save"));
+        msgbox.setButtonText(QMessageBox::Discard,tr("Discard"));
+        msgbox.setButtonText(QMessageBox::Cancel,tr("Cancel"));
 
         int ret=msgbox.exec();
 
