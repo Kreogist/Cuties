@@ -45,17 +45,27 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     pal.setColor(QPalette::Text,QColor(255,255,255));
     setPalette(pal);
 
+    strFileFilter=tr("All Support Files")+"(*.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp);;"+
+            tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
+            tr("C Source Files")+"(*.c);;"+
+            tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
+            tr("All Files")+"(*.*)";
+
     filePath.clear();
     fileError=QFileDevice::NoError;
 }
 
 bool kciTextEditor::open()
 {
-    filePath=QFileDialog::getOpenFileName(this,tr("open"));
+    filePath=QFileDialog::getOpenFileName(this,tr("open"),"",strFileFilter);
     if(!filePath.isEmpty())
+    {
         return open(filePath);
+    }
     else
+    {
         return false;
+    }
 }
 
 bool kciTextEditor::open(const QString &fileName)
@@ -96,7 +106,7 @@ bool kciTextEditor::save()
     }
     else
     {
-        filePath=QFileDialog::getSaveFileName(this,tr("save"));
+        filePath=QFileDialog::getSaveFileName(this,tr("save"),"",strFileFilter);
         if(!filePath.isEmpty())
         {
             return saveAs(filePath);
@@ -111,7 +121,7 @@ bool kciTextEditor::save()
 
 bool kciTextEditor::saveAs()
 {
-    QString _filePath=QFileDialog::getSaveFileName(this,tr("save"));
+    QString _filePath=QFileDialog::getSaveFileName(this,tr("save"),"",strFileFilter);
     if(!_filePath.isEmpty())
     {
         return saveAs(filePath);

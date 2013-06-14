@@ -62,7 +62,7 @@ private:
     kciLinenumPanel *linePanel;
     cppHighlighter *highlighter;
 
-    QString filePath;
+    QString filePath,strFileFilter;
     QFileDevice::FileError fileError;
 };
 
