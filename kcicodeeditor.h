@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 Wang Luming
+ *  Copyright 2013 Wang Luming<wlm199558@126.com>
  *
  *  kcicodeeditor.h is part of Kreogist-Cute-IDE.
  *

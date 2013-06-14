@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #   Copyright 2013 Wang Luming <wlm199558@126.com>
-#   Copyright 2013 Ye Haolei <18710163604@126.com>
+#   Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
 #
 #     Kreogist-Cute-IDE is free software: you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as published
