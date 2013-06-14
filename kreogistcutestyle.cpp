@@ -115,7 +115,14 @@ void KreogistCuteStyle::drawPrimitive(PrimitiveElement pe,
                                       QPainter *p,
                                       const QWidget *w) const
 {
-    style->drawPrimitive(pe,opt,p,w);
+    /*if (QStyle::PE_FrameFocusRect == element && widget &&( widget->inherits("QAbstractItemView")))
+    {
+                return;
+    }
+    else
+    {*/
+        style->drawPrimitive(pe,opt,p,w);
+    //}
 }
 
 void KreogistCuteStyle::drawComplexControl(ComplexControl cc,
@@ -168,16 +175,19 @@ int KreogistCuteStyle::pixelMetric(PixelMetric metric,
     int pIntValue = style->pixelMetric(metric,option,widget);
     switch (metric) {
     case QStyle::PM_SmallIconSize:
-        pIntValue=50;
-        break;
-    case QStyle::PM_LargeIconSize:
-        pIntValue=50;
+        //pIntValue=50;
         break;
     case QStyle::PM_ButtonIconSize:
         pIntValue=25;
         break;
     case QStyle::PM_MenuHMargin:
     case QStyle::PM_MenuVMargin:
+        pIntValue=0;
+        break;
+    case QStyle::PM_LayoutLeftMargin:
+    case QStyle::PM_LayoutBottomMargin:
+    case QStyle::PM_LayoutRightMargin:
+    case QStyle::PM_LayoutTopMargin:
         pIntValue=0;
         break;
     default:

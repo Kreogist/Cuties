@@ -59,7 +59,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     hLayout = new QHBoxLayout(this);
     setLayout(hLayout);
-    hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
     hLayout->addWidget(mainButton);
     hLayout->addStretch();
