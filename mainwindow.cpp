@@ -176,9 +176,21 @@ void MainWindow::createActions()
 
     //about
     act[about]=new QAction(tr("about"),this);
+    connect(act[about],SIGNAL(triggered()),this,SLOT(aboutKCI()));
 
     //about_qt
     act[about_qt]=new QAction(tr("about Qt"),this);
+    connect(act[about_qt],SIGNAL(triggered()),this,SLOT(aboutQt()));
+}
+
+void MainWindow::aboutKCI()
+{
+    QMessageBox::about(this,tr("about"),tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
+}
+
+void MainWindow::aboutQt()
+{
+    QMessageBox::aboutQt(this,tr("about Qt"));
 }
 
 void MainWindow::createTitlebar()

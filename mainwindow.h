@@ -30,6 +30,7 @@
 #include <QStatusBar>
 #include <QApplication>
 #include <QToolButton>
+#include <QMessageBox>
 
 #include "kcitexteditor.h"
 #include "kcititlebar.h"
@@ -43,6 +44,8 @@ public:
 signals:
     
 public slots:
+    void aboutQt();
+    void aboutKCI();
 
 protected:
     void closeEvent(QCloseEvent *e);
