@@ -68,6 +68,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addWidget(maximizeButton);
     hLayout->addWidget(closeButton);
 
+
     /*
     setMinimumWidth(mainButton->width() + titleLabel->width() + 3 +
                     minimizeButton->width() + maximizeButton->width() +

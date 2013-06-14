@@ -1,13 +1,13 @@
 # basic settings
-keyword=#309317,bold // for language keywords
-type=#309317 // for basic types
+keyword=#33ff00 // for language keywords
+datatype=#70c6ff // for basic types
 usertype=#39D898  // for user defined types
-string=#CE0F0F  // for strings and chars
+string=#f0ff00, bold  // for strings and chars
 regexp=#FF8533   // for strings and chars
 specialchar=#FF55FF // for special chars, e.g., \n, \t, \\
-comment=#D56F2B,italic // for comments
+comment=#fc7ef2 // for comments
 number=#D56F2B 	// for literal numbers
-preproc=#2C2C90, bold  // for preproc directives (e.g. #include, import)
+preproc=#EAC02B // for preproc directives (e.g. #include, import)
 symbol=#AA2222  // for simbols (e.g. <, >, +)
 function=#000000, bold // for function calls and declarations
 cbracket=#CE0F0F // for block brackets (e.g. {, })

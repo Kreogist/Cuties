@@ -39,7 +39,7 @@ public:
     explicit kciTitleBar(QWidget *parent = 0);
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString& mainIcon);
-    
+
 signals:
     
 public slots:
@@ -67,7 +67,7 @@ private:
     QString windowTitle;
 
     QToolButton *mainButton;
-    QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon;
+    QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;
 };
 
 #endif // KCITITLEBAR_H
