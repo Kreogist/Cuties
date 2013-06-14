@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowFlags(Qt::FramelessWindowHint);
 
+    restoreSettings();
+
     createActions();
     createTitlebar();
     createMenu();
@@ -275,10 +277,33 @@ void MainWindow::createStatusbar()
     statusbar->setPalette(pal);
 }
 
+void MainWindow::restoreSettings()
+{
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+
+    settings.beginGroup("MainWindow");
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("state").toByteArray());
+    settings.endGroup();
+
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("geometry",saveGeometry());
+    settings.setValue("state",saveState());
+    settings.endGroup();
+}
+
+
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     if(editor->close())
     {
+        saveSettings();
         e->accept();
     }
     else

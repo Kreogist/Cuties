@@ -36,7 +36,8 @@ SOURCES += \
     cpphighlighter.cpp \
     kreogistcutestyle.cpp \
     highlightrulesprovider.cpp \
-    kcititlebar.cpp
+    kcititlebar.cpp \
+    kciglobal.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -48,7 +49,8 @@ HEADERS += \
     cpphighlighter.h \
     kreogistcutestyle.h \
     highlightrulesprovider.h \
-    kcititlebar.h
+    kcititlebar.h \
+    kciglobal.h
 
 # Enable C++11
 CONFIG += c++11

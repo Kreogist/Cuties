@@ -1,5 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
  *  kcitexteditor.h is part of Kreogist-Cute-IDE.
  *
@@ -31,7 +32,10 @@
 #include <QTextStream>
 #include <QString>
 #include <QMessageBox>
+#include <QSettings>
+#include <QDebug>
 
+#include "kciglobal.h"
 #include "kcicodeeditor.h"
 #include "kcilinenumpanel.h"
 #include "cpphighlighter.h"

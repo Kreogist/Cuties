@@ -31,7 +31,9 @@
 #include <QApplication>
 #include <QToolButton>
 #include <QMessageBox>
+#include <QSettings>
 
+#include "kciglobal.h"
 #include "kcitexteditor.h"
 #include "kcititlebar.h"
 
@@ -119,6 +121,9 @@ private:
     QAction *act[act_count];
     QMenu *menu[menu_count];
     kciTitleBar *titlebar;
+
+    void saveSettings();
+    void restoreSettings();
 
     void createActions();
     void createTitlebar();
