@@ -28,6 +28,10 @@ MainWindow::MainWindow(QWidget *parent) :
     editor = new kciTextEditor(this);
     setCentralWidget(editor);
 
+    QPalette QPpal = palette();
+    QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
+    setPalette(QPpal);
+
     setWindowFlags(Qt::FramelessWindowHint);
 
     createActions();
@@ -204,6 +208,7 @@ void MainWindow::createMenu()
     for(i=new_file;i<=quit;i++)
     {
         menu[file]->addAction(act[i]);
+        act[i]->setIcon(*MenuIconAddor);
     }
 
     //edit menu

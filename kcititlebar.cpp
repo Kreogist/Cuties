@@ -64,9 +64,27 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addStretch();
     hLayout->addWidget(titleLabel);
     hLayout->addSpacing(3);
-    hLayout->addWidget(minimizeButton);
-    hLayout->addWidget(maximizeButton);
-    hLayout->addWidget(closeButton);
+
+    vMinLayout = new QVBoxLayout(this);
+    minimizeButton->setFixedWidth(30);
+    minimizeButton->setFixedHeight(20);
+    vMinLayout->addWidget(minimizeButton);
+    vMinLayout->addStretch();
+    hLayout->addLayout(vMinLayout);
+
+    vMaxLayout = new QVBoxLayout(this);
+    maximizeButton->setFixedHeight(20);
+    maximizeButton->setFixedWidth(30);
+    vMaxLayout->addWidget(maximizeButton);
+    vMaxLayout->addStretch();
+    hLayout->addLayout(vMaxLayout);
+
+    vCloseLayout = new QVBoxLayout(this);
+    closeButton->setFixedWidth(50);
+    closeButton->setFixedHeight(20);
+    vCloseLayout->addWidget(closeButton);
+    vCloseLayout->addStretch();
+    hLayout->addLayout(vCloseLayout);
 
 
     /*

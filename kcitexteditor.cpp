@@ -163,8 +163,8 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
     {
         QMessageBox msgbox(this);
 
-        msgbox.setText("<FONT COLOR='#FFFFFF'>" + tr("The document has been modified.") + "</FONT>");
-        msgbox.setInformativeText("<FONT COLOR='#FFFFFF'>" + tr("Do you want to save your changes?") + "</FONT>");
+        msgbox.setText(tr("The document has been modified."));
+        msgbox.setInformativeText(tr("Do you want to save your changes?"));
 
         msgbox.setStandardButtons(QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
         msgbox.setDefaultButton(QMessageBox::Save);

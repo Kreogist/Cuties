@@ -93,7 +93,7 @@ void kciPanel::paintEvent(QPaintEvent *event)
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();
-    setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+5);
+    setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);
 
     for(;
         block.isValid() && block.isVisible();
