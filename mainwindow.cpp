@@ -190,9 +190,7 @@ void MainWindow::createActions()
 void MainWindow::aboutKCI()
 {
     QMessageBox::about(this,tr("about"),
-                       "<FONT COLOR='#FFFFFF'>" +
-                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer")
-                       + "</FONT>");
+                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
 }
 
 void MainWindow::aboutQt()
