@@ -3,7 +3,7 @@
  *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
  *
- *  mainwindow.cpp is part of Kreogist-Cute-IDE.
+ *  highlighterbase.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

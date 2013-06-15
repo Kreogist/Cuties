@@ -22,6 +22,7 @@
 #include <QTranslator>
 #include <QStyle>
 #include <QFont>
+#include <QString>
 #include <QStyleFactory>
 #include "mainwindow.h"
 #include "kreogistcutestyle.h"
@@ -29,6 +30,11 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc,argv);
+    QApplication::setApplicationName(QString("Kreogist Cute IDE"));
+    QApplication::setApplicationVersion(QString("0.1.0"));
+    QApplication::setOrganizationName("Kreogist Team");
+    QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
+
     QTranslator appTrans;
 
     appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());

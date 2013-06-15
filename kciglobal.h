@@ -1,8 +1,8 @@
 /*
- *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Wang Luming<wlm199558@126.com>
  *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
- *  cpphighlighter.h is part of Kreogist-Cute-IDE.
+ *  kciglobal.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,26 +18,19 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CPPHIGHLIGHTER_H
-#define CPPHIGHLIGHTER_H
+#ifndef KCIGLOBAL_H
+#define KCIGLOBAL_H
 
-#include <QList>
-#include <QFont>
-#include <QRegularExpression>
-#include "highlighterbase.h"
+#include <QString>
 
-class cppHighlighter : public highlighterBase
+//Global Variables
+class kciGlobal
 {
-    Q_OBJECT
 public:
-    explicit cppHighlighter(QObject *parent = 0);
-
-protected:
-    void highlightBlock(const QString &text);
+    static const QString settingsFileName;
 
 private:
-    QList<highlight_rule> rules;
-    
+    kciGlobal();
 };
 
-#endif // CPPHIGHLIGHTER_H
+#endif // KCIGLOBAL_H

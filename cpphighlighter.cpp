@@ -2,7 +2,6 @@
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
  *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
- *
  *  cppHighlighter.cpp is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify

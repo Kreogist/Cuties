@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowFlags(Qt::FramelessWindowHint);
 
+    restoreSettings();
+
     createActions();
     createTitlebar();
     createMenu();
@@ -178,9 +180,24 @@ void MainWindow::createActions()
 
     //about
     act[about]=new QAction(tr("about"),this);
+    connect(act[about],SIGNAL(triggered()),this,SLOT(aboutKCI()));
 
     //about_qt
     act[about_qt]=new QAction(tr("about Qt"),this);
+    connect(act[about_qt],SIGNAL(triggered()),this,SLOT(aboutQt()));
+}
+
+void MainWindow::aboutKCI()
+{
+    QMessageBox::about(this,tr("about"),
+                       "<FONT COLOR='#FFFFFF'>" +
+                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer")
+                       + "</FONT>");
+}
+
+void MainWindow::aboutQt()
+{
+    QMessageBox::aboutQt(this,tr("about Qt"));
 }
 
 void MainWindow::createTitlebar()
@@ -269,10 +286,33 @@ void MainWindow::createStatusbar()
     statusbar->setPalette(pal);
 }
 
+void MainWindow::restoreSettings()
+{
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+
+    settings.beginGroup("MainWindow");
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("state").toByteArray());
+    settings.endGroup();
+
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("geometry",saveGeometry());
+    settings.setValue("state",saveState());
+    settings.endGroup();
+}
+
+
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     if(editor->close())
     {
+        saveSettings();
         e->accept();
     }
     else

@@ -1,5 +1,6 @@
 /*
- *  Copyright 2013 Wang Luming
+ *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
  *  kcitexteditor.cpp is part of Kreogist-Cute-IDE.
  *
@@ -55,7 +56,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
 bool kciTextEditor::open()
 {
-    filePath=QFileDialog::getOpenFileName(this,tr("open"),"",strFileFilter);
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    filePath=QFileDialog::getOpenFileName(this,tr("open"),settings.value("texteditor/historyDir").toString(),strFileFilter);
     if(!filePath.isEmpty())
     {
         return open(filePath);
@@ -76,12 +78,17 @@ bool kciTextEditor::open(const QString &fileName)
 
         editor->clear();
         editor->insertPlainText(QString(_textIn.readAll()));
+        editor->document()->setModified(false);
 
         QFileInfo _fileInfo(_file);
         editor->setDocumentTitle(_fileInfo.fileName());
 
         filePath=fileName;
         fileError=QFileDevice::NoError;
+
+        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+        settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
+
         return true;
     }
     else
@@ -104,7 +111,9 @@ bool kciTextEditor::save()
     }
     else
     {
-        filePath=QFileDialog::getSaveFileName(this,tr("save"),"",strFileFilter);
+        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+        filePath=QFileDialog::getSaveFileName(this,tr("save"),settings.value("texteditor/historyDir").toString(),strFileFilter);
+
         if(!filePath.isEmpty())
         {
             return saveAs(filePath);
@@ -119,8 +128,10 @@ bool kciTextEditor::save()
 
 bool kciTextEditor::saveAs()
 {
-    QString _filePath=QFileDialog::getSaveFileName(this,tr("save"),"",strFileFilter);
-    if(!_filePath.isEmpty())
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    filePath=QFileDialog::getSaveFileName(this,tr("save as"),settings.value("texteditor/historyDir").toString(),strFileFilter);
+
+    if(!filePath.isEmpty())
     {
         return saveAs(filePath);
     }
@@ -148,6 +159,11 @@ bool kciTextEditor::saveAs(const QString &fileName)
         filePath=fileName;
         fileError=QFileDevice::NoError;
         editor->document()->setModified(false);
+
+        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+        settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
+
+
         return true;
     }
     else
