@@ -27,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     editor = new kciTextEditor(this);
     setCentralWidget(editor);
+    setContentsMargins(0,0,0,0);
+
+    QPalette QPpal = palette();
+    QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
+    setPalette(QPpal);
 
     setWindowFlags(Qt::FramelessWindowHint);
 
@@ -186,9 +191,7 @@ void MainWindow::createActions()
 void MainWindow::aboutKCI()
 {
     QMessageBox::about(this,tr("about"),
-                       "<FONT COLOR='#FFFFFF'>" +
-                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer")
-                       + "</FONT>");
+                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
 }
 
 void MainWindow::aboutQt()
@@ -208,6 +211,7 @@ void MainWindow::createMenu()
     int i;
 
     QMenu *_mainMenu=new QMenu;
+    _mainMenu->setWindowOpacity(50);
     QIcon *MenuIconAddor=new QIcon;
     QSize *MenuIconSize=new QSize;
     MenuIconSize->setHeight(50);
@@ -221,6 +225,7 @@ void MainWindow::createMenu()
     for(i=new_file;i<=quit;i++)
     {
         menu[file]->addAction(act[i]);
+        act[i]->setIcon(*MenuIconAddor);
     }
 
     //edit menu

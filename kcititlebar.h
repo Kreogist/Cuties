@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QStyle>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QIcon>
 #include <QString>
@@ -62,6 +63,7 @@ private:
     QToolButton *maximizeButton,*minimizeButton;
     QToolButton *closeButton;
 
+    QVBoxLayout *vMinLayout, *vMaxLayout, *vCloseLayout;
     QHBoxLayout *hLayout;
     QLabel *titleLabel;
     QString windowTitle;

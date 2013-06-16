@@ -25,6 +25,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     mainWindow(parent)
 {
     setMouseTracking(true);
+    setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
 
     windowTitle=parent->windowTitle();
@@ -58,15 +59,34 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
 
     hLayout = new QHBoxLayout(this);
-    setLayout(hLayout);
+    hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
+    setLayout(hLayout);
     hLayout->addWidget(mainButton);
     hLayout->addStretch();
     hLayout->addWidget(titleLabel);
     hLayout->addSpacing(3);
-    hLayout->addWidget(minimizeButton);
-    hLayout->addWidget(maximizeButton);
-    hLayout->addWidget(closeButton);
+
+    vMinLayout = new QVBoxLayout();
+    minimizeButton->setFixedWidth(30);
+    minimizeButton->setFixedHeight(20);
+    vMinLayout->addWidget(minimizeButton);
+    vMinLayout->addStretch();
+    hLayout->addLayout(vMinLayout);
+
+    vMaxLayout = new QVBoxLayout();
+    maximizeButton->setFixedHeight(20);
+    maximizeButton->setFixedWidth(30);
+    vMaxLayout->addWidget(maximizeButton);
+    vMaxLayout->addStretch();
+    hLayout->addLayout(vMaxLayout);
+
+    vCloseLayout = new QVBoxLayout();
+    closeButton->setFixedWidth(50);
+    closeButton->setFixedHeight(20);
+    vCloseLayout->addWidget(closeButton);
+    vCloseLayout->addStretch();
+    hLayout->addLayout(vCloseLayout);
 
 
     /*
