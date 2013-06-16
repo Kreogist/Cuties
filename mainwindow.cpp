@@ -210,6 +210,7 @@ void MainWindow::createMenu()
     int i;
 
     QMenu *_mainMenu=new QMenu;
+    _mainMenu->setWindowOpacity(50);
     QIcon *MenuIconAddor=new QIcon;
     QSize *MenuIconSize=new QSize;
     MenuIconSize->setHeight(50);

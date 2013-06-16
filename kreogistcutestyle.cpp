@@ -42,7 +42,9 @@ void KreogistCuteStyle::drawControl(ControlElement element,
         const QStyleOptionMenuItem *_opt_menu_item=
                 qstyleoption_cast<const QStyleOptionMenuItem *>(opt);
         if(_opt_menu_item != nullptr)
+        {
             drawMenuItem(_opt_menu_item,p,w);
+        }
 
         break;
     }
@@ -52,7 +54,6 @@ void KreogistCuteStyle::drawControl(ControlElement element,
         break;
     }
 }
-
 
 void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
                                      QPainter *p,
