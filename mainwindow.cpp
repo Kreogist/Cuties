@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     editor = new kciTextEditor(this);
     setCentralWidget(editor);
+    setContentsMargins(0,0,0,0);
 
     QPalette QPpal = palette();
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));

@@ -25,6 +25,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     mainWindow(parent)
 {
     setMouseTracking(true);
+    setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
 
     windowTitle=parent->windowTitle();
@@ -58,8 +59,9 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
 
     hLayout = new QHBoxLayout(this);
-    setLayout(hLayout);
+    hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
+    setLayout(hLayout);
     hLayout->addWidget(mainButton);
     hLayout->addStretch();
     hLayout->addWidget(titleLabel);

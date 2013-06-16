@@ -221,11 +221,11 @@ int KreogistCuteStyle::pixelMetric(PixelMetric metric,
         pIntValue=0;
         break;
     case QStyle::PM_LayoutLeftMargin:
-    case QStyle::PM_LayoutBottomMargin:
+   /* case QStyle::PM_LayoutBottomMargin:
     case QStyle::PM_LayoutRightMargin:
     case QStyle::PM_LayoutTopMargin:
         pIntValue=0;
-        break;
+        break;*/
     default:
         break;
     }

@@ -27,6 +27,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     mainLayout=new QHBoxLayout(this);
     mainLayout->setSpacing(0);
+    setContentsMargins(0,0,0,0);
+    mainLayout->setMargin(0);
     setLayout(mainLayout);
 
     linePanel=new kciLinenumPanel(this);
