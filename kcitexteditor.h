@@ -41,6 +41,9 @@
 #include "kcilinenumpanel.h"
 #include "highlighterfactory.h"
 
+//default highlighter
+#include "cpphighlighter.h"
+
 class kciTextEditor : public QWidget
 {
     Q_OBJECT
