@@ -1,8 +1,7 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
- *  highlightrulesprovider.cpp is part of Kreogist-Cute-IDE.
+ *  highlighterfactory.cpp is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +17,31 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "highlightrulesprovider.h"
+#include "highlighterfactory.h"
 
-highlightRulesProvider* highlightRulesProvider::instance=nullptr;
-
-highlightRulesProvider* highlightRulesProvider::getInstance()
+highlighterFactory::highlighterFactory(QObject *parent) :
+    QObject(parent)
 {
-    if(instance == nullptr)
+}
+
+QSyntaxHighlighter* highlighterFactory::createHighlighterByFileName(
+        const QString &fileName,
+        QObject *parent)
+{
+    QFileInfo _fileInfo(fileName);
+    QString suffix=_fileInfo.suffix();
+
+    if(suffix.contains(cppHighlighter::suffixFilter()))
     {
-        return instance=new highlightRulesProvider;
+        return new cppHighlighter(parent);
+    }
+    else if(suffix.contains(pascalHighlighter::suffixFilter()))
+    {
+        return new pascalHighlighter(parent);
     }
     else
     {
-        return instance;
+        //use cpp-mode as default.
+        //return new cppHighlighter(parent);
     }
-}
-
-highlightRulesProvider::highlightRulesProvider()
-{
-
 }

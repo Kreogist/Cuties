@@ -3,7 +3,7 @@
  *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
  *
- *  highlighterBase.cpp is part of Kreogist-Cute-IDE.
+ *  textcharformatmap.cpp is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,59 +19,60 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QApplication>
+#include "textcharformatmap.h"
 
-#include "highlighterbase.h"
+textCharFormatMap* textCharFormatMap::instance=nullptr;
 
-QMap<QString, QTextCharFormat> highlighterBase::map;
-bool highlighterBase::isInited=false;
-
-highlighterBase::highlighterBase(QObject *parent) :
-    QSyntaxHighlighter(parent)
+textCharFormatMap::textCharFormatMap(QObject *parent) :
+    QObject(parent)
 {
-    if(!isInited)
+    /*--------------Solve the very exotic problem.----------------*/
+    //QFile file("default.style");
+    QFile file(qApp->applicationDirPath() + "/default.style");
+
+
+    if(file.open(QFile::ReadOnly| QFile::Text))
     {
-        /*--------------Solve the very exotic problem.----------------*/
-        //QFile file("default.style");
-        QFile file(qApp->applicationDirPath() + "/default.style");
+        char str_line[100];
 
-
-        if(file.open(QFile::ReadOnly| QFile::Text))
+        for(int i=file.readLine(str_line,100);
+            i>0;
+            i=file.readLine(str_line,100))
         {
-            char str_line[100];
-
-            for(int i=file.readLine(str_line,100);
-                i>0;
-                i=file.readLine(str_line,100))
-            {
-                parseStyleFileLine(str_line);
-            }
-
+            parseStyleFileLine(str_line);
         }
-        else{
-            qDebug()<<"highlighterBase: Can't not open default.style";
-        }
+
+    }
+    else{
+        qDebug()<<"textCharFormatMap: Can't not open default.style";
     }
 }
 
-const QTextCharFormat& highlighterBase::operator[] (const QString& typeName)
+textCharFormatMap* textCharFormatMap::getInstance()
 {
-    return map[typeName];
+    //FIXME: This isn't thread-safe
+    if(instance == nullptr)
+    {
+        instance = new textCharFormatMap;
+    }
+
+    return instance;
 }
 
-const QTextCharFormat& highlighterBase::getTextCharFormat(
+
+const QTextCharFormat& textCharFormatMap::getTextCharFormat(
         const QString &typeName)
 {
     return map[typeName];
 }
 
 /*!
-* \brief highlighterBase::parseStyleFileLine parse a line of the style file.
+* \brief textCharFormatMap::parseStyleFileLine parse a line of the style file.
 * \param str_line The line that will be parsed.
 * \param lenth The lenth of the str_line.
 * \return return true if the string has been parsed successufully.Otherwise return false.
 */
-bool highlighterBase::parseStyleFileLine(char *str_line)
+bool textCharFormatMap::parseStyleFileLine(char *str_line)
 {
     //ignore the comment line
     if(str_line[0]=='#' || (str_line[0]=='/' && str_line[1]=='/'))

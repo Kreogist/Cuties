@@ -1,8 +1,9 @@
 /*
- *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
- *  cpphighlighter.h is part of Kreogist-Cute-IDE.
+ *
+ *  textcharformatmap.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,33 +19,30 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CPPHIGHLIGHTER_H
-#define CPPHIGHLIGHTER_H
+#ifndef TEXTCHARFORMATMAP_H
+#define TEXTCHARFORMATMAP_H
 
-#include <QList>
-#include <QFont>
-#include <QSyntaxHighlighter>
-#include <QRegularExpression>
+#include <QObject>
+#include <QFile>
+#include <QTextCharFormat>
+#include <QApplication>
+#include <QDebug>
 
-#include "highlighterGlobal.h"
-#include "textcharformatmap.h"
-
-
-class cppHighlighter : public QSyntaxHighlighter
+class textCharFormatMap : public QObject
 {
     Q_OBJECT
 public:
-    explicit cppHighlighter(QObject *parent = 0);
+    explicit textCharFormatMap(QObject *parent = 0);
 
-    static QRegularExpression suffixFilter();
-
-protected:
-    void highlightBlock(const QString &text);
+    static textCharFormatMap* getInstance();
+    const QTextCharFormat& getTextCharFormat(const QString& typeName);
 
 private:
-    QList<highlight_rule> rules;
+    static textCharFormatMap* instance;
+    QMap<QString, QTextCharFormat> map;
+
+    bool parseStyleFileLine(char *str_line);
     
-    textCharFormatMap *instance;
 };
 
-#endif // CPPHIGHLIGHTER_H
+#endif // TEXTCHARFORMATMAP_H

@@ -32,12 +32,13 @@ SOURCES += \
     kcitexteditor.cpp \
     kcipanel.cpp \
     kcilinenumpanel.cpp \
-    highlighterbase.cpp \
     cpphighlighter.cpp \
     kreogistcutestyle.cpp \
-    highlightrulesprovider.cpp \
     kcititlebar.cpp \
-    kciglobal.cpp
+    kciglobal.cpp \
+    pascalhighlighter.cpp \
+    highlighterfactory.cpp \
+    textcharformatmap.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -45,12 +46,14 @@ HEADERS += \
     kcitexteditor.h \
     kcipanel.h \
     kcilinenumpanel.h \
-    highlighterbase.h \
     cpphighlighter.h \
     kreogistcutestyle.h \
-    highlightrulesprovider.h \
     kcititlebar.h \
-    kciglobal.h
+    kciglobal.h \
+    pascalhighlighter.h \
+    highlighterfactory.h \
+    textcharformatmap.h \
+    highlighterGlobal.h
 
 # Enable C++11
 CONFIG += c++11

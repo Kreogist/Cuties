@@ -2,7 +2,7 @@
  *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
  *
- *  cppHighlighter.cpp is part of Kreogist-Cute-IDE.
+ *  pascalhighlighter.cpp is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,60 +18,46 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "cpphighlighter.h"
 
-cppHighlighter::cppHighlighter(QObject *parent) :
+#include "pascalhighlighter.h"
+
+pascalHighlighter::pascalHighlighter(QObject *parent) :
     QSyntaxHighlighter(parent)
 {
     //get textCharFormatMap instance
     instance = textCharFormatMap::getInstance();
 
     //Declare values:
-    int i;
     highlight_rule hlrDataType, hlrKeyWords, hlrSpTypes,hlrSingleLineCComments;
     QString strKeyWords;
 
     //Set Data Types:
     hlrDataType.type_name="datatype";
-    hlrDataType.regexp.setPattern("\\b(bool|char|double|float|int|long|short|signed|unsigned|void|wchar_t|char16_t|char32_t|nullptr)\\b");
+    hlrDataType.regexp.setPattern("\\b(boolean|byte|char|integer|maxint|real)\\b");
+    hlrDataType.regexp.setPatternOptions(
+                QRegularExpression::CaseInsensitiveOption);
     rules<<hlrDataType;
 
     //Set Key Words:
     hlrKeyWords.type_name="keyword";
     QStringList _keyword;
-    _keyword<<"__asm|__cdecl|__declspec|__export|__far16|"
-    <<"__fastcall|__fortran|__import|"
-    <<"__pascal|__rtti|__stdcall|_asm|_cdecl|"
-    <<"__except|_export|_far16|_fastcall|"
-    <<"__finally|_fortran|_import|_pascal|_stdcall|__thread|__try|asm|auto|"
-    <<"break|case|catch|cdecl|const|continue|default|"
-    <<"do|else|enum|extern|for|goto|"
-    <<"if|pascal|"
-    <<"register|return|sizeof|static|"
-    <<"struct|switch|"
-    <<"typedef|union|"
-    <<"volatile|while|"
-    <<"class|const_cast|delete|"
-    <<"dynamic_cast|explicit|false|friend|"
-    <<"inline|mutable|namespace|new|operator|private|protected|"
-    <<"public|reinterpret_cast|static_cast|"
-    <<"template|this|throw|true|"
-    <<"try|typeid|typename|"
-    <<"using|virtual";
+    _keyword<<"alfa|and|array|begin|case|const|div"
+            <<"do|downto|else|end|false|file|for|function|get|goto|if|in"
+            <<"label|mod|new|not|of|or|pack|packed|page|program"
+            <<"put|procedure|read|readln|record|repeat|reset|rewrite|set"
+            <<"text|then|to|true|type|unpack|until|var|while|with|writeln|write";
     strKeyWords="\\b(";
-    for(i=0;i<_keyword.size();i++)
+    for(int i=0;i<_keyword.size();i++)
     {
         strKeyWords=strKeyWords+_keyword[i];
     }
     strKeyWords=strKeyWords+QString(")\\b");
     hlrKeyWords.regexp.setPattern(strKeyWords);
+    hlrKeyWords.regexp.setPatternOptions(
+                QRegularExpression::CaseInsensitiveOption);
     rules<<hlrKeyWords;
 
     //Set Other Special Types:
-    //Pre-Process
-    hlrSpTypes.type_name = "preproc";
-    hlrSpTypes.regexp.setPattern(QString("^[[:blank:]]*#([[:blank:]]*[[:word:]]*)"));
-    rules<<hlrSpTypes;
 
     //TODO
     hlrSpTypes.type_name="todo";
@@ -83,20 +69,16 @@ cppHighlighter::cppHighlighter(QObject *parent) :
     hlrSpTypes.regexp.setPattern("\"([^\"']*)\"");
     rules<<hlrSpTypes;
 
-    //Single Line Comments, this must be the last one
-    hlrSpTypes.type_name="comment";
-    hlrSpTypes.regexp.setPattern(QString("//.{0,}"));
+    hlrSpTypes.regexp.setPattern("\'([^\"']*)\'");
     rules<<hlrSpTypes;
-
 }
 
-QRegularExpression cppHighlighter::suffixFilter()
+QRegularExpression pascalHighlighter::suffixFilter()
 {
-    return QRegularExpression("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)"
-                              ,QRegularExpression::CaseInsensitiveOption);
+    return QRegularExpression("pas",QRegularExpression::CaseInsensitiveOption);
 }
 
-void cppHighlighter::highlightBlock(const QString &text)
+void pascalHighlighter::highlightBlock(const QString &text)
 {
     //!TODO: unsupport multiline comment
     for(int i=0;i<rules.size();i++)

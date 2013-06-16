@@ -1,9 +1,7 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *
- *
- *  highlighterbase.h is part of Kreogist-Cute-IDE.
+ *  highlighterfactory.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,41 +17,30 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HIGHLIGHTERBASE_H
-#define HIGHLIGHTERBASE_H
+#ifndef HIGHLIGHTERFACTORY_H
+#define HIGHLIGHTERFACTORY_H
 
+#include <QObject>
+#include <QTextDocument>
+#include <QFileInfo>
 #include <QSyntaxHighlighter>
-#include <QRegularExpression>
-#include <QMap>
-#include <QString>
-#include <QTextCharFormat>
-#include <QFile>
-#include <QString>
-#include <QSet>
-#include <QDebug>
 
-struct highlight_rule
-{
-    QString type_name;
+#include "cpphighlighter.h"
+#include "pascalhighlighter.h"
 
-    QRegularExpression regexp;
-};
-
-class highlighterBase : public QSyntaxHighlighter
+class highlighterFactory : public QObject
 {
     Q_OBJECT
 public:
-    explicit highlighterBase(QObject *parent = 0);
+    explicit highlighterFactory(QObject *parent = 0);
 
-    const QTextCharFormat& operator[] (const QString& typeName);
-    const QTextCharFormat& getTextCharFormat(const QString& typeName);
-
-private:
-    static QMap<QString, QTextCharFormat> map;
-    static bool isInited;
-
-    bool parseStyleFileLine(char *str_line);
+    static QSyntaxHighlighter* createHighlighterByFileName(const QString& fileName,
+                                                 QObject *parent);
+    
+signals:
+    
+public slots:
     
 };
 
-#endif // HIGHLIGHTERBASE_H
+#endif // HIGHLIGHTERFACTORY_H

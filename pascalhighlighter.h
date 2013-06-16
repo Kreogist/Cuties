@@ -1,8 +1,8 @@
 /*
- *  Copyright 2013 Wang Luming <wlm199558@126.com>
  *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
+ *  Copyright 2013 Wang Luming <wlm199558@126.com>
  *
- *  highlightrulesprovider.h is part of Kreogist-Cute-IDE.
+ *  pascalhighlighter.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,32 +18,36 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HIGHLIGHTRULESPROVIDER_H
-#define HIGHLIGHTRULESPROVIDER_H
+#ifndef PASCALHIGHLIGHTER_H
+#define PASCALHIGHLIGHTER_H
 
-#include <QObject>
 #include <QList>
+#include <QFont>
+#include<QSyntaxHighlighter>
+#include <QRegularExpression>
 
-//This is a Single Ton
+#include "highlighterGlobal.h"
+#include "textcharformatmap.h"
 
-class highlightRulesProvider : public QObject
+class pascalHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
-
 public:
-    highlightRulesProvider* getInstance();
+    explicit pascalHighlighter(QObject *parent = 0);
+
+    static QRegularExpression suffixFilter();
     
 signals:
-    void highlightRuleChanged();
     
 public slots:
 
+protected:
+    void highlightBlock(const QString &text);
+    
 private:
-    highlightRulesProvider();
+    QList<highlight_rule> rules;
 
-    static highlightRulesProvider *instance;
-
-    void generateCppRules();
+    textCharFormatMap *instance;
 };
 
-#endif // HIGHLIGHTRULESPROVIDER_H
+#endif // PASCALHIGHLIGHTER_H

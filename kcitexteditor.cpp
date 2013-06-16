@@ -36,8 +36,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     linePanel->setPlainTextEdit(editor);
     mainLayout->addWidget(editor);
 
-    highlighter=new cppHighlighter(this);
-    highlighter->setDocument(editor->document());
+    highlighter=nullptr;
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x53,0x53,0x53));
@@ -57,7 +56,9 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 bool kciTextEditor::open()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-    filePath=QFileDialog::getOpenFileName(this,tr("open"),settings.value("texteditor/historyDir").toString(),strFileFilter);
+    filePath=QFileDialog::getOpenFileName(this,tr("open"),
+                                          settings.value("texteditor/historyDir").toString(),
+                                          strFileFilter);
     if(!filePath.isEmpty())
     {
         return open(filePath);
@@ -82,6 +83,24 @@ bool kciTextEditor::open(const QString &fileName)
 
         QFileInfo _fileInfo(_file);
         editor->setDocumentTitle(_fileInfo.fileName());
+
+        if(highlighter == nullptr)
+        {
+            highlighter = highlighterFactory::createHighlighterByFileName(
+                        _fileInfo.fileName(), this);
+
+            highlighter->setDocument(editor->document());
+            highlighter->rehighlight();
+        }
+        else
+        {
+            highlighter->deleteLater();
+            highlighter = highlighterFactory::createHighlighterByFileName(
+                        _fileInfo.fileName(), this);
+
+            highlighter->setDocument(editor->document());
+            highlighter->rehighlight();
+        }
 
         filePath=fileName;
         fileError=QFileDevice::NoError;
@@ -163,6 +182,23 @@ bool kciTextEditor::saveAs(const QString &fileName)
         QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
         settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
 
+        if(highlighter == nullptr)
+        {
+            highlighter = highlighterFactory::createHighlighterByFileName(
+                        _fileInfo.fileName(), this);
+
+            highlighter->setDocument(editor->document());
+            highlighter->rehighlight();
+        }
+        else
+        {
+            highlighter->deleteLater();
+            highlighter = highlighterFactory::createHighlighterByFileName(
+                        _fileInfo.fileName(), this);
+
+            highlighter->setDocument(editor->document());
+            highlighter->rehighlight();
+        }
 
         return true;
     }

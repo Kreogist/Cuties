@@ -33,12 +33,13 @@
 #include <QString>
 #include <QMessageBox>
 #include <QSettings>
+#include <QSyntaxHighlighter>
 #include <QDebug>
 
 #include "kciglobal.h"
 #include "kcicodeeditor.h"
 #include "kcilinenumpanel.h"
-#include "cpphighlighter.h"
+#include "highlighterfactory.h"
 
 class kciTextEditor : public QWidget
 {
@@ -64,7 +65,7 @@ private:
     QHBoxLayout *mainLayout;
     kciCodeEditor *editor;
     kciLinenumPanel *linePanel;
-    cppHighlighter *highlighter;
+    QSyntaxHighlighter *highlighter;
 
     QString filePath,strFileFilter;
     QFileDevice::FileError fileError;
