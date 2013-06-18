@@ -38,7 +38,8 @@ SOURCES += \
     kciglobal.cpp \
     pascalhighlighter.cpp \
     highlighterfactory.cpp \
-    textcharformatmap.cpp
+    textcharformatmap.cpp \
+    compilerbase.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -53,7 +54,8 @@ HEADERS += \
     pascalhighlighter.h \
     highlighterfactory.h \
     textcharformatmap.h \
-    highlighterGlobal.h
+    highlighterGlobal.h \
+    compilerbase.h
 
 # Enable C++11
 CONFIG += c++11
