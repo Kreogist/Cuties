@@ -44,7 +44,8 @@ void KreogistCuteStyle::drawControl(ControlElement element,
         if(_opt_menu_item != nullptr)
         {
             drawMenuItem(_opt_menu_item,p,w);
-        }    
+        }
+
         break;
     }
 
@@ -58,16 +59,11 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
                                      QPainter *p,
                                      const QWidget *w) const
 {
-<<<<<<< HEAD
-=======
     //Ok, it's a hack-way to accomplished our design.
-    style->drawControl(CE_MenuItem,opt,p,w);
 
->>>>>>> ec8b128fa8fb1e917bf23b82dd8442107578421e
     switch(opt->menuItemType)
     {
     case QStyleOptionMenuItem::SubMenu:
-
     case QStyleOptionMenuItem::Normal:
     {
         style->drawControl(CE_MenuItem,opt,p,w);
@@ -78,34 +74,15 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
             iRectH=opt->rect.height();
         QPen pen;
 
-<<<<<<< HEAD
-        if(opt->state == State_Selected)
-           //opt->state == State_HasFocus)
-=======
         /*if((opt->state & State_Active) && (opt->state & State_Sunken))
->>>>>>> ec8b128fa8fb1e917bf23b82dd8442107578421e
         {
             p->setBrush(opt->palette.highlight());
             p->drawRect(opt->rect);
             pen.setColor(QColor(0xf6,0xcd,0x32));
             p->setPen(pen);
             p->fillRect(opt->rect,Qt::BrushStyle::SolidPattern);
-            qDebug()<<"asdf";
         }
-<<<<<<< HEAD
-        else
-        {
-            ;
-        }
-        /*if(opt->state)
-        {
-            pen.setColor(QColor(0xf6,0xcd,0x32));
-            p->fillRect(opt->rect,Qt::BrushStyle::SolidPattern);
-            qDebug()<<opt->text;
-        }*/
-=======
 
->>>>>>> ec8b128fa8fb1e917bf23b82dd8442107578421e
         if(!opt->icon.isNull())
         {
             p->drawPixmap(13,
@@ -131,53 +108,15 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
         }*/
         pen.setColor(QColor(0,0,0));
         if(iRectX+iRectH -1 != opt->menuRect.y() + opt->menuRect.height())
-        p->drawLine(iRectX,iRectY+iRectH-1,iRectX+iRectW,iRectY+iRectH-1);
-        break;
-<<<<<<< HEAD
-    }/*
-    case QStyleOptionMenuItem::SubMenu:
-    {
-        int x=opt->rect.x(),
-            y=opt->rect.y(),
-            w=opt->rect.width(),
-            h=opt->rect.height();
-
-        if(opt->state == State_Active ||
-           opt->state == State_HasFocus)
         {
-            p->setBrush(opt->palette.highlight());
-
-            p->drawRect(opt->rect);
+            p->drawLine(iRectX,iRectY+iRectH-1,iRectX+iRectW,iRectY+iRectH-1);
         }
-
-        if(!opt->icon.isNull())
-        {
-            p->drawPixmap(x, y, h, h,
-                          opt->icon.pixmap(h, h));
-
-            p->drawText(x + h + 2, y, w-2-h, h,
-                        Qt::AlignCenter,opt->text);
-        }
-        else
-            p->drawText(x, y, w, h,
-                        Qt::AlignCenter,opt->text);
-
-        QPen pen;
-        pen.setColor(QColor(0,0,0));
-        p->drawLine(x,y+h-1,x+w,y+h-1);
         break;
-    }*/
-=======
     }
->>>>>>> ec8b128fa8fb1e917bf23b82dd8442107578421e
 
     default:
         style->drawControl(CE_MenuItem,opt,p,w);
     }
-<<<<<<< HEAD
-    //style->drawControl(CE_MenuItem,opt,p,w);
-=======
->>>>>>> ec8b128fa8fb1e917bf23b82dd8442107578421e
 }
 
 void KreogistCuteStyle::drawPrimitive(PrimitiveElement pe,

@@ -22,6 +22,7 @@
 #include <QTranslator>
 #include <QStyle>
 #include <QFont>
+#include <QFile>
 #include <QString>
 #include <QStyleFactory>
 #include "mainwindow.h"
@@ -30,10 +31,32 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc,argv);
+
+    QStringList list;
+    list << "Hiragino.otf";
+    int fontID(-1);
+    bool fontWarningShown(false);
+    for (QStringList::const_iterator constIterator = list.constBegin(); constIterator != list.constEnd(); ++constIterator) {
+        QFile res(qApp->applicationDirPath() + "/Fonts/" + *constIterator);
+        if (res.open(QIODevice::ReadOnly) == false) {
+            if (fontWarningShown == false) {
+                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".");
+                fontWarningShown = true;
+            }
+        } else {
+            fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
+            if (fontID == -1 && fontWarningShown == false) {
+                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".");
+                fontWarningShown = true;
+            }
+        }
+    }
+
     QApplication::setApplicationName(QString("Kreogist Cute IDE"));
     QApplication::setApplicationVersion(QString("0.1.0"));
     QApplication::setOrganizationName("Kreogist Team");
     QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
+    app.setFont(QFont("Hiragino Sans GB W3", 10));
 
     QTranslator appTrans;
 
