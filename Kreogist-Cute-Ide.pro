@@ -63,7 +63,6 @@ RESOURCES += \
 
 OTHER_FILES += \
     image/MainMenuButton.png \
-    image/FileMenuIcon.png \
     image/Minimized.png \
     image/Maxmized.png \
     image/Close.png

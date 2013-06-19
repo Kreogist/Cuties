@@ -44,8 +44,7 @@ void KreogistCuteStyle::drawControl(ControlElement element,
         if(_opt_menu_item != nullptr)
         {
             drawMenuItem(_opt_menu_item,p,w);
-        }
-
+        }    
         break;
     }
 
@@ -59,7 +58,7 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
                                      QPainter *p,
                                      const QWidget *w) const
 {
-    /*switch(opt->menuItemType)
+    switch(opt->menuItemType)
     {
     case QStyleOptionMenuItem::Normal:
     {
@@ -69,25 +68,26 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
             iRectH=opt->rect.height();
         QPen pen;
 
-        if(opt->state == State_Active ||
-           opt->state == State_HasFocus)
+        if(opt->state == State_Selected)
+           //opt->state == State_HasFocus)
         {
             p->setBrush(opt->palette.highlight());
             p->drawRect(opt->rect);
             pen.setColor(QColor(0xf6,0xcd,0x32));
             p->setPen(pen);
             p->fillRect(opt->rect,Qt::BrushStyle::SolidPattern);
+            qDebug()<<"asdf";
         }
         else
         {
-
+            ;
         }
-        if(opt->state)
+        /*if(opt->state)
         {
             pen.setColor(QColor(0xf6,0xcd,0x32));
             p->fillRect(opt->rect,Qt::BrushStyle::SolidPattern);
             qDebug()<<opt->text;
-        }
+        }*/
         if(!opt->icon.isNull())
         {
             p->drawPixmap(13,
@@ -114,7 +114,7 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
         pen.setColor(QColor(0,0,0));
         p->drawLine(iRectX,iRectY+iRectH-1,iRectX+iRectW,iRectY+iRectH-1);
         break;
-    }
+    }/*
     case QStyleOptionMenuItem::SubMenu:
     {
         int x=opt->rect.x(),
@@ -146,12 +146,12 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
         pen.setColor(QColor(0,0,0));
         p->drawLine(x,y+h-1,x+w,y+h-1);
         break;
-    }
+    }*/
 
     default:
         style->drawControl(CE_MenuItem,opt,p,w);
-    }*/
-    style->drawControl(CE_MenuItem,opt,p,w);
+    }
+    //style->drawControl(CE_MenuItem,opt,p,w);
 }
 
 void KreogistCuteStyle::drawPrimitive(PrimitiveElement pe,
@@ -220,8 +220,8 @@ int KreogistCuteStyle::pixelMetric(PixelMetric metric,
     case QStyle::PM_MenuVMargin:
         pIntValue=0;
         break;
-    case QStyle::PM_LayoutLeftMargin:
-   /* case QStyle::PM_LayoutBottomMargin:
+    /*case QStyle::PM_LayoutLeftMargin:
+    case QStyle::PM_LayoutBottomMargin:
     case QStyle::PM_LayoutRightMargin:
     case QStyle::PM_LayoutTopMargin:
         pIntValue=0;
