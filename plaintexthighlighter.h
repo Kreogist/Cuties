@@ -1,7 +1,8 @@
 /*
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
  *
- *  highlighterfactory.cpp is part of Kreogist-Cute-IDE.
+ *  pascalhighlighter.h is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,31 +18,33 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "highlighterfactory.h"
+#ifndef PLAINTEXTLIGHTER_H
+#define PLAINTEXTHIGHLIGHTER_H
 
-highlighterFactory::highlighterFactory(QObject *parent) :
-    QObject(parent)
+#include <QList>
+#include <QFont>
+#include <QSyntaxHighlighter>
+#include <QRegularExpression>
+
+#include "highlighterGlobal.h"
+#include "textcharformatmap.h"
+
+class plaintextHighlighter : public QSyntaxHighlighter
 {
-}
+    Q_OBJECT
+public:
+    explicit plaintextHighlighter(QObject *parent = 0);
 
-QSyntaxHighlighter* highlighterFactory::createHighlighterByFileName(
-        const QString &fileName,
-        QObject *parent)
-{
-    QFileInfo _fileInfo(fileName);
-    QString suffix=_fileInfo.suffix();
+    static QRegularExpression suffixFilter();
 
-    if(suffix.contains(cppHighlighter::suffixFilter()))
-    {
-        return new cppHighlighter(parent);
-    }
-    else if(suffix.contains(pascalHighlighter::suffixFilter()))
-    {
-        return new pascalHighlighter(parent);
-    }
-    else
-    {
-        //TODO: Fixed here to plain text.
-        return new cppHighlighter(parent);
-    }
-}
+signals:
+
+public slots:
+
+protected:
+
+private:
+
+};
+
+#endif // PASCALHIGHLIGHTER_H

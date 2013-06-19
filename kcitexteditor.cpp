@@ -46,10 +46,12 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     pal.setColor(QPalette::Text,QColor(255,255,255));
     setPalette(pal);
 
-    strFileFilter=tr("All Support Files")+"(*.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp);;"+
+    strFileFilter=tr("All Support Files")+"(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
+            tr("Plain Text Files")+"(*.txt);;"+
             tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
             tr("C Source Files")+"(*.c);;"+
             tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
+            tr("Pascal Source Files")+"(*.pas);;"+
             tr("All Files")+"(*.*)";
 
     filePath.clear();
