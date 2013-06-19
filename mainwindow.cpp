@@ -213,11 +213,8 @@ void MainWindow::createMenu()
     QMenu *_mainMenu=new QMenu;
     _mainMenu->setWindowOpacity(50);
     QIcon *MenuIconAddor=new QIcon;
-    QSize *MenuIconSize=new QSize;
-    MenuIconSize->setHeight(50);
-    MenuIconSize->setWidth(50);
     //file menu
-    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"),*MenuIconSize);
+    MenuIconAddor->addFile(QString(":/img/image/Blank.png"));
     menu[file] = _mainMenu->addMenu(tr("file"));
     //menu[file]->setStyle(cuteStyle);
     menu[file]->setIcon(*MenuIconAddor);
@@ -226,6 +223,8 @@ void MainWindow::createMenu()
     {
         menu[file]->addAction(act[i]);
         act[i]->setIcon(*MenuIconAddor);
+        //TODO: We have to add all status tip.
+        //act[i]->setStatusTip("");
     }
 
     //edit menu

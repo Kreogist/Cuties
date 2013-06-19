@@ -22,6 +22,10 @@
 
 KreogistCuteStyle::KreogistCuteStyle()
 {
+    //Set File Icon
+    qicoFileIcon = new QIcon;
+    qicoFileIcon->addFile(QString(":/img/image/FileMenuIcon.png"));
+
     style=QStyleFactory::create("fusion");
     style->setParent(this);
 }
@@ -67,45 +71,20 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
     case QStyleOptionMenuItem::Normal:
     {
         style->drawControl(CE_MenuItem,opt,p,w);
-
         int iRectX=opt->rect.x(),
             iRectY=opt->rect.y(),
             iRectW=opt->rect.width(),
             iRectH=opt->rect.height();
         QPen pen;
 
-        /*if((opt->state & State_Active) && (opt->state & State_Sunken))
-        {
-            p->setBrush(opt->palette.highlight());
-            p->drawRect(opt->rect);
-            pen.setColor(QColor(0xf6,0xcd,0x32));
-            p->setPen(pen);
-            p->fillRect(opt->rect,Qt::BrushStyle::SolidPattern);
-        }
-
         if(!opt->icon.isNull())
         {
-            p->drawPixmap(13,
+            p->drawPixmap(11,
                           iRectY + (iRectH - 30)/2,
                           30,
                           30,
-                          opt->icon.pixmap(30, 30));
-            p->drawText(50,
-                        iRectY,
-                        iRectW,
-                        iRectH,
-                        Qt::AlignVCenter,
-                        opt->text);
+                          qicoFileIcon->pixmap(30, 30));
         }
-        else
-        {
-            p->drawText(50,
-                        iRectY,
-                        iRectW,
-                        iRectH,
-                        Qt::AlignVCenter,
-                        opt->text);
-        }*/
         pen.setColor(QColor(0,0,0));
         if(iRectX+iRectH -1 != opt->menuRect.y() + opt->menuRect.height())
         {
@@ -176,7 +155,7 @@ int KreogistCuteStyle::pixelMetric(PixelMetric metric,
     int pIntValue = style->pixelMetric(metric,option,widget);
     switch (metric) {
     case QStyle::PM_SmallIconSize:
-        pIntValue=50;
+        pIntValue=40;
         break;
     case QStyle::PM_ButtonIconSize:
         pIntValue=25;

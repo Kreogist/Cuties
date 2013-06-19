@@ -88,6 +88,7 @@ private:
                       const QWidget *w) const;
 
     QStyle *style;
+    QIcon *qicoFileIcon;
 };
 
 #endif // KREOGISTCUTESTYLE_H
