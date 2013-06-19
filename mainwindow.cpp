@@ -214,7 +214,7 @@ void MainWindow::createMenu()
     _mainMenu->setWindowOpacity(50);
     QIcon *MenuIconAddor=new QIcon;
     //file menu
-    MenuIconAddor->addFile(QString(":/img/image/Blank.png"));
+    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menu[file] = _mainMenu->addMenu(tr("file"));
     //menu[file]->setStyle(cuteStyle);
     menu[file]->setIcon(*MenuIconAddor);
