@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     QApplication app(argc,argv);
 
     QStringList list;
-    list << "Hiragino.otf";
+    list << "monaco.ttf" << "Hiragino.otf";
     int fontID(-1);
     bool fontWarningShown(false);
     for (QStringList::const_iterator constIterator = list.constBegin(); constIterator != list.constEnd(); ++constIterator) {
@@ -56,7 +56,6 @@ int main(int argc, char *argv[])
     QApplication::setApplicationVersion(QString("0.1.0"));
     QApplication::setOrganizationName("Kreogist Team");
     QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
-    app.setFont(QFont("Hiragino Sans GB W3", 10));
 
     QTranslator appTrans;
 

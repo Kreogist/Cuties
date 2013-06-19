@@ -23,6 +23,7 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
     setFrameStyle(QFrame::NoFrame);
+    setFont(QString("Monaco"));
     connect(this,&kciCodeEditor::cursorPositionChanged,
             this,&kciCodeEditor::highlightCurrentLine);
 
