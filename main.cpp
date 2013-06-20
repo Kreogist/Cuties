@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     QApplication app(argc,argv);
 
     QStringList list;
-    list << "monaco.ttf" << "Hiragino.otf";
+    list << "SourceCodePro-Light.otf" << "Inconsolata.otf";
     int fontID(-1);
     bool fontWarningShown(false);
     for (QStringList::const_iterator constIterator = list.constBegin(); constIterator != list.constEnd(); ++constIterator) {

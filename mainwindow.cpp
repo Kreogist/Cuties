@@ -215,8 +215,9 @@ void MainWindow::createMenu()
     QIcon *MenuIconAddor=new QIcon;
     //file menu
     MenuIconAddor->addFile(QString(":/img/image/Blank.png"));
+    MenuIconAddor->name()=QString("test");
+    qDebug()<<MenuIconAddor->name();
     menu[file] = _mainMenu->addMenu(tr("file"));
-    //menu[file]->setStyle(cuteStyle);
     menu[file]->setIcon(*MenuIconAddor);
     //from new_file to quit add into file menu
     for(i=new_file;i<=quit;i++)
@@ -229,10 +230,12 @@ void MainWindow::createMenu()
 
     //edit menu
     menu[edit] = _mainMenu->addMenu(tr("edit"));
+    menu[edit]->setIcon(*MenuIconAddor);
     //from redo to paste add into edit menu
     for(i=redo;i<=preference;i++)
     {
         menu[edit]->addAction(act[i]);
+        act[i]->setIcon(*MenuIconAddor);
     }
 
     //view menu

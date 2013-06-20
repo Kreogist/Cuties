@@ -23,7 +23,8 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
     setFrameStyle(QFrame::NoFrame);
-    setFont(QString("Monaco"));
+    setFont(QFont(QString("Inconsolata"),11));
+
     connect(this,&kciCodeEditor::cursorPositionChanged,
             this,&kciCodeEditor::highlightCurrentLine);
 
@@ -38,7 +39,7 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 }
 
 void kciCodeEditor::highlightCurrentLine()
-{
+{\
     QList<QTextEdit::ExtraSelection> extraSelections;
 
         if (!isReadOnly()) {
