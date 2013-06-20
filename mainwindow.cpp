@@ -301,6 +301,7 @@ void MainWindow::createStatusbar()
     QPalette pal=statusbar->palette();
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
     statusbar->setPalette(pal);
+    //statusbar->
 }
 
 void MainWindow::restoreSettings()
