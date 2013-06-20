@@ -9,5 +9,6 @@
         <file>image/PluginMenuIcon.png</file>
         <file>image/HelpMenuIcon.png</file>
         <file>image/DebugMenuIcon.png</file>
+        <file>image/ViewMenuIcon.png</file>
     </qresource>
 </RCC>

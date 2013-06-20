@@ -238,7 +238,9 @@ void MainWindow::createMenu()
     }
 
     //view menu
+    MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[view] = _mainMenu->addMenu(tr("view"));
+    menu[view]->setIcon(*MenuIconAddor);
 
     //search menu
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
