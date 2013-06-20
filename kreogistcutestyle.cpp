@@ -58,11 +58,6 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
                                      QPainter *p,
                                      const QWidget *w) const
 {
-<<<<<<< HEAD
-    //Wang: Ok, it's a hack-way to accomplished our design.
-    //Saki: A more bug way to redraw icon.
-=======
->>>>>>> 8f7823f006f07c1403a6103d7ee3b6be021dd2f4
     switch(opt->menuItemType)
     {
     case QStyleOptionMenuItem::SubMenu:
@@ -82,11 +77,6 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
         QPen pen;
         if(!opt->icon.isNull())
         {
-<<<<<<< HEAD
-            qDebug()<<opt->text;
-=======
-
->>>>>>> 8f7823f006f07c1403a6103d7ee3b6be021dd2f4
             p->drawPixmap(11,
                           iRectY + (iRectH - 30)/2,
                           30,
