@@ -23,8 +23,13 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
     setFrameStyle(QFrame::NoFrame);
+<<<<<<< HEAD
     setFont(QFont(QString("Inconsolata"),11));
 
+=======
+    setFont(QString("Monaco"));
+    //setFont(QString("Inconsolata"));
+>>>>>>> 8f7823f006f07c1403a6103d7ee3b6be021dd2f4
     connect(this,&kciCodeEditor::cursorPositionChanged,
             this,&kciCodeEditor::highlightCurrentLine);
 

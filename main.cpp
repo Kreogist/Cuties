@@ -33,20 +33,27 @@ int main(int argc, char *argv[])
     QApplication app(argc,argv);
 
     QStringList list;
+<<<<<<< HEAD
     list << "SourceCodePro-Light.otf" << "Inconsolata.otf";
+=======
+    list << "monaco.ttf" << "Hiragino.otf" << "Inconsolata.otf";
+>>>>>>> 8f7823f006f07c1403a6103d7ee3b6be021dd2f4
     int fontID(-1);
     bool fontWarningShown(false);
-    for (QStringList::const_iterator constIterator = list.constBegin(); constIterator != list.constEnd(); ++constIterator) {
+    for (auto constIterator = list.constBegin();
+         constIterator != list.constEnd();
+         ++constIterator)
+    {
         QFile res(qApp->applicationDirPath() + "/Fonts/" + *constIterator);
         if (res.open(QIODevice::ReadOnly) == false) {
             if (fontWarningShown == false) {
-                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".");
+                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".\n" + res.errorString());
                 fontWarningShown = true;
             }
         } else {
             fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
             if (fontID == -1 && fontWarningShown == false) {
-                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".");
+                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".\n" + res.errorString());
                 fontWarningShown = true;
             }
         }

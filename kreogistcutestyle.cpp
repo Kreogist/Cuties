@@ -22,10 +22,6 @@
 
 KreogistCuteStyle::KreogistCuteStyle()
 {
-    //Set File Icon
-    qicoFileIcon = new QIcon;
-    qicoFileIcon->addFile(QString(":/img/image/FileMenuIcon.png"));
-
     style=QStyleFactory::create("fusion");
     style->setParent(this);
 }
@@ -62,14 +58,22 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
                                      QPainter *p,
                                      const QWidget *w) const
 {
+<<<<<<< HEAD
     //Wang: Ok, it's a hack-way to accomplished our design.
     //Saki: A more bug way to redraw icon.
+=======
+>>>>>>> 8f7823f006f07c1403a6103d7ee3b6be021dd2f4
     switch(opt->menuItemType)
     {
     case QStyleOptionMenuItem::SubMenu:
     case QStyleOptionMenuItem::Normal:
     {
-        style->drawControl(CE_MenuItem,opt,p,w);
+        //Ok, it's a hack-way to accomplished our design.
+
+        QStyleOptionMenuItem tmp=*opt;
+        tmp.icon=QIcon();
+
+        style->drawControl(CE_MenuItem,&tmp,p,w);
         int iRectX=opt->rect.x(),
             iRectY=opt->rect.y(),
             iRectW=opt->rect.width(),
@@ -78,12 +82,16 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
         QPen pen;
         if(!opt->icon.isNull())
         {
+<<<<<<< HEAD
             qDebug()<<opt->text;
+=======
+
+>>>>>>> 8f7823f006f07c1403a6103d7ee3b6be021dd2f4
             p->drawPixmap(11,
                           iRectY + (iRectH - 30)/2,
                           30,
                           30,
-                          qicoFileIcon->pixmap(30, 30));
+                          opt->icon.pixmap(30, 30));
         }
         pen.setColor(QColor(0,0,0));
         if(iRectX+iRectH -1 != opt->menuRect.y() + opt->menuRect.height())
