@@ -42,7 +42,7 @@
 #include "highlighterfactory.h"
 
 //default highlighter
-#include "cpphighlighter.h"
+#include "plaintexthighlighter.h"
 
 class kciTextEditor : public QWidget
 {

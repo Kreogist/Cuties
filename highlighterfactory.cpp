@@ -42,6 +42,6 @@ QSyntaxHighlighter* highlighterFactory::createHighlighterByFileName(
     else
     {
         //TODO: Fixed here to plain text.
-        return new cppHighlighter(parent);
+        return new plaintextHighlighter(parent);
     }
 }

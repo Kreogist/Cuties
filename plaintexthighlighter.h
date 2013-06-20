@@ -18,7 +18,7 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLAINTEXTLIGHTER_H
+#ifndef PLAINTEXTHIGHLIGHTER_H
 #define PLAINTEXTHIGHLIGHTER_H
 
 #include <QList>
@@ -42,9 +42,9 @@ signals:
 public slots:
 
 protected:
+    void highlightBlock(const QString &text);
 
 private:
-
 };
 
 #endif // PASCALHIGHLIGHTER_H
