@@ -45,7 +45,6 @@ void KreogistCuteStyle::drawControl(ControlElement element,
         {
             drawMenuItem(_opt_menu_item,p,w);
         }
-
         break;
     }
 
@@ -74,11 +73,10 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
             iRectY=opt->rect.y(),
             iRectW=opt->rect.width(),
             iRectH=opt->rect.height();
-        QPen pen;
 
+        QPen pen;
         if(!opt->icon.isNull())
         {
-
             p->drawPixmap(11,
                           iRectY + (iRectH - 30)/2,
                           30,

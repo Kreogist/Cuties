@@ -216,22 +216,24 @@ void MainWindow::createMenu()
     //file menu
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menu[file] = _mainMenu->addMenu(tr("file"));
-    //menu[file]->setStyle(cuteStyle);
     menu[file]->setIcon(*MenuIconAddor);
     //from new_file to quit add into file menu
     for(i=new_file;i<=quit;i++)
     {
-        menu[file]->addAction(act[i]);
         act[i]->setIcon(*MenuIconAddor);
         //TODO: We have to add all status tip.
         //act[i]->setStatusTip("");
+        menu[file]->addAction(act[i]);
     }
 
     //edit menu
+    MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
     menu[edit] = _mainMenu->addMenu(tr("edit"));
+    menu[edit]->setIcon(*MenuIconAddor);
     //from redo to paste add into edit menu
     for(i=redo;i<=preference;i++)
     {
+        act[i]->setIcon(*MenuIconAddor);
         menu[edit]->addAction(act[i]);
     }
 
@@ -239,37 +241,53 @@ void MainWindow::createMenu()
     menu[view] = _mainMenu->addMenu(tr("view"));
 
     //search menu
+    MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
     menu[search] = _mainMenu->addMenu(tr("search"));
+    menu[search]->setIcon(*MenuIconAddor);
     for(i=searchinfile;i<=gotoline;i++)
     {
         menu[search]->addAction(act[i]);
+        act[i]->setIcon(*MenuIconAddor);
     }
 
     //insert menu
+    MenuIconAddor->addFile(QString(":/img/image/InsertMenuIcon.png"));
     menu[insert] = _mainMenu->addMenu(tr("insert"));
+    menu[insert]->setIcon(*MenuIconAddor);
 
     //run menu
+    MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
     menu[run] = _mainMenu->addMenu(tr("run"));
+    menu[run]->setIcon(*MenuIconAddor);
     for(i=compileandrun;i<=setinputrunshowoutput;i++)
     {
+        act[i]->setIcon(*MenuIconAddor);
         menu[run]->addAction(act[i]);
     }
 
     //debug menu
+    MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
     menu[debug] = _mainMenu->addMenu(tr("debug"));
+    menu[debug]->setIcon(*MenuIconAddor);
     for(i=debugstart;i<=removewatch;i++)
     {
+        act[i]->setIcon(*MenuIconAddor);
         menu[debug]->addAction(act[i]);
     }
 
     //plugins menu
+    MenuIconAddor->addFile(QString(":/img/image/PluginMenuIcon.png"));
     menu[plugins] = _mainMenu->addMenu(tr("plugins"));
+    menu[plugins]->setIcon(*MenuIconAddor);
 
     //help menu
+    MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
     menu[help] = _mainMenu->addMenu(tr("help"));
+    menu[help]->setIcon(*MenuIconAddor);
     //from about to about_qt add into help menu
     for(i=about;i<=about_qt;i++)
     {
+        act[i]->setIcon(*MenuIconAddor);
         menu[help]->addAction(act[i]);
     }
 
