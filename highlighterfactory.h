@@ -27,6 +27,7 @@
 
 #include "cpphighlighter.h"
 #include "pascalhighlighter.h"
+#include "plaintexthighlighter.h"
 
 class highlighterFactory : public QObject
 {

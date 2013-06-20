@@ -38,7 +38,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     linePanel->setPlainTextEdit(editor);
     mainLayout->addWidget(editor);
 
-    highlighter=new cppHighlighter(this);
+    highlighter=new plaintextHighlighter(this);
     highlighter->setDocument(editor->document());
 
     QPalette pal = palette();
