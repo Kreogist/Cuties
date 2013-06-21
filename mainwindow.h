@@ -56,23 +56,22 @@ protected:
 private:
     enum MainWindowActions
     {
-        new_file,
-        open,
-        save,
-        save_as,
-        save_all,
-        close,
-        close_all,
-        close_allother,
-        quit,
-        redo,
-        undo,
-        cut,
-        copy,
-        paste,
-        select_all,
-        set_break_point,
-        preference,
+        mnuFileNewFile,
+        mnuFileOpen,
+        mnuFileSave,
+        mnuFileSaveAs,
+        mnuFileSaveAll,
+        mnuFileClose,
+        mnuFileCloseAll,
+        mnuFileCloseAllExceptThis,
+        mnuFileExit,
+        mnuEditUndo,
+        mnuEditRedo,
+        mnuEditCut,
+        mnuEditCopy,
+        mnuEditPaste,
+        mnuEditSelectAll,
+        mnuEditPreference,
         searchinfile,
         searchallfile,
         replaceinfile,
@@ -91,6 +90,7 @@ private:
         debugstart,
         debugcontinue,
         stopexecute,
+        set_break_point,
         nextline,
         intoline,
         nextinstruction,
@@ -121,6 +121,7 @@ private:
     kciTextEditor *editor;
     QAction *act[act_count];
     QMenu *menu[menu_count];
+    QString actStatusTips[act_count];
     kciTitleBar *titlebar;
 
     void saveSettings();
