@@ -45,60 +45,73 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::createActions()
 {
-    //new file
-    act[new_file]=new QAction(tr("new file"),this);
+    //File -> New
+    act[mnuFileNewFile]=new QAction(tr("new file"),this);
+    actStatusTips[mnuFileNewFile]=QString(tr("Create a new document."));
 
-    //open
-    act[open]=new QAction(tr("open"),this);
-    connect(act[open],SIGNAL(triggered()),editor,SLOT(open()));
+    //File -> Open
+    act[mnuFileOpen]=new QAction(tr("open"),this);
+    actStatusTips[mnuFileOpen]=QString(tr("Open an exsisting document."));
+    connect(act[mnuFileOpen],SIGNAL(triggered()),editor,SLOT(open()));
 
-    //save
-    act[save]=new QAction(tr("save"),this);
-    connect(act[save],SIGNAL(triggered()),editor,SLOT(save()));
+    //File -> Save
+    act[mnuFileSave]=new QAction(tr("save"),this);
+    actStatusTips[mnuFileSave]=QString(tr("Save active document."));
+    connect(act[mnuFileSave],SIGNAL(triggered()),editor,SLOT(save()));
 
-    //save_as
-    act[save_as]=new QAction(tr("save as"),this);
-    connect(act[save_as],SIGNAL(triggered()),editor,SLOT(saveAs()));
+    //File -> Save As
+    act[mnuFileSaveAs]=new QAction(tr("save as"),this);
+    actStatusTips[mnuFileSaveAs]=QString(tr("Save as different file name."));
+    connect(act[mnuFileSaveAs],SIGNAL(triggered()),editor,SLOT(saveAs()));
 
-    //save_all
-    act[save_all]=new QAction(tr("save all"),this);
+    //File -> Save All
+    act[mnuFileSaveAll]=new QAction(tr("save all"),this);
+    actStatusTips[mnuFileSaveAll]=QString(tr("Save all modified documents."));
 
-    //close
-    act[close]=new QAction(tr("close"),this);
+    //File -> Close
+    act[mnuFileClose]=new QAction(tr("close"),this);
+    actStatusTips[mnuFileClose]=QString(tr("Close the active document."));
 
-    //closs_all
-    act[close_all]=new QAction(tr("close all"),this);
+    //File -> Close All
+    act[mnuFileCloseAll]=new QAction(tr("close all"),this);
+    actStatusTips[mnuFileCloseAll]=QString(tr("Close all files."));
 
-    //close_allother
-    act[close_allother]=new QAction(tr("close all other file"),this);
+    //File -> Close All Except This
+    act[mnuFileCloseAllExceptThis]=new QAction(tr("close all other file"),this);
+    actStatusTips[mnuFileCloseAllExceptThis]=QString(tr("Close all files except active file."));
 
-    //quit
-    act[quit]=new QAction(tr("quit"),this);
-    connect(act[quit],SIGNAL(triggered()),this,SLOT(close()));
+    //File -> Exit
+    act[mnuFileExit]=new QAction(tr("quit"),this);
+    actStatusTips[mnuFileExit]=QString(tr("Quit applications; prompts to save documents."));
+    connect(act[mnuFileExit],SIGNAL(triggered()),this,SLOT(close()));
 
-    //redo
-    act[redo]=new QAction(tr("redo"),this);
+    //Edit -> Undo
+    act[mnuEditUndo]=new QAction(tr("undo"),this);
+    actStatusTips[mnuEditUndo]=QString(tr("Undo the last action."));
 
-    //undo
-    act[undo]=new QAction(tr("undo"),this);
+    //Edit -> Redo
+    act[mnuEditRedo]=new QAction(tr("redo"),this);
+    actStatusTips[mnuEditRedo]=QString(tr("Redo the previously undone action."));
 
-    //cut
-    act[cut]=new QAction(tr("cut"),this);
+    //Edit -> Cut
+    act[mnuEditCut]=new QAction(tr("cut"),this);
+    actStatusTips[mnuEditCut]=QString(tr("Cut the selection and put it on the clipboard."));
 
-    //copy
-    act[copy]=new QAction(tr("copy"),this);
+    //Edit -> Copy
+    act[mnuEditCopy]=new QAction(tr("copy"),this);
+    actStatusTips[mnuEditCopy]=QString(tr("Copy the selection and put it on the clipboard."));
 
-    //paste
-    act[paste]=new QAction(tr("paste"),this);
+    //Edit -> Paste
+    act[mnuEditPaste]=new QAction(tr("paste"),this);
+    actStatusTips[mnuEditPaste]=QString(tr("Paste clipboard contents."));
 
-    //select all
-    act[select_all]=new QAction(tr("select all"),this);
+    //Edit -> Select All
+    act[mnuEditSelectAll]=new QAction(tr("select all"),this);
+    actStatusTips[mnuEditSelectAll]=QString(tr("Select the entire document."));
 
-    //set_break_point
-    act[set_break_point]=new QAction(tr("set break point"),this);
-
-    //preference
-    act[preference]=new QAction(tr("preference"),this);
+    //Edit -> Preference
+    act[mnuEditPreference]=new QAction(tr("preference"),this);
+    actStatusTips[mnuEditPreference]=QString(tr("Customize your IDE."));
 
     //search in file
     act[searchinfile]=new QAction(tr("searchinfile"),this);
@@ -154,6 +167,10 @@ void MainWindow::createActions()
 
     //Stop Execute
     act[stopexecute]=new QAction(tr("Stop execute"),this);
+
+    //set_break_point
+    act[set_break_point]=new QAction(tr("set break point"),this);
+    actStatusTips[set_break_point]=QString(tr("Set a break point at the current line."));
 
     //next line
     act[nextline]=new QAction(tr("Next Line"),this);
@@ -218,11 +235,10 @@ void MainWindow::createMenu()
     menu[file] = _mainMenu->addMenu(tr("file"));
     menu[file]->setIcon(*MenuIconAddor);
     //from new_file to quit add into file menu
-    for(i=new_file;i<=quit;i++)
+    for(i=mnuFileNewFile;i<=mnuFileExit;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
-        //TODO: We have to add all status tip.
-        //act[i]->setStatusTip("");
+        act[i]->setStatusTip(actStatusTips[i]);
         menu[file]->addAction(act[i]);
     }
 
@@ -231,9 +247,10 @@ void MainWindow::createMenu()
     menu[edit] = _mainMenu->addMenu(tr("edit"));
     menu[edit]->setIcon(*MenuIconAddor);
     //from redo to paste add into edit menu
-    for(i=redo;i<=preference;i++)
+    for(i=mnuEditUndo;i<=mnuEditPreference;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
+        act[i]->setStatusTip(actStatusTips[i]);
         menu[edit]->addAction(act[i]);
     }
 
@@ -249,6 +266,7 @@ void MainWindow::createMenu()
     for(i=searchinfile;i<=gotoline;i++)
     {
         menu[search]->addAction(act[i]);
+        act[i]->setStatusTip(actStatusTips[i]);
         act[i]->setIcon(*MenuIconAddor);
     }
 
@@ -264,6 +282,7 @@ void MainWindow::createMenu()
     for(i=compileandrun;i<=setinputrunshowoutput;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
+        act[i]->setStatusTip(actStatusTips[i]);
         menu[run]->addAction(act[i]);
     }
 
@@ -274,6 +293,7 @@ void MainWindow::createMenu()
     for(i=debugstart;i<=removewatch;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
+        act[i]->setStatusTip(actStatusTips[i]);
         menu[debug]->addAction(act[i]);
     }
 
@@ -290,6 +310,7 @@ void MainWindow::createMenu()
     for(i=about;i<=about_qt;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
+        act[i]->setStatusTip(actStatusTips[i]);
         menu[help]->addAction(act[i]);
     }
 
@@ -302,6 +323,7 @@ void MainWindow::createStatusbar()
 
     QPalette pal=statusbar->palette();
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
+    pal.setColor(QPalette::Foreground,QColor(255,255,255));
     statusbar->setPalette(pal);
     //statusbar->
 }
