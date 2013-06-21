@@ -40,7 +40,8 @@ SOURCES += \
     highlighterfactory.cpp \
     textcharformatmap.cpp \
     compilerbase.cpp \
-    plaintexthighlighter.cpp
+    plaintexthighlighter.cpp \
+    gcc.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS += \
     textcharformatmap.h \
     highlighterGlobal.h \
     compilerbase.h \
-    plaintexthighlighter.h
+    plaintexthighlighter.h \
+    gcc.h
 
 # Enable C++11
 CONFIG += c++11
