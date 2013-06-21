@@ -113,73 +113,99 @@ void MainWindow::createActions()
     act[mnuEditPreference]=new QAction(tr("preference"),this);
     actStatusTips[mnuEditPreference]=QString(tr("Customize your IDE."));
 
-    //search in file
-    act[searchinfile]=new QAction(tr("searchinfile"),this);
+    //Search -> Search
+    act[mnuSearchFind]=new QAction(tr("searchinfile"),this);
+    actStatusTips[mnuSearchFind]=QString(tr("Find the specified text."));
 
-    //search all file
-    act[searchallfile]=new QAction(tr("searchallfile"),this);
+    //Search -> Find In Files
+    act[mnuSearchFindInFiles]=new QAction(tr("searchallfile"),this);
+    actStatusTips[mnuSearchFindInFiles]=QString(tr("Find text in files."));
 
-    //replace in file
-    act[replaceinfile]=new QAction(tr("replaceinfile"),this);
+    //Search -> Replace
+    act[mnuSearchReplace]=new QAction(tr("replaceinfile"),this);
+    actStatusTips[mnuSearchReplace]=QString(tr("Replace specfic text with different text."));
 
-    //replace all file
-    act[replaceallfile]=new QAction(tr("replaceallfile"),this);
+    //Search -> Replace In Files
+    act[mnuSearchReplaceInFiles]=new QAction(tr("replaceallfile"),this);
+    actStatusTips[mnuSearchReplaceInFiles]=QString(tr("Replace in files."));
 
-    //search online
-    act[searchonline]=new QAction(tr("searchonline"),this);
+    //Search -> Search Online
+    act[mnuSearchSearchOnline]=new QAction(tr("searchonline"),this);
+    actStatusTips[mnuSearchSearchOnline]=QString(tr("Search text online."));
 
-    //go to line
-    act[gotoline]=new QAction(tr("gotoline"),this);
+    //Search -> Go To Line
+    act[mnuSearchGoto]=new QAction(tr("gotoline"),this);
+    actStatusTips[mnuSearchGoto]=QString(tr("Goto line."));
 
-    //compile and run
-    act[compileandrun]=new QAction(tr("Compile & Run"),this);
+    //Run -> Comile And Run
+    act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
+    actStatusTips[mnuRunCompileAndRun]=QString(tr("Compile the active file and run."));
 
-    //compile
-    act[compile]=new QAction(tr("compile"),this);
+    //Run -> Compile
+    act[mnuRunCompile]=new QAction(tr("compile"),this);
+    actStatusTips[mnuRunCompile]=QString(tr("Compile the active file."));
 
-    //compile all file
-    act[compileallfile]=new QAction(tr("Complie all file"),this);
+    //Run -> Compile All File
+    act[mnuRunCompileAllFiles]=new QAction(tr("Complie all file"),this);
+    actStatusTips[mnuRunCompileAllFiles]=QString(tr("Compile all files."));
 
-    //run
-    act[runexe]=new QAction(tr("Runexe"),this);
+    //Run -> Run
+    act[mnuRunRun]=new QAction(tr("Runexe"),this);
+    actStatusTips[mnuRunRun]=QString(tr("Run the compiled execution."));
 
-    //Parameters
-    act[parameters]=new QAction(tr("Parameters"),this);
+    //Run -> Parameters
+    act[mnuRunParameters]=new QAction(tr("Parameters"),this);
+    actStatusTips[mnuRunParameters]=QString(tr("Run the compiled execution with parameters."));
 
-    //Set Input file
-    act[setinputfile]=new QAction(tr("Set Input File"),this);
+    //Run -> Set Input File
+    act[mnuRunSetInputFile]=new QAction(tr("Set Input File"),this);
+    actStatusTips[mnuRunSetInputFile]=QString(tr("Set the input file contents."));
 
-    //Show Output file
-    act[showoutputfile]=new QAction(tr("Show Output file"),this);
+    //Run -> Show Output File
+    act[mnuRunShowOutputFile]=new QAction(tr("Show Output file"),this);
+    actStatusTips[mnuRunShowOutputFile]=QString(tr("Show the output file contents."));
 
-    //Run And show
-    act[runshowoutputfile]=new QAction(tr("Run And Show Output File"),this);
+    //Run -> Run And Show Output File
+    act[mnuRunRunAndShowOutputFile]=new QAction(tr("Run And Show Output File"),this);
+    actStatusTips[mnuRunRunAndShowOutputFile]=QString(tr("Run the execution and show output file."));
 
-    //Set Input, Run and Show Output
-    act[setinputrunshowoutput]=new QAction(
+    //Run -> Set Input, Run and Show Output
+    act[mnuRunSetInputRunShowOutput]=new QAction(
                 tr("Set Input, Run and show Output"), this);
+    actStatusTips[mnuRunSetInputRunShowOutput]=
+            QString(tr("Set the input file, compile and run the document, and show output file."));
 
-    //debug start
-    act[debugstart]=new QAction(tr("Start Debug"),this);
+    //Debug -> Debug Start
+    act[mnuDebugStart]=new QAction(tr("Start Debug"),this);
+    actStatusTips[mnuDebugStart]=QString(tr("Start debugging the active file."));
 
-    //debug pause
-    act[debugcontinue]=new QAction(tr("Pause Debug"),this);
+    //Debug -> Debug Pause
+    act[mnuDebugPause]=new QAction(tr("Pause Debug"), this);
+    actStatusTips[mnuDebugPause]=QString(tr("Pause the active file debugging."));
 
-    //Stop Execute
-    act[stopexecute]=new QAction(tr("Stop execute"),this);
+    //Debug -> Debug Continue
+    act[mnuDebugContinue]=new QAction(tr("Continue Debug"), this);
+    actStatusTips[mnuDebugContinue]=QString(tr("Continue the paused debugging."));
 
-    //set_break_point
-    act[set_break_point]=new QAction(tr("set break point"),this);
-    actStatusTips[set_break_point]=QString(tr("Set a break point at the current line."));
+    //Debug -> Stop Execute
+    act[mnuDebugStopExecute]=new QAction(tr("Stop execute"),this);
+    actStatusTips[mnuDebugStopExecute]=QString(tr("Stop the active debugging."));
 
-    //next line
-    act[nextline]=new QAction(tr("Next Line"),this);
+    //Debug -> Set Break Point
+    act[mnuDebugSetBreakPoint]=new QAction(tr("set break point"),this);
+    actStatusTips[mnuDebugSetBreakPoint]=QString(tr("Set a break point at the current line."));
 
-    //Go Into line
-    act[intoline]=new QAction(tr("Into Line"),this);
+    //Debug -> Next Line
+    act[mnuDebugNextLine]=new QAction(tr("Next Line"),this);
+    actStatusTips[mnuDebugNextLine]=QString(tr("Get into the next line."));
 
-    //Go Next Instruction
-    act[nextinstruction]=new QAction(tr("Next Instruction"),this);
+    //Debug -> Go Into line
+    act[mnuDebugIntoLine]=new QAction(tr("Into Line"),this);
+    actStatusTips[mnuDebugIntoLine]=QString(tr("Get into the current line."));
+
+    //Debug -> Go Next Instruction
+    act[mnuDebugNextInstruction]=new QAction(tr("Next Instruction"),this);
+    actStatusTips[mnuDebugNextInstruction]=QString(tr("Get"));
 
     //Go Into Instruction
     act[mnuDebugIntoInstruction]=new QAction(tr("Into Instruction"),this);
@@ -263,7 +289,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
     menu[search] = _mainMenu->addMenu(tr("search"));
     menu[search]->setIcon(*MenuIconAddor);
-    for(i=searchinfile;i<=gotoline;i++)
+    for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {
         menu[search]->addAction(act[i]);
         act[i]->setStatusTip(actStatusTips[i]);
@@ -279,7 +305,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
     menu[run] = _mainMenu->addMenu(tr("run"));
     menu[run]->setIcon(*MenuIconAddor);
-    for(i=compileandrun;i<=setinputrunshowoutput;i++)
+    for(i=mnuRunCompileAndRun;i<=mnuRunSetInputRunShowOutput;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
@@ -290,7 +316,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
     menu[debug] = _mainMenu->addMenu(tr("debug"));
     menu[debug]->setIcon(*MenuIconAddor);
-    for(i=debugstart;i<=removewatch;i++)
+    for(i=mnuDebugStart;i<=removewatch;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
@@ -325,7 +351,6 @@ void MainWindow::createStatusbar()
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
     pal.setColor(QPalette::Foreground,QColor(255,255,255));
     statusbar->setPalette(pal);
-    //statusbar->
 }
 
 void MainWindow::restoreSettings()
