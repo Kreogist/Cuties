@@ -37,6 +37,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     editor=new kciCodeEditor(this);
     linePanel->setPlainTextEdit(editor);
     mainLayout->addWidget(editor);
+    connect(editor->document(),SIGNAL(modificationChanged(bool)),
+            this,SLOT(onModificationChanged(bool)));
 
     highlighter=new plaintextHighlighter(this);
     highlighter->setDocument(editor->document());
@@ -46,7 +48,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     pal.setColor(QPalette::Text,QColor(255,255,255));
     setPalette(pal);
 
-    strFileFilter=tr("All Support Files")+"(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
+    strFileFilter=tr("All Support Files")+
+            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
             tr("Plain Text Files")+"(*.txt);;"+
             tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
             tr("C Source Files")+"(*.c);;"+
@@ -88,6 +91,7 @@ bool kciTextEditor::open(const QString &fileName)
 
         QFileInfo _fileInfo(_file);
         editor->setDocumentTitle(_fileInfo.fileName());
+        emit filenameChanged(_fileInfo.fileName());
 
         if(highlighter == nullptr)
         {
@@ -179,6 +183,7 @@ bool kciTextEditor::saveAs(const QString &fileName)
 
         QFileInfo _fileInfo(_file);
         editor->setDocumentTitle(_fileInfo.fileName());
+        emit filenameChanged(_fileInfo.fileName());
 
         filePath=fileName;
         fileError=QFileDevice::NoError;
@@ -269,4 +274,52 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
         e->accept();
 
     return ;
+}
+
+void kciTextEditor::setDocumentTitle(const QString& title)
+{
+    editor->setDocumentTitle(title);
+    emit filenameChanged(title);
+}
+
+void kciTextEditor::redo()
+{
+    editor->redo();
+}
+
+void kciTextEditor::undo()
+{
+    editor->undo();
+}
+
+void kciTextEditor::copy()
+{
+    editor->copy();
+}
+
+void kciTextEditor::cut()
+{
+    editor->cut();
+}
+
+void kciTextEditor::paste()
+{
+    editor->paste();
+}
+
+void kciTextEditor::selectAll()
+{
+    editor->selectAll();
+}
+
+void kciTextEditor::onModificationChanged(bool changed)
+{
+    if(changed)
+    {
+        emit filenameChanged(editor->documentTitle()+"*");
+    }
+    else
+    {
+        emit filenameChanged(editor->documentTitle());
+    }
 }

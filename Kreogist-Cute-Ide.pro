@@ -41,7 +41,8 @@ SOURCES += \
     textcharformatmap.cpp \
     compilerbase.cpp \
     plaintexthighlighter.cpp \
-    gcc.cpp
+    gcc.cpp \
+    kcitabmanager.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -59,7 +60,8 @@ HEADERS += \
     highlighterGlobal.h \
     compilerbase.h \
     plaintexthighlighter.h \
-    gcc.h
+    gcc.h \
+    kcitabmanager.h
 
 # Enable C++11
 CONFIG += c++11

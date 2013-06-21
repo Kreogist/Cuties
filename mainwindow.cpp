@@ -25,8 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setWindowTitle(tr("Kreogist Cute IDE"));
 
-    editor = new kciTextEditor(this);
-    setCentralWidget(editor);
+    //editor = new kciTextEditor(this);
+    tabManager=new kciTabManager(this);
+    setCentralWidget(tabManager);
     setContentsMargins(0,0,0,0);
 
     QPalette QPpal = palette();
@@ -48,21 +49,23 @@ void MainWindow::createActions()
     //File -> New
     act[mnuFileNewFile]=new QAction(tr("new file"),this);
     actStatusTips[mnuFileNewFile]=QString(tr("Create a new document."));
+    connect(act[mnuFileNewFile],SIGNAL(triggered()),
+            tabManager,SLOT(new_file()));
 
     //File -> Open
     act[mnuFileOpen]=new QAction(tr("open"),this);
     actStatusTips[mnuFileOpen]=QString(tr("Open an exsisting document."));
-    connect(act[mnuFileOpen],SIGNAL(triggered()),editor,SLOT(open()));
+    connect(act[mnuFileOpen],SIGNAL(triggered()),tabManager,SLOT(open()));
 
     //File -> Save
     act[mnuFileSave]=new QAction(tr("save"),this);
     actStatusTips[mnuFileSave]=QString(tr("Save active document."));
-    connect(act[mnuFileSave],SIGNAL(triggered()),editor,SLOT(save()));
+    connect(act[mnuFileSave],SIGNAL(triggered()),tabManager,SLOT(save()));
 
     //File -> Save As
     act[mnuFileSaveAs]=new QAction(tr("save as"),this);
     actStatusTips[mnuFileSaveAs]=QString(tr("Save as different file name."));
-    connect(act[mnuFileSaveAs],SIGNAL(triggered()),editor,SLOT(saveAs()));
+    connect(act[mnuFileSaveAs],SIGNAL(triggered()),tabManager,SLOT(save_as()));
 
     //File -> Save All
     act[mnuFileSaveAll]=new QAction(tr("save all"),this);
@@ -352,7 +355,7 @@ void MainWindow::saveSettings()
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    if(editor->close())
+    if(tabManager->close())
     {
         saveSettings();
         e->accept();

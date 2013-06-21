@@ -51,8 +51,10 @@ public:
     explicit kciTextEditor(QWidget *parent = 0);
 
     QFileDevice::FileError error();
-    
+    void setDocumentTitle(const QString& title);
+
 signals:
+    void filenameChanged(QString newName);
     
 public slots:
     bool open();
@@ -60,6 +62,15 @@ public slots:
     bool save();
     bool saveAs();
     bool saveAs(const QString& fileName);
+    void redo();
+    void undo();
+    void copy();
+    void cut();
+    void paste();
+    void selectAll();
+
+private slots:
+    void onModificationChanged(bool changed);
 
 protected:
     void closeEvent(QCloseEvent *e);

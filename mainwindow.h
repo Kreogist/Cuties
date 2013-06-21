@@ -35,8 +35,8 @@
 #include <QSettings>
 
 #include "kciglobal.h"
-#include "kcitexteditor.h"
 #include "kcititlebar.h"
+#include "kcitabmanager.h"
 
 class MainWindow : public QMainWindow
 {
@@ -118,7 +118,8 @@ private:
         menu_count  //the number of menus
     };
 
-    kciTextEditor *editor;
+    //kciTextEditor *editor;
+    kciTabManager *tabManager;
     QAction *act[act_count];
     QMenu *menu[menu_count];
     QString actStatusTips[act_count];
