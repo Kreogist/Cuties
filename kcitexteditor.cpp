@@ -208,9 +208,19 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
     if(editor->document()->isModified())
     {
         QMessageBox msgbox(this);
+        QString strDisplayFileName;
+
+        if(filePath.isEmpty())
+        {
+            strDisplayFileName=editor->documentTitle();
+        }
+        else
+        {
+            strDisplayFileName=filePath;
+        }
 
         msgbox.setText(tr("The document has been modified.")+"\n"+
-                       filePath);
+                       strDisplayFileName);
         msgbox.setInformativeText(tr("Do you want to save your changes?"));
 
         msgbox.setStandardButtons(QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
