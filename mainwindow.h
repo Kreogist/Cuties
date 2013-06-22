@@ -36,6 +36,7 @@
 #include <QVariant>
 
 #include "kciglobal.h"
+#include "kcicompiledock.h"
 #include "kcititlebar.h"
 #include "kcitabmanager.h"
 
@@ -126,6 +127,7 @@ private:
     QMenu *menu[menu_count];
     QString actStatusTips[act_count];
     QRect savedGeometry;
+    kcicompiledock *compileDock;
     kciTitleBar *titlebar;
 
     void saveSettings();
@@ -133,6 +135,7 @@ private:
 
     void createActions();
     void createTitlebar();
+    void createDocks();
     void createMenu();
     void createStatusbar();
 };

@@ -42,7 +42,8 @@ SOURCES += \
     compilerbase.cpp \
     plaintexthighlighter.cpp \
     gcc.cpp \
-    kcitabmanager.cpp
+    kcitabmanager.cpp \
+    kcicompiledock.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -61,7 +62,8 @@ HEADERS += \
     compilerbase.h \
     plaintexthighlighter.h \
     gcc.h \
-    kcitabmanager.h
+    kcitabmanager.h \
+    kcicompiledock.h
 
 # Enable C++11
 CONFIG += c++11

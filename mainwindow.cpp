@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setWindowTitle(tr("Kreogist Cute IDE"));
 
-    //editor = new kciTextEditor(this);
     tabManager=new kciTabManager(this);
     setCentralWidget(tabManager);
     setContentsMargins(0,0,0,0);
@@ -40,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     restoreSettings();
 
     createActions();
+    createDocks();
     createTitlebar();
     createMenu();
     createStatusbar();
@@ -263,6 +263,12 @@ void MainWindow::createTitlebar()
     titlebar=new kciTitleBar(this);
     setMenuWidget(titlebar);
     titlebar->setMainButtonIcon(":/img/image/MainMenuButton.png");
+}
+
+void MainWindow::createDocks()
+{
+    compileDock=new kcicompiledock(this);
+    addDockWidget(Qt::BottomDockWidgetArea,compileDock);
 }
 
 void MainWindow::createMenu()
