@@ -102,7 +102,7 @@ void kciTabManager::save_as()
 {
     if(Q_LIKELY(this->isEditor))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
+        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(currentWidget());
 
         Q_ASSERT(currentEditor!=NULL);
 
@@ -120,9 +120,9 @@ void kciTabManager::save_all()
     int i=count();
     while(i--)
     {
-        kciTextEditor *editor=qobject_cast<kciTextEditor *>(widget(i-1));
+        kciTextEditor *editor = qobject_cast<kciTextEditor *>(widget(i));
 
-        if(Q_LIKELY(editor!=NULL))
+        if(Q_LIKELY(editor != NULL))
         {
             if(Q_UNLIKELY(!editor->save()))
             {
@@ -138,7 +138,7 @@ void kciTabManager::undo()
 {
     if(Q_LIKELY(this->isEditor))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
+        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(currentWidget());
 
         Q_ASSERT(currentEditor!=NULL);
         currentEditor->undo();
