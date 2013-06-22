@@ -55,5 +55,6 @@ void gcc::onOutputReady()
     while(readLine(str_msg,1024))
     {
         QString msg=QString::fromUtf8(str_msg);
+        emit output(msg);
     }
 }
