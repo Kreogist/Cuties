@@ -33,10 +33,11 @@ class highlighterFactory : public QObject
 {
     Q_OBJECT
 public:
-    explicit highlighterFactory(QObject *parent = 0);
-
     static QSyntaxHighlighter* createHighlighterByFileName(const QString& fileName,
                                                  QObject *parent);
+
+private:
+    highlighterFactory(){}
     
 signals:
     

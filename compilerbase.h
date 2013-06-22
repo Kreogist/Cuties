@@ -49,7 +49,7 @@ public:
     virtual QString compilerName(){return "compilerase";}
 
 signals:
-    void output(compilerMessage msg);
+    void output(QString msg);
 
 };
 

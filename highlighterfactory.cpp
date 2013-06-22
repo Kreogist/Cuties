@@ -19,11 +19,6 @@
 
 #include "highlighterfactory.h"
 
-highlighterFactory::highlighterFactory(QObject *parent) :
-    QObject(parent)
-{
-}
-
 QSyntaxHighlighter* highlighterFactory::createHighlighterByFileName(
         const QString &fileName,
         QObject *parent)
