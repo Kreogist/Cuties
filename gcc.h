@@ -2,6 +2,7 @@
 #define GCC_H
 
 #include <QFileInfo>
+#include <QRegularExpression>
 #include <QDebug>
 
 #include "compilerbase.h"
@@ -16,6 +17,8 @@ public:
     QString path(){return gccPath;}
     bool checkCompilerPath(const QString& ){return true;}
     QString compilerName(){return "g++";}
+
+    static QRegularExpression suffixFilter();
 
 public slots:
     void onOutputReady();

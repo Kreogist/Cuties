@@ -58,3 +58,9 @@ void gcc::onOutputReady()
         emit output(msg);
     }
 }
+
+QRegularExpression gcc::suffixFilter()
+{
+    return QRegularExpression("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)"
+                              ,QRegularExpression::CaseInsensitiveOption);
+}
