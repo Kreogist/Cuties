@@ -135,6 +135,7 @@ bool kciTextEditor::save()
 {
     if(!filePath.isEmpty())
     {
+        onModificationChanged(false);
         return saveAs(filePath);
     }
     else
@@ -144,6 +145,7 @@ bool kciTextEditor::save()
 
         if(!filePath.isEmpty())
         {
+            onModificationChanged(false);
             return saveAs(filePath);
         }
         else
@@ -161,6 +163,7 @@ bool kciTextEditor::saveAs()
 
     if(!filePath.isEmpty())
     {
+        onModificationChanged(false);
         return saveAs(filePath);
     }
     else

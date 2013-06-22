@@ -49,33 +49,39 @@ void MainWindow::createActions()
 {
     //File -> New
     act[mnuFileNewFile]=new QAction(tr("new file"),this);
+    act[mnuFileNewFile]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
     actStatusTips[mnuFileNewFile]=QString(tr("Create a new document."));
     connect(act[mnuFileNewFile],SIGNAL(triggered()),
             tabManager,SLOT(new_file()));
 
     //File -> Open
     act[mnuFileOpen]=new QAction(tr("open"),this);
+    act[mnuFileOpen]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
     actStatusTips[mnuFileOpen]=QString(tr("Open an exsisting document."));
     connect(act[mnuFileOpen],SIGNAL(triggered()),tabManager,SLOT(open()));
 
     //File -> Save
     act[mnuFileSave]=new QAction(tr("save"),this);
+    act[mnuFileSave]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_S));
     actStatusTips[mnuFileSave]=QString(tr("Save active document."));
     connect(act[mnuFileSave],SIGNAL(triggered()),tabManager,SLOT(save()));
 
     //File -> Save As
     act[mnuFileSaveAs]=new QAction(tr("save as"),this);
+    act[mnuFileSaveAs]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_S));
     actStatusTips[mnuFileSaveAs]=QString(tr("Save as different file name."));
     connect(act[mnuFileSaveAs],SIGNAL(triggered()),tabManager,SLOT(save_as()));
 
     //File -> Save All
     act[mnuFileSaveAll]=new QAction(tr("save all"),this);
+    act[mnuFileSaveAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
     actStatusTips[mnuFileSaveAll]=QString(tr("Save all modified documents."));
     connect(act[mnuFileSaveAll],SIGNAL(triggered()),tabManager,SLOT(save_all()));
 
     //File -> Close
     act[mnuFileClose]=new QAction(tr("close"),this);
     actStatusTips[mnuFileClose]=QString(tr("Close the active document."));
+    connect(act[mnuFileClose],SIGNAL(triggered()),tabManager,SLOT(close()));
 
     //File -> Close All
     act[mnuFileCloseAll]=new QAction(tr("close all"),this);
@@ -92,7 +98,9 @@ void MainWindow::createActions()
 
     //Edit -> Undo
     act[mnuEditUndo]=new QAction(tr("undo"),this);
+    act[mnuEditUndo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Z));
     actStatusTips[mnuEditUndo]=QString(tr("Undo the last action."));
+    connect(act[mnuEditUndo],SIGNAL(triggered()),tabManager,SLOT(undo()));
 
     //Edit -> Redo
     act[mnuEditRedo]=new QAction(tr("redo"),this);

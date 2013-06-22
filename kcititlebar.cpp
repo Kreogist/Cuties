@@ -31,18 +31,24 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     windowTitle=parent->windowTitle();
 
     closeButton = new QToolButton(this);
-    closeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
+    closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));
     closeButton->setAutoFillBackground(true);
 
+    QPalette bpal=closeButton->palette();
+    bpal.setColor(QPalette::Button, QColor(83,83,83));
+    closeButton->setPalette(bpal);
+
     minimizeButton = new QToolButton(this);
-    minimizeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarMinButton));
+    minimizeButton->setIcon(QIcon(QString(":/toolbutton/image/Minimized.png")));
+    minimizeButton->setPalette(bpal);
 
     maximizeButton = new QToolButton(this);
-    maximizeButtonIcon=style()->standardIcon(QStyle::SP_TitleBarMaxButton);
+    maximizeButtonIcon=QIcon(QString(":/toolbutton/image/Maxmized.png"));
     maximizeButton->setIcon(maximizeButtonIcon);
+    maximizeButton->setPalette(bpal);
     isShowingNormalButton = false;
 
-    normalButtonIcon=style()->standardIcon(QStyle::SP_TitleBarNormalButton);
+    normalButtonIcon=QIcon(QString(":/toolbutton/image/Normalmized.png"));
 
     connect(closeButton,SIGNAL(clicked()),this->parent(),SLOT(close()));
     connect(minimizeButton,SIGNAL(clicked()),
@@ -50,13 +56,14 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     connect(maximizeButton,SIGNAL(clicked()),
             this,SLOT(_exchange_button_state()));
 
+    mainButton=new QToolButton(this);
+    connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
+    mainButton->setPalette(bpal);
+
     titleLabel=new QLabel(windowTitle,this);
     QPalette pal=titleLabel->palette();
     pal.setColor(QPalette::WindowText,QColor(208,208,208));
     titleLabel->setPalette(pal);
-
-    mainButton=new QToolButton(this);
-    connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
 
     hLayout = new QHBoxLayout(this);
     hLayout->setContentsMargins(0,0,0,0);

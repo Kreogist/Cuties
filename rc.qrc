@@ -11,4 +11,10 @@
         <file>image/DebugMenuIcon.png</file>
         <file>image/ViewMenuIcon.png</file>
     </qresource>
+    <qresource prefix="/toolbutton">
+        <file>image/Close.png</file>
+        <file>image/Maxmized.png</file>
+        <file>image/Minimized.png</file>
+        <file>image/Normalmized.png</file>
+    </qresource>
 </RCC>

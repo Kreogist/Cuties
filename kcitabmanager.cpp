@@ -8,6 +8,11 @@ kciTabManager::kciTabManager(QWidget *parent) :
     connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(on_tab_close_requested(int)));
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(on_current_tab_change(int)));
 
+/*    QPalette tabpal=this->palette();
+    tabpal.setColor(QPalette::Background, QColor(83,83,83));
+    tabpal.setColor(QPalette::Foreground, QColor(56,56,56));
+    this->setPalette(tabpal);*/
+
     setDocumentMode(true);
     setMovable(true);
     setTabsClosable(true);

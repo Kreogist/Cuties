@@ -27,6 +27,7 @@
 #include <QFileDialog>
 #include <QErrorMessage>
 #include <QSettings>
+#include <QPalette>
 
 #include "kciglobal.h"
 #include "kcitexteditor.h"
