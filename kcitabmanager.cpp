@@ -241,8 +241,16 @@ void kciTabManager::compile_current_file()
     if(Q_LIKELY(this->isEditor))
     {
         kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-
         Q_ASSERT(currentEditor!=NULL);
+
+        if(Q_UNLIKELY(!currentEditor->save()))
+        {
+            QErrorMessage error(this);
+            error.showMessage(tr("Saving file failed!"));
+            error.exec();
+            return;
+        }
+
         //currentEditor->compile();
     }
 }

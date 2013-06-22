@@ -22,20 +22,6 @@
 
 #include <QProcess>
 
-struct compilerMessage
-{
-    enum msgType
-    {
-        error,
-        warning,
-        others
-    };
-
-    msgType type;
-    int lineNum;
-    QString msg;
-};
-
 class compilerBase : public QProcess
 {
     Q_OBJECT
@@ -49,7 +35,7 @@ public:
     virtual QString compilerName(){return "compilerase";}
 
 signals:
-    void output(compilerMessage msg);
+    void output(QString msg);
 
 };
 

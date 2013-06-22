@@ -29,6 +29,8 @@
 #include <QSettings>
 #include <QPalette>
 
+#include "gcc.h"
+#include "compilerbase.h"
 #include "kciglobal.h"
 #include "kcitexteditor.h"
 

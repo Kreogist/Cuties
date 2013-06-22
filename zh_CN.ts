@@ -61,7 +61,7 @@
     <message>
         <location filename="mainwindow.cpp" line="53"/>
         <source>Create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>创建一个新的文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="60"/>
@@ -86,17 +86,17 @@
     <message>
         <location filename="mainwindow.cpp" line="83"/>
         <source>Close the active document.</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭当前文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="88"/>
         <source>Close all files.</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭所有文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="92"/>
         <source>Close all files except active file.</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭除了当前文档之外的文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="96"/>
@@ -106,7 +106,7 @@
     <message>
         <location filename="mainwindow.cpp" line="102"/>
         <source>Undo the last action.</source>
-        <translation type="unfinished"></translation>
+        <translation>撤销最后一次的操作。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="107"/>
@@ -121,7 +121,7 @@
     <message>
         <location filename="mainwindow.cpp" line="111"/>
         <source>Cut the selection and put it on the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>将当前内容剪下并放到剪切板中。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="114"/>
@@ -131,7 +131,7 @@
     <message>
         <location filename="mainwindow.cpp" line="115"/>
         <source>Copy the selection and put it on the clipboard.</source>
-        <translation type="unfinished"></translation>
+        <translation>复制当前选中内容到剪切板。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="118"/>
@@ -156,17 +156,17 @@
     <message>
         <location filename="mainwindow.cpp" line="127"/>
         <source>Customize your IDE.</source>
-        <translation type="unfinished"></translation>
+        <translation>自定义你的Cuties IDE。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="131"/>
         <source>Find the specified text.</source>
-        <translation type="unfinished"></translation>
+        <translation>查找指定字符串。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="135"/>
         <source>Find text in files.</source>
-        <translation type="unfinished"></translation>
+        <translation>在所有文件中查找字符。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="139"/>
@@ -191,17 +191,17 @@
     <message>
         <location filename="mainwindow.cpp" line="155"/>
         <source>Compile the active file and run.</source>
-        <translation type="unfinished"></translation>
+        <translation>编译当前文档并且运行。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="159"/>
         <source>Compile the active file.</source>
-        <translation type="unfinished"></translation>
+        <translation>编译当前文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="163"/>
         <source>Compile all files.</source>
-        <translation type="unfinished"></translation>
+        <translation>编译所有文件。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="167"/>
@@ -416,7 +416,7 @@
     <message>
         <location filename="mainwindow.cpp" line="229"/>
         <source>Add a new variable to debug watch.</source>
-        <translation type="unfinished"></translation>
+        <translation>添加一个新的变量到监视器。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="232"/>
@@ -447,7 +447,7 @@
     <message>
         <location filename="mainwindow.cpp" line="241"/>
         <source>Display the Kreogist Cuties information.</source>
-        <translation type="unfinished"></translation>
+        <translation>显示Kreogist Cuties的详细信息。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="245"/>
@@ -458,7 +458,7 @@
     <message>
         <location filename="mainwindow.cpp" line="246"/>
         <source>Display the Qt information, version number and copyright.</source>
-        <translation type="unfinished"></translation>
+        <translation>显示Qt的信息、版本号和版权声明。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="253"/>
