@@ -31,6 +31,15 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
+    strFileFilter = QObject::tr("All Support Files")+
+            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
+            QObject::tr("Plain Text Files")+"(*.txt);;"+
+            QObject::tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
+            QObject::tr("C Source Files")+"(*.c);;"+
+            QObject::tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
+            QObject::tr("Pascal Source Files")+"(*.pas);;"+
+            QObject::tr("All Files")+"(*.*)";
+
     linePanel=new kciLinenumPanel(this);
     mainLayout->addWidget(linePanel);
 
@@ -47,15 +56,6 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     pal.setColor(QPalette::Base,QColor(0x53,0x53,0x53));
     pal.setColor(QPalette::Text,QColor(255,255,255));
     setPalette(pal);
-
-    strFileFilter=tr("All Support Files")+
-            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
-            tr("Plain Text Files")+"(*.txt);;"+
-            tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
-            tr("C Source Files")+"(*.c);;"+
-            tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
-            tr("Pascal Source Files")+"(*.pas);;"+
-            tr("All Files")+"(*.*)";
 
     filePath.clear();
     fileError=QFileDevice::NoError;

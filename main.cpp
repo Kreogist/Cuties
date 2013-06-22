@@ -25,7 +25,9 @@
 #include <QFile>
 #include <QString>
 #include <QStyleFactory>
+
 #include "mainwindow.h"
+#include "kciglobal.h"
 #include "kreogistcutestyle.h"
 
 int main(int argc, char *argv[])

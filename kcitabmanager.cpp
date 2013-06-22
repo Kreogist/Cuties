@@ -8,14 +8,14 @@ kciTabManager::kciTabManager(QWidget *parent) :
     connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(on_tab_close_requested(int)));
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(on_current_tab_change(int)));
 
-    strFileFilter=tr("All Support Files")+
+    strFileFilter = QObject::tr("All Support Files")+
             "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
-            tr("Plain Text Files")+"(*.txt);;"+
-            tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
-            tr("C Source Files")+"(*.c);;"+
-            tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
-            tr("Pascal Source Files")+"(*.pas);;"+
-            tr("All Files")+"(*.*)";
+            QObject::tr("Plain Text Files")+"(*.txt);;"+
+            QObject::tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
+            QObject::tr("C Source Files")+"(*.c);;"+
+            QObject::tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
+            QObject::tr("Pascal Source Files")+"(*.pas);;"+
+            QObject::tr("All Files")+"(*.*)";
 
     setDocumentMode(true);
     setMovable(true);
@@ -215,7 +215,9 @@ void kciTabManager::on_tab_close_requested(int index)
     {
         tab->setAttribute(Qt::WA_DeleteOnClose,true);
         if(tab->close())
+        {
             removeTab(index);
+        }
     }
 
 }
