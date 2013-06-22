@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tabManager=new kciTabManager(this);
     setCentralWidget(tabManager);
     setContentsMargins(0,0,0,0);
+    setMinimumSize(400,150);
 
     QPalette QPpal = palette();
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
@@ -70,6 +71,7 @@ void MainWindow::createActions()
     //File -> Save All
     act[mnuFileSaveAll]=new QAction(tr("save all"),this);
     actStatusTips[mnuFileSaveAll]=QString(tr("Save all modified documents."));
+    connect(act[mnuFileSaveAll],SIGNAL(triggered()),tabManager,SLOT(save_all()));
 
     //File -> Close
     act[mnuFileClose]=new QAction(tr("close"),this);
@@ -182,14 +184,6 @@ void MainWindow::createActions()
     act[mnuDebugStart]=new QAction(tr("Start Debug"),this);
     actStatusTips[mnuDebugStart]=QString(tr("Start debugging the active file."));
 
-    //Debug -> Debug Pause
-    act[mnuDebugPause]=new QAction(tr("Pause Debug"), this);
-    actStatusTips[mnuDebugPause]=QString(tr("Pause the active file debugging."));
-
-    //Debug -> Debug Continue
-    act[mnuDebugContinue]=new QAction(tr("Continue Debug"), this);
-    actStatusTips[mnuDebugContinue]=QString(tr("Continue the paused debugging."));
-
     //Debug -> Stop Execute
     act[mnuDebugStopExecute]=new QAction(tr("Stop execute"),this);
     actStatusTips[mnuDebugStopExecute]=QString(tr("Stop the active debugging."));
@@ -200,38 +194,49 @@ void MainWindow::createActions()
 
     //Debug -> Next Line
     act[mnuDebugNextLine]=new QAction(tr("Next Line"),this);
-    actStatusTips[mnuDebugNextLine]=QString(tr("Get into the next line."));
+    actStatusTips[mnuDebugNextLine]=QString(tr("Get into and run the next line."));
 
     //Debug -> Go Into line
     act[mnuDebugIntoLine]=new QAction(tr("Into Line"),this);
-    actStatusTips[mnuDebugIntoLine]=QString(tr("Get into the current line."));
+    actStatusTips[mnuDebugIntoLine]=QString(tr("Get into the next line."));
 
     //Debug -> Go Next Instruction
     act[mnuDebugNextInstruction]=new QAction(tr("Next Instruction"),this);
-    actStatusTips[mnuDebugNextInstruction]=QString(tr("Get"));
+    actStatusTips[mnuDebugNextInstruction]=QString(tr("Get into and run the next instruction."));
 
-    //Go Into Instruction
+    //Debug -> Go Into Instruction
     act[mnuDebugIntoInstruction]=new QAction(tr("Into Instruction"),this);
+    actStatusTips[mnuDebugIntoInstruction]=QString(tr("Get into the next instruction."));
 
-    //Skip Function
-    act[skipfunction]=new QAction(tr("skip function"),this);
+    //Debug -> Skip Line
+    act[mnuDebugSkipLine]=new QAction(tr("skip line"),this);
+    actStatusTips[mnuDebugSkipLine]=QString(tr("Skip the current line."));
 
-    //Add Watch
-    act[addwatch]=new QAction(tr("Add Watch"),this);
+    //Debug -> Skip Function
+    act[mnuDebugSkipFunction]=new QAction(tr("skip function"),this);
+    actStatusTips[mnuDebugSkipFunction]=QString(tr("Skip the current function."));
 
-    //Modify Watch
-    act[modifywatch]=new QAction(tr("Modify Watch"),this);
+    //Debug -> Add Watch
+    act[mnuDebugAddWatch]=new QAction(tr("Add Watch"),this);
+    actStatusTips[mnuDebugAddWatch]=QString(tr("Add a new variable to debug watch."));
 
-    //Remove Watch
-    act[removewatch]=new QAction(tr("Remove Watch"),this);
+    //Debug -> Modify Watch
+    act[mnuDebugModifyWatch]=new QAction(tr("Modify Watch"),this);
+    actStatusTips[mnuDebugModifyWatch]=QString(tr("Modify a variable in debug watch list."));
+
+    //Debug -> Remove Watch
+    act[mnuDebugRemoveWatch]=new QAction(tr("Remove Watch"),this);
+    actStatusTips[mnuDebugRemoveWatch]=QString(tr("Remove a variable in debug watch list."));
 
     //about
-    act[about]=new QAction(tr("about"),this);
-    connect(act[about],SIGNAL(triggered()),this,SLOT(aboutKCI()));
+    act[mnuHelpAbout]=new QAction(tr("about"),this);
+    actStatusTips[mnuHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
+    connect(act[mnuHelpAbout],SIGNAL(triggered()),this,SLOT(aboutKCI()));
 
     //about_qt
-    act[about_qt]=new QAction(tr("about Qt"),this);
-    connect(act[about_qt],SIGNAL(triggered()),this,SLOT(aboutQt()));
+    act[mnuHelpAboutQt]=new QAction(tr("about Qt"),this);
+    actStatusTips[mnuHelpAboutQt]=QString(tr("Display the Qt information, version number and copyright."));
+    connect(act[mnuHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutQt()));
 }
 
 void MainWindow::aboutKCI()
@@ -319,7 +324,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
     menu[debug] = _mainMenu->addMenu(tr("debug"));
     menu[debug]->setIcon(*MenuIconAddor);
-    for(i=mnuDebugStart;i<=removewatch;i++)
+    for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
@@ -336,7 +341,7 @@ void MainWindow::createMenu()
     menu[help] = _mainMenu->addMenu(tr("help"));
     menu[help]->setIcon(*MenuIconAddor);
     //from about to about_qt add into help menu
-    for(i=about;i<=about_qt;i++)
+    for(i=mnuHelpAbout;i<=mnuHelpAboutQt;i++)
     {
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
@@ -365,6 +370,22 @@ void MainWindow::restoreSettings()
     restoreState(settings.value("state").toByteArray());
     settings.endGroup();
 
+}
+
+void MainWindow::resizeEvent(QResizeEvent *e)
+{
+    if(this->isMaximized())
+    {
+        savedGeometry.setSize(e->oldSize());
+
+    }
+    else
+    {
+        savedGeometry.setSize(e->size());
+    }
+    savedGeometry.setX(x());
+    savedGeometry.setY(y());
+    QMainWindow::resizeEvent(e);
 }
 
 void MainWindow::saveSettings()

@@ -362,7 +362,7 @@
     <message>
         <location filename="kcitexteditor.cpp" line="50"/>
         <source>Plain Text Files</source>
-        <translation type="unfinished"></translation>
+        <translation>纯文本文件</translation>
     </message>
     <message>
         <location filename="kcitexteditor.cpp" line="51"/>
@@ -382,7 +382,7 @@
     <message>
         <location filename="kcitexteditor.cpp" line="54"/>
         <source>Pascal Source Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Pascal 源代码文件</translation>
     </message>
     <message>
         <location filename="kcitexteditor.cpp" line="55"/>
@@ -402,7 +402,7 @@
     <message>
         <location filename="kcitexteditor.cpp" line="156"/>
         <source>save as</source>
-        <translation type="unfinished">另存为</translation>
+        <translation>另存为</translation>
     </message>
     <message>
         <location filename="kcitexteditor.cpp" line="223"/>

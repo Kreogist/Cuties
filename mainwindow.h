@@ -33,6 +33,7 @@
 #include <QToolButton>
 #include <QMessageBox>
 #include <QSettings>
+#include <QVariant>
 
 #include "kciglobal.h"
 #include "kcititlebar.h"
@@ -52,6 +53,7 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     enum MainWindowActions
@@ -88,20 +90,19 @@ private:
         mnuRunRunAndShowOutputFile,
         mnuRunSetInputRunShowOutput,
         mnuDebugStart,
-        mnuDebugPause,
-        mnuDebugContinue,
         mnuDebugStopExecute,
         mnuDebugSetBreakPoint,
         mnuDebugNextLine,
         mnuDebugIntoLine,
         mnuDebugNextInstruction,
         mnuDebugIntoInstruction,
-        skipfunction,
-        addwatch,
-        modifywatch,
-        removewatch,
-        about,
-        about_qt,
+        mnuDebugSkipLine,
+        mnuDebugSkipFunction,
+        mnuDebugAddWatch,
+        mnuDebugModifyWatch,
+        mnuDebugRemoveWatch,
+        mnuHelpAbout,
+        mnuHelpAboutQt,
         act_count   //the number of actions.
     };
 
@@ -124,6 +125,7 @@ private:
     QAction *act[act_count];
     QMenu *menu[menu_count];
     QString actStatusTips[act_count];
+    QRect savedGeometry;
     kciTitleBar *titlebar;
 
     void saveSettings();
