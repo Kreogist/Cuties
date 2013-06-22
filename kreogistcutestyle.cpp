@@ -134,8 +134,12 @@ QSize KreogistCuteStyle::sizeFromContents(ContentsType ct,
     {
         case CT_MenuItem:
         {
+            const QStyleOptionMenuItem* _opt_menu_item=qstyleoption_cast<const QStyleOptionMenuItem*>(opt);
             QSize ret=style->sizeFromContents(ct,opt,contentsSize,widget);
-            ret.setHeight(42);
+            if(_opt_menu_item->menuItemType != QStyleOptionMenuItem::Separator)
+            {
+                ret.setHeight(42);
+            }
             return ret;
             break;
         }
@@ -162,12 +166,6 @@ int KreogistCuteStyle::pixelMetric(PixelMetric metric,
     case QStyle::PM_MenuVMargin:
         pIntValue=0;
         break;
-    /*case QStyle::PM_LayoutLeftMargin:
-    case QStyle::PM_LayoutBottomMargin:
-    case QStyle::PM_LayoutRightMargin:
-    case QStyle::PM_LayoutTopMargin:
-        pIntValue=0;
-        break;*/
     default:
         break;
     }
