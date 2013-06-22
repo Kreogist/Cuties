@@ -81,7 +81,7 @@ void MainWindow::createActions()
     //File -> Close
     act[mnuFileClose]=new QAction(tr("close"),this);
     actStatusTips[mnuFileClose]=QString(tr("Close the active document."));
-    connect(act[mnuFileClose],SIGNAL(triggered()),tabManager,SLOT(close()));
+    connect(act[mnuFileClose],SIGNAL(triggered()),tabManager,SLOT(close_current_tab()));
 
     //File -> Close All
     act[mnuFileCloseAll]=new QAction(tr("close all"),this);

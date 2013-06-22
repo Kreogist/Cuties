@@ -61,22 +61,6 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     fileError=QFileDevice::NoError;
 }
 
-bool kciTextEditor::open()
-{
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-    filePath=QFileDialog::getOpenFileName(this,tr("open"),
-                                          settings.value("texteditor/historyDir").toString(),
-                                          strFileFilter);
-    if(!filePath.isEmpty())
-    {
-        return open(filePath);
-    }
-    else
-    {
-        return false;
-    }
-}
-
 bool kciTextEditor::open(const QString &fileName)
 {
     QFile _file(fileName);
@@ -135,7 +119,6 @@ bool kciTextEditor::save()
 {
     if(!filePath.isEmpty())
     {
-        onModificationChanged(false);
         return saveAs(filePath);
     }
     else
@@ -145,7 +128,6 @@ bool kciTextEditor::save()
 
         if(!filePath.isEmpty())
         {
-            onModificationChanged(false);
             return saveAs(filePath);
         }
         else
@@ -163,7 +145,6 @@ bool kciTextEditor::saveAs()
 
     if(!filePath.isEmpty())
     {
-        onModificationChanged(false);
         return saveAs(filePath);
     }
     else

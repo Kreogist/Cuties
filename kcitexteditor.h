@@ -57,7 +57,6 @@ signals:
     void filenameChanged(QString newName);
     
 public slots:
-    bool open();
     bool open(const QString& fileName);
     bool save();
     bool saveAs();

@@ -55,17 +55,17 @@ public slots:
     //void compile_all_file();
     void on_tab_close_requested(int index);
     void on_current_tab_change(int index);
+    void close_current_tab();
     void renameTabTitle(QString title);
 
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
-    void tabRemoved(int index);
-
 
 private:
     int tab_count;
     int new_file_count;
+    QString strFileFilter;
     bool isEditor;  //is current widget a widget
 };
 

@@ -8,10 +8,14 @@ kciTabManager::kciTabManager(QWidget *parent) :
     connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(on_tab_close_requested(int)));
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(on_current_tab_change(int)));
 
-/*    QPalette tabpal=this->palette();
-    tabpal.setColor(QPalette::Background, QColor(83,83,83));
-    tabpal.setColor(QPalette::Foreground, QColor(56,56,56));
-    this->setPalette(tabpal);*/
+    strFileFilter=tr("All Support Files")+
+            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
+            tr("Plain Text Files")+"(*.txt);;"+
+            tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
+            tr("C Source Files")+"(*.c);;"+
+            tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
+            tr("Pascal Source Files")+"(*.pas);;"+
+            tr("All Files")+"(*.*)";
 
     setDocumentMode(true);
     setMovable(true);
@@ -26,7 +30,10 @@ kciTabManager::kciTabManager(QWidget *parent) :
 void kciTabManager::open()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-    QStringList file_name_list=QFileDialog::getOpenFileNames(this,tr("Open File"),settings.value("files/historyDir").toString());
+    QStringList file_name_list=QFileDialog::getOpenFileNames(this,
+                                                             tr("Open File"),
+                                                             settings.value("files/historyDir").toString(),
+                                                             strFileFilter);
     kciTextEditor *tmp;
     QString name;
 
@@ -213,6 +220,11 @@ void kciTabManager::on_tab_close_requested(int index)
 
 }
 
+void kciTabManager::close_current_tab()
+{
+    on_tab_close_requested(currentIndex());
+}
+
 void kciTabManager::on_current_tab_change(int index)
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(index));
@@ -255,11 +267,6 @@ void kciTabManager::renameTabTitle(QString title)
     }
     else
         qWarning()<<"in kciTabManager::renameTabTitle(QString title): a wrong sender!";
-}
-
-void kciTabManager::tabRemoved(int index)
-{
-
 }
 
 void kciTabManager::tabInserted(int index)
