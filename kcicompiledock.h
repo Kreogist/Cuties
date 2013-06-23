@@ -2,6 +2,9 @@
 #define KCICOMPILEDOCK_H
 
 #include <QTreeView>
+#include <QPalette>
+#include <QDebug>
+#include <QSignalMapper>
 #include <QDockWidget>
 
 class kcicompiledock : public QDockWidget
@@ -16,6 +19,7 @@ private:
 signals:
     
 public slots:
+    void parseMessage(QString msg);
     
 };
 

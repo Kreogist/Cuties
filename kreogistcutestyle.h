@@ -86,7 +86,9 @@ private:
     void drawMenuItem(const QStyleOptionMenuItem *opt,
                       QPainter *p,
                       const QWidget *w) const;
-
+    void drawTabItem(const QStyleOptionTab *opt,
+                     QPainter *p,
+                     const QWidget *w) const;
     QStyle *style;
 };
 

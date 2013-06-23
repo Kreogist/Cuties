@@ -47,10 +47,48 @@ void KreogistCuteStyle::drawControl(ControlElement element,
         }
         break;
     }
+    case CE_TabBarTab:
+    {
+        const QStyleOptionTab *_opt_tab_item=
+                qstyleoption_cast<const QStyleOptionTab *>(opt);
+        if(_opt_tab_item != nullptr)
+        {
+            drawTabItem(_opt_tab_item,p,w);
+        }
+        break;
 
+    }
     default:
         style->drawControl(element,opt,p,w);
         break;
+    }
+}
+
+void KreogistCuteStyle::drawTabItem(const QStyleOptionTab *opt,
+                                    QPainter *p,
+                                    const QWidget *w) const
+{
+    if(opt->state & QStyle::State_Selected)
+    {
+        QStyleOptionTab tmp=*opt;
+        tmp.text=QString(opt->text.length(),QChar(' '));
+        style->drawControl(CE_TabBarTab,&tmp,p,w);
+        int alignment = Qt::AlignCenter | Qt::TextShowMnemonic;
+        if (!proxy()->styleHint(SH_UnderlineShortcut, opt, w))
+        {
+            alignment |= Qt::TextHideMnemonic;
+        }
+        style->drawItemText(p,
+                            subElementRect(SE_TabBarTabText, opt, w),
+                            alignment,
+                            opt->palette,
+                            true,
+                            opt->text,
+                            QPalette::HighlightedText);
+    }
+    else
+    {
+        style->drawControl(CE_TabBarTab,opt,p,w);
     }
 }
 
@@ -215,7 +253,17 @@ QIcon KreogistCuteStyle::standardIcon(StandardPixmap standardIcon,
                                       const QStyleOption *option,
                                       const QWidget *widget) const
 {
-    return style->standardIcon(standardIcon,option,widget);
+    switch(standardIcon)
+    {
+    case QStyle::SP_TitleBarCloseButton:
+        return QIcon(QString(":/toolbutton/image/Close.png"));
+    case QStyle::SP_TitleBarMaxButton:
+        return QIcon(QString(":/toolbutton/image/Maxmized.png"));
+    case QStyle::SP_TitleBarNormalButton:
+        return QIcon(QString(":/toolbutton/image/Normalmized.png"));
+    default:
+        return style->standardIcon(standardIcon,option,widget);
+    }
 }
 QPixmap KreogistCuteStyle::standardPixmap(StandardPixmap standardPixmap,
                                           const QStyleOption *opt,

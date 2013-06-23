@@ -35,6 +35,9 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     setPalette(pal);
 
     setFrameStyle(0);
+
+    //Solve the default line's bug.
+    highlightCurrentLine();
 }
 
 void kciCodeEditor::highlightCurrentLine()

@@ -51,6 +51,7 @@ signals:
 public slots:
     void aboutQt();
     void aboutKCI();
+    void compileCurrentFile();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -83,7 +84,6 @@ private:
         mnuSearchGoto,
         mnuRunCompileAndRun,
         mnuRunCompile,
-        mnuRunCompileAllFiles,
         mnuRunRun,
         mnuRunParameters,
         mnuRunSetInputFile,

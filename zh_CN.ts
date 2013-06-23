@@ -66,22 +66,22 @@
     <message>
         <location filename="mainwindow.cpp" line="60"/>
         <source>Open an exsisting document.</source>
-        <translation type="unfinished"></translation>
+        <translation>打开一个已经存在的文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="66"/>
         <source>Save active document.</source>
-        <translation type="unfinished"></translation>
+        <translation>保存当前文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="72"/>
         <source>Save as different file name.</source>
-        <translation type="unfinished"></translation>
+        <translation>使用不同的文件名保存当前文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="78"/>
         <source>Save all modified documents.</source>
-        <translation type="unfinished"></translation>
+        <translation>保存所有修改的文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="83"/>
@@ -101,7 +101,7 @@
     <message>
         <location filename="mainwindow.cpp" line="96"/>
         <source>Quit applications; prompts to save documents.</source>
-        <translation type="unfinished"></translation>
+        <translation>退出Cuties，并且提示保存所有文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="102"/>
@@ -111,7 +111,7 @@
     <message>
         <location filename="mainwindow.cpp" line="107"/>
         <source>Redo the previously undone action.</source>
-        <translation type="unfinished"></translation>
+        <translation>重做之前未完成的动作。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="110"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="mainwindow.cpp" line="119"/>
         <source>Paste clipboard contents.</source>
-        <translation type="unfinished"></translation>
+        <translation>粘贴剪切板中的内容。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="122"/>
@@ -151,7 +151,7 @@
     <message>
         <location filename="mainwindow.cpp" line="123"/>
         <source>Select the entire document.</source>
-        <translation type="unfinished"></translation>
+        <translation>选择整个文档。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="127"/>
@@ -171,22 +171,22 @@
     <message>
         <location filename="mainwindow.cpp" line="139"/>
         <source>Replace specfic text with different text.</source>
-        <translation type="unfinished"></translation>
+        <translation>将文件中的部分文字替换为指定的文字。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="143"/>
         <source>Replace in files.</source>
-        <translation type="unfinished"></translation>
+        <translation>将所有打开的文档中指定的文字替换。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="147"/>
         <source>Search text online.</source>
-        <translation type="unfinished"></translation>
+        <translation>在线搜索选择的文本。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="151"/>
         <source>Goto line.</source>
-        <translation type="unfinished"></translation>
+        <translation>转到指定行。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="155"/>
@@ -206,42 +206,42 @@
     <message>
         <location filename="mainwindow.cpp" line="167"/>
         <source>Run the compiled execution.</source>
-        <translation type="unfinished"></translation>
+        <translation>运行编译完的程序。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="171"/>
         <source>Run the compiled execution with parameters.</source>
-        <translation type="unfinished"></translation>
+        <translation>带参数运行编译完的程序。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="175"/>
         <source>Set the input file contents.</source>
-        <translation type="unfinished"></translation>
+        <translation>设置输入文件内容。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="179"/>
         <source>Show the output file contents.</source>
-        <translation type="unfinished"></translation>
+        <translation>显示输出文件内容。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="183"/>
         <source>Run the execution and show output file.</source>
-        <translation type="unfinished"></translation>
+        <translation>重新运行程序并且显示输出文件。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="189"/>
         <source>Set the input file, compile and run the document, and show output file.</source>
-        <translation type="unfinished"></translation>
+        <translation>设置输入文件新的内容，重新编译并运行程序，并且显示输出文件。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
         <source>Start debugging the active file.</source>
-        <translation type="unfinished"></translation>
+        <translation>开始调试当前文件。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="197"/>
         <source>Stop the active debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation>停止当前的调试。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="200"/>
@@ -346,7 +346,7 @@
     <message>
         <location filename="mainwindow.cpp" line="201"/>
         <source>Set a break point at the current line.</source>
-        <translation type="unfinished"></translation>
+        <translation>在当前行设置一个断电。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="204"/>
@@ -356,7 +356,7 @@
     <message>
         <location filename="mainwindow.cpp" line="205"/>
         <source>Get into and run the next line.</source>
-        <translation type="unfinished"></translation>
+        <translation>进入当前行调试。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="208"/>
@@ -366,7 +366,7 @@
     <message>
         <location filename="mainwindow.cpp" line="209"/>
         <source>Get into the next line.</source>
-        <translation type="unfinished"></translation>
+        <translation>进入到下一行调试。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="212"/>
@@ -376,7 +376,7 @@
     <message>
         <location filename="mainwindow.cpp" line="213"/>
         <source>Get into and run the next instruction.</source>
-        <translation type="unfinished"></translation>
+        <translation>进入并且执行下一个函数块。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="216"/>
@@ -386,17 +386,17 @@
     <message>
         <location filename="mainwindow.cpp" line="217"/>
         <source>Get into the next instruction.</source>
-        <translation type="unfinished"></translation>
+        <translation>进入下一个函数块。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="220"/>
         <source>skip line</source>
-        <translation type="unfinished"></translation>
+        <translation>跳过当前行</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="221"/>
         <source>Skip the current line.</source>
-        <translation type="unfinished"></translation>
+        <translation>不执行当前行。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="224"/>
@@ -406,7 +406,7 @@
     <message>
         <location filename="mainwindow.cpp" line="225"/>
         <source>Skip the current function.</source>
-        <translation type="unfinished"></translation>
+        <translation>跳过当前行所在模块。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="228"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="mainwindow.cpp" line="233"/>
         <source>Modify a variable in debug watch list.</source>
-        <translation type="unfinished"></translation>
+        <translation>修改一个已经添加到监视列表的变量。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="236"/>
@@ -436,7 +436,7 @@
     <message>
         <location filename="mainwindow.cpp" line="237"/>
         <source>Remove a variable in debug watch list.</source>
-        <translation type="unfinished"></translation>
+        <translation>将一个在监视列表中的变量移除。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="240"/>

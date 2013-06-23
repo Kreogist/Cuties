@@ -17,6 +17,13 @@ kciTabManager::kciTabManager(QWidget *parent) :
             QObject::tr("Pascal Source Files")+"(*.pas);;"+
             QObject::tr("All Files")+"(*.*)";
 
+    QTabBar *tmpTabBar = this->tabBar();
+    QPalette pal=tmpTabBar->palette();
+    pal.setColor(QPalette::WindowText,QColor(200,200,200));
+    pal.setColor(QPalette::HighlightedText,QColor(255,255,255));
+    pal.setColor(QPalette::Button,QColor(83,83,83));
+    tmpTabBar->setPalette(pal);
+
     setDocumentMode(true);
     setMovable(true);
     setTabsClosable(true);
@@ -66,7 +73,6 @@ void kciTabManager::open()
 
         file_name_list.pop_front();
     }
-
     setCurrentIndex(_last_tab_index);
 }
 
@@ -76,7 +82,7 @@ void kciTabManager::new_file()
     if(tmp!=NULL)
     {
         QString _new_file_title=
-                tr("Untitled")+QString::number(new_file_count++);
+                tr("Untitled")+ " " +QString::number(new_file_count++);
         tmp->setDocumentTitle(_new_file_title);
         setCurrentIndex(addTab(tmp,_new_file_title));
     }
@@ -137,6 +143,34 @@ void kciTabManager::save_all()
                 error.showMessage(tr("Saving file failed!"));
                 error.exec();
             }
+        }
+    }
+}
+
+void kciTabManager::close_all_tab()
+{
+    int i=count();
+    while(i--)
+    {
+        kciTextEditor *editor = qobject_cast<kciTextEditor *>(widget(i));
+
+        if(Q_LIKELY(editor != NULL))
+        {
+            on_tab_close_requested(i);
+        }
+    }
+}
+
+void kciTabManager::close_all_other_tab()
+{
+    int i=count();
+    while(i--)
+    {
+        kciTextEditor *editor = qobject_cast<kciTextEditor *>(widget(i));
+
+        if(Q_LIKELY(editor!=NULL) && i!=currentIndex())
+        {
+            on_tab_close_requested(i);
         }
     }
 }
@@ -219,7 +253,6 @@ void kciTabManager::on_tab_close_requested(int index)
             removeTab(index);
         }
     }
-
 }
 
 void kciTabManager::close_current_tab()
@@ -231,27 +264,13 @@ void kciTabManager::on_current_tab_change(int index)
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(index));
     if(editor!=NULL)
-        isEditor=true;
-    else
-        isEditor=false;
-}
-
-void kciTabManager::compile_current_file()
-{
-    if(Q_LIKELY(this->isEditor))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-        Q_ASSERT(currentEditor!=NULL);
-
-        if(Q_UNLIKELY(!currentEditor->save()))
-        {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
-            return;
-        }
-
-        //currentEditor->compile();
+        isEditor=true;
+        editor->setTextFocus();
+    }
+    else
+    {
+        isEditor=false;
     }
 }
 

@@ -52,6 +52,8 @@ public:
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString& title);
+    void setTextFocus();
+    QString getFilePath();
 
 signals:
     void filenameChanged(QString newName);

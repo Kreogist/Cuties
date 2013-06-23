@@ -5,13 +5,14 @@ QString gcc::gccPath="/usr/bin/g++";
 #endif
 
 #ifdef Q_OS_WIN32
-QString gcc::gccPath="c:\\MinGW\\bin\\g++";
+QString gcc::gccPath="c:/MinGW/bin/g++.exe";
 #endif
 
 gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
     setReadChannelMode(QProcess::MergedChannels);
+    connect(this,SIGNAL(readyRead()),SLOT(onOutputReady()));
 }
 
 QString gcc::version()
@@ -29,24 +30,21 @@ void gcc::startCompile(const QString &filePath)
     QFileInfo fileInfo(filePath);
 
     qDebug()<<filePath;
-
     QStringList arg;
     arg<<filePath<<"-g"<<"-Wall"<<"-o";
 
 #ifdef Q_OS_WIN32
-    arg<<fileInfo.absolutePath()+fileInfo.completeBaseName()+".exe";
-    //windows
+    arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName()+".exe";
+    qDebug()<<arg;
+    //Windows
 #endif
 #ifdef Q_OS_UNIX
     arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName();
     //unix/unix-like system
 #endif
 
-    qDebug()<<arg;
-
-    start(gccPath,arg);
-
     connect(this,SIGNAL(readyRead()),this,SLOT(onOutputReady()));
+    start(gccPath,arg);
 }
 
 void gcc::onOutputReady()
@@ -55,6 +53,7 @@ void gcc::onOutputReady()
     while(readLine(str_msg,1024))
     {
         QString msg=QString::fromUtf8(str_msg);
+        qDebug()<<msg;
         emit output(msg);
     }
 }

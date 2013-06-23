@@ -24,13 +24,15 @@
 #include <QTabWidget>
 #include <QFile>
 #include <QFileInfo>
+#include <QTabBar>
 #include <QFileDialog>
+#include <QPropertyAnimation>
 #include <QErrorMessage>
 #include <QSettings>
 #include <QPalette>
 
-#include "gcc.h"
 #include "compilerbase.h"
+#include "compilerbasefactor.h"
 #include "kciglobal.h"
 #include "kcitexteditor.h"
 
@@ -53,11 +55,11 @@ public slots:
     void cut();
     void paste();
     void select_all();
-    void compile_current_file();
-    //void compile_all_file();
     void on_tab_close_requested(int index);
     void on_current_tab_change(int index);
     void close_current_tab();
+    void close_all_tab();
+    void close_all_other_tab();
     void renameTabTitle(QString title);
 
 protected:

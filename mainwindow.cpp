@@ -80,19 +80,25 @@ void MainWindow::createActions()
 
     //File -> Close
     act[mnuFileClose]=new QAction(tr("close"),this);
+    act[mnuFileClose]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F4));
     actStatusTips[mnuFileClose]=QString(tr("Close the active document."));
     connect(act[mnuFileClose],SIGNAL(triggered()),tabManager,SLOT(close_current_tab()));
 
     //File -> Close All
     act[mnuFileCloseAll]=new QAction(tr("close all"),this);
+    act[mnuFileCloseAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F4));
     actStatusTips[mnuFileCloseAll]=QString(tr("Close all files."));
+    connect(act[mnuFileCloseAll],SIGNAL(triggered()),tabManager,SLOT(close_all_tab()));
 
     //File -> Close All Except This
     act[mnuFileCloseAllExceptThis]=new QAction(tr("close all other file"),this);
+    act[mnuFileCloseAllExceptThis]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F4));
     actStatusTips[mnuFileCloseAllExceptThis]=QString(tr("Close all files except active file."));
+    connect(act[mnuFileCloseAllExceptThis],SIGNAL(triggered()),tabManager,SLOT(close_all_other_tab()));
 
     //File -> Exit
     act[mnuFileExit]=new QAction(tr("quit"),this);
+    act[mnuFileExit]->setShortcut(QKeySequence(Qt::ALT+Qt::Key_F4));
     actStatusTips[mnuFileExit]=QString(tr("Quit applications; prompts to save documents."));
     connect(act[mnuFileExit],SIGNAL(triggered()),this,SLOT(close()));
 
@@ -104,26 +110,37 @@ void MainWindow::createActions()
 
     //Edit -> Redo
     act[mnuEditRedo]=new QAction(tr("redo"),this);
+    act[mnuEditRedo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
     actStatusTips[mnuEditRedo]=QString(tr("Redo the previously undone action."));
+    connect(act[mnuEditRedo],SIGNAL(triggered()),tabManager,SLOT(redo()));
 
     //Edit -> Cut
     act[mnuEditCut]=new QAction(tr("cut"),this);
+    act[mnuEditCut]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_X));
     actStatusTips[mnuEditCut]=QString(tr("Cut the selection and put it on the clipboard."));
+    connect(act[mnuEditCut],SIGNAL(triggered()),tabManager,SLOT(cut()));
 
     //Edit -> Copy
     act[mnuEditCopy]=new QAction(tr("copy"),this);
+    act[mnuEditCopy]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_C));
     actStatusTips[mnuEditCopy]=QString(tr("Copy the selection and put it on the clipboard."));
+    connect(act[mnuEditCopy],SIGNAL(triggered()),tabManager,SLOT(copy()));
 
     //Edit -> Paste
     act[mnuEditPaste]=new QAction(tr("paste"),this);
+    act[mnuEditPaste]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_V));
     actStatusTips[mnuEditPaste]=QString(tr("Paste clipboard contents."));
+    connect(act[mnuEditPaste],SIGNAL(triggered()),tabManager,SLOT(paste()));
 
     //Edit -> Select All
     act[mnuEditSelectAll]=new QAction(tr("select all"),this);
+    act[mnuEditSelectAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_A));
     actStatusTips[mnuEditSelectAll]=QString(tr("Select the entire document."));
+    connect(act[mnuEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(select_all()));
 
     //Edit -> Preference
     act[mnuEditPreference]=new QAction(tr("preference"),this);
+    act[mnuEditPreference]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Comma));
     actStatusTips[mnuEditPreference]=QString(tr("Customize your IDE."));
 
     //Search -> Search
@@ -156,11 +173,9 @@ void MainWindow::createActions()
 
     //Run -> Compile
     act[mnuRunCompile]=new QAction(tr("compile"),this);
+    act[mnuRunCompile]->setShortcut(QKeySequence(Qt::Key_F9));
     actStatusTips[mnuRunCompile]=QString(tr("Compile the active file."));
-
-    //Run -> Compile All File
-    act[mnuRunCompileAllFiles]=new QAction(tr("Complie all file"),this);
-    actStatusTips[mnuRunCompileAllFiles]=QString(tr("Compile all files."));
+    connect(act[mnuRunCompile],SIGNAL(triggered()),this,SLOT(compileCurrentFile()));
 
     //Run -> Run
     act[mnuRunRun]=new QAction(tr("Runexe"),this);
@@ -424,4 +439,27 @@ void MainWindow::closeEvent(QCloseEvent *e)
     {
         e->ignore();
     }
+}
+
+void MainWindow::compileCurrentFile()
+{
+    /*kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
+    if(currentEditor!=NULL)
+    {
+        if(Q_UNLIKELY(!currentEditor->save()))
+        {
+            QErrorMessage error(this);
+            error.showMessage(tr("Saving file failed!"));
+            error.exec();
+            return;
+        }
+
+        compilerBase *currentCompiler=
+                compilerBaseFactor::createCompilerBase(currentEditor->getFilePath(), currentEditor);
+        connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::parseMessage);
+        currentCompiler->startCompile(currentEditor->getFilePath());
+        currentCompiler->waitForFinished();
+        qDebug()<<currentCompiler->error();
+        qDebug()<<currentCompiler->errorString();
+    }*/
 }

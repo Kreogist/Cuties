@@ -307,6 +307,11 @@ void kciTextEditor::selectAll()
     editor->selectAll();
 }
 
+void kciTextEditor::setTextFocus()
+{
+    editor->setFocus();
+}
+
 void kciTextEditor::onModificationChanged(bool changed)
 {
     if(changed)
@@ -317,4 +322,9 @@ void kciTextEditor::onModificationChanged(bool changed)
     {
         emit filenameChanged(editor->documentTitle());
     }
+}
+
+QString kciTextEditor::getFilePath()
+{
+    return filePath;
 }
