@@ -33,6 +33,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <QSettings>
+#include <QIcon>
 #include <QSyntaxHighlighter>
 #include <QDebug>
 

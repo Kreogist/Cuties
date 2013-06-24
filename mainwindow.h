@@ -33,6 +33,9 @@
 #include <QToolButton>
 #include <QMessageBox>
 #include <QSettings>
+#include <QSize>
+#include <QDesktopWidget>
+#include <QDebug>
 #include <QVariant>
 
 #include "kciglobal.h"

@@ -85,6 +85,7 @@ void kciTabManager::new_file()
                 tr("Untitled")+ " " +QString::number(new_file_count++);
         tmp->setDocumentTitle(_new_file_title);
         setCurrentIndex(addTab(tmp,_new_file_title));
+
     }
     else
     {

@@ -33,7 +33,6 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
     pal.setColor(QPalette::Text,QColor(255,255,255));
     setPalette(pal);
-
     setFrameStyle(0);
 
     //Solve the default line's bug.
