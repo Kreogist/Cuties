@@ -175,7 +175,8 @@ void MainWindow::createActions()
     act[mnuRunCompile]=new QAction(tr("compile"),this);
     act[mnuRunCompile]->setShortcut(QKeySequence(Qt::Key_F9));
     actStatusTips[mnuRunCompile]=QString(tr("Compile the active file."));
-    connect(act[mnuRunCompile],SIGNAL(triggered()),this,SLOT(compileCurrentFile()));
+    connect(act[mnuRunCompile],SIGNAL(triggered()),
+            this,SLOT(compileCurrentFile()));
 
     //Run -> Run
     act[mnuRunRun]=new QAction(tr("Runexe"),this);
@@ -443,7 +444,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::compileCurrentFile()
 {
-    /*kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
+    kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
     if(currentEditor!=NULL)
     {
         if(Q_UNLIKELY(!currentEditor->save()))
@@ -454,12 +455,11 @@ void MainWindow::compileCurrentFile()
             return;
         }
 
-        compilerBase *currentCompiler=
+        compilerBase *_currentCompiler=
                 compilerBaseFactor::createCompilerBase(currentEditor->getFilePath(), currentEditor);
-        connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::parseMessage);
-        currentCompiler->startCompile(currentEditor->getFilePath());
-        currentCompiler->waitForFinished();
-        qDebug()<<currentCompiler->error();
-        qDebug()<<currentCompiler->errorString();
-    }*/
+        connect(_currentCompiler,&compilerBase::output,
+                compileDock,&kcicompiledock::parseMessage);
+
+        _currentCompiler->startCompile(currentEditor->getFilePath());
+    }
 }

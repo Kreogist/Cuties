@@ -11,8 +11,7 @@ QString gcc::gccPath="c:/MinGW/bin/g++.exe";
 gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
-    setReadChannelMode(QProcess::MergedChannels);
-    connect(this,SIGNAL(readyRead()),SLOT(onOutputReady()));
+    setReadChannel(QProcess::StandardError);
 }
 
 QString gcc::version()
@@ -31,19 +30,22 @@ void gcc::startCompile(const QString &filePath)
 
     qDebug()<<filePath;
     QStringList arg;
-    arg<<filePath<<"-g"<<"-Wall"<<"-o";
+    arg<<filePath<<"-g"<<"-Wall";
+
+    //unix/unix-like system
+    QString programName=QString("-o")+fileInfo.absolutePath()+"/"
+            +fileInfo.completeBaseName();
 
 #ifdef Q_OS_WIN32
-    arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName()+".exe";
-    qDebug()<<arg;
+    programName+=".exe";
     //Windows
 #endif
-#ifdef Q_OS_UNIX
-    arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName();
-    //unix/unix-like system
-#endif
 
-    connect(this,SIGNAL(readyRead()),this,SLOT(onOutputReady()));
+    arg<<programName;
+
+    connect(this,SIGNAL(readyRead()),
+            this,SLOT(onOutputReady()));
+
     start(gccPath,arg);
 }
 
