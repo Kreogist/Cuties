@@ -45,7 +45,8 @@ SOURCES += \
     kcitabmanager.cpp \
     kcicompiledock.cpp \
     gdb.cpp \
-    compilerbasefactor.cpp
+    compilerbasefactor.cpp \
+    kcimainwindow.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -67,7 +68,8 @@ HEADERS += \
     kcitabmanager.h \
     kcicompiledock.h \
     gdb.h \
-    compilerbasefactor.h
+    compilerbasefactor.h \
+    kcimainwindow.h
 
 # Enable C++11
 CONFIG += c++11

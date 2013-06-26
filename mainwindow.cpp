@@ -21,20 +21,17 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    kciMainWindow(parent)
 {
     setWindowTitle(tr("Kreogist Cute IDE"));
 
     tabManager=new kciTabManager(this);
     setCentralWidget(tabManager);
-    setContentsMargins(0,0,0,0);
     setMinimumSize(400,150);
 
     QPalette QPpal = palette();
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
     setPalette(QPpal);
-
-    setWindowFlags(Qt::FramelessWindowHint);
 
     restoreSettings();
 
@@ -276,9 +273,7 @@ void MainWindow::aboutQt()
 
 void MainWindow::createTitlebar()
 {
-    titlebar=new kciTitleBar(this);
-    setMenuWidget(titlebar);
-    titlebar->setMainButtonIcon(":/img/image/MainMenuButton.png");
+    setMainButtonIcon(":/img/image/MainMenuButton.png");
 }
 
 void MainWindow::createDocks()
@@ -378,7 +373,7 @@ void MainWindow::createMenu()
         menu[help]->addAction(act[i]);
     }
 
-    titlebar->setMenu(_mainMenu);
+    setMenu(_mainMenu);
 }
 
 void MainWindow::createStatusbar()

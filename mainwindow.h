@@ -36,11 +36,12 @@
 #include <QVariant>
 
 #include "kciglobal.h"
+#include "kcimainwindow.h"
 #include "kcicompiledock.h"
 #include "kcititlebar.h"
 #include "kcitabmanager.h"
 
-class MainWindow : public QMainWindow
+class MainWindow : public kciMainWindow
 {
     Q_OBJECT
 public:
@@ -128,7 +129,6 @@ private:
     QString actStatusTips[act_count];
     QRect savedGeometry;
     kcicompiledock *compileDock;
-    kciTitleBar *titlebar;
 
     void saveSettings();
     void restoreSettings();
