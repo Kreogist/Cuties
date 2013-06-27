@@ -4,6 +4,27 @@
 
 #include <QProcess>
 #include <QFileInfo>
+#include <QString>
+#include <QStringList>
+#include <QCharRef>
+#include <QVector>
+#include <QDebug>
+
+struct bkpt_struct
+{
+    int number;
+    QString type;
+    bool enabled;
+    QString disp;
+    QString addr;
+    QString func;
+    QString file;
+    QString fullName;
+    int line;
+    QString threadGroups;
+    int times;
+    QString original_location;
+};
 
 class gdb : public QProcess
 {
@@ -19,7 +40,7 @@ public:
     void quitGDB();
 
     //breakpoint
-    void setBreakPoint(const int &lineNum, const int &count);
+    void setBreakPoint(const int &number, const int &count);
     void setBreakPoint(const QString& functionName);
     void setBreakCondition(const int &lineNum, const QString& expr);
 
@@ -39,13 +60,22 @@ public:
     //Stack Manipulation
     void stackListLocals();
     
+    const QVector<bkpt_struct>* getBkptVec() const;
+
 signals:
+    void errorOccured(QString errMsg);
     
 public slots:
+    void onReadReady();
 
 private:
+    void parseBkpt(const QString& _msg);
+    void parseStopMsg(const QString& _msg);
+    void parseLine(const QString& _msg);
+
     static QString gdbPath;
     static bool checkResult;
+    QVector<bkpt_struct> bkptVec;
 };
 
 #endif // GDB_H

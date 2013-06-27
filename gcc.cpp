@@ -11,7 +11,7 @@ QString gcc::gccPath="c:/MinGW/bin/g++.exe";
 gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
-    setReadChannel(QProcess::StandardError);
+    setReadChannelMode(QProcess::MergedChannels);
 }
 
 QString gcc::version()
