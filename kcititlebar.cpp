@@ -26,13 +26,11 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 {
     setMouseTracking(true);
     setContentsMargins(0,0,0,0);
-    setAutoFillBackground(true);
 
     windowTitle=parent->windowTitle();
 
     closeButton = new QToolButton(this);
     closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));
-    closeButton->setAutoFillBackground(true);
 
     QPalette bpal=closeButton->palette();
     bpal.setColor(QPalette::Button, QColor(83,83,83));
@@ -171,4 +169,9 @@ void kciTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
     {
         _exchange_button_state();
     }
+}
+
+void kciTitleBar::setTitle(const QString &title)
+{
+    titleLabel->setText(title);
 }

@@ -40,6 +40,7 @@ public:
     explicit kciTitleBar(QWidget *parent = 0);
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString& mainIcon);
+    void setTitle(const QString &title);
 
 signals:
     

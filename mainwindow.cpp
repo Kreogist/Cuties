@@ -21,20 +21,17 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    kciMainWindow(parent)
 {
     setWindowTitle(tr("Kreogist Cute IDE"));
 
     tabManager=new kciTabManager(this);
     setCentralWidget(tabManager);
-    setContentsMargins(0,0,0,0);
     setMinimumSize(400,150);
 
     QPalette QPpal = palette();
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
     setPalette(QPpal);
-
-    setWindowFlags(Qt::FramelessWindowHint);
 
     restoreSettings();
 
@@ -197,7 +194,8 @@ void MainWindow::createActions()
     act[mnuRunCompile]=new QAction(tr("compile"),this);
     act[mnuRunCompile]->setShortcut(QKeySequence(Qt::Key_F9));
     actStatusTips[mnuRunCompile]=QString(tr("Compile the active file."));
-    connect(act[mnuRunCompile],SIGNAL(triggered()),this,SLOT(compileCurrentFile()));
+    connect(act[mnuRunCompile],SIGNAL(triggered()),
+            this,SLOT(compileCurrentFile()));
 
     //Run -> Run
     act[mnuRunRun]=new QAction(tr("Runexe"),this);
@@ -297,9 +295,7 @@ void MainWindow::aboutQt()
 
 void MainWindow::createTitlebar()
 {
-    titlebar=new kciTitleBar(this);
-    setMenuWidget(titlebar);
-    titlebar->setMainButtonIcon(":/img/image/MainMenuButton.png");
+    setMainButtonIcon(":/img/image/MainMenuButton.png");
 }
 
 void MainWindow::createDocks()
@@ -313,7 +309,6 @@ void MainWindow::createMenu()
     int i;
 
     QMenu *_mainMenu=new QMenu;
-    _mainMenu->setWindowOpacity(0.8);
     QIcon *MenuIconAddor=new QIcon;
 
     //file menu
@@ -411,7 +406,7 @@ void MainWindow::createMenu()
         menu[help]->addAction(act[i]);
     }
 
-    titlebar->setMenu(_mainMenu);
+    setMenu(_mainMenu);
 }
 
 
@@ -533,7 +528,6 @@ void MainWindow::compileCurrentFile()
             error.exec();
             return;
         }
-
         //File is Ok now, Get Dock Ready.
         //Clear All Dock Info.
         compileDock->clearAllItem();

@@ -12,7 +12,6 @@ gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
     setReadChannelMode(QProcess::MergedChannels);
-    connect(this,SIGNAL(readyRead()),SLOT(onOutputReady()));
 }
 
 QString gcc::version()
@@ -34,32 +33,26 @@ QString gcc::version()
 
 void gcc::startCompile(const QString &filePath)
 {
+    QFileInfo fileInfo(filePath);
     QProcess *gccCompile=new QProcess(this);
     QStringList arg;
-    arg<<"D:/test.cpp"<<"-o"<<"D:/test.exe";
-    gccCompile->execute("c:/MinGW/bin/g++.exe", arg);
-    /*QFileInfo fileInfo(filePath);
+    arg<<filePath<<"-g"<<"-Wall";
 
-
-    qDebug()<<filePath;
-    //arg<<filePath<<"-static"<<"-g"<<"-Wall"<<"-o";
+    //unix/unix-like system
+    QString programName=QString("-o")+fileInfo.absolutePath()+"/"
+            +fileInfo.completeBaseName();
 
 #ifdef Q_OS_WIN32
-    //arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName()+".exe";
+    programName+=".exe";
     //Windows
 #endif
-#ifdef Q_OS_UNIX
-    arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName();
-    //unix/unix-like system
-#endif
-    QString teststr=QString("D:/test.cpp");// -static -g -Wall -o
-    QString teststr2=QString("-o D:/test.exe");
-    arg<<teststr<<teststr2;
-    //connect(this,SIGNAL(started()),this,SLOT(onOutputReady()));
-    //gccCompile.setArguments(arg);
-    qDebug()<<arg;
-    gccCompile->start(gccPath, arg);
-    gccCompile->waitForFinished();*/
+
+    arg<<programName;
+
+    connect(this,SIGNAL(readyRead()),
+            this,SLOT(onOutputReady()));
+
+    start(gccPath,arg);
 }
 
 void gcc::onOutputReady()

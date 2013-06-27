@@ -14,6 +14,142 @@ gdb::gdb(QObject *parent) :
     QProcess(parent)
 {
     checkGDB();
+    connect(this,SIGNAL(readyRead()),SLOT(onReadReady()));
+
+    setReadChannelMode(QProcess::MergedChannels);
+}
+
+void gdb::onReadReady()
+{
+    char buf[1000];
+    while(readLine(buf,1000)>0)
+    {
+        QString _msg(buf);
+        if(_msg.startsWith(QString("^done,bkpt=")))
+            parseBkpt(_msg);
+        else if(_msg.startsWith(QString("^error,msg=")))
+        {
+            QString _err_msg=_msg.mid(12);
+            _err_msg.remove("\"\n");
+            emit errorOccured(_err_msg);
+            qDebug()<<_err_msg;
+        }
+        else if(_msg.startsWith(QString("*stopped")))
+        {
+            parseStopMsg(_msg);
+        }
+        else
+            qDebug()<<_msg;
+    }
+}
+
+void gdb::parseStopMsg(const QString &_msg)
+{
+    QString _stop_msg=_msg.mid(9);
+    QString _var_name;
+    while(!_stop_msg.isEmpty())
+    {
+        _var_name=_stop_msg.left(_stop_msg.indexOf('='));
+        _stop_msg.remove(0,_var_name.length()+1);
+    }
+}
+
+void gdb::parseBkpt(const QString &_msg)
+{
+    //first, remove { , "} , [ , ]
+    QString _tmp_str=_msg.mid(12);
+    _tmp_str.remove("\"}");
+    _tmp_str.remove('[');
+    _tmp_str.remove(']');
+    _tmp_str.remove('\n');
+
+    //then split by ",
+    QStringList _str_list_bkpt=_tmp_str.split("\",");
+    int i=_str_list_bkpt.count();
+
+    //final, parse bkpt
+    bkpt_struct _tmp_bkpt;
+    qDebug()<<"bkpt start";
+    while(i--)
+    {
+        if(_str_list_bkpt[i].startsWith("original-location"))
+        {
+            _tmp_bkpt.original_location=_str_list_bkpt[i].mid(19);
+            qDebug()<<_tmp_bkpt.original_location;
+        }
+        else if(_str_list_bkpt[i].startsWith("times"))
+        {
+            QString _times=_str_list_bkpt[i].mid(7);
+            _tmp_bkpt.times=_times.toInt();
+            qDebug()<<_tmp_bkpt.times;
+        }
+        else if(_str_list_bkpt[i].startsWith("thread-groups"))
+        {
+            _tmp_bkpt.threadGroups=_str_list_bkpt[i].mid(14);
+            _tmp_bkpt.threadGroups.remove('\"');
+            qDebug()<<_tmp_bkpt.threadGroups;
+        }
+        else if(_str_list_bkpt[i].startsWith("line"))
+        {
+            QString _linenum=_str_list_bkpt[i].mid(6);
+            _tmp_bkpt.line=_linenum.toInt();
+            qDebug()<<_tmp_bkpt.line;
+        }
+        else if(_str_list_bkpt[i].startsWith("fullname"))
+        {
+            _tmp_bkpt.fullName=_str_list_bkpt[i].mid(10);
+            qDebug()<<_tmp_bkpt.fullName;
+        }
+        else if(_str_list_bkpt[i].startsWith("file"))
+        {
+            _tmp_bkpt.file=_str_list_bkpt[i].mid(6);
+            qDebug()<<_tmp_bkpt.file;
+        }
+        else if(_str_list_bkpt[i].startsWith("func"))
+        {
+            _tmp_bkpt.func=_str_list_bkpt[i].mid(6);
+            qDebug()<<_tmp_bkpt.func;
+        }
+        else if(_str_list_bkpt[i].startsWith("addr"))
+        {
+            _tmp_bkpt.addr=_str_list_bkpt[i].mid(6);
+            qDebug()<<_tmp_bkpt.addr;
+        }
+        else if(_str_list_bkpt[i].startsWith("enabled"))
+        {
+            QString _str_enabled=_str_list_bkpt[i].mid(9);
+            _tmp_bkpt.enabled=_str_enabled.toLower()=="y"?true:false;
+            qDebug()<<_tmp_bkpt.enabled;
+        }
+        else if(_str_list_bkpt[i].startsWith("disp"))
+        {
+            _tmp_bkpt.disp=_str_list_bkpt[i].mid(6);
+            qDebug()<<_tmp_bkpt.disp;
+        }
+        else if(_str_list_bkpt[i].startsWith("type"))
+        {
+            _tmp_bkpt.type=_str_list_bkpt[i].mid(6);
+            qDebug()<<_tmp_bkpt.type;
+        }
+        else if(_str_list_bkpt[i].startsWith("number"))
+        {
+            QString _num=_str_list_bkpt[i].mid(8);
+            _tmp_bkpt.number=_num.toInt();
+            qDebug()<<_tmp_bkpt.number;
+        }
+        else
+        {
+            qDebug()<<"kci_gdb: unknow bkpt arg";
+            qDebug()<<_str_list_bkpt[i];
+        }
+    }
+    qDebug()<<"bkpt end";
+    bkptVec<<_tmp_bkpt;
+}
+
+const QVector<bkpt_struct>* gdb::getBkptVec() const
+{
+    return &bkptVec;
 }
 
 void gdb::setGDBPath(const QString &path)
@@ -53,12 +189,12 @@ void gdb::quitGDB()
 /*!
  *! * \brief set the break point by line number.
  *!
- *!The breakpoint number lineNum is not in effect until it has been hit count times.
+ *!The breakpoint number is not in effect until it has been hit count times.
  *! */
-void gdb::setBreakPoint(const int &lineNum, const int &count)
+void gdb::setBreakPoint(const int &number, const int &count)
 {
     write(qPrintable(QString("-break-after ")+
-                     QString::number(lineNum)+" "+
+                     QString::number(number)+" "+
                      QString::number(count)+"\n"));
 }
 
