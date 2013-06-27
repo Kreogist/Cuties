@@ -1,5 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
  *
  *  compilerbase.h is part of Kreogist-Cute-IDE.
  *
@@ -28,14 +29,18 @@ class compilerBase : public QProcess
 public:
     explicit compilerBase(QObject *parent = 0);
 
+    void setCompilerName(QString newCompilerName);
     virtual void startCompile(const QString& ) = 0;
     virtual QString version() = 0;
     virtual QString path(){return "";}
     virtual bool checkCompilerPath(const QString& ) = 0;
-    virtual QString compilerName(){return "compilerase";}
+    virtual QString compilerName(){return currentCompilerName;}
 
 signals:
     void output(QString msg);
+
+private:
+    QString currentCompilerName;
 
 };
 

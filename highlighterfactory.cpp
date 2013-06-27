@@ -1,5 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
  *
  *  highlighterfactory.cpp is part of Kreogist-Cute-IDE.
  *

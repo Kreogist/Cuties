@@ -32,6 +32,7 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
     pal.setColor(QPalette::Text,QColor(255,255,255));
+    pal.setColor(QPalette::Button,QColor(83,83,83));
     setPalette(pal);
     setFrameStyle(0);
 

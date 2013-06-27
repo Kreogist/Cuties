@@ -307,3 +307,14 @@ void kciTabManager::tabInserted(int index)
         connect(editor,SIGNAL(filenameChanged(QString)),this,SLOT(renameTabTitle(QString)));
     }
 }
+
+
+
+QString kciTabManager::textNowSelect()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        return editor->getSelectedText();
+    }
+}

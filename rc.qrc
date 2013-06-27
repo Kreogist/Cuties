@@ -20,4 +20,19 @@
     <qresource prefix="/mainicon">
         <file>image/MainIcon.png</file>
     </qresource>
+    <qresource prefix="/menuicon">
+        <file>image/MenuIcons/mnuEditPerformance.png</file>
+        <file>image/MenuIcons/mnuFileNew.png</file>
+        <file>image/MenuIcons/mnuFileOpen.png</file>
+        <file>image/MenuIcons/mnuEditUndo.png</file>
+        <file>image/MenuIcons/mnuEditCut.png</file>
+        <file>image/MenuIcons/mnuFileSave.png</file>
+        <file>image/MenuIcons/mnuFileExit.png</file>
+        <file>image/MenuIcons/mnuFileSaveAs.png</file>
+        <file>image/MenuIcons/mnuEditCopy.png</file>
+        <file>image/MenuIcons/mnuEditPaste.png</file>
+        <file>image/MenuIcons/mnuEditRedo.png</file>
+        <file>image/MenuIcons/mnuEditSelectAll.png</file>
+        <file>image/MenuIcons/mnuFileClose.png</file>
+    </qresource>
 </RCC>

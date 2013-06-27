@@ -17,34 +17,49 @@ gcc::gcc(QObject *parent) :
 
 QString gcc::version()
 {
+    //Initalize Values:
+    QString strReturnValue;
+    QProcess gccInfo;
+
+    //Set Argv:
     QStringList arg;
-    arg<<"-dumpversion";
-    start(gccPath,arg);
-    waitForFinished();
-    return QString("g++ ")+
-            QString::fromUtf8(readAllStandardOutput().constData());
+    arg<<"--version";
+    gccInfo.start(gccPath,arg);
+    gccInfo.waitForFinished();
+    //Save Second Part Of Compiler:
+    strReturnValue=strReturnValue+"\n"+
+                   QString::fromUtf8(gccInfo.readAllStandardOutput().constData());
+    return strReturnValue;
 }
 
 void gcc::startCompile(const QString &filePath)
 {
-    QFileInfo fileInfo(filePath);
+    QProcess *gccCompile=new QProcess(this);
+    QStringList arg;
+    arg<<"D:/test.cpp"<<"-o"<<"D:/test.exe";
+    gccCompile->execute("c:/MinGW/bin/g++.exe", arg);
+    /*QFileInfo fileInfo(filePath);
+
 
     qDebug()<<filePath;
-    QStringList arg;
-    arg<<filePath<<"-g"<<"-Wall"<<"-o";
+    //arg<<filePath<<"-static"<<"-g"<<"-Wall"<<"-o";
 
 #ifdef Q_OS_WIN32
-    arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName()+".exe";
-    qDebug()<<arg;
+    //arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName()+".exe";
     //Windows
 #endif
 #ifdef Q_OS_UNIX
     arg<<fileInfo.absolutePath()+"/"+fileInfo.completeBaseName();
     //unix/unix-like system
 #endif
-
-    connect(this,SIGNAL(readyRead()),this,SLOT(onOutputReady()));
-    start(gccPath,arg);
+    QString teststr=QString("D:/test.cpp");// -static -g -Wall -o
+    QString teststr2=QString("-o D:/test.exe");
+    arg<<teststr<<teststr2;
+    //connect(this,SIGNAL(started()),this,SLOT(onOutputReady()));
+    //gccCompile.setArguments(arg);
+    qDebug()<<arg;
+    gccCompile->start(gccPath, arg);
+    gccCompile->waitForFinished();*/
 }
 
 void gcc::onOutputReady()

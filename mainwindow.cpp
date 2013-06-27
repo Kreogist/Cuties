@@ -50,6 +50,7 @@ void MainWindow::createActions()
     //File -> New
     act[mnuFileNewFile]=new QAction(tr("new file"),this);
     act[mnuFileNewFile]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
+    actMenuIconPath[mnuFileNewFile]=QString(":/menuicon/image/MenuIcons/mnuFileNew.png");
     actStatusTips[mnuFileNewFile]=QString(tr("Create a new document."));
     connect(act[mnuFileNewFile],SIGNAL(triggered()),
             tabManager,SLOT(new_file()));
@@ -57,18 +58,21 @@ void MainWindow::createActions()
     //File -> Open
     act[mnuFileOpen]=new QAction(tr("open"),this);
     act[mnuFileOpen]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
+    actMenuIconPath[mnuFileOpen]=QString(":/menuicon/image/MenuIcons/mnuFileOpen.png");
     actStatusTips[mnuFileOpen]=QString(tr("Open an exsisting document."));
     connect(act[mnuFileOpen],SIGNAL(triggered()),tabManager,SLOT(open()));
 
     //File -> Save
     act[mnuFileSave]=new QAction(tr("save"),this);
     act[mnuFileSave]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_S));
+    actMenuIconPath[mnuFileSave]=QString(":/menuicon/image/MenuIcons/mnuFileSave.png");
     actStatusTips[mnuFileSave]=QString(tr("Save active document."));
     connect(act[mnuFileSave],SIGNAL(triggered()),tabManager,SLOT(save()));
 
     //File -> Save As
     act[mnuFileSaveAs]=new QAction(tr("save as"),this);
     act[mnuFileSaveAs]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_S));
+    actMenuIconPath[mnuFileSaveAs]=QString(":/menuicon/image/MenuIcons/mnuFileSaveAs.png");
     actStatusTips[mnuFileSaveAs]=QString(tr("Save as different file name."));
     connect(act[mnuFileSaveAs],SIGNAL(triggered()),tabManager,SLOT(save_as()));
 
@@ -81,6 +85,7 @@ void MainWindow::createActions()
     //File -> Close
     act[mnuFileClose]=new QAction(tr("close"),this);
     act[mnuFileClose]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F4));
+    actMenuIconPath[mnuFileClose]=QString(":/menuicon/image/MenuIcons/mnuFileClose.png");
     actStatusTips[mnuFileClose]=QString(tr("Close the active document."));
     connect(act[mnuFileClose],SIGNAL(triggered()),tabManager,SLOT(close_current_tab()));
 
@@ -99,64 +104,81 @@ void MainWindow::createActions()
     //File -> Exit
     act[mnuFileExit]=new QAction(tr("quit"),this);
     act[mnuFileExit]->setShortcut(QKeySequence(Qt::ALT+Qt::Key_F4));
+    actMenuIconPath[mnuFileExit]=QString(":/menuicon/image/MenuIcons/mnuFileExit.png");
     actStatusTips[mnuFileExit]=QString(tr("Quit applications; prompts to save documents."));
     connect(act[mnuFileExit],SIGNAL(triggered()),this,SLOT(close()));
 
     //Edit -> Undo
     act[mnuEditUndo]=new QAction(tr("undo"),this);
     act[mnuEditUndo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Z));
+    actMenuIconPath[mnuEditUndo]=QString(":/menuicon/image/MenuIcons/mnuEditUndo.png");
     actStatusTips[mnuEditUndo]=QString(tr("Undo the last action."));
     connect(act[mnuEditUndo],SIGNAL(triggered()),tabManager,SLOT(undo()));
 
     //Edit -> Redo
     act[mnuEditRedo]=new QAction(tr("redo"),this);
     act[mnuEditRedo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
+    actMenuIconPath[mnuEditRedo]=QString(":/menuicon/image/MenuIcons/mnuEditRedo.png");
     actStatusTips[mnuEditRedo]=QString(tr("Redo the previously undone action."));
     connect(act[mnuEditRedo],SIGNAL(triggered()),tabManager,SLOT(redo()));
 
     //Edit -> Cut
     act[mnuEditCut]=new QAction(tr("cut"),this);
     act[mnuEditCut]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_X));
+    actMenuIconPath[mnuEditCut]=QString(":/menuicon/image/MenuIcons/mnuEditCut.png");
     actStatusTips[mnuEditCut]=QString(tr("Cut the selection and put it on the clipboard."));
     connect(act[mnuEditCut],SIGNAL(triggered()),tabManager,SLOT(cut()));
 
     //Edit -> Copy
     act[mnuEditCopy]=new QAction(tr("copy"),this);
     act[mnuEditCopy]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_C));
+    actMenuIconPath[mnuEditCopy]=QString(":/menuicon/image/MenuIcons/mnuEditCopy.png");
     actStatusTips[mnuEditCopy]=QString(tr("Copy the selection and put it on the clipboard."));
     connect(act[mnuEditCopy],SIGNAL(triggered()),tabManager,SLOT(copy()));
 
     //Edit -> Paste
     act[mnuEditPaste]=new QAction(tr("paste"),this);
     act[mnuEditPaste]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_V));
+    actMenuIconPath[mnuEditPaste]=QString(":/menuicon/image/MenuIcons/mnuEditPaste.png");
     actStatusTips[mnuEditPaste]=QString(tr("Paste clipboard contents."));
     connect(act[mnuEditPaste],SIGNAL(triggered()),tabManager,SLOT(paste()));
 
     //Edit -> Select All
     act[mnuEditSelectAll]=new QAction(tr("select all"),this);
     act[mnuEditSelectAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_A));
+    actMenuIconPath[mnuEditSelectAll]=QString(":/menuicon/image/MenuIcons/mnuEditSelectAll.png");
     actStatusTips[mnuEditSelectAll]=QString(tr("Select the entire document."));
     connect(act[mnuEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(select_all()));
 
     //Edit -> Preference
     act[mnuEditPreference]=new QAction(tr("preference"),this);
     act[mnuEditPreference]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Comma));
+    actMenuIconPath[mnuEditPreference]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
     actStatusTips[mnuEditPreference]=QString(tr("Customize your IDE."));
+
+    //View -> Compile Dock
+    act[mnuViewCompileDock]=new QAction(tr("Compile Dock"),this);
+    actStatusTips[mnuViewCompileDock]=QString(tr("Show Compile Info Dock."));
+    connect(act[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
 
     //Search -> Search
     act[mnuSearchFind]=new QAction(tr("searchinfile"),this);
+    act[mnuSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     actStatusTips[mnuSearchFind]=QString(tr("Find the specified text."));
 
     //Search -> Find In Files
     act[mnuSearchFindInFiles]=new QAction(tr("searchallfile"),this);
+    act[mnuSearchFindInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actStatusTips[mnuSearchFindInFiles]=QString(tr("Find text in files."));
 
     //Search -> Replace
     act[mnuSearchReplace]=new QAction(tr("replaceinfile"),this);
+    act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
     actStatusTips[mnuSearchReplace]=QString(tr("Replace specfic text with different text."));
 
     //Search -> Replace In Files
     act[mnuSearchReplaceInFiles]=new QAction(tr("replaceallfile"),this);
+    act[mnuSearchReplaceInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actStatusTips[mnuSearchReplaceInFiles]=QString(tr("Replace in files."));
 
     //Search -> Search Online
@@ -291,15 +313,16 @@ void MainWindow::createMenu()
     int i;
 
     QMenu *_mainMenu=new QMenu;
-    _mainMenu->setWindowOpacity(50);
+    _mainMenu->setWindowOpacity(0.8);
     QIcon *MenuIconAddor=new QIcon;
+
     //file menu
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menu[file] = _mainMenu->addMenu(tr("file"));
     menu[file]->setIcon(*MenuIconAddor);
-    //from new_file to quit add into file menu
     for(i=mnuFileNewFile;i<=mnuFileExit;i++)
     {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[file]->addAction(act[i]);
@@ -309,9 +332,9 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
     menu[edit] = _mainMenu->addMenu(tr("edit"));
     menu[edit]->setIcon(*MenuIconAddor);
-    //from redo to paste add into edit menu
     for(i=mnuEditUndo;i<=mnuEditPreference;i++)
     {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[edit]->addAction(act[i]);
@@ -321,6 +344,13 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[view] = _mainMenu->addMenu(tr("view"));
     menu[view]->setIcon(*MenuIconAddor);
+    for(i=mnuViewCompileDock;i<=mnuViewCompileDock;i++)
+    {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
+        act[i]->setIcon(*MenuIconAddor);
+        act[i]->setStatusTip(actStatusTips[i]);
+        menu[view]->addAction(act[i]);
+    }
 
     //search menu
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
@@ -328,6 +358,7 @@ void MainWindow::createMenu()
     menu[search]->setIcon(*MenuIconAddor);
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         menu[search]->addAction(act[i]);
         act[i]->setStatusTip(actStatusTips[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -344,6 +375,7 @@ void MainWindow::createMenu()
     menu[run]->setIcon(*MenuIconAddor);
     for(i=mnuRunCompileAndRun;i<=mnuRunSetInputRunShowOutput;i++)
     {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[run]->addAction(act[i]);
@@ -355,6 +387,7 @@ void MainWindow::createMenu()
     menu[debug]->setIcon(*MenuIconAddor);
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[debug]->addAction(act[i]);
@@ -372,6 +405,7 @@ void MainWindow::createMenu()
     //from about to about_qt add into help menu
     for(i=mnuHelpAbout;i<=mnuHelpAboutQt;i++)
     {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[help]->addAction(act[i]);
@@ -380,9 +414,11 @@ void MainWindow::createMenu()
     titlebar->setMenu(_mainMenu);
 }
 
+
+
 void MainWindow::createStatusbar()
 {
-    QStatusBar *statusbar=statusBar();
+    statusbar=statusBar();
 
     QPalette pal=statusbar->palette();
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
@@ -485,9 +521,11 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::compileCurrentFile()
 {
-    /*kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
+    kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
+    //Check Tab Status.
     if(currentEditor!=NULL)
     {
+        //File Not Save.
         if(Q_UNLIKELY(!currentEditor->save()))
         {
             QErrorMessage error(this);
@@ -496,12 +534,38 @@ void MainWindow::compileCurrentFile()
             return;
         }
 
+        //File is Ok now, Get Dock Ready.
+        //Clear All Dock Info.
+        compileDock->clearAllItem();
+        compileDock->clearText();
+        //Active Compile Dock.
+        compileDock->setVisible(true);
+        //Set To Compile Mode.
+        //TODO: Add Restore to compile mode animate.
+        compileDock->animeShowError();
+
+        //Prepare Compiler
+        compileDock->addText(tr("Preparing Compiler.\n"));
+        //Get a compiler ready.
         compilerBase *currentCompiler=
                 compilerBaseFactor::createCompilerBase(currentEditor->getFilePath(), currentEditor);
+        //Get Compiler Info.
+        compileDock->addText("Compiler: " +
+                             currentCompiler->version() +
+                             "\n");
         connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::parseMessage);
+
         currentCompiler->startCompile(currentEditor->getFilePath());
         currentCompiler->waitForFinished();
-        qDebug()<<currentCompiler->error();
-        qDebug()<<currentCompiler->errorString();
-    }*/
+    }
+}
+
+void MainWindow::searchOnline()
+{
+    qDebug()<<tabManager->textNowSelect();
+}
+
+void MainWindow::diffVisibleCompileDock()
+{
+    compileDock->setVisible(!compileDock->isVisible());
 }

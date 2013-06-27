@@ -46,6 +46,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     editor=new kciCodeEditor(this);
     linePanel->setPlainTextEdit(editor);
     mainLayout->addWidget(editor);
+    mainLayout->addSpacing(1);
     connect(editor->document(),SIGNAL(modificationChanged(bool)),
             this,SLOT(onModificationChanged(bool)));
 
@@ -327,4 +328,9 @@ void kciTextEditor::onModificationChanged(bool changed)
 QString kciTextEditor::getFilePath()
 {
     return filePath;
+}
+
+QString kciTextEditor::getSelectedText()
+{
+    return editor->textCursor().selectedText();
 }
