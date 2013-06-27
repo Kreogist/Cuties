@@ -17,4 +17,7 @@
         <file>image/Minimized.png</file>
         <file>image/Normalmized.png</file>
     </qresource>
+    <qresource prefix="/mainicon">
+        <file>image/MainIcon.png</file>
+    </qresource>
 </RCC>

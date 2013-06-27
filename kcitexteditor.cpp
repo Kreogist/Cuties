@@ -219,15 +219,15 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
             strDisplayFileName=filePath;
         }
 
-        msgbox.setText(tr("The document has been modified.")+"\n"+
+        msgbox.setText(tr("Will you save changes to the the following file?")+"\n"+
                        strDisplayFileName);
-        msgbox.setInformativeText(tr("Do you want to save your changes?"));
+        msgbox.setInformativeText(tr("If you don't save the changes, all the changes will be lost."));
 
         msgbox.setStandardButtons(QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
         msgbox.setDefaultButton(QMessageBox::Save);
-        msgbox.setButtonText(QMessageBox::Save,tr("Save"));
-        msgbox.setButtonText(QMessageBox::Discard,tr("Discard"));
-        msgbox.setButtonText(QMessageBox::Cancel,tr("Cancel"));
+        msgbox.setButtonText(QMessageBox::Save,tr("&Save"));
+        msgbox.setButtonText(QMessageBox::Discard,tr("&Don't Save"));
+        msgbox.setButtonText(QMessageBox::Cancel,tr("&Cancel"));
 
         int ret=msgbox.exec();
 

@@ -391,8 +391,31 @@ void MainWindow::restoreSettings()
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
-    restoreGeometry(settings.value("geometry").toByteArray());
-    restoreState(settings.value("state").toByteArray());
+
+    int n_WindowState;
+    float n_X, n_Y, n_width, n_height;
+
+    n_X     = (settings.value("x").toFloat() / settings.value("screenwidth").toFloat())
+                * QApplication::desktop()->width();
+    n_Y     = (settings.value("y").toFloat() / settings.value("screenwidth").toFloat())
+                * QApplication::desktop()->width();
+    n_width = (settings.value("width").toFloat() / settings.value("screenwidth").toFloat())
+                * QApplication::desktop()->width();
+    n_height= (settings.value("height").toFloat()/ settings.value("screenheight").toFloat())
+                * QApplication::desktop()->height();
+    setGeometry(static_cast<int>(n_X),
+                static_cast<int>(n_Y),
+                static_cast<int>(n_width),
+                static_cast<int>(n_height));
+    n_WindowState=settings.value("state").toInt();
+    switch(n_WindowState)
+    {
+    case 1:
+        setWindowState(Qt::WindowMinimized);
+    case 2:
+        setWindowState(Qt::WindowMaximized);
+    }
+
     settings.endGroup();
 
 }
@@ -402,14 +425,13 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     if(this->isMaximized())
     {
         savedGeometry.setSize(e->oldSize());
-
     }
     else
     {
         savedGeometry.setSize(e->size());
+        savedGeometry.setX(x());
+        savedGeometry.setY(y());
     }
-    savedGeometry.setX(x());
-    savedGeometry.setY(y());
     QMainWindow::resizeEvent(e);
 }
 
@@ -417,9 +439,29 @@ void MainWindow::saveSettings()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
+    if(!this->isMaximized())
+    {
+        savedGeometry.setX(x());
+        savedGeometry.setY(y());
+    }
+
+    int n_WindowState;
+
+    //Save ALL settings.
     settings.beginGroup("MainWindow");
-    settings.setValue("geometry",saveGeometry());
-    settings.setValue("state",saveState());
+    settings.setValue("width",savedGeometry.width());
+    settings.setValue("height",savedGeometry.height());
+    settings.setValue("x",savedGeometry.x());
+    settings.setValue("y",savedGeometry.y());
+    settings.setValue("screenwidth",QApplication::desktop()->width());
+    settings.setValue("screenheight",QApplication::desktop()->height());
+    switch(windowState())
+    {
+    case Qt::WindowMinimized:n_WindowState=1;break;
+    case Qt::WindowMaximized:n_WindowState=2;break;
+    default:n_WindowState=0;break;
+    }
+    settings.setValue("state",n_WindowState);
     settings.endGroup();
 }
 
