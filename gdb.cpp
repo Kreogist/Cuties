@@ -1,23 +1,3 @@
-/*
- *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
- *
- *  gdb.cpp is part of Kreogist-Cute-IDE.
- *
- *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "gdb.h"
 
 #ifdef Q_OS_UNIX
@@ -116,15 +96,25 @@ void gdb::parseLine(const QString &_msg)
                 break;
         }
 
+        begin++;    //skip ,
+
+        GdbMiValue result;
+
+        for(;begin<end;begin++)
+        {
+            GdbMiValue child;
+            child.build(begin,end);
+
+            result+=child;
+        }
+
         if(_str_async == "stopped")
         {
-            begin++;
-
-            GdbMiValue result;
-
-            result.build(begin,end);
+            qDebug()<<*begin;
         }
     }
+    default:
+        qDebug()<<_msg;
     }
 }
 
@@ -145,7 +135,7 @@ void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
     _tmp_bkpt.times=gmvBkpt["times"].getValue().toInt();
     _tmp_bkpt.original_location=gmvBkpt["original-location"].getValue();
 
-    qDebug()<<_tmp_bkpt.number;
+    /*qDebug()<<_tmp_bkpt.number;
     qDebug()<<_tmp_bkpt.type;
     qDebug()<<_tmp_bkpt.disp;
     qDebug()<<_tmp_bkpt.enabled;
@@ -156,7 +146,7 @@ void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
     qDebug()<<_tmp_bkpt.line;
     qDebug()<<_tmp_bkpt.threadGroups;
     qDebug()<<_tmp_bkpt.times;
-    qDebug()<<_tmp_bkpt.original_location;
+    qDebug()<<_tmp_bkpt.original_location;*/
 
     bkptVec<<_tmp_bkpt;
 

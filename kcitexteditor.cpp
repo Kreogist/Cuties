@@ -40,11 +40,16 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
             QObject::tr("Pascal Source Files")+"(*.pas);;"+
             QObject::tr("All Files")+"(*.*)";
 
+
+    markPanel=new kciMarkPanel(this);
+    mainLayout->addWidget(markPanel);
+
     linePanel=new kciLinenumPanel(this);
     mainLayout->addWidget(linePanel);
 
     editor=new kciCodeEditor(this);
     linePanel->setPlainTextEdit(editor);
+    markPanel->setPlainTextEdit(editor);
     mainLayout->addWidget(editor);
     connect(editor->document(),SIGNAL(modificationChanged(bool)),
             this,SLOT(onModificationChanged(bool)));

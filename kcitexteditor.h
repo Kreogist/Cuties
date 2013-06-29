@@ -40,6 +40,7 @@
 #include "kciglobal.h"
 #include "kcicodeeditor.h"
 #include "kcilinenumpanel.h"
+#include "kcimarkpanel.h"
 #include "highlighterfactory.h"
 
 //default highlighter
@@ -81,6 +82,7 @@ private:
     QHBoxLayout *mainLayout;
     kciCodeEditor *editor;
     kciLinenumPanel *linePanel;
+    kciMarkPanel *markPanel;
     QSyntaxHighlighter *highlighter;
 
     QString filePath,strFileFilter;
