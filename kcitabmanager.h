@@ -62,6 +62,8 @@ public slots:
     void close_all_tab();
     void close_all_other_tab();
     void renameTabTitle(QString title);
+    //void nowCursorChanged();
+    void currentTextCursorChanged();
     QString textNowSelect();
 
 protected:
@@ -72,6 +74,7 @@ private:
     int tab_count;
     int new_file_count;
     QString strFileFilter;
+    QTextCursor currentTextCursor;
     bool isEditor;  //is current widget a widget
 };
 

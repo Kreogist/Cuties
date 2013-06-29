@@ -21,9 +21,12 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    kciMainWindow(parent)
+    QMainWindow(parent)
 {
-    setWindowTitle(tr("Kreogist Cute IDE"));
+    setWindowTitle(tr("Kreogist Cuties"));
+
+    setContentsMargins(0,0,0,0);
+    setWindowFlags(Qt::CustomizeWindowHint);
 
     tabManager=new kciTabManager(this);
     setCentralWidget(tabManager);
@@ -295,7 +298,13 @@ void MainWindow::aboutQt()
 
 void MainWindow::createTitlebar()
 {
-    setMainButtonIcon(":/img/image/MainMenuButton.png");
+    titlebar=new kciTitleBar(this);
+    titlebar->setMainButtonIcon(":/img/image/MainMenuButton.png");
+
+    setMenuWidget(titlebar);
+
+    titlebar->setTitle(this->windowTitle());
+    setWindowTitle(this->windowTitle());
 }
 
 void MainWindow::createDocks()
@@ -406,7 +415,7 @@ void MainWindow::createMenu()
         menu[help]->addAction(act[i]);
     }
 
-    setMenu(_mainMenu);
+    titlebar->setMenu(_mainMenu);
 }
 
 
@@ -535,8 +544,7 @@ void MainWindow::compileCurrentFile()
         //Active Compile Dock.
         compileDock->setVisible(true);
         //Set To Compile Mode.
-        //TODO: Add Restore to compile mode animate.
-        compileDock->animeShowError();
+        compileDock->animeHideError();
 
         //Prepare Compiler
         compileDock->addText(tr("Preparing Compiler.\n"));

@@ -146,9 +146,12 @@ void kciTitleBar::mousePressEvent(QMouseEvent *event)
 
 void kciTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
-    if(hasPressed && event->buttons() == Qt::LeftButton)
+    if(!isShowingNormalButton)
     {
-        mainWindow->move(mainWindow->pos() + event->pos() - mousePosStart);
+        if(hasPressed && event->buttons() == Qt::LeftButton)
+        {
+            mainWindow->move(mainWindow->pos() + event->pos() - mousePosStart);
+        }
     }
 }
 

@@ -39,12 +39,11 @@
 #include <QVariant>
 
 #include "kciglobal.h"
-#include "kcimainwindow.h"
 #include "kcicompiledock.h"
 #include "kcititlebar.h"
 #include "kcitabmanager.h"
 
-class MainWindow : public kciMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:

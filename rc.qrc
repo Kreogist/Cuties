@@ -16,6 +16,9 @@
         <file>image/Maxmized.png</file>
         <file>image/Minimized.png</file>
         <file>image/Normalmized.png</file>
+        <file>image/TabCloseNormal.png</file>
+        <file>image/TabCloseHover.png</file>
+        <file>image/TabCloseDown.png</file>
     </qresource>
     <qresource prefix="/mainicon">
         <file>image/MainIcon.png</file>

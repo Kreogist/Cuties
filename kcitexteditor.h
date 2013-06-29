@@ -32,6 +32,7 @@
 #include <QTextStream>
 #include <QString>
 #include <QMessageBox>
+#include <QTextCursor>
 #include <QSettings>
 #include <QIcon>
 #include <QSyntaxHighlighter>
@@ -55,9 +56,11 @@ public:
     void setDocumentTitle(const QString& title);
     void setTextFocus();
     QString getFilePath();
+    QTextCursor getTextCursor();
 
 signals:
     void filenameChanged(QString newName);
+    void fileTextCursorChanged();
     
 public slots:
     bool open(const QString& fileName);
@@ -70,6 +73,7 @@ public slots:
     void cut();
     void paste();
     void selectAll();
+    void cursorChanged();
     QString getSelectedText();
 
 private slots:
@@ -86,6 +90,7 @@ private:
 
     QString filePath,strFileFilter;
     QFileDevice::FileError fileError;
+    QTextCursor fileTextCursor;
 };
 
 #endif // TEXTEDITOR_H

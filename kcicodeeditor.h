@@ -35,9 +35,10 @@ public:
     explicit kciCodeEditor(QWidget *parent = 0);
     
 signals:
-    
+
 public slots:
     void highlightCurrentLine();
+
 
 private:
     QColor lineColor;

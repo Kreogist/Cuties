@@ -50,6 +50,7 @@ public:
 
     //Show/Hide Error Animation.
     void animeShowError();
+    void animeHideError();
 
 private:
     QWidget *objCombine;

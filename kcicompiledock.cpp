@@ -50,14 +50,18 @@ kcicompiledock::kcicompiledock(QWidget *parent):
 
 void kcicompiledock::animeShowError()
 {
-    QPropertyAnimation showTrevwAnime(trevwCompileInfo,"geometry");
-    QRect startRect=trevwCompileInfo->rect();
-    QRect finalRect=startRect;
-    finalRect.setWidth(100);
-    showTrevwAnime.setStartValue(startRect);
-    showTrevwAnime.setEndValue(finalRect);
+    QList<int> l_sizes_finish;
+    int dockCompileWidth=this->width();
+    dockCompileWidth/=5;
+    l_sizes_finish << dockCompileWidth << this->width()-dockCompileWidth;
+    splCombine->setSizes(l_sizes_finish);
+}
 
-    showTrevwAnime.start();
+void kcicompiledock::animeHideError()
+{
+    QList<int> l_sizes_finish;
+    l_sizes_finish << width() << 0;
+    splCombine->setSizes(l_sizes_finish);
 }
 
 void kcicompiledock::clearText()
