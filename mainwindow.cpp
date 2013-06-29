@@ -183,10 +183,13 @@ void MainWindow::createActions()
 
     //Search -> Search Online
     act[mnuSearchSearchOnline]=new QAction(tr("searchonline"),this);
+    act[mnuSearchSearchOnline]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
     actStatusTips[mnuSearchSearchOnline]=QString(tr("Search text online."));
+    connect(act[mnuSearchSearchOnline],SIGNAL(triggered()),this,SLOT(searchOnline()));
 
     //Search -> Go To Line
     act[mnuSearchGoto]=new QAction(tr("gotoline"),this);
+    act[mnuSearchGoto]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_G));
     actStatusTips[mnuSearchGoto]=QString(tr("Goto line."));
 
     //Run -> Comile And Run
@@ -418,16 +421,15 @@ void MainWindow::createMenu()
     titlebar->setMenu(_mainMenu);
 }
 
-
-
 void MainWindow::createStatusbar()
 {
-    statusbar=statusBar();
+    myStatusBar=new kciStatusBar(this);
+    setStatusBar(myStatusBar);
 
-    QPalette pal=statusbar->palette();
+    QPalette pal=myStatusBar->palette();
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
     pal.setColor(QPalette::Foreground,QColor(255,255,255));
-    statusbar->setPalette(pal);
+    myStatusBar->setPalette(pal);
 }
 
 void MainWindow::restoreSettings()
@@ -564,7 +566,8 @@ void MainWindow::compileCurrentFile()
 
 void MainWindow::searchOnline()
 {
-    qDebug()<<tabManager->textNowSelect();
+    QString strURL="http://www.baidu.com/s?wd="+tabManager->textNowSelect();
+    QDesktopServices::openUrl(QUrl(strURL));
 }
 
 void MainWindow::diffVisibleCompileDock()

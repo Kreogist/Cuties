@@ -339,7 +339,7 @@ QString kciTextEditor::getSelectedText()
 void kciTextEditor::cursorChanged()
 {
     fileTextCursor=editor->textCursor();
-    emit fileTextCursorChanged();
+    emit fileTextCursorChanged();//fileTextCursor.position());
 }
 
 QTextCursor kciTextEditor::getTextCursor()

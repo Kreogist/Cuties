@@ -28,10 +28,10 @@
 #include <QToolBar>
 #include <QMenu>
 #include <QPalette>
-#include <QStatusBar>
 #include <QApplication>
 #include <QToolButton>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include <QSettings>
 #include <QSize>
 #include <QDesktopWidget>
@@ -41,6 +41,7 @@
 #include "kciglobal.h"
 #include "kcicompiledock.h"
 #include "kcititlebar.h"
+#include "kcistatusbar.h"
 #include "kcitabmanager.h"
 
 class MainWindow : public QMainWindow
@@ -135,7 +136,7 @@ private:
     QRect savedGeometry;
     kcicompiledock *compileDock;
     kciTitleBar *titlebar;
-    QStatusBar *statusbar;
+    kciStatusBar *myStatusBar;
 
     void saveSettings();
     void restoreSettings();

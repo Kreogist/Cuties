@@ -321,8 +321,18 @@ void kciTabManager::currentTextCursorChanged()
 QString kciTabManager::textNowSelect()
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    QString returnValue;
     if(editor!=NULL)
     {
-        return editor->getSelectedText();
+        returnValue=editor->getSelectedText();
+        if(returnValue.isEmpty())
+        {
+            returnValue="";
+        }
     }
+    else
+    {
+        returnValue="";
+    }
+    return returnValue;
 }
