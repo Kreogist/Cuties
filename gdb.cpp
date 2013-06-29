@@ -1,3 +1,23 @@
+/*
+ *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
+ *
+ *  gdb.cpp is part of Kreogist-Cute-IDE.
+ *
+ *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "gdb.h"
 
 #ifdef Q_OS_UNIX
@@ -9,6 +29,11 @@ QString gdb::gdbPath="c:\\MinGW\\bin\\gdb";
 #endif
 
 bool gdb::checkResult=false;
+
+static bool isAnsycChar(const char& c)
+{
+    return (c >= 'a' && c <= 'z') || c == '-';
+}
 
 gdb::gdb(QObject *parent) :
     QProcess(parent)
@@ -25,126 +50,116 @@ void gdb::onReadReady()
     while(readLine(buf,1000)>0)
     {
         QString _msg(buf);
-        if(_msg.startsWith(QString("^done,bkpt=")))
-            parseBkpt(_msg);
-        else if(_msg.startsWith(QString("^error,msg=")))
-        {
-            QString _err_msg=_msg.mid(12);
-            _err_msg.remove("\"\n");
-            emit errorOccured(_err_msg);
-            qDebug()<<_err_msg;
-        }
-        else if(_msg.startsWith(QString("*stopped")))
-        {
-            parseStopMsg(_msg);
-        }
-        else
-            qDebug()<<_msg;
+        _msg.remove('\n');
+
+        qDebug()<<_msg;
+        parseLine(_msg);
     }
 }
 
-void gdb::parseStopMsg(const QString &_msg)
+void gdb::parseLine(const QString &_msg)
 {
-    QString _stop_msg=_msg.mid(9);
-    QString _var_name;
-    while(!_stop_msg.isEmpty())
+    if(_msg.isEmpty() || _msg == "(gdb)")
+        return ;
+
+    char _firstChar=_msg.begin()->toLatin1();
+    const QChar* begin=_msg.begin();
+    const QChar* end=_msg.end();
+
+    switch(_firstChar)
     {
-        _var_name=_stop_msg.left(_stop_msg.indexOf('='));
-        _stop_msg.remove(0,_var_name.length()+1);
+    case '^':
+    {
+        begin++;
+
+        QString _str_async;
+        for(;begin<end;begin++)
+        {
+            if(isAnsycChar(begin->toLatin1()))
+                _str_async+=*begin;
+            else
+                break;
+        }
+
+        if(_str_async == "done")
+        {
+            begin++;
+            GdbMiValue result;
+
+            result.build(begin,end);
+
+            if(result.getName() == "bkpt")
+            {
+                parseBkpt(result);
+            }
+        }
+        else if(_str_async == "error")
+        {
+            begin++;
+            GdbMiValue result;
+
+            result.build(begin,end);
+
+            emit errorOccured(result.getValue());
+        }
+    }
+    case '*':
+    {
+        begin++;
+
+        QString _str_async;
+        for(;begin<end;begin++)
+        {
+            if(isAnsycChar(begin->toLatin1()))
+                _str_async+=*begin;
+            else
+                break;
+        }
+
+        if(_str_async == "stopped")
+        {
+            begin++;
+
+            GdbMiValue result;
+
+            result.build(begin,end);
+        }
+    }
     }
 }
 
-void gdb::parseBkpt(const QString &_msg)
+void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
 {
-    //first, remove { , "} , [ , ]
-    QString _tmp_str=_msg.mid(12);
-    _tmp_str.remove("\"}");
-    _tmp_str.remove('[');
-    _tmp_str.remove(']');
-    _tmp_str.remove('\n');
-
-    //then split by ",
-    QStringList _str_list_bkpt=_tmp_str.split("\",");
-    int i=_str_list_bkpt.count();
-
-    //final, parse bkpt
     bkpt_struct _tmp_bkpt;
-    qDebug()<<"bkpt start";
-    while(i--)
-    {
-        if(_str_list_bkpt[i].startsWith("original-location"))
-        {
-            _tmp_bkpt.original_location=_str_list_bkpt[i].mid(19);
-            qDebug()<<_tmp_bkpt.original_location;
-        }
-        else if(_str_list_bkpt[i].startsWith("times"))
-        {
-            QString _times=_str_list_bkpt[i].mid(7);
-            _tmp_bkpt.times=_times.toInt();
-            qDebug()<<_tmp_bkpt.times;
-        }
-        else if(_str_list_bkpt[i].startsWith("thread-groups"))
-        {
-            _tmp_bkpt.threadGroups=_str_list_bkpt[i].mid(14);
-            _tmp_bkpt.threadGroups.remove('\"');
-            qDebug()<<_tmp_bkpt.threadGroups;
-        }
-        else if(_str_list_bkpt[i].startsWith("line"))
-        {
-            QString _linenum=_str_list_bkpt[i].mid(6);
-            _tmp_bkpt.line=_linenum.toInt();
-            qDebug()<<_tmp_bkpt.line;
-        }
-        else if(_str_list_bkpt[i].startsWith("fullname"))
-        {
-            _tmp_bkpt.fullName=_str_list_bkpt[i].mid(10);
-            qDebug()<<_tmp_bkpt.fullName;
-        }
-        else if(_str_list_bkpt[i].startsWith("file"))
-        {
-            _tmp_bkpt.file=_str_list_bkpt[i].mid(6);
-            qDebug()<<_tmp_bkpt.file;
-        }
-        else if(_str_list_bkpt[i].startsWith("func"))
-        {
-            _tmp_bkpt.func=_str_list_bkpt[i].mid(6);
-            qDebug()<<_tmp_bkpt.func;
-        }
-        else if(_str_list_bkpt[i].startsWith("addr"))
-        {
-            _tmp_bkpt.addr=_str_list_bkpt[i].mid(6);
-            qDebug()<<_tmp_bkpt.addr;
-        }
-        else if(_str_list_bkpt[i].startsWith("enabled"))
-        {
-            QString _str_enabled=_str_list_bkpt[i].mid(9);
-            _tmp_bkpt.enabled=_str_enabled.toLower()=="y"?true:false;
-            qDebug()<<_tmp_bkpt.enabled;
-        }
-        else if(_str_list_bkpt[i].startsWith("disp"))
-        {
-            _tmp_bkpt.disp=_str_list_bkpt[i].mid(6);
-            qDebug()<<_tmp_bkpt.disp;
-        }
-        else if(_str_list_bkpt[i].startsWith("type"))
-        {
-            _tmp_bkpt.type=_str_list_bkpt[i].mid(6);
-            qDebug()<<_tmp_bkpt.type;
-        }
-        else if(_str_list_bkpt[i].startsWith("number"))
-        {
-            QString _num=_str_list_bkpt[i].mid(8);
-            _tmp_bkpt.number=_num.toInt();
-            qDebug()<<_tmp_bkpt.number;
-        }
-        else
-        {
-            qDebug()<<"kci_gdb: unknow bkpt arg";
-            qDebug()<<_str_list_bkpt[i];
-        }
-    }
-    qDebug()<<"bkpt end";
+
+    _tmp_bkpt.number=gmvBkpt["number"].getValue().toInt();
+    _tmp_bkpt.type=gmvBkpt["type"].getValue();
+    _tmp_bkpt.disp=gmvBkpt["disp"].getValue();
+    _tmp_bkpt.enabled=gmvBkpt["enabled"].getValue()=="y"?true:false;
+    _tmp_bkpt.addr=gmvBkpt["addr"].getValue();
+    _tmp_bkpt.func=gmvBkpt["func"].getValue();
+    _tmp_bkpt.file=gmvBkpt["file"].getValue();
+    _tmp_bkpt.fullName=gmvBkpt["fullname"].getValue();
+    _tmp_bkpt.line=gmvBkpt["line"].getValue().toInt();
+    _tmp_bkpt.threadGroups=gmvBkpt["thread-groups"][""].getValue();
+    _tmp_bkpt.times=gmvBkpt["times"].getValue().toInt();
+    _tmp_bkpt.original_location=gmvBkpt["original-location"].getValue();
+
+    qDebug()<<_tmp_bkpt.number;
+    qDebug()<<_tmp_bkpt.type;
+    qDebug()<<_tmp_bkpt.disp;
+    qDebug()<<_tmp_bkpt.enabled;
+    qDebug()<<_tmp_bkpt.addr;
+    qDebug()<<_tmp_bkpt.func;
+    qDebug()<<_tmp_bkpt.file;
+    qDebug()<<_tmp_bkpt.fullName;
+    qDebug()<<_tmp_bkpt.line;
+    qDebug()<<_tmp_bkpt.threadGroups;
+    qDebug()<<_tmp_bkpt.times;
+    qDebug()<<_tmp_bkpt.original_location;
+
     bkptVec<<_tmp_bkpt;
+
 }
 
 const QVector<bkpt_struct>* gdb::getBkptVec() const
