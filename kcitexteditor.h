@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #include <QFileDevice>
 #include <QFileDialog>
+#include <QTextDocument>
 #include <QTextStream>
 #include <QString>
 #include <QMessageBox>
@@ -57,6 +58,7 @@ public:
     void setTextFocus();
     QString getFilePath();
     QTextCursor getTextCursor();
+    QTextDocument *document;
 
 signals:
     void filenameChanged(QString newName);

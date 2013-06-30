@@ -325,100 +325,105 @@ void MainWindow::createMenu()
 
     //file menu
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
-    menu[file] = _mainMenu->addMenu(tr("file"));
-    menu[file]->setIcon(*MenuIconAddor);
+    menu[mnuFile] = _mainMenu->addMenu(tr("file"));
+    menu[mnuFile]->setIcon(*MenuIconAddor);
     for(i=mnuFileNewFile;i<=mnuFileExit;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[file]->addAction(act[i]);
+        menu[mnuFile]->addAction(act[i]);
     }
 
     //edit menu
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
-    menu[edit] = _mainMenu->addMenu(tr("edit"));
-    menu[edit]->setIcon(*MenuIconAddor);
+    menu[mnuEdit] = _mainMenu->addMenu(tr("edit"));
+    menu[mnuEdit]->setIcon(*MenuIconAddor);
     for(i=mnuEditUndo;i<=mnuEditPreference;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[edit]->addAction(act[i]);
+        menu[mnuEdit]->addAction(act[i]);
     }
 
     //view menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
-    menu[view] = _mainMenu->addMenu(tr("view"));
-    menu[view]->setIcon(*MenuIconAddor);
+    menu[mnuView] = _mainMenu->addMenu(tr("view"));
+    menu[mnuView]->setIcon(*MenuIconAddor);
     for(i=mnuViewCompileDock;i<=mnuViewCompileDock;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[view]->addAction(act[i]);
+        menu[mnuView]->addAction(act[i]);
     }
 
     //search menu
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
-    menu[search] = _mainMenu->addMenu(tr("search"));
-    menu[search]->setIcon(*MenuIconAddor);
+    menu[mnuSearch] = _mainMenu->addMenu(tr("search"));
+    menu[mnuSearch]->setIcon(*MenuIconAddor);
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
-        menu[search]->addAction(act[i]);
         act[i]->setStatusTip(actStatusTips[i]);
         act[i]->setIcon(*MenuIconAddor);
+        menu[mnuSearch]->addAction(act[i]);
     }
 
     //insert menu
     MenuIconAddor->addFile(QString(":/img/image/InsertMenuIcon.png"));
-    menu[insert] = _mainMenu->addMenu(tr("insert"));
-    menu[insert]->setIcon(*MenuIconAddor);
+    menu[mnuInsert] = _mainMenu->addMenu(tr("insert"));
+    menu[mnuInsert]->setIcon(*MenuIconAddor);
 
     //run menu
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
-    menu[run] = _mainMenu->addMenu(tr("run"));
-    menu[run]->setIcon(*MenuIconAddor);
+    menu[mnuRun] = _mainMenu->addMenu(tr("run"));
+    menu[mnuRun]->setIcon(*MenuIconAddor);
     for(i=mnuRunCompileAndRun;i<=mnuRunSetInputRunShowOutput;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[run]->addAction(act[i]);
+        menu[mnuRun]->addAction(act[i]);
     }
 
     //debug menu
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
-    menu[debug] = _mainMenu->addMenu(tr("debug"));
-    menu[debug]->setIcon(*MenuIconAddor);
+    menu[mnuDebug] = _mainMenu->addMenu(tr("debug"));
+    menu[mnuDebug]->setIcon(*MenuIconAddor);
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[debug]->addAction(act[i]);
+        menu[mnuDebug]->addAction(act[i]);
     }
 
     //plugins menu
     MenuIconAddor->addFile(QString(":/img/image/PluginMenuIcon.png"));
-    menu[plugins] = _mainMenu->addMenu(tr("plugins"));
-    menu[plugins]->setIcon(*MenuIconAddor);
+    menu[mnuPlugins] = _mainMenu->addMenu(tr("plugins"));
+    menu[mnuPlugins]->setIcon(*MenuIconAddor);
 
     //help menu
     MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
-    menu[help] = _mainMenu->addMenu(tr("help"));
-    menu[help]->setIcon(*MenuIconAddor);
+    menu[mnuHelp] = _mainMenu->addMenu(tr("help"));
+    menu[mnuHelp]->setIcon(*MenuIconAddor);
     //from about to about_qt add into help menu
     for(i=mnuHelpAbout;i<=mnuHelpAboutQt;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[help]->addAction(act[i]);
+        menu[mnuHelp]->addAction(act[i]);
     }
 
     titlebar->setMenu(_mainMenu);
+    setNoDocOpenMenuEnabled();
+    connect(tabManager,SIGNAL(tabAdded()),
+            this,SLOT(setDocOpenMenuEnabled()));
+    connect(tabManager,SIGNAL(tabClear()),
+            this,SLOT(setNoDocOpenMenuEnabled()));
 }
 
 void MainWindow::createStatusbar()
@@ -430,6 +435,79 @@ void MainWindow::createStatusbar()
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
     pal.setColor(QPalette::Foreground,QColor(255,255,255));
     myStatusBar->setPalette(pal);
+
+    connect(tabManager,SIGNAL(cursorDataChanged(int,int)),
+            myStatusBar,SLOT(updateCursorPosition(int,int)));
+}
+
+void MainWindow::setNoDocOpenMenuEnabled()
+{
+    //Set Enabled
+    //File Menu
+    act[mnuFileSave]->setEnabled(false);
+    act[mnuFileSaveAs]->setEnabled(false);
+    act[mnuFileSaveAll]->setEnabled(false);
+    act[mnuFileClose]->setEnabled(false);
+    act[mnuFileCloseAll]->setEnabled(false);
+    act[mnuFileCloseAllExceptThis]->setEnabled(false);
+    //Edit Menu
+    act[mnuEditUndo]->setEnabled(false);
+    act[mnuEditRedo]->setEnabled(false);
+    act[mnuEditCut]->setEnabled(false);
+    act[mnuEditCopy]->setEnabled(false);
+    act[mnuEditPaste]->setEnabled(false);
+    act[mnuEditSelectAll]->setEnabled(false);
+
+    //Set Visible
+    //File Menu
+    act[mnuFileSave]->setVisible(false);
+    act[mnuFileSaveAs]->setVisible(false);
+    act[mnuFileSaveAll]->setVisible(false);
+    act[mnuFileClose]->setVisible(false);
+    act[mnuFileCloseAll]->setVisible(false);
+    act[mnuFileCloseAllExceptThis]->setVisible(false);
+    //Edit Menu
+    act[mnuEditUndo]->setVisible(false);
+    act[mnuEditRedo]->setVisible(false);
+    act[mnuEditCut]->setVisible(false);
+    act[mnuEditCopy]->setVisible(false);
+    act[mnuEditPaste]->setVisible(false);
+    act[mnuEditSelectAll]->setVisible(false);
+}
+
+void MainWindow::setDocOpenMenuEnabled()
+{
+    //Set Enabled
+    //File Menu
+    act[mnuFileSave]->setEnabled(true);
+    act[mnuFileSaveAs]->setEnabled(true);
+    act[mnuFileSaveAll]->setEnabled(true);
+    act[mnuFileClose]->setEnabled(true);
+    act[mnuFileCloseAll]->setEnabled(true);
+    act[mnuFileCloseAllExceptThis]->setEnabled(true);
+    //Edit Menu
+    act[mnuEditUndo]->setEnabled(true);
+    act[mnuEditRedo]->setEnabled(true);
+    act[mnuEditCut]->setEnabled(true);
+    act[mnuEditCopy]->setEnabled(true);
+    act[mnuEditPaste]->setEnabled(true);
+    act[mnuEditSelectAll]->setEnabled(true);
+
+    //Set Visible
+    //File Menu
+    act[mnuFileSave]->setVisible(true);
+    act[mnuFileSaveAs]->setVisible(true);
+    act[mnuFileSaveAll]->setVisible(true);
+    act[mnuFileClose]->setVisible(true);
+    act[mnuFileCloseAll]->setVisible(true);
+    act[mnuFileCloseAllExceptThis]->setVisible(true);
+    //Edit Menu
+    act[mnuEditUndo]->setVisible(true);
+    act[mnuEditRedo]->setVisible(true);
+    act[mnuEditCut]->setVisible(true);
+    act[mnuEditCopy]->setVisible(true);
+    act[mnuEditPaste]->setVisible(true);
+    act[mnuEditSelectAll]->setVisible(true);
 }
 
 void MainWindow::restoreSettings()

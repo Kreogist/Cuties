@@ -59,6 +59,9 @@ public slots:
     void searchOnline();
     void diffVisibleCompileDock();
 
+    void setNoDocOpenMenuEnabled();
+    void setDocOpenMenuEnabled();
+
 protected:
     void closeEvent(QCloseEvent *e);
     void resizeEvent(QResizeEvent *e);
@@ -116,15 +119,15 @@ private:
 
     enum MainWindowMenu
     {
-        file,
-        edit,
-        view,
-        search,
-        insert,
-        debug,
-        run,
-        plugins,
-        help,
+        mnuFile,
+        mnuEdit,
+        mnuView,
+        mnuSearch,
+        mnuInsert,
+        mnuRun,
+        mnuDebug,
+        mnuPlugins,
+        mnuHelp,
         menu_count  //the number of menus
     };
 
