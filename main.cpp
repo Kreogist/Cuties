@@ -32,8 +32,24 @@
 
 int main(int argc, char *argv[])
 {
+    //Load QApplication Object.
     QApplication app(argc,argv);
 
+    //Initialize Application Infomation.
+    QApplication::setApplicationName(QString("Kreogist Cuties"));
+    QApplication::setApplicationVersion(QString("0.1.0"));
+    QApplication::setOrganizationName("Kreogist Team");
+    QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
+
+    //Initialize Application Icon.
+    QApplication::setWindowIcon(QIcon(":/mainicon/image/MainIcon.png"));
+
+    //Initialize Application Language.
+    QTranslator appTrans;
+    appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());
+    app.installTranslator(&appTrans);
+
+    //Initialize Application Icon.
     QStringList list;
     list << "monaco.ttf" << "Hiragino.otf" << "Inconsolata.otf";
     int fontID(-1);
@@ -45,43 +61,43 @@ int main(int argc, char *argv[])
         QFile res(qApp->applicationDirPath() + "/Fonts/" + *constIterator);
         if (res.open(QIODevice::ReadOnly) == false) {
             if (fontWarningShown == false) {
-                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".\n" + res.errorString());
+                QMessageBox::warning(0,
+                                     "Application",
+                                     (QString)"Impossible d'ouvrir la police " +
+                                     QChar(0x00AB) +
+                                     " DejaVu Serif " +
+                                     QChar(0x00BB) +
+                                     ".\n" + res.errorString());
                 fontWarningShown = true;
             }
         } else {
             fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
             if (fontID == -1 && fontWarningShown == false) {
-                QMessageBox::warning(0, "Application", (QString)"Impossible d'ouvrir la police " + QChar(0x00AB) + " DejaVu Serif " + QChar(0x00BB) + ".\n" + res.errorString());
+                QMessageBox::warning(0,
+                                     "Application",
+                                     (QString)"Impossible d'ouvrir la police " +
+                                     QChar(0x00AB) +
+                                     " DejaVu Serif " +
+                                     QChar(0x00BB) +
+                                     ".\n" +
+                                     res.errorString());
                 fontWarningShown = true;
             }
         }
     }
 
-    QApplication::setWindowIcon(QIcon(":/mainicon/image/MainIcon.png"));
-
-    //Set Application Details
-    QApplication::setApplicationName(QString("Kreogist Cute IDE"));
-    QApplication::setApplicationVersion(QString("0.1.0"));
-    QApplication::setOrganizationName("Kreogist Team");
-    QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
-
-    QTranslator appTrans;
-
-    appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());
-    app.installTranslator(&appTrans);
-
+    //Initalize Application Palette.
     QPalette pal=app.palette();
-    //pal.setColor(QPalette::Window,QColor(0x53,0x53,0x53));
     pal.setColor(QPalette::Text,QColor(0,0,0));
     pal.setColor(QPalette::Highlight,QColor(0xf7,0xcf,0x3d));
     pal.setColor(QPalette::HighlightedText,QColor(0,0,0));
     app.setPalette(pal);
 
-    //set style
+    //Initalize Application Style
     KreogistCuteStyle *cuteStyle=new KreogistCuteStyle;
     app.setStyle(cuteStyle);
-    //app.setStyle("fusion");
 
+    //Initalize and show Application MainWindow.
     MainWindow mainwindow;
     mainwindow.show();
 

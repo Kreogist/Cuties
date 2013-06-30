@@ -1,4 +1,5 @@
-Kreogist-Cute-IDE
-=================
+Cuties
+===============
 
-A Smart IDE written by Qt.
+By Kreogist.
+A light IDE written for ACMer/OIer.

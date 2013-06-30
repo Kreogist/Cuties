@@ -1,5 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming<wlm199558@126.com>
+ *  Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
  *
  *  kcicodeeditor.h is part of Kreogist-Cute-IDE.
  *
@@ -34,9 +35,10 @@ public:
     explicit kciCodeEditor(QWidget *parent = 0);
     
 signals:
-    
+
 public slots:
     void highlightCurrentLine();
+
 
 private:
     QColor lineColor;

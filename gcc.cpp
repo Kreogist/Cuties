@@ -36,19 +36,25 @@ gcc::gcc(QObject *parent) :
 
 QString gcc::version()
 {
+    //Initalize Values:
+    QString strReturnValue;
+    QProcess gccInfo;
+
+    //Set Argv:
     QStringList arg;
-    arg<<"-dumpversion";
-    start(gccPath,arg);
-    waitForFinished();
-    return QString("g++ ")+
-            QString::fromUtf8(readAllStandardOutput().constData());
+    arg<<"--version";
+    gccInfo.start(gccPath,arg);
+    gccInfo.waitForFinished();
+    //Save Second Part Of Compiler:
+    strReturnValue=strReturnValue+"\n"+
+                   QString::fromUtf8(gccInfo.readAllStandardOutput().constData());
+    return strReturnValue;
 }
 
 void gcc::startCompile(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
-
-    qDebug()<<filePath;
+    QProcess *gccCompile=new QProcess(this);
     QStringList arg;
     arg<<filePath<<"-g"<<"-Wall";
 

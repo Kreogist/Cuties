@@ -1,6 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
+ *  Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
  *
  *  mainwindow.h is part of Kreogist-Cute-IDE.
  *
@@ -39,12 +39,11 @@
 #include <QVariant>
 
 #include "kciglobal.h"
-#include "kcimainwindow.h"
 #include "kcicompiledock.h"
 #include "kcititlebar.h"
 #include "kcitabmanager.h"
 
-class MainWindow : public kciMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
@@ -56,6 +55,8 @@ public slots:
     void aboutQt();
     void aboutKCI();
     void compileCurrentFile();
+    void searchOnline();
+    void diffVisibleCompileDock();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -80,6 +81,7 @@ private:
         mnuEditPaste,
         mnuEditSelectAll,
         mnuEditPreference,
+        mnuViewCompileDock,
         mnuSearchFind,
         mnuSearchFindInFiles,
         mnuSearchReplace,
@@ -129,9 +131,11 @@ private:
     kciTabManager *tabManager;
     QAction *act[act_count];
     QMenu *menu[menu_count];
-    QString actStatusTips[act_count];
+    QString actStatusTips[act_count], actMenuIconPath[act_count];
     QRect savedGeometry;
     kcicompiledock *compileDock;
+    kciTitleBar *titlebar;
+    QStatusBar *statusbar;
 
     void saveSettings();
     void restoreSettings();

@@ -49,6 +49,7 @@ SOURCES += \
     kcimainwindow.cpp \
     gdbmivalue.cpp \
     kcimarkpanel.cpp
+    compilerbasefactor.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -74,6 +75,7 @@ HEADERS += \
     kcimainwindow.h \
     gdbmivalue.h \
     kcimarkpanel.h
+    compilerbasefactor.h
 
 # Enable C++11
 CONFIG += c++11

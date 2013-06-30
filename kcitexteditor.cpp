@@ -24,7 +24,6 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     QWidget(parent)
 {
     //setWindowFlags(Qt::AnchorPoint);
-
     mainLayout=new QHBoxLayout(this);
     mainLayout->setSpacing(0);
     setContentsMargins(0,0,0,0);
@@ -51,8 +50,11 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     linePanel->setPlainTextEdit(editor);
     markPanel->setPlainTextEdit(editor);
     mainLayout->addWidget(editor);
+    mainLayout->addSpacing(1);
     connect(editor->document(),SIGNAL(modificationChanged(bool)),
             this,SLOT(onModificationChanged(bool)));
+    connect(editor,SIGNAL(cursorPositionChanged()),
+            this,SLOT(cursorChanged()));
 
     highlighter=new plaintextHighlighter(this);
     highlighter->setDocument(editor->document());
@@ -332,4 +334,20 @@ void kciTextEditor::onModificationChanged(bool changed)
 QString kciTextEditor::getFilePath()
 {
     return filePath;
+}
+
+QString kciTextEditor::getSelectedText()
+{
+    return editor->textCursor().selectedText();
+}
+
+void kciTextEditor::cursorChanged()
+{
+    fileTextCursor=editor->textCursor();
+    emit fileTextCursorChanged();
+}
+
+QTextCursor kciTextEditor::getTextCursor()
+{
+    return fileTextCursor;
 }

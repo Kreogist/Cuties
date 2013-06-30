@@ -19,7 +19,7 @@
 
 #include "kcimainwindow.h"
 
-int kciMainWindow::range=3;
+int kciMainWindow::range=2;
 
 kciMainWindow::kciMainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -28,9 +28,7 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
     setMenuWidget(m_titleBar);
     setMouseTracking(true);
 
-    //setContentsMargins((range<<1)+1,(range<<1)+1,(range<<1)+1,(range<<1)+1);
     setContentsMargins(0,0,0,0);
-
     pressed=none;
 
     setWindowFlags(Qt::FramelessWindowHint);

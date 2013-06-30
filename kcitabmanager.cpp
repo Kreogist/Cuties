@@ -79,6 +79,7 @@ void kciTabManager::open()
 void kciTabManager::new_file()
 {
     kciTextEditor *tmp=new kciTextEditor(this);
+    connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
     if(tmp!=NULL)
     {
         QString _new_file_title=
@@ -305,5 +306,23 @@ void kciTabManager::tabInserted(int index)
     if(editor!=NULL)
     {
         connect(editor,SIGNAL(filenameChanged(QString)),this,SLOT(renameTabTitle(QString)));
+    }
+}
+
+void kciTabManager::currentTextCursorChanged()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        currentTextCursor=editor->getTextCursor();
+    }
+}
+
+QString kciTabManager::textNowSelect()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        return editor->getSelectedText();
     }
 }

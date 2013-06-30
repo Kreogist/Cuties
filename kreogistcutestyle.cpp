@@ -139,7 +139,36 @@ void KreogistCuteStyle::drawPrimitive(PrimitiveElement pe,
                                       QPainter *p,
                                       const QWidget *w) const
 {
-    style->drawPrimitive(pe,opt,p,w);
+    switch(pe)
+    {
+    case PE_IndicatorTabClose: {
+        QIcon tabBarcloseButtonIcon;
+        tabBarcloseButtonIcon.addPixmap(QPixmap(
+                    QLatin1String(":/toolbutton/image/TabCloseNormal.png")),
+                    QIcon::Normal, QIcon::Off);
+        tabBarcloseButtonIcon.addPixmap(QPixmap(
+                    QLatin1String(":/toolbutton/image/TabCloseDown.png")),
+                    QIcon::Normal, QIcon::On);
+        tabBarcloseButtonIcon.addPixmap(QPixmap(
+                    QLatin1String(":/toolbutton/image/TabCloseHover.png")),
+                    QIcon::Active, QIcon::Off);
+        int size = proxy()->pixelMetric(QStyle::PM_SmallIconSize);
+        QIcon::Mode mode = opt->state & State_Enabled ?
+                            (opt->state & State_Raised ? QIcon::Active : QIcon::Normal)
+                            : QIcon::Disabled;
+        if (!(opt->state & State_Raised)
+            && !(opt->state & State_Sunken)
+            && !(opt->state & QStyle::State_Selected))
+            mode = QIcon::Disabled;
+
+        QIcon::State state = opt->state & State_Sunken ? QIcon::On : QIcon::Off;
+        QPixmap pixmap = tabBarcloseButtonIcon.pixmap(size, mode, state);
+        proxy()->drawItemPixmap(p, opt->rect, Qt::AlignCenter, pixmap);
+        break;
+    }
+    default:
+        style->drawPrimitive(pe,opt,p,w);
+    }
 }
 
 void KreogistCuteStyle::drawComplexControl(ComplexControl cc,
@@ -189,7 +218,7 @@ QSize KreogistCuteStyle::sizeFromContents(ContentsType ct,
 }
 
 int KreogistCuteStyle::pixelMetric(PixelMetric metric,
-                                   const QStyleOption *option,
+                                     const QStyleOption *option,
                                    const QWidget *widget) const
 {
     int pIntValue = style->pixelMetric(metric,option,widget);
@@ -269,7 +298,12 @@ QPixmap KreogistCuteStyle::standardPixmap(StandardPixmap standardPixmap,
                                           const QStyleOption *opt,
                                           const QWidget *widget) const
 {
-    return style->standardPixmap(standardPixmap,opt,widget);
+    switch(standardPixmap)
+    {
+
+    default:
+        return style->standardPixmap(standardPixmap,opt,widget);
+    }
 }
 void KreogistCuteStyle::drawItemPixmap(QPainter *painter, const QRect &rect,
                     int alignment, const QPixmap &pixmap) const

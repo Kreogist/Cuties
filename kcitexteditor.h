@@ -1,6 +1,6 @@
 /*
  *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
+ *  Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
  *
  *  kcitexteditor.h is part of Kreogist-Cute-IDE.
  *
@@ -32,6 +32,7 @@
 #include <QTextStream>
 #include <QString>
 #include <QMessageBox>
+#include <QTextCursor>
 #include <QSettings>
 #include <QIcon>
 #include <QSyntaxHighlighter>
@@ -56,9 +57,11 @@ public:
     void setDocumentTitle(const QString& title);
     void setTextFocus();
     QString getFilePath();
+    QTextCursor getTextCursor();
 
 signals:
     void filenameChanged(QString newName);
+    void fileTextCursorChanged();
     
 public slots:
     bool open(const QString& fileName);
@@ -71,6 +74,8 @@ public slots:
     void cut();
     void paste();
     void selectAll();
+    void cursorChanged();
+    QString getSelectedText();
 
 private slots:
     void onModificationChanged(bool changed);
@@ -87,6 +92,7 @@ private:
 
     QString filePath,strFileFilter;
     QFileDevice::FileError fileError;
+    QTextCursor fileTextCursor;
 };
 
 #endif // TEXTEDITOR_H
