@@ -10,6 +10,7 @@
         <file>image/HelpMenuIcon.png</file>
         <file>image/DebugMenuIcon.png</file>
         <file>image/ViewMenuIcon.png</file>
+        <file>image/BreakPoint.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>

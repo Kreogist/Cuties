@@ -3,11 +3,8 @@
 kciMarkPanel::kciMarkPanel(QWidget *parent) :
     kciPanel(parent)
 {
-    //FIXME: this is a temp pixmap
-    markPix.load(":/img/image/MainMenuButton.png");
-
-    setFixedWidth(30);
-
+    markPix.load(":/img/image/BreakPoint.png");
+    setFixedWidth(32);
     isPressed=false;
 }
 
@@ -54,13 +51,11 @@ void kciMarkPanel::mouseReleaseEvent(QMouseEvent *e)
 {
     if(isPressed)
     {
-        qDebug()<<pressedPos;
         int i=vecMark.size();
         while(i--)
         {
             if(vecMark[i].rect.contains(pressedPos,true))
             {
-                qDebug()<<vecMark[i].rect;
                 if(vecMark[i].rect.contains(e->globalPos(),true))
                 {
                     vecMark[i].marked^=1;   //exchange the state

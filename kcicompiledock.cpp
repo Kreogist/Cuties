@@ -97,5 +97,6 @@ void kcicompiledock::clearAllItem()
 void kcicompiledock::parseMessage(QString msg)
 {
     //trevwCompileInfo->
+    qDebug()<<"Reach!!";
     qDebug()<<msg;
 }

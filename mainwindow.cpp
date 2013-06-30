@@ -633,7 +633,6 @@ void MainWindow::compileCurrentFile()
                              currentCompiler->version() +
                              "\n");
         connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::parseMessage);
-
         currentCompiler->startCompile(currentEditor->getFilePath());
         currentCompiler->waitForFinished();
     }
