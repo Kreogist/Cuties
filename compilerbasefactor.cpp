@@ -40,3 +40,4 @@ compilerBase* compilerBaseFactor::createCompilerBase(const QString &fileName,
         return nullptr;
     }
 }
+

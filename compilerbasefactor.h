@@ -29,7 +29,9 @@
 class compilerBaseFactor : public QObject
 {
     Q_OBJECT
+
 public:
+
     explicit compilerBaseFactor(QObject *parent = 0);
 
     static compilerBase* createCompilerBase(const QString& fileName,

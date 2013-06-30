@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
         if (res.open(QIODevice::ReadOnly) == false) {
             if (fontWarningShown == false) {
                 QMessageBox::warning(0,
-                                     "Application",
+                                     QApplication::applicationName(),
                                      (QString)"Impossible d'ouvrir la police " +
                                      QChar(0x00AB) +
                                      " DejaVu Serif " +
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
             fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
             if (fontID == -1 && fontWarningShown == false) {
                 QMessageBox::warning(0,
-                                     "Application",
+                                     QApplication::applicationName(),
                                      (QString)"Impossible d'ouvrir la police " +
                                      QChar(0x00AB) +
                                      " DejaVu Serif " +

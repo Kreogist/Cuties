@@ -43,6 +43,11 @@ class kciTabManager : public QTabWidget
 public:
     explicit kciTabManager(QWidget *parent = 0);
 
+signals:
+    void cursorDataChanged(int nCursorLine, int nCursorCol);
+    void tabAdded();
+    void tabClear();
+
 public slots:
     void open();
     void new_file();
@@ -62,7 +67,6 @@ public slots:
     void close_all_tab();
     void close_all_other_tab();
     void renameTabTitle(QString title);
-    //void nowCursorChanged();
     void currentTextCursorChanged();
     QString textNowSelect();
 

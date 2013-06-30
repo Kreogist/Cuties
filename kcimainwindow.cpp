@@ -19,7 +19,7 @@
 
 #include "kcimainwindow.h"
 
-int kciMainWindow::range=2;
+int kciMainWindow::range=3;
 
 kciMainWindow::kciMainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -32,6 +32,7 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
     pressed=none;
 
     setWindowFlags(Qt::FramelessWindowHint);
+
     qApp->installEventFilter(this);
 }
 

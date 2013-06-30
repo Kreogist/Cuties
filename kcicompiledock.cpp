@@ -7,7 +7,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     setObjectName(QString("Compile Dock"));
 
     //Set Dock Style.
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(5,0,5,0);
     QPalette pal=this->palette();
     //pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));
     pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));

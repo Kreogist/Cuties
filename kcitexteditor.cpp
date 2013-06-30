@@ -49,6 +49,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     editor=new kciCodeEditor(this);
     linePanel->setPlainTextEdit(editor);
     markPanel->setPlainTextEdit(editor);
+    document=editor->document();
     mainLayout->addWidget(editor);
     mainLayout->addSpacing(1);
     connect(editor->document(),SIGNAL(modificationChanged(bool)),
@@ -253,8 +254,9 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
 
                 msgbox.exec();
                 e->ignore();
+                break;
             }
-
+            e->accept();
             break;
         case QMessageBox::Discard:
             // Don't Save was clicked
@@ -273,7 +275,9 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
         }
     }
     else
+    {
         e->accept();
+    }
 
     return ;
 }

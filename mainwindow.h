@@ -28,10 +28,10 @@
 #include <QToolBar>
 #include <QMenu>
 #include <QPalette>
-#include <QStatusBar>
 #include <QApplication>
 #include <QToolButton>
 #include <QMessageBox>
+#include <QDesktopServices>
 #include <QSettings>
 #include <QSize>
 #include <QDesktopWidget>
@@ -41,9 +41,11 @@
 #include "kciglobal.h"
 #include "kcicompiledock.h"
 #include "kcititlebar.h"
+#include "kcistatusbar.h"
 #include "kcitabmanager.h"
+#include "kcimainwindow.h"
 
-class MainWindow : public QMainWindow
+class MainWindow : public kciMainWindow
 {
     Q_OBJECT
 public:
@@ -57,6 +59,9 @@ public slots:
     void compileCurrentFile();
     void searchOnline();
     void diffVisibleCompileDock();
+
+    void setNoDocOpenMenuEnabled();
+    void setDocOpenMenuEnabled();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -115,15 +120,15 @@ private:
 
     enum MainWindowMenu
     {
-        file,
-        edit,
-        view,
-        search,
-        insert,
-        debug,
-        run,
-        plugins,
-        help,
+        mnuFile,
+        mnuEdit,
+        mnuView,
+        mnuSearch,
+        mnuInsert,
+        mnuRun,
+        mnuDebug,
+        mnuPlugins,
+        mnuHelp,
         menu_count  //the number of menus
     };
 
@@ -135,7 +140,7 @@ private:
     QRect savedGeometry;
     kcicompiledock *compileDock;
     kciTitleBar *titlebar;
-    QStatusBar *statusbar;
+    kciStatusBar *myStatusBar;
 
     void saveSettings();
     void restoreSettings();

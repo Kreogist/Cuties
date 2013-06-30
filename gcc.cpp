@@ -54,7 +54,6 @@ QString gcc::version()
 void gcc::startCompile(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
-    QProcess *gccCompile=new QProcess(this);
     QStringList arg;
     arg<<filePath<<"-g"<<"-Wall";
 

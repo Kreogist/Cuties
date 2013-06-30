@@ -72,21 +72,25 @@ void kciTabManager::open()
         _last_tab_index=addTab(tmp,name);
 
         file_name_list.pop_front();
+        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
     }
     setCurrentIndex(_last_tab_index);
+    currentTextCursorChanged();
+    emit tabAdded();
 }
 
 void kciTabManager::new_file()
 {
     kciTextEditor *tmp=new kciTextEditor(this);
-    connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
     if(tmp!=NULL)
     {
+        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
         QString _new_file_title=
                 tr("Untitled")+ " " +QString::number(new_file_count++);
         tmp->setDocumentTitle(_new_file_title);
         setCurrentIndex(addTab(tmp,_new_file_title));
-
+        currentTextCursorChanged();
+        emit tabAdded();
     }
     else
     {
@@ -255,6 +259,10 @@ void kciTabManager::on_tab_close_requested(int index)
             removeTab(index);
         }
     }
+    if(this->count()==0)
+    {
+        emit tabClear();
+    }
 }
 
 void kciTabManager::close_current_tab()
@@ -274,6 +282,7 @@ void kciTabManager::on_current_tab_change(int index)
     {
         isEditor=false;
     }
+    currentTextCursorChanged();
 }
 
 void kciTabManager::closeEvent(QCloseEvent *e)
@@ -283,9 +292,11 @@ void kciTabManager::closeEvent(QCloseEvent *e)
     while(i--)
     {
         QWidget *page=widget(i);
-
         if(!page->close())
+        {
             e->ignore();//clean the accept flag
+            break;
+        }
     }
 }
 
@@ -315,14 +326,30 @@ void kciTabManager::currentTextCursorChanged()
     if(editor!=NULL)
     {
         currentTextCursor=editor->getTextCursor();
+        emit cursorDataChanged(currentTextCursor.blockNumber()+1,
+                               currentTextCursor.columnNumber());
+    }
+    else
+    {
+        emit cursorDataChanged(-1,-1);
     }
 }
 
 QString kciTabManager::textNowSelect()
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    QString returnValue;
     if(editor!=NULL)
     {
-        return editor->getSelectedText();
+        returnValue=editor->getSelectedText();
+        if(returnValue.isEmpty())
+        {
+            returnValue="";
+        }
     }
+    else
+    {
+        returnValue="";
+    }
+    return returnValue;
 }
