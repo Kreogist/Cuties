@@ -25,7 +25,7 @@ QString gcc::gccPath="/usr/bin/g++";
 #endif
 
 #ifdef Q_OS_WIN32
-QString gcc::gccPath="c:/MinGW/bin/mingw32-g++.exe";
+QString gcc::gccPath="c:/MinGW/bin/g++.exe";
 #endif
 
 gcc::gcc(QObject *parent) :
@@ -70,8 +70,8 @@ void gcc::startCompile(const QString &filePath)
 
     qDebug()<<arg;
 
-    connect(this,SIGNAL(readyRead()),
-            this,SLOT(onOutputReady()));
+    /*connect(this,SIGNAL(readyRead()),
+            this,SLOT(onOutputReady()));*/
 
     start(gccPath,arg);
 }

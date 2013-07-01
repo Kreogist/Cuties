@@ -35,6 +35,7 @@
 #include "compilerbase.h"
 #include "compilerbasefactor.h"
 #include "kciglobal.h"
+#include "kcisearchwindow.h"
 #include "kcitexteditor.h"
 
 class kciTabManager : public QTabWidget
@@ -68,11 +69,13 @@ public slots:
     void close_all_other_tab();
     void renameTabTitle(QString title);
     void currentTextCursorChanged();
+    void showSearchBar();
     QString textNowSelect();
 
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     int tab_count;
@@ -80,6 +83,7 @@ private:
     QString strFileFilter;
     QTextCursor currentTextCursor;
     bool isEditor;  //is current widget a widget
+    kciSearchWindow *searchBar;
 };
 
 #endif // TABMANAGER_H

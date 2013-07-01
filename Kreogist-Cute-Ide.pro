@@ -51,6 +51,8 @@ SOURCES += \
     compilerbasefactor.cpp \
     kcistatusbar.cpp \
     kcitextsearcher.cpp
+    kcisearchwindow.cpp \
+    kcisearchtextbox.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -78,6 +80,8 @@ HEADERS += \
     compilerbasefactor.h \
     kcistatusbar.h \
     kcitextsearcher.h
+    kcisearchwindow.h \
+    kcisearchtextbox.h
 
 # Enable C++11
 CONFIG += c++11
