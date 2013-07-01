@@ -49,7 +49,8 @@ SOURCES += \
     gdbmivalue.cpp \
     kcimarkpanel.cpp \
     compilerbasefactor.cpp \
-    kcistatusbar.cpp
+    kcistatusbar.cpp \
+    kcitextsearcher.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -75,7 +76,8 @@ HEADERS += \
     gdbmivalue.h \
     kcimarkpanel.h \
     compilerbasefactor.h \
-    kcistatusbar.h
+    kcistatusbar.h \
+    kcitextsearcher.h
 
 # Enable C++11
 CONFIG += c++11
