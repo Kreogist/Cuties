@@ -457,6 +457,12 @@ void MainWindow::setNoDocOpenMenuEnabled()
     act[mnuEditCopy]->setEnabled(false);
     act[mnuEditPaste]->setEnabled(false);
     act[mnuEditSelectAll]->setEnabled(false);
+    //Search Menu
+    act[mnuSearchFind]->setEnabled(false);
+    act[mnuSearchFindInFiles]->setEnabled(false);
+    act[mnuSearchReplace]->setEnabled(false);
+    act[mnuSearchReplaceInFiles]->setEnabled(false);
+    act[mnuSearchGoto]->setEnabled(false);
 
     //Set Visible
     //File Menu
@@ -473,6 +479,12 @@ void MainWindow::setNoDocOpenMenuEnabled()
     act[mnuEditCopy]->setVisible(false);
     act[mnuEditPaste]->setVisible(false);
     act[mnuEditSelectAll]->setVisible(false);
+    //Search Menu
+    act[mnuSearchFind]->setVisible(false);
+    act[mnuSearchFindInFiles]->setVisible(false);
+    act[mnuSearchReplace]->setVisible(false);
+    act[mnuSearchReplaceInFiles]->setVisible(false);
+    act[mnuSearchGoto]->setVisible(false);
 }
 
 void MainWindow::setDocOpenMenuEnabled()
@@ -492,6 +504,12 @@ void MainWindow::setDocOpenMenuEnabled()
     act[mnuEditCopy]->setEnabled(true);
     act[mnuEditPaste]->setEnabled(true);
     act[mnuEditSelectAll]->setEnabled(true);
+    //Search Menu
+    act[mnuSearchFind]->setEnabled(true);
+    act[mnuSearchFindInFiles]->setEnabled(true);
+    act[mnuSearchReplace]->setEnabled(true);
+    act[mnuSearchReplaceInFiles]->setEnabled(true);
+    act[mnuSearchGoto]->setEnabled(true);
 
     //Set Visible
     //File Menu
@@ -508,6 +526,12 @@ void MainWindow::setDocOpenMenuEnabled()
     act[mnuEditCopy]->setVisible(true);
     act[mnuEditPaste]->setVisible(true);
     act[mnuEditSelectAll]->setVisible(true);
+    //Search Menu
+    act[mnuSearchFind]->setVisible(true);
+    act[mnuSearchFindInFiles]->setVisible(true);
+    act[mnuSearchReplace]->setVisible(true);
+    act[mnuSearchReplaceInFiles]->setVisible(true);
+    act[mnuSearchGoto]->setVisible(true);
 }
 
 void MainWindow::restoreSettings()
@@ -544,6 +568,7 @@ void MainWindow::restoreSettings()
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
+    kciMainWindow::resizeEvent(e);
     if(this->isMaximized())
     {
         savedGeometry.setSize(e->oldSize());
@@ -558,7 +583,6 @@ void MainWindow::resizeEvent(QResizeEvent *e)
         savedGeometry.setX(0);
         savedGeometry.setY(0);
     }
-    kciMainWindow::resizeEvent(e);
 }
 
 void MainWindow::saveSettings()

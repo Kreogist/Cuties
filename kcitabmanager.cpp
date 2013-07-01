@@ -366,7 +366,7 @@ QString kciTabManager::textNowSelect()
 
 void kciTabManager::resizeEvent(QResizeEvent *e)
 {
-    Q_UNUSED(e);
+    QTabWidget::resizeEvent(e);
     searchBar->setGeometry(width()-searchBar->width()-10,
                            0,
                            searchBar->width(),
