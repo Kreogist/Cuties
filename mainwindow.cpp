@@ -551,8 +551,12 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     else
     {
         savedGeometry.setSize(e->size());
-        savedGeometry.setX(x());
-        savedGeometry.setY(y());
+
+        //savedGeometry.setX(x());
+        //savedGeometry.setY(y());
+
+        savedGeometry.setX(0);
+        savedGeometry.setY(0);
     }
     kciMainWindow::resizeEvent(e);
 }
@@ -561,15 +565,18 @@ void MainWindow::saveSettings()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
-    if(!this->isMaximized())
+    if(!this->isMaximized()) //There is some thing wrong with "x()" and "y()" in Windows 7(Maybe no starting value?),I fix it by a simple way.
     {
-        savedGeometry.setX(x());
-        savedGeometry.setY(y());
+        //savedGeometry.setX(x());
+        savedGeometry.setX(0);
+        //savedGeometry.setY(y());
+        savedGeometry.setY(0);
     }
 
     int n_WindowState;
 
     //Save ALL settings.
+
     settings.beginGroup("MainWindow");
     settings.setValue("width",savedGeometry.width());
     settings.setValue("height",savedGeometry.height());
