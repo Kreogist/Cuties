@@ -55,6 +55,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
             this,SLOT(_exchange_button_state()));
 
     mainButton=new QToolButton(this);
+    mainButton->setAutoRaise(true);
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
 

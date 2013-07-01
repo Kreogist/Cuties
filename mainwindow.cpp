@@ -162,6 +162,7 @@ void MainWindow::createActions()
     act[mnuSearchFind]=new QAction(tr("searchinfile"),this);
     act[mnuSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     actStatusTips[mnuSearchFind]=QString(tr("Find the specified text."));
+    connect(act[mnuSearchFind],SIGNAL(triggered()),tabManager,SLOT(showSearchBar()));
 
     //Search -> Find In Files
     act[mnuSearchFindInFiles]=new QAction(tr("searchallfile"),this);
@@ -311,6 +312,8 @@ void MainWindow::createDocks()
 {
     compileDock=new kcicompiledock(this);
     addDockWidget(Qt::BottomDockWidgetArea,compileDock);
+    //TODO: Configure Hide.
+    compileDock->hide();
 }
 
 void MainWindow::createMenu()
@@ -524,10 +527,10 @@ void MainWindow::restoreSettings()
                 * QApplication::desktop()->width();
     n_height= (settings.value("height").toFloat()/ settings.value("screenheight").toFloat())
                 * QApplication::desktop()->height();
-    setGeometry(static_cast<int>(n_X),
-                static_cast<int>(n_Y),
-                static_cast<int>(n_width),
-                static_cast<int>(n_height));
+    this->setGeometry(static_cast<int>(n_X),
+                      static_cast<int>(n_Y),
+                      static_cast<int>(n_width),
+                      static_cast<int>(n_height));
     n_WindowState=settings.value("state").toInt();
     switch(n_WindowState)
     {
@@ -536,9 +539,7 @@ void MainWindow::restoreSettings()
     case 2:
         setWindowState(Qt::WindowMaximized);
     }
-
     settings.endGroup();
-
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)

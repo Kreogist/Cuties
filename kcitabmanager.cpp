@@ -32,6 +32,10 @@ kciTabManager::kciTabManager(QWidget *parent) :
     tab_count=1;
     new_file_count=1;
     isEditor=false;
+
+    //Initalize Search Window
+    searchBar=new kciSearchWindow(this);
+    searchBar->hide();
 }
 
 void kciTabManager::open()
@@ -335,6 +339,12 @@ void kciTabManager::currentTextCursorChanged()
     }
 }
 
+void kciTabManager::showSearchBar()
+{
+    searchBar->show();
+    searchBar->setTextFocus();
+}
+
 QString kciTabManager::textNowSelect()
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
@@ -352,4 +362,13 @@ QString kciTabManager::textNowSelect()
         returnValue="";
     }
     return returnValue;
+}
+
+void kciTabManager::resizeEvent(QResizeEvent *e)
+{
+    Q_UNUSED(e);
+    searchBar->setGeometry(width()-searchBar->width()-10,
+                           0,
+                           searchBar->width(),
+                           searchBar->height());
 }
