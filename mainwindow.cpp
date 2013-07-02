@@ -33,13 +33,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
     setPalette(QPpal);
 
-    restoreSettings();
-
     createActions();
     createDocks();
     createTitlebar();
     createMenu();
     createStatusbar();
+
+    restoreSettings();
 }
 
 void MainWindow::createActions()
@@ -555,9 +555,9 @@ void MainWindow::restoreSettings()
     switch(n_WindowState)
     {
     case 1:
-        setWindowState(Qt::WindowMinimized);
+        titlebar->setWindowMin();
     case 2:
-        setWindowState(Qt::WindowMaximized);
+        titlebar->setWindowMax();
     }
     settings.endGroup();
 }

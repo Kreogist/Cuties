@@ -41,6 +41,9 @@ public:
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString& mainIcon);
     void setTitle(const QString &title);
+    void setWindowMax();
+    void setWindowNormal();
+    void setWindowMin();
 
 signals:
     

@@ -99,16 +99,31 @@ void kciTitleBar::_exchange_button_state()
 {
     if(isShowingNormalButton)
     {
-        mainWindow->showNormal();
-        maximizeButton->setIcon(maximizeButtonIcon);
+        setWindowNormal();
     }
     else
     {
-        mainWindow->showMaximized();
-        maximizeButton->setIcon(normalButtonIcon);
+        setWindowMax();
     }
+}
 
-    isShowingNormalButton^=1;   //change the state
+void kciTitleBar::setWindowMin()
+{
+    mainWindow->showMinimized();
+}
+
+void kciTitleBar::setWindowNormal()
+{
+    mainWindow->showNormal();
+    maximizeButton->setIcon(maximizeButtonIcon);
+    isShowingNormalButton=false;
+}
+
+void kciTitleBar::setWindowMax()
+{
+    mainWindow->showMaximized();
+    maximizeButton->setIcon(normalButtonIcon);
+    isShowingNormalButton=true;
 }
 
 void kciTitleBar::setMenu(QMenu *menu)
