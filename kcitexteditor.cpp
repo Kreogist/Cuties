@@ -354,3 +354,13 @@ QTextCursor kciTextEditor::getTextCursor()
 {
     return fileTextCursor;
 }
+
+int kciTextEditor::getTextLines()
+{
+    return editor->document()->blockCount();
+}
+
+void kciTextEditor::setDocumentCursor(int nLine)
+{
+    editor->textCursor().setPosition(nLine);
+}

@@ -189,6 +189,7 @@ void MainWindow::createActions()
     act[mnuSearchGoto]=new QAction(tr("gotoline"),this);
     act[mnuSearchGoto]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_G));
     actStatusTips[mnuSearchGoto]=QString(tr("Goto line."));
+    connect(act[mnuSearchGoto],SIGNAL(triggered()),tabManager,SLOT(showGotoBar()));
 
     //Run -> Comile And Run
     act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
@@ -399,6 +400,11 @@ void MainWindow::createMenu()
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuDebug]->addAction(act[i]);
     }
+
+    //window menu
+    MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
+    menu[mnuWindow] = _mainMenu->addMenu(tr("window"));
+    menu[mnuWindow]->setIcon(*MenuIconAddor);
 
     //plugins menu
     MenuIconAddor->addFile(QString(":/img/image/PluginMenuIcon.png"));

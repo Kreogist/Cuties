@@ -73,7 +73,7 @@ bool kciMainWindow::eventFilter(QObject *obj, QEvent *e)
         if(!pressed)
         {
             if(x()-range <= mouseEvent->globalX() &&
-                    x()+range >= mouseEvent->globalX())
+               x()+range >= mouseEvent->globalX())
             {
                 _cursor.setShape(Qt::SizeHorCursor);
             }

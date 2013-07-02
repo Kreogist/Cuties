@@ -36,6 +36,8 @@ kciTabManager::kciTabManager(QWidget *parent) :
     //Initalize Search Window
     searchBar=new kciSearchWindow(this);
     searchBar->hide();
+    connect(searchBar,SIGNAL(hideButtonPressed()),
+            this,SLOT(setFocus()));
 }
 
 void kciTabManager::open()
@@ -339,6 +341,11 @@ void kciTabManager::currentTextCursorChanged()
     }
 }
 
+void kciTabManager::showGotoBar()
+{
+    qDebug()<<"敬请期待！";
+}
+
 void kciTabManager::showSearchBar()
 {
     QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
@@ -374,12 +381,21 @@ QString kciTabManager::textNowSelect()
     return returnValue;
 }
 
+void kciTabManager::switchCurrentToLine(int nLineNum)
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        editor->setTextFocus();
+        editor->setDocumentCursor(nLineNum);
+    }
+}
+
 void kciTabManager::setFocus()
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
     if(editor!=NULL)
     {
-        qDebug()<<"yes!";
         editor->setTextFocus();
     }
 }

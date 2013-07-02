@@ -55,8 +55,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
             this,SLOT(_exchange_button_state()));
 
     mainButton=new QToolButton(this);
-    //TODO: Fixed ShortCut Ctrl+`.
-    mainButton->setShortcut(QKeySequence(Qt::ALT+Qt::Key_1));
     mainButton->setAutoRaise(true);
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);

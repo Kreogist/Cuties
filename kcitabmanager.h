@@ -43,7 +43,6 @@ class kciTabManager : public QTabWidget
     Q_OBJECT
 public:
     explicit kciTabManager(QWidget *parent = 0);
-    void setFocus();
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -70,7 +69,10 @@ public slots:
     void close_all_other_tab();
     void renameTabTitle(QString title);
     void currentTextCursorChanged();
+    void switchCurrentToLine(int nLineNum);
     void showSearchBar();
+    void showGotoBar();
+    void setFocus();
     QString textNowSelect();
 
 protected:
