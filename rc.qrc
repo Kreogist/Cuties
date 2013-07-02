@@ -11,6 +11,10 @@
         <file>image/DebugMenuIcon.png</file>
         <file>image/ViewMenuIcon.png</file>
         <file>image/BreakPoint.png</file>
+        <file>image/SearchIcon.png</file>
+        <file>image/leftSearchButton.png</file>
+        <file>image/rightSearchButton.png</file>
+        <file>image/WindowMenuItem.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>

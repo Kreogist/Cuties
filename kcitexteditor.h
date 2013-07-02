@@ -56,10 +56,12 @@ public:
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString& title);
+    void setDocumentCursor(int nLine);
     void setTextFocus();
     QString getFilePath();
     QTextCursor getTextCursor();
     QTextDocument *document;
+    int getTextLines();
 
 signals:
     void filenameChanged(QString newName);

@@ -36,6 +36,7 @@
 #include <QSize>
 #include <QDesktopWidget>
 #include <QDebug>
+#include <QGraphicsDropShadowEffect>
 #include <QVariant>
 
 #include "kciglobal.h"
@@ -127,6 +128,7 @@ private:
         mnuInsert,
         mnuRun,
         mnuDebug,
+        mnuWindow,
         mnuPlugins,
         mnuHelp,
         menu_count  //the number of menus

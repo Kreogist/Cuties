@@ -32,6 +32,12 @@ kciTabManager::kciTabManager(QWidget *parent) :
     tab_count=1;
     new_file_count=1;
     isEditor=false;
+
+    //Initalize Search Window
+    searchBar=new kciSearchWindow(this);
+    searchBar->hide();
+    connect(searchBar,SIGNAL(hideButtonPressed()),
+            this,SLOT(setFocus()));
 }
 
 void kciTabManager::open()
@@ -335,6 +341,27 @@ void kciTabManager::currentTextCursorChanged()
     }
 }
 
+void kciTabManager::showGotoBar()
+{
+    qDebug()<<"敬请期待！";
+}
+
+void kciTabManager::showSearchBar()
+{
+    QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
+    QRect animeEndPos=searchBar->rect();
+    animeEndPos.setX(width()-searchBar->width()-10);
+    QRect animeStartPos=animeEndPos;
+    animeStartPos.setTop(-animeStartPos.height());
+    searchAnime->setStartValue(animeStartPos);
+    searchAnime->setDuration(300);
+    searchAnime->setEndValue(animeEndPos);
+    searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+    searchBar->show();
+    searchAnime->start();
+    searchBar->setTextFocus();
+}
+
 QString kciTabManager::textNowSelect()
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
@@ -352,4 +379,32 @@ QString kciTabManager::textNowSelect()
         returnValue="";
     }
     return returnValue;
+}
+
+void kciTabManager::switchCurrentToLine(int nLineNum)
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        editor->setTextFocus();
+        editor->setDocumentCursor(nLineNum);
+    }
+}
+
+void kciTabManager::setFocus()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        editor->setTextFocus();
+    }
+}
+
+void kciTabManager::resizeEvent(QResizeEvent *e)
+{
+    QTabWidget::resizeEvent(e);
+    searchBar->setGeometry(width()-searchBar->width()-10,
+                           0,
+                           searchBar->width(),
+                           searchBar->height());
 }

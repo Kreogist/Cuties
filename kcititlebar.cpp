@@ -55,6 +55,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
             this,SLOT(_exchange_button_state()));
 
     mainButton=new QToolButton(this);
+    mainButton->setAutoRaise(true);
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
 
@@ -92,29 +93,37 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     vCloseLayout->addWidget(closeButton);
     vCloseLayout->addStretch();
     hLayout->addLayout(vCloseLayout);
-
-
-    /*
-    setMinimumWidth(mainButton->width() + titleLabel->width() + 3 +
-                    minimizeButton->width() + maximizeButton->width() +
-                    closeButton->width());
-    */
 }
 
 void kciTitleBar::_exchange_button_state()
 {
     if(isShowingNormalButton)
     {
-        mainWindow->showNormal();
-        maximizeButton->setIcon(maximizeButtonIcon);
+        setWindowNormal();
     }
     else
     {
-        mainWindow->showMaximized();
-        maximizeButton->setIcon(normalButtonIcon);
+        setWindowMax();
     }
+}
 
-    isShowingNormalButton^=1;   //change the state
+void kciTitleBar::setWindowMin()
+{
+    mainWindow->showMinimized();
+}
+
+void kciTitleBar::setWindowNormal()
+{
+    mainWindow->showNormal();
+    maximizeButton->setIcon(maximizeButtonIcon);
+    isShowingNormalButton=false;
+}
+
+void kciTitleBar::setWindowMax()
+{
+    mainWindow->showMaximized();
+    maximizeButton->setIcon(normalButtonIcon);
+    isShowingNormalButton=true;
 }
 
 void kciTitleBar::setMenu(QMenu *menu)
@@ -146,12 +155,9 @@ void kciTitleBar::mousePressEvent(QMouseEvent *event)
 
 void kciTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
-    if(!isShowingNormalButton)
+    if(!isShowingNormalButton && hasPressed && event->buttons() == Qt::LeftButton)
     {
-        if(hasPressed && event->buttons() == Qt::LeftButton)
-        {
-            mainWindow->move(mainWindow->pos() + event->pos() - mousePosStart);
-        }
+        mainWindow->move(mainWindow->pos() + event->pos() - mousePosStart);
     }
 }
 

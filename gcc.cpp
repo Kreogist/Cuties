@@ -24,8 +24,8 @@
 QString gcc::gccPath="/usr/bin/g++";
 #endif
 
-#ifdef Q_OS_WIN32
-QString gcc::gccPath="c:/MinGW/bin/mingw32-g++.exe";
+#ifdef Q_OS_WIN
+QString gcc::gccPath="C:/MinGW/bin/g++.exe";
 #endif
 
 gcc::gcc(QObject *parent) :
@@ -55,13 +55,13 @@ void gcc::startCompile(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QStringList arg;
-    arg<<filePath<<"-g"<<"-Wall";
+    arg<<filePath<<"-g"<<"-Wall"<<"-static";
 
     //unix/unix-like system
     QString programName=fileInfo.absolutePath()+"/"
             +fileInfo.completeBaseName();
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     programName+=".exe";
     //Windows
 #endif
@@ -69,9 +69,14 @@ void gcc::startCompile(const QString &filePath)
     arg<<"-o"<<programName;
 
     qDebug()<<arg;
+    /*connect(this,SIGNAL(readyRead()),
+            this,SLOT(onOutputReady()));*/
 
-    connect(this,SIGNAL(readyRead()),
-            this,SLOT(onOutputReady()));
+#ifdef Q_OS_WIN
+    QStringList env;
+    env<<"C:/MinGW/bin;";
+    setEnvironment(env);
+#endif
 
     start(gccPath,arg);
 }

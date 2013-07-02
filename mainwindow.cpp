@@ -33,13 +33,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
     setPalette(QPpal);
 
-    restoreSettings();
-
     createActions();
     createDocks();
     createTitlebar();
     createMenu();
     createStatusbar();
+
+    restoreSettings();
 }
 
 void MainWindow::createActions()
@@ -162,6 +162,7 @@ void MainWindow::createActions()
     act[mnuSearchFind]=new QAction(tr("searchinfile"),this);
     act[mnuSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     actStatusTips[mnuSearchFind]=QString(tr("Find the specified text."));
+    connect(act[mnuSearchFind],SIGNAL(triggered()),tabManager,SLOT(showSearchBar()));
 
     //Search -> Find In Files
     act[mnuSearchFindInFiles]=new QAction(tr("searchallfile"),this);
@@ -188,6 +189,7 @@ void MainWindow::createActions()
     act[mnuSearchGoto]=new QAction(tr("gotoline"),this);
     act[mnuSearchGoto]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_G));
     actStatusTips[mnuSearchGoto]=QString(tr("Goto line."));
+    connect(act[mnuSearchGoto],SIGNAL(triggered()),tabManager,SLOT(showGotoBar()));
 
     //Run -> Comile And Run
     act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
@@ -311,6 +313,8 @@ void MainWindow::createDocks()
 {
     compileDock=new kcicompiledock(this);
     addDockWidget(Qt::BottomDockWidgetArea,compileDock);
+    //TODO: Configure Hide.
+    compileDock->hide();
 }
 
 void MainWindow::createMenu()
@@ -397,6 +401,11 @@ void MainWindow::createMenu()
         menu[mnuDebug]->addAction(act[i]);
     }
 
+    //window menu
+    MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
+    menu[mnuWindow] = _mainMenu->addMenu(tr("window"));
+    menu[mnuWindow]->setIcon(*MenuIconAddor);
+
     //plugins menu
     MenuIconAddor->addFile(QString(":/img/image/PluginMenuIcon.png"));
     menu[mnuPlugins] = _mainMenu->addMenu(tr("plugins"));
@@ -454,6 +463,12 @@ void MainWindow::setNoDocOpenMenuEnabled()
     act[mnuEditCopy]->setEnabled(false);
     act[mnuEditPaste]->setEnabled(false);
     act[mnuEditSelectAll]->setEnabled(false);
+    //Search Menu
+    act[mnuSearchFind]->setEnabled(false);
+    act[mnuSearchFindInFiles]->setEnabled(false);
+    act[mnuSearchReplace]->setEnabled(false);
+    act[mnuSearchReplaceInFiles]->setEnabled(false);
+    act[mnuSearchGoto]->setEnabled(false);
 
     //Set Visible
     //File Menu
@@ -470,6 +485,12 @@ void MainWindow::setNoDocOpenMenuEnabled()
     act[mnuEditCopy]->setVisible(false);
     act[mnuEditPaste]->setVisible(false);
     act[mnuEditSelectAll]->setVisible(false);
+    //Search Menu
+    act[mnuSearchFind]->setVisible(false);
+    act[mnuSearchFindInFiles]->setVisible(false);
+    act[mnuSearchReplace]->setVisible(false);
+    act[mnuSearchReplaceInFiles]->setVisible(false);
+    act[mnuSearchGoto]->setVisible(false);
 }
 
 void MainWindow::setDocOpenMenuEnabled()
@@ -489,6 +510,12 @@ void MainWindow::setDocOpenMenuEnabled()
     act[mnuEditCopy]->setEnabled(true);
     act[mnuEditPaste]->setEnabled(true);
     act[mnuEditSelectAll]->setEnabled(true);
+    //Search Menu
+    act[mnuSearchFind]->setEnabled(true);
+    act[mnuSearchFindInFiles]->setEnabled(true);
+    act[mnuSearchReplace]->setEnabled(true);
+    act[mnuSearchReplaceInFiles]->setEnabled(true);
+    act[mnuSearchGoto]->setEnabled(true);
 
     //Set Visible
     //File Menu
@@ -505,6 +532,12 @@ void MainWindow::setDocOpenMenuEnabled()
     act[mnuEditCopy]->setVisible(true);
     act[mnuEditPaste]->setVisible(true);
     act[mnuEditSelectAll]->setVisible(true);
+    //Search Menu
+    act[mnuSearchFind]->setVisible(true);
+    act[mnuSearchFindInFiles]->setVisible(true);
+    act[mnuSearchReplace]->setVisible(true);
+    act[mnuSearchReplaceInFiles]->setVisible(true);
+    act[mnuSearchGoto]->setVisible(true);
 }
 
 void MainWindow::restoreSettings()
@@ -512,7 +545,7 @@ void MainWindow::restoreSettings()
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
-    //Set default
+    /*Set default
     if(settings.value("x").isNull())
     {
     settings.setValue("screenwidth",QApplication::desktop()->width());
@@ -524,39 +557,34 @@ void MainWindow::restoreSettings()
     settings.setValue("y",temp_p);
     settings.setValue("width","1024");
     settings.setValue("height","768");
-    }
+    }*/
 
 
     int n_WindowState;
     float n_X, n_Y, n_width, n_height;
+    n_X     = settings.value("x", 0.1).toFloat() * QApplication::desktop()->width();
+    n_Y     = settings.value("y", 0.1).toFloat() * QApplication::desktop()->height();
+    n_width = settings.value("width", 0.8).toFloat() * QApplication::desktop()->width();
+    n_height= settings.value("height", 0.8).toFloat() * QApplication::desktop()->height();
 
-    n_X     = (settings.value("x").toFloat() / settings.value("screenwidth").toFloat())
-                * QApplication::desktop()->width();
-    n_Y     = (settings.value("y").toFloat() / settings.value("screenwidth").toFloat())
-                * QApplication::desktop()->width();
-    n_width = (settings.value("width").toFloat() / settings.value("screenwidth").toFloat())
-                * QApplication::desktop()->width();
-    n_height= (settings.value("height").toFloat()/ settings.value("screenheight").toFloat())
-                * QApplication::desktop()->height();
-    setGeometry(static_cast<int>(n_X),
-                static_cast<int>(n_Y),
-                static_cast<int>(n_width),
-                static_cast<int>(n_height));
+    this->setGeometry(static_cast<int>(n_X),
+                      static_cast<int>(n_Y),
+                      static_cast<int>(n_width),
+                      static_cast<int>(n_height));
     n_WindowState=settings.value("state").toInt();
     switch(n_WindowState)
     {
     case 1:
-        setWindowState(Qt::WindowMinimized);
+        titlebar->setWindowMin();
     case 2:
-        setWindowState(Qt::WindowMaximized);
+        titlebar->setWindowMax();
     }
-
     settings.endGroup();
-
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
+    kciMainWindow::resizeEvent(e);
     if(this->isMaximized())
     {
         savedGeometry.setSize(e->oldSize());
@@ -567,23 +595,18 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
         savedGeometry.setX(x());
         savedGeometry.setY(y());
-
-        //savedGeometry.setX(0);
-        //savedGeometry.setY(0);
     }
-    kciMainWindow::resizeEvent(e);
 }
 
 void MainWindow::saveSettings()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
-    if(!this->isMaximized()) //There is some thing wrong with "x()" and "y()" in Windows 7(Maybe no starting value?),I fix it by a simple way.
+    if(!this->isMaximized())
     {
+        savedGeometry.setSize(this->size());
         savedGeometry.setX(x());
-        //savedGeometry.setX(0);
         savedGeometry.setY(y());
-        //savedGeometry.setY(0);
     }
 
     int n_WindowState;
@@ -591,11 +614,10 @@ void MainWindow::saveSettings()
     //Save ALL settings.
 
     settings.beginGroup("MainWindow");
-    settings.setValue("width",savedGeometry.width());
-    settings.setValue("height",savedGeometry.height());
-    settings.setValue("x",savedGeometry.x());
-    settings.setValue("y",savedGeometry.y());
-
+    settings.setValue("width",float(savedGeometry.width())/QApplication::desktop()->width());
+    settings.setValue("height",float(savedGeometry.height())/QApplication::desktop()->height());
+    settings.setValue("x",float(savedGeometry.x())/QApplication::desktop()->width());
+    settings.setValue("y",float(savedGeometry.y())/QApplication::desktop()->height());
 
     switch(windowState())
     {
