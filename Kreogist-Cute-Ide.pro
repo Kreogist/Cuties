@@ -1,6 +1,7 @@
 #-------------------------------------------------
 #   Copyright 2013 Wang Luming <wlm199558@126.com>
 #   Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
+#   Copyright 2013 Zhang Jiayi <bf109g2@126.com>
 #
 #     Kreogist-Cute-IDE is free software: you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as published
@@ -50,7 +51,7 @@ SOURCES += \
     kcimarkpanel.cpp \
     compilerbasefactor.cpp \
     kcistatusbar.cpp \
-    kcitextsearcher.cpp
+    kcitextsearcher.cpp \
     kcisearchwindow.cpp \
     kcisearchtextbox.cpp
 
@@ -79,7 +80,7 @@ HEADERS += \
     kcimarkpanel.h \
     compilerbasefactor.h \
     kcistatusbar.h \
-    kcitextsearcher.h
+    kcitextsearcher.h \
     kcisearchwindow.h \
     kcisearchtextbox.h
 
