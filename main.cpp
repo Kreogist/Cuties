@@ -45,8 +45,10 @@ int main(int argc, char *argv[])
     QApplication::setWindowIcon(QIcon(":/mainicon/image/MainIcon.png"));
 
     //Initialize Application Language.
+    //Can't Initialize Application Language In My PC.   AG3
     QTranslator appTrans;
-    appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());
+    //appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());
+    appTrans.load(qApp->applicationDirPath() + "/" + "zh_CN");
     app.installTranslator(&appTrans);
 
     //Initialize Application Icon.
@@ -59,6 +61,7 @@ int main(int argc, char *argv[])
          ++constIterator)
     {
         QFile res(qApp->applicationDirPath() + "/Fonts/" + *constIterator);
+        qDebug()<<qApp->applicationDirPath() + "/Fonts/" + *constIterator;
         if (res.open(QIODevice::ReadOnly) == false) {
             if (fontWarningShown == false) {
                 QMessageBox::warning(0,

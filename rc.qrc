@@ -39,4 +39,7 @@
         <file>image/MenuIcons/mnuEditSelectAll.png</file>
         <file>image/MenuIcons/mnuFileClose.png</file>
     </qresource>
+    <qresource prefix="/lang">
+        <file>language/zh_CN.qm</file>
+    </qresource>
 </RCC>

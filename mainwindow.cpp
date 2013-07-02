@@ -512,6 +512,20 @@ void MainWindow::restoreSettings()
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
+    //Set default
+    if(settings.value("x").isNull())
+    {
+    settings.setValue("screenwidth",QApplication::desktop()->width());
+    settings.setValue("screenheight",QApplication::desktop()->height());
+    int temp_p;
+    temp_p=(QApplication::desktop()->width()-1024)/2;
+    settings.setValue("x",temp_p);
+    temp_p=(QApplication::desktop()->height()-768)/2;
+    settings.setValue("y",temp_p);
+    settings.setValue("width","1024");
+    settings.setValue("height","768");
+    }
+
 
     int n_WindowState;
     float n_X, n_Y, n_width, n_height;
@@ -551,11 +565,11 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     {
         savedGeometry.setSize(e->size());
 
-        //savedGeometry.setX(x());
-        //savedGeometry.setY(y());
+        savedGeometry.setX(x());
+        savedGeometry.setY(y());
 
-        savedGeometry.setX(0);
-        savedGeometry.setY(0);
+        //savedGeometry.setX(0);
+        //savedGeometry.setY(0);
     }
     kciMainWindow::resizeEvent(e);
 }
@@ -566,10 +580,10 @@ void MainWindow::saveSettings()
 
     if(!this->isMaximized()) //There is some thing wrong with "x()" and "y()" in Windows 7(Maybe no starting value?),I fix it by a simple way.
     {
-        //savedGeometry.setX(x());
-        savedGeometry.setX(0);
-        //savedGeometry.setY(y());
-        savedGeometry.setY(0);
+        savedGeometry.setX(x());
+        //savedGeometry.setX(0);
+        savedGeometry.setY(y());
+        //savedGeometry.setY(0);
     }
 
     int n_WindowState;
@@ -581,8 +595,8 @@ void MainWindow::saveSettings()
     settings.setValue("height",savedGeometry.height());
     settings.setValue("x",savedGeometry.x());
     settings.setValue("y",savedGeometry.y());
-    settings.setValue("screenwidth",QApplication::desktop()->width());
-    settings.setValue("screenheight",QApplication::desktop()->height());
+
+
     switch(windowState())
     {
     case Qt::WindowMinimized:n_WindowState=1;break;
