@@ -542,15 +542,11 @@ void MainWindow::restoreSettings()
 
     int n_WindowState;
     float n_X, n_Y, n_width, n_height;
+    n_X     = settings.value("x", 0.1).toFloat() * QApplication::desktop()->width();
+    n_Y     = settings.value("y", 0.1).toFloat() * QApplication::desktop()->height();
+    n_width = settings.value("width", 0.8).toFloat() * QApplication::desktop()->width();
+    n_height= settings.value("height", 0.8).toFloat() * QApplication::desktop()->height();
 
-    n_X     = (settings.value("x").toFloat() / settings.value("screenwidth").toFloat())
-                * QApplication::desktop()->width();
-    n_Y     = (settings.value("y").toFloat() / settings.value("screenwidth").toFloat())
-                * QApplication::desktop()->width();
-    n_width = (settings.value("width").toFloat() / settings.value("screenwidth").toFloat())
-                * QApplication::desktop()->width();
-    n_height= (settings.value("height").toFloat()/ settings.value("screenheight").toFloat())
-                * QApplication::desktop()->height();
     this->setGeometry(static_cast<int>(n_X),
                       static_cast<int>(n_Y),
                       static_cast<int>(n_width),
@@ -576,12 +572,8 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     else
     {
         savedGeometry.setSize(e->size());
-
-        //savedGeometry.setX(x());
-        //savedGeometry.setY(y());
-
-        savedGeometry.setX(0);
-        savedGeometry.setY(0);
+        savedGeometry.setX(x());
+        savedGeometry.setY(y());
     }
 }
 
@@ -589,12 +581,11 @@ void MainWindow::saveSettings()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
-    if(!this->isMaximized()) //There is some thing wrong with "x()" and "y()" in Windows 7(Maybe no starting value?),I fix it by a simple way.
+    if(!this->isMaximized())
     {
-        //savedGeometry.setX(x());
-        savedGeometry.setX(0);
-        //savedGeometry.setY(y());
-        savedGeometry.setY(0);
+        savedGeometry.setSize(this->size());
+        savedGeometry.setX(x());
+        savedGeometry.setY(y());
     }
 
     int n_WindowState;
@@ -602,12 +593,10 @@ void MainWindow::saveSettings()
     //Save ALL settings.
 
     settings.beginGroup("MainWindow");
-    settings.setValue("width",savedGeometry.width());
-    settings.setValue("height",savedGeometry.height());
-    settings.setValue("x",savedGeometry.x());
-    settings.setValue("y",savedGeometry.y());
-    settings.setValue("screenwidth",QApplication::desktop()->width());
-    settings.setValue("screenheight",QApplication::desktop()->height());
+    settings.setValue("width",float(savedGeometry.width())/QApplication::desktop()->width());
+    settings.setValue("height",float(savedGeometry.height())/QApplication::desktop()->height());
+    settings.setValue("x",float(savedGeometry.x())/QApplication::desktop()->width());
+    settings.setValue("y",float(savedGeometry.y())/QApplication::desktop()->height());
     switch(windowState())
     {
     case Qt::WindowMinimized:n_WindowState=1;break;

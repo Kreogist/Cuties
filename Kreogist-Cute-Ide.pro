@@ -50,7 +50,7 @@ SOURCES += \
     kcimarkpanel.cpp \
     compilerbasefactor.cpp \
     kcistatusbar.cpp \
-    kcitextsearcher.cpp
+    kcitextsearcher.cpp \
     kcisearchwindow.cpp \
     kcisearchtextbox.cpp
 
@@ -79,7 +79,7 @@ HEADERS += \
     kcimarkpanel.h \
     compilerbasefactor.h \
     kcistatusbar.h \
-    kcitextsearcher.h
+    kcitextsearcher.h \
     kcisearchwindow.h \
     kcisearchtextbox.h
 

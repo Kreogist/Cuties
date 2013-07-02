@@ -93,13 +93,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     vCloseLayout->addWidget(closeButton);
     vCloseLayout->addStretch();
     hLayout->addLayout(vCloseLayout);
-
-
-    /*
-    setMinimumWidth(mainButton->width() + titleLabel->width() + 3 +
-                    minimizeButton->width() + maximizeButton->width() +
-                    closeButton->width());
-    */
 }
 
 void kciTitleBar::_exchange_button_state()
