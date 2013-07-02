@@ -55,6 +55,8 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
             this,SLOT(_exchange_button_state()));
 
     mainButton=new QToolButton(this);
+    //TODO: Fixed ShortCut Ctrl+`.
+    mainButton->setShortcut(QKeySequence(Qt::ALT+Qt::Key_1));
     mainButton->setAutoRaise(true);
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
@@ -155,12 +157,9 @@ void kciTitleBar::mousePressEvent(QMouseEvent *event)
 
 void kciTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
-    if(!isShowingNormalButton)
+    if(!isShowingNormalButton && hasPressed && event->buttons() == Qt::LeftButton)
     {
-        if(hasPressed && event->buttons() == Qt::LeftButton)
-        {
-            mainWindow->move(mainWindow->pos() + event->pos() - mousePosStart);
-        }
+        mainWindow->move(mainWindow->pos() + event->pos() - mousePosStart);
     }
 }
 

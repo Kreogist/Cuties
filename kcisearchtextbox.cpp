@@ -6,7 +6,7 @@ kciSearchTextBox::kciSearchTextBox(QWidget *parent) :
     //Set Background Fill.
     setAutoFillBackground(true);
 
-    //Palette Set.s
+    //Palette Set.
     QPalette pal=this->palette();
     pal.setColor(QPalette::Window,QColor(255,255,255));
     setPalette(pal);

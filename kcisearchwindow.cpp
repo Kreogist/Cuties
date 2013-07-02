@@ -55,9 +55,21 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
             this,SLOT(close()));
 
     searchLayout->addWidget(closeButton);
+
+    QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect;
+    wndShadow->setBlurRadius(15.0);
+    wndShadow->setColor(QColor(0, 0, 0, 200));
+    wndShadow->setOffset(0);
+    this->setGraphicsEffect(wndShadow);
 }
 
 void kciSearchWindow::setTextFocus()
 {
     searchText->setTheFocus();
+}
+
+void kciSearchWindow::closeEvent(QCloseEvent *e)
+{
+    this->parentWidget()->setFocus();
+    QWidget::closeEvent(e);
 }

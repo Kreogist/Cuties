@@ -43,6 +43,7 @@ class kciTabManager : public QTabWidget
     Q_OBJECT
 public:
     explicit kciTabManager(QWidget *parent = 0);
+    void setFocus();
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
