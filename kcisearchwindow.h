@@ -22,10 +22,11 @@ public:
     void setTextFocus();
 
 protected:
-    void closeEvent(QCloseEvent *e);
+    void hideEvent(QHideEvent *e);
 
 signals:
-    
+    void hideButtonPressed();
+
 public slots:
 
 private:

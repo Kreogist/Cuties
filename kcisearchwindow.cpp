@@ -45,14 +45,13 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
     closeButton->setIcon(QIcon(":/toolbutton/image/Close.png"));
     closeButton->setAutoRaise(true);
     closeButton->setFixedSize(16,26);
-    closeButton->setShortcut(QKeySequence(Qt::Key_Escape));
     //Set Button Palette
     pal=closeButton->palette();
     pal.setColor(QPalette::Button, QColor(190,0,0));
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton,SIGNAL(clicked()),
-            this,SLOT(close()));
+            this,SLOT(hide()));
 
     searchLayout->addWidget(closeButton);
 
@@ -61,6 +60,7 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
     wndShadow->setColor(QColor(0, 0, 0, 200));
     wndShadow->setOffset(0);
     this->setGraphicsEffect(wndShadow);
+
 }
 
 void kciSearchWindow::setTextFocus()
@@ -68,8 +68,8 @@ void kciSearchWindow::setTextFocus()
     searchText->setTheFocus();
 }
 
-void kciSearchWindow::closeEvent(QCloseEvent *e)
+void kciSearchWindow::hideEvent(QHideEvent *e)
 {
-    this->parentWidget()->setFocus();
-    QWidget::closeEvent(e);
+    QWidget::hideEvent(e);
+    emit hideButtonPressed();
 }

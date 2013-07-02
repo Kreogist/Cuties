@@ -128,6 +128,7 @@ private:
         mnuInsert,
         mnuRun,
         mnuDebug,
+        mnuWindow,
         mnuPlugins,
         mnuHelp,
         menu_count  //the number of menus

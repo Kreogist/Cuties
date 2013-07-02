@@ -32,6 +32,7 @@ kciSearchTextBox::kciSearchTextBox(QWidget *parent) :
     Layout->addWidget(SearchTexts);
 }
 
+
 void kciSearchTextBox::setTheFocus()
 {
     SearchTexts->setFocus();

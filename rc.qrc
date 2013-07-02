@@ -14,6 +14,7 @@
         <file>image/SearchIcon.png</file>
         <file>image/leftSearchButton.png</file>
         <file>image/rightSearchButton.png</file>
+        <file>image/WindowMenuItem.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>
