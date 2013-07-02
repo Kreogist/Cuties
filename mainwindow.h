@@ -36,6 +36,7 @@
 #include <QSize>
 #include <QDesktopWidget>
 #include <QDebug>
+#include <QGraphicsDropShadowEffect>
 #include <QVariant>
 
 #include "kciglobal.h"

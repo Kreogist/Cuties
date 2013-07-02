@@ -14,10 +14,12 @@ void kciStatusBar::updateCursorPosition(int LineNum, int ColNum)
 {
     if(LineNum>0)
     {
-        lblCursorPosition->setText(QString(tr("Line: ")) +
-                                   QString::number(LineNum) + " " +
-                                   QString(tr("Col: ")) +
-                                   QString::number(ColNum));
+        lblCursorPosition->setText(QString(tr("Line ")) +
+                                   QString::number(LineNum) +
+                                   QString(tr(", ")) +
+                                   QString(tr("Col ")) +
+                                   QString::number(ColNum) +
+                                   QString(tr(".")));
     }
     else
     {

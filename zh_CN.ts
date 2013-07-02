@@ -209,12 +209,12 @@
         <translation>编译当前文档。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="614"/>
+        <location filename="mainwindow.cpp" line="634"/>
         <source>Saving file failed!</source>
         <translation type="unfinished">保存文件失败！</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="628"/>
+        <location filename="mainwindow.cpp" line="648"/>
         <source>Preparing Compiler.
 </source>
         <translation type="unfinished"></translation>
@@ -582,39 +582,58 @@
     </message>
 </context>
 <context>
+    <name>kciSearchTextBox</name>
+    <message>
+        <location filename="kcisearchtextbox.cpp" line="30"/>
+        <source>Search</source>
+        <translation>搜索</translation>
+    </message>
+</context>
+<context>
     <name>kciStatusBar</name>
     <message>
         <location filename="kcistatusbar.cpp" line="17"/>
-        <source>Line: </source>
-        <translation type="unfinished"></translation>
+        <source>Line </source>
+        <oldsource>Line: </oldsource>
+        <translation>第 </translation>
     </message>
     <message>
         <location filename="kcistatusbar.cpp" line="19"/>
-        <source>Col: </source>
-        <translation type="unfinished"></translation>
+        <source>, </source>
+        <translation> 行，</translation>
+    </message>
+    <message>
+        <location filename="kcistatusbar.cpp" line="20"/>
+        <source>Col </source>
+        <translation>第 </translation>
+    </message>
+    <message>
+        <location filename="kcistatusbar.cpp" line="22"/>
+        <source>.</source>
+        <translation> 列</translation>
     </message>
 </context>
 <context>
     <name>kciTabManager</name>
     <message>
-        <location filename="kcitabmanager.cpp" line="44"/>
+        <location filename="kcitabmanager.cpp" line="45"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="92"/>
+        <location filename="kcitabmanager.cpp" line="93"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="101"/>
+        <location filename="kcitabmanager.cpp" line="102"/>
         <source>out of memmory!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="117"/>
-        <location filename="kcitabmanager.cpp" line="134"/>
-        <location filename="kcitabmanager.cpp" line="152"/>
+        <location filename="kcitabmanager.cpp" line="118"/>
+        <location filename="kcitabmanager.cpp" line="135"/>
+        <location filename="kcitabmanager.cpp" line="153"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>

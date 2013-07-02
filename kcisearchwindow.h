@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QPalette>
 #include <QKeySequence>
+#include <QGraphicsDropShadowEffect>
 #include <QFrame>
 
 #include "kcisearchtextbox.h"
@@ -19,6 +20,9 @@ class kciSearchWindow : public QWidget
 public:
     explicit kciSearchWindow(QWidget *parent = 0);
     void setTextFocus();
+
+protected:
+    void closeEvent(QCloseEvent *e);
 
 signals:
     
