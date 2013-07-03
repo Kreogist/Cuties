@@ -568,6 +568,20 @@ void MainWindow::restoreSettings()
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
+    /*Set default
+    if(settings.value("x").isNull())
+    {
+    settings.setValue("screenwidth",QApplication::desktop()->width());
+    settings.setValue("screenheight",QApplication::desktop()->height());
+    int temp_p;
+    temp_p=(QApplication::desktop()->width()-1024)/2;
+    settings.setValue("x",temp_p);
+    temp_p=(QApplication::desktop()->height()-768)/2;
+    settings.setValue("y",temp_p);
+    settings.setValue("width","1024");
+    settings.setValue("height","768");
+    }*/
+
 
     int n_WindowState;
     float n_X, n_Y, n_width, n_height;
@@ -601,6 +615,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     else
     {
         savedGeometry.setSize(e->size());
+
         savedGeometry.setX(x());
         savedGeometry.setY(y());
     }
@@ -626,6 +641,7 @@ void MainWindow::saveSettings()
     settings.setValue("height",float(savedGeometry.height())/QApplication::desktop()->height());
     settings.setValue("x",float(savedGeometry.x())/QApplication::desktop()->width());
     settings.setValue("y",float(savedGeometry.y())/QApplication::desktop()->height());
+
     switch(windowState())
     {
     case Qt::WindowMinimized:n_WindowState=1;break;
