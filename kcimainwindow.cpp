@@ -19,7 +19,11 @@
 
 #include "kcimainwindow.h"
 
+static const int we=3;
+
 int kciMainWindow::range=3;
+bool pressflag=false,isleft=false,istop=false,isright=false,isbottom=false;
+QPoint newpos;
 
 kciMainWindow::kciMainWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -64,7 +68,77 @@ void kciMainWindow::setMenu(QMenu *menu)
         m_titleBar->setMenu(menu);
 }
 
-bool kciMainWindow::eventFilter(QObject *obj, QEvent *e)
+void kciMainWindow::mousePressEvent(QMouseEvent *e)
+{
+    pressflag=true;
+    int w_x,w_y,w_w,w_h,m_x,m_y;
+    m_x=e->globalX();
+    m_y=e->globalY();
+    w_x=this->x();
+    w_y=this->y();
+    w_w=this->width();
+    w_h=this->height();
+
+    qDebug()<<w_x<<w_y<<w_w<<w_h<<m_x<<m_y;
+
+    if(m_x>=w_x && m_x<=(w_x+w_w) && m_y>=(w_y-we+w_h) && m_y<=(w_y+we+w_h))
+    {
+        isbottom=true;
+        qDebug()<<"top";
+    }
+
+    else if(m_x>=(w_x-we) && m_x<=(w_x+we) && m_y>=w_y && m_y<=(w_y+w_h))
+    {
+        isleft=true;
+        qDebug()<<"left";
+    }
+
+    else if(m_x>=(w_x+w_w-we) && m_x<=(w_x+w_w+we) && m_y>=w_y && m_y<=(w_y+w_h))
+    {
+        isright=true;
+        qDebug()<<"right";
+    }
+
+
+    qDebug()<<"press";
+}
+
+
+void kciMainWindow::mouseMoveEvent(QMouseEvent *e)
+{
+    newpos=e->pos();
+    QRect g;
+    g=this->geometry();
+
+    if(pressflag==true)
+    {
+        if(isbottom)
+        {
+            g.setHeight(e->y());
+        }
+        else if(isright)
+        {
+            g.setWidth(e->x());
+        }
+        else if(isleft)
+        {
+            //g.setWidth(this->width()-e->x());
+            g.setX(this->x()+e->x());
+        }
+        this->setGeometry(g);
+    }
+}
+
+void kciMainWindow::mouseReleaseEvent(QMouseEvent *)
+{
+    pressflag=false;
+    isleft=false;
+    istop=false;
+    isright=false;
+    isbottom=false;
+    qDebug()<<"release";
+}
+/*bool kciMainWindow::eventFilter(QObject *obj, QEvent *e)
 {
     if(e->type() == QEvent::MouseMove)
     {
@@ -167,4 +241,4 @@ bool kciMainWindow::eventFilter(QObject *obj, QEvent *e)
     }
 
     return qApp->eventFilter(obj,e);
-}
+}*/

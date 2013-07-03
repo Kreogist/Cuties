@@ -46,7 +46,10 @@ signals:
 public slots:
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *e);
+    void mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+    //bool eventFilter(QObject *obj, QEvent *e);
 
 private:
     enum pressType
