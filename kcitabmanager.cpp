@@ -361,11 +361,6 @@ void kciTabManager::currentTextCursorChanged()
     }
 }
 
-void kciTabManager::showGotoBar()
-{
-    qDebug()<<"敬请期待！";
-}
-
 void kciTabManager::showSearchBar()
 {
     QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
@@ -406,7 +401,6 @@ void kciTabManager::switchCurrentToLine(int nLineNum)
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
     if(editor!=NULL)
     {
-        editor->setTextFocus();
         editor->setDocumentCursor(nLineNum);
     }
 }
@@ -427,4 +421,30 @@ void kciTabManager::resizeEvent(QResizeEvent *e)
                            0,
                            searchBar->width(),
                            searchBar->height());
+}
+
+int kciTabManager::getCurrentLineCount()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        return editor->document->blockCount();
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int kciTabManager::getCurrentLineNum()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        return editor->getTextCursor().blockNumber()+1;
+    }
+    else
+    {
+        return -1;
+    }
 }

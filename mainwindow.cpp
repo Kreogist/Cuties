@@ -189,7 +189,8 @@ void MainWindow::createActions()
     act[mnuSearchGoto]=new QAction(tr("gotoline"),this);
     act[mnuSearchGoto]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_G));
     actStatusTips[mnuSearchGoto]=QString(tr("Goto line."));
-    connect(act[mnuSearchGoto],SIGNAL(triggered()),tabManager,SLOT(showGotoBar()));
+    connect(act[mnuSearchGoto],SIGNAL(triggered()),
+            this,SLOT(statusShowGoto()));
 
     //Run -> Comile And Run
     act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
@@ -467,6 +468,8 @@ void MainWindow::createStatusbar()
 
     connect(tabManager,SIGNAL(cursorDataChanged(int,int)),
             myStatusBar,SLOT(updateCursorPosition(int,int)));
+    connect(myStatusBar,SIGNAL(ToNewPosition(int)),
+            this,SLOT(setCurrentTextCursorLine(int)));
 }
 
 void MainWindow::setNoDocOpenMenuEnabled()
@@ -568,20 +571,6 @@ void MainWindow::restoreSettings()
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
-    /*Set default
-    if(settings.value("x").isNull())
-    {
-    settings.setValue("screenwidth",QApplication::desktop()->width());
-    settings.setValue("screenheight",QApplication::desktop()->height());
-    int temp_p;
-    temp_p=(QApplication::desktop()->width()-1024)/2;
-    settings.setValue("x",temp_p);
-    temp_p=(QApplication::desktop()->height()-768)/2;
-    settings.setValue("y",temp_p);
-    settings.setValue("width","1024");
-    settings.setValue("height","768");
-    }*/
-
 
     int n_WindowState;
     float n_X, n_Y, n_width, n_height;
@@ -713,4 +702,15 @@ void MainWindow::searchOnline()
 void MainWindow::diffVisibleCompileDock()
 {
     compileDock->setVisible(!compileDock->isVisible());
+}
+
+void MainWindow::statusShowGoto()
+{
+    myStatusBar->showGotoBar(tabManager->getCurrentLineNum(),
+                             tabManager->getCurrentLineCount());
+}
+
+void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
+{
+    tabManager->switchCurrentToLine(NewLineNumber-1);
 }
