@@ -194,6 +194,7 @@ void MainWindow::createActions()
 
     //Run -> Comile And Run
     act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
+    act[mnuRunCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
     actStatusTips[mnuRunCompileAndRun]=QString(tr("Compile the active file and run."));
 
     //Run -> Compile
@@ -205,6 +206,7 @@ void MainWindow::createActions()
 
     //Run -> Run
     act[mnuRunRun]=new QAction(tr("Runexe"),this);
+    act[mnuRunRun]->setShortcut(QKeySequence(Qt::Key_F10));
     actStatusTips[mnuRunRun]=QString(tr("Run the compiled execution."));
 
     //Run -> Parameters
@@ -494,7 +496,9 @@ void MainWindow::setNoDocOpenMenuEnabled()
     act[mnuSearchFindInFiles]->setEnabled(false);
     act[mnuSearchReplace]->setEnabled(false);
     act[mnuSearchReplaceInFiles]->setEnabled(false);
+    act[mnuSearchSearchOnline]->setEnabled(false);
     act[mnuSearchGoto]->setEnabled(false);
+    menu[mnuSearch]->menuAction()->setEnabled(false);
 
     //Set Visible
     //File Menu
@@ -516,7 +520,9 @@ void MainWindow::setNoDocOpenMenuEnabled()
     act[mnuSearchFindInFiles]->setVisible(false);
     act[mnuSearchReplace]->setVisible(false);
     act[mnuSearchReplaceInFiles]->setVisible(false);
+    act[mnuSearchSearchOnline]->setVisible(false);
     act[mnuSearchGoto]->setVisible(false);
+    menu[mnuSearch]->menuAction()->setVisible(false);
 }
 
 void MainWindow::setDocOpenMenuEnabled()
@@ -541,7 +547,9 @@ void MainWindow::setDocOpenMenuEnabled()
     act[mnuSearchFindInFiles]->setEnabled(true);
     act[mnuSearchReplace]->setEnabled(true);
     act[mnuSearchReplaceInFiles]->setEnabled(true);
+    act[mnuSearchSearchOnline]->setEnabled(true);
     act[mnuSearchGoto]->setEnabled(true);
+    menu[mnuSearch]->menuAction()->setEnabled(true);
 
     //Set Visible
     //File Menu
@@ -563,7 +571,9 @@ void MainWindow::setDocOpenMenuEnabled()
     act[mnuSearchFindInFiles]->setVisible(true);
     act[mnuSearchReplace]->setVisible(true);
     act[mnuSearchReplaceInFiles]->setVisible(true);
+    act[mnuSearchSearchOnline]->setVisible(true);
     act[mnuSearchGoto]->setVisible(true);
+    menu[mnuSearch]->menuAction()->setVisible(true);
 }
 
 void MainWindow::restoreSettings()
