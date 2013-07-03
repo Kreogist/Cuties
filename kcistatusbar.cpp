@@ -4,25 +4,21 @@ kciStatusBar::kciStatusBar(QWidget *parent):
     QStatusBar(parent)
 {
     setContentsMargins(0,0,0,0);
-    lblCursorPosition=new QLabel(this);
+    kscCursorPosition=new kciStatusCursorInfo(this);
+    connect(this,SIGNAL(newUpdateCursorPosition(int,int)),
+            kscCursorPosition,SLOT(updateCursorPosition(int,int)));
+    connect(kscCursorPosition,SIGNAL(ToLineNum(int)),
+            this, SIGNAL(ToNewPosition(int)));
 
+    addPermanentWidget(kscCursorPosition);
+}
 
-    addPermanentWidget(lblCursorPosition);
+void kciStatusBar::showGotoBar(int currentValue, int MaxValue)
+{
+    kscCursorPosition->ShowGotoBox(currentValue, MaxValue);
 }
 
 void kciStatusBar::updateCursorPosition(int LineNum, int ColNum)
 {
-    if(LineNum>0)
-    {
-        lblCursorPosition->setText(QString(tr("Line ")) +
-                                   QString::number(LineNum) +
-                                   QString(tr(", ")) +
-                                   QString(tr("Col ")) +
-                                   QString::number(ColNum) +
-                                   QString(tr(".")));
-    }
-    else
-    {
-        lblCursorPosition->setText("");
-    }
+    emit newUpdateCursorPosition(LineNum, ColNum);
 }

@@ -60,9 +60,11 @@ public slots:
     void compileCurrentFile();
     void searchOnline();
     void diffVisibleCompileDock();
+    void statusShowGoto();
 
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
+    void setCurrentTextCursorLine(int NewLineNumber);
 
 protected:
     void closeEvent(QCloseEvent *e);
