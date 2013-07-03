@@ -67,6 +67,8 @@ public slots:
     void close_current_tab();
     void close_all_tab();
     void close_all_other_tab();
+    void switchNextTab();
+    void switchPrevTab();
     void renameTabTitle(QString title);
     void currentTextCursorChanged();
     void switchCurrentToLine(int nLineNum);

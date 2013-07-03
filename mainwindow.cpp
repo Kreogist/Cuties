@@ -276,12 +276,28 @@ void MainWindow::createActions()
     act[mnuDebugRemoveWatch]=new QAction(tr("Remove Watch"),this);
     actStatusTips[mnuDebugRemoveWatch]=QString(tr("Remove a variable in debug watch list."));
 
-    //about
+    //Window -> Window Split
+    act[mnuWindowSplit]=new QAction(tr("Split Window"),this);
+    actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));
+
+    //Window -> Next
+    act[mnuWindowNext]=new QAction(tr("Next"),this);
+    act[mnuWindowNext]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Tab));
+    actStatusTips[mnuWindowNext]=QString(tr("Switch to the next tab."));
+    connect(act[mnuWindowNext],SIGNAL(triggered()),tabManager,SLOT(switchNextTab()));
+
+    //Window -> Previous
+    act[mnuWindowPrev]=new QAction(tr("Previous"), this);
+    act[mnuWindowPrev]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Tab));
+    actStatusTips[mnuWindowPrev]=QString(tr("Switch to the previous tab."));
+    connect(act[mnuWindowPrev],SIGNAL(triggered()),tabManager,SLOT(switchPrevTab()));
+
+    //Help -> About
     act[mnuHelpAbout]=new QAction(tr("about"),this);
     actStatusTips[mnuHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
     connect(act[mnuHelpAbout],SIGNAL(triggered()),this,SLOT(aboutKCI()));
 
-    //about_qt
+    //Help -> About Qt
     act[mnuHelpAboutQt]=new QAction(tr("about Qt"),this);
     actStatusTips[mnuHelpAboutQt]=QString(tr("Display the Qt information, version number and copyright."));
     connect(act[mnuHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutQt()));
@@ -405,6 +421,13 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
     menu[mnuWindow] = _mainMenu->addMenu(tr("window"));
     menu[mnuWindow]->setIcon(*MenuIconAddor);
+    for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
+    {
+        MenuIconAddor->addFile(actMenuIconPath[i]);
+        act[i]->setIcon(*MenuIconAddor);
+        act[i]->setStatusTip(actStatusTips[i]);
+        menu[mnuWindow]->addAction(act[i]);
+    }
 
     //plugins menu
     MenuIconAddor->addFile(QString(":/img/image/PluginMenuIcon.png"));

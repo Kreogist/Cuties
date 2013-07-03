@@ -114,6 +114,9 @@ private:
         mnuDebugAddWatch,
         mnuDebugModifyWatch,
         mnuDebugRemoveWatch,
+        mnuWindowSplit,
+        mnuWindowPrev,
+        mnuWindowNext,
         mnuHelpAbout,
         mnuHelpAboutQt,
         act_count   //the number of actions.

@@ -106,6 +106,26 @@ void kciTabManager::new_file()
     }
 }
 
+void kciTabManager::switchNextTab()
+{
+    int current=currentIndex();
+    if(++current>=count())
+    {
+        current=0;
+    }
+    setCurrentIndex(current);
+}
+
+void kciTabManager::switchPrevTab()
+{
+    int current=currentIndex();
+    if(--current<0)
+    {
+        current=count()-1;
+    }
+    setCurrentIndex(current);
+}
+
 void kciTabManager::save()
 {
     if(Q_LIKELY(this->isEditor))

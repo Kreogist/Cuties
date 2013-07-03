@@ -25,7 +25,7 @@ QString gcc::gccPath="/usr/bin/g++";
 #endif
 
 #ifdef Q_OS_WIN32
-QString gcc::gccPath="c:/MinGW/bin/g++.exe";
+QString gcc::gccPath="C:/MinGW/bin/g++.exe";
 #endif
 
 gcc::gcc(QObject *parent) :
@@ -55,10 +55,10 @@ void gcc::startCompile(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QStringList arg;
-    arg<<filePath<<"-g"<<"-Wall";
+    arg<<filePath<<"-g"<<"-Wall"<<"-static";
 
     //unix/unix-like system
-    QString programName=fileInfo.absolutePath()+"/"
+    QString programName=fileInfo.absolutePath() + "/"
             +fileInfo.completeBaseName();
 
 #ifdef Q_OS_WIN32
