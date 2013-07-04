@@ -1,3 +1,23 @@
+/*
+ *  Copyright 2013 Wang Luming<wlm199558@126.com>
+ *  Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
+ *
+ *  kcitabmanager.cpp is part of Kreogist-Cute-IDE.
+ *
+ *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "kcitabmanager.h"
 
 kciTabManager::kciTabManager(QWidget *parent) :
@@ -32,12 +52,6 @@ kciTabManager::kciTabManager(QWidget *parent) :
     tab_count=1;
     new_file_count=1;
     isEditor=false;
-
-    //Initalize Search Window
-    searchBar=new kciSearchWindow(this);
-    searchBar->hide();
-    connect(searchBar,SIGNAL(hideButtonPressed()),
-            this,SLOT(setFocus()));
 }
 
 void kciTabManager::open()
@@ -363,18 +377,10 @@ void kciTabManager::currentTextCursorChanged()
 
 void kciTabManager::showSearchBar()
 {
-    QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-    QRect animeEndPos=searchBar->rect();
-    animeEndPos.setX(width()-searchBar->width()-10);
-    QRect animeStartPos=animeEndPos;
-    animeStartPos.setTop(-animeStartPos.height());
-    searchAnime->setStartValue(animeStartPos);
-    searchAnime->setDuration(300);
-    searchAnime->setEndValue(animeEndPos);
-    searchAnime->setEasingCurve(QEasingCurve::OutCubic);
-    searchBar->show();
-    searchAnime->start();
-    searchBar->setTextFocus();
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+
+    if(editor!=NULL)
+        editor->showSearchBar();
 }
 
 QString kciTabManager::textNowSelect()
@@ -401,7 +407,7 @@ void kciTabManager::switchCurrentToLine(int nLineNum)
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
     if(editor!=NULL)
     {
-        editor->setDocumentCursor(nLineNum);
+        editor->setDocumentCursor(nLineNum,0);
     }
 }
 
@@ -412,15 +418,6 @@ void kciTabManager::setFocus()
     {
         editor->setTextFocus();
     }
-}
-
-void kciTabManager::resizeEvent(QResizeEvent *e)
-{
-    QTabWidget::resizeEvent(e);
-    searchBar->setGeometry(width()-searchBar->width()-10,
-                           0,
-                           searchBar->width(),
-                           searchBar->height());
 }
 
 int kciTabManager::getCurrentLineCount()

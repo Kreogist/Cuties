@@ -11,8 +11,12 @@
 #include <QKeySequence>
 #include <QGraphicsDropShadowEffect>
 #include <QFrame>
+#include <QLabel>
+#include <QMenu>
+#include <QTextDocument>
 
-#include "kcisearchtextbox.h"
+#include "kcitexteditor.h"
+#include "kcitextsearcher.h"
 
 class kciSearchWindow : public QWidget
 {
@@ -20,6 +24,14 @@ class kciSearchWindow : public QWidget
 public:
     explicit kciSearchWindow(QWidget *parent = 0);
     void setTextFocus();
+    void setDocument(QTextDocument* doc);
+
+public slots:
+    void onTextChanged(const QString &text);
+    void onSearcherFinished();
+    void moveToPrevResult();
+    void moveToNextResult();
+    void onMenuClicked();
 
 protected:
     void hideEvent(QHideEvent *e);
@@ -27,12 +39,38 @@ protected:
 signals:
     void hideButtonPressed();
 
-public slots:
-
 private:
+    enum menuItem
+    {
+        RegularExpress,
+        MatchCase,
+        WholeWord,
+        menuItemCount
+    };
+
+    int currResultNum;
+
     QHBoxLayout *searchLayout;
     QToolButton *closeButton, *upButton, *downButton;
-    kciSearchTextBox *searchText;
+    QLabel *lblSearchInfo;
+
+    //TextBox
+    QWidget *searchText;
+    QLineEdit *SearchTexts;
+    QHBoxLayout *Layout;
+    QPushButton *SearchIcon;
+    kciTextSearcher *searcher;
+    QTextDocument *document;
+    QList<searchResult> result;
+
+    QTextCharFormat selectedCharFormat;
+    QTextCharFormat normalCharFormat;
+
+    QMenu *menu;
+    QAction *menuAction[menuItemCount];
+
+    void showCurrResult();
+    void setSelectedCharFormat(const QTextCharFormat& format);
 };
 
 #endif // KCISEARCHWINDOW_H

@@ -37,6 +37,7 @@
 #include <QSettings>
 #include <QIcon>
 #include <QSyntaxHighlighter>
+#include <QPropertyAnimation>
 #include <QDebug>
 
 #include "kciglobal.h"
@@ -44,9 +45,12 @@
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"
 #include "highlighterfactory.h"
+#include "kcisearchwindow.h"
 
 //default highlighter
 #include "plaintexthighlighter.h"
+
+class kciSearchWindow;
 
 class kciTextEditor : public QWidget
 {
@@ -56,12 +60,13 @@ public:
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString& title);
-    void setDocumentCursor(int nLine);
+    void setDocumentCursor(int nLine, int linePos);
     void setTextFocus();
     QString getFilePath();
     QTextCursor getTextCursor();
-    QTextDocument *document;
     int getTextLines();
+
+    QTextDocument *document;
 
 signals:
     void filenameChanged(QString newName);
@@ -80,12 +85,14 @@ public slots:
     void selectAll();
     void cursorChanged();
     QString getSelectedText();
+    void showSearchBar();
 
 private slots:
     void onModificationChanged(bool changed);
 
 protected:
     void closeEvent(QCloseEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     QHBoxLayout *mainLayout;
@@ -97,6 +104,8 @@ private:
     QString filePath,strFileFilter;
     QFileDevice::FileError fileError;
     QTextCursor fileTextCursor;
+
+    kciSearchWindow *searchBar;
 };
 
 #endif // TEXTEDITOR_H

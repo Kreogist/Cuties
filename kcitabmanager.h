@@ -82,7 +82,6 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
-    void resizeEvent(QResizeEvent *e);
 
 private:
     int tab_count;
@@ -90,7 +89,6 @@ private:
     QString strFileFilter;
     QTextCursor currentTextCursor;
     bool isEditor;  //is current widget a widget
-    kciSearchWindow *searchBar;
 };
 
 #endif // TABMANAGER_H

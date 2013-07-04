@@ -20,6 +20,8 @@
 
 #include "kcitexteditor.h"
 
+static const int SearchBarOffset = 20;
+
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QWidget(parent)
 {
@@ -66,7 +68,29 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     filePath.clear();
     fileError=QFileDevice::NoError;
+
+    searchBar=new kciSearchWindow(this);
+    searchBar->setDocument(document);
+    searchBar->hide();
+    connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
 }
+
+void kciTextEditor::showSearchBar()
+{
+    QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
+    QRect animeEndPos=searchBar->rect();
+    animeEndPos.setX(width()-searchBar->width()-SearchBarOffset);
+    QRect animeStartPos=animeEndPos;
+    animeStartPos.setTop(-animeStartPos.height());
+    searchAnime->setStartValue(animeStartPos);
+    searchAnime->setDuration(300);
+    searchAnime->setEndValue(animeEndPos);
+    searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+    searchBar->show();
+    searchAnime->start();
+    searchBar->setTextFocus();
+}
+
 
 bool kciTextEditor::open(const QString &fileName)
 {
@@ -360,9 +384,22 @@ int kciTextEditor::getTextLines()
     return editor->document()->blockCount();
 }
 
-void kciTextEditor::setDocumentCursor(int nLine)
+void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 {
      QTextCursor cursor = editor->textCursor();
      cursor.setPosition(editor->document()->findBlockByLineNumber(nLine).position());
+     cursor.movePosition(QTextCursor::NextCharacter,
+                          QTextCursor::MoveAnchor,
+                          linePos);
      editor->setTextCursor(cursor);
+}
+
+void kciTextEditor::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+
+    searchBar->setGeometry(width()-searchBar->width()-SearchBarOffset,
+                           0,
+                           searchBar->width(),
+                           searchBar->height());
 }
