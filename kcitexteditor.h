@@ -50,6 +50,8 @@
 //default highlighter
 #include "plaintexthighlighter.h"
 
+class kciSearchWindow;
+
 class kciTextEditor : public QWidget
 {
     Q_OBJECT
@@ -58,7 +60,7 @@ public:
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString& title);
-    void setDocumentCursor(int nLine);
+    void setDocumentCursor(int nLine, int linePos);
     void setTextFocus();
     QString getFilePath();
     QTextCursor getTextCursor();

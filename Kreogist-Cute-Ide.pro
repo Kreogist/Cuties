@@ -53,7 +53,6 @@ SOURCES += \
     kcistatusbar.cpp \
     kcitextsearcher.cpp \
     kcisearchwindow.cpp \
-    kcisearchtextbox.cpp \
     kcistatuscursorinfo.cpp \
     kcicontrolcenter.cpp
 
@@ -84,7 +83,6 @@ HEADERS += \
     kcistatusbar.h \
     kcitextsearcher.h \
     kcisearchwindow.h \
-    kcisearchtextbox.h \
     kcistatuscursorinfo.h \
     kcicontrolcenter.h
 

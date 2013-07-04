@@ -2,16 +2,19 @@
 
 void kciTextSearchWorker::run()
 {
-    for(QTextBlock i=document->begin();i.next().isValid();i=i.next())
+    for(QTextBlock i=document->begin();i.isValid();i=i.next())
     {
-        QRegularExpressionMatch matchResult=regexp.match(i.text());
+        QRegularExpressionMatchIterator matchResultIt=regexp.globalMatch(i.text());
 
-        if(matchResult.hasMatch())
+        while(matchResultIt.hasNext())
         {
+            QRegularExpressionMatch match=matchResultIt.next();
+
             searchResult _sr_tmp;
             _sr_tmp.lineNum=i.blockNumber();
-            _sr_tmp.startPos=matchResult.capturedStart();
-            _sr_tmp.length=matchResult.capturedLength();
+            _sr_tmp.startPos=match.capturedStart();
+            _sr_tmp.length=match.capturedLength();
+
             emit oneResultReady(_sr_tmp);
         }
     }
@@ -46,8 +49,8 @@ void kciTextSearcher::search()
 
     if(flags & WholeWord)
     {
-        subString+="\\b";
-        subString.prepend(QString("\\b"));
+        subString.prepend(QString("\\b("));
+        subString.append(QString(")\\b"));
     }
 
     regexp.setPattern(subString);

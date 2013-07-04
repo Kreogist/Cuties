@@ -72,6 +72,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     searchBar=new kciSearchWindow(this);
     searchBar->setDocument(document);
     searchBar->hide();
+    connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
 }
 
 void kciTextEditor::showSearchBar()
@@ -383,10 +384,13 @@ int kciTextEditor::getTextLines()
     return editor->document()->blockCount();
 }
 
-void kciTextEditor::setDocumentCursor(int nLine)
+void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 {
      QTextCursor cursor = editor->textCursor();
      cursor.setPosition(editor->document()->findBlockByLineNumber(nLine).position());
+     cursor.movePosition(QTextCursor::NextCharacter,
+                          QTextCursor::MoveAnchor,
+                          linePos);
      editor->setTextCursor(cursor);
 }
 
