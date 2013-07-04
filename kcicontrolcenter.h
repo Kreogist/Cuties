@@ -4,9 +4,12 @@
 #include <QWidget>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QPalette>
+#include <QFrame>
 #include <QIcon>
 #include <QSize>
 #include <QHBoxLayout>
+#include <QStackedWidget>
 
 class kciControlCenter : public QWidget
 {
@@ -31,7 +34,9 @@ private:
     };
 
     QToolButton *LeftListItem[ControlCenterItemCount];
+    QVBoxLayout *WholeTitleBarSplit;
     QVBoxLayout *LeftListButtons;
+    QFrame *fraSplitLine;
 
     void createLeftList();
     
