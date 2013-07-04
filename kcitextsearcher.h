@@ -8,11 +8,15 @@
 #include <QTextBlock>
 #include <QRegularExpressionMatch>
 #include <QList>
+#include <QPointer>
+#include <QReadWriteLock>
+#include <QDebug>
 
 struct searchResult
 {
     int lineNum;
     int startPos;
+    int length;
 };
 
 class kciTextSearchWorker : public QThread
@@ -22,7 +26,9 @@ public:
     QRegularExpression regexp;
     QTextDocument* document;
 
+protected:
     void run();
+
 signals:
     void oneResultReady(searchResult result);
 
@@ -43,16 +49,16 @@ public:
 
     void search();
 
-    QTextDocument *getDocument() const;
     void setDocument(QTextDocument *value);
-    QString getSubString() const;
-    void setRegexp(const QString &value);
+    void setSubString(const QString &value);
     int getFlags() const;
     void setFlags(int value);
 
     QList<searchResult> resultList;
+    QReadWriteLock lock;
 
 signals:
+    void finished();
     
 public slots:
     void receiveSingleResult(searchResult result);
@@ -61,6 +67,7 @@ private:
     QString subString;
     QTextDocument* p_document;
     int flags;
+    QPointer<kciTextSearchWorker> worker;
 };
 
 #endif // KCITEXTSEARCHER_H

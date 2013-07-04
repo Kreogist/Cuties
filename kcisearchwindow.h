@@ -11,6 +11,7 @@
 #include <QKeySequence>
 #include <QGraphicsDropShadowEffect>
 #include <QFrame>
+#include <QTextDocument>
 
 #include "kcisearchtextbox.h"
 
@@ -20,6 +21,7 @@ class kciSearchWindow : public QWidget
 public:
     explicit kciSearchWindow(QWidget *parent = 0);
     void setTextFocus();
+    void setDocument(QTextDocument* doc);
 
 protected:
     void hideEvent(QHideEvent *e);
@@ -27,12 +29,11 @@ protected:
 signals:
     void hideButtonPressed();
 
-public slots:
-
 private:
     QHBoxLayout *searchLayout;
     QToolButton *closeButton, *upButton, *downButton;
     kciSearchTextBox *searchText;
+
 };
 
 #endif // KCISEARCHWINDOW_H

@@ -348,18 +348,10 @@ void kciTabManager::showGotoBar()
 
 void kciTabManager::showSearchBar()
 {
-    QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-    QRect animeEndPos=searchBar->rect();
-    animeEndPos.setX(width()-searchBar->width()-10);
-    QRect animeStartPos=animeEndPos;
-    animeStartPos.setTop(-animeStartPos.height());
-    searchAnime->setStartValue(animeStartPos);
-    searchAnime->setDuration(300);
-    searchAnime->setEndValue(animeEndPos);
-    searchAnime->setEasingCurve(QEasingCurve::OutCubic);
-    searchBar->show();
-    searchAnime->start();
-    searchBar->setTextFocus();
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+
+    if(editor!=NULL)
+        editor->showSearchBar();
 }
 
 QString kciTabManager::textNowSelect()
@@ -398,13 +390,4 @@ void kciTabManager::setFocus()
     {
         editor->setTextFocus();
     }
-}
-
-void kciTabManager::resizeEvent(QResizeEvent *e)
-{
-    QTabWidget::resizeEvent(e);
-    searchBar->setGeometry(width()-searchBar->width()-10,
-                           0,
-                           searchBar->width(),
-                           searchBar->height());
 }

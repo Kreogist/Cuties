@@ -70,8 +70,8 @@ void gcc::startCompile(const QString &filePath)
 
     qDebug()<<arg;
 
-    /*connect(this,SIGNAL(readyRead()),
-            this,SLOT(onOutputReady()));*/
+    connect(this,SIGNAL(readyRead()),
+            this,SLOT(onOutputReady()));
 
     start(gccPath,arg);
 }

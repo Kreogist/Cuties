@@ -78,7 +78,6 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
-    void resizeEvent(QResizeEvent *e);
 
 private:
     int tab_count;
