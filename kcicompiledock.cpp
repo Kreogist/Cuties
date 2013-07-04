@@ -19,8 +19,6 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
     //Set Dock Widget and Layout.
-    //objCombine=new QWidget(this);
-    //objCombine->setContentsMargins(0,0,0,0);
     splCombine=new QSplitter(Qt::Horizontal, this);
     splCombine->setContentsMargins(0,0,0,0);
 
