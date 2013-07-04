@@ -149,9 +149,10 @@ void MainWindow::createActions()
 
     //Edit -> Preference
     act[mnuEditPreference]=new QAction(tr("preference"),this);
-    act[mnuEditPreference]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Comma));
+    act[mnuEditPreference]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
     actMenuIconPath[mnuEditPreference]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
     actStatusTips[mnuEditPreference]=QString(tr("Customize your IDE."));
+    connect(act[mnuEditPreference],SIGNAL(triggered()),this,SLOT(showPreference()));
 
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compile Dock"),this);
@@ -687,7 +688,6 @@ void MainWindow::compileCurrentFile()
         compileDock->setVisible(true);
         //Set To Compile Mode.
         compileDock->animeHideError();
-
         //Prepare Compiler
         compileDock->addText(tr("Preparing Compiler.\n"));
         //Get a compiler ready.
@@ -697,6 +697,7 @@ void MainWindow::compileCurrentFile()
         compileDock->addText("Compiler: " +
                              currentCompiler->version() +
                              "\n");
+        //Ouput Compile Message:
         connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::parseMessage);
         currentCompiler->startCompile(currentEditor->getFilePath());
         currentCompiler->waitForFinished();
@@ -723,4 +724,10 @@ void MainWindow::statusShowGoto()
 void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
 {
     tabManager->switchCurrentToLine(NewLineNumber-1);
+}
+
+void MainWindow::showPreference()
+{
+    kciControlCenter *newControlCenter=new kciControlCenter();
+    newControlCenter->show();
 }

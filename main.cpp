@@ -63,11 +63,9 @@ int main(int argc, char *argv[])
             if (fontWarningShown == false) {
                 QMessageBox::warning(0,
                                      QApplication::applicationName(),
-                                     (QString)"Impossible d'ouvrir la police " +
-                                     QChar(0x00AB) +
-                                     " DejaVu Serif " +
-                                     QChar(0x00BB) +
-                                     ".\n" + res.errorString());
+                                     QString(QApplication::tr("Error occur when load font file.")) +
+                                     "\n" +
+                                     res.errorString());
                 fontWarningShown = true;
             }
         } else {
@@ -75,11 +73,8 @@ int main(int argc, char *argv[])
             if (fontID == -1 && fontWarningShown == false) {
                 QMessageBox::warning(0,
                                      QApplication::applicationName(),
-                                     (QString)"Impossible d'ouvrir la police " +
-                                     QChar(0x00AB) +
-                                     " DejaVu Serif " +
-                                     QChar(0x00BB) +
-                                     ".\n" +
+                                     QString(QApplication::tr("Error occur when load font file.")) +
+                                     "\n" +
                                      res.errorString());
                 fontWarningShown = true;
             }

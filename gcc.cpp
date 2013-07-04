@@ -62,15 +62,15 @@ void gcc::startCompile(const QString &filePath)
             +fileInfo.completeBaseName();
 
 #ifdef Q_OS_WIN
-    programName+=".exe";
     //Windows
+    programName+=".exe";
 #endif
 
     arg<<"-o"<<programName;
 
     qDebug()<<arg;
-    /*connect(this,SIGNAL(readyRead()),
-            this,SLOT(onOutputReady()));*/
+    connect(this,SIGNAL(readyRead()),
+            this,SLOT(onOutputReady()));
 
 #ifdef Q_OS_WIN
     QStringList env;

@@ -45,6 +45,7 @@
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
 #include "kcimainwindow.h"
+#include "kcicontrolcenter.h"
 
 class MainWindow : public kciMainWindow
 {
@@ -65,6 +66,9 @@ public slots:
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
+
+private slots:
+    void showPreference();
 
 protected:
     void closeEvent(QCloseEvent *e);
