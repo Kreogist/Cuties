@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QTabBar>
 #include <QFileDialog>
+#include <QTextCursor>
 #include <QPropertyAnimation>
 #include <QErrorMessage>
 #include <QSettings>
@@ -43,6 +44,9 @@ class kciTabManager : public QTabWidget
     Q_OBJECT
 public:
     explicit kciTabManager(QWidget *parent = 0);
+    int getCurrentLineCount();
+    int getCurrentLineNum();
+    void switchCurrentToLine(int nLineNum);
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -67,11 +71,11 @@ public slots:
     void close_current_tab();
     void close_all_tab();
     void close_all_other_tab();
+    void switchNextTab();
+    void switchPrevTab();
     void renameTabTitle(QString title);
     void currentTextCursorChanged();
-    void switchCurrentToLine(int nLineNum);
     void showSearchBar();
-    void showGotoBar();
     void setFocus();
     QString textNowSelect();
 
@@ -85,7 +89,6 @@ private:
     QString strFileFilter;
     QTextCursor currentTextCursor;
     bool isEditor;  //is current widget a widget
-    kciSearchWindow *searchBar;
 };
 
 #endif // TABMANAGER_H

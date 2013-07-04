@@ -45,6 +45,7 @@
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
 #include "kcimainwindow.h"
+#include "kcicontrolcenter.h"
 
 class MainWindow : public kciMainWindow
 {
@@ -60,9 +61,14 @@ public slots:
     void compileCurrentFile();
     void searchOnline();
     void diffVisibleCompileDock();
+    void statusShowGoto();
 
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
+    void setCurrentTextCursorLine(int NewLineNumber);
+
+private slots:
+    void showPreference();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -114,6 +120,9 @@ private:
         mnuDebugAddWatch,
         mnuDebugModifyWatch,
         mnuDebugRemoveWatch,
+        mnuWindowSplit,
+        mnuWindowPrev,
+        mnuWindowNext,
         mnuHelpAbout,
         mnuHelpAboutQt,
         act_count   //the number of actions.

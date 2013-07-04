@@ -129,5 +129,11 @@ void kciSearchTextBox::onSearcherFinished()
 
     }
 
+    if(l>0)
+    {
+        const searchResult r=result.at(0);
+        QCursor _curr_cursor=;
+    }
+
     document->setModified(docModified);
 }

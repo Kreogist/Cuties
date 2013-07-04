@@ -385,7 +385,9 @@ int kciTextEditor::getTextLines()
 
 void kciTextEditor::setDocumentCursor(int nLine)
 {
-    editor->textCursor().setPosition(nLine);
+     QTextCursor cursor = editor->textCursor();
+     cursor.setPosition(editor->document()->findBlockByLineNumber(nLine).position());
+     editor->setTextCursor(cursor);
 }
 
 void kciTextEditor::resizeEvent(QResizeEvent *e)

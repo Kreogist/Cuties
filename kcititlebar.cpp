@@ -56,6 +56,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
+    mainButton->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_1));
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
 

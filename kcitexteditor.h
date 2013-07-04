@@ -64,6 +64,8 @@ public:
     QTextCursor getTextCursor();
     int getTextLines();
 
+    QTextDocument *document;
+
 signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
@@ -91,7 +93,6 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
-    QTextDocument *document;
     QHBoxLayout *mainLayout;
     kciCodeEditor *editor;
     kciLinenumPanel *linePanel;

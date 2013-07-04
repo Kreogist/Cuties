@@ -32,12 +32,6 @@ kciTabManager::kciTabManager(QWidget *parent) :
     tab_count=1;
     new_file_count=1;
     isEditor=false;
-
-    //Initalize Search Window
-    searchBar=new kciSearchWindow(this);
-    searchBar->hide();
-    connect(searchBar,SIGNAL(hideButtonPressed()),
-            this,SLOT(setFocus()));
 }
 
 void kciTabManager::open()
@@ -104,6 +98,26 @@ void kciTabManager::new_file()
         error.showMessage(tr("out of memmory!"));
         error.exec();
     }
+}
+
+void kciTabManager::switchNextTab()
+{
+    int current=currentIndex();
+    if(++current>=count())
+    {
+        current=0;
+    }
+    setCurrentIndex(current);
+}
+
+void kciTabManager::switchPrevTab()
+{
+    int current=currentIndex();
+    if(--current<0)
+    {
+        current=count()-1;
+    }
+    setCurrentIndex(current);
 }
 
 void kciTabManager::save()
@@ -341,11 +355,6 @@ void kciTabManager::currentTextCursorChanged()
     }
 }
 
-void kciTabManager::showGotoBar()
-{
-    qDebug()<<"敬请期待！";
-}
-
 void kciTabManager::showSearchBar()
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
@@ -378,7 +387,6 @@ void kciTabManager::switchCurrentToLine(int nLineNum)
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
     if(editor!=NULL)
     {
-        editor->setTextFocus();
         editor->setDocumentCursor(nLineNum);
     }
 }
@@ -389,5 +397,31 @@ void kciTabManager::setFocus()
     if(editor!=NULL)
     {
         editor->setTextFocus();
+    }
+}
+
+int kciTabManager::getCurrentLineCount()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        return editor->document->blockCount();
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int kciTabManager::getCurrentLineNum()
+{
+    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    if(editor!=NULL)
+    {
+        return editor->getTextCursor().blockNumber()+1;
+    }
+    else
+    {
+        return -1;
     }
 }

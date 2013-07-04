@@ -43,4 +43,12 @@
         <file>image/MenuIcons/mnuEditSelectAll.png</file>
         <file>image/MenuIcons/mnuFileClose.png</file>
     </qresource>
+    <qresource prefix="/controlcenter">
+        <file>image/Control Center/cciLanguage.png</file>
+        <file>image/Control Center/cciGeneral.png</file>
+        <file>image/Control Center/cciCompiler.png</file>
+        <file>image/Control Center/cciEditor.png</file>
+        <file>image/Control Center/cciDebugger.png</file>
+        <file>image/Control Center/cciFileAssociation.png</file>
+    </qresource>
 </RCC>

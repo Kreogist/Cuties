@@ -7,7 +7,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     setObjectName(QString("Compile Dock"));
 
     //Set Dock Style.
-    setContentsMargins(5,0,5,0);
+    setContentsMargins(0,0,0,0);
     QPalette pal=this->palette();
     pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
@@ -19,8 +19,6 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
     //Set Dock Widget and Layout.
-    //objCombine=new QWidget(this);
-    //objCombine->setContentsMargins(0,0,0,0);
     splCombine=new QSplitter(Qt::Horizontal, this);
     splCombine->setContentsMargins(0,0,0,0);
 
