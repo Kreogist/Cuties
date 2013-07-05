@@ -206,26 +206,32 @@ void kciSearchWindow::onSearcherFinished()
 
 void kciSearchWindow::moveToNextResult()
 {
-    if(currResultNum+1<result.size())
-        currResultNum++;
-    else
-        currResultNum=0;
+    if(!result.isEmpty())
+    {
+        if(currResultNum+1<result.size())
+            currResultNum++;
+        else
+            currResultNum=0;
 
-    showCurrResult();
+        showCurrResult();
+    }
 }
 
 void kciSearchWindow::moveToPrevResult()
 {
-    if(currResultNum-1 >= 0)
+    if(!result.isEmpty())
     {
-        currResultNum--;
-    }
-    else
-    {
-        currResultNum=result.size()-1;
-    }
+        if(currResultNum-1 >= 0)
+        {
+            currResultNum--;
+        }
+        else
+        {
+            currResultNum=result.size()-1;
+        }
 
-    showCurrResult();
+        showCurrResult();
+    }
 }
 
 void kciSearchWindow::setDocument(QTextDocument *doc)

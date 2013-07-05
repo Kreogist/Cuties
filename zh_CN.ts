@@ -583,44 +583,44 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="kcitabmanager.cpp" line="11"/>
-        <location filename="kcitexteditor.cpp" line="33"/>
+        <location filename="kcitabmanager.cpp" line="31"/>
+        <location filename="kcitexteditor.cpp" line="35"/>
         <source>All Support Files</source>
         <translation>支持的所有文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="13"/>
-        <location filename="kcitexteditor.cpp" line="35"/>
+        <location filename="kcitabmanager.cpp" line="33"/>
+        <location filename="kcitexteditor.cpp" line="37"/>
         <source>Plain Text Files</source>
         <translation>纯文本文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="14"/>
-        <location filename="kcitexteditor.cpp" line="36"/>
+        <location filename="kcitabmanager.cpp" line="34"/>
+        <location filename="kcitexteditor.cpp" line="38"/>
         <source>Hearder Files</source>
         <translation>C++ 头文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="15"/>
-        <location filename="kcitexteditor.cpp" line="37"/>
+        <location filename="kcitabmanager.cpp" line="35"/>
+        <location filename="kcitexteditor.cpp" line="39"/>
         <source>C Source Files</source>
         <translation>C 源代码文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="16"/>
-        <location filename="kcitexteditor.cpp" line="38"/>
+        <location filename="kcitabmanager.cpp" line="36"/>
+        <location filename="kcitexteditor.cpp" line="40"/>
         <source>C++ Source Files</source>
         <translation>C++ 源代码文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="17"/>
-        <location filename="kcitexteditor.cpp" line="39"/>
+        <location filename="kcitabmanager.cpp" line="37"/>
+        <location filename="kcitexteditor.cpp" line="41"/>
         <source>Pascal Source Files</source>
         <translation>Pascal 源代码文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="18"/>
-        <location filename="kcitexteditor.cpp" line="40"/>
+        <location filename="kcitabmanager.cpp" line="38"/>
+        <location filename="kcitexteditor.cpp" line="42"/>
         <source>All Files</source>
         <translation>所有文件</translation>
     </message>
@@ -628,37 +628,62 @@
 <context>
     <name>kciControlCenter</name>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="21"/>
         <source>General</source>
-        <translation>通用</translation>
+        <translation type="obsolete">通用</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="30"/>
         <source>Editor</source>
-        <translation>编辑器</translation>
+        <translation type="obsolete">编辑器</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="41"/>
         <source>Compiler</source>
-        <translation>编译器</translation>
+        <translation type="obsolete">编译器</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="50"/>
         <source>Debugger</source>
-        <translation>调试器</translation>
+        <translation type="obsolete">调试器</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="59"/>
         <source>File Association</source>
-        <translation>文件关联</translation>
+        <translation type="obsolete">文件关联</translation>
+    </message>
+</context>
+<context>
+    <name>kciControlCenterBanner</name>
+    <message>
+        <location filename="kcicontrolcenter.cpp" line="7"/>
+        <source>Cuties Control Center</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>kciSearchTextBox</name>
     <message>
-        <location filename="kcisearchtextbox.cpp" line="30"/>
+        <source>Search</source>
+        <translation type="obsolete">搜索</translation>
+    </message>
+</context>
+<context>
+    <name>kciSearchWindow</name>
+    <message>
+        <location filename="kcisearchwindow.cpp" line="37"/>
         <source>Search</source>
         <translation>搜索</translation>
+    </message>
+    <message>
+        <location filename="kcisearchwindow.cpp" line="43"/>
+        <source>Regular Expression</source>
+        <translation>使用正则表达式</translation>
+    </message>
+    <message>
+        <location filename="kcisearchwindow.cpp" line="44"/>
+        <source>Match Case</source>
+        <translation>区分关键词大小写</translation>
+    </message>
+    <message>
+        <location filename="kcisearchwindow.cpp" line="45"/>
+        <source>Match whole word</source>
+        <translation>使用整字匹配</translation>
     </message>
 </context>
 <context>
@@ -708,24 +733,24 @@
 <context>
     <name>kciTabManager</name>
     <message>
-        <location filename="kcitabmanager.cpp" line="47"/>
+        <location filename="kcitabmanager.cpp" line="61"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="95"/>
+        <location filename="kcitabmanager.cpp" line="109"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="104"/>
+        <location filename="kcitabmanager.cpp" line="118"/>
         <source>out of memmory!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="140"/>
-        <location filename="kcitabmanager.cpp" line="157"/>
-        <location filename="kcitabmanager.cpp" line="175"/>
+        <location filename="kcitabmanager.cpp" line="154"/>
+        <location filename="kcitabmanager.cpp" line="171"/>
+        <location filename="kcitabmanager.cpp" line="189"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>
@@ -765,12 +790,12 @@
         <translation type="obsolete">打开</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="134"/>
+        <location filename="kcitexteditor.cpp" line="158"/>
         <source>save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="151"/>
+        <location filename="kcitexteditor.cpp" line="175"/>
         <source>save as</source>
         <translation>另存为</translation>
     </message>
@@ -779,28 +804,28 @@
         <translation type="obsolete">文档已经被更改。</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="229"/>
+        <location filename="kcitexteditor.cpp" line="253"/>
         <source>Will you save changes to the the following file?</source>
         <translation>您要存储对下列文件所做的修改么？</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="231"/>
+        <location filename="kcitexteditor.cpp" line="255"/>
         <source>If you don&apos;t save the changes, all the changes will be lost.</source>
         <oldsource>Do you want to save your changes?</oldsource>
         <translation>如果您不保存修改，所有的修改将会丢失。</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="235"/>
+        <location filename="kcitexteditor.cpp" line="259"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="236"/>
+        <location filename="kcitexteditor.cpp" line="260"/>
         <source>&amp;Don&apos;t Save</source>
         <translation>不保存(&amp;D)</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="237"/>
+        <location filename="kcitexteditor.cpp" line="261"/>
         <source>&amp;Cancel</source>
         <translation>取消(&amp;C)</translation>
     </message>
@@ -817,12 +842,12 @@
         <translation type="obsolete">放弃</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="248"/>
+        <location filename="kcitexteditor.cpp" line="272"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="249"/>
+        <location filename="kcitexteditor.cpp" line="273"/>
         <source>Please save it again</source>
         <translation>请重新保存</translation>
     </message>
