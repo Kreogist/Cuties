@@ -1,6 +1,6 @@
 #include "kcisearchwindow.h"
 
-static const int nFixedWidth=250;
+static const int nFixedWidth=290;
 
 kciSearchWindow::kciSearchWindow(QWidget *parent) :
     QWidget(parent)
@@ -62,7 +62,7 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
     setContentsMargins(7,7,7,7);
 
     QPalette kswPal=this->palette();
-    kswPal.setColor(QPalette::Background,QColor(0,0,0));
+    kswPal.setColor(QPalette::Window,QColor(0,0,0));
     setPalette(kswPal);
 
     //Set New Layout
@@ -76,6 +76,9 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
 
     //Set Search Details.
     lblSearchInfo=new QLabel(this);
+    pal=lblSearchInfo->palette();
+    pal.setColor(QPalette::WindowText,QColor(255,255,255));
+    lblSearchInfo->setPalette(pal);
     lblSearchInfo->setText(" 0/0 ");
     searchLayout->addWidget(lblSearchInfo);
     setFixedSize(nFixedWidth,38);
