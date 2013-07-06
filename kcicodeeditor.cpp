@@ -56,3 +56,9 @@ void kciCodeEditor::highlightCurrentLine()
 
         setExtraSelections(extraSelections);
 }
+
+void kciCodeEditor::paintEvent(QPaintEvent *e)
+{
+    QPlainTextEdit::paintEvent(e);
+    emit updated();
+}
