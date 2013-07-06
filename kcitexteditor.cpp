@@ -311,6 +311,11 @@ void kciTextEditor::setDocumentTitle(const QString& title)
     emit filenameChanged(title);
 }
 
+QString kciTextEditor::getDocumentTitle()
+{
+    return editor->documentTitle();
+}
+
 void kciTextEditor::redo()
 {
     editor->redo();

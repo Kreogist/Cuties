@@ -60,6 +60,7 @@ public:
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString& title);
+    QString getDocumentTitle();
     void setDocumentCursor(int nLine, int linePos);
     void setTextFocus();
     QString getFilePath();

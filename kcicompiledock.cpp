@@ -34,15 +34,59 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     pal=trevwCompileInfo->palette();
     pal.setColor(QPalette::Foreground,QColor(255,255,255));
     trevwCompileInfo->setPalette(pal);
-    compileInfo=new QStandardItemModel();
-    //trevwCompileInfo->setSelectionMode(QAbstractItemView::SingleSelection);
+    trevwCompileInfo->setHeaderHidden(true);
     trevwCompileInfo->setGeometry(0,0,0,0);
+    compileInfo=new QStandardItemModel();
+    trevwCompileInfo->setModel(compileInfo);
+    trevwCompileInfo->setEditTriggers(QAbstractItemView::NoEditTriggers);
     splCombine->addWidget(trevwCompileInfo);
     QList<int> l_sizes;
     l_sizes << width() << 0;
     splCombine->setSizes(l_sizes);
 
+    //Set Default Value
+    resetCompileDock();
     setWidget(splCombine);
+
+    connect(trevwCompileInfo,SIGNAL(clicked(QModelIndex)),
+            this,SLOT(selectAnError(QModelIndex)));
+    connect(trevwCompileInfo,SIGNAL(activated(QModelIndex)),
+            this,SLOT(selectAnError(QModelIndex)));
+    connect(trevwCompileInfo,SIGNAL(doubleClicked(QModelIndex)),
+            this,SLOT(jumpToError(QModelIndex)));
+
+}
+
+void kcicompiledock::jumpToError(QModelIndex ItemID)
+{
+    int ErrID=ItemID.row();
+    if(erifList[ErrID].nColumnNum>-1)
+    {
+        //Open the file;
+        emit requireOpenErrFile(erifList[ErrID].strFilePath);
+        //Jump to the line;
+        emit requireGotoLine(erifList[ErrID].nLineNum - 1, erifList[ErrID].nColumnNum);
+        //Set Focus;
+        emit requireSetFocus();
+    }
+}
+
+void kcicompiledock::selectAnError(QModelIndex ItemID)
+{
+    if(lastSelID>-1)
+    {
+        compileInfo->item(lastSelID)->setText(erifList[lastSelID].strErrDescription);
+    }
+    lastSelID=ItemID.row();
+    if(erifList[lastSelID].nLineNum>-1)
+    {
+        QString strSelErrText;
+        strSelErrText=erifList[lastSelID].strErrDescription + "\n" +
+                tr("Line ") + QString::number(erifList[lastSelID].nLineNum) + ", " +
+                tr("Column ") + QString::number(erifList[lastSelID].nColumnNum) + "\n" +
+                tr("At file: ") + erifList[lastSelID].strFilePath;
+        compileInfo->itemFromIndex(ItemID)->setText(strSelErrText);
+    }
 }
 
 void kcicompiledock::animeShowError()
@@ -80,20 +124,92 @@ void kcicompiledock::addRootItem(QString ItemText)
     compileInfo->appendRow(itemAdd);
 }
 
-void kcicompiledock::addLastSubItem(QString ItemText)
-{
-    QStandardItem *itemAdd=new QStandardItem(ItemText);
-    compileInfo->item(compileInfo->rowCount()-1)->appendRow(itemAdd);
-}
-
 void kcicompiledock::clearAllItem()
 {
     compileInfo->clear();
 }
 
+void kcicompiledock::outputCompileInfo(QString msg)
+{
+    addText(msg);
+}
+
 void kcicompiledock::parseMessage(QString msg)
 {
-    //trevwCompileInfo->
-    qDebug()<<"Reach!!";
-    qDebug()<<msg;
+    if(!hasError)
+    {
+        animeShowError();
+        addText(QTime::currentTime().toString("hh:mm:ss") +
+                " " +
+                tr("Compile Output:") +
+                "\n");
+        hasError=true;
+    }
+    //Add Original Text To TextBox.
+    addText(msg);
+
+    //Process Msg:
+    QString strJudgedStr=msg.left(2).toLower();
+    if(strJudgedStr=="in" || strJudgedStr=="  ")
+    {
+        ErrInfo ThisErr;
+        ThisErr.nColumnNum=-1;
+        ThisErr.nLineNum=-1;
+        ThisErr.strErrDescription=msg;
+        ThisErr.strErrDescription=ThisErr.strErrDescription.remove(
+                    ThisErr.strErrDescription.length()-1,1);
+        ThisErr.strFilePath="";
+        erifList.append(ThisErr);
+        addRootItem(ThisErr.strErrDescription);
+    }
+    else
+    {
+        expressMsg=new QRegularExpression("(<command[ -]line>|([A-Za-z]:)?[^:]+):");
+        QRegularExpressionMatch match=expressMsg->match(msg);
+        if(match.hasMatch()){
+            QString FileName=match.captured();
+            int NewHead=FileName.length();
+            FileName=FileName.remove(NewHead-1,1);
+            QString ErrorDetailInfo=msg.mid(NewHead);
+            ErrorDetailInfo.remove(ErrorDetailInfo.length()-1,1);
+            expressMsg->setPattern("\\d+:\\d+");
+            match=expressMsg->match(ErrorDetailInfo);
+            if(match.hasMatch())
+            {
+                QString strErrPosition=match.captured();
+                QStringList sltErrPos=strErrPosition.split(":");
+
+                ErrInfo ThisErr;
+                ThisErr.nLineNum=sltErrPos.at(0).toInt();
+                ThisErr.nColumnNum=sltErrPos.at(1).toInt();
+                ThisErr.strFilePath=FileName;
+                ThisErr.strErrDescription=ErrorDetailInfo;
+                erifList.append(ThisErr);
+                addRootItem(ErrorDetailInfo);
+            }
+
+        }
+    }
+}
+
+void kcicompiledock::resetCompileDock()
+{
+    clearAllItem();
+    clearText();
+    strCompileFilePath="";
+    hasError=false;
+    ErrorOccur=false;
+    WarningOccur=false;
+    lastSelID=-1;
+    erifList.clear();
+}
+
+void kcicompiledock::setCompileFilePath(QString FilePath)
+{
+    strCompileFilePath=FilePath;
+}
+
+QString kcicompiledock::CompileFilePath()
+{
+    return strCompileFilePath;
 }

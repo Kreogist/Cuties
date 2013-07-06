@@ -2,20 +2,23 @@
 
 void kciTextSearchWorker::run()
 {
-    for(QTextBlock i=document->begin();i.isValid();i=i.next())
+    if(regexp.isValid())
     {
-        QRegularExpressionMatchIterator matchResultIt=regexp.globalMatch(i.text());
-
-        while(matchResultIt.hasNext())
+        for(QTextBlock i=document->begin();i.isValid();i=i.next())
         {
-            QRegularExpressionMatch match=matchResultIt.next();
+            QRegularExpressionMatchIterator matchResultIt=regexp.globalMatch(i.text());
 
-            searchResult _sr_tmp;
-            _sr_tmp.lineNum=i.blockNumber();
-            _sr_tmp.startPos=match.capturedStart();
-            _sr_tmp.length=match.capturedLength();
+            while(matchResultIt.hasNext())
+            {
+                QRegularExpressionMatch match=matchResultIt.next();
 
-            emit oneResultReady(_sr_tmp);
+                searchResult _sr_tmp;
+                _sr_tmp.lineNum=i.blockNumber();
+                _sr_tmp.startPos=match.capturedStart();
+                _sr_tmp.length=match.capturedLength();
+
+                emit oneResultReady(_sr_tmp);
+            }
         }
     }
 
@@ -34,7 +37,8 @@ void kciTextSearcher::search()
     if(worker)
     {
         worker->exit();
-        worker->deleteLater();
+        //worker->deleteLater();
+        delete worker;
     }
 
     while(!resultList.isEmpty())

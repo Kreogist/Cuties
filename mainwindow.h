@@ -27,6 +27,7 @@
 #include <QMenuBar>
 #include <QToolBar>
 #include <QMenu>
+#include <QTime>
 #include <QPalette>
 #include <QApplication>
 #include <QToolButton>

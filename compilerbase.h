@@ -37,6 +37,7 @@ public:
     virtual QString compilerName(){return currentCompilerName;}
 
 signals:
+    void compileinfo(QString msg);
     void output(QString msg);
 
 private:

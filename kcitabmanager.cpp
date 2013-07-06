@@ -54,6 +54,38 @@ kciTabManager::kciTabManager(QWidget *parent) :
     isEditor=false;
 }
 
+int kciTabManager::open(const QString& filePath)
+{
+    QString name=QFileInfo(filePath).fileName();
+    int i=count();
+    while(i--)
+    {
+        kciTextEditor *judgeEditor=qobject_cast<kciTextEditor *>(widget(i));
+        if(judgeEditor!=NULL)
+        {
+            if(judgeEditor->getDocumentTitle() == name)
+            {
+                return i;
+            }
+        }
+    }
+    if(i<0)
+    {
+        kciTextEditor *tmp;
+        tmp=new kciTextEditor(this);
+        tmp->open(filePath);
+        tmp->setDocumentTitle(name);
+        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+        return addTab(tmp,name);
+    }
+}
+
+void kciTabManager::openAndJumpTo(const QString &filePath)
+{
+    setCurrentIndex(open(filePath));
+
+}
+
 void kciTabManager::open()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
@@ -61,19 +93,15 @@ void kciTabManager::open()
                                                              tr("Open File"),
                                                              settings.value("files/historyDir").toString(),
                                                              strFileFilter);
-    kciTextEditor *tmp;
-    QString name;
-
     int i;
+    QString name;
 
     if(!file_name_list.isEmpty())
     {
         name=*file_name_list.begin();
-
         for(i=name.size()-1;i>=0;i--)
             if(name[i]=='/')
                 break;
-
         settings.setValue("files/historyDir",name.left(i));
     }
 
@@ -82,17 +110,8 @@ void kciTabManager::open()
     while(!file_name_list.isEmpty())
     {
         name=*file_name_list.begin();
-
-        tmp=new kciTextEditor(this);
-        tmp->open(name);
-
-        name=QFileInfo(name).fileName();
-        tmp->setDocumentTitle(name);
-
-        _last_tab_index=addTab(tmp,name);
-
+        _last_tab_index=open(name);
         file_name_list.pop_front();
-        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
     }
     setCurrentIndex(_last_tab_index);
     currentTextCursorChanged();
@@ -402,12 +421,12 @@ QString kciTabManager::textNowSelect()
     return returnValue;
 }
 
-void kciTabManager::switchCurrentToLine(int nLineNum)
+void kciTabManager::switchCurrentToLine(int nLineNum, int nColNum)
 {
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
     if(editor!=NULL)
     {
-        editor->setDocumentCursor(nLineNum,0);
+        editor->setDocumentCursor(nLineNum,nColNum);
     }
 }
 
@@ -443,5 +462,28 @@ int kciTabManager::getCurrentLineNum()
     else
     {
         return -1;
+    }
+}
+
+//TODO: Fixed Me!!!!!!
+
+void kciTabManager::dragEnterEvent(QDragEnterEvent *event)
+{
+    if(event->mimeData()->hasFormat("text/uri-list"))
+    {
+        event->acceptProposedAction();
+    }
+}
+
+void kciTabManager::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> urls = event->mimeData()->urls();
+    if (urls.isEmpty())
+    {
+        return;
+    }
+    for(int i=0;i<urls.count();i++)
+    {
+        qDebug()<<urls[i];
     }
 }

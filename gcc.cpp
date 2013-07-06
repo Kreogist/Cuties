@@ -55,7 +55,7 @@ void gcc::startCompile(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QStringList arg;
-    arg<<filePath<<"-g"<<"-Wall"<<"-static";
+    arg<<filePath<<"-g"<<"-Wall"<<"-lm";
 
     //unix/unix-like system
     QString programName=fileInfo.absolutePath() + "/"
@@ -68,7 +68,15 @@ void gcc::startCompile(const QString &filePath)
 
     arg<<"-o"<<programName;
 
-    qDebug()<<arg;
+    QString CompileCmdLine;
+    CompileCmdLine=gccPath;
+    for(int i=0; i<arg.count(); i++)
+    {
+        CompileCmdLine += QString(" ") + arg.at(i);
+    }
+    CompileCmdLine+="\n";
+    emit compileinfo(CompileCmdLine);
+
     connect(this,SIGNAL(readyRead()),
             this,SLOT(onOutputReady()));
 
@@ -83,12 +91,10 @@ void gcc::startCompile(const QString &filePath)
 
 void gcc::onOutputReady()
 {
-    qDebug()<<"Reach!!!";
     char str_msg[1024];
     while(readLine(str_msg,1024))
     {
         QString msg=QString::fromUtf8(str_msg);
-        qDebug()<<msg;
         emit output(msg);
     }
 }

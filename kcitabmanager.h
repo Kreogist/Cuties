@@ -29,8 +29,10 @@
 #include <QFileDialog>
 #include <QTextCursor>
 #include <QPropertyAnimation>
+#include <QTextDocument>
 #include <QErrorMessage>
 #include <QSettings>
+#include <QMimeData>
 #include <QPalette>
 
 #include "compilerbase.h"
@@ -46,7 +48,6 @@ public:
     explicit kciTabManager(QWidget *parent = 0);
     int getCurrentLineCount();
     int getCurrentLineNum();
-    void switchCurrentToLine(int nLineNum);
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -54,6 +55,8 @@ signals:
     void tabClear();
 
 public slots:
+    void openAndJumpTo(const QString& filePath);
+    int open(const QString& filePath);
     void open();
     void new_file();
     void save();
@@ -77,11 +80,14 @@ public slots:
     void currentTextCursorChanged();
     void showSearchBar();
     void setFocus();
+    void switchCurrentToLine(int nLineNum, int nColNum);
     QString textNowSelect();
 
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private:
     int tab_count;

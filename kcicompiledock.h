@@ -27,10 +27,14 @@
 #include <QSplitter>
 #include <QDebug>
 #include <QList>
+#include <QVector>
+#include <QTime>
 #include <QSignalMapper>
+#include <QRegularExpression>
 #include <QPropertyAnimation>
 #include <QPlainTextEdit>
 #include <QDockWidget>
+#include <QModelIndex>
 #include <QStandardItemModel>
 
 class kcicompiledock : public QDockWidget
@@ -41,7 +45,6 @@ public:
 
     //Tree View Controls:
     void addRootItem(QString ItemText);
-    void addLastSubItem(QString ItemText);
     void clearAllItem();
 
     //Text Controls:
@@ -52,17 +55,49 @@ public:
     void animeShowError();
     void animeHideError();
 
+    //Reset Dock
+    void resetCompileDock();
+
+    //Compile File Path
+    void setCompileFilePath(QString FilePath);
+    QString CompileFilePath();
+
 private:
+
+    struct ErrInfo
+    {
+        int nLineNum;
+        int nColumnNum;
+        QString strFilePath;
+        QString strErrDescription;
+    };
+
     QWidget *objCombine;
     QSplitter *splCombine;
     QTreeView *trevwCompileInfo;
     QStandardItemModel *compileInfo;
     QPlainTextEdit *compileOutput;
+    QRegularExpression *expressMsg;
+
+    bool ErrorOccur;
+    bool WarningOccur;
+    bool hasError;
+    int lastSelID;
+    QVector<ErrInfo> erifList;
+    QString strCompileFilePath;
 
 signals:
+    void requireOpenErrFile(QString filePath);
+    void requireGotoLine(int nLineNum, int nColNum);
+    void requireSetFocus();
     
 public slots:
+    void outputCompileInfo(QString msg);
     void parseMessage(QString msg);
+
+private slots:
+    void selectAnError(QModelIndex ItemID);
+    void jumpToError(QModelIndex ItemID);
     
 };
 

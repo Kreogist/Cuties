@@ -332,6 +332,12 @@ void MainWindow::createTitlebar()
 void MainWindow::createDocks()
 {
     compileDock=new kcicompiledock(this);
+    connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
+            tabManager,SLOT(openAndJumpTo(QString)));
+    connect(compileDock,SIGNAL(requireGotoLine(int,int)),
+            tabManager,SLOT(switchCurrentToLine(int,int)));
+    connect(compileDock,SIGNAL(requireSetFocus()),
+            tabManager,SLOT(setFocus()));
     addDockWidget(Qt::BottomDockWidgetArea,compileDock);
     //TODO: Configure Hide.
     compileDock->hide();
@@ -682,23 +688,35 @@ void MainWindow::compileCurrentFile()
         }
         //File is Ok now, Get Dock Ready.
         //Clear All Dock Info.
-        compileDock->clearAllItem();
-        compileDock->clearText();
+        compileDock->resetCompileDock();
+        //Set Compile File Path.
+        compileDock->setCompileFilePath(currentEditor->getFilePath());
         //Active Compile Dock.
         compileDock->setVisible(true);
         //Set To Compile Mode.
         compileDock->animeHideError();
         //Prepare Compiler
-        compileDock->addText(tr("Preparing Compiler.\n"));
+        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
+                             " " +
+                             tr("Preparing Compiler.")+
+                             "\n");
         //Get a compiler ready.
         compilerBase *currentCompiler=
                 compilerBaseFactor::createCompilerBase(currentEditor->getFilePath(), currentEditor);
         //Get Compiler Info.
-        compileDock->addText("Compiler: " +
+        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
+                             " " +
+                             tr("Current Compiler Details:") +
                              currentCompiler->version() +
                              "\n");
-        //Ouput Compile Message:
+        //Output Compile Message:
+        connect(currentCompiler,&compilerBase::compileinfo,compileDock,&kcicompiledock::outputCompileInfo);
         connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::parseMessage);
+        //Output Compile Info:
+        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
+                             " " +
+                             tr("Compile Command:") +
+                             "\n");
         currentCompiler->startCompile(currentEditor->getFilePath());
         currentCompiler->waitForFinished();
     }
@@ -723,7 +741,7 @@ void MainWindow::statusShowGoto()
 
 void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
 {
-    tabManager->switchCurrentToLine(NewLineNumber-1);
+    tabManager->switchCurrentToLine(NewLineNumber-1,0);
 }
 
 void MainWindow::showPreference()
