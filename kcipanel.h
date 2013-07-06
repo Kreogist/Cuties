@@ -32,12 +32,14 @@
 #include <QFontMetrics>
 #include <QDebug>
 
+#include "kcicodeeditor.h"
+
 class kciPanel : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciPanel(QWidget *parent = 0);
-    void setPlainTextEdit(QPlainTextEdit* editor);
+    void setKciCodeEditor(kciCodeEditor* editor);
     
 signals:
     
@@ -50,9 +52,9 @@ protected:
                       bool isCurrentLine) = 0;
     
 private:
-    QPlainTextEdit *e;
+    kciCodeEditor *e;
 
-    QMetaObject::Connection eConnection,edConnection,etConnection;
+    QMetaObject::Connection edConnection,etConnection,euConnection;
 };
 
 #endif // PANEL_H

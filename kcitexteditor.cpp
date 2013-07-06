@@ -48,8 +48,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     mainLayout->addWidget(markPanel);
 
     editor=new kciCodeEditor(this);
-    linePanel->setPlainTextEdit(editor);
-    markPanel->setPlainTextEdit(editor);
+    linePanel->setKciCodeEditor(editor);
+    markPanel->setKciCodeEditor(editor);
     document=editor->document();
     mainLayout->addWidget(editor);
     mainLayout->addSpacing(1);
@@ -387,7 +387,7 @@ int kciTextEditor::getTextLines()
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 {
      QTextCursor cursor = editor->textCursor();
-     cursor.setPosition(editor->document()->findBlockByLineNumber(nLine).position());
+     cursor.setPosition(editor->document()->findBlockByNumber(nLine).position());
      cursor.movePosition(QTextCursor::NextCharacter,
                           QTextCursor::MoveAnchor,
                           linePos);

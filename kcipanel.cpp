@@ -29,14 +29,12 @@ kciPanel::kciPanel(QWidget *parent) :
     setAutoFillBackground(true);
 }
 
-void kciPanel::setPlainTextEdit(QPlainTextEdit *editor)
+void kciPanel::setKciCodeEditor(kciCodeEditor *editor)
 {
     if(editor!=NULL)
     {
         if(e!=NULL)
         {
-            if((bool)eConnection)
-                disconnect(eConnection);
             if((bool)etConnection)
                 disconnect(etConnection);
             if((bool)edConnection)
@@ -44,13 +42,8 @@ void kciPanel::setPlainTextEdit(QPlainTextEdit *editor)
         }
 
         e=editor;
-        eConnection=connect(e->verticalScrollBar(),
-                            SIGNAL(valueChanged(int)),
-                            this,
-                            SLOT(update()));
 
-        etConnection=connect(e,SIGNAL(cursorPositionChanged()),
-                             this,SLOT(update()));
+        etConnection=connect(e,SIGNAL(updated()),this,SLOT(update()));
 
         if(e->document())
             edConnection=connect(e->document()->documentLayout(),
@@ -85,38 +78,38 @@ void kciPanel::paintEvent(QPaintEvent *event)
      *       always be (0,0).
      */
 
-    int line_hight = e->fontMetrics().lineSpacing(),
+    int line_height = e->fontMetrics().lineSpacing(),
         current_line_num=e->textCursor().block().blockNumber();
 
-    int top=e->verticalScrollBar()->value(),
-        bottom=e->height()/line_hight + 1;
+    int top=e->verticalScrollBar()->value();
 
-    int block_top = (top==0)?e->geometry().y() + 7 : 3;
+    int block_top = (top==0)?e->geometry().y() + 7 : 3,
+        bottom=e->height()/line_height;
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();
     setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);
 
-    for(;
-        block.isValid() && block.isVisible();
+    //find first visiable block
+    for(int line_count=0;block.isValid();
         block=block.next())
     {
-        if(block.blockNumber() < top)
-        {
-            continue;
-        }
-
-        if(block.blockNumber() > top + bottom)
-        {
+        line_count+=block.lineCount();
+        if(line_count>top)
             break;
-        }
+    }
 
+    for(;bottom>=0 && block.isValid();
+        block=block.next())
+    {
+        int block_height=line_height*block.lineCount();
         painter.save();
         this->draw(&painter, &block,
-                   0, block_top, width(), e->fontMetrics().height(),
+                   0, block_top, width(), block_height,
                    current_line_num==block.blockNumber()?1:0);
         painter.restore();
 
-        block_top += line_hight;
+        block_top += block_height;
+        bottom-=block.lineCount();
     }
 }
