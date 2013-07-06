@@ -57,6 +57,7 @@ kciTabManager::kciTabManager(QWidget *parent) :
 int kciTabManager::open(const QString& filePath)
 {
     QString name=QFileInfo(filePath).fileName();
+    //Check if file has been opened.
     int i=count();
     while(i--)
     {
@@ -69,15 +70,13 @@ int kciTabManager::open(const QString& filePath)
             }
         }
     }
-    if(i<0)
-    {
-        kciTextEditor *tmp;
-        tmp=new kciTextEditor(this);
-        tmp->open(filePath);
-        tmp->setDocumentTitle(name);
-        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
-        return addTab(tmp,name);
-    }
+    //File has not been opened, then open it and add tab.
+    kciTextEditor *tmp;
+    tmp=new kciTextEditor(this);
+    tmp->open(filePath);
+    tmp->setDocumentTitle(name);
+    connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+    return addTab(tmp,name);
 }
 
 void kciTabManager::openAndJumpTo(const QString &filePath)

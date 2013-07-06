@@ -7,4 +7,5 @@ plaintextHighlighter::plaintextHighlighter(QObject *parent):
 
 void plaintextHighlighter::highlightBlock(const QString &text)
 {
+    Q_UNUSED(text);
 }
