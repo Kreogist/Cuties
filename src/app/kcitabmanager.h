@@ -64,8 +64,7 @@ public slots:
     void new_file();
     void save();
     void save_as();
-    void save_all();
-    //void text_changed();
+    void save_all();\
     void redo();
     void undo();
     void copy();
@@ -97,7 +96,7 @@ private:
     int new_file_count;
     QString strFileFilter;
     QTextCursor currentTextCursor;
-    bool isEditor;  //is current widget a widget
+    kciTextEditor *currentEditor;
 };
 
 #endif // TABMANAGER_H

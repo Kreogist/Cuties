@@ -54,7 +54,6 @@ kciTabManager::kciTabManager(QWidget *parent) :
     setTabPosition(QTabWidget::South);
     tab_count=1;
     new_file_count=1;
-    isEditor=false;
 }
 
 int kciTabManager::open(const QString& filePath)
@@ -163,11 +162,8 @@ void kciTabManager::switchPrevTab()
 
 void kciTabManager::save()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
 
         if(Q_UNLIKELY(!currentEditor->save()))
         {
@@ -180,12 +176,8 @@ void kciTabManager::save()
 
 void kciTabManager::save_as()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
-
         if(Q_UNLIKELY(!currentEditor->saveAs()))
         {
             QErrorMessage error(this);
@@ -244,66 +236,48 @@ void kciTabManager::close_all_other_tab()
 
 void kciTabManager::undo()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
         currentEditor->undo();
     }
 }
 
 void kciTabManager::redo()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
         currentEditor->redo();
     }
 }
 
 void kciTabManager::copy()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
         currentEditor->copy();
     }
 }
 
 void kciTabManager::cut()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
         currentEditor->cut();
     }
 }
 
 void kciTabManager::paste()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
         currentEditor->paste();
     }
 }
 
 void kciTabManager::select_all()
 {
-    if(Q_LIKELY(this->isEditor))
+    if(Q_LIKELY(currentEditor!=NULL))
     {
-        kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(this->currentWidget());
-
-        Q_ASSERT(currentEditor!=NULL);
         currentEditor->selectAll();
     }
 }
@@ -336,12 +310,12 @@ void kciTabManager::on_current_tab_change(int index)
     kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(index));
     if(editor!=NULL)
     {
-        isEditor=true;
+        currentEditor=editor;
         editor->setTextFocus();
     }
     else
     {
-        isEditor=false;
+        currentEditor=NULL;
     }
     currentTextCursorChanged();
 }
@@ -425,28 +399,25 @@ QString kciTabManager::textNowSelect()
 
 void kciTabManager::switchCurrentToLine(int nLineNum, int nColNum)
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
-    if(editor!=NULL)
+    if(currentEditor!=NULL)
     {
-        editor->setDocumentCursor(nLineNum,nColNum);
+        currentEditor->setDocumentCursor(nLineNum,nColNum);
     }
 }
 
 void kciTabManager::setFocus()
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
-    if(editor!=NULL)
+    if(currentEditor!=NULL)
     {
-        editor->setTextFocus();
+        currentEditor->setTextFocus();
     }
 }
 
 int kciTabManager::getCurrentLineCount()
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
-    if(editor!=NULL)
+    if(currentEditor!=NULL)
     {
-        return editor->document->blockCount();
+        return currentEditor->document->blockCount();
     }
     else
     {
@@ -456,10 +427,9 @@ int kciTabManager::getCurrentLineCount()
 
 int kciTabManager::getCurrentLineNum()
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
-    if(editor!=NULL)
+    if(currentEditor!=NULL)
     {
-        return editor->getTextCursor().blockNumber()+1;
+        return currentEditor->getTextCursor().blockNumber()+1;
     }
     else
     {

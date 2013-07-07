@@ -536,7 +536,7 @@
     <message>
         <location filename="mainwindow.cpp" line="313"/>
         <source>Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="360"/>
