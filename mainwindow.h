@@ -42,6 +42,7 @@
 
 #include "kciglobal.h"
 #include "kcicompiledock.h"
+#include "kcijudgedock.h"
 #include "kcititlebar.h"
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
@@ -62,6 +63,7 @@ public slots:
     void compileCurrentFile();
     void searchOnline();
     void diffVisibleCompileDock();
+    void diffVisibleJudgeDock();
     void statusShowGoto();
 
     void setNoDocOpenMenuEnabled();
@@ -95,6 +97,7 @@ private:
         mnuEditSelectAll,
         mnuEditPreference,
         mnuViewCompileDock,
+        mnuViewJudgeDock,
         mnuSearchFind,
         mnuSearchFindInFiles,
         mnuSearchReplace,
@@ -138,8 +141,8 @@ private:
         mnuInsert,
         mnuRun,
         mnuDebug,
+        mnuTool,
         mnuWindow,
-        mnuPlugins,
         mnuHelp,
         menu_count  //the number of menus
     };
@@ -151,6 +154,7 @@ private:
     QString actStatusTips[act_count], actMenuIconPath[act_count];
     QRect savedGeometry;
     kcicompiledock *compileDock;
+    kciJudgeDock *judgeDock;
     kciTitleBar *titlebar;
     kciStatusBar *myStatusBar;
 

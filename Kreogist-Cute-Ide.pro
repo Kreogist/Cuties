@@ -55,7 +55,8 @@ SOURCES += \
     kcisearchwindow.cpp \
     kcistatuscursorinfo.cpp \
     kcicontrolcenter.cpp \
-    kciexecutor.cpp
+    kciexecutor.cpp \
+    kcijudgedock.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -86,7 +87,8 @@ HEADERS += \
     kcisearchwindow.h \
     kcistatuscursorinfo.h \
     kcicontrolcenter.h \
-    kciexecutor.h
+    kciexecutor.h \
+    kcijudgedock.h
 
 # Enable C++11
 CONFIG += c++11

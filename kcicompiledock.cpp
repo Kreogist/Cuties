@@ -32,7 +32,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     trevwCompileInfo=new QTreeView(this);
     trevwCompileInfo->setContentsMargins(0,0,0,0);
     pal=trevwCompileInfo->palette();
-    pal.setColor(QPalette::Foreground,QColor(255,255,255));
+    pal.setColor(QPalette::WindowText,QColor(255,255,255));
     trevwCompileInfo->setPalette(pal);
     trevwCompileInfo->setHeaderHidden(true);
     trevwCompileInfo->setGeometry(0,0,0,0);
@@ -82,8 +82,8 @@ void kcicompiledock::selectAnError(QModelIndex ItemID)
     {
         QString strSelErrText;
         strSelErrText=erifList[lastSelID].strErrDescription + "\n" +
-                tr("Line ") + QString::number(erifList[lastSelID].nLineNum) + ", " +
-                tr("Column ") + QString::number(erifList[lastSelID].nColumnNum) + "\n" +
+                tr("Line ") + QString::number(erifList[lastSelID].nLineNum) + tr(", ") +
+                tr("Column ") + QString::number(erifList[lastSelID].nColumnNum) + tr(". ") + "\n" +
                 tr("At file: ") + erifList[lastSelID].strFilePath;
         compileInfo->itemFromIndex(ItemID)->setText(strSelErrText);
     }

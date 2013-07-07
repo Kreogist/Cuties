@@ -6,7 +6,6 @@
         <file>image/SearchMenuIcon.png</file>
         <file>image/InsertMenuIcon.png</file>
         <file>image/RunMenuIcon.png</file>
-        <file>image/PluginMenuIcon.png</file>
         <file>image/HelpMenuIcon.png</file>
         <file>image/DebugMenuIcon.png</file>
         <file>image/ViewMenuIcon.png</file>
@@ -15,6 +14,7 @@
         <file>image/leftSearchButton.png</file>
         <file>image/rightSearchButton.png</file>
         <file>image/WindowMenuItem.png</file>
+        <file>image/ToolMenuIcon.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>
