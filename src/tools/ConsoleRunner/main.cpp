@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     //get end time
     exec_time= gettime()-exec_time;
 
+    printf("\n------------------------------------------------------------\n");
     printf("Program execution time : %0.3lf s",exec_time);
 
     printf("\nPress "
