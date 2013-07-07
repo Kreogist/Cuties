@@ -13,7 +13,7 @@ double gettime()
     LARGE_INTEGER time;
     QueryPerformanceFrequency(&freq);
     QueryPerformanceCounter(&time);
-    return (double)time.QuadPart/(double)freq;
+    return (double)(time.QuadPart)/(double)(freq.QuadPart);
 }
 
 #else

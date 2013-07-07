@@ -1,3 +1,26 @@
+/*
+ *  Copyright 2013 Kreogist Dev Team
+ *
+ *      Wang Luming <wlm199558@126.com>
+ *      Miyanaga Saki <tomguts@126.com>
+ *      Zhang Jiayi <bf109g2@126.com>
+ *
+ *  This file is part of Kreogist-Cute-IDE.
+ *
+ *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "kcicompiledock.h"
 
 kcicompiledock::kcicompiledock(QWidget *parent):
@@ -32,7 +55,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     trevwCompileInfo=new QTreeView(this);
     trevwCompileInfo->setContentsMargins(0,0,0,0);
     pal=trevwCompileInfo->palette();
-    pal.setColor(QPalette::Foreground,QColor(255,255,255));
+    pal.setColor(QPalette::WindowText,QColor(255,255,255));
     trevwCompileInfo->setPalette(pal);
     trevwCompileInfo->setHeaderHidden(true);
     trevwCompileInfo->setGeometry(0,0,0,0);
@@ -82,8 +105,8 @@ void kcicompiledock::selectAnError(QModelIndex ItemID)
     {
         QString strSelErrText;
         strSelErrText=erifList[lastSelID].strErrDescription + "\n" +
-                tr("Line ") + QString::number(erifList[lastSelID].nLineNum) + ", " +
-                tr("Column ") + QString::number(erifList[lastSelID].nColumnNum) + "\n" +
+                tr("Line ") + QString::number(erifList[lastSelID].nLineNum) + tr(", ") +
+                tr("Column ") + QString::number(erifList[lastSelID].nColumnNum) + tr(". ") + "\n" +
                 tr("At file: ") + erifList[lastSelID].strFilePath;
         compileInfo->itemFromIndex(ItemID)->setText(strSelErrText);
     }

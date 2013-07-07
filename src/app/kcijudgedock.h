@@ -21,43 +21,50 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_H
-#define PANEL_H
+#ifndef KCIJUDGEDOCK_H
+#define KCIJUDGEDOCK_H
 
-#include <QMetaObject>
+#include <QList>
+#include <QLabel>
 #include <QWidget>
+#include <QPalette>
+#include <QSplitter>
+#include <QTreeView>
 #include <QPlainTextEdit>
-#include <QTextBlock>
-#include <QPainter>
-#include <QScrollBar>
-#include <QAbstractTextDocumentLayout>
-#include <QFont>
-#include <QFontMetrics>
-#include <QDebug>
+#include <QTabWidget>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QDockWidget>
 
-#include "kcicodeeditor.h"
-
-class kciPanel : public QWidget
+class kciJudgeFileEdit : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciPanel(QWidget *parent = 0);
-    void setKciCodeEditor(kciCodeEditor* editor);
+    explicit kciJudgeFileEdit(QWidget *parent = 0);
+
+private:
+    QLabel *lblInput, *lblOutput, *lblUserOutput;
+    QPlainTextEdit *InputFileEdit, *OutputFileEdit, *UserOutput;
+    QVBoxLayout *EditLayout;
+};
+
+class kciJudgeDock : public QDockWidget
+{
+    Q_OBJECT
+public:
+    explicit kciJudgeDock(QWidget *parent = 0);
     
 signals:
     
 public slots:
 
-protected:
-    void paintEvent(QPaintEvent *event);
-    virtual void draw(QPainter *painter, QTextBlock *block ,
-                      int x, int y, int w, int h,
-                      bool isCurrentLine) = 0;
-    
 private:
-    kciCodeEditor *e;
+    QTreeView *trevwJudgeList;
+    QSplitter *splCombine;
+    QTabWidget *tabJudgeFiles;
+    QList<int> l_sizes;
+    QToolButton *addANewTab;
 
-    QMetaObject::Connection edConnection,etConnection,euConnection;
 };
 
-#endif // PANEL_H
+#endif // KCIJUDGEDOCK_H

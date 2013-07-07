@@ -1,8 +1,11 @@
 /*
- *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Miyanaga Saki <tomguts@126.com>
+ *  Copyright 2013 Kreogist Dev Team
  *
- *  mainwindow.cpp is part of Kreogist-Cute-IDE.
+ *      Wang Luming <wlm199558@126.com>
+ *      Miyanaga Saki <tomguts@126.com>
+ *      Zhang Jiayi <bf109g2@126.com>
+ *
+ *  This file is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -158,6 +161,11 @@ void MainWindow::createActions()
     act[mnuViewCompileDock]=new QAction(tr("Compile Dock"),this);
     actStatusTips[mnuViewCompileDock]=QString(tr("Show Compile Info Dock."));
     connect(act[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
+
+    //View -> Judge Dock
+    act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
+    actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
+    connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));
 
     //Search -> Search
     act[mnuSearchFind]=new QAction(tr("searchinfile"),this);
@@ -331,6 +339,11 @@ void MainWindow::createTitlebar()
 
 void MainWindow::createDocks()
 {
+    //Judge Dock
+    judgeDock=new kciJudgeDock(this);
+    addDockWidget(Qt::RightDockWidgetArea, judgeDock);
+
+    //Compile Dock
     compileDock=new kcicompiledock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
             tabManager,SLOT(openAndJumpTo(QString)));
@@ -378,7 +391,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView] = _mainMenu->addMenu(tr("view"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewCompileDock;i<=mnuViewCompileDock;i++)
+    for(i=mnuViewCompileDock;i<=mnuViewJudgeDock;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -427,6 +440,11 @@ void MainWindow::createMenu()
         menu[mnuDebug]->addAction(act[i]);
     }
 
+    //Tool menu
+    MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
+    menu[mnuTool] = _mainMenu->addMenu(tr("tool"));
+    menu[mnuTool]->setIcon(*MenuIconAddor);
+
     //window menu
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
     menu[mnuWindow] = _mainMenu->addMenu(tr("window"));
@@ -438,11 +456,6 @@ void MainWindow::createMenu()
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuWindow]->addAction(act[i]);
     }
-
-    //plugins menu
-    MenuIconAddor->addFile(QString(":/img/image/PluginMenuIcon.png"));
-    menu[mnuPlugins] = _mainMenu->addMenu(tr("plugins"));
-    menu[mnuPlugins]->setIcon(*MenuIconAddor);
 
     //help menu
     MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
@@ -731,6 +744,11 @@ void MainWindow::searchOnline()
 void MainWindow::diffVisibleCompileDock()
 {
     compileDock->setVisible(!compileDock->isVisible());
+}
+
+void MainWindow::diffVisibleJudgeDock()
+{
+    judgeDock->setVisible(!judgeDock->isVisible());
 }
 
 void MainWindow::statusShowGoto()

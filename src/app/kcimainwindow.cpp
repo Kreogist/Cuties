@@ -1,7 +1,11 @@
 /*
- *  Copyright 2013 Wang Luming <wlm199558@126.com>
+ *  Copyright 2013 Kreogist Dev Team
  *
- *  kcimainwindow.h is part of Kreogist-Cute-IDE.
+ *      Wang Luming <wlm199558@126.com>
+ *      Miyanaga Saki <tomguts@126.com>
+ *      Zhang Jiayi <bf109g2@126.com>
+ *
+ *  This file is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -79,28 +83,26 @@ void kciMainWindow::mousePressEvent(QMouseEvent *e)
     w_w=this->width();
     w_h=this->height();
 
-    qDebug()<<w_x<<w_y<<w_w<<w_h<<m_x<<m_y;
+    //qDebug()<<w_x<<w_y<<w_w<<w_h<<m_x<<m_y;
 
     if(m_x>=w_x && m_x<=(w_x+w_w) && m_y>=(w_y-we+w_h) && m_y<=(w_y+we+w_h))
     {
         isbottom=true;
-        qDebug()<<"top";
+        //qDebug()<<"top";
     }
 
     else if(m_x>=(w_x-we) && m_x<=(w_x+we) && m_y>=w_y && m_y<=(w_y+w_h))
     {
         isleft=true;
-        qDebug()<<"left";
+        //qDebug()<<"left";
     }
 
     else if(m_x>=(w_x+w_w-we) && m_x<=(w_x+w_w+we) && m_y>=w_y && m_y<=(w_y+w_h))
     {
         isright=true;
-        qDebug()<<"right";
+        //qDebug()<<"right";
     }
-
-
-    qDebug()<<"press";
+    //qDebug()<<"press";
 }
 
 

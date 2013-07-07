@@ -1,7 +1,10 @@
 #-------------------------------------------------
-#   Copyright 2013 Wang Luming <wlm199558@126.com>
-#   Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
-#   Copyright 2013 Zhang Jiayi <bf109g2@126.com>
+#
+#   Copyright 2013 Kreogist Dev Team
+#
+#       Wang Luming <wlm199558@126.com>
+#       Miyanaga Saki <tomguts@126.com>
+#       Zhang Jiayi <bf109g2@126.com>
 #
 #     Kreogist-Cute-IDE is free software: you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as published
@@ -55,7 +58,8 @@ SOURCES += \
     kcisearchwindow.cpp \
     kcistatuscursorinfo.cpp \
     kcicontrolcenter.cpp \
-    kciexecutor.cpp
+    kciexecutor.cpp \
+    kcijudgedock.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -86,7 +90,8 @@ HEADERS += \
     kcisearchwindow.h \
     kcistatuscursorinfo.h \
     kcicontrolcenter.h \
-    kciexecutor.h
+    kciexecutor.h \
+    kcijudgedock.h
 
 # Enable C++11
 CONFIG += c++11
@@ -95,3 +100,10 @@ RESOURCES += \
     rc.qrc
 
 TRANSLATIONS += zh_CN.ts
+
+OTHER_FILES += \
+    zh_CN.ts \
+    lang.map \
+    Kreogist-Cute-Ide.pro~ \
+    default.style \
+    COPYING.txt

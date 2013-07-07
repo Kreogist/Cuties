@@ -1,8 +1,11 @@
 /*
- *  Copyright 2013 Wang Luming <wlm199558@126.com>
- *  Copyright 2013 Ye Haolei(Miyanaga Saki) <tomguts@126.com>
+ *  Copyright 2013 Kreogist Dev Team
  *
- *  mainwindow.h is part of Kreogist-Cute-IDE.
+ *      Wang Luming <wlm199558@126.com>
+ *      Miyanaga Saki <tomguts@126.com>
+ *      Zhang Jiayi <bf109g2@126.com>
+ *
+ *  This file is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,7 +18,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef MAINWINDOW_H
@@ -42,6 +45,7 @@
 
 #include "kciglobal.h"
 #include "kcicompiledock.h"
+#include "kcijudgedock.h"
 #include "kcititlebar.h"
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
@@ -62,6 +66,7 @@ public slots:
     void compileCurrentFile();
     void searchOnline();
     void diffVisibleCompileDock();
+    void diffVisibleJudgeDock();
     void statusShowGoto();
 
     void setNoDocOpenMenuEnabled();
@@ -95,6 +100,7 @@ private:
         mnuEditSelectAll,
         mnuEditPreference,
         mnuViewCompileDock,
+        mnuViewJudgeDock,
         mnuSearchFind,
         mnuSearchFindInFiles,
         mnuSearchReplace,
@@ -138,8 +144,8 @@ private:
         mnuInsert,
         mnuRun,
         mnuDebug,
+        mnuTool,
         mnuWindow,
-        mnuPlugins,
         mnuHelp,
         menu_count  //the number of menus
     };
@@ -151,6 +157,7 @@ private:
     QString actStatusTips[act_count], actMenuIconPath[act_count];
     QRect savedGeometry;
     kcicompiledock *compileDock;
+    kciJudgeDock *judgeDock;
     kciTitleBar *titlebar;
     kciStatusBar *myStatusBar;
 

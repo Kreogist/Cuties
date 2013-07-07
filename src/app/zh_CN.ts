@@ -239,20 +239,39 @@
         <translation>切换到上一个标签。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="426"/>
+        <location filename="mainwindow.cpp" line="437"/>
+        <source>tool</source>
+        <translation>工具</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="442"/>
         <source>window</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="679"/>
+        <location filename="mainwindow.cpp" line="690"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="692"/>
+        <location filename="mainwindow.cpp" line="706"/>
+        <source>Preparing Compiler.</source>
+        <translation>正在准备编译器。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="714"/>
+        <source>Current Compiler Details:</source>
+        <translation>当前编译器信息：</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="723"/>
+        <source>Compile Command:</source>
+        <translation>编译命令：</translation>
+    </message>
+    <message>
         <source>Preparing Compiler.
 </source>
-        <translation>正在准备编译器。</translation>
+        <translation type="obsolete">正在准备编译器。</translation>
     </message>
     <message>
         <source>Compile all files.</source>
@@ -520,37 +539,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="349"/>
+        <location filename="mainwindow.cpp" line="360"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="361"/>
+        <location filename="mainwindow.cpp" line="372"/>
         <source>edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="373"/>
+        <location filename="mainwindow.cpp" line="384"/>
         <source>view</source>
         <translation>视图</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="385"/>
+        <location filename="mainwindow.cpp" line="396"/>
         <source>search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="397"/>
+        <location filename="mainwindow.cpp" line="408"/>
         <source>insert</source>
         <translation>插入</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="414"/>
+        <location filename="mainwindow.cpp" line="425"/>
         <source>debug</source>
         <translation>调试</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="402"/>
+        <location filename="mainwindow.cpp" line="413"/>
         <source>run</source>
         <translation>运行</translation>
     </message>
@@ -561,12 +580,11 @@
         <translation>Kreogist Cuties</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="438"/>
         <source>plugins</source>
-        <translation>插件</translation>
+        <translation type="obsolete">插件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="443"/>
+        <location filename="mainwindow.cpp" line="454"/>
         <source>help</source>
         <translation>帮助</translation>
     </message>
@@ -733,24 +751,24 @@
 <context>
     <name>kciTabManager</name>
     <message>
-        <location filename="kcitabmanager.cpp" line="61"/>
+        <location filename="kcitabmanager.cpp" line="92"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="109"/>
+        <location filename="kcitabmanager.cpp" line="127"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="118"/>
+        <location filename="kcitabmanager.cpp" line="136"/>
         <source>out of memmory!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="154"/>
-        <location filename="kcitabmanager.cpp" line="171"/>
+        <location filename="kcitabmanager.cpp" line="172"/>
         <location filename="kcitabmanager.cpp" line="189"/>
+        <location filename="kcitabmanager.cpp" line="207"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>
@@ -855,9 +873,43 @@
 <context>
     <name>kcicompiledock</name>
     <message>
+        <source>Compile Dock</source>
+        <translation type="obsolete">编译器栏</translation>
+    </message>
+    <message>
         <location filename="kcicompiledock.cpp" line="18"/>
         <source>Compiler</source>
         <translation>编译器</translation>
+    </message>
+    <message>
+        <location filename="kcicompiledock.cpp" line="85"/>
+        <source>Line </source>
+        <translation>第 </translation>
+    </message>
+    <message>
+        <location filename="kcicompiledock.cpp" line="85"/>
+        <source>, </source>
+        <translation> 行，</translation>
+    </message>
+    <message>
+        <location filename="kcicompiledock.cpp" line="86"/>
+        <source>Column </source>
+        <translation>第 </translation>
+    </message>
+    <message>
+        <location filename="kcicompiledock.cpp" line="86"/>
+        <source>. </source>
+        <translation> 列。</translation>
+    </message>
+    <message>
+        <location filename="kcicompiledock.cpp" line="87"/>
+        <source>At file: </source>
+        <translation>在文件：</translation>
+    </message>
+    <message>
+        <location filename="kcicompiledock.cpp" line="144"/>
+        <source>Compile Output:</source>
+        <translation>编译输出：</translation>
     </message>
 </context>
 </TS>
