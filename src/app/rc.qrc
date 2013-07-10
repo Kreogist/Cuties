@@ -51,4 +51,10 @@
         <file>image/Control Center/cciDebugger.png</file>
         <file>image/Control Center/cciFileAssociation.png</file>
     </qresource>
+    <qresource prefix="/JudgeToolBar">
+        <file>image/Judge Dock/ToolBarAdd.png</file>
+        <file>image/Judge Dock/ToolBarRemove.png</file>
+        <file>image/Judge Dock/ToolBarStartAll.png</file>
+        <file>image/Judge Dock/ToolBarStop.png</file>
+    </qresource>
 </RCC>

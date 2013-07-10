@@ -138,7 +138,7 @@ void kciMainWindow::mouseReleaseEvent(QMouseEvent *)
     istop=false;
     isright=false;
     isbottom=false;
-    qDebug()<<"release";
+    //qDebug()<<"release";
 }
 /*bool kciMainWindow::eventFilter(QObject *obj, QEvent *e)
 {
