@@ -29,15 +29,61 @@ const QString console_runner_path("KciConsoleRunner.exe");
 const QString console_runner_path("KciConsoleRunner");
 #endif
 
-kciRunner::kciRunner(QObject *parent):
-    QThread(parent)
+#ifdef Q_OS_WIN32
+static const int terminalCount = 1;
+static const Terminal knownTerminals[terminalCount] =
 {
+    {"cmd", ""},
+};
+#else
+static const int terminalCount = 8;
+static const Terminal knownTerminals[terminalCount] =
+{
+    {"xterm", "-e"},
+    {"gnome-terminal", "-x"},
+    {"konsole", "-e"},
+    {"aterm", "-e"},
+    {"Eterm", "-e"},
+    {"rxvt", "-e"},
+    {"urxvt", "-e"},
+    {"xfce4-terminal", "-x"}
+};
+#endif
+
+Terminal kciRunner::getDefaultTerminal()
+{
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    settings.beginGroup("DefaultTerminal");
+    Terminal ret(
+           settings.value("name", knownTerminals[0].terminal_name).toByteArray().constData(),
+           settings.value("arg",knownTerminals[0].arg).toByteArray().constData());
+    settings.endGroup();
+
+    return ret;
+}
+
+QStringList kciExecutor::getSupportTerminalList()
+{
+    QStringList ret;
+    for(int i=0;i<terminalCount;i++)
+        ret<<knownTerminals[i].terminal_name;
+    return ret;
+}
+
+void kciExecutor::setDefaultTerminal(const int& num)
+{
+    if(Q_LIKELY(num<terminalCount))
+    {
+        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+        settings.beginGroup("DefaultTerminal");
+        settings.setValue("name",knownTerminals[num].terminal_name);
+        settings.value("arg",knownTerminals[num].arg);
+        settings.endGroup();
+    }
 }
 
 void kciRunner::run()
 {
-    kciExecutor *p=qobject_cast<kciExecutor*>(parent());
-
     if(p!=NULL)
     {
         p->lock.lockForRead();
@@ -51,7 +97,7 @@ void kciRunner::run()
 
         if(p->enabledBackExec)
         {
-            p->process=new QProcess(this);
+            p->process=new QProcess;
             p->process->setReadChannelMode(QProcess::MergedChannels);
             connect(p->process,SIGNAL(readyRead()),
                     this,SLOT(onReadyRead()));
@@ -59,11 +105,13 @@ void kciRunner::run()
         }
         else
         {
+            Terminal terminal=getDefaultTerminal();
             QStringList arg;
-            arg<<p->path;
-            p->process=new QProcess(this);
-            p->process->startDetached(console_runner_path,arg);
-
+            arg<<terminal.arg<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
+            p->process=new QProcess;
+            qDebug()<<arg;
+            //p->process->startDetached(qApp->applicationDirPath()+'/'+console_runner_path,arg);
+            p->process->startDetached(QLatin1String(terminal.terminal_name),arg);
         }
 
         if(p->enabledAutoInput)
@@ -71,11 +119,11 @@ void kciRunner::run()
 
         p->lock.unlock();
     }
+    exec();
 }
 
 void kciRunner::onReadyRead()
 {
-    kciExecutor *p=qobject_cast<kciExecutor*>(parent());
     if(p!=NULL)
     {
         p->output_lock.lockForWrite();
@@ -90,6 +138,8 @@ kciExecutor::kciExecutor(QObject *parent) :
     QObject(parent)
 {
     enabledBackExec=false;
+    process=NULL;
+    worker=NULL;
 }
 
 kciExecutor::~kciExecutor()
@@ -153,7 +203,8 @@ void kciExecutor::exec(const QString &programPath)
         delete worker;
     }
 
-    worker=new kciRunner(this);
+    worker=new kciRunner;
+    worker->p=this;
     worker->start();
 
     lock.unlock();

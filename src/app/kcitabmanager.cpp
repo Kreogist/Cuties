@@ -379,12 +379,11 @@ void kciTabManager::showSearchBar()
 }
 
 QString kciTabManager::textNowSelect()
-{
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+{\
     QString returnValue;
-    if(editor!=NULL)
+    if(currentEditor!=NULL)
     {
-        returnValue=editor->getSelectedText();
+        returnValue=currentEditor->getSelectedText();
         if(returnValue.isEmpty())
         {
             returnValue="";

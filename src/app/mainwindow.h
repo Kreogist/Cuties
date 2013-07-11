@@ -36,6 +36,7 @@
 #include <QToolButton>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include <QFileInfo>
 #include <QSettings>
 #include <QSize>
 #include <QDesktopWidget>
@@ -51,6 +52,7 @@
 #include "kcitabmanager.h"
 #include "kcimainwindow.h"
 #include "kcicontrolcenter.h"
+#include "kciexecutor.h"
 
 class MainWindow : public kciMainWindow
 {
@@ -64,6 +66,8 @@ public slots:
     void aboutQt();
     void aboutKCI();
     void compileCurrentFile();
+    void run();
+    void compileAndRun();
     void searchOnline();
     void diffVisibleCompileDock();
     void diffVisibleJudgeDock();

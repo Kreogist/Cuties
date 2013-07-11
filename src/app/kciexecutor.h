@@ -25,12 +25,31 @@
 #define KCIEXECUTOR_H
 
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QThread>
 #include <QByteArray>
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QReadWriteLock>
+#include <QFileInfo>
+#include <QApplication>
+#include <QSettings>
+#include <QDebug>
+
+#include "kciglobal.h"
+
+struct Terminal
+{
+    char terminal_name[50];
+    char arg[10];
+    Terminal(){terminal_name[0]=0; arg[0]=0;}
+    Terminal(const char *str_ter, const char *str_arg)
+    {
+        strcpy(terminal_name,str_ter);
+        strcpy(arg,str_arg);
+    }
+};
 
 class kciExecutor;
 
@@ -38,7 +57,8 @@ class kciRunner : public QThread
 {
     Q_OBJECT
 public:
-    explicit kciRunner(QObject *parent = 0);
+    kciExecutor *p;
+    static Terminal getDefaultTerminal();
 
 public slots:
     void onReadyRead();
@@ -61,6 +81,9 @@ public:
     void setEnabledAutoInput(bool value);
     void exec(const QString& programPath);
     QByteArray getUserOutput();
+
+    static void setDefaultTerminal(const int &num);
+    static QStringList getSupportTerminalList();
 
 private:
     QString path;

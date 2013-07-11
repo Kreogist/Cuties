@@ -3,7 +3,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-TARGET = KciConsoleRummer
+TARGET = KciConsoleRunner
 
 SOURCES += main.cpp
 
