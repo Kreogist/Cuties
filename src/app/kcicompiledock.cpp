@@ -215,6 +215,24 @@ void kcicompiledock::parseMessage(QString msg)
     }
 }
 
+void kcicompiledock::compileFinish(int ExitNum)
+{
+    Q_UNUSED(ExitNum);
+    if(hasError)
+    {
+        //Output Error Num
+        addText(QTime::currentTime().toString("hh:mm:ss") +
+                " " + compileInfo->rowCount() +
+                tr(" Errors Occur."));
+    }
+    else
+    {
+        //Output Compile Success.
+        addText(QTime::currentTime().toString("hh:mm:ss") +
+                " " + tr("Compile Successful."));
+    }
+}
+
 void kcicompiledock::resetCompileDock()
 {
     clearAllItem();

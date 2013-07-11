@@ -104,6 +104,5 @@ TRANSLATIONS += zh_CN.ts
 OTHER_FILES += \
     zh_CN.ts \
     lang.map \
-    Kreogist-Cute-Ide.pro~ \
     default.style \
     COPYING.txt

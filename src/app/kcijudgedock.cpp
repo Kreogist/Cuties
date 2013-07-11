@@ -43,6 +43,64 @@ kciJudgeFileEdit::kciJudgeFileEdit(QWidget *parent) :
     EditLayout->addWidget(UserOutput);
 }
 
+kciJudgeEditWidget::kciJudgeEditWidget(QWidget *parent) :
+    QWidget(parent)
+{
+    MainLayout=new QVBoxLayout(this);
+    setLayout(MainLayout);
+
+    //Set Judge Files Tab.
+    tabJudgeFiles=new QTabWidget(this);
+
+    QPalette pal=tabJudgeFiles->palette();
+    pal.setColor(QPalette::HighlightedText, QColor(255,255,255));
+    tabJudgeFiles->setPalette(pal);
+
+    tabJudgeFiles->setDocumentMode(true);
+    tabJudgeFiles->setMovable(true);
+    tabJudgeFiles->setTabsClosable(true);
+    tabJudgeFiles->setTabPosition(QTabWidget::South);
+
+    MainLayout->addWidget(tabJudgeFiles);
+
+    //Set ToolBar Action
+    tlbacAdd=new QToolButton(this);
+    tlbacAdd->setText(tr("Add Test Data."));
+    tlbacAdd->setFixedSize(23,23);
+    tlbacAdd->setIcon(QIcon(":/JudgeToolBar/image/Judge Dock/ToolBarAdd.png"));
+    connect(tlbacAdd,SIGNAL(clicked()),this,SLOT(addNewTab()));
+    tlbacRemove=new QToolButton(this);
+    tlbacRemove->setText(tr("Remove Test Data."));
+    tlbacRemove->setFixedSize(23,23);
+    tlbacRemove->setIcon(QIcon(":/JudgeToolBar/image/Judge Dock/ToolBarRemove.png"));
+    tlbacStartAll=new QToolButton(this);
+    tlbacStartAll->setText(tr("Start All Test."));
+    tlbacStartAll->setFixedSize(23,23);
+    tlbacStartAll->setIcon(QIcon(":/JudgeToolBar/image/Judge Dock/ToolBarStartAll.png"));
+    tlbacStop=new QToolButton(this);
+    tlbacStop->setText(tr("Stop the test."));
+    tlbacStop->setFixedSize(23,23);
+    tlbacStop->setIcon(QIcon(":/JudgeToolBar/image/Judge Dock/ToolBarStop.png"));
+
+    //Set Judge Tool Bar
+    tlbJudge=new QToolBar("judgetbl",this);
+    tlbJudge->setContentsMargins(0,0,0,0);
+
+    tlbJudge->addWidget(tlbacAdd);
+    tlbJudge->addWidget(tlbacRemove);
+    tlbJudge->addWidget(tlbacStartAll);
+    tlbJudge->addWidget(tlbacStop);
+    MainLayout->addWidget(tlbJudge);
+
+}
+
+void kciJudgeEditWidget::addNewTab()
+{
+    //Set new content.
+    kciJudgeFileEdit *newJudgeEdit = new kciJudgeFileEdit(this);
+    tabJudgeFiles->addTab(newJudgeEdit,"Test");
+}
+
 kciJudgeDock::kciJudgeDock(QWidget *parent) :
     QDockWidget(parent)
 {
@@ -64,21 +122,10 @@ kciJudgeDock::kciJudgeDock(QWidget *parent) :
     //Set Main Split.
     splCombine=new QSplitter(Qt::Vertical,this);
     splCombine->setContentsMargins(0,0,0,0);
-    //Set Judge Files Tab.
-    tabJudgeFiles=new QTabWidget(this);
 
-    pal=tabJudgeFiles->palette();
-    pal.setColor(QPalette::HighlightedText, QColor(255,255,255));
-    tabJudgeFiles->setPalette(pal);
-
-    tabJudgeFiles->setDocumentMode(true);
-    tabJudgeFiles->setMovable(true);
-    tabJudgeFiles->setTabsClosable(true);
-    tabJudgeFiles->setTabPosition(QTabWidget::South);
-    addANewTab=new QToolButton(tabJudgeFiles);
-    tabJudgeFiles->setCornerWidget(addANewTab,Qt::BottomRightCorner);
-
-    splCombine->addWidget(tabJudgeFiles);
+    //Set Judge Edit Widget
+    kjwEditWidget=new kciJudgeEditWidget(this);
+    splCombine->addWidget(kjwEditWidget);
 
     //Set Judge List
     trevwJudgeList=new QTreeView(this);

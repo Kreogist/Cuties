@@ -727,6 +727,7 @@ void MainWindow::compileCurrentFile()
         //Output Compile Message:
         connect(currentCompiler,&compilerBase::compileinfo,compileDock,&kcicompiledock::outputCompileInfo);
         connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::parseMessage);
+        connect(currentCompiler,SIGNAL(finished(int)),compileDock,SLOT(compileFinish(int)));
         //Output Compile Info:
         compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
                              " " +

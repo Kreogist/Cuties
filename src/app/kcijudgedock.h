@@ -30,9 +30,13 @@
 #include <QPalette>
 #include <QSplitter>
 #include <QTreeView>
+#include <QIcon>
+#include <QAction>
 #include <QPlainTextEdit>
 #include <QTabWidget>
 #include <QToolButton>
+#include <QToolBar>
+#include <QKeySequence>
 #include <QVBoxLayout>
 #include <QDockWidget>
 
@@ -48,6 +52,23 @@ private:
     QVBoxLayout *EditLayout;
 };
 
+class kciJudgeEditWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciJudgeEditWidget(QWidget *parent = 0);
+
+private slots:
+    void addNewTab();
+
+private:
+    QTabWidget *tabJudgeFiles;
+    QToolBar *tlbJudge;
+    QVBoxLayout *MainLayout;
+    QToolButton *tlbacAdd, *tlbacRemove, *tlbacStartAll,
+            *tlbacStop;
+};
+
 class kciJudgeDock : public QDockWidget
 {
     Q_OBJECT
@@ -61,10 +82,9 @@ public slots:
 private:
     QTreeView *trevwJudgeList;
     QSplitter *splCombine;
-    QTabWidget *tabJudgeFiles;
     QList<int> l_sizes;
     QToolButton *addANewTab;
-
+    kciJudgeEditWidget *kjwEditWidget;
 };
 
 #endif // KCIJUDGEDOCK_H

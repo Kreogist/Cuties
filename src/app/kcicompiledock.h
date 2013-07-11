@@ -97,6 +97,7 @@ signals:
 public slots:
     void outputCompileInfo(QString msg);
     void parseMessage(QString msg);
+    void compileFinish(int ExitNum);
 
 private slots:
     void selectAnError(QModelIndex ItemID);
