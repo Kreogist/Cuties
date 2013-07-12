@@ -37,6 +37,8 @@
 #include <QSettings>
 #include <QMimeData>
 #include <QPalette>
+#include <QList>
+#include <QUrl>
 
 #include "compilerbase.h"
 #include "compilerbasefactor.h"
@@ -64,7 +66,7 @@ public slots:
     void new_file();
     void save();
     void save_as();
-    void save_all();\
+    void save_all();
     void redo();
     void undo();
     void copy();

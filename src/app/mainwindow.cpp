@@ -205,7 +205,7 @@ void MainWindow::createActions()
     act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
     act[mnuRunCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
     actStatusTips[mnuRunCompileAndRun]=QString(tr("Compile the active file and run."));
-    connect(act[mnuRunCompileAndRun],SIGNAL(triggered()),this,SLOT(run()));
+    connect(act[mnuRunCompileAndRun],SIGNAL(triggered()),this,SLOT(compileAndRun()));
 
     //Run -> Compile
     act[mnuRunCompile]=new QAction(tr("compile"),this);
@@ -756,7 +756,6 @@ void MainWindow::run()
         execName+=".exe";
 #endif
         execName+="\"";
-
         executor->exec(execName);
     }
 }

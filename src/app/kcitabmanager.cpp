@@ -47,6 +47,7 @@ kciTabManager::kciTabManager(QWidget *parent) :
     pal.setColor(QPalette::Button,QColor(83,83,83));
     tmpTabBar->setPalette(pal);
 
+    setAcceptDrops(true);
     setDocumentMode(true);
     setMovable(true);
     setTabsClosable(true);
@@ -84,7 +85,6 @@ int kciTabManager::open(const QString& filePath)
 void kciTabManager::openAndJumpTo(const QString &filePath)
 {
     setCurrentIndex(open(filePath));
-
 }
 
 void kciTabManager::open()
@@ -436,11 +436,9 @@ int kciTabManager::getCurrentLineNum()
     }
 }
 
-//TODO: Fixed Me!!!!!!
-
 void kciTabManager::dragEnterEvent(QDragEnterEvent *event)
 {
-    if(event->mimeData()->hasFormat("text/uri-list"))
+    if(event->mimeData()->hasUrls())
     {
         event->acceptProposedAction();
     }
@@ -448,13 +446,13 @@ void kciTabManager::dragEnterEvent(QDragEnterEvent *event)
 
 void kciTabManager::dropEvent(QDropEvent *event)
 {
-    QList<QUrl> urls = event->mimeData()->urls();
-    if (urls.isEmpty())
+    QList<QUrl> fileList=event->mimeData()->urls();
+    QString tmpPath;
+    int i=fileList.count();
+    while(i--)
     {
-        return;
-    }
-    for(int i=0;i<urls.count();i++)
-    {
-        qDebug()<<urls[i];
+        tmpPath=fileList.at(i).path();
+        tmpPath=tmpPath.remove(0,1);
+        openAndJumpTo(tmpPath);
     }
 }
