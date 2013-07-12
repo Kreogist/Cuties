@@ -798,3 +798,24 @@ void MainWindow::showPreference()
     kciControlCenter *newControlCenter=new kciControlCenter();
     newControlCenter->show();
 }
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if(event->mimeData()->hasUrls())
+    {
+        event->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> fileList=event->mimeData()->urls();
+    QString tmpPath;
+    int i=fileList.count();
+    while(i--)
+    {
+        tmpPath=fileList.at(i).path();
+        tmpPath=tmpPath.remove(0,1);
+        tabManager->openAndJumpTo(tmpPath);
+    }
+}

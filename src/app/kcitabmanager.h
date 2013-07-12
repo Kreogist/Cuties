@@ -90,8 +90,6 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
 
 private:
     int tab_count;

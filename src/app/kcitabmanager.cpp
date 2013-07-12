@@ -79,6 +79,7 @@ int kciTabManager::open(const QString& filePath)
     tmp->open(filePath);
     tmp->setDocumentTitle(name);
     connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+    emit tabAdded();
     return addTab(tmp,name);
 }
 
@@ -116,7 +117,6 @@ void kciTabManager::open()
     }
     setCurrentIndex(_last_tab_index);
     currentTextCursorChanged();
-    emit tabAdded();
 }
 
 void kciTabManager::new_file()
@@ -436,23 +436,3 @@ int kciTabManager::getCurrentLineNum()
     }
 }
 
-void kciTabManager::dragEnterEvent(QDragEnterEvent *event)
-{
-    if(event->mimeData()->hasUrls())
-    {
-        event->acceptProposedAction();
-    }
-}
-
-void kciTabManager::dropEvent(QDropEvent *event)
-{
-    QList<QUrl> fileList=event->mimeData()->urls();
-    QString tmpPath;
-    int i=fileList.count();
-    while(i--)
-    {
-        tmpPath=fileList.at(i).path();
-        tmpPath=tmpPath.remove(0,1);
-        openAndJumpTo(tmpPath);
-    }
-}
