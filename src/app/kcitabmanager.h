@@ -41,7 +41,6 @@
 #include <QUrl>
 
 #include "compilerbase.h"
-#include "compilerbasefactor.h"
 #include "kciglobal.h"
 #include "kcisearchwindow.h"
 #include "kcitexteditor.h"
@@ -53,6 +52,8 @@ public:
     explicit kciTabManager(QWidget *parent = 0);
     int getCurrentLineCount();
     int getCurrentLineNum();
+
+    kciTextEditor* getCurrentEditor();
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);

@@ -93,12 +93,6 @@ cppHighlighter::cppHighlighter(QObject *parent) :
 
 }
 
-QRegularExpression cppHighlighter::suffixFilter()
-{
-    return QRegularExpression("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)"
-                              ,QRegularExpression::CaseInsensitiveOption);
-}
-
 void cppHighlighter::highlightBlock(const QString &text)
 {
     //!TODO: unsupport multiline comment

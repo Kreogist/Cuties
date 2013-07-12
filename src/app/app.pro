@@ -41,7 +41,6 @@ SOURCES += \
     kcititlebar.cpp \
     kciglobal.cpp \
     pascalhighlighter.cpp \
-    highlighterfactory.cpp \
     textcharformatmap.cpp \
     compilerbase.cpp \
     plaintexthighlighter.cpp \
@@ -52,14 +51,14 @@ SOURCES += \
     kcimainwindow.cpp \
     gdbmivalue.cpp \
     kcimarkpanel.cpp \
-    compilerbasefactor.cpp \
     kcistatusbar.cpp \
     kcitextsearcher.cpp \
     kcisearchwindow.cpp \
     kcistatuscursorinfo.cpp \
     kcicontrolcenter.cpp \
     kciexecutor.cpp \
-    kcijudgedock.cpp
+    kcijudgedock.cpp \
+    kcilanguagemode.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -72,7 +71,6 @@ HEADERS += \
     kcititlebar.h \
     kciglobal.h \
     pascalhighlighter.h \
-    highlighterfactory.h \
     textcharformatmap.h \
     highlighterGlobal.h \
     compilerbase.h \
@@ -84,14 +82,14 @@ HEADERS += \
     kcimainwindow.h \
     gdbmivalue.h \
     kcimarkpanel.h \
-    compilerbasefactor.h \
     kcistatusbar.h \
     kcitextsearcher.h \
     kcisearchwindow.h \
     kcistatuscursorinfo.h \
     kcicontrolcenter.h \
     kciexecutor.h \
-    kcijudgedock.h
+    kcijudgedock.h \
+    kcilanguagemode.h
 
 # Enable C++11
 CONFIG += c++11

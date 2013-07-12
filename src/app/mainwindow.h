@@ -50,6 +50,7 @@
 #include "kcititlebar.h"
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
+#include "kcitexteditor.h"
 #include "kcimainwindow.h"
 #include "kcicontrolcenter.h"
 #include "kciexecutor.h"
@@ -175,6 +176,8 @@ private:
     void createDocks();
     void createMenu();
     void createStatusbar();
+
+    void setDocOpenMenuState(bool state);
 };
 
 #endif // MAINWINDOW_H
