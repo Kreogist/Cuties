@@ -61,8 +61,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     connect(editor,SIGNAL(cursorPositionChanged()),
             this,SLOT(cursorChanged()));
 
-    highlighter=new plaintextHighlighter(this);
-    highlighter->setDocument(editor->document());
+    m_langMode=new kciLanguageMode(this);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x53,0x53,0x53));
@@ -105,35 +104,8 @@ bool kciTextEditor::open(const QString &fileName)
 
         editor->clear();
         editor->insertPlainText(QString(_textIn.readAll()));
-        editor->document()->setModified(false);
 
-        QFileInfo _fileInfo(_file);
-        editor->setDocumentTitle(_fileInfo.fileName());
-        emit filenameChanged(_fileInfo.fileName());
-
-        if(highlighter == nullptr)
-        {
-            highlighter = highlighterFactory::createHighlighterByFileName(
-                        _fileInfo.fileName(), this);
-
-            highlighter->setDocument(editor->document());
-            highlighter->rehighlight();
-        }
-        else
-        {
-            highlighter->deleteLater();
-            highlighter = highlighterFactory::createHighlighterByFileName(
-                        _fileInfo.fileName(), this);
-
-            highlighter->setDocument(editor->document());
-            highlighter->rehighlight();
-        }
-
-        filePath=fileName;
-        fileError=QFileDevice::NoError;
-
-        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-        settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
+        fileInfoChanged(_file);
 
         return true;
     }
@@ -199,34 +171,7 @@ bool kciTextEditor::saveAs(const QString &fileName)
 
         _textOut<<editor->toPlainText()<<flush;
 
-        QFileInfo _fileInfo(_file);
-        editor->setDocumentTitle(_fileInfo.fileName());
-        emit filenameChanged(_fileInfo.fileName());
-
-        filePath=fileName;
-        fileError=QFileDevice::NoError;
-        editor->document()->setModified(false);
-
-        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-        settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
-
-        if(highlighter == nullptr)
-        {
-            highlighter = highlighterFactory::createHighlighterByFileName(
-                        _fileInfo.fileName(), this);
-
-            highlighter->setDocument(editor->document());
-            highlighter->rehighlight();
-        }
-        else
-        {
-            highlighter->deleteLater();
-            highlighter = highlighterFactory::createHighlighterByFileName(
-                        _fileInfo.fileName(), this);
-
-            highlighter->setDocument(editor->document());
-            highlighter->rehighlight();
-        }
+        fileInfoChanged(_file);
 
         return true;
     }
@@ -410,4 +355,25 @@ void kciTextEditor::resizeEvent(QResizeEvent *e)
                            0,
                            searchBar->width(),
                            searchBar->height());
+}
+
+void kciTextEditor::fileInfoChanged(const QFile &file)
+{
+    QFileInfo _fileInfo(file);
+    editor->setDocumentTitle(_fileInfo.fileName());
+    emit filenameChanged(_fileInfo.fileName());
+
+    m_langMode->setFileSuffix(_fileInfo.suffix());
+
+    filePath=file.fileName();
+    fileError=QFileDevice::NoError;
+    editor->document()->setModified(false);
+
+    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
+}
+
+kciLanguageMode *kciTextEditor::langMode() const
+{
+    return m_langMode;
 }

@@ -51,9 +51,10 @@
 #include "kcisearchwindow.h"
 
 //default highlighter
-#include "plaintexthighlighter.h"
+#include "kcilanguagemode.h"
 
 class kciSearchWindow;
+class kciLanguageMode;
 
 class kciTextEditor : public QWidget
 {
@@ -71,6 +72,8 @@ public:
     int getTextLines();
 
     QTextDocument *document;
+
+    kciLanguageMode *langMode() const;
 
 signals:
     void filenameChanged(QString newName);
@@ -99,11 +102,14 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
+    void fileInfoChanged(const QFile& file);
+
+    kciLanguageMode *m_langMode;
+
     QHBoxLayout *mainLayout;
     kciCodeEditor *editor;
     kciLinenumPanel *linePanel;
     kciMarkPanel *markPanel;
-    QSyntaxHighlighter *highlighter;
 
     QString filePath,strFileFilter;
     QFileDevice::FileError fileError;

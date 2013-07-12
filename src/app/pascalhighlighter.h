@@ -37,8 +37,6 @@ class pascalHighlighter : public QSyntaxHighlighter
     Q_OBJECT
 public:
     explicit pascalHighlighter(QObject *parent = 0);
-
-    static QRegularExpression suffixFilter();
     
 signals:
     

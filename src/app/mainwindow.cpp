@@ -689,7 +689,8 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::compileCurrentFile()
 {
-    kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
+    kciTextEditor *currentEditor=tabManager->getCurrentEditor();
+
     //Check Tab Status.
     if(currentEditor!=NULL)
     {
@@ -716,8 +717,7 @@ void MainWindow::compileCurrentFile()
                              tr("Preparing Compiler.")+
                              "\n");
         //Get a compiler ready.
-        compilerBase *currentCompiler=
-                compilerBaseFactor::createCompilerBase(currentEditor->getFilePath(), currentEditor);
+        compilerBase *currentCompiler=currentEditor->langMode()->getCompiler();
         //Get Compiler Info.
         compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
                              " " +

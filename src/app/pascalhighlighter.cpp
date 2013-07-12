@@ -75,11 +75,6 @@ pascalHighlighter::pascalHighlighter(QObject *parent) :
     rules<<hlrSpTypes;
 }
 
-QRegularExpression pascalHighlighter::suffixFilter()
-{
-    return QRegularExpression("pas",QRegularExpression::CaseInsensitiveOption);
-}
-
 void pascalHighlighter::highlightBlock(const QString &text)
 {
     //!TODO: unsupport multiline comment

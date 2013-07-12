@@ -56,6 +56,11 @@ kciTabManager::kciTabManager(QWidget *parent) :
     new_file_count=1;
 }
 
+kciTextEditor* kciTabManager::getCurrentEditor()
+{
+    return currentEditor;
+}
+
 int kciTabManager::open(const QString& filePath)
 {
     QString name=QFileInfo(filePath).fileName();

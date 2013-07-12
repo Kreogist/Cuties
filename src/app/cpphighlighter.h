@@ -39,8 +39,6 @@ class cppHighlighter : public QSyntaxHighlighter
 public:
     explicit cppHighlighter(QObject *parent = 0);
 
-    static QRegularExpression suffixFilter();
-
 protected:
     void highlightBlock(const QString &text);
 
