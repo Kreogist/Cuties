@@ -56,5 +56,7 @@
         <file>image/Judge Dock/ToolBarRemove.png</file>
         <file>image/Judge Dock/ToolBarStartAll.png</file>
         <file>image/Judge Dock/ToolBarStop.png</file>
+        <file>image/Judge Dock/ToolBarBackup.png</file>
+        <file>image/Judge Dock/ToolBarImport.png</file>
     </qresource>
 </RCC>
