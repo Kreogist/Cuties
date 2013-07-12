@@ -750,7 +750,11 @@ void MainWindow::dropEvent(QDropEvent *event)
     while(i--)
     {
         tmpPath=fileList.at(i).path();
+
+#ifdef Q_OS_WIN32
         tmpPath=tmpPath.remove(0,1);
+#endif
+
         tabManager->openAndJumpTo(tmpPath);
     }
 }
