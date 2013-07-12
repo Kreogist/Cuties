@@ -496,106 +496,41 @@ void MainWindow::createStatusbar()
             this,SLOT(setCurrentTextCursorLine(int)));
 }
 
+void MainWindow::setDocOpenMenuState(bool state)
+{
+    int i;
+    //File Menu
+    for(i=mnuFileSave;i<=mnuFileCloseAllExceptThis;i++)
+    {
+        act[i]->setEnabled(state);
+        act[i]->setVisible(state);
+    }
+
+    //Edit Menu
+    for(i=mnuEditUndo;i<=mnuEditSelectAll;i++)
+    {
+        act[i]->setEnabled(state);
+        act[i]->setVisible(state);
+    }
+
+    //Search Menu
+    for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
+    {
+        act[i]->setEnabled(state);
+        act[i]->setVisible(state);
+    }
+    menu[mnuSearch]->menuAction()->setEnabled(state);
+    menu[mnuSearch]->menuAction()->setVisible(state);
+}
+
 void MainWindow::setNoDocOpenMenuEnabled()
 {
-    //Set Enabled
-    //File Menu
-    act[mnuFileSave]->setEnabled(false);
-    act[mnuFileSaveAs]->setEnabled(false);
-    act[mnuFileSaveAll]->setEnabled(false);
-    act[mnuFileClose]->setEnabled(false);
-    act[mnuFileCloseAll]->setEnabled(false);
-    act[mnuFileCloseAllExceptThis]->setEnabled(false);
-    //Edit Menu
-    act[mnuEditUndo]->setEnabled(false);
-    act[mnuEditRedo]->setEnabled(false);
-    act[mnuEditCut]->setEnabled(false);
-    act[mnuEditCopy]->setEnabled(false);
-    act[mnuEditPaste]->setEnabled(false);
-    act[mnuEditSelectAll]->setEnabled(false);
-    //Search Menu
-    act[mnuSearchFind]->setEnabled(false);
-    act[mnuSearchFindInFiles]->setEnabled(false);
-    act[mnuSearchReplace]->setEnabled(false);
-    act[mnuSearchReplaceInFiles]->setEnabled(false);
-    act[mnuSearchSearchOnline]->setEnabled(false);
-    act[mnuSearchGoto]->setEnabled(false);
-    menu[mnuSearch]->menuAction()->setEnabled(false);
-
-    //Set Visible
-    //File Menu
-    act[mnuFileSave]->setVisible(false);
-    act[mnuFileSaveAs]->setVisible(false);
-    act[mnuFileSaveAll]->setVisible(false);
-    act[mnuFileClose]->setVisible(false);
-    act[mnuFileCloseAll]->setVisible(false);
-    act[mnuFileCloseAllExceptThis]->setVisible(false);
-    //Edit Menu
-    act[mnuEditUndo]->setVisible(false);
-    act[mnuEditRedo]->setVisible(false);
-    act[mnuEditCut]->setVisible(false);
-    act[mnuEditCopy]->setVisible(false);
-    act[mnuEditPaste]->setVisible(false);
-    act[mnuEditSelectAll]->setVisible(false);
-    //Search Menu
-    act[mnuSearchFind]->setVisible(false);
-    act[mnuSearchFindInFiles]->setVisible(false);
-    act[mnuSearchReplace]->setVisible(false);
-    act[mnuSearchReplaceInFiles]->setVisible(false);
-    act[mnuSearchSearchOnline]->setVisible(false);
-    act[mnuSearchGoto]->setVisible(false);
-    menu[mnuSearch]->menuAction()->setVisible(false);
+    setDocOpenMenuState(false);
 }
 
 void MainWindow::setDocOpenMenuEnabled()
 {
-    //Set Enabled
-    //File Menu
-    act[mnuFileSave]->setEnabled(true);
-    act[mnuFileSaveAs]->setEnabled(true);
-    act[mnuFileSaveAll]->setEnabled(true);
-    act[mnuFileClose]->setEnabled(true);
-    act[mnuFileCloseAll]->setEnabled(true);
-    act[mnuFileCloseAllExceptThis]->setEnabled(true);
-    //Edit Menu
-    act[mnuEditUndo]->setEnabled(true);
-    act[mnuEditRedo]->setEnabled(true);
-    act[mnuEditCut]->setEnabled(true);
-    act[mnuEditCopy]->setEnabled(true);
-    act[mnuEditPaste]->setEnabled(true);
-    act[mnuEditSelectAll]->setEnabled(true);
-    //Search Menu
-    act[mnuSearchFind]->setEnabled(true);
-    act[mnuSearchFindInFiles]->setEnabled(true);
-    act[mnuSearchReplace]->setEnabled(true);
-    act[mnuSearchReplaceInFiles]->setEnabled(true);
-    act[mnuSearchSearchOnline]->setEnabled(true);
-    act[mnuSearchGoto]->setEnabled(true);
-    menu[mnuSearch]->menuAction()->setEnabled(true);
-
-    //Set Visible
-    //File Menu
-    act[mnuFileSave]->setVisible(true);
-    act[mnuFileSaveAs]->setVisible(true);
-    act[mnuFileSaveAll]->setVisible(true);
-    act[mnuFileClose]->setVisible(true);
-    act[mnuFileCloseAll]->setVisible(true);
-    act[mnuFileCloseAllExceptThis]->setVisible(true);
-    //Edit Menu
-    act[mnuEditUndo]->setVisible(true);
-    act[mnuEditRedo]->setVisible(true);
-    act[mnuEditCut]->setVisible(true);
-    act[mnuEditCopy]->setVisible(true);
-    act[mnuEditPaste]->setVisible(true);
-    act[mnuEditSelectAll]->setVisible(true);
-    //Search Menu
-    act[mnuSearchFind]->setVisible(true);
-    act[mnuSearchFindInFiles]->setVisible(true);
-    act[mnuSearchReplace]->setVisible(true);
-    act[mnuSearchReplaceInFiles]->setVisible(true);
-    act[mnuSearchSearchOnline]->setVisible(true);
-    act[mnuSearchGoto]->setVisible(true);
-    menu[mnuSearch]->menuAction()->setVisible(true);
+    setDocOpenMenuState(true);
 }
 
 void MainWindow::restoreSettings()

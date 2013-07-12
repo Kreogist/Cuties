@@ -174,6 +174,8 @@ private:
     void createDocks();
     void createMenu();
     void createStatusbar();
+
+    void setDocOpenMenuState(bool state);
 };
 
 #endif // MAINWINDOW_H

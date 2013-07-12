@@ -47,7 +47,6 @@
 #include "kcicodeeditor.h"
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"
-#include "highlighterfactory.h"
 #include "kcisearchwindow.h"
 
 //default highlighter
