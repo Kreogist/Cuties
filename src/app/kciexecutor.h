@@ -25,34 +25,81 @@
 #define KCIEXECUTOR_H
 
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QThread>
 #include <QByteArray>
 #include <QObject>
+#include <QString>
 #include <QStringList>
+#include <QReadWriteLock>
+#include <QFileInfo>
+#include <QApplication>
+#include <QSettings>
+#include <QDebug>
+
+#include "kciglobal.h"
+
+struct Terminal
+{
+    char terminal_name[50];
+    char arg[10];
+    Terminal(){terminal_name[0]=0; arg[0]=0;}
+    Terminal(const char *str_ter, const char *str_arg)
+    {
+        strcpy(terminal_name,str_ter);
+        strcpy(arg,str_arg);
+    }
+};
+
+class kciExecutor;
+
+class kciRunner : public QThread
+{
+    Q_OBJECT
+public:
+    kciExecutor *p;
+    static Terminal getDefaultTerminal();
+
+public slots:
+    void onReadyRead();
+
+protected:
+    void run();
+};
 
 class kciExecutor : public QObject
 {
     Q_OBJECT
 public:
     explicit kciExecutor(QObject *parent = 0);
-    int addTestCase(const QByteArray& input,const QByteArray& output);
-    void removeInputData(const int& inputDataNum);
-    void setInputFiles(const QStringList& Files);
-    
-signals:
-    
-public slots:
+    ~kciExecutor();
+
+    void setTestCase(const QByteArray& input,const QByteArray& output);
+    void setBackgroundExec(bool enabled);
+    bool getBackgroundExec() const;
+    bool isEnabledAutoInput() const;
+    void setEnabledAutoInput(bool value);
+    void exec(const QString& programPath);
+    QByteArray getUserOutput();
+
+    static void setDefaultTerminal(const int &num);
+    static QStringList getSupportTerminalList();
 
 private:
-    struct TestCase
-    {
-        int testCaseNumber;
-        QByteArray input;
-        QByteArray output;
-    };
-    QStringList inputFilesPath;
-    QList<TestCase> testData;
-    int testCaseNum;
+    QString path;
+    QReadWriteLock lock;
+    QByteArray m_input;
+    QByteArray m_output;
+
+    QReadWriteLock output_lock;
+    QByteArray user_output;
+
+    kciRunner *worker;
+    QProcess* process;
+    bool enabledBackExec;
+    bool enabledAutoInput;
+
+    friend class kciRunner;
 };
 
 #endif // KCIEXECUTOR_H

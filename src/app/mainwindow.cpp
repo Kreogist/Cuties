@@ -205,6 +205,7 @@ void MainWindow::createActions()
     act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
     act[mnuRunCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
     actStatusTips[mnuRunCompileAndRun]=QString(tr("Compile the active file and run."));
+    connect(act[mnuRunCompileAndRun],SIGNAL(triggered()),this,SLOT(run()));
 
     //Run -> Compile
     act[mnuRunCompile]=new QAction(tr("compile"),this);
@@ -217,6 +218,7 @@ void MainWindow::createActions()
     act[mnuRunRun]=new QAction(tr("Runexe"),this);
     act[mnuRunRun]->setShortcut(QKeySequence(Qt::Key_F10));
     actStatusTips[mnuRunRun]=QString(tr("Run the compiled execution."));
+    connect(act[mnuRunRun],SIGNAL(triggered()),this,SLOT(run()));
 
     //Run -> Parameters
     act[mnuRunParameters]=new QAction(tr("Parameters"),this);
@@ -734,6 +736,35 @@ void MainWindow::compileCurrentFile()
         currentCompiler->startCompile(currentEditor->getFilePath());
         currentCompiler->waitForFinished();
     }
+}
+
+void MainWindow::run()
+{
+    kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
+    if(currentEditor!=NULL)
+    {
+        compileCurrentFile();
+        kciExecutor *executor=new kciExecutor(this);
+        executor->setBackgroundExec(false);
+        executor->setEnabledAutoInput(false);
+
+        //execute file name
+        QFileInfo _fileInfo(currentEditor->getFilePath());
+        QString execName=QString("\"")+_fileInfo.absoluteDir().path()+
+                QString("/")+_fileInfo.completeBaseName();
+#ifdef Q_OS_WIN32
+        execName+=".exe";
+#endif
+        execName+="\"";
+
+        executor->exec(execName);
+    }
+}
+
+void MainWindow::compileAndRun()
+{
+    compileCurrentFile();
+    run();
 }
 
 void MainWindow::searchOnline()

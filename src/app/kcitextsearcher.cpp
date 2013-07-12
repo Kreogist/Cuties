@@ -59,7 +59,8 @@ void kciTextSearcher::search()
 {
     if(worker)
     {
-        worker->exit();
+        worker->quit();
+        worker->wait();
         //worker->deleteLater();
         delete worker;
     }
