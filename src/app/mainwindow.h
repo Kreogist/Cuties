@@ -148,7 +148,6 @@ private:
         mnuEdit,
         mnuView,
         mnuSearch,
-        mnuInsert,
         mnuRun,
         mnuDebug,
         mnuTool,

@@ -29,13 +29,7 @@ const QString console_runner_path("KciConsoleRunner.exe");
 const QString console_runner_path("KciConsoleRunner");
 #endif
 
-#ifdef Q_OS_WIN32
-static const int terminalCount = 1;
-static const Terminal knownTerminals[terminalCount] =
-{
-    {"cmd", ""},
-};
-#else
+#ifdef Q_OS_UNIX
 static const int terminalCount = 8;
 static const Terminal knownTerminals[terminalCount] =
 {
@@ -47,6 +41,12 @@ static const Terminal knownTerminals[terminalCount] =
     {"rxvt", "-e"},
     {"urxvt", "-e"},
     {"xfce4-terminal", "-x"}
+};
+#else
+static const int terminalCount = 1;
+static const Terminal knownTerminals[terminalCount] =
+{
+    {"cmd", "/k"}
 };
 #endif
 
@@ -105,13 +105,17 @@ void kciRunner::run()
         }
         else
         {
-            Terminal terminal=getDefaultTerminal();
             QStringList arg;
-            arg<<terminal.arg<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
-            p->process=new QProcess;
-            qDebug()<<arg;
-            //p->process->startDetached(qApp->applicationDirPath()+'/'+console_runner_path,arg);
-            p->process->startDetached(QLatin1String(terminal.terminal_name),arg);
+            #ifdef Q_OS_UNIX
+                Terminal terminal=getDefaultTerminal();
+                arg<<terminal.arg<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
+                p->process=new QProcess;
+                qDebug()<<arg;
+                p->process->startDetached(QLatin1String(terminal.terminal_name),arg);
+            #else
+                arg<<p->path;
+                p->process->startDetached(qApp->applicationDirPath()+'/'+console_runner_path, arg);
+            #endif
         }
 
         if(p->enabledAutoInput)
