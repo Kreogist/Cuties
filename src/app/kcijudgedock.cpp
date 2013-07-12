@@ -30,7 +30,9 @@ kciJudgeFileEdit::kciJudgeFileEdit(QWidget *parent) :
     lblOutput=new QLabel(tr("Output File:"),this);
     lblUserOutput=new QLabel(tr("Execute Output:"),this);
     InputFileEdit=new QPlainTextEdit(this);
+    connect(InputFileEdit,SIGNAL(textChanged()),this,SIGNAL(textChange()));
     OutputFileEdit=new QPlainTextEdit(this);
+    connect(OutputFileEdit,SIGNAL(textChanged()),this,SIGNAL(textChange()));
     UserOutput=new QPlainTextEdit(this);
 
     EditLayout=new QVBoxLayout(this);
@@ -41,6 +43,16 @@ kciJudgeFileEdit::kciJudgeFileEdit(QWidget *parent) :
     EditLayout->addWidget(OutputFileEdit);
     EditLayout->addWidget(lblUserOutput);
     EditLayout->addWidget(UserOutput);
+}
+
+QString kciJudgeFileEdit::inputFile()
+{
+    return InputFileEdit->toPlainText();
+}
+
+QString kciJudgeFileEdit::outputFile()
+{
+    return OutputFileEdit->toPlainText();
 }
 
 kciJudgeEditWidget::kciJudgeEditWidget(QWidget *parent) :
@@ -60,7 +72,6 @@ kciJudgeEditWidget::kciJudgeEditWidget(QWidget *parent) :
 
     tabJudgeFiles->setContentsMargins(0,0,0,0);
     tabJudgeFiles->setDocumentMode(true);
-    tabJudgeFiles->setMovable(true);
     tabJudgeFiles->setTabPosition(QTabWidget::South);
 
     MainLayout->addWidget(tabJudgeFiles);
@@ -75,6 +86,7 @@ kciJudgeEditWidget::kciJudgeEditWidget(QWidget *parent) :
     tlbacRemove->setText(tr("Remove Test Data."));
     tlbacRemove->setFixedSize(23,23);
     tlbacRemove->setIcon(QIcon(":/JudgeToolBar/image/Judge Dock/ToolBarRemove.png"));
+    connect(tlbacRemove,SIGNAL(clicked()),this,SLOT(removeCurrentTab()));
     tlbacStartAll=new QToolButton(this);
     tlbacStartAll->setText(tr("Start All Test."));
     tlbacStartAll->setFixedSize(23,23);
@@ -105,26 +117,78 @@ kciJudgeEditWidget::kciJudgeEditWidget(QWidget *parent) :
     tlbJudge->addWidget(tlbacBackup);
     tlbJudge->addWidget(tlbacImport);
     MainLayout->addWidget(tlbJudge);
+
+    resetJudgetEditWidget();
+}
+
+void kciJudgeEditWidget::backupTestData()
+{
+
+}
+
+void kciJudgeEditWidget::importTestData()
+{
+
+}
+
+void kciJudgeEditWidget::documentChanged()
+{
+    kciJudgeFileEdit* Editor=qobject_cast<kciJudgeFileEdit*>(sender());
+    if(Editor!=NULL)
+    {
+        int nFilesIndex=tabJudgeFiles->indexOf(Editor);
+        strInputFiles.replace(nFilesIndex, Editor->inputFile());
+        strOutputFiles.replace(nFilesIndex, Editor->outputFile());
+    }
 }
 
 void kciJudgeEditWidget::resetJudgetEditWidget()
 {
+    //Remove all tabs.
     int i=tabJudgeFiles->count();
     while(i--)
     {
-        kciJudgeFileEdit *JudgeEditor=qobject_cast<kciJudgeFileEdit *>(tabJudgeFiles->widget(i));
-        if(Q_LIKELY(JudgeEditor!=NULL))
-        {
-            tabJudgeFiles->removeTab(i);
-        }
+        removeTabIndex(i);
     }
+    //Clear Cache.
+    strInputFiles.clear();
+    strOutputFiles.clear();
+}
+
+void kciJudgeEditWidget::removeTabIndex(int TabIndex)
+{
+    //Remove Tab.
+    kciJudgeFileEdit *JudgeEditor=qobject_cast<kciJudgeFileEdit *>(tabJudgeFiles->widget(TabIndex));
+    if(Q_LIKELY(JudgeEditor!=NULL))
+    {
+        tabJudgeFiles->removeTab(TabIndex);
+    }
+    //Remove Memory.
+    strInputFiles.removeAt(TabIndex);
+    strOutputFiles.removeAt(TabIndex);
+    //Reset Tab Num.
+    int tabMax=tabJudgeFiles->count();
+    for(int i=TabIndex;i<tabMax;i++)
+    {
+        tabJudgeFiles->setTabText(i,QString::number(i+1));
+    }
+}
+
+void kciJudgeEditWidget::removeCurrentTab()
+{
+    removeTabIndex(tabJudgeFiles->currentIndex());
 }
 
 void kciJudgeEditWidget::addNewTab()
 {
-    //Set new content.
+    //Set New Tab Content.
     kciJudgeFileEdit *newJudgeEdit = new kciJudgeFileEdit(this);
     tabJudgeFiles->addTab(newJudgeEdit,QString::number(tabJudgeFiles->count()+1));
+    connect(newJudgeEdit,SIGNAL(textChange()),this,SLOT(documentChanged()));
+    //Set List Memory.
+    strInputFiles.append(QString(""));
+    strOutputFiles.append(QString(""));
+
 }
 
 kciJudgeDock::kciJudgeDock(QWidget *parent) :

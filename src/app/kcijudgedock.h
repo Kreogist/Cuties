@@ -37,6 +37,7 @@
 #include <QToolButton>
 #include <QToolBar>
 #include <QMimeData>
+#include <QDebug>
 #include <QKeySequence>
 #include <QVBoxLayout>
 #include <QDockWidget>
@@ -46,6 +47,11 @@ class kciJudgeFileEdit : public QWidget
     Q_OBJECT
 public:
     explicit kciJudgeFileEdit(QWidget *parent = 0);
+    QString inputFile();
+    QString outputFile();
+
+signals:
+    void textChange();
 
 private:
     QLabel *lblInput, *lblOutput, *lblUserOutput;
@@ -61,6 +67,10 @@ public:
 
 private slots:
     void addNewTab();
+    void removeCurrentTab();
+    void documentChanged();
+    void backupTestData();
+    void importTestData();
 
 private:
     int judge_file_count;
@@ -70,7 +80,10 @@ private:
     QToolButton *tlbacAdd, *tlbacRemove, *tlbacStartAll, *tlbacStop,
                 *tlbacBackup, *tlbacImport;
 
+    QList<QString> strInputFiles, strOutputFiles;
+
     void resetJudgetEditWidget();
+    void removeTabIndex(int TabIndex);
 };
 
 class kciJudgeDock : public QDockWidget
