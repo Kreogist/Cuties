@@ -37,6 +37,8 @@
 #include <QSettings>
 #include <QMimeData>
 #include <QPalette>
+#include <QList>
+#include <QUrl>
 
 #include "compilerbase.h"
 #include "kciglobal.h"
@@ -65,7 +67,7 @@ public slots:
     void new_file();
     void save();
     void save_as();
-    void save_all();\
+    void save_all();
     void redo();
     void undo();
     void copy();
@@ -89,8 +91,6 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
 
 private:
     int tab_count;

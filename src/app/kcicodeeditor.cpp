@@ -28,6 +28,7 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 {
     setFrameStyle(QFrame::NoFrame);
     setFont(QString("Monaco"));
+    setAcceptDrops(false);
     connect(this,&kciCodeEditor::cursorPositionChanged,
             this,&kciCodeEditor::highlightCurrentLine);
 

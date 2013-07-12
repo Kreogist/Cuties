@@ -205,7 +205,7 @@ void MainWindow::createActions()
     act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
     act[mnuRunCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
     actStatusTips[mnuRunCompileAndRun]=QString(tr("Compile the active file and run."));
-    connect(act[mnuRunCompileAndRun],SIGNAL(triggered()),this,SLOT(run()));
+    connect(act[mnuRunCompileAndRun],SIGNAL(triggered()),this,SLOT(compileAndRun()));
 
     //Run -> Compile
     act[mnuRunCompile]=new QAction(tr("compile"),this);
@@ -691,7 +691,6 @@ void MainWindow::run()
         execName+=".exe";
 #endif
         execName+="\"";
-
         executor->exec(execName);
     }
 }
@@ -733,4 +732,25 @@ void MainWindow::showPreference()
 {
     kciControlCenter *newControlCenter=new kciControlCenter();
     newControlCenter->show();
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if(event->mimeData()->hasUrls())
+    {
+        event->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    QList<QUrl> fileList=event->mimeData()->urls();
+    QString tmpPath;
+    int i=fileList.count();
+    while(i--)
+    {
+        tmpPath=fileList.at(i).path();
+        tmpPath=tmpPath.remove(0,1);
+        tabManager->openAndJumpTo(tmpPath);
+    }
 }

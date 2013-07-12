@@ -35,6 +35,7 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
     m_titleBar=new kciTitleBar(this);
     setMenuWidget(m_titleBar);
     setMouseTracking(true);
+    setAcceptDrops(true);
 
     setContentsMargins(0,0,0,0);
     pressed=none;

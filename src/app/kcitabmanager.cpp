@@ -47,6 +47,7 @@ kciTabManager::kciTabManager(QWidget *parent) :
     pal.setColor(QPalette::Button,QColor(83,83,83));
     tmpTabBar->setPalette(pal);
 
+    setAcceptDrops(true);
     setDocumentMode(true);
     setMovable(true);
     setTabsClosable(true);
@@ -83,13 +84,13 @@ int kciTabManager::open(const QString& filePath)
     tmp->open(filePath);
     tmp->setDocumentTitle(name);
     connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+    emit tabAdded();
     return addTab(tmp,name);
 }
 
 void kciTabManager::openAndJumpTo(const QString &filePath)
 {
     setCurrentIndex(open(filePath));
-
 }
 
 void kciTabManager::open()
@@ -121,7 +122,6 @@ void kciTabManager::open()
     }
     setCurrentIndex(_last_tab_index);
     currentTextCursorChanged();
-    emit tabAdded();
 }
 
 void kciTabManager::new_file()
@@ -441,25 +441,3 @@ int kciTabManager::getCurrentLineNum()
     }
 }
 
-//TODO: Fixed Me!!!!!!
-
-void kciTabManager::dragEnterEvent(QDragEnterEvent *event)
-{
-    if(event->mimeData()->hasFormat("text/uri-list"))
-    {
-        event->acceptProposedAction();
-    }
-}
-
-void kciTabManager::dropEvent(QDropEvent *event)
-{
-    QList<QUrl> urls = event->mimeData()->urls();
-    if (urls.isEmpty())
-    {
-        return;
-    }
-    for(int i=0;i<urls.count();i++)
-    {
-        qDebug()<<urls[i];
-    }
-}

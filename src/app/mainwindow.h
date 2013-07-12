@@ -84,6 +84,8 @@ private slots:
 protected:
     void closeEvent(QCloseEvent *e);
     void resizeEvent(QResizeEvent *e);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private:
     enum MainWindowActions

@@ -36,6 +36,7 @@
 #include <QTabWidget>
 #include <QToolButton>
 #include <QToolBar>
+#include <QMimeData>
 #include <QKeySequence>
 #include <QVBoxLayout>
 #include <QDockWidget>
@@ -62,11 +63,14 @@ private slots:
     void addNewTab();
 
 private:
+    int judge_file_count;
     QTabWidget *tabJudgeFiles;
     QToolBar *tlbJudge;
     QVBoxLayout *MainLayout;
-    QToolButton *tlbacAdd, *tlbacRemove, *tlbacStartAll,
-            *tlbacStop;
+    QToolButton *tlbacAdd, *tlbacRemove, *tlbacStartAll, *tlbacStop,
+                *tlbacBackup, *tlbacImport;
+
+    void resetJudgetEditWidget();
 };
 
 class kciJudgeDock : public QDockWidget
