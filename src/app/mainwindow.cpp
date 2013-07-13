@@ -679,11 +679,10 @@ void MainWindow::compileCurrentFile()
 
 void MainWindow::run()
 {
-    kciTextEditor *currentEditor=qobject_cast<kciTextEditor *>(tabManager->currentWidget());
+    kciTextEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
     {
-        compileCurrentFile();
-        kciExecutor *executor=new kciExecutor(this);
+        kciExecutor *executor=currentEditor->langMode()->getExecutor();
         executor->setBackgroundExec(false);
         executor->setEnabledAutoInput(false);
 
@@ -754,7 +753,11 @@ void MainWindow::dropEvent(QDropEvent *event)
     while(i--)
     {
         tmpPath=fileList.at(i).path();
+
+#ifdef Q_OS_WIN32
         tmpPath=tmpPath.remove(0,1);
+#endif
+
         tabManager->openAndJumpTo(tmpPath);
     }
 }
