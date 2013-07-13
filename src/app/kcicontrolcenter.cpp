@@ -26,72 +26,49 @@
 kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     QWidget(parent)
 {
+    setFixedHeight(44);
+    setContentsMargins(0,0,0,0);
+    setAutoFillBackground(true);
+
+    //Set Palette
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(83,83,83));
+    setPalette(pal);
+
+    //Set Title Layout
+    TitleLayout=new QHBoxLayout(this);
+    TitleLayout->setContentsMargins(0,0,0,0);
+    setLayout(TitleLayout);
+    //Add some spacing
+    TitleLayout->addSpacing(15);
+    //Set Title Text
     lblBannerTitle=new QLabel(this);
     lblBannerTitle->setText(tr("Cuties Control Center"));
-}
+    QFont TitleFont=lblBannerTitle->font();
+    TitleFont.setPointSize(11);
+    TitleFont.setBold(true);
+    lblBannerTitle->setFont(TitleFont);
+    pal=lblBannerTitle->palette();
+    pal.setColor(QPalette::WindowText, QColor(255,255,255));
+    lblBannerTitle->setPalette(pal);
+    TitleLayout->addWidget(lblBannerTitle);
+    //Set Stretch
+    TitleLayout->addStretch(0);
+    //Set Search Bar
 
-ccGeneral::ccGeneral(QWidget *parent):
-    QWidget(parent)
-{
-
-}
-
-ccEditor::ccEditor(QWidget *parent):
-    QWidget(parent)
-{
-
-}
-
-ccCompiler::ccCompiler(QWidget *parent):
-    QWidget(parent)
-{
-
-}
-
-ccDebugger::ccDebugger(QWidget *parent):
-    QWidget(parent)
-{
-
-}
-
-ccFileAssociation::ccFileAssociation(QWidget *parent):
-    QWidget(parent)
-{
-
-}
-
-ccLanguage::ccLanguage(QWidget *parent):
-    QWidget(parent)
-{
 
 }
 
 kciControlCenter::kciControlCenter(QWidget *parent) :
     QWidget(parent)
 {
-    setFont(QFont(QString("Hiragino Sans GB W3")));
-
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);
+    WholeTitleBarSplit->setContentsMargins(0,0,0,0);
     setLayout(WholeTitleBarSplit);
 
     //Set Banner
     ccBanner=new kciControlCenterBanner(this);
     WholeTitleBarSplit->addWidget(ccBanner);
 
-    //Set Tabs
-    ccMainTabs=new QStackedWidget(this);
-    tabGeneral=new ccGeneral(this);
-    tabEditor=new ccEditor(this);
-    tabCompiler=new ccCompiler(this);
-    tabDebugger=new ccDebugger(this);
-    tabFileAssociation=new ccFileAssociation(this);
-    tabLanguage=new ccLanguage(this);
-
-    WholeTitleBarSplit->addWidget(tabGeneral);
-    WholeTitleBarSplit->addWidget(tabEditor);
-    WholeTitleBarSplit->addWidget(tabCompiler);
-    WholeTitleBarSplit->addWidget(tabDebugger);
-    WholeTitleBarSplit->addWidget(tabFileAssociation);
-    WholeTitleBarSplit->addWidget(tabLanguage);
 }

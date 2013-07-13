@@ -163,9 +163,9 @@ void MainWindow::createActions()
     connect(act[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
 
     //View -> Judge Dock
-    act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
+    /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
-    connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));
+    connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));*/
 
     //Search -> Search
     act[mnuSearchFind]=new QAction(tr("searchinfile"),this);
@@ -341,9 +341,16 @@ void MainWindow::createTitlebar()
 
 void MainWindow::createDocks()
 {
+
+    /*
     //Judge Dock
     judgeDock=new kciJudgeDock(this);
     addDockWidget(Qt::RightDockWidgetArea, judgeDock);
+    */
+
+    //Debug Dock
+    debugDock=new kciDebugDock(this);
+    addDockWidget(Qt::BottomDockWidgetArea,debugDock);
 
     //Compile Dock
     compileDock=new kcicompiledock(this);
@@ -393,7 +400,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView] = _mainMenu->addMenu(tr("view"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewCompileDock;i<=mnuViewJudgeDock;i++)
+    for(i=mnuViewCompileDock;i<=mnuViewCompileDock/*mnuViewJudgeDock*/;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -586,12 +593,14 @@ void MainWindow::saveSettings()
     int n_WindowState;
 
     //Save ALL settings.
+    float deskWidth=float(QApplication::desktop()->width()),
+          deskHeight=float(QApplication::desktop()->height());
 
     settings.beginGroup("MainWindow");
-    settings.setValue("width",float(savedGeometry.width())/QApplication::desktop()->width());
-    settings.setValue("height",float(savedGeometry.height())/QApplication::desktop()->height());
-    settings.setValue("x",float(savedGeometry.x())/QApplication::desktop()->width());
-    settings.setValue("y",float(savedGeometry.y())/QApplication::desktop()->height());
+    settings.setValue("width",float(savedGeometry.width())/deskWidth);
+    settings.setValue("height",float(savedGeometry.height())/deskHeight);
+    settings.setValue("x",float(savedGeometry.x())/deskWidth);
+    settings.setValue("y",float(savedGeometry.y())/deskHeight);
 
     switch(windowState())
     {

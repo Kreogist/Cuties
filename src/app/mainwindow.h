@@ -47,6 +47,7 @@
 #include "kciglobal.h"
 #include "kcicompiledock.h"
 #include "kcijudgedock.h"
+#include "kcidebugdock.h"
 #include "kcititlebar.h"
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
@@ -63,6 +64,7 @@ public:
     
 signals:
     
+
 public slots:
     void aboutQt();
     void aboutKCI();
@@ -107,7 +109,7 @@ private:
         mnuEditSelectAll,
         mnuEditPreference,
         mnuViewCompileDock,
-        mnuViewJudgeDock,
+        //mnuViewJudgeDock,
         mnuSearchFind,
         mnuSearchFindInFiles,
         mnuSearchReplace,
@@ -163,6 +165,7 @@ private:
     QString actStatusTips[act_count], actMenuIconPath[act_count];
     QRect savedGeometry;
     kcicompiledock *compileDock;
+    kciDebugDock *debugDock;
     kciJudgeDock *judgeDock;
     kciTitleBar *titlebar;
     kciStatusBar *myStatusBar;

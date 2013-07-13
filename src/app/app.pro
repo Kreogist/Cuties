@@ -58,7 +58,9 @@ SOURCES += \
     kcicontrolcenter.cpp \
     kciexecutor.cpp \
     kcijudgedock.cpp \
-    kcilanguagemode.cpp
+    kcilanguagemode.cpp \
+    kcisearchlinetext.cpp \
+    kcidebugdock.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -89,7 +91,9 @@ HEADERS += \
     kcicontrolcenter.h \
     kciexecutor.h \
     kcijudgedock.h \
-    kcilanguagemode.h
+    kcilanguagemode.h \
+    kcisearchlinetext.h \
+    kcidebugdock.h
 
 # Enable C++11
 CONFIG += c++11
