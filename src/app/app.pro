@@ -43,7 +43,6 @@ SOURCES += \
     pascalhighlighter.cpp \
     textcharformatmap.cpp \
     compilerbase.cpp \
-    plaintexthighlighter.cpp \
     gcc.cpp \
     kcitabmanager.cpp \
     kcicompiledock.cpp \
@@ -74,7 +73,6 @@ HEADERS += \
     textcharformatmap.h \
     highlighterGlobal.h \
     compilerbase.h \
-    plaintexthighlighter.h \
     gcc.h \
     kcitabmanager.h \
     kcicompiledock.h \

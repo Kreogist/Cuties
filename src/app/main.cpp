@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());
     app.installTranslator(&appTrans);
 
-    //Initialize Application Icon.
+    //Initialize Application Fonts
     QStringList list;
     list << "monaco.ttf" << "Hiragino.otf" << "Inconsolata.otf";
     int fontID(-1);
