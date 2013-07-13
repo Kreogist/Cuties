@@ -413,11 +413,6 @@ void MainWindow::createMenu()
         menu[mnuSearch]->addAction(act[i]);
     }
 
-    //insert menu
-    MenuIconAddor->addFile(QString(":/img/image/InsertMenuIcon.png"));
-    menu[mnuInsert] = _mainMenu->addMenu(tr("insert"));
-    menu[mnuInsert]->setIcon(*MenuIconAddor);
-
     //run menu
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
     menu[mnuRun] = _mainMenu->addMenu(tr("run"));
