@@ -568,14 +568,15 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     kciMainWindow::resizeEvent(e);
     if(this->isMaximized())
     {
-        savedGeometry.setSize(e->oldSize());
+        sgoH=e->oldSize().height();
+        sgoW=e->oldSize().width();
     }
     else
     {
-        savedGeometry.setSize(e->size());
-
-        savedGeometry.setX(x());
-        savedGeometry.setY(y());
+        sgoX=this->x();
+        sgoY=this->y();
+        sgoH=this->height();
+        sgoW=this->width();
     }
 }
 
@@ -583,13 +584,13 @@ void MainWindow::saveSettings()
 {
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
 
-    if(!this->isMaximized())
+    if(!(this->isMaximized() || this->isFullScreen()))
     {
-        savedGeometry.setSize(this->size());
-        savedGeometry.setX(x());
-        savedGeometry.setY(y());
+        sgoX=this->x();
+        sgoY=this->y();
+        sgoH=this->height();
+        sgoW=this->width();
     }
-
     int n_WindowState;
 
     //Save ALL settings.
@@ -597,10 +598,10 @@ void MainWindow::saveSettings()
           deskHeight=float(QApplication::desktop()->height());
 
     settings.beginGroup("MainWindow");
-    settings.setValue("width",float(savedGeometry.width())/deskWidth);
-    settings.setValue("height",float(savedGeometry.height())/deskHeight);
-    settings.setValue("x",float(savedGeometry.x())/deskWidth);
-    settings.setValue("y",float(savedGeometry.y())/deskHeight);
+    settings.setValue("width",float(sgoW)/deskWidth);
+    settings.setValue("height",float(sgoH)/deskHeight);
+    settings.setValue("x",float(sgoX)/deskWidth);
+    settings.setValue("y",float(sgoY)/deskHeight);
 
     switch(windowState())
     {

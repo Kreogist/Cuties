@@ -30,11 +30,10 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
 
     setContentsMargins(0,0,0,0);
 
-    //Set New Layout.
-    PanelLayout=new QGridLayout(this);
-    PanelLayout->setContentsMargins(0,0,0,0);
-    PanelLayout->setSpacing(0);
-    setLayout(PanelLayout);
+    MainLayout=new QHBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
 
     //Create Buttons.
     createControlButtons();
@@ -45,33 +44,54 @@ void kciDebugWidget::createControlButtons()
     //Set New ToolButton.
     tblStartDebug=new QToolButton(this);
     tblStartDebug->setText(tr("Debug"));
+    tblStartDebug->setFixedSize(110,24);
     tblStopDebug=new QToolButton(this);
     tblStopDebug->setText(tr("Stop Debug"));
-    tblRunToBreakPoint=new QToolButton(this);
-    tblRunToBreakPoint->setText(tr("Run to Break Point"));
+    tblStopDebug->setFixedSize(110,24);
+    tblRunToCursor=new QToolButton(this);
+    tblRunToCursor->setText(tr("Run To Cursor"));
+    tblRunToCursor->setFixedSize(110,24);
 
     tblNextStep=new QToolButton(this);
     tblNextStep->setText(tr("Next Step"));
+    tblNextStep->setFixedSize(110,24);
     tblNextLine=new QToolButton(this);
     tblNextLine->setText(tr("Next Line"));
+    tblNextLine->setFixedSize(110,24);
     tblIntoFunction=new QToolButton(this);
     tblIntoFunction->setText(tr("Go Into Function"));
+    tblIntoFunction->setFixedSize(110,24);
 
     tblOutFunction=new QToolButton(this);
     tblOutFunction->setText(tr("Get Out Function"));
+    tblOutFunction->setFixedSize(110,24);
     tblContinue=new QToolButton(this);
-    tblContinue->setText(tr("Continue Running"));
+    tblContinue->setText(tr("Continue"));
+    tblContinue->setFixedSize(110,24);
 
     //Set Layout.
-    PanelLayout->addWidget(tblStartDebug,1,1);
-    PanelLayout->addWidget(tblStopDebug,2,1);
-    PanelLayout->addWidget(tblRunToBreakPoint,3,1);
+    LeftButtonVList1=new QVBoxLayout();
+    LeftButtonVList2=new QVBoxLayout();
+    LeftButtonVList3=new QVBoxLayout();
+    LeftButtonVList1->addWidget(tblStartDebug);
+    LeftButtonVList1->addWidget(tblStopDebug);
+    LeftButtonVList1->addWidget(tblRunToCursor);
+    LeftButtonVList1->addStretch();
 
-    PanelLayout->addWidget(tblNextStep,1,2);
-    PanelLayout->addWidget(tblNextLine,2,2);
-    PanelLayout->addWidget(tblIntoFunction,3,2);
+    LeftButtonVList2->addWidget(tblNextStep);
+    LeftButtonVList2->addWidget(tblNextLine);
+    LeftButtonVList2->addWidget(tblIntoFunction);
+    LeftButtonVList2->addStretch();
 
-    PanelLayout->addWidget(tblOutFunction,1,3);
-    PanelLayout->addWidget(tblContinue,2,3);
+    LeftButtonVList3->addWidget(tblOutFunction);
+    LeftButtonVList3->addWidget(tblContinue);
+    LeftButtonVList3->addStretch();
+
+    MainLayout->addLayout(LeftButtonVList1);
+    MainLayout->addLayout(LeftButtonVList2);
+    MainLayout->addLayout(LeftButtonVList3);
+
+    GDBInfo=new QPlainTextEdit(this);
+    MainLayout->addWidget(GDBInfo);
 
 }

@@ -5,6 +5,8 @@
 #include <QPalette>
 #include <QGridLayout>
 #include <QToolButton>
+#include <QHBoxLayout>
+#include <QPlainTextEdit>
 
 class kciDebugWidget : public QWidget
 {
@@ -13,13 +15,15 @@ public:
     explicit kciDebugWidget(QWidget *parent = 0);
 
 private:
-    QToolButton *tblStartDebug, *tblStopDebug, *tblRunToBreakPoint,
+    QToolButton *tblStartDebug, *tblStopDebug, *tblRunToCursor,
                 *tblNextStep, *tblNextLine, *tblIntoFunction,
                 *tblOutFunction, *tblContinue;
 
     QToolButton *tblAddWatch, *tblEditWatch,* tblRemoveWatch;
 
-    QGridLayout *PanelLayout;
+    QPlainTextEdit *GDBInfo;
+    QVBoxLayout *LeftButtonVList1, *LeftButtonVList2, *LeftButtonVList3;
+    QHBoxLayout *MainLayout;
 
     void createControlButtons();
 };

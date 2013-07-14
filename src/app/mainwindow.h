@@ -39,6 +39,7 @@
 #include <QFileInfo>
 #include <QSettings>
 #include <QSize>
+#include <QRect>
 #include <QDesktopWidget>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
@@ -158,12 +159,13 @@ private:
         menu_count  //the number of menus
     };
 
+    int sgoX, sgoY, sgoH, sgoW;
+
     //kciTextEditor *editor;
     kciTabManager *tabManager;
     QAction *act[act_count];
     QMenu *menu[menu_count];
     QString actStatusTips[act_count], actMenuIconPath[act_count];
-    QRect savedGeometry;
     kcicompiledock *compileDock;
     kciDebugDock *debugDock;
     kciJudgeDock *judgeDock;
