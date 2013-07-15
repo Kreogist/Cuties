@@ -195,10 +195,11 @@ void kciSearchWindow::onMenuClicked()
 void kciSearchWindow::onSearcherFinished(QList<searchResult> *results)
 {
     kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(parent);
+
+    resultSize=results->size();
     if(editor!=NULL)
         editor->setSearchResults(results);
 
-    resultSize=results->size();
     if(resultSize>0)
     {
         currResultNum=0;

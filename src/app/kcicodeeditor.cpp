@@ -45,6 +45,8 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 
     connect(this,&kciCodeEditor::cursorPositionChanged,
             this,&kciCodeEditor::updateHighlights);
+    connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
+            this,SLOT(updateHighlights()));
 }
 
 void kciCodeEditor::paintEvent(QPaintEvent *e)
@@ -94,39 +96,52 @@ void kciCodeEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selec
 
 void kciCodeEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections)
 {
-    int l=resultList.size();
     QTextCursor _cursor(document());
 
     int lastLineNum=0;
-    for(int i=0;i<l;i++)
-    {
-        const searchResult r=resultList.at(i);
 
+    QTextBlock block=firstVisibleBlock();
+    int firstBlockNumber=block.blockNumber();
+    int bottom=height()/fontMetrics().lineSpacing();
+    int lastBlockNumber=firstBlockNumber;
+
+    for(;block.isValid() && bottom>0;block=block.next(),lastBlockNumber++)
+    {
+        bottom-=block.lineCount();
+    }
+
+    auto i=resultList.begin();
+    auto l=resultList.end();
+    while(i<l && i->lineNum < firstBlockNumber) i++;
+
+    for(;i<l && i->lineNum <= lastBlockNumber;i++)
+    {
         QTextEdit::ExtraSelection selection;
 
         _cursor.clearSelection();
         _cursor.movePosition(QTextCursor::NextBlock,
                              QTextCursor::MoveAnchor,
-                             r.lineNum-lastLineNum);
+                             i->lineNum-lastLineNum);
         _cursor.movePosition(QTextCursor::StartOfBlock,
                              QTextCursor::MoveAnchor);
         _cursor.movePosition(QTextCursor::NextCharacter,
                              QTextCursor::MoveAnchor,
-                             r.startPos);
+                             i->startPos);
         _cursor.movePosition(QTextCursor::NextCharacter,
                              QTextCursor::KeepAnchor,
-                             r.length);
+                             i->length);
         selection.cursor=_cursor;
 
         selection.format.setBackground(searchResultColor);
         selections.append(selection);
 
-        lastLineNum=r.lineNum;
+        lastLineNum=i->lineNum;
     }
 }
 
 void kciCodeEditor::setSearchResults(QList<searchResult> *results)
 {
     resultList=*results;
+
     updateHighlights();
 }

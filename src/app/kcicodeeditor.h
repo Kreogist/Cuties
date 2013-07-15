@@ -30,6 +30,7 @@
 #include <QTextBlock>
 #include <QFont>
 #include <QPalette>
+#include <QScrollBar>
 #include <QDebug>
 
 #include "kcitextsearcher.h"
