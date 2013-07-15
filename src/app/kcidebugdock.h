@@ -3,9 +3,14 @@
 
 #include <QDockWidget>
 #include <QPalette>
-#include <QGridLayout>
 #include <QToolButton>
+#include <QToolBar>
+#include <QLabel>
+#include <QComboBox>
+#include <QTreeView>
 #include <QHBoxLayout>
+#include <QStandardItemModel>
+#include <QVBoxLayout>
 #include <QPlainTextEdit>
 
 class kciDebugWidget : public QWidget
@@ -19,13 +24,30 @@ private:
                 *tblNextStep, *tblNextLine, *tblIntoFunction,
                 *tblOutFunction, *tblContinue;
 
+    QToolBar *DebugToolBar;
     QToolButton *tblAddWatch, *tblEditWatch,* tblRemoveWatch;
 
     QPlainTextEdit *GDBInfo;
-    QVBoxLayout *LeftButtonVList1, *LeftButtonVList2, *LeftButtonVList3;
-    QHBoxLayout *MainLayout;
+    //Main Widget Layout.
+    QVBoxLayout *MainWidgetLayout;
+    QHBoxLayout *MainShownLayout;
 
+    //Control Panel Layout.
+    QVBoxLayout *ControlPanel;
+
+    //GDB Layout.
+    QHBoxLayout *InputToGDB;
+    QVBoxLayout *GDBMainLayout;
+    QComboBox *GDBCmd;
+
+    //Watch Layout.
+    QTreeView *watchView;
+    QStandardItemModel *watchResult;
+    QStandardItem *LocalValueView, *CustomValueView;
+
+    void createToolBar();
     void createControlButtons();
+    void createGDBConversation();
 };
 
 class kciDebugDock : public QDockWidget

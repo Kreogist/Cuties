@@ -56,6 +56,7 @@
 #include "kcimainwindow.h"
 #include "kcicontrolcenter.h"
 #include "kciexecutor.h"
+#include "kreogistcutestyle.h"
 
 class MainWindow : public kciMainWindow
 {
@@ -129,9 +130,9 @@ private:
         mnuDebugStopExecute,
         mnuDebugSetBreakPoint,
         mnuDebugNextLine,
-        mnuDebugIntoLine,
-        mnuDebugNextInstruction,
+        mnuDebugNextStep,
         mnuDebugIntoInstruction,
+        mnuDebugSkipInstruction,
         mnuDebugSkipLine,
         mnuDebugSkipFunction,
         mnuDebugAddWatch,

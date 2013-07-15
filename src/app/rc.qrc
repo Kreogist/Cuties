@@ -58,4 +58,17 @@
         <file>image/Judge Dock/ToolBarBackup.png</file>
         <file>image/Judge Dock/ToolBarImport.png</file>
     </qresource>
+    <qresource prefix="/DebugToolBar">
+        <file>image/Debug Docks/StartDebug.png</file>
+        <file>image/Debug Docks/StopDebug.png</file>
+        <file>image/Debug Docks/RunToCursor.png</file>
+        <file>image/Debug Docks/NextLine.png</file>
+        <file>image/Debug Docks/GetOutOfFuntion.png</file>
+        <file>image/Debug Docks/GetIntoFuntion.png</file>
+        <file>image/Debug Docks/NextStep.png</file>
+        <file>image/Debug Docks/Continue.png</file>
+        <file>image/Debug Docks/AddWatch.png</file>
+        <file>image/Debug Docks/RemoveWatch.png</file>
+        <file>image/Debug Docks/ModifyWatch.png</file>
+    </qresource>
 </RCC>

@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QString>
 #include <QStyleFactory>
+#include <QDebug>
 
 #include "mainwindow.h"
 #include "kciglobal.h"
@@ -92,6 +93,7 @@ int main(int argc, char *argv[])
     app.setPalette(pal);
 
     //Initalize Application Style
+    //qDebug()<<app.style();
     KreogistCuteStyle *cuteStyle=new KreogistCuteStyle;
     app.setStyle(cuteStyle);
 

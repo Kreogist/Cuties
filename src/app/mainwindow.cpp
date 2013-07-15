@@ -244,10 +244,12 @@ void MainWindow::createActions()
 
     //Debug -> Debug Start
     act[mnuDebugStart]=new QAction(tr("Start Debug"),this);
+    act[mnuDebugStart]->setShortcut(QKeySequence(Qt::Key_F5));
     actStatusTips[mnuDebugStart]=QString(tr("Start debugging the active file."));
 
     //Debug -> Stop Execute
     act[mnuDebugStopExecute]=new QAction(tr("Stop execute"),this);
+    act[mnuDebugStopExecute]->setShortcut(QKeySequence(Qt::Key_F6));
     actStatusTips[mnuDebugStopExecute]=QString(tr("Stop the active debugging."));
 
     //Debug -> Set Break Point
@@ -256,19 +258,21 @@ void MainWindow::createActions()
 
     //Debug -> Next Line
     act[mnuDebugNextLine]=new QAction(tr("Next Line"),this);
+    act[mnuDebugNextLine]->setShortcut(QKeySequence(Qt::Key_F7));
     actStatusTips[mnuDebugNextLine]=QString(tr("Get into and run the next line."));
 
     //Debug -> Go Into line
-    act[mnuDebugIntoLine]=new QAction(tr("Into Line"),this);
-    actStatusTips[mnuDebugIntoLine]=QString(tr("Get into the next line."));
+    act[mnuDebugNextStep]=new QAction(tr("Next Step"),this);
+    act[mnuDebugNextLine]->setShortcut(QKeySequence(Qt::Key_F8));
+    actStatusTips[mnuDebugNextStep]=QString(tr("Get into and run the next step."));
 
-    //Debug -> Go Next Instruction
-    act[mnuDebugNextInstruction]=new QAction(tr("Next Instruction"),this);
-    actStatusTips[mnuDebugNextInstruction]=QString(tr("Get into and run the next instruction."));
-
-    //Debug -> Go Into Instruction
+    //Debug -> Into Instruction
     act[mnuDebugIntoInstruction]=new QAction(tr("Into Instruction"),this);
-    actStatusTips[mnuDebugIntoInstruction]=QString(tr("Get into the next instruction."));
+    actStatusTips[mnuDebugIntoInstruction]=QString(tr("Get into and run the instruction."));
+
+    //Debug -> Skip Instruction
+    act[mnuDebugSkipInstruction]=new QAction(tr("Skip Instruction"),this);
+    actStatusTips[mnuDebugSkipInstruction]=QString(tr("Run the remainder instruction."));
 
     //Debug -> Skip Line
     act[mnuDebugSkipLine]=new QAction(tr("skip line"),this);

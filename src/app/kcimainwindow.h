@@ -32,6 +32,7 @@
 #include <QDebug>
 
 #include "kcititlebar.h"
+#include "kreogistcutestyle.h"
 
 class kciMainWindow : public QMainWindow
 {
