@@ -23,10 +23,13 @@
 
 #include "kcilinenumpanel.h"
 
+static const int normal_color=120;
+static const int curr_line_color=255;
+
 kciLinenumPanel::kciLinenumPanel(QWidget *parent) :
     kciPanel(parent)
 {
-    textColor.setRgb(255,255,255,200);
+    textColor.setRgb(normal_color,normal_color,normal_color);
 }
 
 void kciLinenumPanel::draw(QPainter *painter, QTextBlock *block,
@@ -39,7 +42,7 @@ void kciLinenumPanel::draw(QPainter *painter, QTextBlock *block,
         font.setBold(true);
         painter->setFont(font);
 
-        textColor.setAlpha(255);
+        textColor.setRgb(curr_line_color,curr_line_color,curr_line_color);
     }
 
     QPen pen(painter->pen ());
@@ -56,7 +59,7 @@ void kciLinenumPanel::draw(QPainter *painter, QTextBlock *block,
         font.setBold(false);
         painter->setFont(font);
 
-        textColor.setAlpha(200);
+        textColor.setRgb(normal_color,normal_color,normal_color);
     }
 
 }

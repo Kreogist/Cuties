@@ -58,14 +58,13 @@ public:
     int getFlags() const;
     void setFlags(int value);
 
-    QList<searchResult> resultList;
     QReadWriteLock lock;
 
 signals:
-    void finished();
+    void finished(QList<searchResult>* results);
     
 public slots:
-    void receiveSingleResult(searchResult result);
+    void onWorkerFinished();
     
 private:
     QString subString;

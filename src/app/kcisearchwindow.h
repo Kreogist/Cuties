@@ -36,22 +36,22 @@
 #include <QFrame>
 #include <QLabel>
 #include <QMenu>
+#include <QPlainTextEdit>
 #include <QTextDocument>
 
-#include "kcitexteditor.h"
+#include "kcicodeeditor.h"
 #include "kcitextsearcher.h"
 
 class kciSearchWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciSearchWindow(QWidget *parent = 0);
+    explicit kciSearchWindow(QPlainTextEdit *parent);
     void setTextFocus();
-    void setDocument(QTextDocument* doc);
 
 public slots:
     void onTextChanged(const QString &text);
-    void onSearcherFinished();
+    void onSearcherFinished(QList<searchResult>* results);
     void moveToPrevResult();
     void moveToNextResult();
     void onMenuClicked();
@@ -73,6 +73,8 @@ private:
 
     int currResultNum;
 
+    QPlainTextEdit* parent;
+
     QHBoxLayout *searchLayout;
     QToolButton *closeButton, *upButton, *downButton;
     QLabel *lblSearchInfo;
@@ -83,11 +85,8 @@ private:
     QHBoxLayout *Layout;
     QPushButton *SearchIcon;
     kciTextSearcher *searcher;
-    QTextDocument *document;
-    QList<searchResult> result;
 
-    QTextCharFormat selectedCharFormat;
-    QTextCharFormat normalCharFormat;
+    int resultSize;
 
     QMenu *menu;
     QAction *menuAction[menuItemCount];

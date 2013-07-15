@@ -17,6 +17,11 @@ void kciTextSearchWorker::run()
     }
 }
 
+QList<searchResult>* kciTextSearchWorker::getResults()
+{
+    return &resultList;
+}
+
 void kciTextSearchWorker::setDocument(QTextDocument *value)
 {
     document = value;
@@ -46,7 +51,7 @@ void kciTextSearchWorker::emitResult(int startPos, int length)
 
     _sr_tmp.length=length;
 
-    emit oneResultReady(_sr_tmp);
+    resultList<<_sr_tmp;
 }
 
 //======kciTextSearchWorkerRegexp======

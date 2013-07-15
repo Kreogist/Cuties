@@ -56,6 +56,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     document=editor->document();
     mainLayout->addWidget(editor);
     mainLayout->addSpacing(1);
+
     connect(editor->document(),SIGNAL(modificationChanged(bool)),
             this,SLOT(onModificationChanged(bool)));
     connect(editor,SIGNAL(cursorPositionChanged()),
@@ -71,8 +72,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     filePath.clear();
     fileError=QFileDevice::NoError;
 
-    searchBar=new kciSearchWindow(this);
-    searchBar->setDocument(document);
+    searchBar=new kciSearchWindow(editor);
     searchBar->hide();
     connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
 }
@@ -81,7 +81,7 @@ void kciTextEditor::showSearchBar()
 {
     QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
     QRect animeEndPos=searchBar->rect();
-    animeEndPos.setX(width()-searchBar->width()-SearchBarOffset);
+    animeEndPos.setX(editor->width()-searchBar->width()-SearchBarOffset);
     QRect animeStartPos=animeEndPos;
     animeStartPos.setTop(-animeStartPos.height());
     searchAnime->setStartValue(animeStartPos);
@@ -92,7 +92,6 @@ void kciTextEditor::showSearchBar()
     searchAnime->start();
     searchBar->setTextFocus();
 }
-
 
 bool kciTextEditor::open(const QString &fileName)
 {
@@ -339,19 +338,14 @@ int kciTextEditor::getTextLines()
 
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 {
-     QTextCursor cursor = editor->textCursor();
-     cursor.setPosition(editor->document()->findBlockByNumber(nLine).position());
-     cursor.movePosition(QTextCursor::NextCharacter,
-                          QTextCursor::MoveAnchor,
-                          linePos);
-     editor->setTextCursor(cursor);
+     editor->setDocumentCursor(nLine,linePos);
 }
 
 void kciTextEditor::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
 
-    searchBar->setGeometry(width()-searchBar->width()-SearchBarOffset,
+    searchBar->setGeometry(editor->width()-searchBar->width()-SearchBarOffset,
                            0,
                            searchBar->width(),
                            searchBar->height());

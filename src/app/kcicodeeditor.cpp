@@ -29,10 +29,6 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     setFrameStyle(QFrame::NoFrame);
     setFont(QString("Monaco"));
     setAcceptDrops(false);
-    connect(this,&kciCodeEditor::cursorPositionChanged,
-            this,&kciCodeEditor::highlightCurrentLine);
-
-    lineColor = QColor(0x64,0x64,0x64);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -41,29 +37,96 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     setPalette(pal);
     setFrameStyle(0);
 
+    lineColor = QColor(0x64,0x64,0x64);
+    searchResultColor = QColor(0xf7,0xcf,0x3d);
+
     //Solve the default line's bug.
-    highlightCurrentLine();
-}
+    updateHighlights();
 
-void kciCodeEditor::highlightCurrentLine()
-{
-    QList<QTextEdit::ExtraSelection> extraSelections;
-
-        if (!isReadOnly()) {
-            QTextEdit::ExtraSelection selection;
-
-            selection.format.setBackground(lineColor);
-            selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-            selection.cursor = textCursor();
-            selection.cursor.clearSelection();
-            extraSelections.append(selection);
-        }
-
-        setExtraSelections(extraSelections);
+    connect(this,&kciCodeEditor::cursorPositionChanged,
+            this,&kciCodeEditor::updateHighlights);
 }
 
 void kciCodeEditor::paintEvent(QPaintEvent *e)
 {
     QPlainTextEdit::paintEvent(e);
     emit updated();
+}
+
+void kciCodeEditor::showSearchResultAt(int num)
+{
+    searchResult result=resultList[num];
+    setDocumentCursor(result.lineNum,result.startPos);
+}
+
+void kciCodeEditor::setDocumentCursor(int nLine, int linePos)
+{
+     QTextCursor cursor = textCursor();
+     cursor.setPosition(document()->findBlockByNumber(nLine).position());
+     cursor.movePosition(QTextCursor::NextCharacter,
+                          QTextCursor::MoveAnchor,
+                          linePos);
+     setTextCursor(cursor);
+}
+
+void kciCodeEditor::updateHighlights()
+{
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    highlightCurrentLine(extraSelections);
+    highlightSearchResult(extraSelections);
+
+    setExtraSelections(extraSelections);
+}
+
+void kciCodeEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections)
+{
+    if (!isReadOnly()) {
+        QTextEdit::ExtraSelection selection;
+
+        selection.format.setBackground(lineColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = textCursor();
+        selection.cursor.clearSelection();
+        selections.append(selection);
+    }
+}
+
+void kciCodeEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections)
+{
+    int l=resultList.size();
+    QTextCursor _cursor(document());
+
+    int lastLineNum=0;
+    for(int i=0;i<l;i++)
+    {
+        const searchResult r=resultList.at(i);
+
+        QTextEdit::ExtraSelection selection;
+
+        _cursor.clearSelection();
+        _cursor.movePosition(QTextCursor::NextBlock,
+                             QTextCursor::MoveAnchor,
+                             r.lineNum-lastLineNum);
+        _cursor.movePosition(QTextCursor::StartOfBlock,
+                             QTextCursor::MoveAnchor);
+        _cursor.movePosition(QTextCursor::NextCharacter,
+                             QTextCursor::MoveAnchor,
+                             r.startPos);
+        _cursor.movePosition(QTextCursor::NextCharacter,
+                             QTextCursor::KeepAnchor,
+                             r.length);
+        selection.cursor=_cursor;
+
+        selection.format.setBackground(searchResultColor);
+        selections.append(selection);
+
+        lastLineNum=r.lineNum;
+    }
+}
+
+void kciCodeEditor::setSearchResults(QList<searchResult> *results)
+{
+    resultList=*results;
+    updateHighlights();
 }

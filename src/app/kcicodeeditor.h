@@ -30,24 +30,34 @@
 #include <QTextBlock>
 #include <QFont>
 #include <QPalette>
+#include <QDebug>
+
+#include "kcitextsearcher.h"
 
 class kciCodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 public:
     explicit kciCodeEditor(QWidget *parent = 0);
+    void setDocumentCursor(int nLine, int linePos);
+    void setSearchResults(QList<searchResult> *results);
+    void showSearchResultAt(int num);
     
 signals:
     void updated();
 
 public slots:
-    void highlightCurrentLine();
+    void updateHighlights();
 
 protected:
     void paintEvent(QPaintEvent *e);
 
 private:
-    QColor lineColor;
+    void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
+    void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
+
+    QList<searchResult> resultList;
+    QColor lineColor,searchResultColor;
 };
 
 #endif // CODEEDITOR_H
