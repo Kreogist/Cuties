@@ -12,6 +12,7 @@
 #include <QStandardItemModel>
 #include <QVBoxLayout>
 #include <QPlainTextEdit>
+#include <QCommonStyle>
 
 class kciDebugWidget : public QWidget
 {
@@ -58,6 +59,9 @@ private:
     QLabel *lblWatch;
     QTreeView *watchView;
     QStandardItemModel *watchResult;
+
+    //Some Control Needs Origin Style.
+    QCommonStyle *DockStyle;
 
     void createToolBar();
     void createControlButtons();

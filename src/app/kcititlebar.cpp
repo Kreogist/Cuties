@@ -29,6 +29,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 {
     setMouseTracking(true);
     setContentsMargins(0,0,0,0);
+    setFixedHeight(32);
 
     windowTitle=parent->windowTitle();
 
@@ -57,8 +58,12 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     connect(maximizeButton,SIGNAL(clicked()),
             this,SLOT(_exchange_button_state()));
 
+    mainToolBar=new QToolBar(this);
+    createToolBar();
+
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
+    mainButton->setFixedSize(32,32);
     mainButton->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_1));
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
@@ -73,6 +78,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->setSpacing(0);
     setLayout(hLayout);
     hLayout->addWidget(mainButton);
+    hLayout->addWidget(mainToolBar);
     hLayout->addStretch();
     hLayout->addWidget(titleLabel);
     hLayout->addSpacing(3);
@@ -97,6 +103,14 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     vCloseLayout->addWidget(closeButton);
     vCloseLayout->addStretch();
     hLayout->addLayout(vCloseLayout);
+}
+
+void kciTitleBar::createToolBar()
+{
+    //mainToolBar
+    QToolButton *tblNew=new QToolButton(this);
+    tblNew->setIcon(QIcon(":/ToolBar/image/ToolBar/01_New.png"));
+    mainToolBar->addWidget(tblNew);
 }
 
 void kciTitleBar::_exchange_button_state()

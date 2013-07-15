@@ -72,4 +72,7 @@
         <file>image/Debug Docks/ModifyWatch.png</file>
         <file>image/Debug Docks/JumpFunction.png</file>
     </qresource>
+    <qresource prefix="/ToolBar">
+        <file>image/ToolBar/01_New.png</file>
+    </qresource>
 </RCC>

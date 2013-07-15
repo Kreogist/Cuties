@@ -34,6 +34,7 @@
 #include <QIcon>
 #include <QString>
 #include <QToolBar>
+#include <QWidget>
 #include <QPalette>
 
 class kciTitleBar : public QWidget
@@ -77,6 +78,9 @@ private:
 
     QToolButton *mainButton;
     QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;
+    QToolBar *mainToolBar;
+
+    void createToolBar();
 };
 
 #endif // KCITITLEBAR_H

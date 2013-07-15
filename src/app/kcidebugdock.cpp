@@ -26,10 +26,13 @@ kciDebugDock::kciDebugDock(QWidget *parent) :
 
 kciDebugWidget::kciDebugWidget(QWidget *parent) :
     QWidget(parent)
-{
-
+{   
     setContentsMargins(0,0,0,0);
 
+    //Origin Style:
+    DockStyle=new QCommonStyle();
+
+    //Main Layout.
     MainWidgetLayout=new QVBoxLayout(this);
     MainWidgetLayout->setContentsMargins(0,0,0,0);
     MainWidgetLayout->setSpacing(0);

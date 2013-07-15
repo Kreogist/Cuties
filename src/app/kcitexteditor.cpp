@@ -79,18 +79,21 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
 void kciTextEditor::showSearchBar()
 {
-    QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-    QRect animeEndPos=searchBar->rect();
-    animeEndPos.setX(editor->width()-searchBar->width()-SearchBarOffset);
-    QRect animeStartPos=animeEndPos;
-    animeStartPos.setTop(-animeStartPos.height());
-    searchAnime->setStartValue(animeStartPos);
-    searchAnime->setDuration(300);
-    searchAnime->setEndValue(animeEndPos);
-    searchAnime->setEasingCurve(QEasingCurve::OutCubic);
-    searchBar->show();
-    searchAnime->start();
-    searchBar->setTextFocus();
+    if(!searchBar->isVisible())
+    {
+        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
+        QRect animeEndPos=searchBar->rect();
+        animeEndPos.setX(editor->width()-searchBar->width()-SearchBarOffset);
+        QRect animeStartPos=animeEndPos;
+        animeStartPos.setTop(-animeStartPos.height());
+        searchAnime->setStartValue(animeStartPos);
+        searchAnime->setDuration(300);
+        searchAnime->setEndValue(animeEndPos);
+        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+        searchBar->show();
+        searchAnime->start();
+        searchBar->setTextFocus();
+    }
 }
 
 bool kciTextEditor::open(const QString &fileName)
