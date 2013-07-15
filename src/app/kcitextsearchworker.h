@@ -25,6 +25,8 @@ public:
     bool needQuit;
     QReadWriteLock lock;
 
+    QList<searchResult>* getResults();
+
     void setDocument(QTextDocument *value);
     void setIsCaseSensitive(bool value);
     virtual void setPattern(const QString& pattern) = 0;
@@ -35,11 +37,9 @@ protected:
     void quitWhenRequest();
     virtual void match(const QString& text) = 0;
     virtual void setCaseSensitive(bool value) = 0;
-
-signals:
-    void oneResultReady(searchResult result);
     
 private:
+    QList<searchResult> resultList;
     int currBlockNumber;
     bool isCaseSensitive;
     QTextDocument* document;

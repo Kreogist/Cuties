@@ -42,9 +42,6 @@ void kciTextSearcher::search()
         delete worker;
     }
 
-    while(!resultList.isEmpty())
-        resultList.removeFirst();
-
     if((flags & RegularExpress) || (flags & WholeWord))
     {
         worker=new kciTextSearchWorkerRegexp;
@@ -69,10 +66,7 @@ void kciTextSearcher::search()
 
     worker->setDocument(p_document);
 
-    connect(worker,SIGNAL(oneResultReady(searchResult)),
-            this,SLOT(receiveSingleResult(searchResult)));
-
-    connect(worker,SIGNAL(finished()),this,SIGNAL(finished()));
+    connect(worker,SIGNAL(finished()),this,SLOT(onWorkerFinished()));
     worker->start(QThread::NormalPriority);
 }
 
@@ -97,8 +91,7 @@ void kciTextSearcher::setFlags(int value)
     flags = value;
 }
 
-void kciTextSearcher::receiveSingleResult(searchResult result)
+void kciTextSearcher::onWorkerFinished()
 {
-    resultList<<result;
-    qDebug()<<result.lineNum<<result.startPos;
+    emit finished(worker->getResults());
 }

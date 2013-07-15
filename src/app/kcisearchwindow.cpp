@@ -25,9 +25,10 @@
 
 static const int nFixedWidth=290;
 
-kciSearchWindow::kciSearchWindow(QWidget *parent) :
+kciSearchWindow::kciSearchWindow(QPlainTextEdit *parent) :
     QWidget(parent)
 {
+    this->parent=parent;
     //--------TextBox Init-----------------
     searchText=new QWidget(this);
     //Set Background Fill.
@@ -77,8 +78,6 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
     SearchIcon->setMenu(menu);
 
     Layout->addWidget(SearchTexts);
-
-    selectedCharFormat.setBackground(QBrush(QColor(0xf7,0xcf,0x3d)));
 
     //--------Search Window Init-------------
     setAutoFillBackground(true);
@@ -150,7 +149,10 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
 
     //Set Searcher
     searcher=new kciTextSearcher(this);
-    connect(searcher,SIGNAL(finished()),this,SLOT(onSearcherFinished()));
+    searcher->setDocument(parent->document());
+    resultSize=0;
+    connect(searcher,SIGNAL(finished(QList<searchResult>*)),
+            this,SLOT(onSearcherFinished(QList<searchResult>*)));
 }
 
 void kciSearchWindow::onTextChanged(const QString &text)
@@ -173,7 +175,14 @@ void kciSearchWindow::onTextChanged(const QString &text)
     }
     else
     {
-        setSelectedCharFormat(normalCharFormat);
+        kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(parent);
+        if(editor!=NULL)
+        {
+            QList<searchResult> *results=new QList<searchResult>();
+            editor->setSearchResults(results);
+            delete results;
+        }
+
         lblSearchInfo->setText(" 0/0 ");
     }
 }
@@ -183,55 +192,26 @@ void kciSearchWindow::onMenuClicked()
     onTextChanged(SearchTexts->text());
 }
 
-void kciSearchWindow::setSelectedCharFormat(const QTextCharFormat& format)
+void kciSearchWindow::onSearcherFinished(QList<searchResult> *results)
 {
-    int l=result.size();
-    QTextCursor _cursor(document);
-    for(int i=0;i<l;i++)
-    {
-        const searchResult r=result.at(i);
+    kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(parent);
+    if(editor!=NULL)
+        editor->setSearchResults(results);
 
-        _cursor.movePosition(QTextCursor::Start);
-        _cursor.movePosition(QTextCursor::NextBlock,
-                             QTextCursor::MoveAnchor,
-                             r.lineNum);
-        _cursor.movePosition(QTextCursor::NextCharacter,
-                             QTextCursor::MoveAnchor,
-                             r.startPos);
-        _cursor.movePosition(QTextCursor::NextCharacter,
-                             QTextCursor::KeepAnchor,
-                             r.length);
-        _cursor.setCharFormat(format);
-    }
-}
-
-void kciSearchWindow::onSearcherFinished()
-{
-    bool docModified=document->isModified();
-
-    setSelectedCharFormat(normalCharFormat);
-
-    normalCharFormat=document->begin().charFormat();
-
-    result=searcher->resultList;
-
-    setSelectedCharFormat(selectedCharFormat);
-
-    if(result.size()>0)
+    resultSize=results->size();
+    if(resultSize>0)
     {
         currResultNum=0;
 
         showCurrResult();
     }
-
-    document->setModified(docModified);
 }
 
 void kciSearchWindow::moveToNextResult()
 {
-    if(!result.isEmpty())
+    if(resultSize>0)
     {
-        if(currResultNum+1<result.size())
+        if(currResultNum+1<resultSize)
             currResultNum++;
         else
             currResultNum=0;
@@ -242,7 +222,7 @@ void kciSearchWindow::moveToNextResult()
 
 void kciSearchWindow::moveToPrevResult()
 {
-    if(!result.isEmpty())
+    if(resultSize>0)
     {
         if(currResultNum-1 >= 0)
         {
@@ -250,17 +230,11 @@ void kciSearchWindow::moveToPrevResult()
         }
         else
         {
-            currResultNum=result.size()-1;
+            currResultNum=resultSize-1;
         }
 
         showCurrResult();
     }
-}
-
-void kciSearchWindow::setDocument(QTextDocument *doc)
-{
-    searcher->setDocument(doc);
-    document=doc;
 }
 
 void kciSearchWindow::setTextFocus()
@@ -276,14 +250,13 @@ void kciSearchWindow::hideEvent(QHideEvent *e)
 
 void kciSearchWindow::showCurrResult()
 {
-    const searchResult r=result.at(currResultNum);
-    kciTextEditor *editor=qobject_cast<kciTextEditor*>(parent());
+    kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(parent);
     if(editor!=NULL)
-        editor->setDocumentCursor(r.lineNum,r.startPos);
+        editor->showSearchResultAt(currResultNum);
 
     lblSearchInfo->setText(QString(" ")+
                            QString::number(currResultNum+1)+
                            QString("/")+
-                           QString::number(result.size())+
+                           QString::number(resultSize)+
                            QString(" "));
 }
