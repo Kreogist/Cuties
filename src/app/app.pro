@@ -59,7 +59,8 @@ SOURCES += \
     kcijudgedock.cpp \
     kcilanguagemode.cpp \
     kcisearchlinetext.cpp \
-    kcidebugdock.cpp
+    kcidebugdock.cpp \
+    kcitextsearchworker.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -91,7 +92,8 @@ HEADERS += \
     kcijudgedock.h \
     kcilanguagemode.h \
     kcisearchlinetext.h \
-    kcidebugdock.h
+    kcidebugdock.h \
+    kcitextsearchworker.h
 
 # Enable C++11
 CONFIG += c++11
