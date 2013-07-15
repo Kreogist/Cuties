@@ -2,8 +2,9 @@
 #define KCISEARCHLINETEXT_H
 
 #include <QLineEdit>
-#include <QIcon>
+#include <QLabel>
 #include <QWidget>
+#include <QPixmap>
 #include <QHBoxLayout>
 
 class kciSearchLineText : public QWidget
@@ -19,6 +20,7 @@ public slots:
 private:
     QLineEdit *searchTextBox;
     QHBoxLayout *MainLayout;
+    QLabel *lblImage;
 
 };
 

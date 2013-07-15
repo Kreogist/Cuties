@@ -59,7 +59,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
             this,SLOT(_exchange_button_state()));
 
     mainToolBar=new QToolBar(this);
-    createToolBar();
 
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
@@ -105,12 +104,9 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addLayout(vCloseLayout);
 }
 
-void kciTitleBar::createToolBar()
+void kciTitleBar::addToolButton(QToolButton *tblMainButton)
 {
-    //mainToolBar
-    QToolButton *tblNew=new QToolButton(this);
-    tblNew->setIcon(QIcon(":/ToolBar/image/ToolBar/01_New.png"));
-    mainToolBar->addWidget(tblNew);
+    mainToolBar->addWidget(tblMainButton);
 }
 
 void kciTitleBar::_exchange_button_state()

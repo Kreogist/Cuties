@@ -162,6 +162,12 @@ private:
         menu_count  //the number of menus
     };
 
+    enum MainToolBarButton
+    {
+        tlbNewFile,
+        tlbbutton_count // the number of toolbar buttons
+    };
+
     int sgoX, sgoY, sgoH, sgoW;
 
     //kciTextEditor *editor;
@@ -169,6 +175,7 @@ private:
     QAction *act[act_count];
     QMenu *menu[menu_count];
     QString actStatusTips[act_count], actMenuIconPath[act_count];
+    QToolButton *tblMainButton[tlbbutton_count];
     kcicompiledock *compileDock;
     kciDebugDock *debugDock;
     kciJudgeDock *judgeDock;
@@ -183,6 +190,7 @@ private:
     void createDocks();
     void createMenu();
     void createStatusbar();
+    void createToolBar();
 
     void setDocOpenMenuState(bool state);
 };

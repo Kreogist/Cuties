@@ -42,6 +42,7 @@ class kciTitleBar : public QWidget
     Q_OBJECT
 public:
     explicit kciTitleBar(QWidget *parent = 0);
+    void addToolButton(QToolButton *tblMainButton);
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString& mainIcon);
     void setTitle(const QString &title);
@@ -79,8 +80,6 @@ private:
     QToolButton *mainButton;
     QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;
     QToolBar *mainToolBar;
-
-    void createToolBar();
 };
 
 #endif // KCITITLEBAR_H

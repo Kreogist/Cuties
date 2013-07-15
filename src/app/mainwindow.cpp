@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     createDocks();
     createTitlebar();
     createMenu();
+    createToolBar();
     createStatusbar();
 
     restoreSettings();
@@ -346,6 +347,19 @@ void MainWindow::createTitlebar()
 
     titlebar->setTitle(this->windowTitle());
     setWindowTitle(this->windowTitle());
+}
+
+void MainWindow::createToolBar()
+{
+    QString strIconPath[tlbbutton_count];
+    strIconPath[tlbNewFile]=":/ToolBar/image/ToolBar/01_New.png";
+    for(int i=tlbNewFile;i<=tlbNewFile;i++)
+    {
+        tblMainButton[i]=new QToolButton(titlebar);
+        //tblMainButton[i]->setIcon(QIcon);
+        titlebar->addToolButton(tblMainButton[i]);
+    }
+
 }
 
 void MainWindow::createDocks()

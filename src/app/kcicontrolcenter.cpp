@@ -55,8 +55,10 @@ kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     //Set Stretch
     TitleLayout->addStretch(0);
     //Set Search Bar
-
-
+    CCSearch=new kciSearchLineText();
+    CCSearch->setFixedWidth(250);
+    TitleLayout->addWidget(CCSearch);
+    TitleLayout->addSpacing(7);
 }
 
 kciControlCenter::kciControlCenter(QWidget *parent) :
@@ -70,5 +72,6 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     //Set Banner
     ccBanner=new kciControlCenterBanner(this);
     WholeTitleBarSplit->addWidget(ccBanner);
+    WholeTitleBarSplit->addStretch();
 
 }

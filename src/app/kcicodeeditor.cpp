@@ -98,6 +98,7 @@ void kciCodeEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& sele
     QTextCursor _cursor(document());
 
     int lastLineNum=0;
+
     for(int i=0;i<l;i++)
     {
         const searchResult r=resultList.at(i);

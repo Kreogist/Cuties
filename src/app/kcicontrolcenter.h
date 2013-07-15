@@ -37,6 +37,8 @@
 #include <QHBoxLayout>
 #include <QStackedWidget>
 
+#include "kcisearchlinetext.h"
+
 class kciControlCenterBanner : public QWidget
 {
     Q_OBJECT
@@ -46,7 +48,7 @@ public:
 private:
     QHBoxLayout *TitleLayout;
     QLabel *lblBannerTitle;
-
+    kciSearchLineText *CCSearch;
 };
 
 class kciControlCenter : public QWidget
