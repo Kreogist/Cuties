@@ -4,7 +4,7 @@ kciDebugDock::kciDebugDock(QWidget *parent) :
     QDockWidget(parent)
 {
     //Set ObjectName
-    setObjectName(tr("Debug Dock"));
+    setObjectName("Debug Dock");
 
     //Set Style
     setContentsMargins(0,0,0,0);
@@ -16,7 +16,7 @@ kciDebugDock::kciDebugDock(QWidget *parent) :
     pal.setColor(QPalette::Text,QColor(255,255,255));
     pal.setColor(QPalette::ButtonText,QColor(255,255,255));
     setPalette(pal);
-    setWindowTitle(tr("Debug"));
+    setWindowTitle(" " + tr("Debug") + " ");
 
     //New Central Widget
     CentralWidget=new kciDebugWidget(this);
@@ -90,7 +90,7 @@ void kciDebugWidget::createWatchLayout()
     WatchLayout->setSpacing(5);
     //Add Label Widget.
     lblLocalWatch=new QLabel(this);
-    lblLocalWatch->setText(tr("Local Watch"));
+    lblLocalWatch->setText(" " + tr("Local Watch"));
     WatchLayout->addWidget(lblLocalWatch);
     //Add TreeView
     localWatchView=new QTreeView(this);
@@ -104,7 +104,7 @@ void kciDebugWidget::createWatchLayout()
 
     //Add New Label Widget.
     lblWatch=new QLabel(this);
-    lblWatch->setText(tr("Custom Watch"));
+    lblWatch->setText(" " + tr("Custom Watch"));
     WatchLayout->addWidget(lblWatch);
     //Add TreeView
     watchView=new QTreeView(this);

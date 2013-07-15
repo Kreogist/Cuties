@@ -553,10 +553,18 @@ void MainWindow::restoreSettings()
 
     int n_WindowState;
     float n_X, n_Y, n_width, n_height;
-    n_X     = settings.value("x", 0.1).toFloat() * QApplication::desktop()->width();
-    n_Y     = settings.value("y", 0.1).toFloat() * QApplication::desktop()->height();
-    n_width = settings.value("width", 0.8).toFloat() * QApplication::desktop()->width();
-    n_height= settings.value("height", 0.8).toFloat() * QApplication::desktop()->height();
+
+    float deskWidth=float(QApplication::desktop()->width()),
+          deskHeight=float(QApplication::desktop()->height());
+
+    n_X     = settings.value("x", 0.1).toFloat();
+    n_X     = (n_X>1 || n_X<0)?0.1*deskWidth:n_X*deskWidth;
+    n_Y     = settings.value("y", 0.1).toFloat();
+    n_Y     = (n_Y>1 || n_Y<0)?0.1*deskHeight:n_Y*deskHeight;
+    n_width = settings.value("width", 0.8).toFloat();
+    n_width = (n_width>1||n_width<0)?0.8*deskWidth:n_width*deskWidth;
+    n_height= settings.value("height", 0.8).toFloat();
+    n_height= (n_height>1||n_height<0)?0.8*deskHeight:n_height*deskHeight;
 
     this->setGeometry(static_cast<int>(n_X),
                       static_cast<int>(n_Y),
