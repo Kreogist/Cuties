@@ -124,6 +124,7 @@ void KreogistCuteStyle::drawMenuItem(const QStyleOptionMenuItem *opt,
                           30,
                           opt->icon.pixmap(30, 30));
         }
+
         pen.setColor(QColor(0,0,0));
         if(iRectX+iRectH -1 != opt->menuRect.y() + opt->menuRect.height())
         {

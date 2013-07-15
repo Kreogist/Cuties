@@ -30,6 +30,9 @@
 #include <QStyleFactory>
 #include <QPainter>
 #include <QIcon>
+#include <QWidget>
+#include <QPalette>
+#include <QColor>
 #include <QDebug>
 
 class KreogistCuteStyle : public QCommonStyle

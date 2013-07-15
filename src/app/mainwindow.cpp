@@ -162,6 +162,11 @@ void MainWindow::createActions()
     actStatusTips[mnuViewCompileDock]=QString(tr("Show Compile Info Dock."));
     connect(act[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
 
+    //View -> Debug Dock
+    act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
+    actStatusTips[mnuViewDebugDock]=QString(tr("Show Debug Dock."));
+    connect(act[mnuViewDebugDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugDock()));
+
     //View -> Judge Dock
     /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
@@ -244,10 +249,12 @@ void MainWindow::createActions()
 
     //Debug -> Debug Start
     act[mnuDebugStart]=new QAction(tr("Start Debug"),this);
+    act[mnuDebugStart]->setShortcut(QKeySequence(Qt::Key_F5));
     actStatusTips[mnuDebugStart]=QString(tr("Start debugging the active file."));
 
     //Debug -> Stop Execute
     act[mnuDebugStopExecute]=new QAction(tr("Stop execute"),this);
+    act[mnuDebugStopExecute]->setShortcut(QKeySequence(Qt::Key_F6));
     actStatusTips[mnuDebugStopExecute]=QString(tr("Stop the active debugging."));
 
     //Debug -> Set Break Point
@@ -256,19 +263,21 @@ void MainWindow::createActions()
 
     //Debug -> Next Line
     act[mnuDebugNextLine]=new QAction(tr("Next Line"),this);
+    act[mnuDebugNextLine]->setShortcut(QKeySequence(Qt::Key_F7));
     actStatusTips[mnuDebugNextLine]=QString(tr("Get into and run the next line."));
 
     //Debug -> Go Into line
-    act[mnuDebugIntoLine]=new QAction(tr("Into Line"),this);
-    actStatusTips[mnuDebugIntoLine]=QString(tr("Get into the next line."));
+    act[mnuDebugNextStep]=new QAction(tr("Next Step"),this);
+    act[mnuDebugNextLine]->setShortcut(QKeySequence(Qt::Key_F8));
+    actStatusTips[mnuDebugNextStep]=QString(tr("Get into and run the next step."));
 
-    //Debug -> Go Next Instruction
-    act[mnuDebugNextInstruction]=new QAction(tr("Next Instruction"),this);
-    actStatusTips[mnuDebugNextInstruction]=QString(tr("Get into and run the next instruction."));
-
-    //Debug -> Go Into Instruction
+    //Debug -> Into Instruction
     act[mnuDebugIntoInstruction]=new QAction(tr("Into Instruction"),this);
-    actStatusTips[mnuDebugIntoInstruction]=QString(tr("Get into the next instruction."));
+    actStatusTips[mnuDebugIntoInstruction]=QString(tr("Get into and run the instruction."));
+
+    //Debug -> Skip Instruction
+    act[mnuDebugSkipInstruction]=new QAction(tr("Skip Instruction"),this);
+    actStatusTips[mnuDebugSkipInstruction]=QString(tr("Run the remainder instruction."));
 
     //Debug -> Skip Line
     act[mnuDebugSkipLine]=new QAction(tr("skip line"),this);
@@ -348,10 +357,6 @@ void MainWindow::createDocks()
     addDockWidget(Qt::RightDockWidgetArea, judgeDock);
     */
 
-    //Debug Dock
-    debugDock=new kciDebugDock(this);
-    addDockWidget(Qt::BottomDockWidgetArea,debugDock);
-
     //Compile Dock
     compileDock=new kcicompiledock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
@@ -363,6 +368,11 @@ void MainWindow::createDocks()
     addDockWidget(Qt::BottomDockWidgetArea,compileDock);
     //TODO: Configure Hide.
     compileDock->hide();
+
+    //Debug Dock
+    debugDock=new kciDebugDock(this);
+    addDockWidget(Qt::BottomDockWidgetArea,debugDock);
+    debugDock->hide();
 }
 
 void MainWindow::createMenu()
@@ -400,7 +410,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView] = _mainMenu->addMenu(tr("view"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewCompileDock;i<=mnuViewCompileDock/*mnuViewJudgeDock*/;i++)
+    for(i=mnuViewCompileDock;i<=mnuViewDebugDock/*mnuViewJudgeDock*/;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -543,10 +553,18 @@ void MainWindow::restoreSettings()
 
     int n_WindowState;
     float n_X, n_Y, n_width, n_height;
-    n_X     = settings.value("x", 0.1).toFloat() * QApplication::desktop()->width();
-    n_Y     = settings.value("y", 0.1).toFloat() * QApplication::desktop()->height();
-    n_width = settings.value("width", 0.8).toFloat() * QApplication::desktop()->width();
-    n_height= settings.value("height", 0.8).toFloat() * QApplication::desktop()->height();
+
+    float deskWidth=float(QApplication::desktop()->width()),
+          deskHeight=float(QApplication::desktop()->height());
+
+    n_X     = settings.value("x", 0.1).toFloat();
+    n_X     = (n_X>1 || n_X<0)?0.1*deskWidth:n_X*deskWidth;
+    n_Y     = settings.value("y", 0.1).toFloat();
+    n_Y     = (n_Y>1 || n_Y<0)?0.1*deskHeight:n_Y*deskHeight;
+    n_width = settings.value("width", 0.8).toFloat();
+    n_width = (n_width>1||n_width<0)?0.8*deskWidth:n_width*deskWidth;
+    n_height= settings.value("height", 0.8).toFloat();
+    n_height= (n_height>1||n_height<0)?0.8*deskHeight:n_height*deskHeight;
 
     this->setGeometry(static_cast<int>(n_X),
                       static_cast<int>(n_Y),
@@ -714,6 +732,11 @@ void MainWindow::searchOnline()
 void MainWindow::diffVisibleCompileDock()
 {
     compileDock->setVisible(!compileDock->isVisible());
+}
+
+void MainWindow::diffVisibleDebugDock()
+{
+    debugDock->setVisible(!debugDock->isVisible());
 }
 
 void MainWindow::diffVisibleJudgeDock()

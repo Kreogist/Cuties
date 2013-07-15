@@ -170,111 +170,126 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="166"/>
-        <source>Judge Dock</source>
-        <translation type="unfinished"></translation>
+        <source>Debug Dock</source>
+        <translation>调试栏</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="167"/>
-        <source>Show Judge Dock.</source>
-        <translation type="unfinished"></translation>
+        <source>Show Debug Dock.</source>
+        <translation>显示调试栏。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="173"/>
+        <location filename="mainwindow.cpp" line="178"/>
         <source>Find the specified text.</source>
         <translation>查找指定字符串。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="179"/>
+        <location filename="mainwindow.cpp" line="184"/>
         <source>Find text in files.</source>
         <translation>在所有文件中查找字符。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="184"/>
+        <location filename="mainwindow.cpp" line="189"/>
         <source>Replace specfic text with different text.</source>
         <translation>将文件中的部分文字替换为指定的文字。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="189"/>
+        <location filename="mainwindow.cpp" line="194"/>
         <source>Replace in files.</source>
         <translation>将所有打开的文档中指定的文字替换。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="194"/>
+        <location filename="mainwindow.cpp" line="199"/>
         <source>Search text online.</source>
         <translation>在线搜索选择的文本。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="200"/>
+        <location filename="mainwindow.cpp" line="205"/>
         <source>Goto line.</source>
         <translation>转到指定行。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="207"/>
+        <location filename="mainwindow.cpp" line="212"/>
         <source>Compile the active file and run.</source>
         <translation>编译当前文档并且运行。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="212"/>
+        <location filename="mainwindow.cpp" line="218"/>
         <source>Compile the active file.</source>
         <translation>编译当前文档。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="292"/>
+        <location filename="mainwindow.cpp" line="270"/>
+        <source>Next Step</source>
+        <translation>执行下一步</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="279"/>
+        <source>Skip Instruction</source>
+        <translation>跳出函数</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="280"/>
+        <source>Run the remainder instruction.</source>
+        <translation>运行完剩余的函数。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="303"/>
         <source>Split Window</source>
         <translation>分割窗口</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="293"/>
+        <location filename="mainwindow.cpp" line="304"/>
         <source>Split the window into two part.</source>
         <translation>将窗口分割为两部分。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="296"/>
+        <location filename="mainwindow.cpp" line="307"/>
         <source>Next</source>
         <translation>下一个标签</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="298"/>
+        <location filename="mainwindow.cpp" line="309"/>
         <source>Switch to the next tab.</source>
         <translation>切换到下一个标签。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="302"/>
+        <location filename="mainwindow.cpp" line="313"/>
         <source>Previous</source>
         <translation>上一个标签</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="304"/>
+        <location filename="mainwindow.cpp" line="315"/>
         <source>Switch to the previous tab.</source>
         <translation>切换到上一个标签。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="445"/>
+        <location filename="mainwindow.cpp" line="459"/>
         <source>tool</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="450"/>
+        <location filename="mainwindow.cpp" line="464"/>
         <source>window</source>
         <translation>标签</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="698"/>
+        <location filename="mainwindow.cpp" line="651"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="714"/>
+        <location filename="mainwindow.cpp" line="667"/>
         <source>Preparing Compiler.</source>
         <translation>正在准备编译器。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="722"/>
+        <location filename="mainwindow.cpp" line="674"/>
         <source>Current Compiler Details:</source>
         <translation>当前编译器信息：</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="732"/>
+        <location filename="mainwindow.cpp" line="684"/>
         <source>Compile Command:</source>
         <translation>编译命令：</translation>
     </message>
@@ -288,47 +303,47 @@
         <translation type="obsolete">编译所有文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="219"/>
+        <location filename="mainwindow.cpp" line="225"/>
         <source>Run the compiled execution.</source>
         <translation>运行编译完的程序。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="223"/>
+        <location filename="mainwindow.cpp" line="230"/>
         <source>Run the compiled execution with parameters.</source>
         <translation>带参数运行编译完的程序。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="227"/>
+        <location filename="mainwindow.cpp" line="234"/>
         <source>Set the input file contents.</source>
         <translation>设置输入文件内容。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="231"/>
+        <location filename="mainwindow.cpp" line="238"/>
         <source>Show the output file contents.</source>
         <translation>显示输出文件内容。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="235"/>
+        <location filename="mainwindow.cpp" line="242"/>
         <source>Run the execution and show output file.</source>
         <translation>重新运行程序并且显示输出文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="241"/>
+        <location filename="mainwindow.cpp" line="248"/>
         <source>Set the input file, compile and run the document, and show output file.</source>
         <translation>设置输入文件新的内容，重新编译并运行程序，并且显示输出文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="245"/>
+        <location filename="mainwindow.cpp" line="253"/>
         <source>Start debugging the active file.</source>
         <translation>开始调试当前文件。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="249"/>
+        <location filename="mainwindow.cpp" line="258"/>
         <source>Stop the active debugging.</source>
         <translation>停止当前的调试。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="252"/>
+        <location filename="mainwindow.cpp" line="261"/>
         <source>set break point</source>
         <translation>设置断点</translation>
     </message>
@@ -338,42 +353,42 @@
         <translation>首选项</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="171"/>
+        <location filename="mainwindow.cpp" line="176"/>
         <source>searchinfile</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="177"/>
+        <location filename="mainwindow.cpp" line="182"/>
         <source>searchallfile</source>
         <translation>搜索所有文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="182"/>
+        <location filename="mainwindow.cpp" line="187"/>
         <source>replaceinfile</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="187"/>
+        <location filename="mainwindow.cpp" line="192"/>
         <source>replaceallfile</source>
         <translation>替换所有文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="192"/>
+        <location filename="mainwindow.cpp" line="197"/>
         <source>searchonline</source>
         <translation>在线搜索</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="198"/>
+        <location filename="mainwindow.cpp" line="203"/>
         <source>gotoline</source>
         <translation>到指定行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="205"/>
+        <location filename="mainwindow.cpp" line="210"/>
         <source>Compile &amp; Run</source>
         <translation>编译运行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="210"/>
+        <location filename="mainwindow.cpp" line="216"/>
         <source>compile</source>
         <translation>编译</translation>
     </message>
@@ -382,38 +397,38 @@
         <translation type="obsolete">编译所有文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="217"/>
+        <location filename="mainwindow.cpp" line="223"/>
         <source>Runexe</source>
         <oldsource>Run</oldsource>
         <translation>运行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="222"/>
+        <location filename="mainwindow.cpp" line="229"/>
         <source>Parameters</source>
         <translation>带参数运行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="226"/>
+        <location filename="mainwindow.cpp" line="233"/>
         <source>Set Input File</source>
         <translation>设置输入文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="230"/>
+        <location filename="mainwindow.cpp" line="237"/>
         <source>Show Output file</source>
         <translation>显示输出文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="234"/>
+        <location filename="mainwindow.cpp" line="241"/>
         <source>Run And Show Output File</source>
         <translation>运行显示输出文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="239"/>
+        <location filename="mainwindow.cpp" line="246"/>
         <source>Set Input, Run and show Output</source>
         <translation>设置输入文件运行并显示输出文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="244"/>
+        <location filename="mainwindow.cpp" line="251"/>
         <source>Start Debug</source>
         <translation>开始调试</translation>
     </message>
@@ -422,164 +437,162 @@
         <translation type="obsolete">暂停调试</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="248"/>
+        <location filename="mainwindow.cpp" line="256"/>
         <source>Stop execute</source>
         <translation>停止调试</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="253"/>
+        <location filename="mainwindow.cpp" line="262"/>
         <source>Set a break point at the current line.</source>
         <translation>在当前行设置一个断电。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="256"/>
+        <location filename="mainwindow.cpp" line="265"/>
         <source>Next Line</source>
         <translation>执行下一行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="257"/>
+        <location filename="mainwindow.cpp" line="267"/>
         <source>Get into and run the next line.</source>
-        <translation>进入当前行调试。</translation>
+        <translation>执行下一行高级语言的代码。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="260"/>
         <source>Into Line</source>
-        <translation>进入到下一行</translation>
+        <translation type="obsolete">进入到下一行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="261"/>
         <source>Get into the next line.</source>
-        <translation>进入到下一行调试。</translation>
+        <translation type="obsolete">进入到下一行调试。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="264"/>
         <source>Next Instruction</source>
-        <translation>执行下一个语法块</translation>
+        <translation type="obsolete">执行下一个语法块</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="265"/>
-        <source>Get into and run the next instruction.</source>
-        <translation>进入并且执行下一个函数块。</translation>
+        <location filename="mainwindow.cpp" line="272"/>
+        <source>Get into and run the next step.</source>
+        <oldsource>Get into and run the next instruction.</oldsource>
+        <translation>按顺序执行下一步。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="268"/>
+        <location filename="mainwindow.cpp" line="275"/>
         <source>Into Instruction</source>
         <translation>进入下一个语法块</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="269"/>
-        <source>Get into the next instruction.</source>
-        <translation>进入下一个函数块。</translation>
+        <location filename="mainwindow.cpp" line="276"/>
+        <source>Get into and run the instruction.</source>
+        <oldsource>Get into the next instruction.</oldsource>
+        <translation>进入函数块运行。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="272"/>
+        <location filename="mainwindow.cpp" line="283"/>
         <source>skip line</source>
         <translation>跳过当前行</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="273"/>
+        <location filename="mainwindow.cpp" line="284"/>
         <source>Skip the current line.</source>
         <translation>不执行当前行。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="276"/>
+        <location filename="mainwindow.cpp" line="287"/>
         <source>skip function</source>
         <translation>跳过函数</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="277"/>
+        <location filename="mainwindow.cpp" line="288"/>
         <source>Skip the current function.</source>
         <translation>跳过当前行所在模块。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="280"/>
+        <location filename="mainwindow.cpp" line="291"/>
         <source>Add Watch</source>
         <translation>添加查看</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="281"/>
+        <location filename="mainwindow.cpp" line="292"/>
         <source>Add a new variable to debug watch.</source>
         <translation>添加一个新的变量到监视器。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="284"/>
+        <location filename="mainwindow.cpp" line="295"/>
         <source>Modify Watch</source>
         <translation>更改查看</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="285"/>
+        <location filename="mainwindow.cpp" line="296"/>
         <source>Modify a variable in debug watch list.</source>
         <translation>修改一个已经添加到监视列表的变量。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="288"/>
+        <location filename="mainwindow.cpp" line="299"/>
         <source>Remove Watch</source>
         <translation>移除查看</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="289"/>
+        <location filename="mainwindow.cpp" line="300"/>
         <source>Remove a variable in debug watch list.</source>
         <translation>将一个在监视列表中的变量移除。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="308"/>
-        <location filename="mainwindow.cpp" line="320"/>
+        <location filename="mainwindow.cpp" line="319"/>
+        <location filename="mainwindow.cpp" line="331"/>
         <source>about</source>
         <translation>关于 Kreogist Cure IDE</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="309"/>
+        <location filename="mainwindow.cpp" line="320"/>
         <source>Display the Kreogist Cuties information.</source>
         <translation>显示Kreogist Cuties的详细信息。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="313"/>
-        <location filename="mainwindow.cpp" line="326"/>
+        <location filename="mainwindow.cpp" line="324"/>
+        <location filename="mainwindow.cpp" line="337"/>
         <source>about Qt</source>
         <translation>关于Qt</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="314"/>
+        <location filename="mainwindow.cpp" line="325"/>
         <source>Display the Qt information, version number and copyright.</source>
         <translation>显示Qt的信息、版本号和版权声明。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="321"/>
+        <location filename="mainwindow.cpp" line="332"/>
         <source>Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="368"/>
+        <location filename="mainwindow.cpp" line="387"/>
         <source>file</source>
         <translation>文件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="380"/>
+        <location filename="mainwindow.cpp" line="399"/>
         <source>edit</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="392"/>
+        <location filename="mainwindow.cpp" line="411"/>
         <source>view</source>
         <translation>视图</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="404"/>
+        <location filename="mainwindow.cpp" line="423"/>
         <source>search</source>
         <translation>搜索</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="416"/>
         <source>insert</source>
-        <translation>插入</translation>
+        <translation type="obsolete">插入</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="433"/>
+        <location filename="mainwindow.cpp" line="447"/>
         <source>debug</source>
         <translation>调试</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="421"/>
+        <location filename="mainwindow.cpp" line="435"/>
         <source>run</source>
         <translation>运行</translation>
     </message>
@@ -594,7 +607,7 @@
         <translation type="obsolete">插件</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="462"/>
+        <location filename="mainwindow.cpp" line="476"/>
         <source>help</source>
         <translation>帮助</translation>
     </message>
@@ -602,8 +615,8 @@
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="main.cpp" line="69"/>
-        <location filename="main.cpp" line="79"/>
+        <location filename="main.cpp" line="70"/>
+        <location filename="main.cpp" line="80"/>
         <source>Error occur when load font file.</source>
         <translation>加载字体文件发生错误。</translation>
     </message>
@@ -679,17 +692,139 @@
 <context>
     <name>kciControlCenterBanner</name>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="30"/>
+        <location filename="kcicontrolcenter.cpp" line="46"/>
         <source>Cuties Control Center</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
+    <name>kciDebugDock</name>
+    <message>
+        <location filename="kcidebugdock.cpp" line="7"/>
+        <source>Debug Dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="19"/>
+        <source>Debug</source>
+        <translation>调试</translation>
+    </message>
+</context>
+<context>
+    <name>kciDebugWidget</name>
+    <message>
+        <source>Local Value</source>
+        <translation type="obsolete">本地变量</translation>
+    </message>
+    <message>
+        <source>Custom Value</source>
+        <translation type="obsolete">查看变量</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="73"/>
+        <source>Stack View</source>
+        <translation>堆栈信息</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="93"/>
+        <source>Local Watch</source>
+        <oldsource>Local Watch:</oldsource>
+        <translation>本地变量</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="107"/>
+        <source>Custom Watch</source>
+        <oldsource>Custom Watch:</oldsource>
+        <translation>变量查看</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="131"/>
+        <source>Send command to GDB:</source>
+        <translation>发送命令到GDB：</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="155"/>
+        <source>Start debugging.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="201"/>
+        <source>Next Step</source>
+        <translation>执行下一步</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="207"/>
+        <source>Next Line</source>
+        <translation>执行下一行</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="228"/>
+        <source>Next Instruction</source>
+        <translation>执行下一函数</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="234"/>
+        <source>Into Instruction</source>
+        <translation>进入下一函数</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="241"/>
+        <source>Continue Instruction</source>
+        <translation>继续运行函数</translation>
+    </message>
+    <message>
+        <source>Go Into Function</source>
+        <translation type="obsolete">进入函数</translation>
+    </message>
+    <message>
+        <source>Get Out Function</source>
+        <translation type="obsolete">跳出函数</translation>
+    </message>
+    <message>
+        <location filename="kcidebugdock.cpp" line="214"/>
+        <source>Continue</source>
+        <translation>继续运行</translation>
+    </message>
+</context>
+<context>
     <name>kciJudgeDock</name>
     <message>
-        <location filename="kcijudgedock.cpp" line="89"/>
+        <location filename="kcijudgedock.cpp" line="210"/>
         <source>Judge</source>
         <translation>测评</translation>
+    </message>
+</context>
+<context>
+    <name>kciJudgeEditWidget</name>
+    <message>
+        <location filename="kcijudgedock.cpp" line="81"/>
+        <source>Add Test Data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcijudgedock.cpp" line="86"/>
+        <source>Remove Test Data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcijudgedock.cpp" line="91"/>
+        <source>Start All Test.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcijudgedock.cpp" line="95"/>
+        <source>Stop the test.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcijudgedock.cpp" line="99"/>
+        <source>Save the test data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcijudgedock.cpp" line="103"/>
+        <source>Import a test data backup file.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -787,24 +922,24 @@
 <context>
     <name>kciTabManager</name>
     <message>
-        <location filename="kcitabmanager.cpp" line="95"/>
+        <location filename="kcitabmanager.cpp" line="100"/>
         <source>Open File</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="130"/>
+        <location filename="kcitabmanager.cpp" line="134"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="139"/>
+        <location filename="kcitabmanager.cpp" line="143"/>
         <source>out of memmory!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcitabmanager.cpp" line="175"/>
-        <location filename="kcitabmanager.cpp" line="192"/>
-        <location filename="kcitabmanager.cpp" line="210"/>
+        <location filename="kcitabmanager.cpp" line="176"/>
+        <location filename="kcitabmanager.cpp" line="189"/>
+        <location filename="kcitabmanager.cpp" line="207"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>
@@ -844,12 +979,12 @@
         <translation type="obsolete">打开</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="161"/>
+        <location filename="kcitexteditor.cpp" line="133"/>
         <source>save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="178"/>
+        <location filename="kcitexteditor.cpp" line="150"/>
         <source>save as</source>
         <translation>另存为</translation>
     </message>
@@ -858,28 +993,28 @@
         <translation type="obsolete">文档已经被更改。</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="256"/>
+        <location filename="kcitexteditor.cpp" line="201"/>
         <source>Will you save changes to the the following file?</source>
         <translation>您要存储对下列文件所做的修改么？</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="258"/>
+        <location filename="kcitexteditor.cpp" line="203"/>
         <source>If you don&apos;t save the changes, all the changes will be lost.</source>
         <oldsource>Do you want to save your changes?</oldsource>
         <translation>如果您不保存修改，所有的修改将会丢失。</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="262"/>
+        <location filename="kcitexteditor.cpp" line="207"/>
         <source>&amp;Save</source>
         <translation>保存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="263"/>
+        <location filename="kcitexteditor.cpp" line="208"/>
         <source>&amp;Don&apos;t Save</source>
         <translation>不保存(&amp;D)</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="264"/>
+        <location filename="kcitexteditor.cpp" line="209"/>
         <source>&amp;Cancel</source>
         <translation>取消(&amp;C)</translation>
     </message>
@@ -896,12 +1031,12 @@
         <translation type="obsolete">放弃</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="275"/>
+        <location filename="kcitexteditor.cpp" line="220"/>
         <source>Saving file failed!</source>
         <translation>保存文件失败！</translation>
     </message>
     <message>
-        <location filename="kcitexteditor.cpp" line="276"/>
+        <location filename="kcitexteditor.cpp" line="221"/>
         <source>Please save it again</source>
         <translation>请重新保存</translation>
     </message>

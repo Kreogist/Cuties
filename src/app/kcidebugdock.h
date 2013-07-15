@@ -3,9 +3,14 @@
 
 #include <QDockWidget>
 #include <QPalette>
-#include <QGridLayout>
 #include <QToolButton>
+#include <QToolBar>
+#include <QLabel>
+#include <QComboBox>
+#include <QTreeView>
 #include <QHBoxLayout>
+#include <QStandardItemModel>
+#include <QVBoxLayout>
 #include <QPlainTextEdit>
 
 class kciDebugWidget : public QWidget
@@ -16,16 +21,49 @@ public:
 
 private:
     QToolButton *tblStartDebug, *tblStopDebug, *tblRunToCursor,
-                *tblNextStep, *tblNextLine, *tblIntoFunction,
-                *tblOutFunction, *tblContinue;
+                *tblNextStep, *tblNextLine, *tblIntoInstruction,
+                *tblNextInstruction, *tblSkipInstruction, *tblContinue;
 
+    QToolBar *DebugToolBar;
     QToolButton *tblAddWatch, *tblEditWatch,* tblRemoveWatch;
 
     QPlainTextEdit *GDBInfo;
-    QVBoxLayout *LeftButtonVList1, *LeftButtonVList2, *LeftButtonVList3;
-    QHBoxLayout *MainLayout;
+    //Main Widget Layout.
+    QVBoxLayout *MainWidgetLayout;
+    QHBoxLayout *MainShownLayout;
 
+    //Control Panel Layout.
+    QVBoxLayout *ControlPanel1, *ControlPanel2;
+    QHBoxLayout *ControlPanelM;
+
+    //Stack View.
+    QVBoxLayout *stackMain;
+    QLabel *lblStackView;
+    QTreeView *trevwStackView;
+    QStandardItemModel *mdlStackView;
+
+    //Combine.
+    QVBoxLayout *CombinePanelStack;
+
+    //GDB Layout.
+    QHBoxLayout *InputToGDB;
+    QVBoxLayout *GDBMainLayout;
+    QComboBox *GDBCmd;
+
+    //Watch Layout.
+    QVBoxLayout *WatchLayout;
+    QLabel *lblLocalWatch;
+    QTreeView *localWatchView;
+    QStandardItemModel *localWatchResult;
+    QLabel *lblWatch;
+    QTreeView *watchView;
+    QStandardItemModel *watchResult;
+
+    void createToolBar();
     void createControlButtons();
+    void createStackView();
+    void createGDBConversation();
+    void createWatchLayout();
 };
 
 class kciDebugDock : public QDockWidget

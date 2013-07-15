@@ -56,6 +56,7 @@
 #include "kcimainwindow.h"
 #include "kcicontrolcenter.h"
 #include "kciexecutor.h"
+#include "kreogistcutestyle.h"
 
 class MainWindow : public kciMainWindow
 {
@@ -74,6 +75,7 @@ public slots:
     void compileAndRun();
     void searchOnline();
     void diffVisibleCompileDock();
+    void diffVisibleDebugDock();
     void diffVisibleJudgeDock();
     void statusShowGoto();
 
@@ -110,6 +112,7 @@ private:
         mnuEditSelectAll,
         mnuEditPreference,
         mnuViewCompileDock,
+        mnuViewDebugDock,
         //mnuViewJudgeDock,
         mnuSearchFind,
         mnuSearchFindInFiles,
@@ -129,9 +132,9 @@ private:
         mnuDebugStopExecute,
         mnuDebugSetBreakPoint,
         mnuDebugNextLine,
-        mnuDebugIntoLine,
-        mnuDebugNextInstruction,
+        mnuDebugNextStep,
         mnuDebugIntoInstruction,
+        mnuDebugSkipInstruction,
         mnuDebugSkipLine,
         mnuDebugSkipFunction,
         mnuDebugAddWatch,

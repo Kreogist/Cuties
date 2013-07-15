@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QString>
 #include <QStyleFactory>
+#include <QDebug>
 
 #include "mainwindow.h"
 #include "kciglobal.h"
