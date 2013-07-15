@@ -21,8 +21,8 @@ public:
 
 private:
     QToolButton *tblStartDebug, *tblStopDebug, *tblRunToCursor,
-                *tblNextStep, *tblNextLine, *tblIntoFunction,
-                *tblOutFunction, *tblContinue;
+                *tblNextStep, *tblNextLine, *tblIntoInstruction,
+                *tblNextInstruction, *tblSkipInstruction, *tblContinue;
 
     QToolBar *DebugToolBar;
     QToolButton *tblAddWatch, *tblEditWatch,* tblRemoveWatch;
@@ -33,7 +33,17 @@ private:
     QHBoxLayout *MainShownLayout;
 
     //Control Panel Layout.
-    QVBoxLayout *ControlPanel;
+    QVBoxLayout *ControlPanel1, *ControlPanel2;
+    QHBoxLayout *ControlPanelM;
+
+    //Stack View.
+    QVBoxLayout *stackMain;
+    QLabel *lblStackView;
+    QTreeView *trevwStackView;
+    QStandardItemModel *mdlStackView;
+
+    //Combine.
+    QVBoxLayout *CombinePanelStack;
 
     //GDB Layout.
     QHBoxLayout *InputToGDB;
@@ -41,13 +51,19 @@ private:
     QComboBox *GDBCmd;
 
     //Watch Layout.
+    QVBoxLayout *WatchLayout;
+    QLabel *lblLocalWatch;
+    QTreeView *localWatchView;
+    QStandardItemModel *localWatchResult;
+    QLabel *lblWatch;
     QTreeView *watchView;
     QStandardItemModel *watchResult;
-    QStandardItem *LocalValueView, *CustomValueView;
 
     void createToolBar();
     void createControlButtons();
+    void createStackView();
     void createGDBConversation();
+    void createWatchLayout();
 };
 
 class kciDebugDock : public QDockWidget

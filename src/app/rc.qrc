@@ -70,5 +70,6 @@
         <file>image/Debug Docks/AddWatch.png</file>
         <file>image/Debug Docks/RemoveWatch.png</file>
         <file>image/Debug Docks/ModifyWatch.png</file>
+        <file>image/Debug Docks/JumpFunction.png</file>
     </qresource>
 </RCC>

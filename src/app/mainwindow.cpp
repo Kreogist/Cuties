@@ -162,6 +162,11 @@ void MainWindow::createActions()
     actStatusTips[mnuViewCompileDock]=QString(tr("Show Compile Info Dock."));
     connect(act[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
 
+    //View -> Debug Dock
+    act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
+    actStatusTips[mnuViewDebugDock]=QString(tr("Show Debug Dock."));
+    connect(act[mnuViewDebugDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugDock()));
+
     //View -> Judge Dock
     /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
@@ -352,10 +357,6 @@ void MainWindow::createDocks()
     addDockWidget(Qt::RightDockWidgetArea, judgeDock);
     */
 
-    //Debug Dock
-    debugDock=new kciDebugDock(this);
-    addDockWidget(Qt::BottomDockWidgetArea,debugDock);
-
     //Compile Dock
     compileDock=new kcicompiledock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
@@ -367,6 +368,11 @@ void MainWindow::createDocks()
     addDockWidget(Qt::BottomDockWidgetArea,compileDock);
     //TODO: Configure Hide.
     compileDock->hide();
+
+    //Debug Dock
+    debugDock=new kciDebugDock(this);
+    addDockWidget(Qt::BottomDockWidgetArea,debugDock);
+    debugDock->hide();
 }
 
 void MainWindow::createMenu()
@@ -404,7 +410,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView] = _mainMenu->addMenu(tr("view"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewCompileDock;i<=mnuViewCompileDock/*mnuViewJudgeDock*/;i++)
+    for(i=mnuViewCompileDock;i<=mnuViewDebugDock/*mnuViewJudgeDock*/;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -718,6 +724,11 @@ void MainWindow::searchOnline()
 void MainWindow::diffVisibleCompileDock()
 {
     compileDock->setVisible(!compileDock->isVisible());
+}
+
+void MainWindow::diffVisibleDebugDock()
+{
+    debugDock->setVisible(!debugDock->isVisible());
 }
 
 void MainWindow::diffVisibleJudgeDock()

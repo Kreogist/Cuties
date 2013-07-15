@@ -75,6 +75,7 @@ public slots:
     void compileAndRun();
     void searchOnline();
     void diffVisibleCompileDock();
+    void diffVisibleDebugDock();
     void diffVisibleJudgeDock();
     void statusShowGoto();
 
@@ -111,6 +112,7 @@ private:
         mnuEditSelectAll,
         mnuEditPreference,
         mnuViewCompileDock,
+        mnuViewDebugDock,
         //mnuViewJudgeDock,
         mnuSearchFind,
         mnuSearchFindInFiles,

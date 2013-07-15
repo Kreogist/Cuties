@@ -45,27 +45,77 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
     MainWidgetLayout->addLayout(MainShownLayout);
 
     //Add Widgets to Sub Layout.
-    ControlPanel=new QVBoxLayout();
-    ControlPanel->setContentsMargins(0,0,0,0);
-    ControlPanel->setSpacing(0);
-    MainShownLayout->addLayout(ControlPanel);
     createControlButtons();
+    createStackView();
+    CombinePanelStack=new QVBoxLayout();
+    CombinePanelStack->setContentsMargins(0,0,0,0);
+    CombinePanelStack->setSpacing(5);
+    CombinePanelStack->addLayout(ControlPanelM);
+    CombinePanelStack->addLayout(stackMain,1);
+    MainShownLayout->addLayout(CombinePanelStack);
 
     //Add Widget to GDB Layout.
     createGDBConversation();
 
+    //Add Watch Widget.
+    createWatchLayout();
+}
+
+void kciDebugWidget::createStackView()
+{
+    //Set Main Layout.
+    stackMain=new QVBoxLayout();
+    stackMain->setContentsMargins(0,0,0,0);
+    stackMain->setSpacing(5);
+
+    //Set Label.
+    lblStackView=new QLabel(this);
+    lblStackView->setText(" " + tr("Stack View"));
+    stackMain->addWidget(lblStackView);
+
+    //Set TreeView.
+    trevwStackView=new QTreeView(this);
+    trevwStackView->setHeaderHidden(true);
+    trevwStackView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mdlStackView=new QStandardItemModel(this);
+    trevwStackView->setModel(mdlStackView);
+    stackMain->addWidget(trevwStackView);
+}
+
+void kciDebugWidget::createWatchLayout()
+{
     //Create Watch TreeView.
+    WatchLayout=new QVBoxLayout();
+    WatchLayout->setContentsMargins(0,0,0,0);
+    WatchLayout->setSpacing(5);
+    //Add Label Widget.
+    lblLocalWatch=new QLabel(this);
+    lblLocalWatch->setText(tr("Local Watch"));
+    WatchLayout->addWidget(lblLocalWatch);
+    //Add TreeView
+    localWatchView=new QTreeView(this);
+    QPalette pal=localWatchView->palette();
+    pal.setColor(QPalette::WindowText,QColor(255,255,255));
+    localWatchView->setPalette(pal);
+    localWatchView->setHeaderHidden(true);
+    localWatchResult=new QStandardItemModel();
+    localWatchView->setModel(localWatchResult);
+    WatchLayout->addWidget(localWatchView);
+
+    //Add New Label Widget.
+    lblWatch=new QLabel(this);
+    lblWatch->setText(tr("Custom Watch"));
+    WatchLayout->addWidget(lblWatch);
+    //Add TreeView
     watchView=new QTreeView(this);
-    watchResult=new QStandardItemModel();
+    watchView->setPalette(pal);
     watchView->setHeaderHidden(true);
+    watchResult=new QStandardItemModel();
     watchView->setModel(watchResult);
-    LocalValueView=new QStandardItem(QString(tr("Local Value")));
-    LocalValueView->setEditable(false);
-    watchResult->appendRow(LocalValueView);
-    CustomValueView=new QStandardItem(QString(tr("Custom Value")));
-    CustomValueView->setEditable(false);
-    watchResult->appendRow(CustomValueView);
-    MainShownLayout->addWidget(watchView);
+    WatchLayout->addWidget(watchView);
+
+    //Add to MainLayout.
+    MainShownLayout->addLayout(WatchLayout,1);
 }
 
 void kciDebugWidget::createGDBConversation()
@@ -73,7 +123,6 @@ void kciDebugWidget::createGDBConversation()
     GDBMainLayout=new QVBoxLayout();
     GDBMainLayout->setContentsMargins(0,0,0,0);
     GDBMainLayout->setSpacing(5);
-    MainShownLayout->addLayout(GDBMainLayout);
     //Create Input Box.
     InputToGDB=new QHBoxLayout();
     InputToGDB->setContentsMargins(0,0,0,0);
@@ -87,6 +136,9 @@ void kciDebugWidget::createGDBConversation()
     GDBMainLayout->addLayout(InputToGDB);
     GDBInfo=new QPlainTextEdit(this);
     GDBMainLayout->addWidget(GDBInfo,1);
+
+    //Add To MainLayout.
+    MainShownLayout->addLayout(GDBMainLayout,1);
 }
 
 void kciDebugWidget::createToolBar()
@@ -128,42 +180,69 @@ void kciDebugWidget::createToolBar()
     tblEditWatch->setFixedSize(26,26);
     DebugToolBar->addWidget(tblEditWatch);
 
-    MainWidgetLayout->addWidget(DebugToolBar);
+    MainWidgetLayout->addWidget(DebugToolBar,1);
 }
 
 void kciDebugWidget::createControlButtons()
 {
+    //Control Panel Main Layout.
+    ControlPanelM=new QHBoxLayout();
+    ControlPanelM->setContentsMargins(0,0,0,0);
+    ControlPanelM->setSpacing(0);
+
+    //Control Panel Layouts 1.
+    ControlPanel1=new QVBoxLayout();
+    ControlPanel1->setContentsMargins(0,0,0,0);
+    ControlPanel1->setSpacing(0);
+    ControlPanelM->addLayout(ControlPanel1);
+
     //Set New ToolButton.
     tblNextStep=new QToolButton(this);
     tblNextStep->setText(QString(" " + tr("Next Step")));
     tblNextStep->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/NextStep.png"));
     tblNextStep->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tblNextStep->setFixedSize(140,30);
-    ControlPanel->addWidget(tblNextStep);
+    tblNextStep->setFixedSize(160,30);
+    ControlPanel1->addWidget(tblNextStep);
     tblNextLine=new QToolButton(this);
     tblNextLine->setText(QString(" " + tr("Next Line")));
     tblNextLine->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/NextLine.png"));
     tblNextLine->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tblNextLine->setFixedSize(140,30);
-    ControlPanel->addWidget(tblNextLine);
-    tblIntoFunction=new QToolButton(this);
-    tblIntoFunction->setText(QString(" " + tr("Go Into Function")));
-    tblIntoFunction->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/GetIntoFuntion.png"));
-    tblIntoFunction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tblIntoFunction->setFixedSize(140,30);
-    ControlPanel->addWidget(tblIntoFunction);
-    tblOutFunction=new QToolButton(this);
-    tblOutFunction->setText(QString(" " + tr("Get Out Function")));
-    tblOutFunction->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/GetOutOfFuntion.png"));
-    tblOutFunction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tblOutFunction->setFixedSize(140,30);
-    ControlPanel->addWidget(tblOutFunction);
-    ControlPanel->addSpacing(3);
+    tblNextLine->setFixedSize(160,30);
+    ControlPanel1->addWidget(tblNextLine);
+    ControlPanel1->addSpacing(3);
     tblContinue=new QToolButton(this);
     tblContinue->setText(QString(" " + tr("Continue")));
     tblContinue->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/Continue.png"));
     tblContinue->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    tblContinue->setFixedSize(140,30);
-    ControlPanel->addWidget(tblContinue);
-    ControlPanel->addStretch();
+    tblContinue->setFixedSize(160,30);
+    ControlPanel1->addWidget(tblContinue);
+    ControlPanel1->addStretch();
+
+    //Control Panel Layouts 2.
+    ControlPanel2=new QVBoxLayout();
+    ControlPanel2->setContentsMargins(0,0,0,0);
+    ControlPanel2->setSpacing(0);
+    ControlPanelM->addLayout(ControlPanel2);
+
+    tblNextInstruction=new QToolButton(this);
+    tblNextInstruction->setText(QString(" " + tr("Next Instruction")));
+    tblNextInstruction->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/JumpFunction.png"));
+    tblNextInstruction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    tblNextInstruction->setFixedSize(160,30);
+    ControlPanel2->addWidget(tblNextInstruction);
+    tblIntoInstruction=new QToolButton(this);
+    tblIntoInstruction->setText(QString(" " + tr("Into Instruction")));
+    tblIntoInstruction->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/GetIntoFuntion.png"));
+    tblIntoInstruction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    tblIntoInstruction->setFixedSize(160,30);
+    ControlPanel2->addWidget(tblIntoInstruction);
+    ControlPanel2->addSpacing(3);
+    tblSkipInstruction=new QToolButton(this);
+    tblSkipInstruction->setText(QString(" " + tr("Continue Instruction")));
+    tblSkipInstruction->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/GetOutOfFuntion.png"));
+    tblSkipInstruction->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    tblSkipInstruction->setFixedSize(160,30);
+    ControlPanel2->addWidget(tblSkipInstruction);
+    ControlPanel2->addStretch();
+
 }

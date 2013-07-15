@@ -93,7 +93,6 @@ int main(int argc, char *argv[])
     app.setPalette(pal);
 
     //Initalize Application Style
-    //qDebug()<<app.style();
     KreogistCuteStyle *cuteStyle=new KreogistCuteStyle;
     app.setStyle(cuteStyle);
 
