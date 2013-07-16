@@ -38,6 +38,7 @@
 #include <QStackedWidget>
 
 #include "kcisearchlinetext.h"
+#include "kciccgerneral.h"
 
 class kciControlCenterBanner : public QWidget
 {
@@ -63,8 +64,11 @@ public slots:
 
 private:
     QStackedWidget *ccMainTabs;
-    QVBoxLayout *WholeTitleBarSplit;
+    QVBoxLayout *WholeTitleBarSplit, *ButtonListLayout;
+    QHBoxLayout *ContentLayout;
     kciControlCenterBanner *ccBanner;
+
+    kciCCGerneral *ccGeneral;
 
     void createLeftList();
     

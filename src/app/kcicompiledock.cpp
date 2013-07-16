@@ -180,7 +180,7 @@ void kcicompiledock::compileFinish(int ExitNum)
     {
         //Output Error Num
         addText(QTime::currentTime().toString("hh:mm:ss") +
-                " " + compileInfo->rowCount() +
+                " " + QString::number(compileInfo->rowCount()) +
                 tr(" Errors Occur."));
     }
     else

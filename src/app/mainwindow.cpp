@@ -572,6 +572,15 @@ void MainWindow::setDocOpenMenuState(bool state)
         act[i]->setVisible(state);
     }
 
+    //View Menu
+    for(i=mnuViewCompileDock;i<=mnuViewDebugDock;i++)
+    {
+        act[i]->setEnabled(state);
+        act[i]->setVisible(state);
+    }
+    menu[mnuView]->menuAction()->setEnabled(state);
+    menu[mnuView]->menuAction()->setVisible(state);
+
     //Search Menu
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {

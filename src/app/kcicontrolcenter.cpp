@@ -72,6 +72,12 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     //Set Banner
     ccBanner=new kciControlCenterBanner(this);
     WholeTitleBarSplit->addWidget(ccBanner);
-    WholeTitleBarSplit->addStretch();
+    //Set Content Layout.
+    ContentLayout=new QHBoxLayout(this);
+    ContentLayout->setContentsMargins(0,0,0,0);
+    ContentLayout->setSpacing(0);
+    WholeTitleBarSplit->addLayout(ContentLayout);
+
+    //Set List.
 
 }

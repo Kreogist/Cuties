@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     double exec_time= gettime();
 
     //run program
+    printf(program_name);
     system(program_name);
 
     //get end time

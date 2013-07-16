@@ -48,7 +48,7 @@ QStringList gcc::getCompileArg(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QStringList arg;
-    arg<<filePath<<"-g"<<"-Wall"<<"-lm";
+    arg<<filePath<<"-g"<<"-Wall"<<"-lm"<<"-static";
 
     //unix/unix-like system
     QString programName=fileInfo.absolutePath() + "/"

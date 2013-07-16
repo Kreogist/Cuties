@@ -61,7 +61,9 @@ SOURCES += \
     kcisearchlinetext.cpp \
     kcidebugdock.cpp \
     kcitextsearchworker.cpp \
-    fpc.cpp
+    fpc.cpp \
+    kciccgerneral.cpp \
+    kcilistbutton.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -95,7 +97,9 @@ HEADERS += \
     kcisearchlinetext.h \
     kcidebugdock.h \
     kcitextsearchworker.h \
-    fpc.h
+    fpc.h \
+    kciccgerneral.h \
+    kcilistbutton.h
 
 # Enable C++11
 CONFIG += c++11
@@ -110,3 +114,6 @@ OTHER_FILES += \
     lang.map \
     default.style \
     COPYING.txt
+
+FORMS += \
+    kciccgerneral.ui

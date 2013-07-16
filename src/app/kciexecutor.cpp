@@ -105,16 +105,16 @@ void kciRunner::run()
         }
         else
         {
+            p->process=new QProcess;
             QStringList arg;
             #ifdef Q_OS_UNIX
                 Terminal terminal=getDefaultTerminal();
                 arg<<terminal.arg<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
-                p->process=new QProcess;
-                qDebug()<<arg;
+
                 p->process->startDetached(QLatin1String(terminal.terminal_name),arg);
             #else
                 arg<<p->path;
-                p->process->startDetached(qApp->applicationDirPath()+'/'+console_runner_path, arg);
+                p->process->start(qApp->applicationDirPath()+'/'+console_runner_path, arg);
             #endif
         }
 
