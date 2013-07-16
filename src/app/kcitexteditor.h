@@ -37,6 +37,7 @@
 #include <QString>
 #include <QMessageBox>
 #include <QTextCursor>
+#include <QErrorMessage>
 #include <QSettings>
 #include <QIcon>
 #include <QSyntaxHighlighter>
@@ -69,6 +70,7 @@ public:
     QString getFilePath();
     QTextCursor getTextCursor();
     int getTextLines();
+    bool isModified();
 
     QTextDocument *document;
 
@@ -102,6 +104,7 @@ protected:
 
 private:
     void fileInfoChanged(const QFile& file);
+    bool dosaveas(const QString& Caption);
 
     kciLanguageMode *m_langMode;
 

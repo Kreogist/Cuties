@@ -169,13 +169,7 @@ void kciTabManager::save()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
-
-        if(Q_UNLIKELY(!currentEditor->save()))
-        {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
-        }
+        currentEditor->save();
     }
 }
 
@@ -183,16 +177,16 @@ void kciTabManager::save_as()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
-        if(Q_UNLIKELY(!currentEditor->saveAs()))
-        {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
-        }
+        currentEditor->saveAs();
     }
 }
 
 void kciTabManager::save_all()
+{
+    save_all_file();
+}
+
+bool kciTabManager::save_all_file()
 {
     int i=count();
     while(i--)
@@ -201,14 +195,10 @@ void kciTabManager::save_all()
 
         if(Q_LIKELY(editor != NULL))
         {
-            if(Q_UNLIKELY(!editor->save()))
-            {
-                QErrorMessage error(this);
-                error.showMessage(tr("Saving file failed!"));
-                error.exec();
-            }
+            editor->save();
         }
     }
+    return true;
 }
 
 void kciTabManager::close_all_tab()
@@ -217,7 +207,6 @@ void kciTabManager::close_all_tab()
     while(i--)
     {
         kciTextEditor *editor = qobject_cast<kciTextEditor *>(widget(i));
-
         if(Q_LIKELY(editor != NULL))
         {
             on_tab_close_requested(i);
@@ -336,6 +325,10 @@ void kciTabManager::closeEvent(QCloseEvent *e)
         {
             e->ignore();//clean the accept flag
             break;
+        }
+        else
+        {
+            removeTab(i);
         }
     }
 }

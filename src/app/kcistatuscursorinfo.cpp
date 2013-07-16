@@ -95,6 +95,7 @@ void kciStatusCursorInfo::updateCursorPosition(int LineNum, int ColNum)
     else
     {
         lblCursorPosition->setText("");
+        HideGotoBox();
     }
     this->resize(lblCursorPosition->size());
 }

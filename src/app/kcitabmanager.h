@@ -98,6 +98,8 @@ private:
     QString strFileFilter;
     QTextCursor currentTextCursor;
     kciTextEditor *currentEditor;
+
+    bool save_all_file();
 };
 
 #endif // TABMANAGER_H

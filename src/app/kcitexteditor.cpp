@@ -131,25 +131,45 @@ bool kciTextEditor::save()
     }
     else
     {
-        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-        filePath=QFileDialog::getSaveFileName(this,tr("save"),settings.value("texteditor/historyDir").toString(),strFileFilter);
-
-        if(!filePath.isEmpty())
+        if(!dosaveas(tr("save")))
         {
-            return saveAs(filePath);
+            if(fileError!=QFileDevice::AbortError)
+            {
+                QErrorMessage error(this);
+                error.showMessage(tr("Saving file failed!"));
+                error.exec();
+            }
+            return false;
         }
         else
         {
-            fileError=QFileDevice::AbortError;
-            return false;
+            return true;
         }
     }
 }
 
 bool kciTextEditor::saveAs()
 {
+    if(!dosaveas(tr("save as")))
+    {
+        if(fileError!=QFileDevice::AbortError)
+        {
+            QErrorMessage error(this);
+            error.showMessage(tr("Saving file failed!"));
+            error.exec();
+        }
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+bool kciTextEditor::dosaveas(const QString &Caption)
+{
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-    filePath=QFileDialog::getSaveFileName(this,tr("save as"),settings.value("texteditor/historyDir").toString(),strFileFilter);
+    filePath=QFileDialog::getSaveFileName(this,Caption,settings.value("texteditor/historyDir").toString(),strFileFilter);
 
     if(!filePath.isEmpty())
     {
@@ -170,11 +190,8 @@ bool kciTextEditor::saveAs(const QString &fileName)
     if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
     {
         QTextStream _textOut(&_file);
-
         _textOut<<editor->toPlainText()<<flush;
-
         fileInfoChanged(_file);
-
         return true;
     }
     else
@@ -200,7 +217,7 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
             strDisplayFileName=filePath;
         }
 
-        msgbox.setText(tr("Will you save changes to the the following file?")+"\n"+
+        msgbox.setText(tr("Will you save changes to the the following file?") + "\n" +
                        strDisplayFileName);
         msgbox.setInformativeText(tr("If you don't save the changes, all the changes will be lost."));
 
@@ -218,19 +235,14 @@ void kciTextEditor::closeEvent(QCloseEvent *e)
             // Save was clicked
             if(!save())
             {
-                //Save file failed
-                msgbox.setText(tr("Saving file failed!"));
-                msgbox.setInformativeText(tr("Please save it again"));
-                msgbox.setStandardButtons(QMessageBox::Ok);
-                msgbox.setDefaultButton(QMessageBox::Ok);
-                msgbox.setIcon(QMessageBox::Warning);
-
-                msgbox.exec();
                 e->ignore();
                 break;
             }
-            e->accept();
-            break;
+            else
+            {
+                e->accept();
+                break;
+            }
         case QMessageBox::Discard:
             // Don't Save was clicked
             e->accept();
@@ -373,4 +385,9 @@ void kciTextEditor::fileInfoChanged(const QFile &file)
 kciLanguageMode *kciTextEditor::langMode() const
 {
     return m_langMode;
+}
+
+bool kciTextEditor::isModified()
+{
+    return editor->document()->isModified();
 }
