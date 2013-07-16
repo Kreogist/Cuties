@@ -71,21 +71,14 @@ void gcc::startCompile(const QString &filePath)
 
     arg<<"-o"<<programName;
 
-    QString CompileCmdLine;
-    CompileCmdLine=gccPath;
-    for(int i=0; i<arg.count(); i++)
-    {
-        CompileCmdLine += QString(" ") + arg.at(i);
-    }
-    CompileCmdLine+="\n";
-    emit compileinfo(CompileCmdLine);
+    emitCompileInfo(gccPath,arg);
 
     connect(this,SIGNAL(readyRead()),
             this,SLOT(onOutputReady()));
 
 #ifdef Q_OS_WIN
     QStringList env;
-    env<<"C:/MinGW/bin;";
+    env<<gccPath;
     setEnvironment(env);
 #endif
 
@@ -99,11 +92,52 @@ void gcc::onOutputReady()
     {
         QString msg=QString::fromUtf8(str_msg);
         emit output(msg);
+        parseMessage(msg);
     }
 }
 
-QRegularExpression gcc::suffixFilter()
+void gcc::parseMessage(const QString &msg)
 {
-    return QRegularExpression("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)"
-                              ,QRegularExpression::CaseInsensitiveOption);
+    QString strJudgedStr=msg.left(2).toLower();
+    if(strJudgedStr=="in" || strJudgedStr=="  ")
+    {
+        ErrInfo error;
+        error.nColumnNum=-1;
+        error.nLineNum=-1;
+        error.strErrDescription=msg;
+        error.strErrDescription=error.strErrDescription.remove(
+                    error.strErrDescription.length()-1,1);
+        error.strFilePath="";
+
+        emit compileError(error);
+    }
+    else
+    {
+        QRegularExpression expressMsg("(<command[ -]line>|([A-Za-z]:)?[^:]+):");
+        QRegularExpressionMatch match=expressMsg.match(msg);
+        if(match.hasMatch())
+        {
+            QString FileName=match.captured();
+            int NewHead=FileName.length();
+            FileName=FileName.remove(NewHead-1,1);
+
+            QString ErrorDetailInfo=msg.mid(NewHead);
+            ErrorDetailInfo.remove(ErrorDetailInfo.length()-1,1);
+
+            expressMsg.setPattern("\\d+:\\d+");
+            match=expressMsg.match(ErrorDetailInfo);
+            if(match.hasMatch())
+            {
+                QString strErrPosition=match.captured();
+                QStringList sltErrPos=strErrPosition.split(":");
+
+                ErrInfo error;
+                error.nLineNum=sltErrPos.at(0).toInt();
+                error.nColumnNum=sltErrPos.at(1).toInt();
+                error.strFilePath=FileName;
+                error.strErrDescription=ErrorDetailInfo;
+                emit compileError(error);
+            }
+        }
+    }
 }

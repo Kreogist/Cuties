@@ -42,12 +42,12 @@ public:
     bool checkCompilerPath(const QString& ){return true;}
     QString compilerName(){return "g++";}
 
-    static QRegularExpression suffixFilter();
-
 public slots:
     void onOutputReady();
 
 private:
+    void parseMessage(const QString& msg);
+
     static QString gccPath;
 };
 

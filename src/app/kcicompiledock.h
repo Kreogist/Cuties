@@ -40,6 +40,8 @@
 #include <QModelIndex>
 #include <QStandardItemModel>
 
+#include "compilerbase.h"
+
 class kcicompiledock : public QDockWidget
 {
     Q_OBJECT
@@ -67,14 +69,6 @@ public:
 
 private:
 
-    struct ErrInfo
-    {
-        int nLineNum;
-        int nColumnNum;
-        QString strFilePath;
-        QString strErrDescription;
-    };
-
     QWidget *objCombine;
     QSplitter *splCombine;
     QTreeView *trevwCompileInfo;
@@ -96,7 +90,7 @@ signals:
     
 public slots:
     void outputCompileInfo(QString msg);
-    void parseMessage(QString msg);
+    void onCompileMsgReceived(ErrInfo error);
     void compileFinish(int ExitNum);
 
 private slots:

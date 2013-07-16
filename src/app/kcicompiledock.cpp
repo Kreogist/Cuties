@@ -157,7 +157,7 @@ void kcicompiledock::outputCompileInfo(QString msg)
     addText(msg);
 }
 
-void kcicompiledock::parseMessage(QString msg)
+void kcicompiledock::onCompileMsgReceived(ErrInfo error)
 {
     if(!hasError)
     {
@@ -168,56 +168,14 @@ void kcicompiledock::parseMessage(QString msg)
                 "\n");
         hasError=true;
     }
-    //Add Original Text To TextBox.
-    addText(msg);
 
-    //Process Msg:
-    QString strJudgedStr=msg.left(2).toLower();
-    if(strJudgedStr=="in" || strJudgedStr=="  ")
-    {
-        ErrInfo ThisErr;
-        ThisErr.nColumnNum=-1;
-        ThisErr.nLineNum=-1;
-        ThisErr.strErrDescription=msg;
-        ThisErr.strErrDescription=ThisErr.strErrDescription.remove(
-                    ThisErr.strErrDescription.length()-1,1);
-        ThisErr.strFilePath="";
-        erifList.append(ThisErr);
-        addRootItem(ThisErr.strErrDescription);
-    }
-    else
-    {
-        expressMsg=new QRegularExpression("(<command[ -]line>|([A-Za-z]:)?[^:]+):");
-        QRegularExpressionMatch match=expressMsg->match(msg);
-        if(match.hasMatch()){
-            QString FileName=match.captured();
-            int NewHead=FileName.length();
-            FileName=FileName.remove(NewHead-1,1);
-            QString ErrorDetailInfo=msg.mid(NewHead);
-            ErrorDetailInfo.remove(ErrorDetailInfo.length()-1,1);
-            expressMsg->setPattern("\\d+:\\d+");
-            match=expressMsg->match(ErrorDetailInfo);
-            if(match.hasMatch())
-            {
-                QString strErrPosition=match.captured();
-                QStringList sltErrPos=strErrPosition.split(":");
-
-                ErrInfo ThisErr;
-                ThisErr.nLineNum=sltErrPos.at(0).toInt();
-                ThisErr.nColumnNum=sltErrPos.at(1).toInt();
-                ThisErr.strFilePath=FileName;
-                ThisErr.strErrDescription=ErrorDetailInfo;
-                erifList.append(ThisErr);
-                addRootItem(ErrorDetailInfo);
-            }
-
-        }
-    }
+    erifList.append(error);
+    addRootItem(error.strErrDescription);
 }
 
 void kcicompiledock::compileFinish(int ExitNum)
 {
-    Q_UNUSED(ExitNum);
+    qDebug()<<ExitNum;
     if(hasError)
     {
         //Output Error Num
