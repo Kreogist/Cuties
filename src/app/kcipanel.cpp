@@ -102,6 +102,8 @@ void kciPanel::paintEvent(QPaintEvent *event)
             break;
     }
 
+    first=block.blockNumber();
+
     for(;bottom>=0 && block.isValid();
         block=block.next())
     {
@@ -115,4 +117,16 @@ void kciPanel::paintEvent(QPaintEvent *event)
         block_top += block_height;
         bottom-=block.lineCount();
     }
+
+    last=block.blockNumber();
+}
+
+int kciPanel::getFirstVisiableBlockNumber()
+{
+    return first;
+}
+
+int kciPanel::getLastVisiableBlockNumber()
+{
+    return last;
 }

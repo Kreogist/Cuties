@@ -74,8 +74,14 @@ void kciMarkPanel::mouseReleaseEvent(QMouseEvent *e)
 {
     if(isPressed)
     {
-        int i=vecMark.size();
-        while(i--)
+        int i=getFirstVisiableBlockNumber(),
+            l=getLastVisiableBlockNumber();
+
+        l=(l==-1)?vecMark.size():l;
+        // l==-1 means that the document is reach at the end.
+        // So l should be vecMark.size().
+
+        for(;i<=l;i++)
         {
             if(vecMark[i].rect.contains(pressedPos,true))
             {

@@ -26,6 +26,14 @@
 
 #include <QProcess>
 
+struct ErrInfo
+{
+    int nLineNum;
+    int nColumnNum;
+    QString strFilePath;
+    QString strErrDescription;
+};
+
 class compilerBase : public QProcess
 {
     Q_OBJECT
@@ -41,7 +49,12 @@ public:
 
 signals:
     void compileinfo(QString msg);
+    void compileError(ErrInfo errInfo);
     void output(QString msg);
+
+protected:
+    void emitCompileInfo(const QString& compilerPath,
+                         const QStringList& arg);
 
 private:
     QString currentCompilerName;

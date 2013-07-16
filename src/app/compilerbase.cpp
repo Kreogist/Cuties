@@ -32,3 +32,16 @@ void compilerBase::setCompilerName(QString newCompilerName)
 {
     currentCompilerName=newCompilerName;
 }
+
+void compilerBase::emitCompileInfo(const QString &compilerPath,
+                                   const QStringList &arg)
+{
+    QString CompileCmdLine;
+    CompileCmdLine=compilerPath;
+    for(int i=0; i<arg.count(); i++)
+    {
+        CompileCmdLine += QString(" ") + arg.at(i);
+    }
+    CompileCmdLine+="\n";
+    emit compileinfo(CompileCmdLine);
+}
