@@ -35,9 +35,12 @@
 #include <QFileInfo>
 #include <QApplication>
 #include <QSettings>
+#include <QDir>
+#include <QFile>
 #include <QDebug>
 
 #include "kciglobal.h"
+#include "fpc.h"
 
 struct Terminal
 {
