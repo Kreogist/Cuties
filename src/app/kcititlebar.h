@@ -31,11 +31,14 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QPropertyAnimation>
+#include <QRect>
 #include <QIcon>
 #include <QString>
 #include <QToolBar>
 #include <QWidget>
 #include <QPalette>
+#include <QDebug>
 
 class kciTitleBar : public QWidget
 {
@@ -43,6 +46,7 @@ class kciTitleBar : public QWidget
 public:
     explicit kciTitleBar(QWidget *parent = 0);
     void addToolButton(QToolButton *tblMainButton);
+    void addToolSeparator();
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString& mainIcon);
     void setTitle(const QString &title);
@@ -53,9 +57,12 @@ public:
 signals:
     
 public slots:
+    void showToolBar();
+    void hideToolBar();
 
 private slots:
     void _exchange_button_state();
+    void hideRealToolBar();
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -80,6 +87,8 @@ private:
     QToolButton *mainButton;
     QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;
     QToolBar *mainToolBar;
+    QPropertyAnimation *tlbHideAnime;
+
 };
 
 #endif // KCITITLEBAR_H
