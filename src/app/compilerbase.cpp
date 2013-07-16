@@ -28,11 +28,6 @@ compilerBase::compilerBase(QObject *parent) :
 {
 }
 
-void compilerBase::setCompilerName(QString newCompilerName)
-{
-    currentCompilerName=newCompilerName;
-}
-
 void compilerBase::emitCompileInfo(const QString &compilerPath,
                                    const QStringList &arg)
 {
@@ -44,4 +39,47 @@ void compilerBase::emitCompileInfo(const QString &compilerPath,
     }
     CompileCmdLine+="\n";
     emit compileinfo(CompileCmdLine);
+}
+
+QString compilerBase::version()
+{
+    //Initalize Values:
+    QString strReturnValue;
+
+    start(path(),getVersionArg());
+    waitForFinished();
+
+    //Save Second Part Of Compiler:
+    strReturnValue=strReturnValue+"\n"+
+                   QString::fromUtf8(readAllStandardOutput().constData());
+    return strReturnValue;
+}
+
+void compilerBase::startCompile(const QString &filePath)
+{
+    QString compilerPath=path();
+    QStringList arg=getCompileArg(filePath);
+
+    emitCompileInfo(compilerPath,arg);
+
+    connect(this,SIGNAL(readyRead()),
+            this,SLOT(onOutputReady()));
+
+    QStringList env=getcompileEnv();
+    if(!env.isEmpty())
+        setEnvironment(env);
+
+    start(compilerPath,arg);
+}
+
+bool compilerBase::checkCompilerPath(const QString& path)
+{
+    QFileInfo _fileInfo(path);
+
+    if(_fileInfo.exists() && _fileInfo.isExecutable())
+    {
+        return true;
+    }
+
+    return false;
 }

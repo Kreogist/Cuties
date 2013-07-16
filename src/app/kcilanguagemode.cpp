@@ -50,7 +50,7 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
     else if(suffix.contains(_regexp_pascal))
     {
         m_type=pascal;
-        //TODO: compile pascal unsupported!
+        m_compiler=new fpc(m_parent);
         m_highlighter=new pascalHighlighter(m_parent);
         m_highlighter->setDocument(m_parent->document);
     }
