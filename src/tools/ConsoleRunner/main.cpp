@@ -4,6 +4,7 @@
 
 #ifdef _OS_WIN32_
 #include <windows.h>
+#include <direct.h>
 #include <conio.h>
 #define wait_key getch
 
@@ -18,6 +19,7 @@ double gettime()
 
 #else
 #include <sys/time.h>
+#include <unistd.h>
 #define wait_key getchar
 
 double gettime()
@@ -39,7 +41,9 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    char* program_name=new char[strlen(argv[1])+2];
+    int l=strlen(argv[1])+2;
+
+    char* program_name=new char[l];
     memset(program_name,0,sizeof(program_name));
     program_name[0]='\"';
     strcat(program_name,argv[1]);
@@ -50,7 +54,6 @@ int main(int argc, char *argv[])
     double exec_time= gettime();
 
     //run program
-    printf(program_name);
     system(program_name);
 
     //get end time

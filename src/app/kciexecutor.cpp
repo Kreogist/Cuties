@@ -46,7 +46,7 @@ static const Terminal knownTerminals[terminalCount] =
 static const int terminalCount = 1;
 static const Terminal knownTerminals[terminalCount] =
 {
-    {"cmd", "/k"}
+    {"cmd", "/c"}
 };
 #endif
 
@@ -105,17 +105,23 @@ void kciRunner::run()
         }
         else
         {
-            p->process=new QProcess;
             QStringList arg;
-            #ifdef Q_OS_UNIX
-                Terminal terminal=getDefaultTerminal();
-                arg<<terminal.arg<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
+            p->process=new QProcess;
+            QString tmpPath=p->path;
+            tmpPath.chop(1);
+            tmpPath.remove(0,1);
+            QFileInfo info(tmpPath);
 
-                p->process->startDetached(QLatin1String(terminal.terminal_name),arg);
+            p->process->setWorkingDirectory(info.absoluteDir().absolutePath());
+
+            Terminal terminal=getDefaultTerminal();
+
+            #ifdef Q_OS_WIN
+                arg<<terminal.arg<<"start"<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
             #else
-                arg<<p->path;
-                p->process->start(qApp->applicationDirPath()+'/'+console_runner_path, arg);
+                arg<<terminal.arg<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
             #endif
+            p->process->start(QLatin1String(terminal.terminal_name),arg);
         }
 
         if(p->enabledAutoInput)

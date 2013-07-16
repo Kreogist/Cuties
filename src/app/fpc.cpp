@@ -22,7 +22,7 @@ QStringList fpc::getVersionArg()
 QStringList fpc::getCompileArg(const QString &filePath)
 {
     QStringList arg;
-    arg<<filePath;
+    arg<<filePath<<"-g";
     return arg;
 }
 
