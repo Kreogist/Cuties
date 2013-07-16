@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     tabManager=new kciTabManager(this);
     setCentralWidget(tabManager);
-    setMinimumSize(400,150);
+    setMinimumSize(500,450);
 
     QPalette QPpal = palette();
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
@@ -351,14 +351,43 @@ void MainWindow::createTitlebar()
 
 void MainWindow::createToolBar()
 {
+    //Set Icons.
     QString strIconPath[tlbbutton_count];
-    strIconPath[tlbNewFile]=":/ToolBar/image/ToolBar/01_New.png";
-    for(int i=tlbNewFile;i<=tlbNewFile;i++)
+    strIconPath[tlbNewFile]=":/ToolBar/image/ToolBar/new.png";
+    strIconPath[tlbOpenFile]=":/ToolBar/image/ToolBar/open.png";
+    strIconPath[tlbSaveFile]=":/ToolBar/image/ToolBar/save.png";
+    strIconPath[tlbCut]=":/ToolBar/image/ToolBar/cut.png";
+    strIconPath[tlbCopy]=":/ToolBar/image/ToolBar/copy.png";
+    strIconPath[tlbPaste]=":/ToolBar/image/ToolBar/paste.png";
+    strIconPath[tlbSearch]=":/ToolBar/image/ToolBar/search.png";
+    strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compile&run.png";
+
+    //Set Other Buttons.
+    for(int i=tlbNewFile;i<tlbbutton_count;i++)
     {
         tblMainButton[i]=new QToolButton(titlebar);
-        //tblMainButton[i]->setIcon(QIcon);
+        //tblMainButton[i]->setPalette(pal);
+        tblMainButton[i]->setFixedSize(25,25);
+        tblMainButton[i]->setIcon(QIcon(strIconPath[i]));
         titlebar->addToolButton(tblMainButton[i]);
+        if(i==tlbSaveFile || i==tlbPaste || i==tlbSearch)
+        {
+            titlebar->addToolSeparator();
+        }
     }
+
+    connect(tblMainButton[tlbNewFile],SIGNAL(clicked()),
+            tabManager,SLOT(new_file()));
+    connect(tblMainButton[tlbOpenFile],SIGNAL(clicked()),
+            tabManager,SLOT(open()));
+    connect(tblMainButton[tlbSaveFile],SIGNAL(clicked()),
+            tabManager,SLOT(save()));
+    connect(tblMainButton[tlbCut],SIGNAL(clicked()),
+            tabManager,SLOT(cut()));
+    connect(tblMainButton[tlbCopy],SIGNAL(clicked()),
+            tabManager,SLOT(copy()));
+    connect(tblMainButton[tlbPaste],SIGNAL(clicked()),
+            tabManager,SLOT(paste()));
 
 }
 
@@ -502,8 +531,12 @@ void MainWindow::createMenu()
     setNoDocOpenMenuEnabled();
     connect(tabManager,SIGNAL(tabAdded()),
             this,SLOT(setDocOpenMenuEnabled()));
+    connect(tabManager,SIGNAL(tabAdded()),
+            titlebar,SLOT(showToolBar()));
     connect(tabManager,SIGNAL(tabClear()),
             this,SLOT(setNoDocOpenMenuEnabled()));
+    connect(tabManager,SIGNAL(tabClear()),
+            titlebar,SLOT(hideToolBar()));
 }
 
 void MainWindow::createStatusbar()

@@ -73,6 +73,13 @@
         <file>image/Debug Docks/JumpFunction.png</file>
     </qresource>
     <qresource prefix="/ToolBar">
-        <file>image/ToolBar/01_New.png</file>
+        <file>image/ToolBar/paste.png</file>
+        <file>image/ToolBar/cut.png</file>
+        <file>image/ToolBar/copy.png</file>
+        <file>image/ToolBar/save.png</file>
+        <file>image/ToolBar/open.png</file>
+        <file>image/ToolBar/new.png</file>
+        <file>image/ToolBar/search.png</file>
+        <file>image/ToolBar/compile&amp;run.png</file>
     </qresource>
 </RCC>

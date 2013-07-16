@@ -58,8 +58,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     connect(maximizeButton,SIGNAL(clicked()),
             this,SLOT(_exchange_button_state()));
 
-    mainToolBar=new QToolBar(this);
-
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
     mainButton->setFixedSize(32,32);
@@ -67,8 +65,20 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
 
+    mainToolBar=new QToolBar(this);
+    QPalette pal=mainToolBar->palette();
+    pal.setColor(QPalette::Button, QColor(83,83,83));
+    mainToolBar->setPalette(pal);
+    mainToolBar->setContentsMargins(0,0,0,0);
+    mainToolBar->setMovable(true);
+    mainToolBar->setGeometry(mainButton->width(),
+                             0,
+                             mainToolBar->width(),
+                             mainToolBar->height());
+    mainToolBar->hide();
+
     titleLabel=new QLabel(windowTitle,this);
-    QPalette pal=titleLabel->palette();
+    pal=titleLabel->palette();
     pal.setColor(QPalette::WindowText,QColor(208,208,208));
     titleLabel->setPalette(pal);
 
@@ -77,7 +87,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->setSpacing(0);
     setLayout(hLayout);
     hLayout->addWidget(mainButton);
-    hLayout->addWidget(mainToolBar);
     hLayout->addStretch();
     hLayout->addWidget(titleLabel);
     hLayout->addSpacing(3);
@@ -102,11 +111,59 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     vCloseLayout->addWidget(closeButton);
     vCloseLayout->addStretch();
     hLayout->addLayout(vCloseLayout);
+
+    tlbHideAnime=new QPropertyAnimation(mainToolBar,"geometry");
+    connect(tlbHideAnime,SIGNAL(finished()),
+            this,SLOT(hideRealToolBar()));
+}
+
+void kciTitleBar::showToolBar()
+{
+    if(!mainToolBar->isVisible())
+    {
+        QPropertyAnimation *tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry");
+        QRect animeEndPos=mainToolBar->geometry();
+        animeEndPos.setLeft(mainButton->width());
+        animeEndPos.setTop(0);
+        QRect animeStartPos=animeEndPos;
+        animeStartPos.setTop(-mainToolBar->height());
+        tlbShowAnime->setStartValue(animeStartPos);
+        tlbShowAnime->setEndValue(animeEndPos);
+        tlbShowAnime->setEasingCurve(QEasingCurve::OutCubic);
+        mainToolBar->show();
+        tlbShowAnime->start();
+    }
+}
+
+void kciTitleBar::hideToolBar()
+{
+    if(mainToolBar->isVisible())
+    {
+        QRect animeStartPos=mainToolBar->geometry();
+        QRect animeEndPos=animeStartPos;
+        animeEndPos.setTop(-mainToolBar->height()*2);
+        tlbHideAnime->setStartValue(animeStartPos);
+        tlbHideAnime->setEndValue(animeEndPos);
+        tlbHideAnime->setEasingCurve(QEasingCurve::OutCubic);
+        tlbHideAnime->start();
+    }
+}
+
+void kciTitleBar::hideRealToolBar()
+{
+    mainToolBar->hide();
+}
+
+void kciTitleBar::addToolSeparator()
+{
+    mainToolBar->addSeparator();
+    mainToolBar->setFixedWidth(mainToolBar->width()+3);
 }
 
 void kciTitleBar::addToolButton(QToolButton *tblMainButton)
 {
     mainToolBar->addWidget(tblMainButton);
+    mainToolBar->setFixedWidth(mainToolBar->width()+25);
 }
 
 void kciTitleBar::_exchange_button_state()
@@ -164,7 +221,9 @@ void kciTitleBar::mousePressEvent(QMouseEvent *event)
         event->accept();
     }
     else
+    {
         event->ignore();
+    }
 }
 
 void kciTitleBar::mouseMoveEvent(QMouseEvent *event)
@@ -190,6 +249,7 @@ void kciTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
     {
+        event->accept();
         _exchange_button_state();
     }
 }

@@ -165,6 +165,13 @@ private:
     enum MainToolBarButton
     {
         tlbNewFile,
+        tlbOpenFile,
+        tlbSaveFile,
+        tlbCut,
+        tlbCopy,
+        tlbPaste,
+        tlbSearch,
+        tlbCompileAndRun,
         tlbbutton_count // the number of toolbar buttons
     };
 
