@@ -49,6 +49,8 @@ signals:
 public slots:
 
 protected:
+    int getFirstVisiableBlockNumber();
+    int getLastVisiableBlockNumber();
     void paintEvent(QPaintEvent *event);
     virtual void draw(QPainter *painter, QTextBlock *block ,
                       int x, int y, int w, int h,
@@ -56,6 +58,8 @@ protected:
     
 private:
     kciCodeEditor *e;
+
+    int first,last;
 
     QMetaObject::Connection edConnection,etConnection,euConnection;
 };
