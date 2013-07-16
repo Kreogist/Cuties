@@ -37,24 +37,14 @@ gcc::gcc(QObject *parent) :
     setReadChannelMode(QProcess::MergedChannels);
 }
 
-QString gcc::version()
+QStringList gcc::getVersionArg()
 {
-    //Initalize Values:
-    QString strReturnValue;
-    QProcess gccInfo;
-
-    //Set Argv:
     QStringList arg;
-    arg<<"--version";
-    gccInfo.start(gccPath,arg);
-    gccInfo.waitForFinished();
-    //Save Second Part Of Compiler:
-    strReturnValue=strReturnValue+"\n"+
-                   QString::fromUtf8(gccInfo.readAllStandardOutput().constData());
-    return strReturnValue;
+    arg<<"-dumpversion";
+    return arg;
 }
 
-void gcc::startCompile(const QString &filePath)
+QStringList gcc::getCompileArg(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QStringList arg;
@@ -71,18 +61,23 @@ void gcc::startCompile(const QString &filePath)
 
     arg<<"-o"<<programName;
 
-    emitCompileInfo(gccPath,arg);
+    return arg;
+}
 
-    connect(this,SIGNAL(readyRead()),
-            this,SLOT(onOutputReady()));
+QStringList gcc::getcompileEnv()
+{
+    QStringList env;
 
 #ifdef Q_OS_WIN
-    QStringList env;
     env<<gccPath;
-    setEnvironment(env);
 #endif
 
-    start(gccPath,arg);
+    return env;
+}
+
+void gcc::setCompilerPath(const QString &path)
+{
+    gccPath=path;
 }
 
 void gcc::onOutputReady()

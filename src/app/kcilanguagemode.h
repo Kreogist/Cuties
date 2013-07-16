@@ -15,6 +15,7 @@
 #include "cpphighlighter.h"
 
 //pascal
+#include "fpc.h"
 #include "pascalhighlighter.h"
 
 class kciTextEditor;

@@ -25,6 +25,7 @@
 #define COMPILERBASE_H
 
 #include <QProcess>
+#include <QFileInfo>
 
 struct ErrInfo
 {
@@ -40,25 +41,27 @@ class compilerBase : public QProcess
 public:
     explicit compilerBase(QObject *parent = 0);
 
-    void setCompilerName(QString newCompilerName);
-    virtual void startCompile(const QString& ) = 0;
-    virtual QString version() = 0;
+    QString version();
+    void startCompile(const QString& filePath);
+    virtual void setCompilerPath(const QString& ) = 0;
     virtual QString path(){return "";}
-    virtual bool checkCompilerPath(const QString& ) = 0;
-    virtual QString compilerName(){return currentCompilerName;}
+    virtual bool checkCompilerPath(const QString& path);
+    virtual QString compilerName() = 0;
 
 signals:
     void compileinfo(QString msg);
     void compileError(ErrInfo errInfo);
     void output(QString msg);
 
+public slots:
+    virtual void onOutputReady() = 0;
+
 protected:
     void emitCompileInfo(const QString& compilerPath,
                          const QStringList& arg);
-
-private:
-    QString currentCompilerName;
-
+    virtual QStringList getVersionArg() = 0;
+    virtual QStringList getCompileArg(const QString& filePath) = 0;
+    virtual QStringList getcompileEnv() = 0;
 };
 
 #endif // COMPILERBASE_H
