@@ -72,6 +72,13 @@ private:
 
     kciCCGerneral *ccGeneral;
 
+    enum kciCCLists
+    {
+        ccGerneral,
+        cclist_count
+    };
+
+    kciListButton *lsbLeftButtons[cclist_count];
     void createLeftList();
     
 };

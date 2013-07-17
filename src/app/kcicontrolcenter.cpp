@@ -73,7 +73,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     ccBanner=new kciControlCenterBanner(this);
     WholeTitleBarSplit->addWidget(ccBanner);
     //Set Content Layout.
-    ContentLayout=new QHBoxLayout(this);
+    ContentLayout=new QHBoxLayout();
     ContentLayout->setContentsMargins(0,0,0,0);
     ContentLayout->setSpacing(0);
     WholeTitleBarSplit->addLayout(ContentLayout);
@@ -83,8 +83,14 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     ButtonListLayout->setContentsMargins(0,0,0,0);
     ButtonListLayout->setSpacing(0);
     ContentLayout->addLayout(ButtonListLayout);
+    createLeftList();
 
     //Set Main Contents.
     CCMainContents=new QStackedWidget(this);
     ContentLayout->addWidget(CCMainContents);
+}
+
+void kciControlCenter::createLeftList()
+{
+
 }
