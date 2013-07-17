@@ -43,17 +43,17 @@ pascalHighlighter::pascalHighlighter(QObject *parent) :
     //Set Key Words:
     hlrKeyWords.type_name="keyword";
     QStringList _keyword;
-    _keyword<<"alfa|and|array|begin|case|const|div"
-            <<"do|downto|else|end|false|file|for|function|get|goto|if|in"
-            <<"label|mod|new|not|of|or|pack|packed|page|program"
-            <<"put|procedure|read|readln|record|repeat|reset|rewrite|set"
+    _keyword<<"alfa|and|array|begin|case|const|div|"
+            <<"do|downto|else|end|false|file|for|function|get|goto|if|in|"
+            <<"label|mod|new|not|of|or|pack|packed|page|program|"
+            <<"put|procedure|read|readln|record|repeat|reset|rewrite|set|"
             <<"text|then|to|true|type|unpack|until|var|while|with|writeln|write";
     strKeyWords="\\b(";
     for(int i=0;i<_keyword.size();i++)
     {
-        strKeyWords=strKeyWords+_keyword[i];
+        strKeyWords+=_keyword[i];
     }
-    strKeyWords=strKeyWords+QString(")\\b");
+    strKeyWords+=QString(")\\b");
     hlrKeyWords.regexp.setPattern(strKeyWords);
     hlrKeyWords.regexp.setPatternOptions(
                 QRegularExpression::CaseInsensitiveOption);
@@ -80,10 +80,10 @@ void pascalHighlighter::highlightBlock(const QString &text)
     //!TODO: unsupport multiline comment
     for(int i=0;i<rules.size();i++)
     {
-        QRegularExpressionMatch match=rules[i].regexp.match(
-                    text,
-                    0);
-        while (match.hasMatch()) {
+        QRegularExpressionMatchIterator matchIterator=rules[i].regexp.globalMatch(
+                    text);
+        while (matchIterator.hasNext()) {
+            QRegularExpressionMatch match=matchIterator.next();
             setFormat(match.capturedStart(),
                       match.capturedLength(),
                       instance->getTextCharFormat(rules[i].type_name));
