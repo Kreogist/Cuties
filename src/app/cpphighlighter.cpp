@@ -64,9 +64,9 @@ cppHighlighter::cppHighlighter(QObject *parent) :
     strKeyWords="\\b(";
     for(i=0;i<_keyword.size();i++)
     {
-        strKeyWords=strKeyWords+_keyword[i];
+        strKeyWords+=_keyword[i];
     }
-    strKeyWords=strKeyWords+QString(")\\b");
+    strKeyWords+=QString(")\\b");
     hlrKeyWords.regexp.setPattern(strKeyWords);
     rules<<hlrKeyWords;
 
@@ -98,10 +98,10 @@ void cppHighlighter::highlightBlock(const QString &text)
     //!TODO: unsupport multiline comment
     for(int i=0;i<rules.size();i++)
     {
-        QRegularExpressionMatch match=rules[i].regexp.match(
-                    text,
-                    0);
-        while (match.hasMatch()) {
+        QRegularExpressionMatchIterator matchIterator=rules[i].regexp.globalMatch(
+                    text);
+        while (matchIterator.hasNext()) {
+            QRegularExpressionMatch match=matchIterator.next();
             setFormat(match.capturedStart(),
                       match.capturedLength(),
                       instance->getTextCharFormat(rules[i].type_name));

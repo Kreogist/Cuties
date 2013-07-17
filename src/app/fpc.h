@@ -1,6 +1,8 @@
 #ifndef FPC_H
 #define FPC_H
 
+#include <QRegularExpression>
+#include <QDebug>
 #include "compilerbase.h"
 
 class fpc : public compilerBase
