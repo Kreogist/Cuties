@@ -114,25 +114,36 @@ void gcc::parseMessage(const QString &msg)
         {
             QString FileName=match.captured();
             int NewHead=FileName.length();
-            FileName=FileName.remove(NewHead-1,1);
+            FileName.chop(1);
+            //remove :
+            //for example ,match.captured() is "/home/user/desktop/test.cpp:"
+            //and the FileName should be "/home/user/desktop/test.cpp"
 
             QString ErrorDetailInfo=msg.mid(NewHead);
-            ErrorDetailInfo.remove(ErrorDetailInfo.length()-1,1);
+            ErrorDetailInfo.chop(1);    //remove :
 
-            expressMsg.setPattern("\\d+:\\d+");
+
+            expressMsg.setPattern("(\\d+):(\\d+)");
             match=expressMsg.match(ErrorDetailInfo);
+
+            ErrInfo error;
+            error.strFilePath=FileName;
+            error.strErrDescription=ErrorDetailInfo;
+
             if(match.hasMatch())
             {
-                QString strErrPosition=match.captured();
-                QStringList sltErrPos=strErrPosition.split(":");
-
-                ErrInfo error;
-                error.nLineNum=sltErrPos.at(0).toInt();
-                error.nColumnNum=sltErrPos.at(1).toInt();
-                error.strFilePath=FileName;
-                error.strErrDescription=ErrorDetailInfo;
-                emit compileError(error);
+                error.nLineNum=match.captured(1).toInt();
+                error.nColumnNum=match.captured(2).toInt();
             }
+            else
+            {
+                //some message may not contian line/column number
+                //for example: the message may be " in function ‘int main()’ "
+                error.nLineNum=-1;
+                error.nColumnNum=-1;
+            }
+
+            emit compileError(error);
         }
     }
 }
