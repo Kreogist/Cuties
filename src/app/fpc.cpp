@@ -50,5 +50,34 @@ void fpc::onOutputReady()
 
 void fpc::parseMessage(const QString &msg)
 {
+    QRegularExpression regexp("([A-Za-z]+\\.pas)\\((\\d+),(\\d+)\\)");
+
+    QRegularExpressionMatch match=regexp.match(msg);
+
+    if(match.hasMatch())
+    {
+        ErrInfo error;
+        error.strFilePath=match.captured(1);
+        error.nLineNum=match.captured(2).toInt();
+        error.nColumnNum=match.captured(3).toInt();
+        error.strErrDescription=msg.mid(match.capturedLength());
+
+        emit compileError(error);
+    }
+    else
+    {
+        regexp.setPattern("(Fatal|Error|Warning|Hint|Note)");
+        match=regexp.match(msg);
+
+        if(match.hasMatch())
+        {
+            ErrInfo error;
+            error.strFilePath.clear();
+            error.nLineNum=-1;
+            error.nColumnNum=-1;
+            error.strErrDescription=msg;
+        }
+    }
+
     return ;
 }

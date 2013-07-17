@@ -95,10 +95,10 @@ void kciRunner::run()
             delete p->process;
         }
 
+        p->process=new QProcess;
+        p->process->setReadChannelMode(QProcess::MergedChannels);
         if(p->enabledBackExec)
         {
-            p->process=new QProcess;
-            p->process->setReadChannelMode(QProcess::MergedChannels);
             connect(p->process,SIGNAL(readyRead()),
                     this,SLOT(onReadyRead()));
             p->process->start(p->path);
@@ -106,7 +106,6 @@ void kciRunner::run()
         else
         {
             QStringList arg;
-            p->process=new QProcess;
             QString tmpPath=p->path;
             tmpPath.chop(1);
             tmpPath.remove(0,1);
