@@ -68,6 +68,7 @@ public:
     void setDocumentCursor(int nLine, int linePos);
     void setTextFocus();
     QString getFilePath();
+    QString getExecFileName();
     QTextCursor getTextCursor();
     int getTextLines();
     bool isModified();
@@ -103,6 +104,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
+    void computeExecFileName();
     void fileInfoChanged(const QFile& file);
     bool dosaveas(const QString& Caption);
 
@@ -114,6 +116,7 @@ private:
     kciMarkPanel *markPanel;
 
     QString filePath,strFileFilter;
+    QString execFileName;
     QFileDevice::FileError fileError;
     QTextCursor fileTextCursor;
 

@@ -763,14 +763,8 @@ void MainWindow::run()
         executor->setEnabledAutoInput(false);
 
         //execute file name
-        QFileInfo _fileInfo(currentEditor->getFilePath());
-        QString execName=QString("\"")+_fileInfo.absoluteDir().path()+
-                QString("/")+_fileInfo.completeBaseName();
-#ifdef Q_OS_WIN32
-        execName+=".exe";
-#endif
-        execName+="\"";
-        executor->exec(execName);
+
+        executor->exec(currentEditor->getExecFileName());
     }
 }
 

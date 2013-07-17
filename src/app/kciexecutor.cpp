@@ -106,14 +106,14 @@ void kciRunner::run()
         else
         {
             QStringList arg;
-            QString tmpPath=p->path;
-            tmpPath.chop(1);
-            tmpPath.remove(0,1);
-            QFileInfo info(tmpPath);
+            QFileInfo info(p->path);
 
             p->process->setWorkingDirectory(info.absoluteDir().absolutePath());
 
             Terminal terminal=getDefaultTerminal();
+
+            p->path.prepend('\"');
+            p->path.append('\"');
 
             #ifdef Q_OS_WIN
                 arg<<terminal.arg<<"start"<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;

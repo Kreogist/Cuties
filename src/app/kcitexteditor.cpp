@@ -77,6 +77,20 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
 }
 
+QString kciTextEditor::getExecFileName()
+{
+    return execFileName;
+}
+
+void kciTextEditor::computeExecFileName()
+{
+    QFileInfo _fileInfo(filePath);
+    execFileName=_fileInfo.absolutePath()+QString("/")+_fileInfo.completeBaseName();
+    #ifdef Q_OS_WIN32
+            execFileName+=".exe";
+    #endif
+}
+
 void kciTextEditor::showSearchBar()
 {
     if(!searchBar->isVisible())
@@ -377,6 +391,8 @@ void kciTextEditor::fileInfoChanged(const QFile &file)
     filePath=file.fileName();
     fileError=QFileDevice::NoError;
     editor->document()->setModified(false);
+
+    computeExecFileName();
 
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
     settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
