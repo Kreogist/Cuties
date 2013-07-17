@@ -39,6 +39,7 @@
 
 #include "kcisearchlinetext.h"
 #include "kciccgerneral.h"
+#include "kcilistbutton.h"
 
 class kciControlCenterBanner : public QWidget
 {
@@ -66,6 +67,7 @@ private:
     QStackedWidget *ccMainTabs;
     QVBoxLayout *WholeTitleBarSplit, *ButtonListLayout;
     QHBoxLayout *ContentLayout;
+    QStackedWidget *CCMainContents;
     kciControlCenterBanner *ccBanner;
 
     kciCCGerneral *ccGeneral;

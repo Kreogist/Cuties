@@ -1,6 +1,8 @@
 #ifndef KCILISTBUTTON_H
 #define KCILISTBUTTON_H
 
+#include <QLabel>
+#include <QHBoxLayout>
 #include <QWidget>
 
 class kciListButton : public QWidget
@@ -15,7 +17,10 @@ protected:
 
 
 public slots:
-    
+
+private:
+    QLabel *lblButtonText;
+    QHBoxLayout *mLayout;
 };
 
 #endif // KCILISTBUTTON_H

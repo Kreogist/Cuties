@@ -79,5 +79,12 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     WholeTitleBarSplit->addLayout(ContentLayout);
 
     //Set List.
+    ButtonListLayout=new QVBoxLayout();
+    ButtonListLayout->setContentsMargins(0,0,0,0);
+    ButtonListLayout->setSpacing(0);
+    ContentLayout->addLayout(ButtonListLayout);
 
+    //Set Main Contents.
+    CCMainContents=new QStackedWidget(this);
+    ContentLayout->addWidget(CCMainContents);
 }
