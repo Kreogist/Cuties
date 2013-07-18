@@ -79,10 +79,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     WholeTitleBarSplit->addLayout(ContentLayout);
 
     //Set List.
-    ButtonListLayout=new QVBoxLayout();
-    ButtonListLayout->setContentsMargins(0,0,0,0);
-    ButtonListLayout->setSpacing(0);
-    ContentLayout->addLayout(ButtonListLayout);
+    ContentLayout->addSpacing(215);
     createLeftList();
 
     //Set Main Contents.
@@ -95,6 +92,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
 
 void kciControlCenter::createLeftList()
 {
+    //Set Label Strings.
     QString strLabelTexts[cclist_count], strLabelIcons[cclist_count];
     strLabelTexts[cclstGerneral]=tr("Gerneral");
     strLabelTexts[cclstEditor]=tr("Editor");
@@ -115,16 +113,17 @@ void kciControlCenter::createLeftList()
     for(int i=cclstGerneral;i<cclist_count;i++)
     {
         lsbLeftButtons[i]=new kciListButton(this);
-        lsbLeftButtons[i]->setFixedWidth(215);
         lsbLeftButtons[i]->setLabelText(strLabelTexts[i]);
         lsbLeftButtons[i]->setLabelIcon(strLabelIcons[i]);
+        lsbLeftButtons[i]->setGeometry(0,
+                                       85 + (i-1) * 40,
+                                       215,
+                                       40);
         connect(lsbLeftButtons[i],SIGNAL(click()),lstMapper,SLOT(map()));
         lstMapper->setMapping(lsbLeftButtons[i],i);
-        //connect(lsbLeftButtons[i],SIGNAL(click()),this,SLOT(lstClick(/*int*/)));
-        ButtonListLayout->addWidget(lsbLeftButtons[i]);
+
     }
     connect(lstMapper,SIGNAL(mapped(int)),this,SLOT(lstClick(int)));
-    ButtonListLayout->addStretch();
 }
 
 void kciControlCenter::lstClick(int Index)
@@ -138,14 +137,14 @@ void kciControlCenter::lstClick(int Index)
     {
         //Clear Anime.
         WholeAnimeGroup->clear();
-
         QParallelAnimationGroup *MainAnimeGroup=new QParallelAnimationGroup(this);
-        //Mode Anime
+        //Move Anime
         QPropertyAnimation *moveListButton=new QPropertyAnimation(lsbLeftButtons[Index],"geometry");
         QRect animeStartPos=lsbLeftButtons[Index]->geometry();
         QRect animeEndPos=lsbLeftButtons[lstSelect]->geometry();
         moveListButton->setStartValue(animeStartPos);
         moveListButton->setEndValue(animeEndPos);
+        moveListButton->setEasingCurve(QEasingCurve::OutCubic);
         MainAnimeGroup->addAnimation(moveListButton);
         //Hide Anime
         QPropertyAnimation *hideListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry");
@@ -154,6 +153,7 @@ void kciControlCenter::lstClick(int Index)
         animeEndPos.setX(-animeEndPos.width());
         hideListButton->setStartValue(animeStartPos);
         hideListButton->setEndValue(animeEndPos);
+        hideListButton->setEasingCurve(QEasingCurve::OutCubic);
         MainAnimeGroup->addAnimation(hideListButton);
         //Add to Whole Anime.
         WholeAnimeGroup->addAnimation(MainAnimeGroup);
@@ -165,8 +165,8 @@ void kciControlCenter::lstClick(int Index)
         animeStartPos.setX(-animeStartPos.width());
         showListButton->setStartValue(animeStartPos);
         showListButton->setEndValue(animeEndPos);
+        showListButton->setEasingCurve(QEasingCurve::OutQuad);
         WholeAnimeGroup->addAnimation(showListButton);
-
         WholeAnimeGroup->start();
         lstSelect=Index;
     }

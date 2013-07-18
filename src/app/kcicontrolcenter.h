@@ -73,7 +73,7 @@ private slots:
 
 private:
     QStackedWidget *ccMainTabs;
-    QVBoxLayout *WholeTitleBarSplit, *ButtonListLayout;
+    QVBoxLayout *WholeTitleBarSplit;
     QHBoxLayout *ContentLayout;
     QStackedWidget *CCMainContents;
     kciControlCenterBanner *ccBanner;
