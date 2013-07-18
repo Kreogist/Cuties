@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QColor>
 #include <QPixmap>
 
 class kciListButton : public QWidget
@@ -16,7 +17,17 @@ public:
     explicit kciListButton(QWidget *parent = 0);
     void setLabelIcon(const QString &fileName);
     void setLabelText(const QString &text);
-    
+    void setBackgroundColor(const QColor &NewColor);
+    QColor getBackgroundColor();
+    void setPushedColor(const QColor &NewColor);
+    QColor getPushedColor();
+    void setTextColor(const QColor &NewColor);
+    QColor getTextColor();
+    void setPushedTextColor(const QColor &NewColor);
+    QColor getPushedTextColor();
+    void setPushed(bool newValue);
+    bool getPushed();
+
 signals:
     void click();
     
@@ -28,9 +39,12 @@ protected:
 public slots:
 
 private:
+    bool pushed;
+
     QLabel *lblButtonIcon, *lblButtonText;
     QHBoxLayout *mLayout;
     QPalette pal;
+    QColor *bgColor, *pushedColor, *textColor, *pushedTextColor;
 };
 
 #endif // KCILISTBUTTON_H

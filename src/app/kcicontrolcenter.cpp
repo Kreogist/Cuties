@@ -116,7 +116,7 @@ void kciControlCenter::createLeftList()
         lsbLeftButtons[i]->setLabelText(strLabelTexts[i]);
         lsbLeftButtons[i]->setLabelIcon(strLabelIcons[i]);
         lsbLeftButtons[i]->setGeometry(0,
-                                       85 + (i-1) * 40,
+                                       84 + (i-1) * 40,
                                        215,
                                        40);
         connect(lsbLeftButtons[i],SIGNAL(click()),lstMapper,SLOT(map()));
@@ -124,6 +124,9 @@ void kciControlCenter::createLeftList()
 
     }
     connect(lstMapper,SIGNAL(mapped(int)),this,SLOT(lstClick(int)));
+
+    //Set First To Be Pushed.
+    lsbLeftButtons[lstSelect]->setPushed(true);
 }
 
 void kciControlCenter::lstClick(int Index)
@@ -168,6 +171,11 @@ void kciControlCenter::lstClick(int Index)
         showListButton->setEasingCurve(QEasingCurve::OutQuad);
         WholeAnimeGroup->addAnimation(showListButton);
         WholeAnimeGroup->start();
+
+        //Set Pushed.
+        lsbLeftButtons[lstSelect]->setPushed(false);
+        lsbLeftButtons[Index]->setPushed(true);
+        //Set Index.
         lstSelect=Index;
     }
 }
