@@ -34,6 +34,11 @@
 #include <QIcon>
 #include <QSize>
 #include <QFont>
+#include <QRect>
+#include <QSignalMapper>
+#include <QParallelAnimationGroup>
+#include <QSequentialAnimationGroup>
+#include <QPropertyAnimation>
 #include <QHBoxLayout>
 #include <QStackedWidget>
 
@@ -63,6 +68,9 @@ signals:
     
 public slots:
 
+private slots:
+    void lstClick(int Index);
+
 private:
     QStackedWidget *ccMainTabs;
     QVBoxLayout *WholeTitleBarSplit, *ButtonListLayout;
@@ -80,7 +88,9 @@ private:
         cclist_count
     };
 
+    QSequentialAnimationGroup *WholeAnimeGroup;
     kciListButton *lsbLeftButtons[cclist_count];
+    QSignalMapper *lstMapper;
     int lstSelect;
     void createLeftList();
     

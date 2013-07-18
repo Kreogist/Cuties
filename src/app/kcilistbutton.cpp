@@ -46,3 +46,12 @@ void kciListButton::leaveEvent(QEvent *event)
     this->setPalette(pal);
     QWidget::leaveEvent(event);
 }
+
+void kciListButton::mousePressEvent(QMouseEvent *e)
+{
+    if(e->buttons() == Qt::LeftButton)
+    {
+        emit click();
+    }
+    QWidget::mousePressEvent(e);
+}

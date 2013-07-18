@@ -5,6 +5,8 @@
 #include <QPalette>
 #include <QHBoxLayout>
 #include <QWidget>
+#include <QDebug>
+#include <QMouseEvent>
 #include <QPixmap>
 
 class kciListButton : public QWidget
@@ -16,11 +18,12 @@ public:
     void setLabelText(const QString &text);
     
 signals:
+    void click();
     
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
-
+    void mousePressEvent(QMouseEvent *e);
 
 public slots:
 
