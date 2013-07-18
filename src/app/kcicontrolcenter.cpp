@@ -92,5 +92,28 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
 
 void kciControlCenter::createLeftList()
 {
+    QString strLabelTexts[cclist_count], strLabelIcons[cclist_count];
+    strLabelTexts[cclstGerneral]=tr("Gerneral");
+    strLabelTexts[cclstEditor]=tr("Editor");
+    strLabelTexts[cclstCompiler]=tr("Compiler");
+    strLabelTexts[cclstDebugger]=tr("Debugger");
+    strLabelTexts[cclstFileAssociation]=tr("File Association");
 
+    strLabelIcons[cclstGerneral]=":/controlcenter/image/Control Center/cciGeneral.png";
+    strLabelIcons[cclstEditor]=":/controlcenter/image/Control Center/cciEditor.png";
+    strLabelIcons[cclstCompiler]=":/controlcenter/image/Control Center/cciCompiler.png";
+    strLabelIcons[cclstDebugger]=":/controlcenter/image/Control Center/cciDebugger.png";
+    strLabelIcons[cclstFileAssociation]=":/controlcenter/image/Control Center/cciFileAssociation.png";
+
+    lstSelect=cclstGerneral;
+    for(int i=cclstGerneral;i<cclist_count;i++)
+    {
+        lsbLeftButtons[i]=new kciListButton(this);
+        lsbLeftButtons[i]->setFixedWidth(215);
+        lsbLeftButtons[i]->setLabelText(strLabelTexts[i]);
+        lsbLeftButtons[i]->setLabelIcon(strLabelIcons[i]);
+        ButtonListLayout->addWidget(lsbLeftButtons[i]);
+    }
+
+    ButtonListLayout->addStretch();
 }

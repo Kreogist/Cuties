@@ -70,15 +70,18 @@ private:
     QStackedWidget *CCMainContents;
     kciControlCenterBanner *ccBanner;
 
-    kciCCGerneral *ccGeneral;
-
     enum kciCCLists
     {
-        ccGerneral,
+        cclstGerneral,
+        cclstEditor,
+        cclstCompiler,
+        cclstDebugger,
+        cclstFileAssociation,
         cclist_count
     };
 
     kciListButton *lsbLeftButtons[cclist_count];
+    int lstSelect;
     void createLeftList();
     
 };
