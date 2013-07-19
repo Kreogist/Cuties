@@ -34,16 +34,15 @@
 #include <QIcon>
 #include <QSize>
 #include <QFont>
+#include <QScrollArea>
 #include <QRect>
 #include <QSignalMapper>
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
 #include <QPropertyAnimation>
 #include <QHBoxLayout>
-#include <QStackedWidget>
 
 #include "kcisearchlinetext.h"
-#include "kciccgerneral.h"
 #include "kcilistbutton.h"
 
 class kciControlCenterBanner : public QWidget
@@ -58,26 +57,16 @@ private:
     kciSearchLineText *CCSearch;
 };
 
-class kciControlCenter : public QWidget
+class kciControlCenterLeftBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciControlCenter(QWidget *parent = 0);
-    
-signals:
-    
-public slots:
+    explicit kciControlCenterLeftBar(QWidget *parent = 0);
 
 private slots:
     void lstClick(int Index);
 
 private:
-    QStackedWidget *ccMainTabs;
-    QVBoxLayout *WholeTitleBarSplit;
-    QHBoxLayout *ContentLayout;
-    QStackedWidget *CCMainContents;
-    kciControlCenterBanner *ccBanner;
-
     enum kciCCLists
     {
         cclstGerneral,
@@ -92,8 +81,25 @@ private:
     kciListButton *lsbLeftButtons[cclist_count];
     QSignalMapper *lstMapper;
     int lstSelect;
-    void createLeftList();
+
+};
+
+class kciControlCenter : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciControlCenter(QWidget *parent = 0);
     
+signals:
+    
+public slots:
+
+private:
+    QVBoxLayout *WholeTitleBarSplit;
+    QHBoxLayout *ContentLayout;
+    QWidget *CCMainContents;
+    kciControlCenterBanner *ccBanner;
+    kciControlCenterLeftBar *ccLeftBar;
 };
 
 #endif // KCICONTROLCENTER_H
