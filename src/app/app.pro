@@ -62,7 +62,9 @@ SOURCES += \
     kcidebugdock.cpp \
     kcitextsearchworker.cpp \
     fpc.cpp \
-    kcilistbutton.cpp
+    kcilistbutton.cpp \
+    Controls/Setting-List/ListItem/kcisettinglistitembase.cpp \
+    Controls/Setting-List/kcisettinglist.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -97,7 +99,9 @@ HEADERS += \
     kcidebugdock.h \
     kcitextsearchworker.h \
     fpc.h \
-    kcilistbutton.h
+    kcilistbutton.h \
+    Controls/Setting-List/ListItem/kcisettinglistitembase.h \
+    Controls/Setting-List/kcisettinglist.h
 
 # Enable C++11
 CONFIG += c++11

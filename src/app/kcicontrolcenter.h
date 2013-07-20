@@ -36,11 +36,12 @@
 #include <QFont>
 #include <QScrollArea>
 #include <QRect>
+#include <QScrollArea>
 #include <QSignalMapper>
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
 #include <QPropertyAnimation>
-#include <QHBoxLayout>
+#include <QComboBox>
 
 #include "kcisearchlinetext.h"
 #include "kcilistbutton.h"
@@ -84,6 +85,26 @@ private:
 
 };
 
+class kciControlCenterTabGerneral : public QWidget
+{
+public:
+    explicit kciControlCenterTabGerneral(QWidget *parent = 0);
+private:
+    QVBoxLayout *FakeLayout, *RealLayout;
+    QScrollArea *mainScrollArea;
+
+    QLabel *lblDefaultLanguage;
+    QComboBox *cboMainLanguage;
+};
+
+class kciControlCenterContents : public QWidget
+{
+public:
+    explicit kciControlCenterContents(QWidget *parent = 0);
+private:
+    kciControlCenterTabGerneral *tabGerneral;
+};
+
 class kciControlCenter : public QWidget
 {
     Q_OBJECT
@@ -97,7 +118,7 @@ public slots:
 private:
     QVBoxLayout *WholeTitleBarSplit;
     QHBoxLayout *ContentLayout;
-    QWidget *CCMainContents;
+    kciControlCenterContents *CCMainContents;
     kciControlCenterBanner *ccBanner;
     kciControlCenterLeftBar *ccLeftBar;
 };

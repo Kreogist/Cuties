@@ -53,6 +53,12 @@ kciStatusCursorInfo::kciStatusCursorInfo(QWidget *parent) :
             this,SLOT(setHideGotoBox()));
 }
 
+void kciStatusCursorInfo::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    spbLineNum->setFixedWidth(this->width());
+}
+
 void kciStatusCursorInfo::ShowGotoBox(int currentValue, int MaxValue)
 {
     spbLineNum->setValue(currentValue);

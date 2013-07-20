@@ -160,6 +160,26 @@ void kciControlCenterLeftBar::lstClick(int Index)
     }
 }
 
+kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
+    QWidget(parent)
+{
+    //Set FakeLayout.
+    FakeLayout=new QVBoxLayout(this);
+    FakeLayout->setContentsMargins(0,0,0,0);
+    FakeLayout->setSpacing(0);
+    setLayout(FakeLayout);
+
+    //Set Main Widget.
+    mainScrollArea=new QScrollArea(this);
+    FakeLayout->addWidget(mainScrollArea);
+}
+
+kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
+    QWidget(parent)
+{
+    tabGerneral=new kciControlCenterTabGerneral(this);
+}
+
 kciControlCenter::kciControlCenter(QWidget *parent) :
     QWidget(parent)
 {
@@ -184,6 +204,6 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
 
     //Set Main Contents.
     //This widget ONLY use to get size, no use.
-    CCMainContents=new QWidget(this);
+    CCMainContents=new kciControlCenterContents(this);
     ContentLayout->addWidget(CCMainContents);
 }

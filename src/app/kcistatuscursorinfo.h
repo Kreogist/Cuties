@@ -42,6 +42,9 @@ public:
 signals:
     void ToLineNum(int LineNum);
 
+protected:
+    void resizeEvent(QResizeEvent *e);
+
 public slots:
     void updateCursorPosition(int LineNum, int ColNum);
     void gotoLineNumber(int NewNum);
