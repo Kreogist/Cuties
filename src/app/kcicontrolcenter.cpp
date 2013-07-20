@@ -66,6 +66,7 @@ kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
 {
     //Set Content Margin.
     setContentsMargins(0,0,0,0);
+    setFixedWidth(215);
     //Set Label Strings.
     QString strLabelTexts[cclist_count], strLabelIcons[cclist_count];
     strLabelTexts[cclstGerneral]=tr("Gerneral");
@@ -171,13 +172,30 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
 
     //Set Main Widget.
     mainScrollArea=new QScrollArea(this);
+    mainScrollArea->setAutoFillBackground(true);
+    mainScrollArea->setFrameShape(QFrame::NoFrame);
+    QPalette pal=mainScrollArea->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    mainScrollArea->setPalette(pal);
     FakeLayout->addWidget(mainScrollArea);
 }
 
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
 {
+    contentIndex=0;
     tabGerneral=new kciControlCenterTabGerneral(this);
+}
+
+void kciControlCenterContents::resizeEvent(QResizeEvent *e)
+{
+    switch(contentIndex)
+    {
+    case 0:
+        tabGerneral->setGeometry(0,0,this->width(),this->height());
+    }
+
+    QWidget::resizeEvent(e);
 }
 
 kciControlCenter::kciControlCenter(QWidget *parent) :

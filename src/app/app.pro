@@ -63,8 +63,9 @@ SOURCES += \
     kcitextsearchworker.cpp \
     fpc.cpp \
     kcilistbutton.cpp \
-    Controls/Setting-List/ListItem/kcisettinglistitembase.cpp \
-    Controls/Setting-List/kcisettinglist.cpp
+    Controls/SettingItems/kcisettinglistitemboolean.cpp \
+    Controls/SettingItems/kcisettinglistitembase.cpp \
+    Controls/SettingItems/kcisettinglistitemcombo.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -101,7 +102,10 @@ HEADERS += \
     fpc.h \
     kcilistbutton.h \
     Controls/Setting-List/ListItem/kcisettinglistitembase.h \
-    Controls/Setting-List/kcisettinglist.h
+    Controls/Setting-List/ListItem/kcisettinglistitemboolean.h \
+    Controls/SettingItems/kcisettinglistitemboolean.h \
+    Controls/SettingItems/kcisettinglistitembase.h \
+    Controls/SettingItems/kcisettinglistitemcombo.h
 
 # Enable C++11
 CONFIG += c++11

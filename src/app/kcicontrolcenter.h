@@ -36,6 +36,7 @@
 #include <QFont>
 #include <QScrollArea>
 #include <QRect>
+#include <QFrame>
 #include <QScrollArea>
 #include <QSignalMapper>
 #include <QParallelAnimationGroup>
@@ -92,17 +93,19 @@ public:
 private:
     QVBoxLayout *FakeLayout, *RealLayout;
     QScrollArea *mainScrollArea;
-
-    QLabel *lblDefaultLanguage;
-    QComboBox *cboMainLanguage;
 };
 
 class kciControlCenterContents : public QWidget
 {
 public:
     explicit kciControlCenterContents(QWidget *parent = 0);
+
+protected:
+    void resizeEvent(QResizeEvent *e);
+
 private:
     kciControlCenterTabGerneral *tabGerneral;
+    int contentIndex;
 };
 
 class kciControlCenter : public QWidget

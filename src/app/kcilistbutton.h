@@ -25,6 +25,8 @@ public:
     QColor getTextColor();
     void setPushedTextColor(const QColor &NewColor);
     QColor getPushedTextColor();
+    void setHoverColor(const QColor &NewColor);
+    QColor getHoverColor();
     void setPushed(bool newValue);
     bool getPushed();
 
@@ -44,7 +46,7 @@ private:
     QLabel *lblButtonIcon, *lblButtonText;
     QHBoxLayout *mLayout;
     QPalette pal;
-    QColor *bgColor, *pushedColor, *textColor, *pushedTextColor;
+    QColor *bgColor, *pushedColor, *textColor, *pushedTextColor, *hoverColor;
 };
 
 #endif // KCILISTBUTTON_H

@@ -8,15 +8,18 @@ kciListButton::kciListButton(QWidget *parent) :
     bgColor=new QColor();
     bgColor->setRgb(0,0,0,0);
     //Set Pushed Color.
-    pushed=false;++
+    pushed=false;
     pushedColor=new QColor();
-    pushedColor->setRgb(0,0,0,100);
+    pushedColor->setRgb(255,255,255);
     //Set Text Color.
     textColor=new QColor();
     textColor->setRgb(0,0,0,255);
     //Set Pushed Text Color.
     pushedTextColor=new QColor();
-    pushedTextColor->setRgb(255,255,255,255);
+    pushedTextColor->setRgb(0,0,0,255);
+    //Set Hover Color.
+    hoverColor=new QColor();
+    hoverColor->setRgb(0xf7,0xcf,0x3d,255);
     //Set QPalette.
     pal=palette();
     pal.setColor(QPalette::Window, *bgColor);
@@ -49,7 +52,7 @@ void kciListButton::enterEvent(QEvent *event)
 {
     if(!pushed)
     {
-        pal.setColor(QPalette::Window, QColor(255,255,255,255));
+        pal.setColor(QPalette::Window, *hoverColor);
         this->setPalette(pal);
     }
     QWidget::enterEvent(event);
@@ -131,3 +134,14 @@ QColor kciListButton::getPushedTextColor()
 {
     return *pushedTextColor;
 }
+
+void kciListButton::setHoverColor(const QColor &NewColor)
+{
+    *hoverColor=NewColor;
+}
+
+QColor kciListButton::getHoverColor()
+{
+    return *hoverColor;
+}
+
