@@ -11,4 +11,6 @@ kciSettingListItemBase::kciSettingListItemBase(QWidget *parent) :
     setPalette(pal);
     //Set Label.
     Caption=new QLabel(this);
+    //Set Default Height.
+    setFixedHeight(40);
 }

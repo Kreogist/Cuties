@@ -161,6 +161,19 @@ void kciControlCenterLeftBar::lstClick(int Index)
     }
 }
 
+kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+    QWidget(parent)
+{
+    MainLayout=new QVBoxLayout(this);
+    setLayout(MainLayout);
+
+    sboDefaultLanguage=new kciSettingListItemCombo(this);
+    sboDefaultLanguage->Caption->setText("test!!");
+    sboDefaultLanguage->addListItem("C/C++");
+    sboDefaultLanguage->addListItem("Pascal");
+    MainLayout->addWidget(sboDefaultLanguage);
+}
+
 kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     QWidget(parent)
 {
@@ -178,6 +191,11 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     pal.setColor(QPalette::Window, QColor(255,255,255));
     mainScrollArea->setPalette(pal);
     FakeLayout->addWidget(mainScrollArea);
+
+    //Set Contents.
+    contentWidget=new kciCCTabGerneralContent(this);
+    mainScrollArea->setContentsMargins(0,0,0,0);
+    mainScrollArea->setWidget(contentWidget);
 }
 
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :

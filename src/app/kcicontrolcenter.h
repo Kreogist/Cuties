@@ -45,6 +45,7 @@
 #include <QComboBox>
 
 #include "kcisearchlinetext.h"
+#include "Controls/SettingItems/kcisettinglistitemcombo.h"
 #include "kcilistbutton.h"
 
 class kciControlCenterBanner : public QWidget
@@ -86,13 +87,23 @@ private:
 
 };
 
+class kciCCTabGerneralContent : public QWidget
+{
+public:
+    explicit kciCCTabGerneralContent(QWidget *parent = 0);
+private:
+    QVBoxLayout *MainLayout;
+    kciSettingListItemCombo *sboDefaultLanguage;
+};
+
 class kciControlCenterTabGerneral : public QWidget
 {
 public:
     explicit kciControlCenterTabGerneral(QWidget *parent = 0);
 private:
-    QVBoxLayout *FakeLayout, *RealLayout;
+    QVBoxLayout *FakeLayout;
     QScrollArea *mainScrollArea;
+    kciCCTabGerneralContent *contentWidget;
 };
 
 class kciControlCenterContents : public QWidget
