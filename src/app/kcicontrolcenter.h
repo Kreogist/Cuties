@@ -34,11 +34,17 @@
 #include <QIcon>
 #include <QSize>
 #include <QFont>
+#include <QRect>
+#include <QSignalMapper>
+#include <QParallelAnimationGroup>
+#include <QSequentialAnimationGroup>
+#include <QPropertyAnimation>
 #include <QHBoxLayout>
 #include <QStackedWidget>
 
 #include "kcisearchlinetext.h"
 #include "kciccgerneral.h"
+#include "kcilistbutton.h"
 
 class kciControlCenterBanner : public QWidget
 {
@@ -62,14 +68,30 @@ signals:
     
 public slots:
 
+private slots:
+    void lstClick(int Index);
+
 private:
     QStackedWidget *ccMainTabs;
-    QVBoxLayout *WholeTitleBarSplit, *ButtonListLayout;
+    QVBoxLayout *WholeTitleBarSplit;
     QHBoxLayout *ContentLayout;
+    QStackedWidget *CCMainContents;
     kciControlCenterBanner *ccBanner;
 
-    kciCCGerneral *ccGeneral;
+    enum kciCCLists
+    {
+        cclstGerneral,
+        cclstEditor,
+        cclstCompiler,
+        cclstDebugger,
+        cclstFileAssociation,
+        cclist_count
+    };
 
+    QSequentialAnimationGroup *WholeAnimeGroup;
+    kciListButton *lsbLeftButtons[cclist_count];
+    QSignalMapper *lstMapper;
+    int lstSelect;
     void createLeftList();
     
 };
