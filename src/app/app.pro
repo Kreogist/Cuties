@@ -62,8 +62,10 @@ SOURCES += \
     kcidebugdock.cpp \
     kcitextsearchworker.cpp \
     fpc.cpp \
-    kciccgerneral.cpp \
-    kcilistbutton.cpp
+    kcilistbutton.cpp \
+    Controls/SettingItems/kcisettinglistitemboolean.cpp \
+    Controls/SettingItems/kcisettinglistitembase.cpp \
+    Controls/SettingItems/kcisettinglistitemcombo.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -98,8 +100,12 @@ HEADERS += \
     kcidebugdock.h \
     kcitextsearchworker.h \
     fpc.h \
-    kciccgerneral.h \
-    kcilistbutton.h
+    kcilistbutton.h \
+    Controls/Setting-List/ListItem/kcisettinglistitembase.h \
+    Controls/Setting-List/ListItem/kcisettinglistitemboolean.h \
+    Controls/SettingItems/kcisettinglistitemboolean.h \
+    Controls/SettingItems/kcisettinglistitembase.h \
+    Controls/SettingItems/kcisettinglistitemcombo.h
 
 # Enable C++11
 CONFIG += c++11
@@ -115,5 +121,4 @@ OTHER_FILES += \
     default.style \
     COPYING.txt
 
-FORMS += \
-    kciccgerneral.ui
+FORMS +=

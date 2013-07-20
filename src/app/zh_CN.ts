@@ -667,43 +667,30 @@
     </message>
 </context>
 <context>
-    <name>kciCCGerneral</name>
-    <message>
-        <location filename="kciccgerneral.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>kciControlCenter</name>
     <message>
         <source>General</source>
         <translation type="obsolete">通用</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="99"/>
         <source>Gerneral</source>
-        <translation>通用</translation>
+        <translation type="obsolete">通用</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="100"/>
         <source>Editor</source>
-        <translation>编辑器</translation>
+        <translation type="obsolete">编辑器</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="101"/>
         <source>Compiler</source>
-        <translation>编译器</translation>
+        <translation type="obsolete">编译器</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="102"/>
         <source>Debugger</source>
-        <translation>调试器</translation>
+        <translation type="obsolete">调试器</translation>
     </message>
     <message>
-        <location filename="kcicontrolcenter.cpp" line="103"/>
         <source>File Association</source>
-        <translation>文件关联</translation>
+        <translation type="obsolete">文件关联</translation>
     </message>
 </context>
 <context>
@@ -712,6 +699,34 @@
         <location filename="kcicontrolcenter.cpp" line="46"/>
         <source>Cuties Control Center</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>kciControlCenterLeftBar</name>
+    <message>
+        <location filename="kcicontrolcenter.cpp" line="71"/>
+        <source>Gerneral</source>
+        <translation>通用</translation>
+    </message>
+    <message>
+        <location filename="kcicontrolcenter.cpp" line="72"/>
+        <source>Editor</source>
+        <translation>编辑器</translation>
+    </message>
+    <message>
+        <location filename="kcicontrolcenter.cpp" line="73"/>
+        <source>Compiler</source>
+        <translation>编译器</translation>
+    </message>
+    <message>
+        <location filename="kcicontrolcenter.cpp" line="74"/>
+        <source>Debugger</source>
+        <translation>调试器</translation>
+    </message>
+    <message>
+        <location filename="kcicontrolcenter.cpp" line="75"/>
+        <source>File Association</source>
+        <translation>文件关联</translation>
     </message>
 </context>
 <context>

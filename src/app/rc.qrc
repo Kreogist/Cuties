@@ -25,7 +25,7 @@
         <file>image/TabCloseDown.png</file>
     </qresource>
     <qresource prefix="/mainicon">
-        <file>image/MainIcon.png</file>
+        <file>image/Cuties.ico</file>
     </qresource>
     <qresource prefix="/menuicon">
         <file>image/MenuIcons/mnuEditPerformance.png</file>

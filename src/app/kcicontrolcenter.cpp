@@ -61,37 +61,12 @@ kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     TitleLayout->addSpacing(7);
 }
 
-kciControlCenter::kciControlCenter(QWidget *parent) :
+kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
     QWidget(parent)
 {
-    //Set Whole Layout
-    WholeTitleBarSplit=new QVBoxLayout(this);
-    WholeTitleBarSplit->setContentsMargins(0,0,0,0);
-    setLayout(WholeTitleBarSplit);
-
-    //Set Banner
-    ccBanner=new kciControlCenterBanner(this);
-    WholeTitleBarSplit->addWidget(ccBanner);
-    //Set Content Layout.
-    ContentLayout=new QHBoxLayout();
-    ContentLayout->setContentsMargins(0,0,0,0);
-    ContentLayout->setSpacing(0);
-    WholeTitleBarSplit->addLayout(ContentLayout);
-
-    //Set List.
-    ContentLayout->addSpacing(215);
-    createLeftList();
-
-    //Set Main Contents.
-    CCMainContents=new QStackedWidget(this);
-    ContentLayout->addWidget(CCMainContents);
-
-    //Set Anime.
-    WholeAnimeGroup=new QSequentialAnimationGroup(this);
-}
-
-void kciControlCenter::createLeftList()
-{
+    //Set Content Margin.
+    setContentsMargins(0,0,0,0);
+    setFixedWidth(215);
     //Set Label Strings.
     QString strLabelTexts[cclist_count], strLabelIcons[cclist_count];
     strLabelTexts[cclstGerneral]=tr("Gerneral");
@@ -116,7 +91,7 @@ void kciControlCenter::createLeftList()
         lsbLeftButtons[i]->setLabelText(strLabelTexts[i]);
         lsbLeftButtons[i]->setLabelIcon(strLabelIcons[i]);
         lsbLeftButtons[i]->setGeometry(0,
-                                       84 + (i-1) * 40,
+                                       i*40,
                                        215,
                                        40);
         connect(lsbLeftButtons[i],SIGNAL(click()),lstMapper,SLOT(map()));
@@ -127,9 +102,15 @@ void kciControlCenter::createLeftList()
 
     //Set First To Be Pushed.
     lsbLeftButtons[lstSelect]->setPushed(true);
+
+    //Set Min Height
+    setMinimumHeight((cclist_count)*40);
+
+    //Set Anime.
+    WholeAnimeGroup=new QSequentialAnimationGroup(this);
 }
 
-void kciControlCenter::lstClick(int Index)
+void kciControlCenterLeftBar::lstClick(int Index)
 {
     if(Index == lstSelect)
     {
@@ -178,4 +159,69 @@ void kciControlCenter::lstClick(int Index)
         //Set Index.
         lstSelect=Index;
     }
+}
+
+kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
+    QWidget(parent)
+{
+    //Set FakeLayout.
+    FakeLayout=new QVBoxLayout(this);
+    FakeLayout->setContentsMargins(0,0,0,0);
+    FakeLayout->setSpacing(0);
+    setLayout(FakeLayout);
+
+    //Set Main Widget.
+    mainScrollArea=new QScrollArea(this);
+    mainScrollArea->setAutoFillBackground(true);
+    mainScrollArea->setFrameShape(QFrame::NoFrame);
+    QPalette pal=mainScrollArea->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    mainScrollArea->setPalette(pal);
+    FakeLayout->addWidget(mainScrollArea);
+}
+
+kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
+    QWidget(parent)
+{
+    contentIndex=0;
+    tabGerneral=new kciControlCenterTabGerneral(this);
+}
+
+void kciControlCenterContents::resizeEvent(QResizeEvent *e)
+{
+    switch(contentIndex)
+    {
+    case 0:
+        tabGerneral->setGeometry(0,0,this->width(),this->height());
+    }
+
+    QWidget::resizeEvent(e);
+}
+
+kciControlCenter::kciControlCenter(QWidget *parent) :
+    QWidget(parent)
+{
+    //Set Whole Layout
+    WholeTitleBarSplit=new QVBoxLayout(this);
+    WholeTitleBarSplit->setContentsMargins(0,0,0,0);
+    WholeTitleBarSplit->setSpacing(0);
+    setLayout(WholeTitleBarSplit);
+
+    //Set Banner
+    ccBanner=new kciControlCenterBanner(this);
+    WholeTitleBarSplit->addWidget(ccBanner);
+    //Set Content Layout.
+    ContentLayout=new QHBoxLayout();
+    ContentLayout->setContentsMargins(0,0,0,0);
+    ContentLayout->setSpacing(0);
+    WholeTitleBarSplit->addLayout(ContentLayout);
+
+    //Set List.
+    ccLeftBar=new kciControlCenterLeftBar(this);
+    ContentLayout->addWidget(ccLeftBar);
+
+    //Set Main Contents.
+    //This widget ONLY use to get size, no use.
+    CCMainContents=new kciControlCenterContents(this);
+    ContentLayout->addWidget(CCMainContents);
 }

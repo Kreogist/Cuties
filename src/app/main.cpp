@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
 
     //Initialize Application Icon.
-    QApplication::setWindowIcon(QIcon(":/mainicon/image/MainIcon.png"));
+    QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.ico"));
 
     //Initialize Application Language.
     QTranslator appTrans;
