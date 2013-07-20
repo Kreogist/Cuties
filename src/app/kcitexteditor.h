@@ -21,106 +21,44 @@
  *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTEDITOR_H
-#define TEXTEDITOR_H
+#ifndef CODEEDITOR_H
+#define CODEEDITOR_H
 
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QPalette>
-#include <QFile>
 #include <QPlainTextEdit>
-#include <QFileInfo>
-#include <QFileDevice>
-#include <QFileDialog>
 #include <QTextDocument>
-#include <QTextStream>
-#include <QString>
-#include <QMessageBox>
 #include <QTextCursor>
-#include <QErrorMessage>
-#include <QSettings>
-#include <QIcon>
-#include <QSyntaxHighlighter>
-#include <QPropertyAnimation>
+#include <QTextBlock>
+#include <QFont>
+#include <QPalette>
+#include <QScrollBar>
 #include <QDebug>
 
-#include "kciglobal.h"
-#include "kcicodeeditor.h"
-#include "kcilinenumpanel.h"
-#include "kcimarkpanel.h"
-#include "kcisearchwindow.h"
+#include "kcitextsearcher.h"
 
-//default highlighter
-#include "kcilanguagemode.h"
-
-class kciSearchWindow;
-class kciLanguageMode;
-
-class kciTextEditor : public QWidget
+class kciTextEditor : public QPlainTextEdit
 {
     Q_OBJECT
 public:
     explicit kciTextEditor(QWidget *parent = 0);
-
-    QFileDevice::FileError error();
-    void setDocumentTitle(const QString& title);
-    QString getDocumentTitle();
     void setDocumentCursor(int nLine, int linePos);
-    void setTextFocus();
-    QString getFilePath();
-    QString getExecFileName();
-    QTextCursor getTextCursor();
-    int getTextLines();
-    bool isModified();
-
-    QTextDocument *document;
-
-    kciLanguageMode *langMode() const;
-
-signals:
-    void filenameChanged(QString newName);
-    void fileTextCursorChanged();
+    void setSearchResults(QList<searchResult> *results);
+    void showSearchResultAt(int num);
     
-public slots:
-    bool open(const QString& fileName);
-    bool save();
-    bool saveAs();
-    bool saveAs(const QString& fileName);
-    void redo();
-    void undo();
-    void copy();
-    void cut();
-    void paste();
-    void selectAll();
-    void cursorChanged();
-    QString getSelectedText();
-    void showSearchBar();
+signals:
+    void updated();
 
-private slots:
-    void onModificationChanged(bool changed);
+public slots:
+    void updateHighlights();
 
 protected:
-    void closeEvent(QCloseEvent *e);
-    void resizeEvent(QResizeEvent *e);
+    void paintEvent(QPaintEvent *e);
 
 private:
-    void computeExecFileName();
-    void fileInfoChanged(const QFile& file);
-    bool dosaveas(const QString& Caption);
+    void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
+    void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
 
-    kciLanguageMode *m_langMode;
-
-    QHBoxLayout *mainLayout;
-    kciCodeEditor *editor;
-    kciLinenumPanel *linePanel;
-    kciMarkPanel *markPanel;
-
-    QString filePath,strFileFilter;
-    QString execFileName;
-    QFileDevice::FileError fileError;
-    QTextCursor fileTextCursor;
-
-    kciSearchWindow *searchBar;
+    QList<searchResult> resultList;
+    QColor lineColor,searchResultColor;
 };
 
-#endif // TEXTEDITOR_H
+#endif // CODEEDITOR_H

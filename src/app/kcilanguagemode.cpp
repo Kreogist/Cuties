@@ -6,7 +6,7 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
     m_compiler=NULL;
     m_executor=new kciExecutor(this);
     m_highlighter=NULL;
-    m_parent=qobject_cast<kciTextEditor*>(parent);
+    m_parent=qobject_cast<kciCodeEditor*>(parent);
     m_type=plainText;
 
     Q_ASSERT(parent!=NULL);

@@ -703,7 +703,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::compileCurrentFile()
 {
-    kciTextEditor *currentEditor=tabManager->getCurrentEditor();
+    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
 
     //Check Tab Status.
     if(currentEditor!=NULL)
@@ -755,7 +755,7 @@ void MainWindow::compileCurrentFile()
 
 void MainWindow::run()
 {
-    kciTextEditor *currentEditor=tabManager->getCurrentEditor();
+    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
     {
         kciExecutor *executor=currentEditor->langMode()->getExecutor();

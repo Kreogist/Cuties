@@ -18,7 +18,7 @@
 #include "fpc.h"
 #include "pascalhighlighter.h"
 
-class kciTextEditor;
+class kciCodeEditor;
 
 class kciLanguageMode : public QObject
 {
@@ -43,7 +43,7 @@ public slots:
 
 private:
     modeType m_type;
-    kciTextEditor *m_parent;
+    kciCodeEditor *m_parent;
     kciExecutor *m_executor;
     compilerBase *m_compiler;
     QSyntaxHighlighter *m_highlighter;

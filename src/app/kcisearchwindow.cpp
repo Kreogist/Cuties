@@ -175,7 +175,7 @@ void kciSearchWindow::onTextChanged(const QString &text)
     }
     else
     {
-        kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(parent);
+        kciTextEditor *editor=qobject_cast<kciTextEditor*>(parent);
         if(editor!=NULL)
         {
             QList<searchResult> *results=new QList<searchResult>();
@@ -194,7 +194,7 @@ void kciSearchWindow::onMenuClicked()
 
 void kciSearchWindow::onSearcherFinished(QList<searchResult> *results)
 {
-    kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(parent);
+    kciTextEditor *editor=qobject_cast<kciTextEditor*>(parent);
 
     resultSize=results->size();
     if(editor!=NULL)
@@ -251,7 +251,7 @@ void kciSearchWindow::hideEvent(QHideEvent *e)
 
 void kciSearchWindow::showCurrResult()
 {
-    kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(parent);
+    kciTextEditor *editor=qobject_cast<kciTextEditor*>(parent);
     if(editor!=NULL)
         editor->showSearchResultAt(currResultNum);
 

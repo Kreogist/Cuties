@@ -43,7 +43,7 @@
 #include "compilerbase.h"
 #include "kciglobal.h"
 #include "kcisearchwindow.h"
-#include "kcitexteditor.h"
+#include "kcicodeeditor.h"
 
 class kciTabManager : public QTabWidget
 {
@@ -53,7 +53,7 @@ public:
     int getCurrentLineCount();
     int getCurrentLineNum();
 
-    kciTextEditor* getCurrentEditor();
+    kciCodeEditor* getCurrentEditor();
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -97,7 +97,7 @@ private:
     int new_file_count;
     QString strFileFilter;
     QTextCursor currentTextCursor;
-    kciTextEditor *currentEditor;
+    kciCodeEditor *currentEditor;
 
     bool save_all_file();
 };
