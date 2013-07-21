@@ -3,9 +3,14 @@
 kciSettingListItemCombo::kciSettingListItemCombo(QWidget *parent) :
     kciSettingListItemBase(parent)
 {
-    cboList=new QComboBox(this);
-    setFixedWidth(400);
+    MainLayout=new QHBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
 
+    cboList=new QComboBox(this);
+    MainLayout->addWidget(Caption);
+    MainLayout->addWidget(cboList);
 }
 
 void kciSettingListItemCombo::addListItem(const QString &ItemText)

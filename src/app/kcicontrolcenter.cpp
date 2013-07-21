@@ -167,11 +167,11 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout=new QVBoxLayout(this);
     setLayout(MainLayout);
 
-    sboDefaultLanguage=new kciSettingListItemCombo(this);
+    /*sboDefaultLanguage=new kciSettingListItemCombo(this);
     sboDefaultLanguage->Caption->setText("test!!");
     sboDefaultLanguage->addListItem("C/C++");
     sboDefaultLanguage->addListItem("Pascal");
-    MainLayout->addWidget(sboDefaultLanguage);
+    MainLayout->addWidget(sboDefaultLanguage);*/
 }
 
 kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :

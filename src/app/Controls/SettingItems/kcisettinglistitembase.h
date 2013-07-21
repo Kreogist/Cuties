@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QString>
 #include <QHBoxLayout>
+#include <QPropertyAnimation>
 
 class kciSettingListItemBase : public QWidget
 {
@@ -15,10 +16,11 @@ public:
     QLabel *Caption;
     
 signals:
-    
+
 public slots:
 
 private:
+    QPalette pal;
 };
 
 #endif // KCISETTINGLISTITEMBASE_H
