@@ -35,6 +35,7 @@
 #include <QSize>
 #include <QFont>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QRect>
 #include <QFrame>
 #include <QScrollArea>
@@ -46,6 +47,7 @@
 
 #include "kcisearchlinetext.h"
 #include "Controls/SettingItems/kcisettinglistitemcombo.h"
+#include "Controls/SettingItems/kcisettinglistitemboolean.h"
 #include "kcilistbutton.h"
 
 class kciControlCenterBanner : public QWidget
@@ -91,15 +93,21 @@ class kciCCTabGerneralContent : public QWidget
 {
 public:
     explicit kciCCTabGerneralContent(QWidget *parent = 0);
+
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
+    kciSettingListItemBoolean *slnEnableAnime;
 };
 
 class kciControlCenterTabGerneral : public QWidget
 {
 public:
     explicit kciControlCenterTabGerneral(QWidget *parent = 0);
+
+protected:
+    void resizeEvent(QResizeEvent *e);
+
 private:
     QVBoxLayout *FakeLayout;
     QScrollArea *mainScrollArea;

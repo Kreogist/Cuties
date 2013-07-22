@@ -164,15 +164,32 @@ void kciControlCenterLeftBar::lstClick(int Index)
 kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     QWidget(parent)
 {
+    setContentsMargins(0,0,0,0);
+
+    //Set Layout.
     MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
     setLayout(MainLayout);
+
+    //Title Label.
+    QLabel *tblLanguage=new QLabel(this);
+    tblLanguage->setText("  " + tr("Language Settings"));
+    tblLanguage->setFixedHeight(30);
+    MainLayout->addWidget(tblLanguage);
 
     sboDefaultLanguage=new kciSettingListItemCombo(this);
     sboDefaultLanguage->Caption->setText(tr("Default Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
     sboDefaultLanguage->addListItem(tr("C/C++"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
+    sboDefaultLanguage->setCurrentItemIndex(2);
     MainLayout->addWidget(sboDefaultLanguage);
+
+    slnEnableAnime=new kciSettingListItemBoolean(this);
+    slnEnableAnime->setEnabledText(tr("Use Animation Effect."));
+    slnEnableAnime->setDisabledText(tr("Don't use Animation Effect."));
+    MainLayout->addWidget(slnEnableAnime);
 }
 
 kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
@@ -199,6 +216,12 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     mainScrollArea->setWidget(contentWidget);
 }
 
+void kciControlCenterTabGerneral::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
+}
+
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
 {
@@ -213,8 +236,7 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
     case 0:
         tabGerneral->setGeometry(0,0,this->width(),this->height());
     }
-
-    QWidget::resizeEvent(e);
+    e->accept();
 }
 
 kciControlCenter::kciControlCenter(QWidget *parent) :

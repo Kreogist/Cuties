@@ -12,10 +12,18 @@ public:
     explicit kciSettingListItemCombo(QWidget *parent = 0);
     void addListItem(const QString& ItemText);
     void clearList();
+    void setCurrentItemIndex(int Index);
+    int getCurrentItemIndex();
+
+private slots:
+    void valueChangedEvent(int newValue);
+    void focusGetEvent();
+    void focusLostEvent();
 
 private:
     QComboBox *cboList;
     QHBoxLayout *MainLayout;
+    QLabel *lblComboText;
 };
 
 #endif // KCISETTINGLISTITEMCOMBO_H
