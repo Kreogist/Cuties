@@ -166,6 +166,9 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
 {
     setContentsMargins(0,0,0,0);
 
+    QFont TitleFont=this->font();
+    TitleFont.setPixelSize(20);
+
     //Set Layout.
     MainLayout=new QVBoxLayout(this);
     MainLayout->setContentsMargins(0,0,0,0);
@@ -174,8 +177,10 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
 
     //Title Label.
     QLabel *tblLanguage=new QLabel(this);
-    tblLanguage->setText("  " + tr("Language Settings"));
+    tblLanguage->setText(" " + tr("Language Settings"));
+    tblLanguage->setFont(TitleFont);
     tblLanguage->setFixedHeight(30);
+    MainLayout->addSpacing(5);
     MainLayout->addWidget(tblLanguage);
 
     sboDefaultLanguage=new kciSettingListItemCombo(this);

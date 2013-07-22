@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QPixmap>
+#include <QTimeLine>
 #include <QHBoxLayout>
 
 #include "kcisettinglistitembase.h"
@@ -17,9 +18,6 @@ public:
 
 signals:
     void valueChanged();
-
-protected:
-    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
     bool Value;
@@ -36,6 +34,7 @@ public:
     QString getEnabledText();
     void setDisabledText(const QString& Text);
     QString getDisabledText();
+    void setItemValue(bool NewValue);
     bool getItemValue();
 
 signals:
@@ -44,15 +43,25 @@ public slots:
 
 private slots:
     void valueChangedEvent();
+    void valueChangedAnimeEvent();
+    void setValueChangedAlpha(int alpha);
+
+protected:
+    void mousePressEvent(QMouseEvent *e);
+    void leaveEvent(QEvent *e);
+    void enterEvent(QEvent *e);
 
 private:
     QHBoxLayout *MainLayout;
     QString strEnabledInfo, strDisabledInfo;
     kciSettingListItemBooleanSwitcher *ValueSetter;
-    bool ItemValue;
+    bool ItemValue, blnEditMode;
+    QTimeLine *ChangedAnime;
+    QPalette pal;
 
     void refreshCaption();
 
+    bool animeChangedBugFixed;
 };
 
 #endif // KCISETTINGLISTITEMBOOLEAN_H

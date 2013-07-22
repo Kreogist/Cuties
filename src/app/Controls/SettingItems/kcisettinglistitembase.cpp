@@ -12,13 +12,15 @@ kciSettingListItemBase::kciSettingListItemBase(QWidget *parent) :
     //Set Label.
     Caption=new QLabel(this);
     //Set Default Height.
-    setFixedHeight(30);
+    setFixedHeight(34);
 
     //Set Selected Status.
     itemSelected=false;
 
     //Set Fade Out Anime.
     animeFadeOut=new QTimeLine(200);
+    connect(animeFadeOut,SIGNAL(frameChanged(int)),
+            this,SLOT(changeBackgroundAlpha(int)));
 }
 
 void kciSettingListItemBase::enterEvent(QEvent *e)
@@ -41,8 +43,6 @@ void kciSettingListItemBase::leaveEvent(QEvent *e)
         int nowAlpha=pal.color(QPalette::Window).alpha();
         animeFadeOut->stop();
         animeFadeOut->setFrameRange(nowAlpha,0);
-        connect(animeFadeOut,SIGNAL(frameChanged(int)),
-                this,SLOT(changeBackgroundAlpha(int)));
         animeFadeOut->start();
     }
     e->accept();

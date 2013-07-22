@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
     //Initialize Application Fonts
     QStringList list;
-    list << "monaco.ttf" << "Hiragino.otf" << "Inconsolata.otf";
+    list << "monaco.ttf" << "Hiragino.otf";
     int fontID(-1);
     bool fontWarningShown(false);
     for (auto constIterator = list.constBegin();
