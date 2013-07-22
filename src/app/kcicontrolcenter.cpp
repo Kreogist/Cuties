@@ -158,6 +158,9 @@ void kciControlCenterLeftBar::lstClick(int Index)
         lsbLeftButtons[Index]->setPushed(true);
         //Set Index.
         lstSelect=Index;
+
+        //Emit Signal.
+        emit NowSelectChanged(Index);
     }
 }
 
@@ -221,6 +224,30 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     mainScrollArea->setWidget(contentWidget);
 }
 
+kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
+    QWidget(parent)
+{
+    //Set FakeLayout.
+    FakeLayout=new QVBoxLayout(this);
+    FakeLayout->setContentsMargins(0,0,0,0);
+    FakeLayout->setSpacing(0);
+    setLayout(FakeLayout);
+
+    //Set Main Widget.
+    mainScrollArea=new QScrollArea(this);
+    mainScrollArea->setAutoFillBackground(true);
+    mainScrollArea->setFrameShape(QFrame::NoFrame);
+    QPalette pal=mainScrollArea->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    mainScrollArea->setPalette(pal);
+    FakeLayout->addWidget(mainScrollArea);
+}
+
+void kciControlCenterTabEditor::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+}
+
 void kciControlCenterTabGerneral::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
@@ -231,7 +258,32 @@ kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
 {
     contentIndex=0;
+
     tabGerneral=new kciControlCenterTabGerneral(this);
+    tabEditor=new kciControlCenterTabEditor(this);
+}
+
+void kciControlCenterContents::animeToIndex(int Index)
+{
+    switch(Index)
+    {
+    case 0:
+        tabGerneral->setGeometry(0,0,this->width(),this->height());
+        break;
+    case 1:
+        tabEditor->setGeometry(0,0,this->width(),this->height());
+        break;
+    }
+    switch(contentIndex)
+    {
+    case 0:
+        tabGerneral->setGeometry(this->width(),0,this->width(),this->height());
+        break;
+    case 1:
+        tabEditor->setGeometry(this->width(),0,this->width(),this->height());
+        break;
+    }
+    contentIndex=Index;
 }
 
 void kciControlCenterContents::resizeEvent(QResizeEvent *e)
@@ -240,6 +292,12 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
     {
     case 0:
         tabGerneral->setGeometry(0,0,this->width(),this->height());
+        tabEditor->setGeometry(this->width(),0,this->width(),this->height());
+        break;
+    case 1:
+        tabEditor->setGeometry(0,0,this->width(),this->height());
+        tabGerneral->setGeometry(this->width(),0,this->width(),this->height());
+        break;
     }
     e->accept();
 }
@@ -270,4 +328,6 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     //This widget ONLY use to get size, no use.
     CCMainContents=new kciControlCenterContents(this);
     ContentLayout->addWidget(CCMainContents);
+    connect(ccLeftBar,SIGNAL(NowSelectChanged(int)),
+            CCMainContents,SLOT(animeToIndex(int)));
 }

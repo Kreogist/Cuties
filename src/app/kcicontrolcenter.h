@@ -68,6 +68,9 @@ class kciControlCenterLeftBar : public QWidget
 public:
     explicit kciControlCenterLeftBar(QWidget *parent = 0);
 
+signals:
+    void NowSelectChanged(int newIndex);
+
 private slots:
     void lstClick(int Index);
 
@@ -91,6 +94,7 @@ private:
 
 class kciCCTabGerneralContent : public QWidget
 {
+    Q_OBJECT
 public:
     explicit kciCCTabGerneralContent(QWidget *parent = 0);
 
@@ -102,6 +106,7 @@ private:
 
 class kciControlCenterTabGerneral : public QWidget
 {
+    Q_OBJECT
 public:
     explicit kciControlCenterTabGerneral(QWidget *parent = 0);
 
@@ -114,16 +119,37 @@ private:
     kciCCTabGerneralContent *contentWidget;
 };
 
-class kciControlCenterContents : public QWidget
+class kciControlCenterTabEditor : public QWidget
 {
+    Q_OBJECT
 public:
-    explicit kciControlCenterContents(QWidget *parent = 0);
+    explicit kciControlCenterTabEditor(QWidget *parent = 0);
 
 protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
+    QVBoxLayout *FakeLayout;
+    QScrollArea *mainScrollArea;
+};
+
+class kciControlCenterContents : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciControlCenterContents(QWidget *parent = 0);
+
+public slots:
+    void animeToIndex(int Index);
+
+protected:
+    void resizeEvent(QResizeEvent *e);
+
+private:
+    QParallelAnimationGroup *tabModeAnime;
+    QPropertyAnimation *moveOut, *moveIn;
     kciControlCenterTabGerneral *tabGerneral;
+    kciControlCenterTabEditor *tabEditor;
     int contentIndex;
 };
 
@@ -136,6 +162,8 @@ public:
 signals:
     
 public slots:
+
+private slots:
 
 private:
     QVBoxLayout *WholeTitleBarSplit;
