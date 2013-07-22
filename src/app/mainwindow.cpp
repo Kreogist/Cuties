@@ -719,32 +719,34 @@ void MainWindow::compileCurrentFile()
         //File is Ok now, Get Dock Ready.
         //Clear All Dock Info.
         compileDock->resetCompileDock();
-        //Set Compile File Path.
-        compileDock->setCompileFilePath(currentEditor->getFilePath());
         //Active Compile Dock.
         compileDock->setVisible(true);
         //Set To Compile Mode.
         compileDock->animeHideError();
         //Prepare Compiler
-        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
+        compileDock->getReceiver()->addText(QTime::currentTime().toString("hh:mm:ss") +
                              " " +
                              tr("Preparing Compiler.")+
                              "\n");
         //Get a compiler ready.
         compilerBase *currentCompiler=currentEditor->langMode()->getCompiler();
         //Get Compiler Info.
-        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
+        compileDock->getReceiver()->addText(QTime::currentTime().toString("hh:mm:ss") +
                              " " +
                              tr("Current Compiler Details:") +
                              currentCompiler->version() +
                              "\n");
         //Output Compile Message:
-        connect(currentCompiler,&compilerBase::compileinfo,compileDock,&kcicompiledock::outputCompileInfo);
-        connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::addText);
-        connect(currentCompiler,&compilerBase::compileError,compileDock,&kcicompiledock::onCompileMsgReceived);
-        connect(currentCompiler,SIGNAL(finished(int)),compileDock,SLOT(compileFinish(int)));
+        connect(currentCompiler,&compilerBase::compileinfo,
+                compileDock->getReceiver(),&compileOutputReceiver::addText);
+        connect(currentCompiler,&compilerBase::output,
+                compileDock->getReceiver(),&compileOutputReceiver::addText);
+        connect(currentCompiler,&compilerBase::compileError,
+                compileDock->getReceiver(),&compileOutputReceiver::onCompileMsgReceived);
+        connect(currentCompiler,SIGNAL(finished(int)),
+                compileDock->receiver,SLOT(compileFinish(int)));
         //Output Compile Info:
-        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
+        compileDock->getReceiver()->addText(QTime::currentTime().toString("hh:mm:ss") +
                              " " +
                              tr("Compile Command:") +
                              "\n");
