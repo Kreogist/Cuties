@@ -121,6 +121,8 @@ private:
     QTextCursor fileTextCursor;
 
     kciSearchWindow *searchBar;
+
+    friend class kciLanguageMode;
 };
 
 #endif // TEXTEDITOR_H

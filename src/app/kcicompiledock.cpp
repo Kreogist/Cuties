@@ -26,8 +26,6 @@
 kcicompiledock::kcicompiledock(QWidget *parent):
     QDockWidget(parent)
 {
-
-    receiver=new compileOutputReceiver(this);
     //Set Object Name.
     setObjectName(QString("Compile Dock"));
 
@@ -62,8 +60,6 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     trevwCompileInfo->setPalette(pal);
     trevwCompileInfo->setHeaderHidden(true);
     trevwCompileInfo->setGeometry(0,0,0,0);
-    compileInfo=receiver->getCompilerOutputModel();
-    trevwCompileInfo->setModel(compileInfo);
     trevwCompileInfo->setEditTriggers(QAbstractItemView::NoEditTriggers);
     splCombine->addWidget(trevwCompileInfo);
     QList<int> l_sizes;
@@ -71,7 +67,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     splCombine->setSizes(l_sizes);
 
     //Set Default Value
-    resetCompileDock();
+    receiver=NULL;
     setWidget(splCombine);
 
     connect(trevwCompileInfo,SIGNAL(clicked(QModelIndex)),
@@ -81,17 +77,6 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     connect(trevwCompileInfo,SIGNAL(doubleClicked(QModelIndex)),
             this,SLOT(jumpToError(QModelIndex)));
 
-
-    //refactor-tmp
-    compileOutput->setDocument(receiver->getCompilerOutputText());
-    erifList=receiver->getErifList();
-    connect(receiver,SIGNAL(requireShowError()),
-            this,SLOT(animeShowError()));
-}
-
-compileOutputReceiver* kcicompiledock::getReceiver()
-{
-    return receiver;
 }
 
 static inline QModelIndex getRootItem(QModelIndex item)
@@ -108,6 +93,7 @@ void kcicompiledock::jumpToError(QModelIndex ItemID)
     ItemID=getRootItem(ItemID);
 
     int ErrID=ItemID.row();
+    const QVector<ErrInfo> *erifList=receiver->getErifList();
     if(erifList->at(ErrID).nColumnNum>-1)
     {
         //Open the file;
@@ -148,7 +134,17 @@ void kcicompiledock::animeHideError()
     splCombine->setSizes(l_sizes_finish);
 }
 
-void kcicompiledock::resetCompileDock()
+void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
 {
-    receiver->reset();
+    if(receiver!=NULL)
+    {
+        disconnect(receiverConnectionHandle);
+    }
+
+    receiver=currReceiver;
+
+    compileOutput->setDocument(receiver->getCompilerOutputText());
+    trevwCompileInfo->setModel(receiver->getCompilerOutputModel());
+    receiverConnectionHandle=connect(receiver,SIGNAL(requireShowError()),
+            this,SLOT(animeShowError()));
 }

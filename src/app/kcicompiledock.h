@@ -49,25 +49,20 @@ class kcicompiledock : public QDockWidget
 public:
     explicit kcicompiledock(QWidget *parent = 0);
 
-    //Reset Dock
-    void resetCompileDock();
-
     //Compile File Path
     void setCompileFilePath(QString FilePath);
     QString CompileFilePath();
 
-    compileOutputReceiver* getReceiver();
+    void setReceiver(const compileOutputReceiver* currReceiver);
 
 private:
     QWidget *objCombine;
-    QStandardItemModel *compileInfo;
     QSplitter *splCombine;
     QTreeView *trevwCompileInfo;
     QPlainTextEdit *compileOutput;
-    QRegularExpression *expressMsg;
-    compileOutputReceiver *receiver;
-    const QVector<ErrInfo> *erifList;
     QModelIndex lastSelIndex;
+    const compileOutputReceiver *receiver;
+    QMetaObject::Connection receiverConnectionHandle;
 
 signals:
     void requireOpenErrFile(QString filePath);

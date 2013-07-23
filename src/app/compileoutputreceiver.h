@@ -32,6 +32,8 @@ public:
 
     bool hasCompileError();
 
+    void connectCompiler(compilerBase* compiler);
+
 signals:
     void requireShowError();
     
@@ -40,12 +42,25 @@ public slots:
     void compileFinish(int ExitNum);
     
 private:
+    enum connectionType
+    {
+        compileinfo,
+        output,
+        compileError,
+        finished,
+        typeCount
+    };
+
     bool hasError;
     QStandardItemModel *compilerOutputModel;
     QTextDocument *compilerOutputText;
     QPlainTextDocumentLayout *plainTextLayout;
     QModelIndex lastSelIndex;
     QVector<ErrInfo> erifList;
+
+    compilerBase *connectedCompiler;
+
+    QMetaObject::Connection connectHandle[typeCount];
 };
 
 #endif // COMPILEOUTPUTRECEIVER_H
