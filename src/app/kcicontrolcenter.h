@@ -104,6 +104,16 @@ private:
     kciSettingListItemBoolean *slnEnableAnime;
 };
 
+class kciCCTabEditorContent : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabEditorContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+    kciSettingListItemBoolean *slnEnableLineNum;
+};
 class kciControlCenterTabGerneral : public QWidget
 {
     Q_OBJECT
@@ -131,6 +141,7 @@ protected:
 private:
     QVBoxLayout *FakeLayout;
     QScrollArea *mainScrollArea;
+    kciCCTabEditorContent *contentWidget;
 };
 
 class kciControlCenterContents : public QWidget

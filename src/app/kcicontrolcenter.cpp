@@ -200,9 +200,33 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(slnEnableAnime);
 }
 
+kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
+    QWidget(parent)
+{
+    setContentsMargins(0,0,0,0);
+
+    QFont TitleFont=this->font();
+    TitleFont.setPixelSize(20);
+
+    //Set Layout.
+    MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
+
+    //Title Label.
+    QLabel *tblLanguage=new QLabel(this);
+    tblLanguage->setText(" " + tr("Editor Component"));
+    tblLanguage->setFont(TitleFont);
+    tblLanguage->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblLanguage);
+}
+
 kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     QWidget(parent)
 {
+
     //Set FakeLayout.
     FakeLayout=new QVBoxLayout(this);
     FakeLayout->setContentsMargins(0,0,0,0);
@@ -214,7 +238,7 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     mainScrollArea->setAutoFillBackground(true);
     mainScrollArea->setFrameShape(QFrame::NoFrame);
     QPalette pal=mainScrollArea->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
+    pal.setColor(QPalette::Window, QColor(0,255,0));
     mainScrollArea->setPalette(pal);
     FakeLayout->addWidget(mainScrollArea);
 
@@ -236,20 +260,29 @@ kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     //Set Main Widget.
     mainScrollArea=new QScrollArea(this);
     mainScrollArea->setAutoFillBackground(true);
-    mainScrollArea->setFrameShape(QFrame::NoFrame);
+    mainScrollArea->setFrameShape(QFrame::Box);
     QPalette pal=mainScrollArea->palette();
     pal.setColor(QPalette::Window, QColor(255,255,255));
     mainScrollArea->setPalette(pal);
     FakeLayout->addWidget(mainScrollArea);
+
+    //Set Contents.
+    contentWidget=new kciCCTabEditorContent(this);
+    mainScrollArea->setContentsMargins(0,0,0,0);
+    mainScrollArea->setWidget(contentWidget);
+
+    contentWidget->setFixedWidth(mainScrollArea->viewport()->contentsRect().width());
 }
 
 void kciControlCenterTabEditor::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
+    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
 }
 
 void kciControlCenterTabGerneral::resizeEvent(QResizeEvent *e)
 {
+    e->accept();
     QWidget::resizeEvent(e);
     contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
 }
