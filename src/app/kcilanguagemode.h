@@ -58,6 +58,8 @@ public slots:
     void onCompileFinished();
 
 private:
+    void resetCompilerAndHighlighter();
+
     modeType m_type;
     kciCodeEditor *m_parent;
     kciExecutor *m_executor;
@@ -68,6 +70,8 @@ private:
 
     compileState state;
     QReadWriteLock stateLock;
+
+    QMetaObject::Connection compilerFinishedConnection;
 };
 
 #endif // KCILANGUAGEMODE_H

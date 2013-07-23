@@ -190,6 +190,7 @@ private:
     kciJudgeDock *judgeDock;
     kciTitleBar *titlebar;
     kciStatusBar *myStatusBar;
+    QMetaObject::Connection compileFinishedConnection;
 
     void saveSettings();
     void restoreSettings();
@@ -202,6 +203,8 @@ private:
     void createToolBar();
 
     void setDocOpenMenuState(bool state);
+
+
 };
 
 #endif // MAINWINDOW_H
