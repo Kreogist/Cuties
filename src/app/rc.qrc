@@ -82,4 +82,8 @@
         <file>image/ToolBar/search.png</file>
         <file>image/ToolBar/compile&amp;run.png</file>
     </qresource>
+    <qresource prefix="/Controls">
+        <file>image/Controls/BooleanFalse.png</file>
+        <file>image/Controls/BooleanTrue.png</file>
+    </qresource>
 </RCC>

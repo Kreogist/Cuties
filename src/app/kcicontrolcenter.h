@@ -35,6 +35,7 @@
 #include <QSize>
 #include <QFont>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QRect>
 #include <QFrame>
 #include <QScrollArea>
@@ -45,6 +46,8 @@
 #include <QComboBox>
 
 #include "kcisearchlinetext.h"
+#include "Controls/SettingItems/kcisettinglistitemcombo.h"
+#include "Controls/SettingItems/kcisettinglistitemboolean.h"
 #include "kcilistbutton.h"
 
 class kciControlCenterBanner : public QWidget
@@ -64,6 +67,9 @@ class kciControlCenterLeftBar : public QWidget
     Q_OBJECT
 public:
     explicit kciControlCenterLeftBar(QWidget *parent = 0);
+
+signals:
+    void NowSelectChanged(int newIndex);
 
 private slots:
     void lstClick(int Index);
@@ -86,25 +92,64 @@ private:
 
 };
 
-class kciControlCenterTabGerneral : public QWidget
+class kciCCTabGerneralContent : public QWidget
 {
+    Q_OBJECT
 public:
-    explicit kciControlCenterTabGerneral(QWidget *parent = 0);
+    explicit kciCCTabGerneralContent(QWidget *parent = 0);
+
 private:
-    QVBoxLayout *FakeLayout, *RealLayout;
-    QScrollArea *mainScrollArea;
+    QVBoxLayout *MainLayout;
+    kciSettingListItemCombo *sboDefaultLanguage;
+    kciSettingListItemBoolean *slnEnableAnime;
 };
 
-class kciControlCenterContents : public QWidget
+class kciControlCenterTabGerneral : public QWidget
 {
+    Q_OBJECT
 public:
-    explicit kciControlCenterContents(QWidget *parent = 0);
+    explicit kciControlCenterTabGerneral(QWidget *parent = 0);
 
 protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
+    QVBoxLayout *FakeLayout;
+    QScrollArea *mainScrollArea;
+    kciCCTabGerneralContent *contentWidget;
+};
+
+class kciControlCenterTabEditor : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciControlCenterTabEditor(QWidget *parent = 0);
+
+protected:
+    void resizeEvent(QResizeEvent *e);
+
+private:
+    QVBoxLayout *FakeLayout;
+    QScrollArea *mainScrollArea;
+};
+
+class kciControlCenterContents : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciControlCenterContents(QWidget *parent = 0);
+
+public slots:
+    void animeToIndex(int Index);
+
+protected:
+    void resizeEvent(QResizeEvent *e);
+
+private:
+    QParallelAnimationGroup *tabModeAnime;
+    QPropertyAnimation *moveOut, *moveIn;
     kciControlCenterTabGerneral *tabGerneral;
+    kciControlCenterTabEditor *tabEditor;
     int contentIndex;
 };
 
@@ -117,6 +162,8 @@ public:
 signals:
     
 public slots:
+
+private slots:
 
 private:
     QVBoxLayout *WholeTitleBarSplit;

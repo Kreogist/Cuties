@@ -158,7 +158,46 @@ void kciControlCenterLeftBar::lstClick(int Index)
         lsbLeftButtons[Index]->setPushed(true);
         //Set Index.
         lstSelect=Index;
+
+        //Emit Signal.
+        emit NowSelectChanged(Index);
     }
+}
+
+kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+    QWidget(parent)
+{
+    setContentsMargins(0,0,0,0);
+
+    QFont TitleFont=this->font();
+    TitleFont.setPixelSize(20);
+
+    //Set Layout.
+    MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
+
+    //Title Label.
+    QLabel *tblLanguage=new QLabel(this);
+    tblLanguage->setText(" " + tr("Language Settings"));
+    tblLanguage->setFont(TitleFont);
+    tblLanguage->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblLanguage);
+
+    sboDefaultLanguage=new kciSettingListItemCombo(this);
+    sboDefaultLanguage->Caption->setText(tr("Default Language:"));
+    sboDefaultLanguage->addListItem(tr("Plain Text"));
+    sboDefaultLanguage->addListItem(tr("C/C++"));
+    sboDefaultLanguage->addListItem(tr("Pascal"));
+    sboDefaultLanguage->setCurrentItemIndex(2);
+    MainLayout->addWidget(sboDefaultLanguage);
+
+    slnEnableAnime=new kciSettingListItemBoolean(this);
+    slnEnableAnime->setEnabledText(tr("Use Animation Effect."));
+    slnEnableAnime->setDisabledText(tr("Don't use Animation Effect."));
+    MainLayout->addWidget(slnEnableAnime);
 }
 
 kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
@@ -178,13 +217,73 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     pal.setColor(QPalette::Window, QColor(255,255,255));
     mainScrollArea->setPalette(pal);
     FakeLayout->addWidget(mainScrollArea);
+
+    //Set Contents.
+    contentWidget=new kciCCTabGerneralContent(this);
+    mainScrollArea->setContentsMargins(0,0,0,0);
+    mainScrollArea->setWidget(contentWidget);
+}
+
+kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
+    QWidget(parent)
+{
+    //Set FakeLayout.
+    FakeLayout=new QVBoxLayout(this);
+    FakeLayout->setContentsMargins(0,0,0,0);
+    FakeLayout->setSpacing(0);
+    setLayout(FakeLayout);
+
+    //Set Main Widget.
+    mainScrollArea=new QScrollArea(this);
+    mainScrollArea->setAutoFillBackground(true);
+    mainScrollArea->setFrameShape(QFrame::NoFrame);
+    QPalette pal=mainScrollArea->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    mainScrollArea->setPalette(pal);
+    FakeLayout->addWidget(mainScrollArea);
+}
+
+void kciControlCenterTabEditor::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+}
+
+void kciControlCenterTabGerneral::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
 }
 
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
 {
     contentIndex=0;
+
     tabGerneral=new kciControlCenterTabGerneral(this);
+    tabEditor=new kciControlCenterTabEditor(this);
+}
+
+void kciControlCenterContents::animeToIndex(int Index)
+{
+    switch(Index)
+    {
+    case 0:
+        tabGerneral->setGeometry(0,0,this->width(),this->height());
+        break;
+    case 1:
+        tabEditor->setGeometry(0,0,this->width(),this->height());
+        break;
+    }
+    switch(contentIndex)
+    {
+    case 0:
+        tabGerneral->setGeometry(this->width(),0,this->width(),this->height());
+        break;
+    case 1:
+        tabEditor->setGeometry(this->width(),0,this->width(),this->height());
+        break;
+    }
+    contentIndex=Index;
 }
 
 void kciControlCenterContents::resizeEvent(QResizeEvent *e)
@@ -193,9 +292,14 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
     {
     case 0:
         tabGerneral->setGeometry(0,0,this->width(),this->height());
+        tabEditor->setGeometry(this->width(),0,this->width(),this->height());
+        break;
+    case 1:
+        tabEditor->setGeometry(0,0,this->width(),this->height());
+        tabGerneral->setGeometry(this->width(),0,this->width(),this->height());
+        break;
     }
-
-    QWidget::resizeEvent(e);
+    e->accept();
 }
 
 kciControlCenter::kciControlCenter(QWidget *parent) :
@@ -224,4 +328,6 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     //This widget ONLY use to get size, no use.
     CCMainContents=new kciControlCenterContents(this);
     ContentLayout->addWidget(CCMainContents);
+    connect(ccLeftBar,SIGNAL(NowSelectChanged(int)),
+            CCMainContents,SLOT(animeToIndex(int)));
 }
