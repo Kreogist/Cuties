@@ -23,371 +23,128 @@
 
 #include "kcitexteditor.h"
 
-static const int SearchBarOffset = 20;
-
 kciTextEditor::kciTextEditor(QWidget *parent) :
-    QWidget(parent)
+    QPlainTextEdit(parent)
 {
-    //setWindowFlags(Qt::AnchorPoint);
-    mainLayout=new QHBoxLayout(this);
-    mainLayout->setSpacing(0);
-    setContentsMargins(0,0,0,0);
-    mainLayout->setMargin(0);
-    setLayout(mainLayout);
-
-    strFileFilter = QObject::tr("All Support Files")+
-            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
-            QObject::tr("Plain Text Files")+"(*.txt);;"+
-            QObject::tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
-            QObject::tr("C Source Files")+"(*.c);;"+
-            QObject::tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
-            QObject::tr("Pascal Source Files")+"(*.pas);;"+
-            QObject::tr("All Files")+"(*.*)";
-
-    linePanel=new kciLinenumPanel(this);
-    mainLayout->addWidget(linePanel);
-
-    markPanel=new kciMarkPanel(this);
-    mainLayout->addWidget(markPanel);
-
-    editor=new kciCodeEditor(this);
-    linePanel->setKciCodeEditor(editor);
-    markPanel->setKciCodeEditor(editor);
-    document=editor->document();
-    mainLayout->addWidget(editor);
-    mainLayout->addSpacing(1);
-
-    connect(editor->document(),SIGNAL(modificationChanged(bool)),
-            this,SLOT(onModificationChanged(bool)));
-    connect(editor,SIGNAL(cursorPositionChanged()),
-            this,SLOT(cursorChanged()));
-
-    m_langMode=new kciLanguageMode(this);
+    setFrameStyle(QFrame::NoFrame);
+    setFont(QString("Monaco"));
+    setAcceptDrops(false);
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Base,QColor(0x53,0x53,0x53));
+    pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
     pal.setColor(QPalette::Text,QColor(255,255,255));
+    pal.setColor(QPalette::Button,QColor(83,83,83));
     setPalette(pal);
+    setFrameStyle(0);
 
-    filePath.clear();
-    fileError=QFileDevice::NoError;
+    lineColor = QColor(0x64,0x64,0x64);
+    searchResultColor = QColor(0xf7,0xcf,0x3d);
 
-    searchBar=new kciSearchWindow(editor);
-    searchBar->hide();
-    connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
+    //Solve the default line's bug.
+    updateHighlights();
+
+    connect(this,&kciTextEditor::cursorPositionChanged,
+            this,&kciTextEditor::updateHighlights);
+    connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
+            this,SLOT(updateHighlights()));
 }
 
-void kciTextEditor::showSearchBar()
+void kciTextEditor::paintEvent(QPaintEvent *e)
 {
-    if(!searchBar->isVisible())
-    {
-        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-        QRect animeEndPos=searchBar->rect();
-        animeEndPos.setX(editor->width()-searchBar->width()-SearchBarOffset);
-        QRect animeStartPos=animeEndPos;
-        animeStartPos.setTop(-animeStartPos.height());
-        searchAnime->setStartValue(animeStartPos);
-        searchAnime->setDuration(300);
-        searchAnime->setEndValue(animeEndPos);
-        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
-        searchBar->show();
-        searchAnime->start();
-        searchBar->setTextFocus();
-    }
+    QPlainTextEdit::paintEvent(e);
+    emit updated();
 }
 
-bool kciTextEditor::open(const QString &fileName)
+void kciTextEditor::showSearchResultAt(int num)
 {
-    QFile _file(fileName);
-
-    if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
-    {
-        QTextStream _textIn(&_file);
-
-        editor->clear();
-        editor->insertPlainText(QString(_textIn.readAll()));
-
-        fileInfoChanged(_file);
-
-        return true;
-    }
-    else
-    {
-        fileError=_file.error();
-        return false;
-    }
-}
-
-QFileDevice::FileError kciTextEditor::error()
-{
-    return fileError;
-}
-
-bool kciTextEditor::save()
-{
-    if(!filePath.isEmpty())
-    {
-        return saveAs(filePath);
-    }
-    else
-    {
-        if(!dosaveas(tr("save")))
-        {
-            if(fileError!=QFileDevice::AbortError)
-            {
-                QErrorMessage error(this);
-                error.showMessage(tr("Saving file failed!"));
-                error.exec();
-            }
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-}
-
-bool kciTextEditor::saveAs()
-{
-    if(!dosaveas(tr("save as")))
-    {
-        if(fileError!=QFileDevice::AbortError)
-        {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
-        }
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-}
-
-bool kciTextEditor::dosaveas(const QString &Caption)
-{
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-    filePath=QFileDialog::getSaveFileName(this,Caption,settings.value("texteditor/historyDir").toString(),strFileFilter);
-
-    if(!filePath.isEmpty())
-    {
-        return saveAs(filePath);
-    }
-    else
-    {
-        fileError=QFileDevice::AbortError;
-        return false;
-    }
-}
-
-bool kciTextEditor::saveAs(const QString &fileName)
-{
-
-    QFile _file(fileName);
-
-    if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
-    {
-        QTextStream _textOut(&_file);
-        _textOut<<editor->toPlainText()<<flush;
-        fileInfoChanged(_file);
-        return true;
-    }
-    else
-    {
-        fileError=_file.error();
-        return false;
-    }
-}
-
-void kciTextEditor::closeEvent(QCloseEvent *e)
-{
-    if(editor->document()->isModified())
-    {
-        QMessageBox msgbox(this);
-        QString strDisplayFileName;
-
-        if(filePath.isEmpty())
-        {
-            strDisplayFileName=editor->documentTitle();
-        }
-        else
-        {
-            strDisplayFileName=filePath;
-        }
-
-        msgbox.setText(tr("Will you save changes to the the following file?") + "\n" +
-                       strDisplayFileName);
-        msgbox.setInformativeText(tr("If you don't save the changes, all the changes will be lost."));
-
-        msgbox.setStandardButtons(QMessageBox::Save|QMessageBox::Discard|QMessageBox::Cancel);
-        msgbox.setDefaultButton(QMessageBox::Save);
-        msgbox.setButtonText(QMessageBox::Save,tr("&Save"));
-        msgbox.setButtonText(QMessageBox::Discard,tr("&Don't Save"));
-        msgbox.setButtonText(QMessageBox::Cancel,tr("&Cancel"));
-
-        int ret=msgbox.exec();
-
-        switch (ret)
-        {
-        case QMessageBox::Save:
-            // Save was clicked
-            if(!save())
-            {
-                e->ignore();
-                break;
-            }
-            else
-            {
-                e->accept();
-                break;
-            }
-        case QMessageBox::Discard:
-            // Don't Save was clicked
-            e->accept();
-
-            break;
-        case QMessageBox::Cancel:
-            // Cancel was clicked
-            e->ignore();
-
-            break;
-        default:
-            // should never be reached
-            qWarning("codeeditor.cpp: switch(ret) reached an unexcepted line!");
-            break;
-        }
-    }
-    else
-    {
-        e->accept();
-    }
-
-    return ;
-}
-
-void kciTextEditor::setDocumentTitle(const QString& title)
-{
-    editor->setDocumentTitle(title);
-    emit filenameChanged(title);
-}
-
-QString kciTextEditor::getDocumentTitle()
-{
-    return editor->documentTitle();
-}
-
-void kciTextEditor::redo()
-{
-    editor->redo();
-}
-
-void kciTextEditor::undo()
-{
-    editor->undo();
-}
-
-void kciTextEditor::copy()
-{
-    editor->copy();
-}
-
-void kciTextEditor::cut()
-{
-    editor->cut();
-}
-
-void kciTextEditor::paste()
-{
-    editor->paste();
-}
-
-void kciTextEditor::selectAll()
-{
-    editor->selectAll();
-}
-
-void kciTextEditor::setTextFocus()
-{
-    editor->setFocus();
-}
-
-void kciTextEditor::onModificationChanged(bool changed)
-{
-    if(changed)
-    {
-        emit filenameChanged(editor->documentTitle()+"*");
-    }
-    else
-    {
-        emit filenameChanged(editor->documentTitle());
-    }
-}
-
-QString kciTextEditor::getFilePath()
-{
-    return filePath;
-}
-
-QString kciTextEditor::getSelectedText()
-{
-    return editor->textCursor().selectedText();
-}
-
-void kciTextEditor::cursorChanged()
-{
-    fileTextCursor=editor->textCursor();
-    emit fileTextCursorChanged();
-}
-
-QTextCursor kciTextEditor::getTextCursor()
-{
-    return fileTextCursor;
-}
-
-int kciTextEditor::getTextLines()
-{
-    return editor->document()->blockCount();
+    searchResult result=resultList[num];
+    setDocumentCursor(result.lineNum,result.startPos);
 }
 
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 {
-     editor->setDocumentCursor(nLine,linePos);
+     QTextCursor cursor = textCursor();
+     cursor.setPosition(document()->findBlockByNumber(nLine).position());
+     cursor.movePosition(QTextCursor::NextCharacter,
+                          QTextCursor::MoveAnchor,
+                          linePos);
+     setTextCursor(cursor);
 }
 
-void kciTextEditor::resizeEvent(QResizeEvent *e)
+void kciTextEditor::updateHighlights()
 {
-    QWidget::resizeEvent(e);
+    QList<QTextEdit::ExtraSelection> extraSelections;
 
-    searchBar->setGeometry(editor->width()-searchBar->width()-SearchBarOffset,
-                           0,
-                           searchBar->width(),
-                           searchBar->height());
+    highlightCurrentLine(extraSelections);
+    highlightSearchResult(extraSelections);
+
+    setExtraSelections(extraSelections);
 }
 
-void kciTextEditor::fileInfoChanged(const QFile &file)
+void kciTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections)
 {
-    QFileInfo _fileInfo(file);
-    editor->setDocumentTitle(_fileInfo.fileName());
-    emit filenameChanged(_fileInfo.fileName());
+    if (!isReadOnly()) {
+        QTextEdit::ExtraSelection selection;
 
-    m_langMode->setFileSuffix(_fileInfo.suffix());
-
-    filePath=file.fileName();
-    fileError=QFileDevice::NoError;
-    editor->document()->setModified(false);
-
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-    settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
+        selection.format.setBackground(lineColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = textCursor();
+        selection.cursor.clearSelection();
+        selections.append(selection);
+    }
 }
 
-kciLanguageMode *kciTextEditor::langMode() const
+void kciTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections)
 {
-    return m_langMode;
+    QTextCursor _cursor(document());
+
+    int lastLineNum=0;
+
+    QTextBlock block=firstVisibleBlock();
+    int firstBlockNumber=block.blockNumber();
+    int bottom=height()/fontMetrics().lineSpacing();
+    int lastBlockNumber=firstBlockNumber;
+
+    for(;block.isValid() && bottom>0;block=block.next(),lastBlockNumber++)
+    {
+        bottom-=block.lineCount();
+    }
+
+    auto i=resultList.begin();
+    auto l=resultList.end();
+    while(i<l && i->lineNum < firstBlockNumber)
+    {
+        i++;
+    }
+
+    for(;i<l && i->lineNum <= lastBlockNumber;i++)
+    {
+        QTextEdit::ExtraSelection selection;
+
+        _cursor.clearSelection();
+        _cursor.movePosition(QTextCursor::NextBlock,
+                             QTextCursor::MoveAnchor,
+                             i->lineNum-lastLineNum);
+        _cursor.movePosition(QTextCursor::StartOfBlock,
+                             QTextCursor::MoveAnchor);
+        _cursor.movePosition(QTextCursor::NextCharacter,
+                             QTextCursor::MoveAnchor,
+                             i->startPos);
+        _cursor.movePosition(QTextCursor::NextCharacter,
+                             QTextCursor::KeepAnchor,
+                             i->length);
+        selection.cursor=_cursor;
+
+        selection.format.setBackground(searchResultColor);
+        selections.append(selection);
+
+        lastLineNum=i->lineNum;
+    }
 }
 
-bool kciTextEditor::isModified()
+void kciTextEditor::setSearchResults(QList<searchResult> *results)
 {
-    return editor->document()->isModified();
+    resultList=*results;
+
+    updateHighlights();
 }

@@ -29,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle(tr("Kreogist Cuties"));
 
     tabManager=new kciTabManager(this);
+    connect(tabManager,SIGNAL(currentChanged(int)),
+            this,SLOT(onCurrentTabChanged()));
+
     setCentralWidget(tabManager);
     setMinimumSize(500,450);
 
@@ -703,7 +706,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::compileCurrentFile()
 {
-    kciTextEditor *currentEditor=tabManager->getCurrentEditor();
+    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
 
     //Check Tab Status.
     if(currentEditor!=NULL)
@@ -716,46 +719,27 @@ void MainWindow::compileCurrentFile()
             error.exec();
             return;
         }
-        //File is Ok now, Get Dock Ready.
-        //Clear All Dock Info.
-        compileDock->resetCompileDock();
-        //Set Compile File Path.
-        compileDock->setCompileFilePath(currentEditor->getFilePath());
+
         //Active Compile Dock.
         compileDock->setVisible(true);
         //Set To Compile Mode.
         compileDock->animeHideError();
-        //Prepare Compiler
-        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
-                             " " +
-                             tr("Preparing Compiler.")+
-                             "\n");
-        //Get a compiler ready.
-        compilerBase *currentCompiler=currentEditor->langMode()->getCompiler();
-        //Get Compiler Info.
-        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
-                             " " +
-                             tr("Current Compiler Details:") +
-                             currentCompiler->version() +
-                             "\n");
-        //Output Compile Message:
-        connect(currentCompiler,&compilerBase::compileinfo,compileDock,&kcicompiledock::outputCompileInfo);
-        connect(currentCompiler,&compilerBase::output,compileDock,&kcicompiledock::addText);
-        connect(currentCompiler,&compilerBase::compileError,compileDock,&kcicompiledock::onCompileMsgReceived);
-        connect(currentCompiler,SIGNAL(finished(int)),compileDock,SLOT(compileFinish(int)));
-        //Output Compile Info:
-        compileDock->addText(QTime::currentTime().toString("hh:mm:ss") +
-                             " " +
-                             tr("Compile Command:") +
-                             "\n");
-        currentCompiler->startCompile(currentEditor->getFilePath());
-        currentCompiler->waitForFinished();
+
+        currentEditor->langMode()->compile();
+
+        //File is Ok now, Get Dock Ready.
+        compileOutputReceiver *receiver=currentEditor->langMode()->getReceiver();
+        if(receiver!=NULL)
+        {
+            receiver->reset();
+            compileDock->setReceiver(receiver);
+        }
     }
 }
 
 void MainWindow::run()
 {
-    kciTextEditor *currentEditor=tabManager->getCurrentEditor();
+    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
     {
         kciExecutor *executor=currentEditor->langMode()->getExecutor();
@@ -763,21 +747,47 @@ void MainWindow::run()
         executor->setEnabledAutoInput(false);
 
         //execute file name
-        QFileInfo _fileInfo(currentEditor->getFilePath());
-        QString execName=QString("\"")+_fileInfo.absoluteDir().path()+
-                QString("/")+_fileInfo.completeBaseName();
-#ifdef Q_OS_WIN32
-        execName+=".exe";
-#endif
-        execName+="\"";
-        executor->exec(execName);
+        executor->exec(currentEditor->getExecFileName());
     }
 }
 
 void MainWindow::compileAndRun()
-{
-    compileCurrentFile();
-    run();
+{\
+    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
+
+    //Check Tab Status.
+    if(currentEditor!=NULL)
+    {
+        //File Not Save.
+        if(Q_UNLIKELY(!currentEditor->save()))
+        {
+            QErrorMessage error(this);
+            error.showMessage(tr("Saving file failed!"));
+            error.exec();
+            return;
+        }
+
+        //Active Compile Dock.
+        compileDock->setVisible(true);
+        //Set To Compile Mode.
+        compileDock->animeHideError();
+
+        kciExecutor *executor=currentEditor->langMode()->getExecutor();
+        executor->setBackgroundExec(false);
+        executor->setEnabledAutoInput(false);
+
+        connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
+                executor,SLOT(exec(QString)));
+
+        currentEditor->langMode()->compile();
+
+        compileOutputReceiver *receiver=currentEditor->langMode()->getReceiver();
+        if(receiver!=NULL)
+        {
+            receiver->reset();
+            compileDock->setReceiver(receiver);
+        }
+    }
 }
 
 void MainWindow::searchOnline()
@@ -840,5 +850,18 @@ void MainWindow::dropEvent(QDropEvent *event)
 #endif
 
         tabManager->openAndJumpTo(tmpPath);
+    }
+}
+
+void MainWindow::onCurrentTabChanged()
+{
+    kciCodeEditor* currEditor=tabManager->getCurrentEditor();
+    if(currEditor==NULL)
+        return ;
+
+    compileOutputReceiver *receiver=currEditor->langMode()->getReceiver();
+    if(receiver!=NULL)
+    {
+        compileDock->setReceiver(receiver);
     }
 }

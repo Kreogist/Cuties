@@ -41,6 +41,7 @@
 #include <QStandardItemModel>
 
 #include "compilerbase.h"
+#include "compileoutputreceiver.h"
 
 class kcicompiledock : public QDockWidget
 {
@@ -48,40 +49,20 @@ class kcicompiledock : public QDockWidget
 public:
     explicit kcicompiledock(QWidget *parent = 0);
 
-    //Tree View Controls:
-    void addRootItem(QString ItemText);
-    void clearAllItem();
-
-    //Text Controls:
-    void clearText();
-    void addText(QString NewText);
-
-    //Show/Hide Error Animation.
-    void animeShowError();
-    void animeHideError();
-
-    //Reset Dock
-    void resetCompileDock();
-
     //Compile File Path
     void setCompileFilePath(QString FilePath);
     QString CompileFilePath();
 
-private:
+    void setReceiver(const compileOutputReceiver* currReceiver);
 
+private:
     QWidget *objCombine;
     QSplitter *splCombine;
     QTreeView *trevwCompileInfo;
-    QStandardItemModel *compileInfo;
     QPlainTextEdit *compileOutput;
-    QRegularExpression *expressMsg;
-
-    bool ErrorOccur;
-    bool WarningOccur;
-    bool hasError;
-    int lastSelID;
-    QVector<ErrInfo> erifList;
-    QString strCompileFilePath;
+    QModelIndex lastSelIndex;
+    const compileOutputReceiver *receiver;
+    QMetaObject::Connection receiverConnectionHandle;
 
 signals:
     void requireOpenErrFile(QString filePath);
@@ -89,12 +70,12 @@ signals:
     void requireSetFocus();
     
 public slots:
-    void outputCompileInfo(QString msg);
-    void onCompileMsgReceived(ErrInfo error);
-    void compileFinish(int ExitNum);
+    //Show/Hide Error Animation.
+    void animeShowError();
+    void animeHideError();
 
 private slots:
-    void selectAnError(QModelIndex ItemID);
+    void selectAnError(QModelIndex ItemIndex);
     void jumpToError(QModelIndex ItemID);
     
 };

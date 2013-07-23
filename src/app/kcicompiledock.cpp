@@ -53,14 +53,13 @@ kcicompiledock::kcicompiledock(QWidget *parent):
 
     //Set TreeView Controls.
     trevwCompileInfo=new QTreeView(this);
+    trevwCompileInfo->setRootIsDecorated(false);
     trevwCompileInfo->setContentsMargins(0,0,0,0);
     pal=trevwCompileInfo->palette();
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
     trevwCompileInfo->setPalette(pal);
     trevwCompileInfo->setHeaderHidden(true);
     trevwCompileInfo->setGeometry(0,0,0,0);
-    compileInfo=new QStandardItemModel();
-    trevwCompileInfo->setModel(compileInfo);
     trevwCompileInfo->setEditTriggers(QAbstractItemView::NoEditTriggers);
     splCombine->addWidget(trevwCompileInfo);
     QList<int> l_sizes;
@@ -68,7 +67,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     splCombine->setSizes(l_sizes);
 
     //Set Default Value
-    resetCompileDock();
+    receiver=NULL;
     setWidget(splCombine);
 
     connect(trevwCompileInfo,SIGNAL(clicked(QModelIndex)),
@@ -80,36 +79,43 @@ kcicompiledock::kcicompiledock(QWidget *parent):
 
 }
 
+static inline QModelIndex getRootItem(QModelIndex item)
+{
+    while(item.parent().isValid())
+    {
+        item=item.parent();
+    }
+    return item;
+}
+
 void kcicompiledock::jumpToError(QModelIndex ItemID)
 {
+    ItemID=getRootItem(ItemID);
+
     int ErrID=ItemID.row();
-    if(erifList[ErrID].nColumnNum>-1)
+    const QVector<ErrInfo> *erifList=receiver->getErifList();
+    if(erifList->at(ErrID).nColumnNum>-1)
     {
         //Open the file;
-        emit requireOpenErrFile(erifList[ErrID].strFilePath);
+        emit requireOpenErrFile(erifList->at(ErrID).strFilePath);
         //Jump to the line;
-        emit requireGotoLine(erifList[ErrID].nLineNum - 1, erifList[ErrID].nColumnNum);
+        emit requireGotoLine(erifList->at(ErrID).nLineNum - 1, erifList->at(ErrID).nColumnNum);
         //Set Focus;
         emit requireSetFocus();
     }
 }
 
-void kcicompiledock::selectAnError(QModelIndex ItemID)
+void kcicompiledock::selectAnError(QModelIndex ItemIndex)
 {
-    if(lastSelID>-1)
+    ItemIndex=getRootItem(ItemIndex);
+
+    if(ItemIndex!=lastSelIndex)
     {
-        compileInfo->item(lastSelID)->setText(erifList[lastSelID].strErrDescription);
+        trevwCompileInfo->collapse(lastSelIndex);
+        trevwCompileInfo->expand(ItemIndex);
     }
-    lastSelID=ItemID.row();
-    if(erifList[lastSelID].nLineNum>-1)
-    {
-        QString strSelErrText;
-        strSelErrText=erifList[lastSelID].strErrDescription + "\n" +
-                tr("Line ") + QString::number(erifList[lastSelID].nLineNum) + tr(", ") +
-                tr("Column ") + QString::number(erifList[lastSelID].nColumnNum) + tr(". ") + "\n" +
-                tr("At file: ") + erifList[lastSelID].strFilePath;
-        compileInfo->itemFromIndex(ItemID)->setText(strSelErrText);
-    }
+
+    lastSelIndex=ItemIndex;
 }
 
 void kcicompiledock::animeShowError()
@@ -128,87 +134,17 @@ void kcicompiledock::animeHideError()
     splCombine->setSizes(l_sizes_finish);
 }
 
-void kcicompiledock::clearText()
+void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
 {
-    compileOutput->clear();
-}
-
-void kcicompiledock::addText(QString NewText)
-{
-    QTextDocument *document=compileOutput->document();
-    QTextCursor text_cursor=QTextCursor(document);
-    text_cursor.movePosition(QTextCursor::End);
-    text_cursor.insertText(NewText);
-}
-
-void kcicompiledock::addRootItem(QString ItemText)
-{
-    QStandardItem *itemAdd=new QStandardItem(ItemText);
-    compileInfo->appendRow(itemAdd);
-}
-
-void kcicompiledock::clearAllItem()
-{
-    compileInfo->clear();
-}
-
-void kcicompiledock::outputCompileInfo(QString msg)
-{
-    addText(msg);
-}
-
-void kcicompiledock::onCompileMsgReceived(ErrInfo error)
-{
-    if(!hasError)
+    if(receiver!=NULL)
     {
-        animeShowError();
-        addText(QTime::currentTime().toString("hh:mm:ss") +
-                " " +
-                tr("Compile Output:") +
-                "\n");
-        hasError=true;
+        disconnect(receiverConnectionHandle);
     }
 
-    erifList.append(error);
-    addRootItem(error.strErrDescription);
-}
+    receiver=currReceiver;
 
-void kcicompiledock::compileFinish(int ExitNum)
-{
-    qDebug()<<ExitNum;
-    if(hasError)
-    {
-        //Output Error Num
-        addText(QTime::currentTime().toString("hh:mm:ss") +
-                " " + QString::number(compileInfo->rowCount()) +
-                tr(" Errors Occur."));
-    }
-    else
-    {
-        //Output Compile Success.
-        addText(QTime::currentTime().toString("hh:mm:ss") +
-                " " + tr("Compile Successful."));
-    }
-}
-
-void kcicompiledock::resetCompileDock()
-{
-    clearAllItem();
-    clearText();
-    strCompileFilePath="";
-    hasError=false;
-    ErrorOccur=false;
-    WarningOccur=false;
-    lastSelID=-1;
-    erifList.clear();
-}
-
-void kcicompiledock::setCompileFilePath(QString FilePath)
-{
-    strCompileFilePath=FilePath;
-}
-
-QString kcicompiledock::CompileFilePath()
-{
-    return strCompileFilePath;
+    compileOutput->setDocument(receiver->getCompilerOutputText());
+    trevwCompileInfo->setModel(receiver->getCompilerOutputModel());
+    receiverConnectionHandle=connect(receiver,SIGNAL(requireShowError()),
+            this,SLOT(animeShowError()));
 }

@@ -57,7 +57,7 @@ kciTabManager::kciTabManager(QWidget *parent) :
     new_file_count=1;
 }
 
-kciTextEditor* kciTabManager::getCurrentEditor()
+kciCodeEditor* kciTabManager::getCurrentEditor()
 {
     return currentEditor;
 }
@@ -69,7 +69,7 @@ int kciTabManager::open(const QString& filePath)
     int i=count();
     while(i--)
     {
-        kciTextEditor *judgeEditor=qobject_cast<kciTextEditor *>(widget(i));
+        kciCodeEditor *judgeEditor=qobject_cast<kciCodeEditor *>(widget(i));
         if(judgeEditor!=NULL)
         {
             if(judgeEditor->getDocumentTitle() == name)
@@ -79,8 +79,8 @@ int kciTabManager::open(const QString& filePath)
         }
     }
     //File has not been opened, then open it and add tab.
-    kciTextEditor *tmp;
-    tmp=new kciTextEditor(this);
+    kciCodeEditor *tmp;
+    tmp=new kciCodeEditor(this);
     tmp->open(filePath);
     tmp->setDocumentTitle(name);
     connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
@@ -126,7 +126,7 @@ void kciTabManager::open()
 
 void kciTabManager::new_file()
 {
-    kciTextEditor *tmp=new kciTextEditor(this);
+    kciCodeEditor *tmp=new kciCodeEditor(this);
     if(tmp!=NULL)
     {
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
@@ -191,7 +191,7 @@ bool kciTabManager::save_all_file()
     int i=count();
     while(i--)
     {
-        kciTextEditor *editor = qobject_cast<kciTextEditor *>(widget(i));
+        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(i));
 
         if(Q_LIKELY(editor != NULL))
         {
@@ -206,7 +206,7 @@ void kciTabManager::close_all_tab()
     int i=count();
     while(i--)
     {
-        kciTextEditor *editor = qobject_cast<kciTextEditor *>(widget(i));
+        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(i));
         if(Q_LIKELY(editor != NULL))
         {
             on_tab_close_requested(i);
@@ -219,7 +219,7 @@ void kciTabManager::close_all_other_tab()
     int i=count();
     while(i--)
     {
-        kciTextEditor *editor = qobject_cast<kciTextEditor *>(widget(i));
+        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(i));
 
         if(Q_LIKELY(editor!=NULL) && i!=currentIndex())
         {
@@ -301,7 +301,7 @@ void kciTabManager::close_current_tab()
 
 void kciTabManager::on_current_tab_change(int index)
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(index));
+    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(index));
     if(editor!=NULL)
     {
         currentEditor=editor;
@@ -346,7 +346,7 @@ void kciTabManager::renameTabTitle(QString title)
 
 void kciTabManager::tabInserted(int index)
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(index));
+    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(index));
     if(editor!=NULL)
     {
         connect(editor,SIGNAL(filenameChanged(QString)),this,SLOT(renameTabTitle(QString)));
@@ -355,7 +355,7 @@ void kciTabManager::tabInserted(int index)
 
 void kciTabManager::currentTextCursorChanged()
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(this->currentIndex()));
     if(editor!=NULL)
     {
         currentTextCursor=editor->getTextCursor();
@@ -370,7 +370,7 @@ void kciTabManager::currentTextCursorChanged()
 
 void kciTabManager::showSearchBar()
 {
-    kciTextEditor* editor=qobject_cast<kciTextEditor *>(widget(this->currentIndex()));
+    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(this->currentIndex()));
 
     if(editor!=NULL)
         editor->showSearchBar();

@@ -35,14 +35,14 @@
 #include <QFontMetrics>
 #include <QDebug>
 
-#include "kcicodeeditor.h"
+#include "kcitexteditor.h"
 
 class kciPanel : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciPanel(QWidget *parent = 0);
-    void setKciCodeEditor(kciCodeEditor* editor);
+    void setKciCodeEditor(kciTextEditor *editor);
     
 signals:
     
@@ -57,7 +57,7 @@ protected:
                       bool isCurrentLine) = 0;
     
 private:
-    kciCodeEditor *e;
+    kciTextEditor *e;
 
     int first,last;
 

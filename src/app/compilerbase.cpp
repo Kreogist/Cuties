@@ -50,8 +50,7 @@ QString compilerBase::version()
     waitForFinished();
 
     //Save Second Part Of Compiler:
-    strReturnValue=strReturnValue+"\n"+
-                   QString::fromUtf8(readAllStandardOutput().constData());
+    strReturnValue=QString::fromUtf8(readAllStandardOutput().constData());
     return strReturnValue;
 }
 

@@ -3,12 +3,14 @@
 
 #include <QObject>
 #include <QSyntaxHighlighter>
+#include <QReadWriteLock>
 
 #include "kcitexteditor.h"
 #include "kcicodeeditor.h"
 
 #include "compilerbase.h"
 #include "kciexecutor.h"
+#include "compileoutputreceiver.h"
 
 //c/cpp
 #include "gcc.h"
@@ -18,7 +20,7 @@
 #include "fpc.h"
 #include "pascalhighlighter.h"
 
-class kciTextEditor;
+class kciCodeEditor;
 
 class kciLanguageMode : public QObject
 {
@@ -31,22 +33,41 @@ public:
         pascal
     };
 
+    enum compileState
+    {
+        uncompiled,
+        compiling,
+        compiled
+    };
+
     explicit kciLanguageMode(QWidget *parent = 0);
 
-    kciExecutor* getExecutor();
-    compilerBase* getCompiler();
+    void run();
+    void compile();
+    void setMode(const modeType& type);
     void setFileSuffix(const QString& suffix);
+
+    kciExecutor* getExecutor();
     
+    compileOutputReceiver *getReceiver() const;
+
 signals:
+    void compileSuccessfully(QString execFileName);
     
 public slots:
+    void onCompileFinished();
 
 private:
     modeType m_type;
-    kciTextEditor *m_parent;
+    kciCodeEditor *m_parent;
     kciExecutor *m_executor;
     compilerBase *m_compiler;
     QSyntaxHighlighter *m_highlighter;
+
+    compileOutputReceiver *receiver;
+
+    compileState state;
+    QReadWriteLock stateLock;
 };
 
 #endif // KCILANGUAGEMODE_H

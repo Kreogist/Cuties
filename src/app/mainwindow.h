@@ -83,6 +83,8 @@ public slots:
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
 
+    void onCurrentTabChanged();
+
 private slots:
     void showPreference();
 

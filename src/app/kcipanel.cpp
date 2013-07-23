@@ -32,7 +32,7 @@ kciPanel::kciPanel(QWidget *parent) :
     setAutoFillBackground(true);
 }
 
-void kciPanel::setKciCodeEditor(kciCodeEditor *editor)
+void kciPanel::setKciCodeEditor(kciTextEditor *editor)
 {
     if(editor!=NULL)
     {

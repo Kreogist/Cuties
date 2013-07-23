@@ -82,11 +82,13 @@ public:
     bool getBackgroundExec() const;
     bool isEnabledAutoInput() const;
     void setEnabledAutoInput(bool value);
-    void exec(const QString& programPath);
     QByteArray getUserOutput();
 
     static void setDefaultTerminal(const int &num);
     static QStringList getSupportTerminalList();
+
+public slots:
+    void exec(const QString& programPath);
 
 private:
     QString path;
