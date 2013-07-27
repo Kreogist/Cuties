@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
          ++constIterator)
     {
         QFile res(qApp->applicationDirPath() + "/Fonts/" + *constIterator);
+        qDebug()<<qApp->applicationDirPath() + "/Fonts/" + *constIterator;
         if (res.open(QIODevice::ReadOnly) == false) {
             if (fontWarningShown == false) {
                 QMessageBox::warning(0,
