@@ -195,8 +195,8 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(sboDefaultLanguage);
 
     slnEnableAnime=new kciSettingListItemBoolean(this);
-    slnEnableAnime->setEnabledText(tr("Use Animation Effect."));
-    slnEnableAnime->setDisabledText(tr("Don't use Animation Effect."));
+    slnEnableAnime->setEnabledText(tr("Enabled Animation Effect."));
+    slnEnableAnime->setDisabledText(tr("Disabled Animation Effect."));
     MainLayout->addWidget(slnEnableAnime);
 }
 
@@ -221,6 +221,17 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     tblLanguage->setFixedHeight(30);
     MainLayout->addSpacing(5);
     MainLayout->addWidget(tblLanguage);
+
+    //Set Line Text.
+    slnEnableLineNum=new kciSettingListItemBoolean(this);
+    slnEnableLineNum->setEnabledText(tr("Enabled Line Number Panel."));
+    slnEnableLineNum->setDisabledText(tr("Disabled Line Number Panel."));
+    MainLayout->addWidget(slnEnableLineNum);
+
+    //Text Edit Test.
+    txeCCompilerPath=new kciSettingListItemLineText(this);
+    txeCCompilerPath->Caption->setText(tr("g++/gcc Path:"));
+    MainLayout->addWidget(txeCCompilerPath);
 }
 
 kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
@@ -237,9 +248,6 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     mainScrollArea=new QScrollArea(this);
     mainScrollArea->setAutoFillBackground(true);
     mainScrollArea->setFrameShape(QFrame::NoFrame);
-    QPalette pal=mainScrollArea->palette();
-    pal.setColor(QPalette::Window, QColor(0,255,0));
-    mainScrollArea->setPalette(pal);
     FakeLayout->addWidget(mainScrollArea);
 
     //Set Contents.
@@ -260,10 +268,7 @@ kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     //Set Main Widget.
     mainScrollArea=new QScrollArea(this);
     mainScrollArea->setAutoFillBackground(true);
-    mainScrollArea->setFrameShape(QFrame::Box);
-    QPalette pal=mainScrollArea->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    mainScrollArea->setPalette(pal);
+    mainScrollArea->setFrameShape(QFrame::NoFrame);
     FakeLayout->addWidget(mainScrollArea);
 
     //Set Contents.
@@ -271,7 +276,7 @@ kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     mainScrollArea->setContentsMargins(0,0,0,0);
     mainScrollArea->setWidget(contentWidget);
 
-    contentWidget->setFixedWidth(mainScrollArea->viewport()->contentsRect().width());
+    contentWidget->setFixedWidth(500);
 }
 
 void kciControlCenterTabEditor::resizeEvent(QResizeEvent *e)

@@ -7,7 +7,7 @@ kciSettingListItemBase::kciSettingListItemBase(QWidget *parent) :
     setAutoFillBackground(true);
     //Set Palette.
     pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
+    pal.setColor(QPalette::Window, QColor(0xf7,0xcf,0x3d,0));
     setPalette(pal);
     //Set Label.
     Caption=new QLabel(this);

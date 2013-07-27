@@ -42,6 +42,8 @@
 #include <QIcon>
 #include <QSyntaxHighlighter>
 #include <QPropertyAnimation>
+#include <QTimeLine>
+#include <QGraphicsOpacityEffect>
 #include <QDebug>
 
 #include "kciglobal.h"
@@ -98,6 +100,7 @@ public slots:
 
 private slots:
     void onModificationChanged(bool changed);
+    void initAnimeOpacity(int opacity);
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -107,6 +110,8 @@ private:
     void computeExecFileName();
     void fileInfoChanged(const QFile& file);
     bool dosaveas(const QString& Caption);
+
+    QGraphicsOpacityEffect *initEffect;
 
     kciLanguageMode *m_langMode;
 
