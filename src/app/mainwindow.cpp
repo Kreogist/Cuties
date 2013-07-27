@@ -725,15 +725,23 @@ void MainWindow::compileCurrentFile()
         //Set To Compile Mode.
         compileDock->animeHideError();
 
-        currentEditor->langMode()->compile();
-
-        //File is Ok now, Get Dock Ready.
+        //if the file has been compiled,
+        //then we clean the text of last compiling.
         compileOutputReceiver *receiver=currentEditor->langMode()->getReceiver();
         if(receiver!=NULL)
         {
             receiver->reset();
-            compileDock->setReceiver(receiver);
         }
+
+        currentEditor->langMode()->compile();
+
+        //The receiver is NULL if we didn't compile the file before.
+        //And if receiver is NULL, setReceiver() will cause the program crash.
+        //So we getReceiver() again to avoid this.
+        receiver=currentEditor->langMode()->getReceiver();
+
+        Q_ASSERT(receiver!=NULL);
+        compileDock->setReceiver(receiver);
     }
 }
 
@@ -758,35 +766,18 @@ void MainWindow::compileAndRun()
     //Check Tab Status.
     if(currentEditor!=NULL)
     {
-        //File Not Save.
-        if(Q_UNLIKELY(!currentEditor->save()))
-        {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
-            return;
-        }
-
-        //Active Compile Dock.
-        compileDock->setVisible(true);
-        //Set To Compile Mode.
-        compileDock->animeHideError();
-
         kciExecutor *executor=currentEditor->langMode()->getExecutor();
         executor->setBackgroundExec(false);
         executor->setEnabledAutoInput(false);
 
-        connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
+        //when compile successfully, executor will run the program.
+        if((bool)compileFinishedConnection)
+            disconnect(compileFinishedConnection);
+
+        compileFinishedConnection=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
                 executor,SLOT(exec(QString)));
 
-        currentEditor->langMode()->compile();
-
-        compileOutputReceiver *receiver=currentEditor->langMode()->getReceiver();
-        if(receiver!=NULL)
-        {
-            receiver->reset();
-            compileDock->setReceiver(receiver);
-        }
+        compileCurrentFile();
     }
 }
 

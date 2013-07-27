@@ -26,6 +26,8 @@
 compilerBase::compilerBase(QObject *parent) :
     QProcess(parent)
 {
+    connect(this,SIGNAL(finished(int)),
+            this,SLOT(onFinished()));
 }
 
 void compilerBase::emitCompileInfo(const QString &compilerPath,
@@ -61,7 +63,7 @@ void compilerBase::startCompile(const QString &filePath)
 
     emitCompileInfo(compilerPath,arg);
 
-    connect(this,SIGNAL(readyRead()),
+    connectionHandle=connect(this,SIGNAL(readyRead()),
             this,SLOT(onOutputReady()));
 
     QStringList env=getcompileEnv();
@@ -81,4 +83,12 @@ bool compilerBase::checkCompilerPath(const QString& path)
     }
 
     return false;
+}
+
+void compilerBase::onFinished()
+{
+    if((bool)connectionHandle)
+    {
+        disconnect(connectionHandle);
+    }
 }

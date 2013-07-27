@@ -53,8 +53,10 @@ kciTabManager::kciTabManager(QWidget *parent) :
     setTabsClosable(true);
     setElideMode(Qt::ElideRight);
     setTabPosition(QTabWidget::South);
+
     tab_count=1;
     new_file_count=1;
+    currentEditor=NULL;
 }
 
 kciCodeEditor* kciTabManager::getCurrentEditor()

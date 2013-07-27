@@ -21,13 +21,16 @@ void kciLanguageMode::setMode(const modeType &type)
 void kciLanguageMode::compile()
 {
     if(m_compiler==NULL)
+    {
+        qDebug()<<"compiler is NULL";
         return ;
+    }
 
     if(receiver==NULL)
     {
         receiver=new compileOutputReceiver(this);
+        receiver->connectCompiler(m_compiler);
     }
-    receiver->connectCompiler(m_compiler);
 
     //Prepare Compiler
     receiver->addText(QTime::currentTime().toString("hh:mm:ss") +
@@ -51,12 +54,12 @@ void kciLanguageMode::compile()
 
     stateLock.lockForWrite();
     state=compiling;
+    stateLock.unlock();
 
-    connect(m_compiler,SIGNAL(finished(int)),
+    compilerFinishedConnection=connect(m_compiler,SIGNAL(finished(int)),
             this,SLOT(onCompileFinished()));
 
     m_compiler->startCompile(m_parent->filePath);
-    stateLock.unlock();
 }
 
 void kciLanguageMode::setFileSuffix(const QString& suffix)
@@ -66,19 +69,13 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
     QRegularExpression _regexp_pascal("pas",
                                       QRegularExpression::CaseInsensitiveOption);
 
-    if(m_compiler!=NULL)
-    {
-        delete m_compiler;
-        m_compiler=NULL;
-    }
-    if(m_highlighter!=NULL)
-    {
-        delete m_highlighter;
-        m_highlighter=NULL;
-    }
-
     if(suffix.contains(_regexp_cpp))
     {
+        if(m_type==cpp) //file type doesn't change,so return.
+            return ;
+
+        resetCompilerAndHighlighter();
+
         m_type=cpp;
         m_compiler=new gcc(m_parent);
         m_highlighter=new cppHighlighter(m_parent);
@@ -86,6 +83,11 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
     }
     else if(suffix.contains(_regexp_pascal))
     {
+        if(m_type==pascal) //file type doesn't change,so return.
+            return ;
+
+        resetCompilerAndHighlighter();
+
         m_type=pascal;
         m_compiler=new fpc(m_parent);
         m_highlighter=new pascalHighlighter(m_parent);
@@ -93,10 +95,6 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
     }
     else
         m_type=plainText;
-
-
-    if(m_compiler==NULL)
-        return ;
 }
 
 compileOutputReceiver *kciLanguageMode::getReceiver() const
@@ -109,13 +107,32 @@ void kciLanguageMode::onCompileFinished()
     stateLock.lockForWrite();
     state=compiled;
     stateLock.unlock();
+
+    if((bool)compilerFinishedConnection)
+        disconnect(compilerFinishedConnection);
+
     if(!receiver->hasCompileError())
     {
         emit compileSuccessfully(m_parent->execFileName);
     }
+
 }
 
 kciExecutor* kciLanguageMode::getExecutor()
 {
     return m_executor;
+}
+
+void kciLanguageMode::resetCompilerAndHighlighter()
+{
+    if(m_compiler!=NULL)
+    {
+        delete m_compiler;
+        m_compiler=NULL;
+    }
+    if(m_highlighter!=NULL)
+    {
+        delete m_highlighter;
+        m_highlighter=NULL;
+    }
 }

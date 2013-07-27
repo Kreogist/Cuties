@@ -63,6 +63,12 @@ protected:
     virtual QStringList getVersionArg() = 0;
     virtual QStringList getCompileArg(const QString& filePath) = 0;
     virtual QStringList getcompileEnv() = 0;
+
+private slots:
+    void onFinished();
+
+private:
+    QMetaObject::Connection connectionHandle;
 };
 
 #endif // COMPILERBASE_H
