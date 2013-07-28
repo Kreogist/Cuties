@@ -66,7 +66,8 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemboolean.cpp \
     Controls/SettingItems/kcisettinglistitembase.cpp \
     Controls/SettingItems/kcisettinglistitemcombo.cpp \
-    compileoutputreceiver.cpp
+    compileoutputreceiver.cpp \
+    Controls/SettingItems/kcisettinglistitemlinetext.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -107,7 +108,8 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemboolean.h \
     Controls/SettingItems/kcisettinglistitembase.h \
     Controls/SettingItems/kcisettinglistitemcombo.h \
-    compileoutputreceiver.h
+    compileoutputreceiver.h \
+    Controls/SettingItems/kcisettinglistitemlinetext.h
 
 # Enable C++11
 CONFIG += c++11
