@@ -32,7 +32,7 @@ kciPanel::kciPanel(QWidget *parent) :
     setAutoFillBackground(true);
 }
 
-void kciPanel::setKciCodeEditor(kciTextEditor *editor)
+void kciPanel::setKciTextEditor(kciTextEditor *editor)
 {
     if(editor!=NULL)
     {
@@ -72,16 +72,14 @@ void kciPanel::paintEvent(QPaintEvent *event)
     painter.setBackground(brush);
     painter.fillRect(this->rect(),QColor(0x53,0x53,0x53));
 
-    setFont(e->font());
-    QFont font(e->font());
-    QFontMetrics fm(font);
+    QFontMetrics fm=e->fontMetrics();
 
     /*FIXME: It's so ugly. But I can't solve it.I try to find the text layout's
      *       position. But the position of the layout of the QTextBlock is
      *       always be (0,0).
      */
 
-    int line_height = e->fontMetrics().lineSpacing(),
+    int line_height = fm.lineSpacing(),
         current_line_num=e->textCursor().block().blockNumber();
 
     int top=e->verticalScrollBar()->value();

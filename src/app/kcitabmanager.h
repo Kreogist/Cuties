@@ -24,7 +24,6 @@
 #ifndef TABMANAGER_H
 #define TABMANAGER_H
 
-#include <QWidget>
 #include <QTabWidget>
 #include <QFile>
 #include <QFileInfo>
@@ -35,12 +34,9 @@
 #include <QTextDocument>
 #include <QErrorMessage>
 #include <QSettings>
-#include <QMimeData>
 #include <QPalette>
-#include <QList>
 #include <QUrl>
 
-#include "compilerbase.h"
 #include "kciglobal.h"
 #include "kcisearchwindow.h"
 #include "kcicodeeditor.h"
@@ -50,10 +46,10 @@ class kciTabManager : public QTabWidget
     Q_OBJECT
 public:
     explicit kciTabManager(QWidget *parent = 0);
-    int getCurrentLineCount();
-    int getCurrentLineNum();
+    int getCurrentLineCount() const;
+    int getCurrentLineNum() const;
 
-    kciCodeEditor* getCurrentEditor();
+    kciCodeEditor* getCurrentEditor() const;
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);

@@ -19,6 +19,7 @@ class kciDebugWidget : public QWidget
     Q_OBJECT
 public:
     explicit kciDebugWidget(QWidget *parent = 0);
+    ~kciDebugWidget();
 
 private:
     QToolButton *tblStartDebug, *tblStopDebug, *tblRunToCursor,

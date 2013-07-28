@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     int l=strlen(argv[1])+2;
 
     char* program_name=new char[l];
-    memset(program_name,0,sizeof(program_name));
+    memset(program_name,0,sizeof(char)*l);
     program_name[0]='\"';
     strcat(program_name,argv[1]);
     strcat(program_name,"\"");

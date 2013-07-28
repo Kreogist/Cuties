@@ -24,19 +24,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QTextEdit>
 #include <QAction>
-#include <QMenuBar>
-#include <QToolBar>
 #include <QMenu>
-#include <QTime>
 #include <QPalette>
 #include <QApplication>
 #include <QToolButton>
 #include <QMessageBox>
 #include <QDesktopServices>
-#include <QFileInfo>
 #include <QSettings>
 #include <QSize>
 #include <QRect>

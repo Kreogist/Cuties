@@ -425,7 +425,7 @@ void MainWindow::createMenu()
 {
     int i;
 
-    QMenu *_mainMenu=new QMenu;
+    QMenu *_mainMenu=new QMenu(this);
     QIcon *MenuIconAddor=new QIcon;
 
     //file menu
@@ -540,6 +540,8 @@ void MainWindow::createMenu()
             this,SLOT(setNoDocOpenMenuEnabled()));
     connect(tabManager,SIGNAL(tabClear()),
             titlebar,SLOT(hideToolBar()));
+
+    delete MenuIconAddor;
 }
 
 void MainWindow::createStatusbar()

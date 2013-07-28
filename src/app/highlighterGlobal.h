@@ -24,6 +24,11 @@
 #ifndef HIGHLIGHTERGLOBAL_H
 #define HIGHLIGHTERGLOBAL_H
 
+//all file that should be included by highlighter define here
+#include <QSyntaxHighlighter>
+#include <QList>
+#include <QRegularExpression>
+
 struct highlight_rule
 {
     QString type_name;

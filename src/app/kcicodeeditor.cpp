@@ -51,8 +51,8 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     mainLayout->addWidget(markPanel);
 
     editor=new kciTextEditor(this);
-    linePanel->setKciCodeEditor(editor);
-    markPanel->setKciCodeEditor(editor);
+    linePanel->setKciTextEditor(editor);
+    markPanel->setKciTextEditor(editor);
     document=editor->document();
     mainLayout->addWidget(editor);
     mainLayout->addSpacing(1);

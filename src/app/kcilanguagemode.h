@@ -1,11 +1,8 @@
 #ifndef KCILANGUAGEMODE_H
 #define KCILANGUAGEMODE_H
 
-#include <QObject>
-#include <QSyntaxHighlighter>
 #include <QReadWriteLock>
 
-#include "kcitexteditor.h"
 #include "kcicodeeditor.h"
 
 #include "compilerbase.h"

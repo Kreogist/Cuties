@@ -59,7 +59,7 @@ kciTabManager::kciTabManager(QWidget *parent) :
     currentEditor=NULL;
 }
 
-kciCodeEditor* kciTabManager::getCurrentEditor()
+kciCodeEditor* kciTabManager::getCurrentEditor() const
 {
     return currentEditor;
 }
@@ -303,16 +303,13 @@ void kciTabManager::close_current_tab()
 
 void kciTabManager::on_current_tab_change(int index)
 {
-    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(index));
-    if(editor!=NULL)
+    currentEditor=qobject_cast<kciCodeEditor *>(widget(index));
+
+    if(currentEditor!=NULL)
     {
-        currentEditor=editor;
-        editor->setTextFocus();
+        currentEditor->setTextFocus();
     }
-    else
-    {
-        currentEditor=NULL;
-    }
+
     currentTextCursorChanged();
 }
 
@@ -357,10 +354,9 @@ void kciTabManager::tabInserted(int index)
 
 void kciTabManager::currentTextCursorChanged()
 {
-    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(this->currentIndex()));
-    if(editor!=NULL)
+    if(currentEditor!=NULL)
     {
-        currentTextCursor=editor->getTextCursor();
+        currentTextCursor=currentEditor->getTextCursor();
         emit cursorDataChanged(currentTextCursor.blockNumber()+1,
                                currentTextCursor.columnNumber());
     }
@@ -372,10 +368,8 @@ void kciTabManager::currentTextCursorChanged()
 
 void kciTabManager::showSearchBar()
 {
-    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(this->currentIndex()));
-
-    if(editor!=NULL)
-        editor->showSearchBar();
+    if(currentEditor!=NULL)
+        currentEditor->showSearchBar();
 }
 
 QString kciTabManager::textNowSelect()
@@ -412,7 +406,7 @@ void kciTabManager::setFocus()
     }
 }
 
-int kciTabManager::getCurrentLineCount()
+int kciTabManager::getCurrentLineCount() const
 {
     if(currentEditor!=NULL)
     {
@@ -424,7 +418,7 @@ int kciTabManager::getCurrentLineCount()
     }
 }
 
-int kciTabManager::getCurrentLineNum()
+int kciTabManager::getCurrentLineNum() const
 {
     if(currentEditor!=NULL)
     {
