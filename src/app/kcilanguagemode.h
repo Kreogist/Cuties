@@ -9,7 +9,6 @@
 #include "kcicodeeditor.h"
 
 #include "compilerbase.h"
-#include "kciexecutor.h"
 #include "compileoutputreceiver.h"
 
 //c/cpp
@@ -46,8 +45,6 @@ public:
     void compile();
     void setMode(const modeType& type);
     void setFileSuffix(const QString& suffix);
-
-    kciExecutor* getExecutor();
     
     compileOutputReceiver *getReceiver() const;
 
@@ -62,7 +59,6 @@ private:
 
     modeType m_type;
     kciCodeEditor *m_parent;
-    kciExecutor *m_executor;
     compilerBase *m_compiler;
     QSyntaxHighlighter *m_highlighter;
 

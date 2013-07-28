@@ -22,6 +22,7 @@ public:
     //Text Controls:
     void clearText();
     void addText(QString NewText);
+    void addForwardText();
 
     void reset();
 
@@ -33,6 +34,8 @@ public:
     bool hasCompileError();
 
     void connectCompiler(compilerBase* compiler);
+
+    QString getCompilerVersion() const;
 
 signals:
     void requireShowError();
@@ -57,6 +60,7 @@ private:
     QPlainTextDocumentLayout *plainTextLayout;
     QModelIndex lastSelIndex;
     QVector<ErrInfo> erifList;
+    QString compilerVersion;
 
     compilerBase *connectedCompiler;
 

@@ -750,12 +750,8 @@ void MainWindow::run()
     kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
     {
-        kciExecutor *executor=currentEditor->langMode()->getExecutor();
-        executor->setBackgroundExec(false);
-        executor->setEnabledAutoInput(false);
-
         //execute file name
-        executor->exec(currentEditor->getExecFileName());
+        kciExecutor::getInstance()->exec(currentEditor->getExecFileName());
     }
 }
 
@@ -766,16 +762,12 @@ void MainWindow::compileAndRun()
     //Check Tab Status.
     if(currentEditor!=NULL)
     {
-        kciExecutor *executor=currentEditor->langMode()->getExecutor();
-        executor->setBackgroundExec(false);
-        executor->setEnabledAutoInput(false);
-
         //when compile successfully, executor will run the program.
         if((bool)compileFinishedConnection)
             disconnect(compileFinishedConnection);
 
         compileFinishedConnection=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
-                executor,SLOT(exec(QString)));
+                kciExecutor::getInstance(),SLOT(exec(QString)));
 
         compileCurrentFile();
     }
