@@ -24,16 +24,9 @@
 #ifndef KCITEXTSEARCHER_H
 #define KCITEXTSEARCHER_H
 
-#include <QObject>
-#include <QThread>
 #include <QRegularExpression>
 #include <QTextDocument>
 #include <QTextBlock>
-#include <QRegularExpressionMatch>
-#include <QStringMatcher>
-#include <QList>
-#include <QPointer>
-#include <QReadWriteLock>
 #include <QDebug>
 
 #include "kcitextsearchworker.h"
@@ -57,8 +50,6 @@ public:
     void setSubString(const QString &value);
     int getFlags() const;
     void setFlags(int value);
-
-    QReadWriteLock lock;
 
 signals:
     void finished(QList<searchResult>* results);

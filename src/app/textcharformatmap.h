@@ -24,7 +24,6 @@
 #ifndef TEXTCHARFORMATMAP_H
 #define TEXTCHARFORMATMAP_H
 
-#include <QObject>
 #include <QFile>
 #include <QTextCharFormat>
 #include <QApplication>

@@ -38,8 +38,9 @@ void kciTextSearcher::search()
         worker->lock.lockForWrite();
         worker->needQuit=true;
         worker->lock.unlock();
+        worker->terminate();
         worker->wait();
-        delete worker;
+        worker->deleteLater();
     }
 
     if((flags & RegularExpress) || (flags & WholeWord))

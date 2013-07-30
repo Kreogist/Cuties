@@ -30,9 +30,7 @@
 #include <QFile>
 #include <QPlainTextEdit>
 #include <QFileInfo>
-#include <QFileDevice>
 #include <QFileDialog>
-#include <QTextDocument>
 #include <QTextStream>
 #include <QString>
 #include <QMessageBox>
@@ -40,7 +38,6 @@
 #include <QErrorMessage>
 #include <QSettings>
 #include <QIcon>
-#include <QSyntaxHighlighter>
 #include <QPropertyAnimation>
 #include <QTimeLine>
 #include <QGraphicsOpacityEffect>

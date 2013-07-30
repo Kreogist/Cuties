@@ -425,7 +425,7 @@ void MainWindow::createMenu()
 {
     int i;
 
-    QMenu *_mainMenu=new QMenu;
+    QMenu *_mainMenu=new QMenu(this);
     QIcon *MenuIconAddor=new QIcon;
 
     //file menu
@@ -540,6 +540,8 @@ void MainWindow::createMenu()
             this,SLOT(setNoDocOpenMenuEnabled()));
     connect(tabManager,SIGNAL(tabClear()),
             titlebar,SLOT(hideToolBar()));
+
+    delete MenuIconAddor;
 }
 
 void MainWindow::createStatusbar()
@@ -750,12 +752,8 @@ void MainWindow::run()
     kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
     {
-        kciExecutor *executor=currentEditor->langMode()->getExecutor();
-        executor->setBackgroundExec(false);
-        executor->setEnabledAutoInput(false);
-
         //execute file name
-        executor->exec(currentEditor->getExecFileName());
+        kciExecutor::getInstance()->exec(currentEditor->getExecFileName());
     }
 }
 
@@ -766,16 +764,12 @@ void MainWindow::compileAndRun()
     //Check Tab Status.
     if(currentEditor!=NULL)
     {
-        kciExecutor *executor=currentEditor->langMode()->getExecutor();
-        executor->setBackgroundExec(false);
-        executor->setEnabledAutoInput(false);
-
         //when compile successfully, executor will run the program.
         if((bool)compileFinishedConnection)
             disconnect(compileFinishedConnection);
 
         compileFinishedConnection=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
-                executor,SLOT(exec(QString)));
+                kciExecutor::getInstance(),SLOT(exec(QString)));
 
         compileCurrentFile();
     }

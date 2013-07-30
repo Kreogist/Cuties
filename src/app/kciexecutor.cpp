@@ -55,8 +55,8 @@ Terminal kciRunner::getDefaultTerminal()
     QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
     settings.beginGroup("DefaultTerminal");
     Terminal ret(
-           settings.value("name", knownTerminals[0].terminal_name).toByteArray().constData(),
-           settings.value("arg",knownTerminals[0].arg).toByteArray().constData());
+                settings.value("name", knownTerminals[0].terminal_name).toByteArray().constData(),
+            settings.value("arg",knownTerminals[0].arg).toByteArray().constData());
     settings.endGroup();
 
     return ret;
@@ -82,147 +82,154 @@ void kciExecutor::setDefaultTerminal(const int& num)
     }
 }
 
+kciRunner::kciRunner(QObject *parent):
+    QThread(parent)
+{
+    process=NULL;
+}
+
+kciRunner::~kciRunner()
+{
+    if(process==NULL)
+        return ;
+
+    if(process->state() != QProcess::NotRunning)
+    {
+        process->kill();
+        process->waitForFinished();
+    }
+}
+
 void kciRunner::run()
 {
-    if(p!=NULL)
-    {
-        p->lock.lockForRead();
-
-        if(p->process!=NULL)
+        process=new QProcess;
+        process->setReadChannelMode(QProcess::MergedChannels);
+        if(enabledBackExec)
         {
-            p->process->kill();
-            p->process->waitForFinished();
-            delete p->process;
-        }
-
-        p->process=new QProcess;
-        p->process->setReadChannelMode(QProcess::MergedChannels);
-        if(p->enabledBackExec)
-        {
-            connect(p->process,SIGNAL(readyRead()),
+            connect(process,SIGNAL(readyRead()),
                     this,SLOT(onReadyRead()));
-            p->process->start(p->path);
+            process->start(path);
         }
         else
         {
             QStringList arg;
-            QFileInfo info(p->path);
+            QFileInfo info(path);
 
-            p->process->setWorkingDirectory(info.absoluteDir().absolutePath());
+            process->setWorkingDirectory(info.absoluteDir().absolutePath());
 
             Terminal terminal=getDefaultTerminal();
 
-            p->path.prepend('\"');
-            p->path.append('\"');
+            path.prepend('\"');
+            path.append('\"');
 
-            #ifdef Q_OS_WIN
-                arg<<terminal.arg<<"start"<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
-            #else
-                arg<<terminal.arg<<qApp->applicationDirPath()+'/'+console_runner_path<<p->path;
-            #endif
-            p->process->start(QLatin1String(terminal.terminal_name),arg);
+            arg<<terminal.arg
+#ifdef Q_OS_WIN
+               <<"start"
+#endif
+               <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
+
+            connect(process,SIGNAL(finished(int)),
+                    this,SLOT(quit()));
+            connect(this,SIGNAL(finished()),
+                    this,SLOT(deleteLater()));
+            process->start(QLatin1String(terminal.terminal_name),arg);
         }
 
-        if(p->enabledAutoInput)
-            p->process->write(p->m_input);
+        if(enabledAutoInput)
+            process->write(m_input);
 
-        p->lock.unlock();
-    }
     exec();
 }
 
 void kciRunner::onReadyRead()
 {
-    if(p!=NULL)
-    {
-        p->output_lock.lockForWrite();
+    output_lock.lockForWrite();
 
-        p->user_output+=p->process->readAll();
+    user_output+=process->readAll();
 
-        p->output_lock.unlock();
-    }
+    output_lock.unlock();
 }
 
-kciExecutor::kciExecutor(QObject *parent) :
-    QObject(parent)
-{
-    enabledBackExec=false;
-    process=NULL;
-    worker=NULL;
-}
-
-kciExecutor::~kciExecutor()
-{
-    if(process!=NULL)
-    {
-        process->kill();
-        process->waitForFinished();
-        delete process;
-    }
-
-    if(worker!=NULL)
-    {
-        worker->quit();
-        worker->wait();
-        delete worker;
-    }
-}
-
-void kciExecutor::setTestCase(const QByteArray &input, const QByteArray &output)
+void kciRunner::setTestCase(const QByteArray &input, const QByteArray &output)
 {
     m_input=input;
     m_output=output;
-    worker=NULL;
-    process=NULL;
 }
 
-bool kciExecutor::getBackgroundExec() const
+bool kciRunner::isBackgroundExec() const
 {
     return enabledBackExec;
 }
 
-void kciExecutor::setBackgroundExec(bool value)
+void kciRunner::setBackgroundExec(bool value)
 {
     lock.lockForWrite();
     enabledBackExec = value;
     lock.unlock();
 }
 
-bool kciExecutor::isEnabledAutoInput() const
+bool kciRunner::isEnabledAutoInput() const
 {
     return enabledAutoInput;
 }
 
-void kciExecutor::setEnabledAutoInput(bool value)
+void kciRunner::setEnabledAutoInput(bool value)
 {
     lock.lockForWrite();
     enabledAutoInput = value;
     lock.unlock();
 }
 
-void kciExecutor::exec(const QString &programPath)
-{
-    lock.lockForWrite();
-    path=programPath;
-
-    if(worker!=NULL)
-    {
-        worker->quit();
-        worker->wait();
-        delete worker;
-    }
-
-    worker=new kciRunner;
-    worker->p=this;
-    worker->start();
-
-    lock.unlock();
-}
-
-QByteArray kciExecutor::getUserOutput()
+QByteArray kciRunner::getUserOutput()
 {
     output_lock.lockForRead();
     QByteArray ret = user_output;
     output_lock.unlock();
     return ret;
+}
+
+QString kciRunner::getPath() const
+{
+    return path;
+}
+
+void kciRunner::setPath(const QString &value)
+{
+    path = value;
+}
+
+kciExecutor* kciExecutor::instance=NULL;
+
+kciExecutor::kciExecutor(QObject *parent) :
+    QObject(parent)
+{
+}
+
+kciExecutor::~kciExecutor()
+{
+    /*for(auto i=runnerList.begin(),e=runnerList.end();
+        i!=e;
+        i++)
+    {
+        delete i;
+    }*/
+}
+
+void kciExecutor::exec(const QString &programPath)
+{
+    kciRunner* runner=new kciRunner;
+    runner->setPath(programPath);
+    runner->setBackgroundExec(false);
+    runner->setEnabledAutoInput(false);
+    runner->start();
+}
+
+kciExecutor* kciExecutor::getInstance()
+{
+    if(instance==NULL)
+    {
+        return instance=new kciExecutor;
+    }
+
+    return instance;
 }

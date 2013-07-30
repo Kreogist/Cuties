@@ -60,14 +60,40 @@ class kciRunner : public QThread
 {
     Q_OBJECT
 public:
-    kciExecutor *p;
+    explicit kciRunner(QObject *parent = 0);
+    ~kciRunner();
+
     static Terminal getDefaultTerminal();
+    void setTestCase(const QByteArray& input,const QByteArray& output);
+    void setBackgroundExec(bool enabled);
+    bool isBackgroundExec() const;
+    bool isEnabledAutoInput() const;
+    void setEnabledAutoInput(bool value);
+    QByteArray getUserOutput();
+
+    QString getPath() const;
+    void setPath(const QString &value);
 
 public slots:
     void onReadyRead();
 
 protected:
     void run();
+
+private:
+    QReadWriteLock lock;
+
+    QByteArray m_input;
+    QByteArray m_output;
+
+    QReadWriteLock output_lock;
+    QByteArray user_output;
+
+    QString path;
+
+    QProcess* process;
+    bool enabledBackExec;
+    bool enabledAutoInput;
 };
 
 class kciExecutor : public QObject
@@ -77,34 +103,18 @@ public:
     explicit kciExecutor(QObject *parent = 0);
     ~kciExecutor();
 
-    void setTestCase(const QByteArray& input,const QByteArray& output);
-    void setBackgroundExec(bool enabled);
-    bool getBackgroundExec() const;
-    bool isEnabledAutoInput() const;
-    void setEnabledAutoInput(bool value);
-    QByteArray getUserOutput();
-
     static void setDefaultTerminal(const int &num);
     static QStringList getSupportTerminalList();
+    static kciExecutor* getInstance();
 
 public slots:
     void exec(const QString& programPath);
 
 private:
-    QString path;
     QReadWriteLock lock;
-    QByteArray m_input;
-    QByteArray m_output;
+    QList<kciRunner*> runnerList;
 
-    QReadWriteLock output_lock;
-    QByteArray user_output;
-
-    kciRunner *worker;
-    QProcess* process;
-    bool enabledBackExec;
-    bool enabledAutoInput;
-
-    friend class kciRunner;
+    static kciExecutor* instance;
 };
 
 #endif // KCIEXECUTOR_H

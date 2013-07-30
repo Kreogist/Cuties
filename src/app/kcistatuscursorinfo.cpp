@@ -48,7 +48,7 @@ kciStatusCursorInfo::kciStatusCursorInfo(QWidget *parent) :
 
     setFixedHeight(spbLineNum->height());
 
-    gotoHideAnime=new QPropertyAnimation(spbLineNum,"geometry");
+    gotoHideAnime=new QPropertyAnimation(spbLineNum,"geometry",this);
     connect(gotoHideAnime,SIGNAL(finished()),
             this,SLOT(setHideGotoBox()));
 }

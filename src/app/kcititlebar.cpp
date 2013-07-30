@@ -112,7 +112,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     vCloseLayout->addStretch();
     hLayout->addLayout(vCloseLayout);
 
-    tlbHideAnime=new QPropertyAnimation(mainToolBar,"geometry");
+    tlbHideAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
     connect(tlbHideAnime,SIGNAL(finished()),
             this,SLOT(hideRealToolBar()));
 }
@@ -121,7 +121,7 @@ void kciTitleBar::showToolBar()
 {
     if(!mainToolBar->isVisible())
     {
-        QPropertyAnimation *tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry");
+        QPropertyAnimation *tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
         QRect animeEndPos=mainToolBar->geometry();
         animeEndPos.setLeft(mainButton->width());
         animeEndPos.setTop(0);
