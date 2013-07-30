@@ -167,7 +167,12 @@ void kciControlCenterLeftBar::lstClick(int Index)
 kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     QWidget(parent)
 {
+    setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
 
     QFont TitleFont=this->font();
     TitleFont.setPixelSize(20);
@@ -203,7 +208,12 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     QWidget(parent)
 {
+    setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
 
     QFont TitleFont=this->font();
     TitleFont.setPixelSize(20);
@@ -237,6 +247,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     QWidget(parent)
 {
+    setAutoFillBackground(true);
 
     //Set FakeLayout.
     FakeLayout=new QVBoxLayout(this);
@@ -259,6 +270,8 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
 kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     QWidget(parent)
 {
+    setAutoFillBackground(true);
+
     //Set FakeLayout.
     FakeLayout=new QVBoxLayout(this);
     FakeLayout->setContentsMargins(0,0,0,0);
