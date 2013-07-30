@@ -27,7 +27,6 @@
 #include <QPoint>
 #include <QMouseEvent>
 #include <QToolButton>
-#include <QStyle>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>

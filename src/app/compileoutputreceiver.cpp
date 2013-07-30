@@ -34,6 +34,29 @@ void compileOutputReceiver::addText(QString NewText)
     text_cursor.insertText(NewText);
 }
 
+void compileOutputReceiver::addForwardText()
+{
+    //Prepare Compiler
+    addText(QTime::currentTime().toString("hh:mm:ss") +
+                      " " +
+                      tr("Preparing Compiler.")+
+                      "\n");
+    //Get Compiler Info.
+    addText(QTime::currentTime().toString("hh:mm:ss") +
+                      " " +
+                      tr("Current Compiler Details:\n") +
+                      compilerVersion
+                       +
+                      "\n");
+
+    //Output Compile Info:
+    addText(QTime::currentTime().toString("hh:mm:ss") +
+                      " " +
+                      tr("Compile Command:") +
+                      "\n");
+    //compile command will be output when compiler emit signal compileinfo
+}
+
 void compileOutputReceiver::addRootItem(const ErrInfo &error)
 {
     QStandardItem *itemAdd=new QStandardItem(error.strErrDescription);
@@ -122,6 +145,8 @@ void compileOutputReceiver::connectCompiler(compilerBase *compiler)
         }
     }
 
+    compilerVersion=compiler->compilerName()+" "+compiler->version();
+
     //Output Compile Message:
     connectHandle[compileinfo]=connect(compiler,&compilerBase::compileinfo,
                                        this,&compileOutputReceiver::addText);
@@ -133,4 +158,9 @@ void compileOutputReceiver::connectCompiler(compilerBase *compiler)
                                        this,SLOT(compileFinish(int)));
 
     connectedCompiler=compiler;
+}
+
+QString compileOutputReceiver::getCompilerVersion() const
+{
+    return compilerVersion;
 }

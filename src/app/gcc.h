@@ -26,7 +26,6 @@
 
 #include <QFileInfo>
 #include <QRegularExpression>
-#include <QProcess>
 #include <QDebug>
 
 #include "compilerbase.h"

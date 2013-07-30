@@ -14,6 +14,9 @@ public:
     void setTextValue(const QString& NewTextValue);
     QString getTextValue();
 
+protected:
+    void mousePressEvent(QMouseEvent *e);
+
 private:
     QLineEdit *ValueEditor;
     QHBoxLayout *MainLayout;

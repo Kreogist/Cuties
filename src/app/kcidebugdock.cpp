@@ -30,10 +30,10 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
     setContentsMargins(0,0,0,0);
 
     //Origin Style:
-    DockStyle=new QCommonStyle();
+    DockStyle=new QCommonStyle;
 
     //Main Layout.
-    MainWidgetLayout=new QVBoxLayout(this);
+    MainWidgetLayout=new QVBoxLayout;
     MainWidgetLayout->setContentsMargins(0,0,0,0);
     MainWidgetLayout->setSpacing(0);
     setLayout(MainWidgetLayout);
@@ -42,7 +42,7 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
     createToolBar();
 
     //Set Sub Layout.
-    MainShownLayout=new QHBoxLayout();
+    MainShownLayout=new QHBoxLayout;
     MainShownLayout->setContentsMargins(0,0,0,0);
     MainShownLayout->setSpacing(5);
     MainWidgetLayout->addLayout(MainShownLayout);
@@ -50,7 +50,7 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
     //Add Widgets to Sub Layout.
     createControlButtons();
     createStackView();
-    CombinePanelStack=new QVBoxLayout();
+    CombinePanelStack=new QVBoxLayout;
     CombinePanelStack->setContentsMargins(0,0,0,0);
     CombinePanelStack->setSpacing(5);
     CombinePanelStack->addLayout(ControlPanelM);
@@ -64,10 +64,25 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
     createWatchLayout();
 }
 
+kciDebugWidget::~kciDebugWidget()
+{
+    DockStyle->deleteLater();
+    MainWidgetLayout->deleteLater();
+    MainShownLayout->deleteLater();
+    CombinePanelStack->deleteLater();
+    ControlPanel1->deleteLater();
+    ControlPanel2->deleteLater();
+    ControlPanelM->deleteLater();
+    stackMain->deleteLater();
+    WatchLayout->deleteLater();
+    InputToGDB->deleteLater();
+    GDBMainLayout->deleteLater();
+}
+
 void kciDebugWidget::createStackView()
 {
     //Set Main Layout.
-    stackMain=new QVBoxLayout();
+    stackMain=new QVBoxLayout;
     stackMain->setContentsMargins(0,0,0,0);
     stackMain->setSpacing(5);
 
@@ -88,7 +103,7 @@ void kciDebugWidget::createStackView()
 void kciDebugWidget::createWatchLayout()
 {
     //Create Watch TreeView.
-    WatchLayout=new QVBoxLayout();
+    WatchLayout=new QVBoxLayout;
     WatchLayout->setContentsMargins(0,0,0,0);
     WatchLayout->setSpacing(5);
     //Add Label Widget.
@@ -101,7 +116,7 @@ void kciDebugWidget::createWatchLayout()
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
     localWatchView->setPalette(pal);
     localWatchView->setHeaderHidden(true);
-    localWatchResult=new QStandardItemModel();
+    localWatchResult=new QStandardItemModel(this);
     localWatchView->setModel(localWatchResult);
     WatchLayout->addWidget(localWatchView);
 
@@ -113,7 +128,7 @@ void kciDebugWidget::createWatchLayout()
     watchView=new QTreeView(this);
     watchView->setPalette(pal);
     watchView->setHeaderHidden(true);
-    watchResult=new QStandardItemModel();
+    watchResult=new QStandardItemModel(this);
     watchView->setModel(watchResult);
     WatchLayout->addWidget(watchView);
 
@@ -123,11 +138,11 @@ void kciDebugWidget::createWatchLayout()
 
 void kciDebugWidget::createGDBConversation()
 {
-    GDBMainLayout=new QVBoxLayout();
+    GDBMainLayout=new QVBoxLayout;
     GDBMainLayout->setContentsMargins(0,0,0,0);
     GDBMainLayout->setSpacing(5);
     //Create Input Box.
-    InputToGDB=new QHBoxLayout();
+    InputToGDB=new QHBoxLayout;
     InputToGDB->setContentsMargins(0,0,0,0);
     InputToGDB->setSpacing(2);
     QLabel *InputTag=new QLabel(this);
@@ -189,12 +204,12 @@ void kciDebugWidget::createToolBar()
 void kciDebugWidget::createControlButtons()
 {
     //Control Panel Main Layout.
-    ControlPanelM=new QHBoxLayout();
+    ControlPanelM=new QHBoxLayout;
     ControlPanelM->setContentsMargins(0,0,0,0);
     ControlPanelM->setSpacing(0);
 
     //Control Panel Layouts 1.
-    ControlPanel1=new QVBoxLayout();
+    ControlPanel1=new QVBoxLayout;
     ControlPanel1->setContentsMargins(0,0,0,0);
     ControlPanel1->setSpacing(0);
     ControlPanelM->addLayout(ControlPanel1);
@@ -222,7 +237,7 @@ void kciDebugWidget::createControlButtons()
     ControlPanel1->addStretch();
 
     //Control Panel Layouts 2.
-    ControlPanel2=new QVBoxLayout();
+    ControlPanel2=new QVBoxLayout;
     ControlPanel2->setContentsMargins(0,0,0,0);
     ControlPanel2->setSpacing(0);
     ControlPanelM->addLayout(ControlPanel2);

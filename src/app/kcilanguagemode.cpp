@@ -4,7 +4,6 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
     QObject(parent)
 {
     m_compiler=NULL;
-    m_executor=new kciExecutor(this);
     m_highlighter=NULL;
     m_parent=qobject_cast<kciCodeEditor*>(parent);
     m_type=plainText;
@@ -32,29 +31,11 @@ void kciLanguageMode::compile()
         receiver->connectCompiler(m_compiler);
     }
 
-    //Prepare Compiler
-    receiver->addText(QTime::currentTime().toString("hh:mm:ss") +
-                      " " +
-                      tr("Preparing Compiler.")+
-                      "\n");
-    //Get Compiler Info.
-    receiver->addText(QTime::currentTime().toString("hh:mm:ss") +
-                      " " +
-                      tr("Current Compiler Details:\n") +
-                      m_compiler->compilerName() + " " +
-                      m_compiler->version() +
-                      "\n");
-
-    //Output Compile Info:
-    receiver->addText(QTime::currentTime().toString("hh:mm:ss") +
-                      " " +
-                      tr("Compile Command:") +
-                      "\n");
-    //compile command will be output when compiler emit signal compileinfo
-
     stateLock.lockForWrite();
     state=compiling;
     stateLock.unlock();
+
+    receiver->addForwardText();
 
     compilerFinishedConnection=connect(m_compiler,SIGNAL(finished(int)),
             this,SLOT(onCompileFinished()));
@@ -116,11 +97,6 @@ void kciLanguageMode::onCompileFinished()
         emit compileSuccessfully(m_parent->execFileName);
     }
 
-}
-
-kciExecutor* kciLanguageMode::getExecutor()
-{
-    return m_executor;
 }
 
 void kciLanguageMode::resetCompilerAndHighlighter()

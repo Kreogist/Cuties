@@ -103,8 +103,6 @@ HEADERS += \
     kcitextsearchworker.h \
     fpc.h \
     kcilistbutton.h \
-    Controls/Setting-List/ListItem/kcisettinglistitembase.h \
-    Controls/Setting-List/ListItem/kcisettinglistitemboolean.h \
     Controls/SettingItems/kcisettinglistitemboolean.h \
     Controls/SettingItems/kcisettinglistitembase.h \
     Controls/SettingItems/kcisettinglistitemcombo.h \

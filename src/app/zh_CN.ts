@@ -712,7 +712,7 @@
     <message>
         <location filename="kcicontrolcenter.cpp" line="219"/>
         <source>Editor Component</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑器组件</translation>
     </message>
 </context>
 <context>
@@ -720,37 +720,37 @@
     <message>
         <location filename="kcicontrolcenter.cpp" line="183"/>
         <source>Language Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>语言设置</translation>
     </message>
     <message>
         <location filename="kcicontrolcenter.cpp" line="190"/>
         <source>Default Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>默认程序设计语言:</translation>
     </message>
     <message>
         <location filename="kcicontrolcenter.cpp" line="191"/>
         <source>Plain Text</source>
-        <translation type="unfinished"></translation>
+        <translation>纯文本</translation>
     </message>
     <message>
         <location filename="kcicontrolcenter.cpp" line="192"/>
         <source>C/C++</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="kcicontrolcenter.cpp" line="193"/>
         <source>Pascal</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="kcicontrolcenter.cpp" line="198"/>
         <source>Use Animation Effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>开启动画效果。</translation>
     </message>
     <message>
         <location filename="kcicontrolcenter.cpp" line="199"/>
         <source>Don&apos;t use Animation Effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭动画效果。</translation>
     </message>
 </context>
 <context>
@@ -829,7 +829,7 @@
     <message>
         <location filename="kcicontrolcenter.cpp" line="46"/>
         <source>Cuties Control Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuties控制中心</translation>
     </message>
 </context>
 <context>
@@ -903,7 +903,7 @@
     <message>
         <location filename="kcidebugdock.cpp" line="158"/>
         <source>Start debugging.</source>
-        <translation type="unfinished"></translation>
+        <translation>开始调试。</translation>
     </message>
     <message>
         <location filename="kcidebugdock.cpp" line="204"/>
@@ -957,32 +957,32 @@
     <message>
         <location filename="kcijudgedock.cpp" line="81"/>
         <source>Add Test Data.</source>
-        <translation type="unfinished"></translation>
+        <translation>添加测试数据。</translation>
     </message>
     <message>
         <location filename="kcijudgedock.cpp" line="86"/>
         <source>Remove Test Data.</source>
-        <translation type="unfinished"></translation>
+        <translation>移除测试数据。</translation>
     </message>
     <message>
         <location filename="kcijudgedock.cpp" line="91"/>
         <source>Start All Test.</source>
-        <translation type="unfinished"></translation>
+        <translation>开始所有测试。</translation>
     </message>
     <message>
         <location filename="kcijudgedock.cpp" line="95"/>
         <source>Stop the test.</source>
-        <translation type="unfinished"></translation>
+        <translation>停止测试 。</translation>
     </message>
     <message>
         <location filename="kcijudgedock.cpp" line="99"/>
         <source>Save the test data.</source>
-        <translation type="unfinished"></translation>
+        <translation>保存测试数据。</translation>
     </message>
     <message>
         <location filename="kcijudgedock.cpp" line="103"/>
         <source>Import a test data backup file.</source>
-        <translation type="unfinished"></translation>
+        <translation>从文件导入测试数据。</translation>
     </message>
 </context>
 <context>
@@ -1119,7 +1119,7 @@
     <message>
         <location filename="kcitabmanager.cpp" line="143"/>
         <source>out of memmory!</source>
-        <translation type="unfinished"></translation>
+        <translation>内存不足！</translation>
     </message>
     <message>
         <source>Saving file failed!</source>
