@@ -48,6 +48,7 @@
 #include "kcisearchlinetext.h"
 #include "Controls/SettingItems/kcisettinglistitemcombo.h"
 #include "Controls/SettingItems/kcisettinglistitemboolean.h"
+#include "Controls/SettingItems/kcisettinglistitemlinetext.h"
 #include "kcilistbutton.h"
 
 class kciControlCenterBanner : public QWidget
@@ -104,6 +105,17 @@ private:
     kciSettingListItemBoolean *slnEnableAnime;
 };
 
+class kciCCTabEditorContent : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabEditorContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+    kciSettingListItemBoolean *slnEnableLineNum;
+    kciSettingListItemLineText *txeCCompilerPath;
+};
 class kciControlCenterTabGerneral : public QWidget
 {
     Q_OBJECT
@@ -131,6 +143,7 @@ protected:
 private:
     QVBoxLayout *FakeLayout;
     QScrollArea *mainScrollArea;
+    kciCCTabEditorContent *contentWidget;
 };
 
 class kciControlCenterContents : public QWidget

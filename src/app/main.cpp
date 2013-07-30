@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
     //Initialize Application Infomation.
     QApplication::setApplicationName(QString("Kreogist Cuties"));
-    QApplication::setApplicationVersion(QString("0.1.0"));
+    QApplication::setApplicationVersion(QString("0.0.0.1"));
     QApplication::setOrganizationName("Kreogist Team");
     QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
 
@@ -50,8 +50,10 @@ int main(int argc, char *argv[])
 
     //Initialize Application Language.
     QTranslator appTrans;
-    appTrans.load(qApp->applicationDirPath() + "/" + QLocale::system().name());
+    appTrans.load(qApp->applicationDirPath() + "/Locale/" + QLocale::system().name());
     app.installTranslator(&appTrans);
+
+    qDebug()<<QCoreApplication::applicationDirPath();
 
     //Initialize Application Fonts
     QStringList list;
@@ -63,13 +65,13 @@ int main(int argc, char *argv[])
          ++constIterator)
     {
         QFile res(qApp->applicationDirPath() + "/Fonts/" + *constIterator);
-        qDebug()<<qApp->applicationDirPath() + "/Fonts/" + *constIterator;
         if (res.open(QIODevice::ReadOnly) == false) {
             if (fontWarningShown == false) {
                 QMessageBox::warning(0,
                                      QApplication::applicationName(),
                                      QString(QApplication::tr("Error occur when load font file.")) +
                                      "\n" +
+                                     QString(QApplication::tr("Error: ")) +
                                      res.errorString());
                 fontWarningShown = true;
             }
@@ -80,6 +82,7 @@ int main(int argc, char *argv[])
                                      QApplication::applicationName(),
                                      QString(QApplication::tr("Error occur when load font file.")) +
                                      "\n" +
+                                     QString(QApplication::tr("Error: ")) +
                                      res.errorString());
                 fontWarningShown = true;
             }
