@@ -199,6 +199,13 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     sboDefaultLanguage->setCurrentItemIndex(2);
     MainLayout->addWidget(sboDefaultLanguage);
 
+    sboDefaultEncode=new kciSettingListItemCombo(this);
+    sboDefaultEncode->Caption->setText(tr("Default Encoder:"));
+    sboDefaultEncode->addListItem(tr("Unicode"));
+    sboDefaultEncode->addListItem(tr("ANSI"));
+    sboDefaultEncode->addListItem(tr("UTF-8"));
+    MainLayout->addWidget(sboDefaultEncode);
+
     slnEnableAnime=new kciSettingListItemBoolean(this);
     slnEnableAnime->setEnabledText(tr("Enabled Animation Effect."));
     slnEnableAnime->setDisabledText(tr("Disabled Animation Effect."));
@@ -241,6 +248,9 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     //Text Edit Test.
     txeCCompilerPath=new kciSettingListItemLineText(this);
     txeCCompilerPath->Caption->setText(tr("g++/gcc Path:"));
+    txeCCompilerPath->setTextValue("C:/MinGW/bin/g++.exe");
+
+
     MainLayout->addWidget(txeCCompilerPath);
 }
 
@@ -248,6 +258,11 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     QWidget(parent)
 {
     setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
 
     //Set FakeLayout.
     FakeLayout=new QVBoxLayout(this);
@@ -271,6 +286,11 @@ kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     QWidget(parent)
 {
     setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
 
     //Set FakeLayout.
     FakeLayout=new QVBoxLayout(this);
@@ -356,6 +376,7 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
 kciControlCenter::kciControlCenter(QWidget *parent) :
     QWidget(parent)
 {
+    setFont(QFont("Hiragino Sans GB W3"));
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);
     WholeTitleBarSplit->setContentsMargins(0,0,0,0);

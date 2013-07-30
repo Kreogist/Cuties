@@ -426,6 +426,7 @@ void MainWindow::createMenu()
     int i;
 
     QMenu *_mainMenu=new QMenu(this);
+    _mainMenu->setFont(QFont("Gotham Nights"));
     QIcon *MenuIconAddor=new QIcon;
 
     //file menu

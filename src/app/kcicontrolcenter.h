@@ -102,6 +102,7 @@ public:
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
+    kciSettingListItemCombo *sboDefaultEncode;
     kciSettingListItemBoolean *slnEnableAnime;
 };
 
