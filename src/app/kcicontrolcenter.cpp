@@ -376,7 +376,7 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
 kciControlCenter::kciControlCenter(QWidget *parent) :
     QWidget(parent)
 {
-    setFont(QFont("Hiragino Sans GB W3"));
+    setFont(QFont("Kreogist-UI"));
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);
     WholeTitleBarSplit->setContentsMargins(0,0,0,0);
