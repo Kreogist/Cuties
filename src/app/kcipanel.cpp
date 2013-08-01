@@ -34,26 +34,23 @@ kciPanel::kciPanel(QWidget *parent) :
 
 void kciPanel::setKciTextEditor(kciTextEditor *editor)
 {
-    if(editor!=NULL)
+    if(editor==NULL)
+        return ;
+
+    if(e!=NULL)
     {
-        if(e!=NULL)
-        {
-            if((bool)etConnection)
-                disconnect(etConnection);
-            if((bool)edConnection)
-                disconnect(edConnection);
-        }
-
-        e=editor;
-
-        etConnection=connect(e,SIGNAL(updated()),this,SLOT(update()));
-
-        if(e->document())
-            edConnection=connect(e->document()->documentLayout(),
-                                 SIGNAL(update()),
-                                 this,
-                                 SLOT(update()));
+        connectionHandles.disConnectAll();
     }
+
+    e=editor;
+
+    connectionHandles+=connect(e,SIGNAL(updated()),this,SLOT(update()));
+
+    if(e->document())
+        connectionHandles+=connect(e->document()->documentLayout(),
+                                   SIGNAL(update()),
+                                   this,
+                                   SLOT(update()));
 }
 
 void kciPanel::paintEvent(QPaintEvent *event)

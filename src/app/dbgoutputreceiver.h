@@ -8,6 +8,7 @@
 #include <QTextCursor>
 
 #include "gdb.h"
+#include "connectionhandler.h"
 
 class dbgOutputReceiver : public QObject
 {
@@ -28,15 +29,6 @@ public slots:
     void addText(QString text);
 
 private:
-    enum connectionType
-    {
-        errorOccured,
-        consoleOutputStream,
-        targetOutputStream,
-        logOutputStream,
-        connectionCount
-    };
-
     gdb* gdbInstance;
 
     QStandardItemModel *stackInfoModel;
@@ -44,7 +36,7 @@ private:
     QStandardItemModel *watchModel;
     QTextDocument *textStreamOutput;
 
-    QMetaObject::Connection connectionHandle[connectionCount];
+    connectionHandler connectionHandles;
 };
 
 #endif // DBGOUTPUTRECEIVER_H

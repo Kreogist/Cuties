@@ -18,20 +18,16 @@ void dbgOutputReceiver::connectGDB(gdb *gdbInstance)
 {
     if(this->gdbInstance!=NULL)
     {
-        for(int i=0;i<connectionCount;i++)
-        {
-            if(connectionHandle[i])
-                disconnect(connectionHandle[i]);
-        }
+        connectionHandles.disConnectAll();
     }
 
-    connectionHandle[errorOccured]=connect(gdbInstance,&gdb::errorOccured,
+    connectionHandles+=connect(gdbInstance,&gdb::errorOccured,
                                            this,&dbgOutputReceiver::addText);
-    connectionHandle[consoleOutputStream]=connect(gdbInstance,&gdb::consoleOutputStream,
+    connectionHandles+=connect(gdbInstance,&gdb::consoleOutputStream,
                                            this,&dbgOutputReceiver::addText);
-    connectionHandle[targetOutputStream]=connect(gdbInstance,&gdb::targetOutputStream,
+    connectionHandles+=connect(gdbInstance,&gdb::targetOutputStream,
                                            this,&dbgOutputReceiver::addText);
-    connectionHandle[logOutputStream]=connect(gdbInstance,&gdb::logOutputStream,
+    connectionHandles+=connect(gdbInstance,&gdb::logOutputStream,
                                            this,&dbgOutputReceiver::addText);
 }
 

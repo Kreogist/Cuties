@@ -137,25 +137,24 @@ void compileOutputReceiver::compileFinish(int ExitNum)
 
 void compileOutputReceiver::connectCompiler(compilerBase *compiler)
 {
+    Q_ASSERT(compiler!=NULL);
+
     if(connectedCompiler!=NULL)
     {
-        for(int i=0;i<typeCount;i++)
-        {
-            disconnect(connectHandle[i]);
-        }
+        connectionHandles.disConnectAll();
     }
 
     compilerVersion=compiler->compilerName()+" "+compiler->version();
 
     //Output Compile Message:
-    connectHandle[compileinfo]=connect(compiler,&compilerBase::compileinfo,
-                                       this,&compileOutputReceiver::addText);
-    connectHandle[output]=connect(compiler,&compilerBase::output,
-                                       this,&compileOutputReceiver::addText);
-    connectHandle[compileError]=connect(compiler,&compilerBase::compileError,
-                                       this,&compileOutputReceiver::onCompileMsgReceived);
-    connectHandle[finished]=connect(compiler,SIGNAL(finished(int)),
-                                       this,SLOT(compileFinish(int)));
+    connectionHandles+=connect(compiler,&compilerBase::compileinfo,
+                               this,&compileOutputReceiver::addText);
+    connectionHandles+=connect(compiler,&compilerBase::output,
+                               this,&compileOutputReceiver::addText);
+    connectionHandles+=connect(compiler,&compilerBase::compileError,
+                               this,&compileOutputReceiver::onCompileMsgReceived);
+    connectionHandles+=connect(compiler,SIGNAL(finished(int)),
+                               this,SLOT(compileFinish(int)));
 
     connectedCompiler=compiler;
 }
