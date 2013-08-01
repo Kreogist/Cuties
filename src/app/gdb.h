@@ -65,9 +65,11 @@ public:
     void quitGDB();
 
     //breakpoint
-    void setBreakPoint(const int &number, const int &count);
+    void setBreakPoint(const QString& fileName,
+                       const int &lineNum,
+                       const int &count);
     void setBreakPoint(const QString& functionName);
-    void setBreakCondition(const int &lineNum, const QString& expr);
+    void setBreakCondition(const int &number, const QString& expr);
 
     //watchpoint
     void setWatchPoint(const QString& var);
@@ -89,12 +91,29 @@ public:
 
 signals:
     void errorOccured(QString errMsg);
+
+    /* The console output stream contains text
+     * that should be displayed in the CLI console window.
+     * It contains the textual responses to CLI commands.
+     */
+    void consoleOutputStream(QString consoleOutput);
+
+    /* The target output stream contains any textual output
+     * from the running target.
+     */
+    void targetOutputStream(QString targetOutput);
+
+    /* The log stream contains debugging messages being produced by
+     * GDB's internals.
+     */
+    void logOutputStream(QString logOutput);
     
 public slots:
     void onReadReady();
 
 private:
     void parseBkpt(const GdbMiValue& gmvBkpt);
+    QString parseOutputStream(const QChar* begin,const QChar* end);
     void parseLine(const QString& _msg);
 
     static QString gdbPath;

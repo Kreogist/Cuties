@@ -52,10 +52,10 @@ void gdb::onReadReady()
     char buf[1000];
     while(readLine(buf,1000)>0)
     {
-        QString _msg(buf);
+        QString _msg=QString::fromUtf8(buf);
         _msg.remove('\n');
 
-        qDebug()<<_msg;
+        qDebug()<<"buf: "<<buf<<"_msg: "<<_msg;
         parseLine(_msg);
     }
 }
@@ -96,6 +96,10 @@ void gdb::parseLine(const QString &_msg)
                 parseBkpt(result);
             }
         }
+        else if(_str_async == "running")
+        {
+
+        }
         else if(_str_async == "error")
         {
             begin++;
@@ -105,6 +109,13 @@ void gdb::parseLine(const QString &_msg)
 
             emit errorOccured(result.getValue());
         }
+        else
+        {
+            qWarning()<<"Unknow gdbmi result records!";
+            qWarning()<<qPrintable(_msg);
+        }
+
+        break;
     }
     case '*':
     {
@@ -135,10 +146,41 @@ void gdb::parseLine(const QString &_msg)
         {
             qDebug()<<*begin;
         }
+
+        break;
+    }
+    case '~':
+    {
+        begin++;
+        emit consoleOutputStream(parseOutputStream(begin,end));
+
+        break;
+    }
+    case '@':
+    {
+        begin++;
+        emit targetOutputStream(parseOutputStream(begin,end));
+
+        break;
+    }
+    case '&':
+    {
+        begin++;
+        emit logOutputStream(parseOutputStream(begin,end));
+
+        break;
     }
     default:
         qDebug()<<_msg;
     }
+}
+
+QString gdb::parseOutputStream(const QChar *begin, const QChar *end)
+{
+    GdbMiValue result;
+    result.build(begin,end);
+
+    return result.getValue();
 }
 
 void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
@@ -219,10 +261,13 @@ void gdb::quitGDB()
  *!
  *!The breakpoint number is not in effect until it has been hit count times.
  *! */
-void gdb::setBreakPoint(const int &number, const int &count)
+void gdb::setBreakPoint(const QString &fileName,
+                        const int &lineNum,
+                        const int &count)
 {
-    write(qPrintable(QString("-break-after ")+
-                     QString::number(number)+" "+
+    write(qPrintable(QString("-break-insert ")+
+                     fileName+":"+
+                     QString::number(lineNum)+" "+
                      QString::number(count)+"\n"));
 }
 
@@ -240,10 +285,10 @@ void gdb::setBreakPoint(const QString &functionName)
 /*!
  * \brief Breakpoint number will stop the program only if the condition in expr is true.
  */
-void gdb::setBreakCondition(const int &lineNum, const QString &expr)
+void gdb::setBreakCondition(const int &number, const QString &expr)
 {
     write(qPrintable(QString("-break-condition ")+
-                     QString::number(lineNum)+" "
+                     QString::number(number)+" "
                      +expr+"\n"));
 }
 
