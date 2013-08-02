@@ -69,7 +69,8 @@ SOURCES += \
     compileoutputreceiver.cpp \
     Controls/SettingItems/kcisettinglistitemlinetext.cpp \
     dbgoutputreceiver.cpp \
-    connectionhandler.cpp
+    connectionhandler.cpp \
+    Controls/SettingItems/kcisettinglistitemfoldertext.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -111,7 +112,8 @@ HEADERS += \
     compileoutputreceiver.h \
     Controls/SettingItems/kcisettinglistitemlinetext.h \
     dbgoutputreceiver.h \
-    connectionhandler.h
+    connectionhandler.h \
+    Controls/SettingItems/kcisettinglistitemfoldertext.h
 
 # Enable C++11
 CONFIG += c++11
@@ -126,5 +128,3 @@ OTHER_FILES += \
     lang.map \
     default.style \
     COPYING.txt
-
-FORMS +=

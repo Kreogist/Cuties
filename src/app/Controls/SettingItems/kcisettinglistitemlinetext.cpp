@@ -15,6 +15,7 @@ kciSettingListItemLineText::kciSettingListItemLineText(QWidget *parent) :
     //Set Caption.
     MainLayout->addSpacing(5);
     MainLayout->addWidget(Caption);
+    MainLayout->addSpacing(3);
 
     //Set Value Displayer.
     ValueDisplayer=new QLabel(this);
@@ -24,7 +25,9 @@ kciSettingListItemLineText::kciSettingListItemLineText(QWidget *parent) :
     ValueEditor=new QLineEdit(this);
     ValueEditor->setEnabled(false);
     ValueEditor->hide();
-    MainLayout->addWidget(ValueEditor);
+    MainLayout->addWidget(ValueEditor,1);
+    MainLayout->addSpacing(5);
+    MainLayout->addStretch();
 }
 
 void kciSettingListItemLineText::setTextValue(const QString &NewTextValue)
@@ -39,4 +42,10 @@ QString kciSettingListItemLineText::getTextValue()
     return ItemValue;
 }
 
-
+void kciSettingListItemLineText::mousePressEvent(QMouseEvent *e)
+{
+    ValueDisplayer->hide();
+    ValueEditor->setEnabled(true);
+    ValueEditor->show();
+    e->accept();
+}
