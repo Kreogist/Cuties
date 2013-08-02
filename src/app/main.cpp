@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     //Initialize Application Icon.
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.ico"));
-    #ifdef Q_OS_UNIX
+    #ifdef Q_OS_MACX
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.icns"));
     #endif
 
@@ -55,8 +55,6 @@ int main(int argc, char *argv[])
     QTranslator appTrans;
     appTrans.load(qApp->applicationDirPath() + "/Locale/" + QLocale::system().name());
     app.installTranslator(&appTrans);
-
-    qDebug()<<QCoreApplication::applicationDirPath();
 
     //Initialize Application Fonts
     QStringList list;
