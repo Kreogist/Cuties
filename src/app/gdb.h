@@ -109,7 +109,8 @@ signals:
     void logOutputStream(QString logOutput);
     
 public slots:
-    void onReadReady();
+    void readGdbStandardError();
+    void readGdbStandardOutput();
 
 private:
     void parseBkpt(const GdbMiValue& gmvBkpt);

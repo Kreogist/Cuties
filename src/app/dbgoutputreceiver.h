@@ -26,15 +26,23 @@ public:
 signals:
     
 public slots:
-    void addText(QString text);
+    void receiveconsoleOutput(QString text);
+    void receivetargetOutput(QString text);
+    void receivelogOutput(QString text);
+    void receiveError(QString text);
+    void addText(const QString& text);
 
 private:
+    void insertText(const QString& text,const QTextCharFormat &charFormat);
+
     gdb* gdbInstance;
 
     QStandardItemModel *stackInfoModel;
     QStandardItemModel *localVarModel;
     QStandardItemModel *watchModel;
     QTextDocument *textStreamOutput;
+
+    QTextCharFormat normalFormat,errorFormat,targetFormat,logFormat;
 
     connectionHandler connectionHandles;
 };

@@ -42,12 +42,15 @@ gdb::gdb(QObject *parent) :
     QProcess(parent)
 {
     checkGDB();
-    connect(this,SIGNAL(readyRead()),SLOT(onReadReady()));
-
-    setReadChannelMode(QProcess::MergedChannels);
+    connect(this,
+            SIGNAL(readyReadStandardOutput()),
+            SLOT(readGdbStandardOutput()));
+    connect(this,
+            SIGNAL(readyReadStandardError()),
+            SLOT(readGdbStandardError()));
 }
 
-void gdb::onReadReady()
+void gdb::readGdbStandardOutput()
 {
     char buf[1000];
     while(readLine(buf,1000)>0)
@@ -55,14 +58,15 @@ void gdb::onReadReady()
         QString _msg=QString::fromUtf8(buf);
         _msg.remove('\n');
 
-        qDebug()<<"buf: "<<buf<<"_msg: "<<_msg;
+        qDebug()<<_msg;
+
         parseLine(_msg);
     }
 }
 
 void gdb::parseLine(const QString &_msg)
 {
-    if(_msg.isEmpty() || _msg == "(gdb)")
+    if(_msg.isEmpty() || _msg.contains("(gdb)"))
         return ;
 
     char _firstChar=_msg.begin()->toLatin1();
@@ -170,8 +174,14 @@ void gdb::parseLine(const QString &_msg)
 
         break;
     }
+    case '=':
+    {
+        //ignore this information
+        break;
+    }
     default:
-        qDebug()<<_msg;
+        //program that is being debuged outputs
+        emit targetOutputStream(_msg+"\n");
     }
 }
 
@@ -240,7 +250,7 @@ bool gdb::runGDB(const QString &filePath)
     if(checkResult)
     {
         QStringList _arg;
-        _arg<<filePath<<"-i"<<"mi";
+        _arg<<filePath<<"--interpreter"<<"mi";
 
         start(gdbPath,_arg);
 
@@ -253,8 +263,22 @@ bool gdb::runGDB(const QString &filePath)
 void gdb::quitGDB()
 {
     write(qPrintable(QString("-gdb-exit\n")));
+    //! TODO: too long waitting time if gdb doesn't quit.
+    waitForFinished();
+
+    if(state() == QProcess::Running)
+    {
+        //gdb doesn't quit till now, so we have to kill it.
+        this->kill();
+    }
 }
 
+void gdb::readGdbStandardError()
+{
+    QByteArray err = readAllStandardError();
+
+    emit errorOccured(QString(err));
+}
 
 /*!
  *! * \brief set the break point by line number.
