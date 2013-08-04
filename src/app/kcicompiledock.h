@@ -28,19 +28,13 @@
 #include <QPalette>
 #include <QWidget>
 #include <QSplitter>
-#include <QDebug>
 #include <QList>
 #include <QVector>
-#include <QTime>
-#include <QSignalMapper>
-#include <QRegularExpression>
 #include <QPropertyAnimation>
-#include <QPlainTextEdit>
 #include <QDockWidget>
 #include <QModelIndex>
-#include <QStandardItemModel>
 
-#include "compilerbase.h"
+#include "kciplaintextbrowser.h"
 #include "compileoutputreceiver.h"
 
 class kcicompiledock : public QDockWidget
@@ -59,7 +53,7 @@ private:
     QWidget *objCombine;
     QSplitter *splCombine;
     QTreeView *trevwCompileInfo;
-    QPlainTextEdit *compileOutput;
+    kciPlainTextBrowser *compileOutput;
     QModelIndex lastSelIndex;
     const compileOutputReceiver *receiver;
     QMetaObject::Connection receiverConnectionHandle;

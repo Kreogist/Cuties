@@ -30,6 +30,7 @@ public slots:
     void receivetargetOutput(QString text);
     void receivelogOutput(QString text);
     void receiveError(QString text);
+    void receiveLocals(GdbMiValue localVars);
     void addText(const QString& text);
 
 private:

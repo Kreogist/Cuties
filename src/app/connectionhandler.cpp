@@ -30,4 +30,6 @@ void connectionHandler::disConnectAll()
             disconnect(*i);
         }
     }
+
+    connections.erase(connections.begin(),connections.end());
 }

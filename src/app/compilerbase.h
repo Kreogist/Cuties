@@ -26,7 +26,6 @@
 
 #include <QProcess>
 #include <QFileInfo>
-#include <QDebug>
 
 struct ErrInfo
 {

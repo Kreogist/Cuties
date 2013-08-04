@@ -91,6 +91,9 @@ void gdb::parseLine(const QString &_msg)
         if(_str_async == "done")
         {
             begin++;
+            if(begin>=end)
+                return ;
+
             GdbMiValue result;
 
             result.build(begin,end);
@@ -98,6 +101,10 @@ void gdb::parseLine(const QString &_msg)
             if(result.getName() == "bkpt")
             {
                 parseBkpt(result);
+            }
+            else if(result.getName() == "locals")
+            {
+                emit locals(result);
             }
         }
         else if(_str_async == "running")
@@ -107,6 +114,9 @@ void gdb::parseLine(const QString &_msg)
         else if(_str_async == "error")
         {
             begin++;
+            if(begin>=end)
+                return ;
+
             GdbMiValue result;
 
             result.build(begin,end);
@@ -148,6 +158,7 @@ void gdb::parseLine(const QString &_msg)
 
         if(_str_async == "stopped")
         {
+            stackListLocals();
             qDebug()<<*begin;
         }
 
