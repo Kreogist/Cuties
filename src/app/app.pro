@@ -67,7 +67,8 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitembase.cpp \
     Controls/SettingItems/kcisettinglistitemcombo.cpp \
     compileoutputreceiver.cpp \
-    Controls/SettingItems/kcisettinglistitemlinetext.cpp
+    Controls/SettingItems/kcisettinglistitemlinetext.cpp \
+    Controls/UserControls/kciscrollarea.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -107,7 +108,8 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitembase.h \
     Controls/SettingItems/kcisettinglistitemcombo.h \
     compileoutputreceiver.h \
-    Controls/SettingItems/kcisettinglistitemlinetext.h
+    Controls/SettingItems/kcisettinglistitemlinetext.h \
+    Controls/UserControls/kciscrollarea.h
 
 # Enable C++11
 CONFIG += c++11
