@@ -31,6 +31,7 @@ public slots:
     void receivelogOutput(QString text);
     void receiveError(QString text);
     void receiveLocals(GdbMiValue localVars);
+    void receiveExprValue(QString value);
     void addText(const QString& text);
 
 private:
