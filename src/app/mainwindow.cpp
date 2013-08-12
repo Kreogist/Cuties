@@ -747,7 +747,6 @@ void MainWindow::compileCurrentFile()
         //So we getReceiver() again to avoid this.
         receiver=currentEditor->langMode()->getCompilerReceiver();
 
-        Q_ASSERT(receiver!=NULL);
         compileDock->setReceiver(receiver);
     }
 }
