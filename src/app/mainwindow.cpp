@@ -52,12 +52,11 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::createActions()
 {
     //File -> New
-    act[mnuFileNewFile]=new QAction(tr("new file"),this);
+    act[mnuFileNewFile]=new QAction(tr("New Source File"),this);
     act[mnuFileNewFile]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
     actMenuIconPath[mnuFileNewFile]=QString(":/menuicon/image/MenuIcons/mnuFileNew.png");
     actStatusTips[mnuFileNewFile]=QString(tr("Create a new document."));
-    connect(act[mnuFileNewFile],SIGNAL(triggered()),
-            tabManager,SLOT(new_file()));
+    connect(act[mnuFileNewFile],SIGNAL(triggered()),tabManager,SLOT(new_file()));
 
     //File -> Open
     act[mnuFileOpen]=new QAction(tr("open"),this);
@@ -211,44 +210,44 @@ void MainWindow::createActions()
             this,SLOT(statusShowGoto()));
 
     //Run -> Comile And Run
-    act[mnuRunCompileAndRun]=new QAction(tr("Compile & Run"),this);
-    act[mnuRunCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
-    actStatusTips[mnuRunCompileAndRun]=QString(tr("Compile the active file and run."));
-    connect(act[mnuRunCompileAndRun],SIGNAL(triggered()),this,SLOT(compileAndRun()));
+    act[mnuExecuteCompileAndRun]=new QAction(tr("Compile & Run"),this);
+    act[mnuExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
+    actStatusTips[mnuExecuteCompileAndRun]=QString(tr("Compile the active file and run."));
+    connect(act[mnuExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(compileAndRun()));
 
     //Run -> Compile
-    act[mnuRunCompile]=new QAction(tr("compile"),this);
-    act[mnuRunCompile]->setShortcut(QKeySequence(Qt::Key_F9));
-    actStatusTips[mnuRunCompile]=QString(tr("Compile the active file."));
-    connect(act[mnuRunCompile],SIGNAL(triggered()),
+    act[mnuExecuteCompile]=new QAction(tr("compile"),this);
+    act[mnuExecuteCompile]->setShortcut(QKeySequence(Qt::Key_F9));
+    actStatusTips[mnuExecuteCompile]=QString(tr("Compile the active file."));
+    connect(act[mnuExecuteCompile],SIGNAL(triggered()),
             this,SLOT(compileCurrentFile()));
 
     //Run -> Run
-    act[mnuRunRun]=new QAction(tr("Runexe"),this);
-    act[mnuRunRun]->setShortcut(QKeySequence(Qt::Key_F10));
-    actStatusTips[mnuRunRun]=QString(tr("Run the compiled execution."));
-    connect(act[mnuRunRun],SIGNAL(triggered()),this,SLOT(run()));
+    act[mnuExecuteRun]=new QAction(tr("Runexe"),this);
+    act[mnuExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
+    actStatusTips[mnuExecuteRun]=QString(tr("Run the compiled execution."));
+    connect(act[mnuExecuteRun],SIGNAL(triggered()),this,SLOT(run()));
 
     //Run -> Parameters
-    act[mnuRunParameters]=new QAction(tr("Parameters"),this);
-    actStatusTips[mnuRunParameters]=QString(tr("Run the compiled execution with parameters."));
+    act[mnuExecuteParameters]=new QAction(tr("Parameters"),this);
+    actStatusTips[mnuExecuteParameters]=QString(tr("Run the compiled execution with parameters."));
 
     //Run -> Set Input File
-    act[mnuRunSetInputFile]=new QAction(tr("Set Input File"),this);
-    actStatusTips[mnuRunSetInputFile]=QString(tr("Set the input file contents."));
+    act[mnuExecuteSetInputFile]=new QAction(tr("Set Input File"),this);
+    actStatusTips[mnuExecuteSetInputFile]=QString(tr("Set the input file contents."));
 
     //Run -> Show Output File
-    act[mnuRunShowOutputFile]=new QAction(tr("Show Output file"),this);
-    actStatusTips[mnuRunShowOutputFile]=QString(tr("Show the output file contents."));
+    act[mnuExecuteShowOutputFile]=new QAction(tr("Show Output file"),this);
+    actStatusTips[mnuExecuteShowOutputFile]=QString(tr("Show the output file contents."));
 
     //Run -> Run And Show Output File
-    act[mnuRunRunAndShowOutputFile]=new QAction(tr("Run And Show Output File"),this);
-    actStatusTips[mnuRunRunAndShowOutputFile]=QString(tr("Run the execution and show output file."));
+    act[mnuExecuteRunAndShowOutputFile]=new QAction(tr("Run And Show Output File"),this);
+    actStatusTips[mnuExecuteRunAndShowOutputFile]=QString(tr("Run the execution and show output file."));
 
     //Run -> Set Input, Run and Show Output
-    act[mnuRunSetInputRunShowOutput]=new QAction(
+    act[mnuExecuteSetInputRunShowOutput]=new QAction(
                 tr("Set Input, Run and show Output"), this);
-    actStatusTips[mnuRunSetInputRunShowOutput]=
+    actStatusTips[mnuExecuteSetInputRunShowOutput]=
             QString(tr("Set the input file, compile and run the document, and show output file."));
 
     //Debug -> Debug Start
@@ -433,9 +432,9 @@ void MainWindow::createMenu()
     _mainMenu->setFont(QFont("Gotham Nights"));
     QIcon *MenuIconAddor=new QIcon;
 
-    //file menu
+    //Create File Menu
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
-    menu[mnuFile] = _mainMenu->addMenu(tr("file"));
+    menu[mnuFile] = _mainMenu->addMenu(tr("&File"));
     menu[mnuFile]->setIcon(*MenuIconAddor);
     for(i=mnuFileNewFile;i<=mnuFileExit;i++)
     {
@@ -445,9 +444,9 @@ void MainWindow::createMenu()
         menu[mnuFile]->addAction(act[i]);
     }
 
-    //edit menu
+    //Create Edit Menu
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
-    menu[mnuEdit] = _mainMenu->addMenu(tr("edit"));
+    menu[mnuEdit] = _mainMenu->addMenu(tr("&Edit"));
     menu[mnuEdit]->setIcon(*MenuIconAddor);
     for(i=mnuEditUndo;i<=mnuEditPreference;i++)
     {
@@ -457,9 +456,9 @@ void MainWindow::createMenu()
         menu[mnuEdit]->addAction(act[i]);
     }
 
-    //view menu
+    //Create View Menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
-    menu[mnuView] = _mainMenu->addMenu(tr("view"));
+    menu[mnuView] = _mainMenu->addMenu(tr("&View"));
     menu[mnuView]->setIcon(*MenuIconAddor);
     for(i=mnuViewCompileDock;i<=mnuViewDebugDock/*mnuViewJudgeDock*/;i++)
     {
@@ -469,9 +468,9 @@ void MainWindow::createMenu()
         menu[mnuView]->addAction(act[i]);
     }
 
-    //search menu
+    //Create Search Menu
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
-    menu[mnuSearch] = _mainMenu->addMenu(tr("search"));
+    menu[mnuSearch] = _mainMenu->addMenu(tr("&Search"));
     menu[mnuSearch]->setIcon(*MenuIconAddor);
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {
@@ -481,21 +480,21 @@ void MainWindow::createMenu()
         menu[mnuSearch]->addAction(act[i]);
     }
 
-    //run menu
+    //Create Run Menu
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
-    menu[mnuRun] = _mainMenu->addMenu(tr("run"));
-    menu[mnuRun]->setIcon(*MenuIconAddor);
-    for(i=mnuRunCompileAndRun;i<=mnuRunSetInputRunShowOutput;i++)
+    menu[mnuExecute] = _mainMenu->addMenu(tr("E&xecute"));
+    menu[mnuExecute]->setIcon(*MenuIconAddor);
+    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteSetInputRunShowOutput;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[mnuRun]->addAction(act[i]);
+        menu[mnuExecute]->addAction(act[i]);
     }
 
-    //debug menu
+    //Create Debug Menu
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
-    menu[mnuDebug] = _mainMenu->addMenu(tr("debug"));
+    menu[mnuDebug] = _mainMenu->addMenu(tr("&Debug"));
     menu[mnuDebug]->setIcon(*MenuIconAddor);
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
@@ -505,14 +504,14 @@ void MainWindow::createMenu()
         menu[mnuDebug]->addAction(act[i]);
     }
 
-    //Tool menu
+    //Create Tool Menu
     MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
-    menu[mnuTool] = _mainMenu->addMenu(tr("tool"));
-    menu[mnuTool]->setIcon(*MenuIconAddor);
+    menu[mnuTools] = _mainMenu->addMenu(tr("&Tools"));
+    menu[mnuTools]->setIcon(*MenuIconAddor);
 
-    //window menu
+    //Create Window Menu
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
-    menu[mnuWindow] = _mainMenu->addMenu(tr("window"));
+    menu[mnuWindow] = _mainMenu->addMenu(tr("&Window"));
     menu[mnuWindow]->setIcon(*MenuIconAddor);
     for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
     {
@@ -522,9 +521,9 @@ void MainWindow::createMenu()
         menu[mnuWindow]->addAction(act[i]);
     }
 
-    //help menu
+    //Create Help Menu
     MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
-    menu[mnuHelp] = _mainMenu->addMenu(tr("help"));
+    menu[mnuHelp] = _mainMenu->addMenu(tr("&Help"));
     menu[mnuHelp]->setIcon(*MenuIconAddor);
     //from about to about_qt add into help menu
     for(i=mnuHelpAbout;i<=mnuHelpAboutQt;i++)
