@@ -346,8 +346,11 @@ void MainWindow::aboutQt()
 void MainWindow::createTitlebar()
 {
     titlebar=titleBar();
-    setWindowTitle(windowTitle());
+
+#ifndef Q_OS_MACX
     setMainButtonIcon(":/img/image/MainMenuButton.png");
+    setWindowTitle(windowTitle());
+#endif
 }
 
 void MainWindow::createToolBar()
@@ -425,13 +428,38 @@ void MainWindow::createMenu()
 {
     int i;
 
+#ifdef Q_OS_MACX
+    QMenuBar *_mainMenuBar=new QMenuBar();
+#else
     QMenu *_mainMenu=new QMenu(this);
-    _mainMenu->setFont(QFont("Gotham Nights"));
+    //_mainMenu->setFont(QFont("Gotham Nights"));
+#endif
     QIcon *MenuIconAddor=new QIcon;
+
+#ifdef Q_OS_MACX
+    menu[mnuFile]   = _mainMenuBar->addMenu(tr("file"));
+    menu[mnuEdit]   = _mainMenuBar->addMenu(tr("edit"));
+    menu[mnuView]   = _mainMenuBar->addMenu(tr("view"));
+    menu[mnuSearch] = _mainMenuBar->addMenu(tr("search"));
+    menu[mnuRun]    = _mainMenuBar->addMenu(tr("run"));
+    menu[mnuDebug]  = _mainMenuBar->addMenu(tr("debug"));
+    menu[mnuTool]   = _mainMenuBar->addMenu(tr("tool"));
+    menu[mnuWindow] = _mainMenuBar->addMenu(tr("window"));
+    menu[mnuHelp]   = _mainMenuBar->addMenu(tr("help"));
+#else
+    menu[mnuFile]   = _mainMenu->addMenu(tr("file"));
+    menu[mnuEdit]   = _mainMenu->addMenu(tr("edit"));
+    menu[mnuView]   = _mainMenu->addMenu(tr("view"));
+    menu[mnuSearch] = _mainMenu->addMenu(tr("search"));
+    menu[mnuRun]    = _mainMenu->addMenu(tr("run"));
+    menu[mnuDebug]  = _mainMenu->addMenu(tr("debug"));
+    menu[mnuTool]   = _mainMenu->addMenu(tr("tool"));
+    menu[mnuWindow] = _mainMenu->addMenu(tr("window"));
+    menu[mnuHelp]   = _mainMenu->addMenu(tr("help"));
+#endif
 
     //file menu
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
-    menu[mnuFile] = _mainMenu->addMenu(tr("file"));
     menu[mnuFile]->setIcon(*MenuIconAddor);
     for(i=mnuFileNewFile;i<=mnuFileExit;i++)
     {
@@ -443,7 +471,6 @@ void MainWindow::createMenu()
 
     //edit menu
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
-    menu[mnuEdit] = _mainMenu->addMenu(tr("edit"));
     menu[mnuEdit]->setIcon(*MenuIconAddor);
     for(i=mnuEditUndo;i<=mnuEditPreference;i++)
     {
@@ -455,7 +482,6 @@ void MainWindow::createMenu()
 
     //view menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
-    menu[mnuView] = _mainMenu->addMenu(tr("view"));
     menu[mnuView]->setIcon(*MenuIconAddor);
     for(i=mnuViewCompileDock;i<=mnuViewDebugDock/*mnuViewJudgeDock*/;i++)
     {
@@ -467,7 +493,6 @@ void MainWindow::createMenu()
 
     //search menu
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
-    menu[mnuSearch] = _mainMenu->addMenu(tr("search"));
     menu[mnuSearch]->setIcon(*MenuIconAddor);
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {
@@ -479,7 +504,6 @@ void MainWindow::createMenu()
 
     //run menu
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
-    menu[mnuRun] = _mainMenu->addMenu(tr("run"));
     menu[mnuRun]->setIcon(*MenuIconAddor);
     for(i=mnuRunCompileAndRun;i<=mnuRunSetInputRunShowOutput;i++)
     {
@@ -491,7 +515,6 @@ void MainWindow::createMenu()
 
     //debug menu
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
-    menu[mnuDebug] = _mainMenu->addMenu(tr("debug"));
     menu[mnuDebug]->setIcon(*MenuIconAddor);
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
@@ -503,12 +526,10 @@ void MainWindow::createMenu()
 
     //Tool menu
     MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
-    menu[mnuTool] = _mainMenu->addMenu(tr("tool"));
     menu[mnuTool]->setIcon(*MenuIconAddor);
 
     //window menu
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
-    menu[mnuWindow] = _mainMenu->addMenu(tr("window"));
     menu[mnuWindow]->setIcon(*MenuIconAddor);
     for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
     {
@@ -520,7 +541,6 @@ void MainWindow::createMenu()
 
     //help menu
     MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
-    menu[mnuHelp] = _mainMenu->addMenu(tr("help"));
     menu[mnuHelp]->setIcon(*MenuIconAddor);
     //from about to about_qt add into help menu
     for(i=mnuHelpAbout;i<=mnuHelpAboutQt;i++)
@@ -531,7 +551,10 @@ void MainWindow::createMenu()
         menu[mnuHelp]->addAction(act[i]);
     }
 
+#ifndef Q_OS_MACX
     titlebar->setMenu(_mainMenu);
+#endif
+
     setNoDocOpenMenuEnabled();
     connect(tabManager,SIGNAL(tabAdded()),
             this,SLOT(setDocOpenMenuEnabled()));

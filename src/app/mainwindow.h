@@ -39,6 +39,10 @@
 #include <QGraphicsDropShadowEffect>
 #include <QVariant>
 
+#ifdef Q_OS_MACX
+#include <QMenuBar>
+#endif
+
 #include "kciglobal.h"
 #include "kcicompiledock.h"
 #include "kcijudgedock.h"

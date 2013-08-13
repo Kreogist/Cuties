@@ -95,7 +95,6 @@ public slots:
 
 private slots:
     void onModificationChanged(bool changed);
-    void initAnimeOpacity(int opacity);
 
 protected:
     void closeEvent(QCloseEvent *e);

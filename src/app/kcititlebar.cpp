@@ -23,6 +23,22 @@
 
 #include "kcititlebar.h"
 
+#ifndef Q_OS_MACX
+kciTitleBarAutoFill::kciTitleBarAutoFill(QWidget *parent) :
+    QWidget(parent)
+{
+}
+
+void kciTitleBarAutoFill::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    e->accept();
+    if(e->button() == Qt::LeftButton)
+    {
+        emit dblClickEmit();
+    }
+}
+#endif
+
 kciTitleBar::kciTitleBar(QWidget *parent) :
     QWidget(parent),
     mainWindow(parent)
@@ -33,6 +49,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     windowTitle=parent->windowTitle();
 
+#ifndef Q_OS_MACX
     closeButton = new QToolButton(this);
     closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));
 
@@ -57,13 +74,13 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
                             this->parent(),SLOT(showMinimized()));
     connect(maximizeButton,SIGNAL(clicked()),
             this,SLOT(_exchange_button_state()));
-
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
     mainButton->setFixedSize(32,32);
     mainButton->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_1));
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
+#endif
 
     mainToolBar=new QToolBar(this);
     QPalette pal=mainToolBar->palette();
@@ -71,23 +88,37 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     mainToolBar->setPalette(pal);
     mainToolBar->setContentsMargins(0,0,0,0);
     mainToolBar->setMovable(true);
+#ifdef Q_OS_MACX
+    mainToolBar->setGeometry(0,
+                             0,
+                             mainToolBar->width() - 70,
+                             mainToolBar->height());
+#else
     mainToolBar->setGeometry(mainButton->width(),
                              0,
-                             mainToolBar->width(),
+                             mainToolBar->width() - 70,
                              mainToolBar->height());
-    mainToolBar->hide();
 
     titleLabel=new QLabel(windowTitle,this);
     pal=titleLabel->palette();
     pal.setColor(QPalette::WindowText,QColor(208,208,208));
     titleLabel->setPalette(pal);
 
+    autoFill=new kciTitleBarAutoFill(this);
+    connect(autoFill, SIGNAL(dblClickEmit()),
+            this, SLOT(spacingDblClick()));
+#endif
+    mainToolBar->hide();
+
     hLayout = new QHBoxLayout(this);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
     setLayout(hLayout);
+
+#ifndef Q_OS_MACX
     hLayout->addWidget(mainButton);
-    hLayout->addStretch();
+    hLayout->addWidget(autoFill, 1);
+
     hLayout->addWidget(titleLabel);
     hLayout->addSpacing(3);
 
@@ -111,6 +142,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     vCloseLayout->addWidget(closeButton);
     vCloseLayout->addStretch();
     hLayout->addLayout(vCloseLayout);
+#endif
 
     tlbHideAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
     connect(tlbHideAnime,SIGNAL(finished()),
@@ -123,7 +155,11 @@ void kciTitleBar::showToolBar()
     {
         QPropertyAnimation *tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
         QRect animeEndPos=mainToolBar->geometry();
+#ifdef Q_OS_MACX
+        animeEndPos.setLeft(0);
+#else
         animeEndPos.setLeft(mainButton->width());
+#endif
         animeEndPos.setTop(0);
         QRect animeStartPos=animeEndPos;
         animeStartPos.setTop(-mainToolBar->height());
@@ -131,6 +167,11 @@ void kciTitleBar::showToolBar()
         tlbShowAnime->setEndValue(animeEndPos);
         tlbShowAnime->setEasingCurve(QEasingCurve::OutCubic);
         mainToolBar->show();
+
+        //Insert Spacing to Fit ToolBar.
+        hLayout->insertSpacing(1, mainToolBar->width());
+
+        //Start Animation.
         tlbShowAnime->start();
     }
 }
@@ -197,6 +238,7 @@ void kciTitleBar::setWindowMax()
     isShowingNormalButton=true;
 }
 
+#ifndef Q_OS_MACX
 void kciTitleBar::setMenu(QMenu *menu)
 {
     mainButton->setMenu(menu);
@@ -207,6 +249,12 @@ void kciTitleBar::setMainButtonIcon(const QString &mainIcon)
     mainButtonIcon.addFile(mainIcon);
     mainButton->setIcon(mainButtonIcon);
 }
+
+void kciTitleBar::setTitle(const QString &title)
+{
+    titleLabel->setText(title);
+}
+#endif
 
 void kciTitleBar::mousePressEvent(QMouseEvent *event)
 {
@@ -245,16 +293,9 @@ void kciTitleBar::mouseReleaseEvent(QMouseEvent *event)
         event->ignore();
 }
 
-void kciTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
+#ifndef Q_OS_MACX
+void kciTitleBar::spacingDblClick()
 {
-    if(event->button() == Qt::LeftButton)
-    {
-        event->accept();
-        _exchange_button_state();
-    }
+    _exchange_button_state();
 }
-
-void kciTitleBar::setTitle(const QString &title)
-{
-    titleLabel->setText(title);
-}
+#endif
