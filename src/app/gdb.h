@@ -85,7 +85,11 @@ signals:
      */
     void logOutputStream(QString logOutput);
 
+    /* This signal is emited with informations about local variables
+     */
     void locals(GdbMiValue locals);
+
+    void exprValue(QString value);
     
 public slots:
     void readGdbStandardError();
@@ -113,6 +117,9 @@ public slots:
 
     //Stack Manipulation
     void stackListLocals();
+
+    //Data Evaluate
+    void evaluate(const QString& expr);
 
 private:
     void parseBkpt(const GdbMiValue& gmvBkpt);

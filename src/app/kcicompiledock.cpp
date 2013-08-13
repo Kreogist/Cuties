@@ -67,7 +67,6 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     splCombine->setSizes(l_sizes);
 
     //Set Default Value
-    receiver=NULL;
     setWidget(splCombine);
 
     connect(trevwCompileInfo,SIGNAL(clicked(QModelIndex)),
@@ -93,13 +92,14 @@ void kcicompiledock::jumpToError(QModelIndex ItemID)
     ItemID=getRootItem(ItemID);
 
     int ErrID=ItemID.row();
-    const QVector<ErrInfo> *erifList=receiver->getErifList();
+
     if(erifList->at(ErrID).nColumnNum>-1)
     {
         //Open the file;
         emit requireOpenErrFile(erifList->at(ErrID).strFilePath);
         //Jump to the line;
-        emit requireGotoLine(erifList->at(ErrID).nLineNum - 1, erifList->at(ErrID).nColumnNum);
+        emit requireGotoLine(erifList->at(ErrID).nLineNum - 1,
+                             erifList->at(ErrID).nColumnNum);
         //Set Focus;
         emit requireSetFocus();
     }
@@ -138,15 +138,11 @@ void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
 {
     Q_ASSERT(currReceiver!=NULL);
 
-    if(receiver!=NULL)
-    {
-        disconnect(receiverConnectionHandle);
-    }
+    disconnect(receiverConnectionHandle);
 
-    receiver=currReceiver;
-
-    compileOutput->setDocument(receiver->getCompilerOutputText());
-    trevwCompileInfo->setModel(receiver->getCompilerOutputModel());
-    receiverConnectionHandle=connect(receiver,SIGNAL(requireShowError()),
+    erifList=currReceiver->getErifList();
+    compileOutput->setDocument(currReceiver->getCompilerOutputText());
+    trevwCompileInfo->setModel(currReceiver->getCompilerOutputModel());
+    receiverConnectionHandle=connect(currReceiver,SIGNAL(requireShowError()),
             this,SLOT(animeShowError()));
 }

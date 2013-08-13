@@ -55,7 +55,7 @@ private:
     QTreeView *trevwCompileInfo;
     kciPlainTextBrowser *compileOutput;
     QModelIndex lastSelIndex;
-    const compileOutputReceiver *receiver;
+    const QVector<ErrInfo> *erifList;
     QMetaObject::Connection receiverConnectionHandle;
 
 signals:

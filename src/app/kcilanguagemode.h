@@ -40,7 +40,6 @@ public:
 
     explicit kciLanguageMode(QWidget *parent = 0);
 
-    void run();
     void compile();
     gdb* startDebug();
     void setMode(const modeType& type);
@@ -54,17 +53,19 @@ signals:
     void compileSuccessfully(QString execFileName);
     
 public slots:
-    void onCompileFinished();
+    void onCompileFinished(bool hasError);
 
 private:
     void resetCompilerAndHighlighter();
+    void connectCompilerAndOutputReceiver();
 
     modeType m_type;
     kciCodeEditor *m_parent;
     QSyntaxHighlighter *m_highlighter;
 
-    compilerBase *m_compiler;
+    compilerBase *compiler;
     compileOutputReceiver *compilerReceiver;
+    connectionHandler connectionHandles;
     compileState state;
     QReadWriteLock stateLock;
 

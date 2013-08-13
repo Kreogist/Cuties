@@ -8,8 +8,6 @@ compileOutputReceiver::compileOutputReceiver(QObject *parent) :
 
     plainTextLayout=new QPlainTextDocumentLayout(compilerOutputText);
     compilerOutputText->setDocumentLayout(plainTextLayout);
-
-    connectedCompiler=NULL;
 }
 
 QTextDocument *compileOutputReceiver::getCompilerOutputText() const
@@ -87,19 +85,19 @@ void compileOutputReceiver::reset()
     clearAllItem();
     clearText();
     erifList.clear();
-    hasError=false;
+    hasOutput=false;
 }
 
 void compileOutputReceiver::onCompileMsgReceived(ErrInfo error)
 {
-    if(!hasError)
+    if(!hasOutput)
     {
         emit requireShowError();
         addText(QTime::currentTime().toString("hh:mm:ss") +
                 " " +
                 tr("Compile Output:") +
                 "\n");
-        hasError=true;
+        hasOutput=true;
     }
 
     erifList.append(error);
@@ -112,12 +110,7 @@ const QVector<ErrInfo> *compileOutputReceiver::getErifList() const
     return &erifList;
 }
 
-bool compileOutputReceiver::hasCompileError()
-{
-    return hasError;
-}
-
-void compileOutputReceiver::compileFinish(int ExitNum)
+void compileOutputReceiver::onCompileFinished(bool hasError)
 {
     if(hasError)
     {
@@ -135,31 +128,7 @@ void compileOutputReceiver::compileFinish(int ExitNum)
 
 }
 
-void compileOutputReceiver::connectCompiler(compilerBase *compiler)
+void compileOutputReceiver::setCompilerVersionString(const QString &strVersion)
 {
-    Q_ASSERT(compiler!=NULL);
-
-    if(connectedCompiler!=NULL)
-    {
-        connectionHandles.disConnectAll();
-    }
-
-    compilerVersion=compiler->compilerName()+" "+compiler->version();
-
-    //Output Compile Message:
-    connectionHandles+=connect(compiler,&compilerBase::compileinfo,
-                               this,&compileOutputReceiver::addText);
-    connectionHandles+=connect(compiler,&compilerBase::output,
-                               this,&compileOutputReceiver::addText);
-    connectionHandles+=connect(compiler,&compilerBase::compileError,
-                               this,&compileOutputReceiver::onCompileMsgReceived);
-    connectionHandles+=connect(compiler,SIGNAL(finished(int)),
-                               this,SLOT(compileFinish(int)));
-
-    connectedCompiler=compiler;
-}
-
-QString compileOutputReceiver::getCompilerVersion() const
-{
-    return compilerVersion;
+    compilerVersion=strVersion;
 }

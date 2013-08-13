@@ -3,7 +3,7 @@
 kciLanguageMode::kciLanguageMode(QWidget *parent) :
     QObject(parent)
 {
-    m_compiler=NULL;
+    compiler=NULL;
     m_highlighter=NULL;
     m_parent=qobject_cast<kciCodeEditor*>(parent);
     m_type=plainText;
@@ -11,7 +11,7 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
     dbgReceiver=NULL;
     gdbInstance=NULL;
 
-    Q_ASSERT(parent!=NULL);
+    Q_ASSERT(m_parent!=NULL);
 }
 
 void kciLanguageMode::setMode(const modeType &type)
@@ -21,7 +21,7 @@ void kciLanguageMode::setMode(const modeType &type)
 
 void kciLanguageMode::compile()
 {
-    if(m_compiler==NULL)
+    if(compiler==NULL)
     {
         qDebug()<<"compiler is NULL";
         return ;
@@ -30,7 +30,7 @@ void kciLanguageMode::compile()
     if(compilerReceiver==NULL)
     {
         compilerReceiver=new compileOutputReceiver(this);
-        compilerReceiver->connectCompiler(m_compiler);
+        connectCompilerAndOutputReceiver();
     }
 
     stateLock.lockForWrite();
@@ -39,10 +39,29 @@ void kciLanguageMode::compile()
 
     compilerReceiver->addForwardText();
 
-    compilerFinishedConnection=connect(m_compiler,SIGNAL(finished(int)),
-            this,SLOT(onCompileFinished()));
+    compilerFinishedConnection=connect(compiler,&compilerBase::compileFinished,
+            this,&kciLanguageMode::onCompileFinished);
 
-    m_compiler->startCompile(m_parent->filePath);
+    compiler->startCompile(m_parent->filePath);
+}
+
+void kciLanguageMode::connectCompilerAndOutputReceiver()
+{
+    connectionHandles.disConnectAll();
+
+    compilerReceiver->setCompilerVersionString(compiler->compilerName()+
+                                               " "+
+                                               compiler->version());
+
+    //Output Compile Message:
+    connectionHandles+=connect(compiler,&compilerBase::compileCmd,
+                               compilerReceiver,&compileOutputReceiver::addText);
+    connectionHandles+=connect(compiler,&compilerBase::output,
+                               compilerReceiver,&compileOutputReceiver::addText);
+    connectionHandles+=connect(compiler,&compilerBase::compileError,
+                               compilerReceiver,&compileOutputReceiver::onCompileMsgReceived);
+    connectionHandles+=connect(compiler,&compilerBase::compileFinished,
+                               compilerReceiver,&compileOutputReceiver::onCompileFinished);
 }
 
 void kciLanguageMode::setFileSuffix(const QString& suffix)
@@ -60,8 +79,8 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
         resetCompilerAndHighlighter();
 
         m_type=cpp;
-        m_compiler=new gcc(m_parent);
-        m_highlighter=new cppHighlighter(m_parent);
+        compiler=new gcc(this);
+        m_highlighter=new cppHighlighter(this);
     }
     else if(suffix.contains(_regexp_pascal))
     {
@@ -71,8 +90,8 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
         resetCompilerAndHighlighter();
 
         m_type=pascal;
-        m_compiler=new fpc(m_parent);
-        m_highlighter=new pascalHighlighter(m_parent);
+        compiler=new fpc(this);
+        m_highlighter=new pascalHighlighter(this);
     }
     else
         m_type=plainText;
@@ -112,7 +131,7 @@ gdb* kciLanguageMode::startDebug()
     return gdbInstance;
 }
 
-void kciLanguageMode::onCompileFinished()
+void kciLanguageMode::onCompileFinished(bool hasError)
 {
     stateLock.lockForWrite();
     state=compiled;
@@ -121,7 +140,7 @@ void kciLanguageMode::onCompileFinished()
     if((bool)compilerFinishedConnection)
         disconnect(compilerFinishedConnection);
 
-    if(!compilerReceiver->hasCompileError())
+    if(!hasError)
     {
         emit compileSuccessfully(m_parent->execFileName);
     }
@@ -129,14 +148,14 @@ void kciLanguageMode::onCompileFinished()
 
 void kciLanguageMode::resetCompilerAndHighlighter()
 {
-    if(m_compiler!=NULL)
+    if(compiler!=NULL)
     {
-        delete m_compiler;
-        m_compiler=NULL;
+        compiler->deleteLater();
+        compiler=NULL;
     }
     if(m_highlighter!=NULL)
     {
-        delete m_highlighter;
+        m_highlighter->deleteLater();
         m_highlighter=NULL;
     }
 }

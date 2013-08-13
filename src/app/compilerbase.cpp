@@ -27,10 +27,10 @@ compilerBase::compilerBase(QObject *parent) :
     QProcess(parent)
 {
     connect(this,SIGNAL(finished(int)),
-            this,SLOT(onFinished()));
+            this,SLOT(onFinished(int)));
 }
 
-void compilerBase::emitCompileInfo(const QString &compilerPath,
+void compilerBase::emitCompileCmd(const QString &compilerPath,
                                    const QStringList &arg)
 {
     QString CompileCmdLine;
@@ -40,7 +40,7 @@ void compilerBase::emitCompileInfo(const QString &compilerPath,
         CompileCmdLine += QString(" ") + arg.at(i);
     }
     CompileCmdLine+="\n";
-    emit compileinfo(CompileCmdLine);
+    emit compileCmd(CompileCmdLine);
 }
 
 QString compilerBase::version()
@@ -61,7 +61,7 @@ void compilerBase::startCompile(const QString &filePath)
     QString compilerPath=path();
     QStringList arg=getCompileArg(filePath);
 
-    emitCompileInfo(compilerPath,arg);
+    emitCompileCmd(compilerPath,arg);
 
     connectionHandle=connect(this,SIGNAL(readyRead()),
             this,SLOT(onOutputReady()));
@@ -85,10 +85,12 @@ bool compilerBase::checkCompilerPath(const QString& path)
     return false;
 }
 
-void compilerBase::onFinished()
+void compilerBase::onFinished(int exitNum)
 {
     if((bool)connectionHandle)
     {
         disconnect(connectionHandle);
     }
+
+    emit compileFinished(checkHasErrorByExitNum(exitNum));
 }

@@ -86,6 +86,11 @@ void dbgOutputReceiver::receiveLocals(GdbMiValue localVars)
     }
 }
 
+void dbgOutputReceiver::receiveExprValue(QString value)
+{
+
+}
+
 void dbgOutputReceiver::addText(const QString& text)
 {
     insertText(text,normalFormat);

@@ -101,10 +101,17 @@ void gdb::parseLine(const QString &_msg)
             if(result.getName() == "bkpt")
             {
                 parseBkpt(result);
+                break;
             }
-            else if(result.getName() == "locals")
+            if(result.getName() == "locals")
             {
                 emit locals(result);
+                break;
+            }
+            if(result.getName() == "value")
+            {
+                emit exprValue(result.getValue());
+                break;
             }
         }
         else if(_str_async == "running")
@@ -121,7 +128,7 @@ void gdb::parseLine(const QString &_msg)
 
             result.build(begin,end);
 
-            emit errorOccured(result.getValue());
+            emit errorOccured(result.getValue()+"\n");
         }
         else
         {
@@ -192,7 +199,7 @@ void gdb::parseLine(const QString &_msg)
     }
     default:
         //program that is being debuged outputs
-        emit targetOutputStream(_msg+"\n");
+        emit targetOutputStream(_msg+'\n');
     }
 }
 
@@ -407,4 +414,9 @@ void gdb::execUntil(const QString &location)
 void gdb::stackListLocals()
 {
     write(qPrintable(QString("-stack-list-locals 1\n")));
+}
+
+void gdb::evaluate(const QString &expr)
+{
+    write(qPrintable(QString("-data-evaluate-expression ")+expr+"\n"));
 }
