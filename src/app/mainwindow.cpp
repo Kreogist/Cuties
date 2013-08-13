@@ -345,13 +345,9 @@ void MainWindow::aboutQt()
 
 void MainWindow::createTitlebar()
 {
-    titlebar=new kciTitleBar(this);
-    titlebar->setMainButtonIcon(":/img/image/MainMenuButton.png");
-
-    setMenuWidget(titlebar);
-
-    titlebar->setTitle(this->windowTitle());
-    setWindowTitle(this->windowTitle());
+    titlebar=titleBar();
+    setWindowTitle(windowTitle());
+    setMainButtonIcon(":/img/image/MainMenuButton.png");
 }
 
 void MainWindow::createToolBar()
@@ -856,7 +852,7 @@ void MainWindow::onCurrentTabChanged()
         compileDock->setReceiver(compilerReceiver);
     }
 
-    debugDock->connectCurrEditorLangMode(currLangMode);
+    connectDebugDockWithCurrEditor();
 }
 
 void MainWindow::startDebug()
@@ -865,6 +861,23 @@ void MainWindow::startDebug()
     kciLanguageMode* currLangMode=currEditor->langMode();
     currLangMode->startDebug();
 
-    debugDock->connectCurrEditorLangMode(currLangMode);
+    connectDebugDockWithCurrEditor();
     debugDock->show();
+}
+
+void MainWindow::connectDebugDockWithCurrEditor()
+{
+    kciLanguageMode* currLangMode=tabManager->getCurrentEditor()->langMode();
+
+    dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
+    if(dbgReceiver!=NULL)
+    {
+        debugDock->setDbgReceiver(dbgReceiver);
+    }
+
+    gdb *gdbInstance=currLangMode->getGdbInstance();
+    if(gdbInstance!=NULL)
+    {
+        debugDock->setGdbInstance(gdbInstance);
+    }
 }

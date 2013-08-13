@@ -1,22 +1,18 @@
 #ifndef DBGOUTPUTRECEIVER_H
 #define DBGOUTPUTRECEIVER_H
 
-#include <QObject>
 #include <QStandardItemModel>
 #include <QTextDocument>
 #include <QPlainTextDocumentLayout>
 #include <QTextCursor>
 
-#include "gdb.h"
-#include "connectionhandler.h"
+#include "gdbmivalue.h"
 
 class dbgOutputReceiver : public QObject
 {
     Q_OBJECT
 public:
     explicit dbgOutputReceiver(QObject *parent = 0);
-
-    void connectGDB(gdb* gdbInstance);
     
     QStandardItemModel *getStackInfoModel() const;
     QStandardItemModel *getLocalVarModel() const;
@@ -37,16 +33,12 @@ public slots:
 private:
     void insertText(const QString& text,const QTextCharFormat &charFormat);
 
-    gdb* gdbInstance;
-
     QStandardItemModel *stackInfoModel;
     QStandardItemModel *localVarModel;
     QStandardItemModel *watchModel;
     QTextDocument *textStreamOutput;
 
     QTextCharFormat normalFormat,errorFormat,targetFormat,logFormat;
-
-    connectionHandler connectionHandles;
 };
 
 #endif // DBGOUTPUTRECEIVER_H

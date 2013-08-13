@@ -199,6 +199,8 @@ private:
 
     void setDocOpenMenuState(bool state);
 
+    void connectDebugDockWithCurrEditor();
+
 
 };
 
