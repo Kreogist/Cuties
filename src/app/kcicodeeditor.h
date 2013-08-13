@@ -48,8 +48,6 @@
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"
 #include "kcisearchwindow.h"
-
-//default highlighter
 #include "kcilanguagemode.h"
 
 class kciSearchWindow;
@@ -97,7 +95,6 @@ public slots:
 
 private slots:
     void onModificationChanged(bool changed);
-    void initAnimeOpacity(int opacity);
 
 protected:
     void closeEvent(QCloseEvent *e);

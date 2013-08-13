@@ -26,6 +26,8 @@
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
+    setContentsMargins(0,0,0,0);
+
     setFrameStyle(QFrame::NoFrame);
     setFont(QString("Monaco"));
     setAcceptDrops(false);

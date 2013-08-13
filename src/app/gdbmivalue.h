@@ -44,11 +44,13 @@ public:
 
     void build(const QChar* &begin, const QChar* &end);
     QString getName() const;
-
     inline ValueType getType(){return type;}
-
     QString getValue() const;
+    inline QList<GdbMiValue>::iterator begin(){return children.begin();}
+    inline QList<GdbMiValue>::iterator end(){return children.end();}
+    inline int size(){return children.size();}
 
+    GdbMiValue at(const int& i) const;
     GdbMiValue operator [](const char *_str_name) const;
     GdbMiValue& operator += (const GdbMiValue& child);
 

@@ -255,6 +255,8 @@ void MainWindow::createActions()
     act[mnuDebugStart]=new QAction(tr("Start Debug"),this);
     act[mnuDebugStart]->setShortcut(QKeySequence(Qt::Key_F5));
     actStatusTips[mnuDebugStart]=QString(tr("Start debugging the active file."));
+    connect(act[mnuDebugStart],SIGNAL(triggered()),
+            this,SLOT(startDebug()));
 
     //Debug -> Stop Execute
     act[mnuDebugStopExecute]=new QAction(tr("Stop execute"),this);
@@ -418,6 +420,8 @@ void MainWindow::createDocks()
     //Debug Dock
     debugDock=new kciDebugDock(this);
     addDockWidget(Qt::BottomDockWidgetArea,debugDock);
+    connect(debugDock,SIGNAL(requireStartDebug()),
+            this,SLOT(startDebug()));
     debugDock->hide();
 }
 
@@ -730,7 +734,7 @@ void MainWindow::compileCurrentFile()
 
         //if the file has been compiled,
         //then we clean the text of last compiling.
-        compileOutputReceiver *receiver=currentEditor->langMode()->getReceiver();
+        compileOutputReceiver *receiver=currentEditor->langMode()->getCompilerReceiver();
         if(receiver!=NULL)
         {
             receiver->reset();
@@ -741,7 +745,7 @@ void MainWindow::compileCurrentFile()
         //The receiver is NULL if we didn't compile the file before.
         //And if receiver is NULL, setReceiver() will cause the program crash.
         //So we getReceiver() again to avoid this.
-        receiver=currentEditor->langMode()->getReceiver();
+        receiver=currentEditor->langMode()->getCompilerReceiver();
 
         Q_ASSERT(receiver!=NULL);
         compileDock->setReceiver(receiver);
@@ -845,9 +849,23 @@ void MainWindow::onCurrentTabChanged()
     if(currEditor==NULL)
         return ;
 
-    compileOutputReceiver *receiver=currEditor->langMode()->getReceiver();
-    if(receiver!=NULL)
+    kciLanguageMode* currLangMode=currEditor->langMode();
+
+    compileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
+    if(compilerReceiver!=NULL)
     {
-        compileDock->setReceiver(receiver);
+        compileDock->setReceiver(compilerReceiver);
     }
+
+    debugDock->connectCurrEditorLangMode(currLangMode);
+}
+
+void MainWindow::startDebug()
+{
+    kciCodeEditor* currEditor=tabManager->getCurrentEditor();
+    kciLanguageMode* currLangMode=currEditor->langMode();
+    currLangMode->startDebug();
+
+    debugDock->connectCurrEditorLangMode(currLangMode);
+    debugDock->show();
 }

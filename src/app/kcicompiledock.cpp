@@ -46,7 +46,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     splCombine->setContentsMargins(0,0,0,0);
 
     //Set Text Output.
-    compileOutput=new QPlainTextEdit(this);
+    compileOutput=new kciPlainTextBrowser(this);
     compileOutput->setContentsMargins(0,0,0,0);
     compileOutput->setWordWrapMode(QTextOption::NoWrap);
     splCombine->addWidget(compileOutput);
@@ -136,6 +136,8 @@ void kcicompiledock::animeHideError()
 
 void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
 {
+    Q_ASSERT(currReceiver!=NULL);
+
     if(receiver!=NULL)
     {
         disconnect(receiverConnectionHandle);

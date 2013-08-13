@@ -9,10 +9,15 @@
 #include <QComboBox>
 #include <QTreeView>
 #include <QHBoxLayout>
-#include <QStandardItemModel>
 #include <QVBoxLayout>
-#include <QPlainTextEdit>
-#include <QCommonStyle>
+
+#include "kciplaintextbrowser.h"
+#include "kcilanguagemode.h"
+#include "gdb.h"
+#include "dbgoutputreceiver.h"
+#include "connectionhandler.h"
+
+class kciDebugDock;
 
 class kciDebugWidget : public QWidget
 {
@@ -20,6 +25,12 @@ class kciDebugWidget : public QWidget
 public:
     explicit kciDebugWidget(QWidget *parent = 0);
     ~kciDebugWidget();
+
+    void connectGDB(gdb *instance);
+    void setDbgReceiver(dbgOutputReceiver *receiver);
+
+private slots:
+    void onGDBCmdEditFinished(QString command);
 
 private:
     QToolButton *tblStartDebug, *tblStopDebug, *tblRunToCursor,
@@ -29,7 +40,7 @@ private:
     QToolBar *DebugToolBar;
     QToolButton *tblAddWatch, *tblEditWatch,* tblRemoveWatch;
 
-    QPlainTextEdit *GDBInfo;
+    kciPlainTextBrowser *GDBInfo;
     //Main Widget Layout.
     QVBoxLayout *MainWidgetLayout;
     QHBoxLayout *MainShownLayout;
@@ -42,7 +53,6 @@ private:
     QVBoxLayout *stackMain;
     QLabel *lblStackView;
     QTreeView *trevwStackView;
-    QStandardItemModel *mdlStackView;
 
     //Combine.
     QVBoxLayout *CombinePanelStack;
@@ -56,13 +66,13 @@ private:
     QVBoxLayout *WatchLayout;
     QLabel *lblLocalWatch;
     QTreeView *localWatchView;
-    QStandardItemModel *localWatchResult;
     QLabel *lblWatch;
     QTreeView *watchView;
-    QStandardItemModel *watchResult;
 
-    //Some Control Needs Origin Style.
-    QCommonStyle *DockStyle;
+    kciDebugDock *m_parent;
+    gdb *gdbInstance;
+
+    connectionHandler connectionHandles;
 
     void createToolBar();
     void createControlButtons();
@@ -76,8 +86,10 @@ class kciDebugDock : public QDockWidget
     Q_OBJECT
 public:
     explicit kciDebugDock(QWidget *parent = 0);
+    void connectCurrEditorLangMode(kciLanguageMode *mode);
     
 signals:
+    void requireStartDebug();
     
 public slots:
     

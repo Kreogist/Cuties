@@ -65,6 +65,7 @@ public slots:
     void aboutQt();
     void aboutKCI();
     void compileCurrentFile();
+    void startDebug();
     void run();
     void compileAndRun();
     void searchOnline();

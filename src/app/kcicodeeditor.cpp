@@ -75,22 +75,6 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     searchBar=new kciSearchWindow(editor);
     searchBar->hide();
     connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
-
-    /*QTimeLine *InitAnime=new QTimeLine(500,this);
-    InitAnime->setFrameRange(0,100);
-    initEffect=new QGraphicsOpacityEffect(this);
-    initEffect->setOpacity(0);
-    setGraphicsEffect(initEffect);
-    connect(InitAnime,SIGNAL(frameChanged(int)),
-            this,SLOT(initAnimeOpacity(int)));
-    InitAnime->start();*/
-}
-
-void kciCodeEditor::initAnimeOpacity(int opacity)
-{
-    /*float effOpacity=float(opacity)/100.0;
-    initEffect->setOpacity(effOpacity);*/
-    //setGraphicsEffect(initEffect);
 }
 
 QString kciCodeEditor::getExecFileName()
@@ -135,7 +119,7 @@ bool kciCodeEditor::open(const QString &fileName)
         QTextStream _textIn(&_file);
 
         editor->clear();
-        editor->insertPlainText(QString(_textIn.readAll()));
+        editor->setPlainText(QString(_textIn.readAll()));
 
         fileInfoChanged(_file);
 

@@ -21,16 +21,14 @@ kciDebugDock::kciDebugDock(QWidget *parent) :
     //New Central Widget
     CentralWidget=new kciDebugWidget(this);
     setWidget(CentralWidget);
-
 }
 
 kciDebugWidget::kciDebugWidget(QWidget *parent) :
     QWidget(parent)
 {   
-    setContentsMargins(0,0,0,0);
+    m_parent=qobject_cast<kciDebugDock*>(parent);
 
-    //Origin Style:
-    DockStyle=new QCommonStyle;
+    setContentsMargins(0,0,0,0);
 
     //Main Layout.
     MainWidgetLayout=new QVBoxLayout;
@@ -66,7 +64,6 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
 
 kciDebugWidget::~kciDebugWidget()
 {
-    DockStyle->deleteLater();
     MainWidgetLayout->deleteLater();
     MainShownLayout->deleteLater();
     CombinePanelStack->deleteLater();
@@ -95,8 +92,6 @@ void kciDebugWidget::createStackView()
     trevwStackView=new QTreeView(this);
     trevwStackView->setHeaderHidden(true);
     trevwStackView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    mdlStackView=new QStandardItemModel(this);
-    trevwStackView->setModel(mdlStackView);
     stackMain->addWidget(trevwStackView);
 }
 
@@ -116,8 +111,6 @@ void kciDebugWidget::createWatchLayout()
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
     localWatchView->setPalette(pal);
     localWatchView->setHeaderHidden(true);
-    localWatchResult=new QStandardItemModel(this);
-    localWatchView->setModel(localWatchResult);
     WatchLayout->addWidget(localWatchView);
 
     //Add New Label Widget.
@@ -128,8 +121,6 @@ void kciDebugWidget::createWatchLayout()
     watchView=new QTreeView(this);
     watchView->setPalette(pal);
     watchView->setHeaderHidden(true);
-    watchResult=new QStandardItemModel(this);
-    watchView->setModel(watchResult);
     WatchLayout->addWidget(watchView);
 
     //Add to MainLayout.
@@ -148,11 +139,15 @@ void kciDebugWidget::createGDBConversation()
     QLabel *InputTag=new QLabel(this);
     InputTag->setText(tr("Send command to GDB:"));
     InputToGDB->addWidget(InputTag);
+
     GDBCmd=new QComboBox(this);
     GDBCmd->setEditable(true);
+    connect(GDBCmd,SIGNAL(activated(QString)),
+            this,SLOT(onGDBCmdEditFinished(QString)));
+
     InputToGDB->addWidget(GDBCmd,1);
     GDBMainLayout->addLayout(InputToGDB);
-    GDBInfo=new QPlainTextEdit(this);
+    GDBInfo=new kciPlainTextBrowser(this);
     GDBMainLayout->addWidget(GDBInfo,1);
 
     //Add To MainLayout.
@@ -165,6 +160,7 @@ void kciDebugWidget::createToolBar()
     //Init ToolBar.
     DebugToolBar=new QToolBar(this);
     DebugToolBar->setContentsMargins(0,0,0,0);
+
     //Set New ToolButton.
     //Set Debug Main Control Buttons.
     tblStartDebug=new QToolButton(this);
@@ -172,27 +168,34 @@ void kciDebugWidget::createToolBar()
     tblStartDebug->setFixedSize(26,26);
     tmpToolTip=tr("Start debugging.");
     tblStartDebug->setToolTip(tmpToolTip);
+    connect(tblStartDebug,SIGNAL(clicked()),
+            m_parent,SIGNAL(requireStartDebug()));
+
     DebugToolBar->addWidget(tblStartDebug);
     tblStopDebug=new QToolButton(this);
     tblStopDebug->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/StopDebug.png"));
     tblStopDebug->setFixedSize(26,26);
     DebugToolBar->addWidget(tblStopDebug);
     DebugToolBar->addSeparator();
+
     //Set Debug Control Buttons.
     tblRunToCursor=new QToolButton(this);
     tblRunToCursor->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/RunToCursor.png"));
     tblRunToCursor->setFixedSize(26,26);
     DebugToolBar->addWidget(tblRunToCursor);
     DebugToolBar->addSeparator();
+
     //Set Debug Watch Buttons.
     tblAddWatch=new QToolButton(this);
     tblAddWatch->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/AddWatch.png"));
     tblAddWatch->setFixedSize(26,26);
     DebugToolBar->addWidget(tblAddWatch);
+
     tblRemoveWatch=new QToolButton(this);
     tblRemoveWatch->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/RemoveWatch.png"));
     tblRemoveWatch->setFixedSize(26,26);
     DebugToolBar->addWidget(tblRemoveWatch);
+
     tblEditWatch=new QToolButton(this);
     tblEditWatch->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/ModifyWatch.png"));
     tblEditWatch->setFixedSize(26,26);
@@ -263,4 +266,48 @@ void kciDebugWidget::createControlButtons()
     ControlPanel2->addWidget(tblSkipInstruction);
     ControlPanel2->addStretch();
 
+}
+
+void kciDebugWidget::setDbgReceiver(dbgOutputReceiver *receiver)
+{
+    Q_ASSERT(receiver!=NULL);
+
+    watchView->setModel(receiver->getWatchModel());
+    localWatchView->setModel(receiver->getLocalVarModel());
+    trevwStackView->setModel(receiver->getStackInfoModel());
+    GDBInfo->setDocument(receiver->getTextStreamOutput());
+}
+
+void kciDebugWidget::connectGDB(gdb *instance)
+{
+    if(gdbInstance!=NULL)
+    {
+        connectionHandles.disConnectAll();
+    }
+
+    gdbInstance=instance;
+    connectionHandles+=connect(tblNextLine,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execNext()));
+    connectionHandles+=connect(tblNextInstruction,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execStepi()));
+}
+
+void kciDebugWidget::onGDBCmdEditFinished(QString command)
+{
+    qDebug()<<command;
+    gdbInstance->write(qPrintable(command+"\n"));
+}
+
+void kciDebugDock::connectCurrEditorLangMode(kciLanguageMode *mode)
+{
+    dbgOutputReceiver *dbgReceiver=mode->getDbgReceiver();
+    if(dbgReceiver!=NULL)
+    {
+        CentralWidget->setDbgReceiver(dbgReceiver);
+    }
+    gdb *gdbInstance=mode->getGdbInstance();
+    if(gdbInstance!=NULL)
+    {
+        CentralWidget->connectGDB(gdbInstance);
+    }
 }

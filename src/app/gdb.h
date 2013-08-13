@@ -63,11 +63,40 @@ public:
 
     bool runGDB(const QString& filePath);
     void quitGDB();
+    
+    const QVector<bkpt_struct>* getBkptVec() const;
+
+signals:
+    void errorOccured(QString errMsg);
+
+    /* The console output stream contains text
+     * that should be displayed in the CLI console window.
+     * It contains the textual responses to CLI commands.
+     */
+    void consoleOutputStream(QString consoleOutput);
+
+    /* The target output stream contains any textual output
+     * from the running target.
+     */
+    void targetOutputStream(QString targetOutput);
+
+    /* The log stream contains debugging messages being produced by
+     * GDB's internals.
+     */
+    void logOutputStream(QString logOutput);
+
+    void locals(GdbMiValue locals);
+    
+public slots:
+    void readGdbStandardError();
+    void readGdbStandardOutput();
 
     //breakpoint
-    void setBreakPoint(const int &number, const int &count);
+    void setBreakPoint(const QString& fileName,
+                       const int &lineNum,
+                       const int &count);
     void setBreakPoint(const QString& functionName);
-    void setBreakCondition(const int &lineNum, const QString& expr);
+    void setBreakCondition(const int &number, const QString& expr);
 
     //watchpoint
     void setWatchPoint(const QString& var);
@@ -84,17 +113,10 @@ public:
 
     //Stack Manipulation
     void stackListLocals();
-    
-    const QVector<bkpt_struct>* getBkptVec() const;
-
-signals:
-    void errorOccured(QString errMsg);
-    
-public slots:
-    void onReadReady();
 
 private:
     void parseBkpt(const GdbMiValue& gmvBkpt);
+    QString parseOutputStream(const QChar* begin,const QChar* end);
     void parseLine(const QString& _msg);
 
     static QString gdbPath;

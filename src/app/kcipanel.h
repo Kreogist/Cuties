@@ -33,6 +33,7 @@
 #include <QDebug>
 
 #include "kcitexteditor.h"
+#include "connectionhandler.h"
 
 class kciPanel : public QWidget
 {
@@ -58,7 +59,7 @@ private:
 
     int first,last;
 
-    QMetaObject::Connection edConnection,etConnection,euConnection;
+    connectionHandler connectionHandles;
 };
 
 #endif // PANEL_H

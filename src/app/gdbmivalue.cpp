@@ -29,6 +29,11 @@ static void skipCommas(const QChar *&begin, const QChar *end)
         ++begin;
 }
 
+GdbMiValue GdbMiValue::at(const int &i) const
+{
+    return children[i];
+}
+
 GdbMiValue GdbMiValue::operator [] (const char *_str_name) const
 {
     int i=children.size();
@@ -73,6 +78,14 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
                 break;
         }
 
+        if(begin == end || *begin!='=')
+        {
+            //is a c-string
+            begin=name.begin();
+            const QChar* tmpEnd=name.end();
+            parseConst(begin,tmpEnd);
+            return ;
+        }
         begin++;//skip the '='
 
         switch(begin->toLatin1())
@@ -87,6 +100,8 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
             parseTuple(begin,end);
             break;
         default:
+            for(;begin<end;begin++)
+            qDebug()<<*begin;
             qDebug()<<"error! GdbMiValue:unknow";
         }
     }
