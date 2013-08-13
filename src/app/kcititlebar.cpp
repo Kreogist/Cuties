@@ -23,6 +23,20 @@
 
 #include "kcititlebar.h"
 
+kciTitleBarAutoFill::kciTitleBarAutoFill(QWidget *parent) :
+    QWidget(parent)
+{
+}
+
+void kciTitleBarAutoFill::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    e->accept();
+    if(e->button() == Qt::LeftButton)
+    {
+        emit dblClickEmit();
+    }
+}
+
 kciTitleBar::kciTitleBar(QWidget *parent) :
     QWidget(parent),
     mainWindow(parent)
@@ -66,16 +80,22 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     mainButton->setPalette(bpal);
 
     mainToolBar=new QToolBar(this);
+
     QPalette pal=mainToolBar->palette();
     pal.setColor(QPalette::Button, QColor(83,83,83));
     mainToolBar->setPalette(pal);
+
     mainToolBar->setContentsMargins(0,0,0,0);
     mainToolBar->setMovable(true);
     mainToolBar->setGeometry(mainButton->width(),
                              0,
-                             mainToolBar->width(),
+                             mainToolBar->width() - 70,
                              mainToolBar->height());
     mainToolBar->hide();
+
+    autoFill=new kciTitleBarAutoFill(this);
+    connect(autoFill, SIGNAL(dblClickEmit()),
+            this, SLOT(spacingDblClick()));
 
     titleLabel=new QLabel(windowTitle,this);
     pal=titleLabel->palette();
@@ -87,7 +107,8 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->setSpacing(0);
     setLayout(hLayout);
     hLayout->addWidget(mainButton);
-    hLayout->addStretch();
+    //hLayout->addStretch();
+    hLayout->addWidget(autoFill, 1);
     hLayout->addWidget(titleLabel);
     hLayout->addSpacing(3);
 
@@ -131,6 +152,11 @@ void kciTitleBar::showToolBar()
         tlbShowAnime->setEndValue(animeEndPos);
         tlbShowAnime->setEasingCurve(QEasingCurve::OutCubic);
         mainToolBar->show();
+
+        //Insert Spacing to Fit ToolBar.
+        hLayout->insertSpacing(1, mainToolBar->width());
+
+        //Start Animation.
         tlbShowAnime->start();
     }
 }
@@ -245,13 +271,9 @@ void kciTitleBar::mouseReleaseEvent(QMouseEvent *event)
         event->ignore();
 }
 
-void kciTitleBar::mouseDoubleClickEvent(QMouseEvent *event)
+void kciTitleBar::spacingDblClick()
 {
-    if(event->button() == Qt::LeftButton)
-    {
-        event->accept();
-        _exchange_button_state();
-    }
+    _exchange_button_state();
 }
 
 void kciTitleBar::setTitle(const QString &title)
