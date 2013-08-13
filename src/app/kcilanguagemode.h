@@ -7,6 +7,8 @@
 
 #include "compilerbase.h"
 #include "compileoutputreceiver.h"
+#include "gdb.h"
+#include "dbgoutputreceiver.h"
 
 //c/cpp
 #include "gcc.h"
@@ -40,10 +42,13 @@ public:
 
     void run();
     void compile();
+    gdb* startDebug();
     void setMode(const modeType& type);
     void setFileSuffix(const QString& suffix);
     
-    compileOutputReceiver *getReceiver() const;
+    compileOutputReceiver* getCompilerReceiver() const;
+    dbgOutputReceiver* getDbgReceiver() const;
+    gdb* getGdbInstance() const;
 
 signals:
     void compileSuccessfully(QString execFileName);
@@ -56,13 +61,15 @@ private:
 
     modeType m_type;
     kciCodeEditor *m_parent;
-    compilerBase *m_compiler;
     QSyntaxHighlighter *m_highlighter;
 
-    compileOutputReceiver *receiver;
-
+    compilerBase *m_compiler;
+    compileOutputReceiver *compilerReceiver;
     compileState state;
     QReadWriteLock stateLock;
+
+    gdb *gdbInstance;
+    dbgOutputReceiver *dbgReceiver;
 
     QMetaObject::Connection compilerFinishedConnection;
 };

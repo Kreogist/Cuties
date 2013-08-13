@@ -1,6 +1,8 @@
 #ifndef KCISETTINGLISTITEMFOLDERTEXT_H
 #define KCISETTINGLISTITEMFOLDERTEXT_H
 
+#include <QLineEdit>
+
 #include "kcisettinglistitembase.h"
 
 class kciSettingListItemFolderText : public kciSettingListItemBase

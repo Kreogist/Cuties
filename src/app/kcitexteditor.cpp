@@ -32,6 +32,12 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setAcceptDrops(false);
 
+    QFontMetrics fm=this->fontMetrics();
+
+    //Set TextEditor Properties.
+    //Tab Width
+    setTabStopWidth(4);
+
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
     pal.setColor(QPalette::Text,QColor(255,255,255));

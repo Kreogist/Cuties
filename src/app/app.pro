@@ -68,6 +68,8 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemcombo.cpp \
     compileoutputreceiver.cpp \
     Controls/SettingItems/kcisettinglistitemlinetext.cpp \
+    dbgoutputreceiver.cpp \
+    connectionhandler.cpp \
     Controls/SettingItems/kcisettinglistitemfoldertext.cpp
 
 HEADERS += \
@@ -109,6 +111,8 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemcombo.h \
     compileoutputreceiver.h \
     Controls/SettingItems/kcisettinglistitemlinetext.h \
+    dbgoutputreceiver.h \
+    connectionhandler.h \
     Controls/SettingItems/kcisettinglistitemfoldertext.h
 
 # Enable C++11
@@ -124,9 +128,3 @@ OTHER_FILES += \
     lang.map \
     default.style \
     COPYING.txt
-
-FORMS +=
-
-unix{
-ICON = image/Cuties.icns
-}

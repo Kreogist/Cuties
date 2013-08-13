@@ -7,7 +7,9 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
     m_highlighter=NULL;
     m_parent=qobject_cast<kciCodeEditor*>(parent);
     m_type=plainText;
-    receiver=NULL;
+    compilerReceiver=NULL;
+    dbgReceiver=NULL;
+    gdbInstance=NULL;
 
     Q_ASSERT(parent!=NULL);
 }
@@ -25,17 +27,17 @@ void kciLanguageMode::compile()
         return ;
     }
 
-    if(receiver==NULL)
+    if(compilerReceiver==NULL)
     {
-        receiver=new compileOutputReceiver(this);
-        receiver->connectCompiler(m_compiler);
+        compilerReceiver=new compileOutputReceiver(this);
+        compilerReceiver->connectCompiler(m_compiler);
     }
 
     stateLock.lockForWrite();
     state=compiling;
     stateLock.unlock();
 
-    receiver->addForwardText();
+    compilerReceiver->addForwardText();
 
     compilerFinishedConnection=connect(m_compiler,SIGNAL(finished(int)),
             this,SLOT(onCompileFinished()));
@@ -60,7 +62,6 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
         m_type=cpp;
         m_compiler=new gcc(m_parent);
         m_highlighter=new cppHighlighter(m_parent);
-        m_highlighter->setDocument(m_parent->document);
     }
     else if(suffix.contains(_regexp_pascal))
     {
@@ -72,15 +73,43 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
         m_type=pascal;
         m_compiler=new fpc(m_parent);
         m_highlighter=new pascalHighlighter(m_parent);
-        m_highlighter->setDocument(m_parent->document);
     }
     else
         m_type=plainText;
+
+
+    if(m_highlighter==NULL)
+        return ;
+    m_highlighter->setDocument(m_parent->document);
 }
 
-compileOutputReceiver *kciLanguageMode::getReceiver() const
+compileOutputReceiver* kciLanguageMode::getCompilerReceiver() const
 {
-    return receiver;
+    return compilerReceiver;
+}
+
+dbgOutputReceiver* kciLanguageMode::getDbgReceiver() const
+{
+    return dbgReceiver;
+}
+
+gdb* kciLanguageMode::getGdbInstance() const
+{
+    return gdbInstance;
+}
+
+gdb* kciLanguageMode::startDebug()
+{
+    if(gdbInstance == NULL)
+        gdbInstance=new gdb(this);
+
+    if(dbgReceiver == NULL)
+        dbgReceiver=new dbgOutputReceiver(this);
+
+    dbgReceiver->connectGDB(gdbInstance);
+    gdbInstance->runGDB(m_parent->execFileName);
+
+    return gdbInstance;
 }
 
 void kciLanguageMode::onCompileFinished()
@@ -92,11 +121,10 @@ void kciLanguageMode::onCompileFinished()
     if((bool)compilerFinishedConnection)
         disconnect(compilerFinishedConnection);
 
-    if(!receiver->hasCompileError())
+    if(!compilerReceiver->hasCompileError())
     {
         emit compileSuccessfully(m_parent->execFileName);
     }
-
 }
 
 void kciLanguageMode::resetCompilerAndHighlighter()

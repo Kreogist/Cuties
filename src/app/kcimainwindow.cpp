@@ -40,8 +40,11 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     pressed=none;
 
+#ifdef Q_OS_MACX
+    QMainWindow::setUnifiedTitleAndToolBarOnMac(false);
+#else
     setWindowFlags(Qt::FramelessWindowHint);
-
+#endif
     qApp->installEventFilter(this);
 }
 

@@ -30,19 +30,19 @@ kciSettingListItemFolderText::kciSettingListItemFolderText(QWidget *parent) :
     MainLayout->addStretch();
 }
 
-void kciSettingListItemLineText::setTextValue(const QString &NewTextValue)
+void kciSettingListItemFolderText::setTextValue(const QString &NewTextValue)
 {
     ItemValue=NewTextValue;
     ValueEditor->setText(ItemValue);
     ValueDisplayer->setText(ItemValue);
 }
 
-QString kciSettingListItemLineText::getTextValue()
+QString kciSettingListItemFolderText::getTextValue()
 {
     return ItemValue;
 }
 
-void kciSettingListItemLineText::mousePressEvent(QMouseEvent *e)
+void kciSettingListItemFolderText::mousePressEvent(QMouseEvent *e)
 {
     ValueDisplayer->hide();
     ValueEditor->setEnabled(true);

@@ -34,26 +34,23 @@ kciPanel::kciPanel(QWidget *parent) :
 
 void kciPanel::setKciTextEditor(kciTextEditor *editor)
 {
-    if(editor!=NULL)
+    if(editor==NULL)
+        return ;
+
+    if(e!=NULL)
     {
-        if(e!=NULL)
-        {
-            if((bool)etConnection)
-                disconnect(etConnection);
-            if((bool)edConnection)
-                disconnect(edConnection);
-        }
-
-        e=editor;
-
-        etConnection=connect(e,SIGNAL(updated()),this,SLOT(update()));
-
-        if(e->document())
-            edConnection=connect(e->document()->documentLayout(),
-                                 SIGNAL(update()),
-                                 this,
-                                 SLOT(update()));
+        connectionHandles.disConnectAll();
     }
+
+    e=editor;
+
+    connectionHandles+=connect(e,SIGNAL(updated()),this,SLOT(update()));
+
+    if(e->document())
+        connectionHandles+=connect(e->document()->documentLayout(),
+                                   SIGNAL(update()),
+                                   this,
+                                   SLOT(update()));
 }
 
 void kciPanel::paintEvent(QPaintEvent *event)
@@ -83,9 +80,14 @@ void kciPanel::paintEvent(QPaintEvent *event)
         current_line_num=e->textCursor().block().blockNumber();
 
     int top=e->verticalScrollBar()->value();
-
+#ifdef Q_OS_MACX
+    line_height++;
+    int block_top = (top==0)?e->geometry().y() + 5 : 0,
+        bottom=e->height()/line_height;
+#else
     int block_top = (top==0)?e->geometry().y() + 7 : 3,
         bottom=e->height()/line_height;
+#endif
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();

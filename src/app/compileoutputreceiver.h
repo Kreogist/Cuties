@@ -9,6 +9,7 @@
 #include <QTime>
 
 #include "compilerbase.h"
+#include "connectionhandler.h"
 
 class compileOutputReceiver : public QObject
 {
@@ -45,15 +46,6 @@ public slots:
     void compileFinish(int ExitNum);
     
 private:
-    enum connectionType
-    {
-        compileinfo,
-        output,
-        compileError,
-        finished,
-        typeCount
-    };
-
     bool hasError;
     QStandardItemModel *compilerOutputModel;
     QTextDocument *compilerOutputText;
@@ -64,7 +56,7 @@ private:
 
     compilerBase *connectedCompiler;
 
-    QMetaObject::Connection connectHandle[typeCount];
+    connectionHandler connectionHandles;
 };
 
 #endif // COMPILEOUTPUTRECEIVER_H
