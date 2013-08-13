@@ -9,13 +9,13 @@
 #include <QComboBox>
 #include <QTreeView>
 #include <QHBoxLayout>
-#include <QStandardItemModel>
 #include <QVBoxLayout>
-#include <QPlainTextEdit>
 
+#include "kciplaintextbrowser.h"
 #include "kcilanguagemode.h"
 #include "gdb.h"
 #include "dbgoutputreceiver.h"
+#include "connectionhandler.h"
 
 class kciDebugDock;
 
@@ -40,7 +40,7 @@ private:
     QToolBar *DebugToolBar;
     QToolButton *tblAddWatch, *tblEditWatch,* tblRemoveWatch;
 
-    QPlainTextEdit *GDBInfo;
+    kciPlainTextBrowser *GDBInfo;
     //Main Widget Layout.
     QVBoxLayout *MainWidgetLayout;
     QHBoxLayout *MainShownLayout;
@@ -71,6 +71,8 @@ private:
 
     kciDebugDock *m_parent;
     gdb *gdbInstance;
+
+    connectionHandler connectionHandles;
 
     void createToolBar();
     void createControlButtons();

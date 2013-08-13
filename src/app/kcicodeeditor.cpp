@@ -119,7 +119,7 @@ bool kciCodeEditor::open(const QString &fileName)
         QTextStream _textIn(&_file);
 
         editor->clear();
-        editor->insertPlainText(QString(_textIn.readAll()));
+        editor->setPlainText(QString(_textIn.readAll()));
 
         fileInfoChanged(_file);
 

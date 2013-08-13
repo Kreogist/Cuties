@@ -39,6 +39,21 @@
 #include <QPalette>
 #include <QDebug>
 
+class kciTitleBarAutoFill : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciTitleBarAutoFill(QWidget *parent = 0);
+
+signals:
+    void dblClickEmit();
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent *e);
+
+private:
+};
+
 class kciTitleBar : public QWidget
 {
     Q_OBJECT
@@ -62,12 +77,12 @@ public slots:
 private slots:
     void _exchange_button_state();
     void hideRealToolBar();
+    void spacingDblClick();
 
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
     bool hasPressed;
@@ -82,6 +97,8 @@ private:
     QHBoxLayout *hLayout;
     QLabel *titleLabel;
     QString windowTitle;
+
+    kciTitleBarAutoFill *autoFill;
 
     QToolButton *mainButton;
     QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;

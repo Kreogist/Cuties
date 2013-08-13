@@ -68,9 +68,11 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemcombo.cpp \
     compileoutputreceiver.cpp \
     Controls/SettingItems/kcisettinglistitemlinetext.cpp \
+    Controls/UserControls/kciscrollarea.cpp \
     dbgoutputreceiver.cpp \
     connectionhandler.cpp \
-    Controls/SettingItems/kcisettinglistitemfoldertext.cpp
+    Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
+    kciplaintextbrowser.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -111,9 +113,11 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemcombo.h \
     compileoutputreceiver.h \
     Controls/SettingItems/kcisettinglistitemlinetext.h \
+    Controls/UserControls/kciscrollarea.h \
     dbgoutputreceiver.h \
     connectionhandler.h \
-    Controls/SettingItems/kcisettinglistitemfoldertext.h
+    Controls/SettingItems/kcisettinglistitemfoldertext.h \
+    kciplaintextbrowser.h
 
 # Enable C++11
 CONFIG += c++11

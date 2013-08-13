@@ -68,7 +68,6 @@ private:
      */
     kciSearchWindow();
     void showCurrResult();
-    void setSelectedCharFormat(const QTextCharFormat& format);
 
     enum menuItem
     {

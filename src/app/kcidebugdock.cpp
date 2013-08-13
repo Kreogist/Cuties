@@ -147,7 +147,7 @@ void kciDebugWidget::createGDBConversation()
 
     InputToGDB->addWidget(GDBCmd,1);
     GDBMainLayout->addLayout(InputToGDB);
-    GDBInfo=new QPlainTextEdit(this);
+    GDBInfo=new kciPlainTextBrowser(this);
     GDBMainLayout->addWidget(GDBInfo,1);
 
     //Add To MainLayout.
@@ -280,7 +280,16 @@ void kciDebugWidget::setDbgReceiver(dbgOutputReceiver *receiver)
 
 void kciDebugWidget::connectGDB(gdb *instance)
 {
+    if(gdbInstance!=NULL)
+    {
+        connectionHandles.disConnectAll();
+    }
+
     gdbInstance=instance;
+    connectionHandles+=connect(tblNextLine,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execNext()));
+    connectionHandles+=connect(tblNextInstruction,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execStepi()));
 }
 
 void kciDebugWidget::onGDBCmdEditFinished(QString command)

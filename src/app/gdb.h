@@ -63,6 +63,37 @@ public:
 
     bool runGDB(const QString& filePath);
     void quitGDB();
+    
+    const QVector<bkpt_struct>* getBkptVec() const;
+
+signals:
+    void errorOccured(QString errMsg);
+
+    /* The console output stream contains text
+     * that should be displayed in the CLI console window.
+     * It contains the textual responses to CLI commands.
+     */
+    void consoleOutputStream(QString consoleOutput);
+
+    /* The target output stream contains any textual output
+     * from the running target.
+     */
+    void targetOutputStream(QString targetOutput);
+
+    /* The log stream contains debugging messages being produced by
+     * GDB's internals.
+     */
+    void logOutputStream(QString logOutput);
+
+    /* This signal is emited with informations about local variables
+     */
+    void locals(GdbMiValue locals);
+
+    void exprValue(QString value);
+    
+public slots:
+    void readGdbStandardError();
+    void readGdbStandardOutput();
 
     //breakpoint
     void setBreakPoint(const QString& fileName,
@@ -86,31 +117,9 @@ public:
 
     //Stack Manipulation
     void stackListLocals();
-    
-    const QVector<bkpt_struct>* getBkptVec() const;
 
-signals:
-    void errorOccured(QString errMsg);
-
-    /* The console output stream contains text
-     * that should be displayed in the CLI console window.
-     * It contains the textual responses to CLI commands.
-     */
-    void consoleOutputStream(QString consoleOutput);
-
-    /* The target output stream contains any textual output
-     * from the running target.
-     */
-    void targetOutputStream(QString targetOutput);
-
-    /* The log stream contains debugging messages being produced by
-     * GDB's internals.
-     */
-    void logOutputStream(QString logOutput);
-    
-public slots:
-    void readGdbStandardError();
-    void readGdbStandardOutput();
+    //Data Evaluate
+    void evaluate(const QString& expr);
 
 private:
     void parseBkpt(const GdbMiValue& gmvBkpt);

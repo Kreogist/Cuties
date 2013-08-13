@@ -10,8 +10,17 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
                 new QPlainTextDocumentLayout(textStreamOutput));
 
     stackInfoModel=new QStandardItemModel(this);
+
+    QStringList labels;
+    labels<<tr("name")<<tr("value");
+
     watchModel=new QStandardItemModel(this);
+    watchModel->setColumnCount(2);
+    watchModel->setHorizontalHeaderLabels(labels);
+
     localVarModel=new QStandardItemModel(this);
+    localVarModel->setColumnCount(2);
+    localVarModel->setHorizontalHeaderLabels(labels);
 
     normalFormat.setForeground(QBrush(QColor(255,255,255)));
     errorFormat.setForeground(QBrush(QColor(255,0,0)));
@@ -27,13 +36,15 @@ void dbgOutputReceiver::connectGDB(gdb *gdbInstance)
     }
 
     connectionHandles+=connect(gdbInstance,&gdb::errorOccured,
-                                           this,&dbgOutputReceiver::receiveError);
+                               this,&dbgOutputReceiver::receiveError);
     connectionHandles+=connect(gdbInstance,&gdb::consoleOutputStream,
-                                           this,&dbgOutputReceiver::receiveconsoleOutput);
+                               this,&dbgOutputReceiver::receiveconsoleOutput);
     connectionHandles+=connect(gdbInstance,&gdb::targetOutputStream,
-                                           this,&dbgOutputReceiver::receivetargetOutput);
+                               this,&dbgOutputReceiver::receivetargetOutput);
     connectionHandles+=connect(gdbInstance,&gdb::logOutputStream,
-                                           this,&dbgOutputReceiver::receivelogOutput);
+                               this,&dbgOutputReceiver::receivelogOutput);
+    connectionHandles+=connect(gdbInstance,&gdb::locals,
+                               this,&dbgOutputReceiver::receiveLocals);
 }
 
 void dbgOutputReceiver::receiveError(QString text)
@@ -54,6 +65,30 @@ void dbgOutputReceiver::receivetargetOutput(QString text)
 void dbgOutputReceiver::receivelogOutput(QString text)
 {
     insertText(text,logFormat);
+}
+
+void dbgOutputReceiver::receiveLocals(GdbMiValue localVars)
+{
+    localVarModel->clear();
+
+    for(QList<GdbMiValue>::iterator i=localVars.begin(),e=localVars.end();
+        i<e;
+        i++)
+    {
+        QString name=i->at(0).getValue();  //name
+        QString value=i->at(1).getValue(); //value
+
+        QStandardItem* varName=new QStandardItem(name);
+        QStandardItem* varValue=new QStandardItem(value);
+        QList<QStandardItem*> localVar;
+        localVar<<varName<<varValue;
+        localVarModel->appendRow(localVar);
+    }
+}
+
+void dbgOutputReceiver::receiveExprValue(QString value)
+{
+
 }
 
 void dbgOutputReceiver::addText(const QString& text)

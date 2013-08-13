@@ -77,9 +77,9 @@ void kciPanel::paintEvent(QPaintEvent *event)
      */
 
     int line_height = fm.lineSpacing(),
-        current_line_num=e->textCursor().block().blockNumber();
+        current_line_num=e->textCursor().block().blockNumber(),
+        top=e->verticalScrollBar()->value();
 
-    int top=e->verticalScrollBar()->value();
 #ifdef Q_OS_MACX
     line_height++;
     int block_top = (top==0)?e->geometry().y() + 5 : 0,

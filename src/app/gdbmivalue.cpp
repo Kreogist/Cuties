@@ -29,6 +29,11 @@ static void skipCommas(const QChar *&begin, const QChar *end)
         ++begin;
 }
 
+GdbMiValue GdbMiValue::at(const int &i) const
+{
+    return children[i];
+}
+
 GdbMiValue GdbMiValue::operator [] (const char *_str_name) const
 {
     int i=children.size();

@@ -25,9 +25,8 @@ void connectionHandler::disConnectAll()
         i!=end;
         i++)
     {
-        if((bool)*i)
-        {
-            disconnect(*i);
-        }
+        disconnect(*i);
     }
+
+    connections.erase(connections.begin(),connections.end());
 }

@@ -48,8 +48,6 @@
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"
 #include "kcisearchwindow.h"
-
-//default highlighter
 #include "kcilanguagemode.h"
 
 class kciSearchWindow;
