@@ -470,6 +470,18 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuFile]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuFileOpen:
+        case mnuFileSaveAll:
+        case mnuFileCloseAllExceptThis:
+            menu[mnuFile]->addSeparator();
+            break;
+        }
+
+#endif
+
     }
 
     //edit menu

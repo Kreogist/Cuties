@@ -8,6 +8,8 @@ kciScrollArea::kciScrollArea(QWidget *parent) :
 
     verticalScrollBar=new QScrollBar(this);
     verticalScrollBar->setOrientation(Qt::Vertical);
+    verticalScrollBar->setVisible(false);
+    verticalScrollBar->setEnabled(false);
 }
 
 void kciScrollArea::setWidget(QWidget *widget)
@@ -17,4 +19,16 @@ void kciScrollArea::setWidget(QWidget *widget)
                         0,
                         widget->width(),
                         widget->height());
+    //HSB Should be shown?
+    if(widget->minimumWidth() > width())
+    {
+        verticalScrollBar->setVisible(true);
+        verticalScrollBar->setEnabled(true);
+    }
+    else
+    {
+        widget->setFixedWidth(width());
+        verticalScrollBar->setVisible(false);
+        verticalScrollBar->setEnabled(false);
+    }
 }
