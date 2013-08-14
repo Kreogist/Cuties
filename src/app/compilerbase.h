@@ -59,7 +59,7 @@ public slots:
 
 protected:
     void emitCompileCmd(const QString& compilerPath,
-                         const QStringList& arg);
+                         const QStringList &arg);
     virtual QStringList getVersionArg() = 0;
     virtual QStringList getCompileArg(const QString& filePath) = 0;
     virtual QStringList getcompileEnv() = 0;
