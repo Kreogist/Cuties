@@ -41,6 +41,17 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     setWindowTitle(QString(tr("Compiler")));
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
+    //Set Time Lines:
+    animeShowTimeLine=new QTimeLine(400,this);
+    animeShowTimeLine->setEasingCurve(QEasingCurve::OutCubic);
+    connect(animeShowTimeLine, SIGNAL(frameChanged(int)),
+            this, SLOT(changeDockCompileWidth(int)));
+
+    animeHideTimeLine=new QTimeLine(400,this);
+    animeHideTimeLine->setEasingCurve(QEasingCurve::OutCubic);
+    connect(animeHideTimeLine, SIGNAL(frameChanged(int)),
+            this, SLOT(changeDockCompileWidth(int)));
+
     //Set Dock Widget and Layout.
     splCombine=new QSplitter(Qt::Horizontal, this);
     splCombine->setContentsMargins(0,0,0,0);
@@ -49,6 +60,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     compileOutput=new kciPlainTextBrowser(this);
     compileOutput->setContentsMargins(0,0,0,0);
     compileOutput->setWordWrapMode(QTextOption::NoWrap);
+    compileOutput->setMinimumWidth(1);
     splCombine->addWidget(compileOutput);
 
     //Set TreeView Controls.
@@ -61,6 +73,7 @@ kcicompiledock::kcicompiledock(QWidget *parent):
     trevwCompileInfo->setHeaderHidden(true);
     trevwCompileInfo->setGeometry(0,0,0,0);
     trevwCompileInfo->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    trevwCompileInfo->setMinimumWidth(1);
     splCombine->addWidget(trevwCompileInfo);
     QList<int> l_sizes;
     l_sizes << width() << 0;
@@ -120,17 +133,28 @@ void kcicompiledock::selectAnError(QModelIndex ItemIndex)
 
 void kcicompiledock::animeShowError()
 {
-    QList<int> l_sizes_finish;
-    int dockCompileWidth=this->width();
-    dockCompileWidth/=5;
-    l_sizes_finish << dockCompileWidth << this->width()-dockCompileWidth;
-    splCombine->setSizes(l_sizes_finish);
+    /*animeHideTimeLine->stop();
+    if(animeShowTimeLine->state() == QTimeLine::NotRunning)
+    {
+        animeShowTimeLine->setFrameRange(compileOutput->width(), int(width()/5));
+        animeShowTimeLine->start();
+    }*/
 }
 
 void kcicompiledock::animeHideError()
 {
+    /*animeShowTimeLine->stop();
+    if(animeHideTimeLine->state() != QTimeLine::NotRunning)
+    {
+        animeHideTimeLine->setFrameRange(compileOutput->width(), width());
+        animeHideTimeLine->start();
+    }*/
+}
+
+void kcicompiledock::changeDockCompileWidth(int dockCompileWidth)
+{
     QList<int> l_sizes_finish;
-    l_sizes_finish << width() << 0;
+    l_sizes_finish << dockCompileWidth << width() - dockCompileWidth;
     splCombine->setSizes(l_sizes_finish);
 }
 
@@ -143,6 +167,6 @@ void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
     erifList=currReceiver->getErifList();
     compileOutput->setDocument(currReceiver->getCompilerOutputText());
     trevwCompileInfo->setModel(currReceiver->getCompilerOutputModel());
-    receiverConnectionHandle=connect(currReceiver,SIGNAL(requireShowError()),
-            this,SLOT(animeShowError()));
+    receiverConnectionHandle=connect(currReceiver, SIGNAL(requireShowError()),
+                                     this, SLOT(animeShowError()));
 }

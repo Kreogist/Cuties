@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     //Initialize Application Infomation.
     QApplication::setApplicationName(QString("Kreogist Cuties"));
     QApplication::setApplicationVersion(QString("0.0.0.1"));
+    QApplication::setApplicationDisplayName(QString("Kreogist Cuties"));
     QApplication::setOrganizationName("Kreogist Team");
     QApplication::setOrganizationDomain("https://github.com/Harinlen/Kreogist-Cute-IDE");
 

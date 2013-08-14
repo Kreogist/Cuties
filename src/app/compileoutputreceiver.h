@@ -6,6 +6,7 @@
 #include <QPlainTextDocumentLayout>
 #include <QTextCursor>
 #include <QTime>
+#include <QDebug>
 
 #include "compilerbase.h"
 
