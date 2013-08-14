@@ -58,6 +58,7 @@ public slots:
 private:
     void resetCompilerAndHighlighter();
     void connectCompilerAndOutputReceiver();
+    void connectGDBAndDbgReceiver();
 
     modeType m_type;
     kciCodeEditor *m_parent;
@@ -65,7 +66,7 @@ private:
 
     compilerBase *compiler;
     compileOutputReceiver *compilerReceiver;
-    connectionHandler connectionHandles;
+    connectionHandler compilerConnectionHandles,gdbConnectionHandles;
     compileState state;
     QReadWriteLock stateLock;
 

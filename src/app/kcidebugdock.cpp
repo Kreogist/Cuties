@@ -60,6 +60,8 @@ kciDebugWidget::kciDebugWidget(QWidget *parent) :
 
     //Add Watch Widget.
     createWatchLayout();
+
+    gdbInstance=NULL;
 }
 
 kciDebugWidget::~kciDebugWidget()
@@ -169,7 +171,7 @@ void kciDebugWidget::createToolBar()
     tmpToolTip=tr("Start debugging.");
     tblStartDebug->setToolTip(tmpToolTip);
     connect(tblStartDebug,SIGNAL(clicked()),
-            m_parent,SIGNAL(requireStartDebug()));
+            this,SLOT(onStartDebugButtonClicked()));
 
     DebugToolBar->addWidget(tblStartDebug);
     tblStopDebug=new QToolButton(this);
@@ -288,8 +290,16 @@ void kciDebugWidget::connectGDB(gdb *instance)
     gdbInstance=instance;
     connectionHandles+=connect(tblNextLine,SIGNAL(clicked()),
                                gdbInstance,SLOT(execNext()));
+    connectionHandles+=connect(tblNextStep,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execStepi()));
     connectionHandles+=connect(tblNextInstruction,SIGNAL(clicked()),
                                gdbInstance,SLOT(execStepi()));
+    connectionHandles+=connect(tblContinue,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execContinue()));
+    connectionHandles+=connect(tblStopDebug,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execAbort()));
+    connectionHandles+=connect(tblSkipInstruction,SIGNAL(clicked()),
+                               gdbInstance,SLOT(execReturn()));
 }
 
 void kciDebugWidget::onGDBCmdEditFinished(QString command)
@@ -298,16 +308,26 @@ void kciDebugWidget::onGDBCmdEditFinished(QString command)
     gdbInstance->write(qPrintable(command+"\n"));
 }
 
-void kciDebugDock::connectCurrEditorLangMode(kciLanguageMode *mode)
+void kciDebugWidget::onStartDebugButtonClicked()
 {
-    dbgOutputReceiver *dbgReceiver=mode->getDbgReceiver();
-    if(dbgReceiver!=NULL)
+    if(gdbInstance == NULL)
     {
-        CentralWidget->setDbgReceiver(dbgReceiver);
+        emit m_parent->requireStartDebug();
     }
-    gdb *gdbInstance=mode->getGdbInstance();
-    if(gdbInstance!=NULL)
-    {
-        CentralWidget->connectGDB(gdbInstance);
-    }
+
+    Q_ASSERT(gdbInstance!=NULL);
+
+    gdbInstance->execRun();
+}
+
+void kciDebugDock::setDbgReceiver(dbgOutputReceiver *receiver)
+{
+    Q_ASSERT(receiver!=NULL);
+    CentralWidget->setDbgReceiver(receiver);
+}
+
+void kciDebugDock::setGdbInstance(gdb *instance)
+{
+    Q_ASSERT(instance!=NULL);
+    CentralWidget->connectGDB(instance);
 }

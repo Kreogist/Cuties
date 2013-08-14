@@ -374,7 +374,7 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
 }
 
 kciControlCenter::kciControlCenter(QWidget *parent) :
-    QWidget(parent)
+    QDialog(parent)
 {
     setFont(QFont("Kreogist-UI"));
     //Set Whole Layout

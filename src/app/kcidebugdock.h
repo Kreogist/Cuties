@@ -30,6 +30,7 @@ public:
     void setDbgReceiver(dbgOutputReceiver *receiver);
 
 private slots:
+    void onStartDebugButtonClicked();
     void onGDBCmdEditFinished(QString command);
 
 private:
@@ -86,13 +87,15 @@ class kciDebugDock : public QDockWidget
     Q_OBJECT
 public:
     explicit kciDebugDock(QWidget *parent = 0);
-    void connectCurrEditorLangMode(kciLanguageMode *mode);
-    
+    void setDbgReceiver(dbgOutputReceiver *receiver);
+    void setGdbInstance(gdb* instance);
+
 signals:
     void requireStartDebug();
     
 public slots:
-    
+
+
 private:
     kciDebugWidget *CentralWidget;
 };

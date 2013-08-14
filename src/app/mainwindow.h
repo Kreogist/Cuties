@@ -39,6 +39,10 @@
 #include <QGraphicsDropShadowEffect>
 #include <QVariant>
 
+#ifdef Q_OS_MACX
+#include <QMenuBar>
+#endif
+
 #include "kciglobal.h"
 #include "kcicompiledock.h"
 #include "kcijudgedock.h"
@@ -129,10 +133,10 @@ private:
         mnuDebugStopExecute,
         mnuDebugSetBreakPoint,
         mnuDebugNextLine,
-        mnuDebugNextStep,
+        mnuDebugIntoLine,
+        mnuDebugNextInstruction,
         mnuDebugIntoInstruction,
-        mnuDebugSkipInstruction,
-        mnuDebugSkipLine,
+        mnuDebugContinue,
         mnuDebugSkipFunction,
         mnuDebugAddWatch,
         mnuDebugModifyWatch,
@@ -198,6 +202,8 @@ private:
     void createToolBar();
 
     void setDocOpenMenuState(bool state);
+
+    void connectDebugDockWithCurrEditor();
 
 
 };
