@@ -121,22 +121,22 @@ private:
         mnuSearchReplaceInFiles,
         mnuSearchSearchOnline,
         mnuSearchGoto,
-        mnuRunCompileAndRun,
-        mnuRunCompile,
-        mnuRunRun,
-        mnuRunParameters,
-        mnuRunSetInputFile,
-        mnuRunShowOutputFile,
-        mnuRunRunAndShowOutputFile,
-        mnuRunSetInputRunShowOutput,
+        mnuExecuteCompileAndRun,
+        mnuExecuteCompile,
+        mnuExecuteRun,
+        mnuExecuteParameters,
+        mnuExecuteSetInputFile,
+        mnuExecuteShowOutputFile,
+        mnuExecuteRunAndShowOutputFile,
+        mnuExecuteSetInputRunShowOutput,
         mnuDebugStart,
         mnuDebugStopExecute,
         mnuDebugSetBreakPoint,
         mnuDebugNextLine,
-        mnuDebugNextStep,
+        mnuDebugIntoLine,
+        mnuDebugNextInstruction,
         mnuDebugIntoInstruction,
-        mnuDebugSkipInstruction,
-        mnuDebugSkipLine,
+        mnuDebugContinue,
         mnuDebugSkipFunction,
         mnuDebugAddWatch,
         mnuDebugModifyWatch,
@@ -155,9 +155,9 @@ private:
         mnuEdit,
         mnuView,
         mnuSearch,
-        mnuRun,
+        mnuExecute,
         mnuDebug,
-        mnuTool,
+        mnuTools,
         mnuWindow,
         mnuHelp,
         menu_count  //the number of menus
@@ -202,6 +202,8 @@ private:
     void createToolBar();
 
     void setDocOpenMenuState(bool state);
+
+    void connectDebugDockWithCurrEditor();
 
 
 };

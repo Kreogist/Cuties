@@ -3,8 +3,6 @@
 dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     QObject(parent)
 {
-    gdbInstance=NULL;
-
     textStreamOutput=new QTextDocument(this);
     textStreamOutput->setDocumentLayout(
                 new QPlainTextDocumentLayout(textStreamOutput));
@@ -26,25 +24,6 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     errorFormat.setForeground(QBrush(QColor(255,0,0)));
     targetFormat.setForeground(QBrush(QColor(0,0x8f,0xff)));
     logFormat.setForeground(QBrush(Qt::yellow));
-}
-
-void dbgOutputReceiver::connectGDB(gdb *gdbInstance)
-{
-    if(this->gdbInstance!=NULL)
-    {
-        connectionHandles.disConnectAll();
-    }
-
-    connectionHandles+=connect(gdbInstance,&gdb::errorOccured,
-                               this,&dbgOutputReceiver::receiveError);
-    connectionHandles+=connect(gdbInstance,&gdb::consoleOutputStream,
-                               this,&dbgOutputReceiver::receiveconsoleOutput);
-    connectionHandles+=connect(gdbInstance,&gdb::targetOutputStream,
-                               this,&dbgOutputReceiver::receivetargetOutput);
-    connectionHandles+=connect(gdbInstance,&gdb::logOutputStream,
-                               this,&dbgOutputReceiver::receivelogOutput);
-    connectionHandles+=connect(gdbInstance,&gdb::locals,
-                               this,&dbgOutputReceiver::receiveLocals);
 }
 
 void dbgOutputReceiver::receiveError(QString text)

@@ -33,6 +33,8 @@
 #include <QPropertyAnimation>
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QDebug>
+#include <QTimeLine>
 
 #include "kciplaintextbrowser.h"
 #include "compileoutputreceiver.h"
@@ -55,6 +57,7 @@ private:
     QTreeView *trevwCompileInfo;
     kciPlainTextBrowser *compileOutput;
     QModelIndex lastSelIndex;
+    QTimeLine *animeShowTimeLine, *animeHideTimeLine;
     const QVector<ErrInfo> *erifList;
     QMetaObject::Connection receiverConnectionHandle;
 
@@ -64,14 +67,14 @@ signals:
     void requireSetFocus();
     
 public slots:
-    //Show/Hide Error Animation.
+    //Show & Hide Error Animation.
     void animeShowError();
     void animeHideError();
 
 private slots:
+    void changeDockCompileWidth(int dockCompileWidth);
     void selectAnError(QModelIndex ItemIndex);
     void jumpToError(QModelIndex ItemID);
-    
 };
 
 #endif // KCICOMPILEDOCK_H

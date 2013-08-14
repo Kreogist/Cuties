@@ -6,6 +6,7 @@
 #include <QPlainTextDocumentLayout>
 #include <QTextCursor>
 #include <QTime>
+#include <QDebug>
 
 #include "compilerbase.h"
 
@@ -20,7 +21,7 @@ public:
 
     //Text Controls:
     void clearText();
-    void addText(QString NewText);
+    void addText(const QString NewText);
     void addForwardText();
 
     void reset();

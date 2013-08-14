@@ -33,35 +33,14 @@ void kciLanguageMode::compile()
         connectCompilerAndOutputReceiver();
     }
 
-    stateLock.lockForWrite();
-    state=compiling;
-    stateLock.unlock();
-
     compilerReceiver->addForwardText();
 
+    if(compiler->state() != QProcess::NotRunning)
+        return ;
+
     compilerFinishedConnection=connect(compiler,&compilerBase::compileFinished,
-            this,&kciLanguageMode::onCompileFinished);
-
+                                       this,&kciLanguageMode::onCompileFinished);
     compiler->startCompile(m_parent->filePath);
-}
-
-void kciLanguageMode::connectCompilerAndOutputReceiver()
-{
-    connectionHandles.disConnectAll();
-
-    compilerReceiver->setCompilerVersionString(compiler->compilerName()+
-                                               " "+
-                                               compiler->version());
-
-    //Output Compile Message:
-    connectionHandles+=connect(compiler,&compilerBase::compileCmd,
-                               compilerReceiver,&compileOutputReceiver::addText);
-    connectionHandles+=connect(compiler,&compilerBase::output,
-                               compilerReceiver,&compileOutputReceiver::addText);
-    connectionHandles+=connect(compiler,&compilerBase::compileError,
-                               compilerReceiver,&compileOutputReceiver::onCompileMsgReceived);
-    connectionHandles+=connect(compiler,&compilerBase::compileFinished,
-                               compilerReceiver,&compileOutputReceiver::onCompileFinished);
 }
 
 void kciLanguageMode::setFileSuffix(const QString& suffix)
@@ -125,7 +104,7 @@ gdb* kciLanguageMode::startDebug()
     if(dbgReceiver == NULL)
         dbgReceiver=new dbgOutputReceiver(this);
 
-    dbgReceiver->connectGDB(gdbInstance);
+    connectGDBAndDbgReceiver();
     gdbInstance->runGDB(m_parent->execFileName);
 
     return gdbInstance;
@@ -133,10 +112,6 @@ gdb* kciLanguageMode::startDebug()
 
 void kciLanguageMode::onCompileFinished(bool hasError)
 {
-    stateLock.lockForWrite();
-    state=compiled;
-    stateLock.unlock();
-
     if((bool)compilerFinishedConnection)
         disconnect(compilerFinishedConnection);
 
@@ -158,4 +133,39 @@ void kciLanguageMode::resetCompilerAndHighlighter()
         m_highlighter->deleteLater();
         m_highlighter=NULL;
     }
+}
+
+void kciLanguageMode::connectCompilerAndOutputReceiver()
+{
+    compilerConnectionHandles.disConnectAll();
+
+    compilerReceiver->setCompilerVersionString(compiler->compilerName()+
+                                               " "+
+                                               compiler->version());
+
+    //Output Compile Message:
+    compilerConnectionHandles+=connect(compiler,&compilerBase::compileCmd,
+                               compilerReceiver,&compileOutputReceiver::addText);
+    compilerConnectionHandles+=connect(compiler,&compilerBase::output,
+                               compilerReceiver,&compileOutputReceiver::addText);
+    compilerConnectionHandles+=connect(compiler,&compilerBase::compileError,
+                               compilerReceiver,&compileOutputReceiver::onCompileMsgReceived);
+    compilerConnectionHandles+=connect(compiler,&compilerBase::compileFinished,
+                               compilerReceiver,&compileOutputReceiver::onCompileFinished);
+}
+
+void kciLanguageMode::connectGDBAndDbgReceiver()
+{
+    gdbConnectionHandles.disConnectAll();
+
+    gdbConnectionHandles+=connect(gdbInstance,&gdb::errorOccured,
+                               dbgReceiver,&dbgOutputReceiver::receiveError);
+    gdbConnectionHandles+=connect(gdbInstance,&gdb::consoleOutputStream,
+                               dbgReceiver,&dbgOutputReceiver::receiveconsoleOutput);
+    gdbConnectionHandles+=connect(gdbInstance,&gdb::targetOutputStream,
+                               dbgReceiver,&dbgOutputReceiver::receivetargetOutput);
+    gdbConnectionHandles+=connect(gdbInstance,&gdb::logOutputStream,
+                               dbgReceiver,&dbgOutputReceiver::receivelogOutput);
+    gdbConnectionHandles+=connect(gdbInstance,&gdb::locals,
+                               dbgReceiver,&dbgOutputReceiver::receiveLocals);
 }

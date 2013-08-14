@@ -72,7 +72,8 @@ SOURCES += \
     dbgoutputreceiver.cpp \
     connectionhandler.cpp \
     Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
-    kciplaintextbrowser.cpp
+    kciplaintextbrowser.cpp \
+    kcimessagebox.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -117,7 +118,8 @@ HEADERS += \
     dbgoutputreceiver.h \
     connectionhandler.h \
     Controls/SettingItems/kcisettinglistitemfoldertext.h \
-    kciplaintextbrowser.h
+    kciplaintextbrowser.h \
+    kcimessagebox.h
 
 # Enable C++11
 CONFIG += c++11

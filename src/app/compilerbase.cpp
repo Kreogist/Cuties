@@ -40,6 +40,7 @@ void compilerBase::emitCompileCmd(const QString &compilerPath,
         CompileCmdLine += QString(" ") + arg.at(i);
     }
     CompileCmdLine+="\n";
+
     emit compileCmd(CompileCmdLine);
 }
 
@@ -58,10 +59,10 @@ QString compilerBase::version()
 
 void compilerBase::startCompile(const QString &filePath)
 {
-    QString compilerPath=path();
     QStringList arg=getCompileArg(filePath);
+    QString compilerPath=path();
 
-    emitCompileCmd(compilerPath,arg);
+    emitCompileCmd(compilerPath,getCompileArg(filePath));
 
     connectionHandle=connect(this,SIGNAL(readyRead()),
             this,SLOT(onOutputReady()));
@@ -70,7 +71,7 @@ void compilerBase::startCompile(const QString &filePath)
     if(!env.isEmpty())
         setEnvironment(env);
 
-    start(compilerPath,arg);
+    start(compilerPath,getCompileArg(filePath));
 }
 
 bool compilerBase::checkCompilerPath(const QString& path)
@@ -92,5 +93,6 @@ void compilerBase::onFinished(int exitNum)
         disconnect(connectionHandle);
     }
 
-    emit compileFinished(checkHasErrorByExitNum(exitNum));
+    int hasErr=checkHasErrorByExitNum(exitNum);
+    emit compileFinished(hasErr);
 }
