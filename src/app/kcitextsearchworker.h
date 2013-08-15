@@ -26,6 +26,7 @@ public:
     QReadWriteLock lock;
 
     QList<searchResult>* getResults();
+    void setResults(QList<searchResult> *results);
 
     void setDocument(QTextDocument *value);
     void setIsCaseSensitive(bool value);
@@ -39,7 +40,7 @@ protected:
     virtual void setCaseSensitive(bool value) = 0;
     
 private:
-    QList<searchResult> resultList;
+    QList<searchResult> *resultList;
     int currBlockNumber;
     bool isCaseSensitive;
     QTextDocument* document;

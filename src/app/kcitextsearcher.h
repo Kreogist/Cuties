@@ -50,6 +50,7 @@ public:
     void setSubString(const QString &value);
     int getFlags() const;
     void setFlags(int value);
+    void cancelPrevSearch();
 
 signals:
     void finished(QList<searchResult>* results);
@@ -58,6 +59,7 @@ public slots:
     void onWorkerFinished();
     
 private:
+    QList<searchResult> resultList;
     QString subString;
     QTextDocument* p_document;
     int flags;
