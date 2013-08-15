@@ -33,6 +33,7 @@
 
 #include "kcititlebar.h"
 #include "kreogistcutestyle.h"
+#include "kcidragproxy.h"
 
 class kciMainWindow : public QMainWindow
 {
@@ -52,24 +53,9 @@ signals:
     
 public slots:
 
-protected:
-    void mouseMoveEvent(QMouseEvent *);
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    //bool eventFilter(QObject *obj, QEvent *e);
-
 private:
-    enum pressType
-    {
-        none,
-        left_frame,
-        right_frame,
-        bottom_frame
-    };
 
     kciTitleBar *m_titleBar;
-    static int range;
-    int pressed;
     QPoint startPos;
 };
 

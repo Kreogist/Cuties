@@ -187,6 +187,7 @@ private:
     kciControlCenterContents *CCMainContents;
     kciControlCenterBanner *ccBanner;
     kciControlCenterLeftBar *ccLeftBar;
+    QToolButton *btYes, *btCancel, *btApply;
 };
 
 #endif // KCICONTROLCENTER_H
