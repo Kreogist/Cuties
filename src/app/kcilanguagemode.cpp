@@ -33,15 +33,13 @@ void kciLanguageMode::compile()
         connectCompilerAndOutputReceiver();
     }
 
-    stateLock.lockForWrite();
-    state=compiling;
-    stateLock.unlock();
-
     compilerReceiver->addForwardText();
 
-    compilerFinishedConnection=connect(compiler,&compilerBase::compileFinished,
-            this,&kciLanguageMode::onCompileFinished);
+    if(compiler->state() != QProcess::NotRunning)
+        return ;
 
+    compilerFinishedConnection=connect(compiler,&compilerBase::compileFinished,
+                                       this,&kciLanguageMode::onCompileFinished);
     compiler->startCompile(m_parent->filePath);
 }
 
@@ -114,10 +112,6 @@ gdb* kciLanguageMode::startDebug()
 
 void kciLanguageMode::onCompileFinished(bool hasError)
 {
-    stateLock.lockForWrite();
-    state=compiled;
-    stateLock.unlock();
-
     if((bool)compilerFinishedConnection)
         disconnect(compilerFinishedConnection);
 
@@ -162,10 +156,7 @@ void kciLanguageMode::connectCompilerAndOutputReceiver()
 
 void kciLanguageMode::connectGDBAndDbgReceiver()
 {
-    if(this->gdbInstance!=NULL)
-    {
-        gdbConnectionHandles.disConnectAll();
-    }
+    gdbConnectionHandles.disConnectAll();
 
     gdbConnectionHandles+=connect(gdbInstance,&gdb::errorOccured,
                                dbgReceiver,&dbgOutputReceiver::receiveError);

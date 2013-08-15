@@ -87,9 +87,6 @@ void pascalHighlighter::highlightBlock(const QString &text)
             setFormat(match.capturedStart(),
                       match.capturedLength(),
                       instance->getTextCharFormat(rules[i].type_name));
-            match=rules[i].regexp.match(
-                        text,
-                        match.capturedEnd());
         }
     }
 }

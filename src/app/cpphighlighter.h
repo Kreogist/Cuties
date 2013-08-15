@@ -41,6 +41,7 @@ private:
     QList<highlight_rule> rules;
     
     textCharFormatMap *instance;
+    void conmmentHighlightBlock(const QString &text);
 };
 
 #endif // CPPHIGHLIGHTER_H

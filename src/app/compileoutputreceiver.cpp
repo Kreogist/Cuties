@@ -25,9 +25,9 @@ void compileOutputReceiver::clearText()
    compilerOutputText->clear();
 }
 
-void compileOutputReceiver::addText(QString NewText)
+void compileOutputReceiver::addText(const QString NewText)
 {
-    QTextCursor text_cursor=QTextCursor(compilerOutputText);
+    QTextCursor text_cursor(compilerOutputText);
     text_cursor.movePosition(QTextCursor::End);
     text_cursor.insertText(NewText);
 }
