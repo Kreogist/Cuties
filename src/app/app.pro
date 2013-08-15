@@ -129,6 +129,8 @@ CONFIG += c++11
 RESOURCES += \
     rc.qrc
 
+RC_FILE += winico.rc
+
 TRANSLATIONS += zh_CN.ts
 
 OTHER_FILES += \

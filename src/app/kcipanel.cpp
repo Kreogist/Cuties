@@ -53,6 +53,12 @@ void kciPanel::setKciTextEditor(kciTextEditor *editor)
                                    SLOT(update()));
 }
 
+int kciPanel::getRealLineCount(const QTextBlock &block, const int& offset)
+{
+    return block.blockNumber() == first ?
+                offset:block.lineCount();
+}
+
 void kciPanel::paintEvent(QPaintEvent *event)
 {
     if(e == NULL||
@@ -94,7 +100,8 @@ void kciPanel::paintEvent(QPaintEvent *event)
     setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);
 
     //find first visiable block
-    for(int line_count=0;block.isValid();
+    int line_count;
+    for(line_count=0;block.isValid();
         block=block.next())
     {
         line_count+=block.lineCount();
@@ -107,7 +114,10 @@ void kciPanel::paintEvent(QPaintEvent *event)
     for(;bottom>=0 && block.isValid();
         block=block.next())
     {
-        int block_height=line_height*(block.lineCount());
+        /*If block is the first block, the real line count is (line_count-top).
+         *Otherwise the real line count is block.lineCount();
+         */
+        int block_height=line_height*getRealLineCount(block,line_count-top);
         painter.save();
         this->draw(&painter, &block,
                    0, block_top, width(), block_height,

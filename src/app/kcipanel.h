@@ -55,6 +55,7 @@ protected:
                       bool isCurrentLine) = 0;
     
 private:
+    int getRealLineCount(const QTextBlock& block, const int &offset);
     kciTextEditor *e;
 
     int first,last;
