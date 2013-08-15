@@ -26,7 +26,6 @@
 
 #include <QProcess>
 #include <QFileInfo>
-#include <QDebug>
 
 struct ErrInfo
 {
@@ -50,22 +49,25 @@ public:
     virtual QString compilerName() = 0;
 
 signals:
-    void compileinfo(QString msg);
+    void compileCmd(QString cmd);
     void compileError(ErrInfo errInfo);
     void output(QString msg);
+    void compileFinished(bool hasError);
 
 public slots:
     virtual void onOutputReady() = 0;
 
 protected:
-    void emitCompileInfo(const QString& compilerPath,
-                         const QStringList& arg);
+    void emitCompileCmd(const QString& compilerPath,
+                         const QStringList &arg);
     virtual QStringList getVersionArg() = 0;
     virtual QStringList getCompileArg(const QString& filePath) = 0;
     virtual QStringList getcompileEnv() = 0;
 
+    virtual bool checkHasErrorByExitNum(const int& exitNum){return exitNum > 0;}
+
 private slots:
-    void onFinished();
+    void onFinished(int exitNum);
 
 private:
     QMetaObject::Connection connectionHandle;

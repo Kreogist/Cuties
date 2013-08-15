@@ -45,6 +45,8 @@
 #include <QPropertyAnimation>
 #include <QComboBox>
 
+#include <QDialog>
+
 #include "kcisearchlinetext.h"
 #include "Controls/SettingItems/kcisettinglistitemcombo.h"
 #include "Controls/SettingItems/kcisettinglistitemboolean.h"
@@ -102,6 +104,7 @@ public:
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
+    kciSettingListItemCombo *sboDefaultEncode;
     kciSettingListItemBoolean *slnEnableAnime;
 };
 
@@ -166,7 +169,7 @@ private:
     int contentIndex;
 };
 
-class kciControlCenter : public QWidget
+class kciControlCenter : public QDialog //QWidget
 {
     Q_OBJECT
 public:

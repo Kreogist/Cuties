@@ -24,11 +24,6 @@
 #ifndef PASCALHIGHLIGHTER_H
 #define PASCALHIGHLIGHTER_H
 
-#include <QList>
-#include <QFont>
-#include<QSyntaxHighlighter>
-#include <QRegularExpression>
-
 #include "highlighterGlobal.h"
 #include "textcharformatmap.h"
 

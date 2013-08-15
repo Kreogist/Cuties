@@ -25,15 +25,28 @@
 #define KCIGLOBAL_H
 
 #include <QString>
+#include <QSettings>
 
 //Global Variables
 class kciGlobal
 {
 public:
     static const QString settingsFileName;
+    void readSettings();
+    void writeSettings();
+
+    //Gernal Settings:
+    //Editor Settings:
+    //Compiler Settings:
+    QString gstGCCUNIXPath;
+    QString gstGCCWinPath;
+
+    //Debugger Settings:
+    //Language Settings:
 
 private:
     kciGlobal();
+    QSettings *kciMainConfig;
 };
 
 #endif // KCIGLOBAL_H

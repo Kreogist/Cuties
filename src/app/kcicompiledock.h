@@ -28,19 +28,15 @@
 #include <QPalette>
 #include <QWidget>
 #include <QSplitter>
-#include <QDebug>
 #include <QList>
 #include <QVector>
-#include <QTime>
-#include <QSignalMapper>
-#include <QRegularExpression>
 #include <QPropertyAnimation>
-#include <QPlainTextEdit>
 #include <QDockWidget>
 #include <QModelIndex>
-#include <QStandardItemModel>
+#include <QDebug>
+#include <QTimeLine>
 
-#include "compilerbase.h"
+#include "kciplaintextbrowser.h"
 #include "compileoutputreceiver.h"
 
 class kcicompiledock : public QDockWidget
@@ -59,9 +55,10 @@ private:
     QWidget *objCombine;
     QSplitter *splCombine;
     QTreeView *trevwCompileInfo;
-    QPlainTextEdit *compileOutput;
+    kciPlainTextBrowser *compileOutput;
     QModelIndex lastSelIndex;
-    const compileOutputReceiver *receiver;
+    QTimeLine *animeShowTimeLine, *animeHideTimeLine;
+    const QVector<ErrInfo> *erifList;
     QMetaObject::Connection receiverConnectionHandle;
 
 signals:
@@ -70,14 +67,14 @@ signals:
     void requireSetFocus();
     
 public slots:
-    //Show/Hide Error Animation.
+    //Show & Hide Error Animation.
     void animeShowError();
     void animeHideError();
 
 private slots:
+    void changeDockCompileWidth(int dockCompileWidth);
     void selectAnError(QModelIndex ItemIndex);
     void jumpToError(QModelIndex ItemID);
-    
 };
 
 #endif // KCICOMPILEDOCK_H

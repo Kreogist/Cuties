@@ -23,9 +23,20 @@
 
 #include "kciglobal.h"
 
-const QString kciGlobal::settingsFileName("kcisettings.ini");
-
+const QString kciGlobal::settingsFileName("Cuties.ini");
 
 kciGlobal::kciGlobal()
 {
+    kciMainConfig=new QSettings(settingsFileName, QSettings::IniFormat);
+
+}
+
+void kciGlobal::readSettings()
+{
+
+}
+
+void kciGlobal::writeSettings()
+{
+
 }

@@ -1,12 +1,12 @@
 #ifndef COMPILEOUTPUTRECEIVER_H
 #define COMPILEOUTPUTRECEIVER_H
 
-#include <QObject>
 #include <QStandardItemModel>
 #include <QTextDocument>
 #include <QPlainTextDocumentLayout>
 #include <QTextCursor>
 #include <QTime>
+#include <QDebug>
 
 #include "compilerbase.h"
 
@@ -21,50 +21,35 @@ public:
 
     //Text Controls:
     void clearText();
-    void addText(QString NewText);
+    void addText(const QString NewText);
     void addForwardText();
 
     void reset();
 
-    //getter
     QStandardItemModel *getCompilerOutputModel() const;
     QTextDocument *getCompilerOutputText() const;
     const QVector<ErrInfo> *getErifList() const;
 
     bool hasCompileError();
 
-    void connectCompiler(compilerBase* compiler);
-
-    QString getCompilerVersion() const;
+    QString getCompilerVersionString() const;
+    void setCompilerVersionString(const QString& strVersion);
 
 signals:
     void requireShowError();
     
 public slots:
     void onCompileMsgReceived(ErrInfo error);
-    void compileFinish(int ExitNum);
+    void onCompileFinished(bool hasError);
     
 private:
-    enum connectionType
-    {
-        compileinfo,
-        output,
-        compileError,
-        finished,
-        typeCount
-    };
-
-    bool hasError;
+    bool hasOutput;
     QStandardItemModel *compilerOutputModel;
     QTextDocument *compilerOutputText;
     QPlainTextDocumentLayout *plainTextLayout;
     QModelIndex lastSelIndex;
     QVector<ErrInfo> erifList;
     QString compilerVersion;
-
-    compilerBase *connectedCompiler;
-
-    QMetaObject::Connection connectHandle[typeCount];
 };
 
 #endif // COMPILEOUTPUTRECEIVER_H

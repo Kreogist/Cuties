@@ -24,19 +24,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QTextEdit>
 #include <QAction>
-#include <QMenuBar>
-#include <QToolBar>
 #include <QMenu>
-#include <QTime>
 #include <QPalette>
 #include <QApplication>
 #include <QToolButton>
 #include <QMessageBox>
 #include <QDesktopServices>
-#include <QFileInfo>
 #include <QSettings>
 #include <QSize>
 #include <QRect>
@@ -44,6 +38,10 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QVariant>
+
+#ifdef Q_OS_MACX
+#include <QMenuBar>
+#endif
 
 #include "kciglobal.h"
 #include "kcicompiledock.h"
@@ -71,6 +69,7 @@ public slots:
     void aboutQt();
     void aboutKCI();
     void compileCurrentFile();
+    void startDebug();
     void run();
     void compileAndRun();
     void searchOnline();
@@ -122,22 +121,22 @@ private:
         mnuSearchReplaceInFiles,
         mnuSearchSearchOnline,
         mnuSearchGoto,
-        mnuRunCompileAndRun,
-        mnuRunCompile,
-        mnuRunRun,
-        mnuRunParameters,
-        mnuRunSetInputFile,
-        mnuRunShowOutputFile,
-        mnuRunRunAndShowOutputFile,
-        mnuRunSetInputRunShowOutput,
+        mnuExecuteCompileAndRun,
+        mnuExecuteCompile,
+        mnuExecuteRun,
+        mnuExecuteParameters,
+        mnuExecuteSetInputFile,
+        mnuExecuteShowOutputFile,
+        mnuExecuteRunAndShowOutputFile,
+        mnuExecuteSetInputRunShowOutput,
         mnuDebugStart,
         mnuDebugStopExecute,
         mnuDebugSetBreakPoint,
         mnuDebugNextLine,
-        mnuDebugNextStep,
+        mnuDebugIntoLine,
+        mnuDebugNextInstruction,
         mnuDebugIntoInstruction,
-        mnuDebugSkipInstruction,
-        mnuDebugSkipLine,
+        mnuDebugContinue,
         mnuDebugSkipFunction,
         mnuDebugAddWatch,
         mnuDebugModifyWatch,
@@ -156,9 +155,9 @@ private:
         mnuEdit,
         mnuView,
         mnuSearch,
-        mnuRun,
+        mnuExecute,
         mnuDebug,
-        mnuTool,
+        mnuTools,
         mnuWindow,
         mnuHelp,
         menu_count  //the number of menus
@@ -203,6 +202,8 @@ private:
     void createToolBar();
 
     void setDocOpenMenuState(bool state);
+
+    void connectDebugDockWithCurrEditor();
 
 
 };

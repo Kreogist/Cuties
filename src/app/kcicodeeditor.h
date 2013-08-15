@@ -30,9 +30,7 @@
 #include <QFile>
 #include <QPlainTextEdit>
 #include <QFileInfo>
-#include <QFileDevice>
 #include <QFileDialog>
-#include <QTextDocument>
 #include <QTextStream>
 #include <QString>
 #include <QMessageBox>
@@ -40,7 +38,6 @@
 #include <QErrorMessage>
 #include <QSettings>
 #include <QIcon>
-#include <QSyntaxHighlighter>
 #include <QPropertyAnimation>
 #include <QTimeLine>
 #include <QGraphicsOpacityEffect>
@@ -51,8 +48,6 @@
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"
 #include "kcisearchwindow.h"
-
-//default highlighter
 #include "kcilanguagemode.h"
 
 class kciSearchWindow;
@@ -100,7 +95,6 @@ public slots:
 
 private slots:
     void onModificationChanged(bool changed);
-    void initAnimeOpacity(int opacity);
 
 protected:
     void closeEvent(QCloseEvent *e);

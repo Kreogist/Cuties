@@ -26,9 +26,17 @@
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
+    setContentsMargins(0,0,0,0);
+
     setFrameStyle(QFrame::NoFrame);
     setFont(QString("Monaco"));
     setAcceptDrops(false);
+
+    QFontMetrics fm=this->fontMetrics();
+
+    //Set TextEditor Properties.
+    //Tab Width
+    setTabStopWidth(4);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));

@@ -24,11 +24,6 @@
 #ifndef CPPHIGHLIGHTER_H
 #define CPPHIGHLIGHTER_H
 
-#include <QList>
-#include <QFont>
-#include <QSyntaxHighlighter>
-#include <QRegularExpression>
-
 #include "highlighterGlobal.h"
 #include "textcharformatmap.h"
 

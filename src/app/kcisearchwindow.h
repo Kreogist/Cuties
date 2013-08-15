@@ -36,17 +36,15 @@
 #include <QFrame>
 #include <QLabel>
 #include <QMenu>
-#include <QPlainTextEdit>
-#include <QTextDocument>
 
-#include "kcicodeeditor.h"
+#include "kcitexteditor.h"
 #include "kcitextsearcher.h"
 
 class kciSearchWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciSearchWindow(QPlainTextEdit *parent);
+    explicit kciSearchWindow(kciTextEditor *parent);
     void setTextFocus();
 
 public slots:
@@ -63,6 +61,14 @@ signals:
     void hideButtonPressed();
 
 private:
+    /*kciSearchWindow must be a child of a kciTextEditor,
+     *otherwise parent may be NULL.
+     *Because we assume parent isn't NULL,
+     *so if parent is NULL, the program will crash.
+     */
+    kciSearchWindow();
+    void showCurrResult();
+
     enum menuItem
     {
         RegularExpress,
@@ -73,7 +79,7 @@ private:
 
     int currResultNum;
 
-    QPlainTextEdit* parent;
+    kciTextEditor* parent;
 
     QHBoxLayout *searchLayout;
     QToolButton *closeButton, *upButton, *downButton;
@@ -90,9 +96,6 @@ private:
 
     QMenu *menu;
     QAction *menuAction[menuItemCount];
-
-    void showCurrResult();
-    void setSelectedCharFormat(const QTextCharFormat& format);
 };
 
 #endif // KCISEARCHWINDOW_H

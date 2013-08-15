@@ -18,7 +18,7 @@ kciSettingListItemBase::kciSettingListItemBase(QWidget *parent) :
     itemSelected=false;
 
     //Set Fade Out Anime.
-    animeFadeOut=new QTimeLine(200);
+    animeFadeOut=new QTimeLine(200,this);
     connect(animeFadeOut,SIGNAL(frameChanged(int)),
             this,SLOT(changeBackgroundAlpha(int)));
 }

@@ -67,7 +67,13 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitembase.cpp \
     Controls/SettingItems/kcisettinglistitemcombo.cpp \
     compileoutputreceiver.cpp \
-    Controls/SettingItems/kcisettinglistitemlinetext.cpp
+    Controls/SettingItems/kcisettinglistitemlinetext.cpp \
+    Controls/UserControls/kciscrollarea.cpp \
+    dbgoutputreceiver.cpp \
+    connectionhandler.cpp \
+    Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
+    kciplaintextbrowser.cpp \
+    kcimessagebox.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -103,13 +109,17 @@ HEADERS += \
     kcitextsearchworker.h \
     fpc.h \
     kcilistbutton.h \
-    Controls/Setting-List/ListItem/kcisettinglistitembase.h \
-    Controls/Setting-List/ListItem/kcisettinglistitemboolean.h \
     Controls/SettingItems/kcisettinglistitemboolean.h \
     Controls/SettingItems/kcisettinglistitembase.h \
     Controls/SettingItems/kcisettinglistitemcombo.h \
     compileoutputreceiver.h \
-    Controls/SettingItems/kcisettinglistitemlinetext.h
+    Controls/SettingItems/kcisettinglistitemlinetext.h \
+    Controls/UserControls/kciscrollarea.h \
+    dbgoutputreceiver.h \
+    connectionhandler.h \
+    Controls/SettingItems/kcisettinglistitemfoldertext.h \
+    kciplaintextbrowser.h \
+    kcimessagebox.h
 
 # Enable C++11
 CONFIG += c++11
@@ -124,5 +134,3 @@ OTHER_FILES += \
     lang.map \
     default.style \
     COPYING.txt
-
-FORMS +=

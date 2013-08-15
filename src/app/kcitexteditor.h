@@ -28,7 +28,6 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTextBlock>
-#include <QFont>
 #include <QPalette>
 #include <QScrollBar>
 #include <QDebug>

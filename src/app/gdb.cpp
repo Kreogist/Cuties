@@ -42,27 +42,31 @@ gdb::gdb(QObject *parent) :
     QProcess(parent)
 {
     checkGDB();
-    connect(this,SIGNAL(readyRead()),SLOT(onReadReady()));
-
-    setReadChannelMode(QProcess::MergedChannels);
+    connect(this,
+            SIGNAL(readyReadStandardOutput()),
+            SLOT(readGdbStandardOutput()));
+    connect(this,
+            SIGNAL(readyReadStandardError()),
+            SLOT(readGdbStandardError()));
 }
 
-void gdb::onReadReady()
+void gdb::readGdbStandardOutput()
 {
     char buf[1000];
     while(readLine(buf,1000)>0)
     {
-        QString _msg(buf);
+        QString _msg=QString::fromUtf8(buf);
         _msg.remove('\n');
 
         qDebug()<<_msg;
+
         parseLine(_msg);
     }
 }
 
 void gdb::parseLine(const QString &_msg)
 {
-    if(_msg.isEmpty() || _msg == "(gdb)")
+    if(_msg.isEmpty() || _msg.contains("(gdb)"))
         return ;
 
     char _firstChar=_msg.begin()->toLatin1();
@@ -87,6 +91,9 @@ void gdb::parseLine(const QString &_msg)
         if(_str_async == "done")
         {
             begin++;
+            if(begin>=end)
+                return ;
+
             GdbMiValue result;
 
             result.build(begin,end);
@@ -94,17 +101,42 @@ void gdb::parseLine(const QString &_msg)
             if(result.getName() == "bkpt")
             {
                 parseBkpt(result);
+                break;
             }
+            if(result.getName() == "locals")
+            {
+                emit locals(result);
+                break;
+            }
+            if(result.getName() == "value")
+            {
+                emit exprValue(result.getValue());
+                break;
+            }
+        }
+        else if(_str_async == "running")
+        {
+
         }
         else if(_str_async == "error")
         {
             begin++;
+            if(begin>=end)
+                return ;
+
             GdbMiValue result;
 
             result.build(begin,end);
 
-            emit errorOccured(result.getValue());
+            emit errorOccured(result.getValue()+"\n");
         }
+        else
+        {
+            qWarning()<<"Unknow gdbmi result records!";
+            qWarning()<<qPrintable(_msg);
+        }
+
+        break;
     }
     case '*':
     {
@@ -133,12 +165,50 @@ void gdb::parseLine(const QString &_msg)
 
         if(_str_async == "stopped")
         {
+            stackListLocals();
             qDebug()<<*begin;
         }
+
+        break;
+    }
+    case '~':
+    {
+        begin++;
+        emit consoleOutputStream(parseOutputStream(begin,end));
+
+        break;
+    }
+    case '@':
+    {
+        begin++;
+        emit targetOutputStream(parseOutputStream(begin,end));
+
+        break;
+    }
+    case '&':
+    {
+        begin++;
+        emit logOutputStream(parseOutputStream(begin,end));
+
+        break;
+    }
+    case '=':
+    {
+        //ignore this information
+        break;
     }
     default:
-        qDebug()<<_msg;
+        //program that is being debuged outputs
+        emit targetOutputStream(_msg+'\n');
     }
+}
+
+QString gdb::parseOutputStream(const QChar *begin, const QChar *end)
+{
+    GdbMiValue result;
+    result.build(begin,end);
+
+    return result.getValue();
 }
 
 void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
@@ -198,7 +268,7 @@ bool gdb::runGDB(const QString &filePath)
     if(checkResult)
     {
         QStringList _arg;
-        _arg<<filePath<<"-i"<<"mi";
+        _arg<<filePath<<"--interpreter"<<"mi";
 
         start(gdbPath,_arg);
 
@@ -211,18 +281,35 @@ bool gdb::runGDB(const QString &filePath)
 void gdb::quitGDB()
 {
     write(qPrintable(QString("-gdb-exit\n")));
+    //! TODO: too long waitting time if gdb doesn't quit.
+    waitForFinished();
+
+    if(state() == QProcess::Running)
+    {
+        //gdb doesn't quit till now, so we have to kill it.
+        this->kill();
+    }
 }
 
+void gdb::readGdbStandardError()
+{
+    QByteArray err = readAllStandardError();
+
+    emit errorOccured(QString(err));
+}
 
 /*!
  *! * \brief set the break point by line number.
  *!
  *!The breakpoint number is not in effect until it has been hit count times.
  *! */
-void gdb::setBreakPoint(const int &number, const int &count)
+void gdb::setBreakPoint(const QString &fileName,
+                        const int &lineNum,
+                        const int &count)
 {
-    write(qPrintable(QString("-break-after ")+
-                     QString::number(number)+" "+
+    write(qPrintable(QString("-break-insert ")+
+                     fileName+":"+
+                     QString::number(lineNum)+" "+
                      QString::number(count)+"\n"));
 }
 
@@ -240,10 +327,10 @@ void gdb::setBreakPoint(const QString &functionName)
 /*!
  * \brief Breakpoint number will stop the program only if the condition in expr is true.
  */
-void gdb::setBreakCondition(const int &lineNum, const QString &expr)
+void gdb::setBreakCondition(const int &number, const QString &expr)
 {
     write(qPrintable(QString("-break-condition ")+
-                     QString::number(lineNum)+" "
+                     QString::number(number)+" "
                      +expr+"\n"));
 }
 
@@ -327,4 +414,9 @@ void gdb::execUntil(const QString &location)
 void gdb::stackListLocals()
 {
     write(qPrintable(QString("-stack-list-locals 1\n")));
+}
+
+void gdb::evaluate(const QString &expr)
+{
+    write(qPrintable(QString("-data-evaluate-expression ")+expr+"\n"));
 }

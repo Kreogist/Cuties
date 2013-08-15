@@ -25,9 +25,11 @@
 
 static const int nFixedWidth=290;
 
-kciSearchWindow::kciSearchWindow(QPlainTextEdit *parent) :
+kciSearchWindow::kciSearchWindow(kciTextEditor *parent) :
     QWidget(parent)
 {
+    Q_ASSERT(parent!=NULL);
+
     this->parent=parent;
     //--------TextBox Init-----------------
     searchText=new QWidget(this);
@@ -175,13 +177,9 @@ void kciSearchWindow::onTextChanged(const QString &text)
     }
     else
     {
-        kciTextEditor *editor=qobject_cast<kciTextEditor*>(parent);
-        if(editor!=NULL)
-        {
-            QList<searchResult> *results=new QList<searchResult>();
-            editor->setSearchResults(results);
-            delete results;
-        }
+        QList<searchResult> *results=new QList<searchResult>();
+        parent->setSearchResults(results);
+        delete results;
 
         lblSearchInfo->setText(" 0/0 ");
     }
@@ -194,11 +192,9 @@ void kciSearchWindow::onMenuClicked()
 
 void kciSearchWindow::onSearcherFinished(QList<searchResult> *results)
 {
-    kciTextEditor *editor=qobject_cast<kciTextEditor*>(parent);
 
     resultSize=results->size();
-    if(editor!=NULL)
-        editor->setSearchResults(results);
+    parent->setSearchResults(results);
 
     if(resultSize>0)
     {
@@ -251,9 +247,7 @@ void kciSearchWindow::hideEvent(QHideEvent *e)
 
 void kciSearchWindow::showCurrResult()
 {
-    kciTextEditor *editor=qobject_cast<kciTextEditor*>(parent);
-    if(editor!=NULL)
-        editor->showSearchResultAt(currResultNum);
+    parent->showSearchResultAt(currResultNum);
 
     lblSearchInfo->setText(QString(" ")+
                            QString::number(currResultNum+1)+

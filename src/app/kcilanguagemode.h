@@ -1,15 +1,14 @@
 #ifndef KCILANGUAGEMODE_H
 #define KCILANGUAGEMODE_H
 
-#include <QObject>
-#include <QSyntaxHighlighter>
 #include <QReadWriteLock>
 
-#include "kcitexteditor.h"
 #include "kcicodeeditor.h"
 
 #include "compilerbase.h"
 #include "compileoutputreceiver.h"
+#include "gdb.h"
+#include "dbgoutputreceiver.h"
 
 //c/cpp
 #include "gcc.h"
@@ -41,31 +40,38 @@ public:
 
     explicit kciLanguageMode(QWidget *parent = 0);
 
-    void run();
     void compile();
+    gdb* startDebug();
     void setMode(const modeType& type);
     void setFileSuffix(const QString& suffix);
     
-    compileOutputReceiver *getReceiver() const;
+    compileOutputReceiver* getCompilerReceiver() const;
+    dbgOutputReceiver* getDbgReceiver() const;
+    gdb* getGdbInstance() const;
 
 signals:
     void compileSuccessfully(QString execFileName);
     
 public slots:
-    void onCompileFinished();
+    void onCompileFinished(bool hasError);
 
 private:
     void resetCompilerAndHighlighter();
+    void connectCompilerAndOutputReceiver();
+    void connectGDBAndDbgReceiver();
 
     modeType m_type;
     kciCodeEditor *m_parent;
-    compilerBase *m_compiler;
     QSyntaxHighlighter *m_highlighter;
 
-    compileOutputReceiver *receiver;
-
+    compilerBase *compiler;
+    compileOutputReceiver *compilerReceiver;
+    connectionHandler compilerConnectionHandles,gdbConnectionHandles;
     compileState state;
     QReadWriteLock stateLock;
+
+    gdb *gdbInstance;
+    dbgOutputReceiver *dbgReceiver;
 
     QMetaObject::Connection compilerFinishedConnection;
 };

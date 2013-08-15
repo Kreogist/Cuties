@@ -25,24 +25,22 @@
 #define PANEL_H
 
 #include <QMetaObject>
-#include <QWidget>
 #include <QPlainTextEdit>
 #include <QTextBlock>
 #include <QPainter>
 #include <QScrollBar>
-#include <QAbstractTextDocumentLayout>
-#include <QFont>
 #include <QFontMetrics>
 #include <QDebug>
 
 #include "kcitexteditor.h"
+#include "connectionhandler.h"
 
 class kciPanel : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciPanel(QWidget *parent = 0);
-    void setKciCodeEditor(kciTextEditor *editor);
+    void setKciTextEditor(kciTextEditor *editor);
     
 signals:
     
@@ -61,7 +59,7 @@ private:
 
     int first,last;
 
-    QMetaObject::Connection edConnection,etConnection,euConnection;
+    connectionHandler connectionHandles;
 };
 
 #endif // PANEL_H

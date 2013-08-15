@@ -40,14 +40,19 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     pressed=none;
 
+#ifdef Q_OS_MACX
+    QMainWindow::setUnifiedTitleAndToolBarOnMac(false);
+#else
     setWindowFlags(Qt::FramelessWindowHint);
-
+#endif
     qApp->installEventFilter(this);
 }
 
 void kciMainWindow::setWindowTitle(const QString &title)
 {
+#ifndef Q_OS_MACX
     m_titleBar->setTitle(title);
+#endif
     QMainWindow::setWindowTitle(title);
 }
 
@@ -61,10 +66,13 @@ void kciMainWindow::setTitleBar(kciTitleBar *titleBar)
     m_titleBar = titleBar;
 }
 
+#ifndef Q_OS_MACX
 void kciMainWindow::setMainButtonIcon(const QString &mainIcon)
 {
     if(m_titleBar)
+    {
         m_titleBar->setMainButtonIcon(mainIcon);
+    }
 }
 
 void kciMainWindow::setMenu(QMenu *menu)
@@ -72,6 +80,7 @@ void kciMainWindow::setMenu(QMenu *menu)
     if(m_titleBar)
         m_titleBar->setMenu(menu);
 }
+#endif
 
 void kciMainWindow::mousePressEvent(QMouseEvent *e)
 {

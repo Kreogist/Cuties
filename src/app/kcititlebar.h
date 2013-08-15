@@ -27,7 +27,6 @@
 #include <QPoint>
 #include <QMouseEvent>
 #include <QToolButton>
-#include <QStyle>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -40,6 +39,23 @@
 #include <QPalette>
 #include <QDebug>
 
+#ifndef Q_OS_MACX
+class kciTitleBarAutoFill : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciTitleBarAutoFill(QWidget *parent = 0);
+
+signals:
+    void dblClickEmit();
+
+protected:
+    void mouseDoubleClickEvent(QMouseEvent *e);
+
+private:
+};
+#endif
+
 class kciTitleBar : public QWidget
 {
     Q_OBJECT
@@ -47,12 +63,14 @@ public:
     explicit kciTitleBar(QWidget *parent = 0);
     void addToolButton(QToolButton *tblMainButton);
     void addToolSeparator();
-    void setMenu(QMenu *menu);
-    void setMainButtonIcon(const QString& mainIcon);
-    void setTitle(const QString &title);
     void setWindowMax();
     void setWindowNormal();
     void setWindowMin();
+#ifndef Q_OS_MACX
+    void setMenu(QMenu *menu);
+    void setMainButtonIcon(const QString& mainIcon);
+    void setTitle(const QString &title);
+#endif
 
 signals:
     
@@ -63,12 +81,14 @@ public slots:
 private slots:
     void _exchange_button_state();
     void hideRealToolBar();
+#ifndef Q_OS_MACX
+    void spacingDblClick();
+#endif
 
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    void mouseDoubleClickEvent(QMouseEvent *event);
 
 private:
     bool hasPressed;
@@ -84,11 +104,13 @@ private:
     QLabel *titleLabel;
     QString windowTitle;
 
+#ifndef Q_OS_MACX
+    kciTitleBarAutoFill *autoFill;
     QToolButton *mainButton;
+#endif
     QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;
     QToolBar *mainToolBar;
     QPropertyAnimation *tlbHideAnime;
-
 };
 
 #endif // KCITITLEBAR_H
