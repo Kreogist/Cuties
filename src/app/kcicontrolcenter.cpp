@@ -274,12 +274,11 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     mainScrollArea=new QScrollArea(this);
     mainScrollArea->setAutoFillBackground(true);
     mainScrollArea->setFrameShape(QFrame::NoFrame);
-    FakeLayout->addWidget(mainScrollArea);
-
     //Set Contents.
-    contentWidget=new kciCCTabGerneralContent(this);
+    contentWidget=new kciCCTabGerneralContent(mainScrollArea);
     mainScrollArea->setContentsMargins(0,0,0,0);
     mainScrollArea->setWidget(contentWidget);
+    FakeLayout->addWidget(mainScrollArea);
 }
 
 kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
@@ -376,7 +375,7 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
 kciControlCenter::kciControlCenter(QWidget *parent) :
     QDialog(parent)
 {
-    setFont(QFont("Kreogist-UI"));
+
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);
     WholeTitleBarSplit->setContentsMargins(0,0,0,0);
@@ -402,4 +401,20 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     ContentLayout->addWidget(CCMainContents);
     connect(ccLeftBar,SIGNAL(NowSelectChanged(int)),
             CCMainContents,SLOT(animeToIndex(int)));
+
+    //Main Buttom
+    QHBoxLayout *BottomButton=new QHBoxLayout();
+    btYes=new QToolButton(this);
+    btCancel=new QToolButton(this);
+    btApply=new QToolButton(this);
+
+    btYes->setText(tr("Ok"));
+    btCancel->setText(tr("Cancel"));
+    btApply->setText(tr("Apply"));
+
+    BottomButton->addStretch();
+    BottomButton->addWidget(btYes);
+    BottomButton->addWidget(btCancel);
+    BottomButton->addWidget(btApply);
+    WholeTitleBarSplit->addLayout(BottomButton);
 }

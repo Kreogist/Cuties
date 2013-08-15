@@ -73,7 +73,8 @@ SOURCES += \
     connectionhandler.cpp \
     Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
     kciplaintextbrowser.cpp \
-    kcimessagebox.cpp
+    kcimessagebox.cpp \
+    kcidragproxy.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -119,7 +120,8 @@ HEADERS += \
     connectionhandler.h \
     Controls/SettingItems/kcisettinglistitemfoldertext.h \
     kciplaintextbrowser.h \
-    kcimessagebox.h
+    kcimessagebox.h \
+    kcidragproxy.h
 
 # Enable C++11
 CONFIG += c++11
