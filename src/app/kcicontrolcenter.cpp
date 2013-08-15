@@ -23,6 +23,23 @@
 
 #include "kcicontrolcenter.h"
 
+/**************************************/
+/*    Based Widget - kciScrollArea    */
+/**************************************/
+kciScrollArea::kciScrollArea(QWidget *parent):
+    QScrollArea(parent)
+{
+    ;
+}
+
+void kciScrollArea::resizeEvent(QResizeEvent *event)
+{
+    event->accept();
+    QScrollArea::resizeEvent(event);
+    emit sizeChanged();
+}
+
+//-------------Banner--------------
 kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     QWidget(parent)
 {
@@ -61,6 +78,7 @@ kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     TitleLayout->addSpacing(7);
 }
 
+//----------------Left Bar-------------------
 kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
     QWidget(parent)
 {
@@ -164,6 +182,10 @@ void kciControlCenterLeftBar::lstClick(int Index)
     }
 }
 
+/********************************************/
+/*          Contorl Center Contents         */
+/********************************************/
+//---------------Gerneral------------------------
 kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     QWidget(parent)
 {
@@ -212,6 +234,42 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(slnEnableAnime);
 }
 
+kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
+    QWidget(parent)
+{
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
+    //Set FakeLayout.
+    FakeLayout=new QVBoxLayout(this);
+    FakeLayout->setContentsMargins(0,0,0,0);
+    FakeLayout->setSpacing(0);
+    setLayout(FakeLayout);
+
+    //Set Main Widget.
+    mainScrollArea=new kciScrollArea(this);
+    mainScrollArea->setAutoFillBackground(true);
+    mainScrollArea->setFrameShape(QFrame::NoFrame);
+    //Set Contents.
+    contentWidget=new kciCCTabGerneralContent(mainScrollArea);
+
+    mainScrollArea->setContentsMargins(0,0,0,0);
+    mainScrollArea->setWidget(contentWidget);
+    FakeLayout->addWidget(mainScrollArea);
+    connect(mainScrollArea, SIGNAL(sizeChanged()),
+            this, SLOT(sizeChangeResize()));
+}
+
+void kciControlCenterTabGerneral::sizeChangeResize()
+{
+    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
+}
+
+//--------------------Editor------------------
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     QWidget(parent)
 {
@@ -254,33 +312,6 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(txeCCompilerPath);
 }
 
-kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
-    QWidget(parent)
-{
-    setAutoFillBackground(true);
-    setContentsMargins(0,0,0,0);
-
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
-
-    //Set FakeLayout.
-    FakeLayout=new QVBoxLayout(this);
-    FakeLayout->setContentsMargins(0,0,0,0);
-    FakeLayout->setSpacing(0);
-    setLayout(FakeLayout);
-
-    //Set Main Widget.
-    mainScrollArea=new QScrollArea(this);
-    mainScrollArea->setAutoFillBackground(true);
-    mainScrollArea->setFrameShape(QFrame::NoFrame);
-    //Set Contents.
-    contentWidget=new kciCCTabGerneralContent(mainScrollArea);
-    mainScrollArea->setContentsMargins(0,0,0,0);
-    mainScrollArea->setWidget(contentWidget);
-    FakeLayout->addWidget(mainScrollArea);
-}
-
 kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     QWidget(parent)
 {
@@ -298,8 +329,9 @@ kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     setLayout(FakeLayout);
 
     //Set Main Widget.
-    mainScrollArea=new QScrollArea(this);
+    mainScrollArea=new kciScrollArea(this);
     mainScrollArea->setAutoFillBackground(true);
+
     mainScrollArea->setFrameShape(QFrame::NoFrame);
     FakeLayout->addWidget(mainScrollArea);
 
@@ -308,21 +340,52 @@ kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
     mainScrollArea->setContentsMargins(0,0,0,0);
     mainScrollArea->setWidget(contentWidget);
 
-    contentWidget->setFixedWidth(500);
+    connect(mainScrollArea,SIGNAL(sizeChanged()),
+            this,SLOT(sizeChangeResize()));
 }
 
-void kciControlCenterTabEditor::resizeEvent(QResizeEvent *e)
+void kciControlCenterTabEditor::sizeChangeResize()
 {
-    QWidget::resizeEvent(e);
     contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
 }
 
-void kciControlCenterTabGerneral::resizeEvent(QResizeEvent *e)
+//------------------Container----------------------
+/*kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
+    QWidget(parent)
 {
-    e->accept();
-    QWidget::resizeEvent(e);
-    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
+    //Set FakeLayout.
+    FakeLayout=new QVBoxLayout(this);
+    FakeLayout->setContentsMargins(0,0,0,0);
+    FakeLayout->setSpacing(0);
+    setLayout(FakeLayout);
+
+    //Set Main Widget.
+    mainScrollArea=new kciScrollArea(this);
+    mainScrollArea->setAutoFillBackground(true);
+    mainScrollArea->setFrameShape(QFrame::NoFrame);
+    //Set Contents.
+    //contentWidget=new kciCCTabGerneralContent(mainScrollArea);
+
+    mainScrollArea->setContentsMargins(0,0,0,0);
+    contentMWidget=contentWidget;
+    mainScrollArea->setWidget(contentWidget);
+    FakeLayout->addWidget(mainScrollArea);
+
+    connect(mainScrollArea, SIGNAL(sizeChanged()),
+            this, SLOT(sizeChangeResize()));
 }
+
+void kciControlCenterTab::sizeChangeResize()
+{
+    contentMWidget->setFixedWidth(mainScrollArea->viewport()->width());
+}*/
 
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
