@@ -177,6 +177,11 @@ void kciSearchWindow::onTextChanged(const QString &text)
     }
     else
     {
+        /*If a kciTextSearchWorker is running, it may change the result after
+         *lblSearchInfo->setText(" 0/0 "); So we cancel it first.
+         */
+        searcher->cancelPrevSearch();
+
         QList<searchResult> *results=new QList<searchResult>();
         parent->setSearchResults(results);
         delete results;

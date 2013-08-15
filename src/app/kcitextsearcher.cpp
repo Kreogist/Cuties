@@ -33,15 +33,7 @@ kciTextSearcher::kciTextSearcher(QObject *parent) :
 
 void kciTextSearcher::search()
 {
-    if(worker)
-    {
-        worker->lock.lockForWrite();
-        worker->needQuit=true;
-        worker->lock.unlock();
-        worker->terminate();
-        worker->wait();
-        worker->deleteLater();
-    }
+    cancelPrevSearch();
 
     if((flags & RegularExpress) || (flags & WholeWord))
     {
@@ -62,13 +54,28 @@ void kciTextSearcher::search()
     }
 
     worker->setPattern(subString);
-
     worker->setIsCaseSensitive(flags & MatchCase);
-
     worker->setDocument(p_document);
+    worker->setResults(&resultList);
 
     connect(worker,SIGNAL(finished()),this,SLOT(onWorkerFinished()));
     worker->start(QThread::NormalPriority);
+}
+
+void kciTextSearcher::cancelPrevSearch()
+{
+    if(worker)
+    {
+        worker->lock.lockForWrite();
+        worker->needQuit=true;
+        worker->lock.unlock();
+        worker->quit();
+        worker->wait();
+        worker->deleteLater();
+        worker=nullptr;
+    }
+
+    resultList.clear();
 }
 
 void kciTextSearcher::setDocument(QTextDocument *value)
@@ -94,5 +101,5 @@ void kciTextSearcher::setFlags(int value)
 
 void kciTextSearcher::onWorkerFinished()
 {
-    emit finished(worker->getResults());
+    emit finished(&resultList);
 }
