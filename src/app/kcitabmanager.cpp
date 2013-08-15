@@ -145,8 +145,8 @@ void kciTabManager::new_file()
         QPropertyAnimation *geoAnime=new QPropertyAnimation(tmp,"geometry",this);
         geoAnime->setDuration(500);
         geoAnime->setEasingCurve(QEasingCurve::OutCubic);
-        geoAnime->setStartValue(QRect(0, -this->height(), this->width(), this->height()));
-        geoAnime->setEndValue(QRect(0, 0, this->width(), this->height()));
+        geoAnime->setStartValue(QRect(0, -this->contentsRect().height(), this->width(), this->contentsRect().height()));
+        geoAnime->setEndValue(QRect(0, 0, this->width(), this->contentsRect().height()));
         geoAnime->start(QPropertyAnimation::DeleteWhenStopped);
     }
     else
