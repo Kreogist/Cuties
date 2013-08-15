@@ -123,7 +123,7 @@ void kciControlCenterLeftBar::lstClick(int Index)
         WholeAnimeGroup->clear();
         QParallelAnimationGroup *MainAnimeGroup=new QParallelAnimationGroup(this);
         //Move Anime
-        QPropertyAnimation *moveListButton=new QPropertyAnimation(lsbLeftButtons[Index],"geometry");
+        QPropertyAnimation *moveListButton=new QPropertyAnimation(lsbLeftButtons[Index],"geometry",this);
         QRect animeStartPos=lsbLeftButtons[Index]->geometry();
         QRect animeEndPos=lsbLeftButtons[lstSelect]->geometry();
         moveListButton->setStartValue(animeStartPos);
@@ -131,7 +131,7 @@ void kciControlCenterLeftBar::lstClick(int Index)
         moveListButton->setEasingCurve(QEasingCurve::OutCubic);
         MainAnimeGroup->addAnimation(moveListButton);
         //Hide Anime
-        QPropertyAnimation *hideListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry");
+        QPropertyAnimation *hideListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry",this);
         animeStartPos=lsbLeftButtons[lstSelect]->geometry();
         animeEndPos=animeStartPos;
         animeEndPos.setX(-animeEndPos.width());
@@ -143,7 +143,7 @@ void kciControlCenterLeftBar::lstClick(int Index)
         WholeAnimeGroup->addAnimation(MainAnimeGroup);
 
         //Show Anime
-        QPropertyAnimation *showListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry");
+        QPropertyAnimation *showListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry",this);
         animeEndPos=lsbLeftButtons[Index]->geometry();
         animeStartPos=animeEndPos;
         animeStartPos.setX(-animeStartPos.width());

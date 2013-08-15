@@ -28,6 +28,7 @@ static const int SearchBarOffset = 20;
 kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
+    setVisible(false);
     //setWindowFlags(Qt::AnchorPoint);
     mainLayout=new QHBoxLayout(this);
     mainLayout->setSpacing(0);
@@ -105,7 +106,7 @@ void kciCodeEditor::showSearchBar()
         searchAnime->setEndValue(animeEndPos);
         searchAnime->setEasingCurve(QEasingCurve::OutCubic);
         searchBar->show();
-        searchAnime->start();
+        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
         searchBar->setTextFocus();
     }
 }

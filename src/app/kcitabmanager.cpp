@@ -131,13 +131,23 @@ void kciTabManager::new_file()
     kciCodeEditor *tmp=new kciCodeEditor(this);
     if(tmp!=NULL)
     {
+        tmp->setGeometry(0, -this->height(), this->width(), this->height());
+        tmp->setVisible(true);
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
         QString _new_file_title=
                 tr("Untitled")+ " " +QString::number(new_file_count++);
         tmp->setDocumentTitle(_new_file_title);
         setCurrentIndex(addTab(tmp,_new_file_title));
         currentTextCursorChanged();
+
         emit tabAdded();
+
+        QPropertyAnimation *geoAnime=new QPropertyAnimation(tmp,"geometry",this);
+        geoAnime->setDuration(500);
+        geoAnime->setEasingCurve(QEasingCurve::OutCubic);
+        geoAnime->setStartValue(QRect(0, -this->height(), this->width(), this->height()));
+        geoAnime->setEndValue(QRect(0, 0, this->width(), this->height()));
+        geoAnime->start(QPropertyAnimation::DeleteWhenStopped);
     }
     else
     {

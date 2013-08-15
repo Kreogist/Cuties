@@ -108,9 +108,12 @@ private:
     kciTitleBarAutoFill *autoFill;
     QToolButton *mainButton;
 #endif
+
     QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;
     QToolBar *mainToolBar;
-    QPropertyAnimation *tlbHideAnime;
+    QPropertyAnimation *tlbHideAnime, *tlbShowAnime;
+
+    QSpacerItem *NoUseSpacing;
 };
 
 #endif // KCITITLEBAR_H

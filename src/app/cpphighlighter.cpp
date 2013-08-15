@@ -93,7 +93,6 @@ cppHighlighter::cppHighlighter(QObject *parent) :
 
 }
 
-
 void cppHighlighter::conmmentHighlightBlock(const QString &text)
 {
     QRegExp startExpression("/\\*");
@@ -118,8 +117,6 @@ void cppHighlighter::conmmentHighlightBlock(const QString &text)
         startIndex = text.indexOf(startExpression,startIndex + conmmentLength);
     }
 }
-
-
 
 void cppHighlighter::highlightBlock(const QString &text)
 {

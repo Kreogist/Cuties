@@ -163,7 +163,6 @@ protected:
 
 private:
     QParallelAnimationGroup *tabModeAnime;
-    QPropertyAnimation *moveOut, *moveIn;
     kciControlCenterTabGerneral *tabGerneral;
     kciControlCenterTabEditor *tabEditor;
     int contentIndex;
