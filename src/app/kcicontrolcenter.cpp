@@ -234,41 +234,6 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(slnEnableAnime);
 }
 
-kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
-    QWidget(parent)
-{
-    setAutoFillBackground(true);
-    setContentsMargins(0,0,0,0);
-
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
-
-    //Set FakeLayout.
-    FakeLayout=new QVBoxLayout(this);
-    FakeLayout->setContentsMargins(0,0,0,0);
-    FakeLayout->setSpacing(0);
-    setLayout(FakeLayout);
-
-    //Set Main Widget.
-    mainScrollArea=new kciScrollArea(this);
-    mainScrollArea->setAutoFillBackground(true);
-    mainScrollArea->setFrameShape(QFrame::NoFrame);
-    //Set Contents.
-    contentWidget=new kciCCTabGerneralContent(mainScrollArea);
-
-    mainScrollArea->setContentsMargins(0,0,0,0);
-    mainScrollArea->setWidget(contentWidget);
-    FakeLayout->addWidget(mainScrollArea);
-    connect(mainScrollArea, SIGNAL(sizeChanged()),
-            this, SLOT(sizeChangeResize()));
-}
-
-void kciControlCenterTabGerneral::sizeChangeResize()
-{
-    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
-}
-
 //--------------------Editor------------------
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     QWidget(parent)
@@ -312,45 +277,8 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(txeCCompilerPath);
 }
 
-kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
-    QWidget(parent)
-{
-    setAutoFillBackground(true);
-    setContentsMargins(0,0,0,0);
-
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
-
-    //Set FakeLayout.
-    FakeLayout=new QVBoxLayout(this);
-    FakeLayout->setContentsMargins(0,0,0,0);
-    FakeLayout->setSpacing(0);
-    setLayout(FakeLayout);
-
-    //Set Main Widget.
-    mainScrollArea=new kciScrollArea(this);
-    mainScrollArea->setAutoFillBackground(true);
-
-    mainScrollArea->setFrameShape(QFrame::NoFrame);
-    FakeLayout->addWidget(mainScrollArea);
-
-    //Set Contents.
-    contentWidget=new kciCCTabEditorContent(this);
-    mainScrollArea->setContentsMargins(0,0,0,0);
-    mainScrollArea->setWidget(contentWidget);
-
-    connect(mainScrollArea,SIGNAL(sizeChanged()),
-            this,SLOT(sizeChangeResize()));
-}
-
-void kciControlCenterTabEditor::sizeChangeResize()
-{
-    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
-}
-
 //------------------Container----------------------
-/*kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
+kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
     QWidget(parent)
 {
     setAutoFillBackground(true);
@@ -366,15 +294,15 @@ void kciControlCenterTabEditor::sizeChangeResize()
     FakeLayout->setSpacing(0);
     setLayout(FakeLayout);
 
+    //Set Content.
+    contentWidget->setParent(this);
+    contentMWidget=contentWidget;
+
     //Set Main Widget.
     mainScrollArea=new kciScrollArea(this);
     mainScrollArea->setAutoFillBackground(true);
     mainScrollArea->setFrameShape(QFrame::NoFrame);
-    //Set Contents.
-    //contentWidget=new kciCCTabGerneralContent(mainScrollArea);
-
     mainScrollArea->setContentsMargins(0,0,0,0);
-    contentMWidget=contentWidget;
     mainScrollArea->setWidget(contentWidget);
     FakeLayout->addWidget(mainScrollArea);
 
@@ -385,15 +313,21 @@ void kciControlCenterTabEditor::sizeChangeResize()
 void kciControlCenterTab::sizeChangeResize()
 {
     contentMWidget->setFixedWidth(mainScrollArea->viewport()->width());
-}*/
+}
 
+/*************************************/
+/*      Control Center Contents      */
+/*************************************/
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
 {
     contentIndex=0;
 
-    tabGerneral=new kciControlCenterTabGerneral(this);
-    tabEditor=new kciControlCenterTabEditor(this);
+    contentWidgetGerneral=new kciCCTabGerneralContent();
+    contentWidgetEditor=new kciCCTabEditorContent();
+
+    tabGerneral=new kciControlCenterTab(contentWidgetGerneral, this);
+    tabEditor=new kciControlCenterTab(contentWidgetEditor, this);
 }
 
 void kciControlCenterContents::animeToIndex(int Index)
@@ -473,6 +407,8 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
 
     btYes->setText(tr("Ok"));
     btCancel->setText(tr("Cancel"));
+    connect(btCancel, SIGNAL(clicked()),
+            this, SLOT(close()));
     btApply->setText(tr("Apply"));
 
     BottomButton->addStretch();

@@ -127,21 +127,6 @@ private:
     kciSettingListItemCombo *sboDefaultEncode;
     kciSettingListItemBoolean *slnEnableAnime;
 };
-class kciControlCenterTabGerneral : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit kciControlCenterTabGerneral(QWidget *parent = 0);
-
-private slots:
-    void sizeChangeResize();
-
-private:
-    QVBoxLayout *FakeLayout;
-    kciScrollArea *mainScrollArea;
-    kciCCTabGerneralContent *contentWidget;
-};
-
 //------------------Editor---------------
 class kciCCTabEditorContent : public QWidget
 {
@@ -154,22 +139,8 @@ private:
     kciSettingListItemBoolean *slnEnableLineNum;
     kciSettingListItemLineText *txeCCompilerPath;
 };
-class kciControlCenterTabEditor : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit kciControlCenterTabEditor(QWidget *parent = 0);
-
-private slots:
-    void sizeChangeResize();
-
-private:
-    QVBoxLayout *FakeLayout;
-    kciScrollArea *mainScrollArea;
-    kciCCTabEditorContent *contentWidget;
-};
 //-------------------Container--------------------
-/*class kciControlCenterTab : public QWidget
+class kciControlCenterTab : public QWidget
 {
     Q_OBJECT
 public:
@@ -182,7 +153,7 @@ private:
     QVBoxLayout *FakeLayout;
     kciScrollArea *mainScrollArea;
     QWidget *contentMWidget;
-};*/
+};
 
 /********************************************************/
 /*                  Main Control Center                 */
@@ -201,8 +172,13 @@ protected:
 
 private:
     QParallelAnimationGroup *tabModeAnime;
-    kciControlCenterTabGerneral *tabGerneral;
-    kciControlCenterTabEditor *tabEditor;
+
+    kciControlCenterTab *tabGerneral;
+    kciControlCenterTab *tabEditor;
+
+    kciCCTabGerneralContent *contentWidgetGerneral;
+    kciCCTabEditorContent   *contentWidgetEditor;
+
     int contentIndex;
 };
 class kciControlCenter : public QDialog
