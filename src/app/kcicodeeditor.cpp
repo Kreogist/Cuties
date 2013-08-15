@@ -45,11 +45,11 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
             QObject::tr("Pascal Source Files")+"(*.pas);;"+
             QObject::tr("All Files")+"(*.*)";
 
-    linePanel=new kciLinenumPanel(this);
-    mainLayout->addWidget(linePanel);
-
     markPanel=new kciMarkPanel(this);
     mainLayout->addWidget(markPanel);
+
+    linePanel=new kciLinenumPanel(this);
+    mainLayout->addWidget(linePanel);
 
     editor=new kciTextEditor(this);
     linePanel->setKciTextEditor(editor);

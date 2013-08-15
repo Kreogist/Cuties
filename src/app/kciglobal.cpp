@@ -28,7 +28,6 @@ const QString kciGlobal::settingsFileName("Cuties.ini");
 kciGlobal::kciGlobal()
 {
     kciMainConfig=new QSettings(settingsFileName, QSettings::IniFormat);
-
 }
 
 void kciGlobal::readSettings()

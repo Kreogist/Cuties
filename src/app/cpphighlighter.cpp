@@ -98,11 +98,13 @@ void cppHighlighter::conmmentHighlightBlock(const QString &text)
     QRegExp startExpression("/\\*");
     QRegExp endExpression("\\*/");
 
-    setCurrentBlockState(0);  //????!!!!
+    setCurrentBlockState(0);
 
     int startIndex = 0;
     if(previousBlockState() != 1)
+    {
         startIndex = text.indexOf(startExpression);
+    }
 
     while(startIndex >= 0) {
         int endIndex = text.indexOf(endExpression , startIndex);
@@ -113,14 +115,13 @@ void cppHighlighter::conmmentHighlightBlock(const QString &text)
         } else {
             conmmentLength = endIndex - startIndex +endExpression.matchedLength();
         }
-        setFormat(startIndex,conmmentLength,instance->getTextCharFormat("comment"));    //instance的作用???!!!!!
+        setFormat(startIndex,conmmentLength,instance->getTextCharFormat("comment"));
         startIndex = text.indexOf(startExpression,startIndex + conmmentLength);
     }
 }
 
 void cppHighlighter::highlightBlock(const QString &text)
 {
-    //!TODO: unsupport multiline comment
     for(int i=0;i<rules.size();i++)
     {
         QRegularExpressionMatchIterator matchIterator=rules[i].regexp.globalMatch(

@@ -107,7 +107,7 @@ void kciPanel::paintEvent(QPaintEvent *event)
     for(;bottom>=0 && block.isValid();
         block=block.next())
     {
-        int block_height=line_height*block.lineCount();
+        int block_height=line_height*(block.lineCount());
         painter.save();
         this->draw(&painter, &block,
                    0, block_top, width(), block_height,
