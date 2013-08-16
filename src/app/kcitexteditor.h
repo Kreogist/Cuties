@@ -25,14 +25,16 @@
 #define CODEEDITOR_H
 
 #include <QPlainTextEdit>
-#include <QTextDocument>
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QPalette>
 #include <QScrollBar>
+#include <QMenu>
+#include <QSignalMapper>
 #include <QDebug>
 
 #include "kcitextsearcher.h"
+#include "kciclipboard.h"
 
 class kciTextEditor : public QPlainTextEdit
 {
@@ -48,16 +50,21 @@ signals:
 
 public slots:
     void updateHighlights();
+    void pasteFromeHistory();
 
 protected:
     void paintEvent(QPaintEvent *e);
+    void contextMenuEvent (QContextMenuEvent * event);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
 
+    kciClipboard* clipboard;
+    QSignalMapper* clipboardHistoryMenuSignalMapper;
     QList<searchResult> resultList;
     QColor lineColor,searchResultColor;
+    QPoint contextMenuPos;
 };
 
 #endif // CODEEDITOR_H

@@ -23,6 +23,8 @@
 
 #include "kcitexteditor.h"
 
+static int elideWidth=500;
+
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
@@ -32,11 +34,15 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setAcceptDrops(false);
 
+    clipboard=kciClipboard::getInstance();
+    clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
+    connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
+            this,SLOT(insertPlainText(QString)));
+
     QFontMetrics fm=this->fontMetrics();
 
     //Set TextEditor Properties.
-    //Tab Width
-    setTabStopWidth(4);
+    setTabStopWidth(fm.width(' ')<<2);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -155,4 +161,39 @@ void kciTextEditor::setSearchResults(QList<searchResult> *results)
     resultList=*results;
 
     updateHighlights();
+}
+
+void kciTextEditor::pasteFromeHistory()
+{
+    QMenu* menu=new QMenu(this);
+
+    QStringList texts=clipboard->getClipboardTexts();
+    for(int i=0,l=texts.size();
+        i<l;
+        i++)
+    {
+        QString elidedText=fontMetrics().elidedText(texts.at(i),
+                                                    Qt::ElideRight,
+                                                    elideWidth);
+        QAction *action=menu->addAction(elidedText,
+                                        clipboardHistoryMenuSignalMapper,
+                                        SLOT(map()));
+
+        clipboardHistoryMenuSignalMapper->setMapping(action,texts.at(i));
+    }
+
+    menu->exec(contextMenuPos);
+
+    delete menu;
+}
+
+void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
+{
+    contextMenuPos=event->globalPos();
+
+    QMenu *menu=createStandardContextMenu();
+    menu->addAction(tr("paste from clipboard history"),
+                    this,SLOT(pasteFromeHistory()));
+    menu->exec(event->globalPos());
+    delete menu;
 }
