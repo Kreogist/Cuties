@@ -27,7 +27,8 @@ kciMarkPanel::kciMarkPanel(QWidget *parent) :
     kciPanel(parent)
 {
     markPix.load(":/img/image/BreakPoint.png");
-    setFixedWidth(32);
+    setAutoAdaptWidth(false);
+    setFixedWidth(25);
     isPressed=false;
 }
 
@@ -58,7 +59,13 @@ void kciMarkPanel::draw(QPainter *painter, QTextBlock *block,
     vecMark[blockNum].rect.setHeight(h);
 
     if(vecMark[blockNum].marked)
-        painter->drawPixmap(x,y,w,h,markPix);
+    {
+        painter->drawPixmap(x,
+                            y - 3,
+                            markPix.width(),
+                            markPix.height(),
+                            markPix);
+    }
 }
 
 void kciMarkPanel::mousePressEvent(QMouseEvent *e)

@@ -28,8 +28,19 @@ kciPanel::kciPanel(QWidget *parent) :
     e(NULL)
 {
     setContentsMargins(0,0,0,0);
+    autoWidth=false;
     setFixedWidth(1);
     setAutoFillBackground(true);
+}
+
+bool kciPanel::autoAdaptWidth()
+{
+    return autoWidth;
+}
+
+void kciPanel::setAutoAdaptWidth(bool newValue)
+{
+    autoWidth=newValue;
 }
 
 void kciPanel::setKciTextEditor(kciTextEditor *editor)
@@ -97,7 +108,10 @@ void kciPanel::paintEvent(QPaintEvent *event)
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();
-    setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);
+    if(autoWidth)
+    {
+        setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);
+    }
 
     //find first visiable block
     int line_count;

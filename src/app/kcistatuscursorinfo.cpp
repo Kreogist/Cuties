@@ -94,9 +94,9 @@ void kciStatusCursorInfo::updateCursorPosition(int LineNum, int ColNum)
         lblCursorPosition->setText(QString(tr("Line ")) +
                                    QString::number(LineNum) +
                                    QString(tr(", ")) +
-                                   QString(tr("Col ")) +
+                                   QString(tr("Column ")) +
                                    QString::number(ColNum) +
-                                   QString(tr(" ")));
+                                   QString(tr(".")));
     }
     else
     {

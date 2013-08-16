@@ -102,6 +102,7 @@ private:
         cclstCompiler,
         cclstDebugger,
         cclstFileAssociation,
+        cclstLanguage,
         cclist_count
     };
 
