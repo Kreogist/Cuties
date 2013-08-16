@@ -474,9 +474,7 @@ void MainWindow::createMenu()
             menu[mnuFile]->addSeparator();
             break;
         }
-
 #endif
-
     }
 
     //Create Edit Menu
@@ -488,6 +486,16 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuEdit]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuEditRedo:
+        case mnuEditPaste:
+        case mnuEditSelectAll:
+            menu[mnuEdit]->addSeparator();
+            break;
+        }
+#endif
     }
 
     //Create View Menu
@@ -521,6 +529,15 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuExecute]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuExecuteRun:
+        case mnuExecuteParameters:
+            menu[mnuExecute]->addSeparator();
+            break;
+        }
+#endif
     }
 
     //Create Debug Menu
