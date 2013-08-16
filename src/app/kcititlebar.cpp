@@ -91,7 +91,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 #ifdef Q_OS_MACX
     mainToolBar->setGeometry(0,
                              0,
-                             mainToolBar->width() - 70,
+                             mainToolBar->width(),
                              mainToolBar->height());
 #else
     mainToolBar->setGeometry(mainButton->width(),
