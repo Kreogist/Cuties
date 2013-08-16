@@ -92,12 +92,14 @@ kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
     strLabelTexts[cclstCompiler]=tr("Compiler");
     strLabelTexts[cclstDebugger]=tr("Debugger");
     strLabelTexts[cclstFileAssociation]=tr("File Association");
+    strLabelTexts[cclstLanguage]="";
 
     strLabelIcons[cclstGerneral]=":/controlcenter/image/Control Center/cciGeneral.png";
     strLabelIcons[cclstEditor]=":/controlcenter/image/Control Center/cciEditor.png";
     strLabelIcons[cclstCompiler]=":/controlcenter/image/Control Center/cciCompiler.png";
     strLabelIcons[cclstDebugger]=":/controlcenter/image/Control Center/cciDebugger.png";
     strLabelIcons[cclstFileAssociation]=":/controlcenter/image/Control Center/cciFileAssociation.png";
+    strLabelIcons[cclstLanguage]=":/controlcenter/image/Control Center/cciLanguage.png";
 
     //Set Now Index.
     lstSelect=cclstGerneral;
@@ -401,6 +403,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
 
     //Main Buttom
     QHBoxLayout *BottomButton=new QHBoxLayout();
+    BottomButton->setContentsMargins(8,8,8,8);
     btYes=new QToolButton(this);
     btCancel=new QToolButton(this);
     btApply=new QToolButton(this);
@@ -413,7 +416,9 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
 
     BottomButton->addStretch();
     BottomButton->addWidget(btYes);
+    BottomButton->addSpacing(3);
     BottomButton->addWidget(btCancel);
+    BottomButton->addSpacing(3);
     BottomButton->addWidget(btApply);
     WholeTitleBarSplit->addLayout(BottomButton);
 }

@@ -362,6 +362,8 @@ void MainWindow::createToolBar()
     strIconPath[tlbCut]=":/ToolBar/image/ToolBar/cut.png";
     strIconPath[tlbCopy]=":/ToolBar/image/ToolBar/copy.png";
     strIconPath[tlbPaste]=":/ToolBar/image/ToolBar/paste.png";
+    strIconPath[tlbUndo]=":/ToolBar/image/ToolBar/undo.png";
+    strIconPath[tlbRedo]=":/ToolBar/image/ToolBar/redo.png";
     strIconPath[tlbSearch]=":/ToolBar/image/ToolBar/search.png";
     strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compile&run.png";
 
@@ -373,7 +375,7 @@ void MainWindow::createToolBar()
         tblMainButton[i]->setFixedSize(25,25);
         tblMainButton[i]->setIcon(QIcon(strIconPath[i]));
         titlebar->addToolButton(tblMainButton[i]);
-        if(i==tlbSaveFile || i==tlbPaste || i==tlbSearch)
+        if(i==tlbSaveFile || i==tlbPaste || i==tlbRedo || i==tlbSearch)
         {
             titlebar->addToolSeparator();
         }
@@ -391,6 +393,10 @@ void MainWindow::createToolBar()
             tabManager,SLOT(copy()));
     connect(tblMainButton[tlbPaste],SIGNAL(clicked()),
             tabManager,SLOT(paste()));
+    connect(tblMainButton[tlbUndo],SIGNAL(clicked()),
+            tabManager,SLOT(undo()));
+    connect(tblMainButton[tlbRedo],SIGNAL(clicked()),
+            tabManager,SLOT(redo()));
 
 }
 

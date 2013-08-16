@@ -171,6 +171,8 @@ private:
         tlbCut,
         tlbCopy,
         tlbPaste,
+        tlbUndo,
+        tlbRedo,
         tlbSearch,
         tlbCompileAndRun,
         tlbbutton_count // the number of toolbar buttons
