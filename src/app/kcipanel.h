@@ -41,6 +41,8 @@ class kciPanel : public QWidget
 public:
     explicit kciPanel(QWidget *parent = 0);
     void setKciTextEditor(kciTextEditor *editor);
+    void setAutoAdaptWidth(bool newValue);
+    bool autoAdaptWidth();
     
 signals:
     
@@ -59,6 +61,8 @@ private:
     kciTextEditor *e;
 
     int first,last;
+
+    bool autoWidth;
 
     connectionHandler connectionHandles;
 };

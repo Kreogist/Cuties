@@ -29,6 +29,7 @@ static const int curr_line_color=255;
 kciLinenumPanel::kciLinenumPanel(QWidget *parent) :
     kciPanel(parent)
 {
+    setAutoAdaptWidth(true);
     textColor.setRgb(normal_color,normal_color,normal_color);
 }
 

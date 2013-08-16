@@ -8,12 +8,12 @@
         <file>image/HelpMenuIcon.png</file>
         <file>image/DebugMenuIcon.png</file>
         <file>image/ViewMenuIcon.png</file>
-        <file>image/BreakPoint.png</file>
         <file>image/SearchIcon.png</file>
         <file>image/leftSearchButton.png</file>
         <file>image/rightSearchButton.png</file>
         <file>image/WindowMenuItem.png</file>
         <file>image/ToolMenuIcon.png</file>
+        <file>image/BreakPoint.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>
@@ -44,11 +44,11 @@
     </qresource>
     <qresource prefix="/controlcenter">
         <file>image/Control Center/cciLanguage.png</file>
-        <file>image/Control Center/cciGeneral.png</file>
         <file>image/Control Center/cciCompiler.png</file>
-        <file>image/Control Center/cciEditor.png</file>
         <file>image/Control Center/cciDebugger.png</file>
+        <file>image/Control Center/cciEditor.png</file>
         <file>image/Control Center/cciFileAssociation.png</file>
+        <file>image/Control Center/cciGeneral.png</file>
     </qresource>
     <qresource prefix="/JudgeToolBar">
         <file>image/Judge Dock/ToolBarAdd.png</file>
