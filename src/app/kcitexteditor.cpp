@@ -239,6 +239,11 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
         }
         break;
     }
+    case Qt::Key_BracketLeft:
+    {
+        autoCompleteParentheses(e,_textCursor,']');
+        break;
+    }
     default:
         QPlainTextEdit::keyPressEvent(e);
         break;
