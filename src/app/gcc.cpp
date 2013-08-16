@@ -50,9 +50,19 @@ QStringList gcc::getCompileArg(const QString &filePath)
     QStringList arg;
     arg<<filePath<<"-g"<<"-Wall"<<"-lm"<<"-static";
 
+    QString programName;
+
     //unix/unix-like system
-    QString programName=fileInfo.absolutePath() + "/"
-            +fileInfo.completeBaseName();
+    if(fileInfo.absolutePath().right(1)=="/")
+    {
+        programName=fileInfo.absolutePath()
+                +fileInfo.completeBaseName();
+    }
+    else
+    {
+        programName=fileInfo.absolutePath() + "/"
+                +fileInfo.completeBaseName();
+    }
 
 #ifdef Q_OS_WIN
     //Windows
