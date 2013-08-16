@@ -15,11 +15,18 @@ void kciTextSearchWorker::run()
         currBlockNumber=i.blockNumber();
         match(i.text());
     }
+
+    exit(0);
 }
 
 QList<searchResult>* kciTextSearchWorker::getResults()
 {
-    return &resultList;
+    return resultList;
+}
+
+void kciTextSearchWorker::setResults(QList<searchResult> *results)
+{
+    resultList=results;
 }
 
 void kciTextSearchWorker::setDocument(QTextDocument *value)
@@ -51,7 +58,7 @@ void kciTextSearchWorker::emitResult(int startPos, int length)
 
     _sr_tmp.length=length;
 
-    resultList<<_sr_tmp;
+    resultList->append(_sr_tmp);
 }
 
 //======kciTextSearchWorkerRegexp======

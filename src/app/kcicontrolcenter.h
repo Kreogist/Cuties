@@ -38,7 +38,6 @@
 #include <QScrollBar>
 #include <QRect>
 #include <QFrame>
-#include <QScrollArea>
 #include <QSignalMapper>
 #include <QParallelAnimationGroup>
 #include <QSequentialAnimationGroup>
@@ -53,6 +52,23 @@
 #include "Controls/SettingItems/kcisettinglistitemlinetext.h"
 #include "kcilistbutton.h"
 
+//------------------------------Based Widget-------------------------------
+//Our Scroll Area, Can emit resize signal.
+class kciScrollArea : public QScrollArea
+{
+    Q_OBJECT
+public:
+    explicit kciScrollArea(QWidget *parent = 0);
+
+signals:
+    void sizeChanged();
+
+protected:
+    void resizeEvent(QResizeEvent *event);
+};
+
+//------------------------------Display Widget------------------------------
+//Banner Widget.
 class kciControlCenterBanner : public QWidget
 {
     Q_OBJECT
@@ -65,6 +81,7 @@ private:
     kciSearchLineText *CCSearch;
 };
 
+//Left Bar List Widget
 class kciControlCenterLeftBar : public QWidget
 {
     Q_OBJECT
@@ -95,6 +112,9 @@ private:
 
 };
 
+//----------------------------Contents Widget-----------------------
+
+//-------------Gerneral-----------------
 class kciCCTabGerneralContent : public QWidget
 {
     Q_OBJECT
@@ -107,7 +127,7 @@ private:
     kciSettingListItemCombo *sboDefaultEncode;
     kciSettingListItemBoolean *slnEnableAnime;
 };
-
+//------------------Editor---------------
 class kciCCTabEditorContent : public QWidget
 {
     Q_OBJECT
@@ -119,36 +139,25 @@ private:
     kciSettingListItemBoolean *slnEnableLineNum;
     kciSettingListItemLineText *txeCCompilerPath;
 };
-class kciControlCenterTabGerneral : public QWidget
+//-------------------Container--------------------
+class kciControlCenterTab : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciControlCenterTabGerneral(QWidget *parent = 0);
+    explicit kciControlCenterTab(QWidget *contentWidget, QWidget *parent = 0);
 
-protected:
-    void resizeEvent(QResizeEvent *e);
-
-private:
-    QVBoxLayout *FakeLayout;
-    QScrollArea *mainScrollArea;
-    kciCCTabGerneralContent *contentWidget;
-};
-
-class kciControlCenterTabEditor : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit kciControlCenterTabEditor(QWidget *parent = 0);
-
-protected:
-    void resizeEvent(QResizeEvent *e);
+private slots:
+    void sizeChangeResize();
 
 private:
     QVBoxLayout *FakeLayout;
-    QScrollArea *mainScrollArea;
-    kciCCTabEditorContent *contentWidget;
+    kciScrollArea *mainScrollArea;
+    QWidget *contentMWidget;
 };
 
+/********************************************************/
+/*                  Main Control Center                 */
+/********************************************************/
 class kciControlCenterContents : public QWidget
 {
     Q_OBJECT
@@ -163,13 +172,16 @@ protected:
 
 private:
     QParallelAnimationGroup *tabModeAnime;
-    QPropertyAnimation *moveOut, *moveIn;
-    kciControlCenterTabGerneral *tabGerneral;
-    kciControlCenterTabEditor *tabEditor;
+
+    kciControlCenterTab *tabGerneral;
+    kciControlCenterTab *tabEditor;
+
+    kciCCTabGerneralContent *contentWidgetGerneral;
+    kciCCTabEditorContent   *contentWidgetEditor;
+
     int contentIndex;
 };
-
-class kciControlCenter : public QDialog //QWidget
+class kciControlCenter : public QDialog
 {
     Q_OBJECT
 public:
@@ -187,6 +199,7 @@ private:
     kciControlCenterContents *CCMainContents;
     kciControlCenterBanner *ccBanner;
     kciControlCenterLeftBar *ccLeftBar;
+    QToolButton *btYes, *btCancel, *btApply;
 };
 
 #endif // KCICONTROLCENTER_H

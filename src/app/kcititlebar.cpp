@@ -110,6 +110,8 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 #endif
     mainToolBar->hide();
 
+    NoUseSpacing=new QSpacerItem(0,this->height());
+
     hLayout = new QHBoxLayout(this);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
@@ -117,6 +119,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
 #ifndef Q_OS_MACX
     hLayout->addWidget(mainButton);
+    hLayout->addSpacerItem(NoUseSpacing);
     hLayout->addWidget(autoFill, 1);
 
     hLayout->addWidget(titleLabel);
@@ -144,6 +147,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addLayout(vCloseLayout);
 #endif
 
+    tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
     tlbHideAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
     connect(tlbHideAnime,SIGNAL(finished()),
             this,SLOT(hideRealToolBar()));
@@ -151,43 +155,37 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
 void kciTitleBar::showToolBar()
 {
-    if(!mainToolBar->isVisible())
-    {
-        QPropertyAnimation *tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
-        QRect animeEndPos=mainToolBar->geometry();
+    tlbHideAnime->stop();
+    QRect animeEndPos=mainToolBar->geometry();
 #ifdef Q_OS_MACX
-        animeEndPos.setLeft(0);
+    animeEndPos.setLeft(0);
 #else
-        animeEndPos.setLeft(mainButton->width());
+    animeEndPos.setLeft(mainButton->width());
 #endif
-        animeEndPos.setTop(0);
-        QRect animeStartPos=animeEndPos;
-        animeStartPos.setTop(-mainToolBar->height());
-        tlbShowAnime->setStartValue(animeStartPos);
-        tlbShowAnime->setEndValue(animeEndPos);
-        tlbShowAnime->setEasingCurve(QEasingCurve::OutCubic);
-        mainToolBar->show();
+    animeEndPos.setTop(0);
+    QRect animeStartPos=animeEndPos;
+    animeStartPos.setTop(-mainToolBar->height());
+    tlbShowAnime->setStartValue(animeStartPos);
+    tlbShowAnime->setEndValue(animeEndPos);
+    tlbShowAnime->setEasingCurve(QEasingCurve::OutCubic);
+    NoUseSpacing->changeSize(mainToolBar->width(),this->height());
+    mainToolBar->show();
 
-        //Insert Spacing to Fit ToolBar.
-        hLayout->insertSpacing(1, mainToolBar->width());
-
-        //Start Animation.
-        tlbShowAnime->start();
-    }
+    //Start Animation.
+    tlbShowAnime->start();
 }
 
 void kciTitleBar::hideToolBar()
 {
-    if(mainToolBar->isVisible())
-    {
-        QRect animeStartPos=mainToolBar->geometry();
-        QRect animeEndPos=animeStartPos;
-        animeEndPos.setTop(-mainToolBar->height()*2);
-        tlbHideAnime->setStartValue(animeStartPos);
-        tlbHideAnime->setEndValue(animeEndPos);
-        tlbHideAnime->setEasingCurve(QEasingCurve::OutCubic);
-        tlbHideAnime->start();
-    }
+    tlbShowAnime->stop();
+    QRect animeStartPos=mainToolBar->geometry();
+    QRect animeEndPos=animeStartPos;
+    animeEndPos.setTop(-mainToolBar->height()*2);
+    tlbHideAnime->setStartValue(animeStartPos);
+    tlbHideAnime->setEndValue(animeEndPos);
+    tlbHideAnime->setEasingCurve(QEasingCurve::OutCubic);
+    NoUseSpacing->changeSize(0,this->height());
+    tlbHideAnime->start();
 }
 
 void kciTitleBar::hideRealToolBar()

@@ -28,6 +28,7 @@ static const int SearchBarOffset = 20;
 kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
+    setVisible(false);
     //setWindowFlags(Qt::AnchorPoint);
     mainLayout=new QHBoxLayout(this);
     mainLayout->setSpacing(0);
@@ -44,11 +45,11 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
             QObject::tr("Pascal Source Files")+"(*.pas);;"+
             QObject::tr("All Files")+"(*.*)";
 
-    linePanel=new kciLinenumPanel(this);
-    mainLayout->addWidget(linePanel);
-
     markPanel=new kciMarkPanel(this);
     mainLayout->addWidget(markPanel);
+
+    linePanel=new kciLinenumPanel(this);
+    mainLayout->addWidget(linePanel);
 
     editor=new kciTextEditor(this);
     linePanel->setKciTextEditor(editor);
@@ -105,7 +106,7 @@ void kciCodeEditor::showSearchBar()
         searchAnime->setEndValue(animeEndPos);
         searchAnime->setEasingCurve(QEasingCurve::OutCubic);
         searchBar->show();
-        searchAnime->start();
+        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
         searchBar->setTextFocus();
     }
 }

@@ -23,6 +23,23 @@
 
 #include "kcicontrolcenter.h"
 
+/**************************************/
+/*    Based Widget - kciScrollArea    */
+/**************************************/
+kciScrollArea::kciScrollArea(QWidget *parent):
+    QScrollArea(parent)
+{
+    ;
+}
+
+void kciScrollArea::resizeEvent(QResizeEvent *event)
+{
+    event->accept();
+    QScrollArea::resizeEvent(event);
+    emit sizeChanged();
+}
+
+//-------------Banner--------------
 kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     QWidget(parent)
 {
@@ -61,6 +78,7 @@ kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     TitleLayout->addSpacing(7);
 }
 
+//----------------Left Bar-------------------
 kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
     QWidget(parent)
 {
@@ -123,7 +141,7 @@ void kciControlCenterLeftBar::lstClick(int Index)
         WholeAnimeGroup->clear();
         QParallelAnimationGroup *MainAnimeGroup=new QParallelAnimationGroup(this);
         //Move Anime
-        QPropertyAnimation *moveListButton=new QPropertyAnimation(lsbLeftButtons[Index],"geometry");
+        QPropertyAnimation *moveListButton=new QPropertyAnimation(lsbLeftButtons[Index],"geometry",this);
         QRect animeStartPos=lsbLeftButtons[Index]->geometry();
         QRect animeEndPos=lsbLeftButtons[lstSelect]->geometry();
         moveListButton->setStartValue(animeStartPos);
@@ -131,7 +149,7 @@ void kciControlCenterLeftBar::lstClick(int Index)
         moveListButton->setEasingCurve(QEasingCurve::OutCubic);
         MainAnimeGroup->addAnimation(moveListButton);
         //Hide Anime
-        QPropertyAnimation *hideListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry");
+        QPropertyAnimation *hideListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry",this);
         animeStartPos=lsbLeftButtons[lstSelect]->geometry();
         animeEndPos=animeStartPos;
         animeEndPos.setX(-animeEndPos.width());
@@ -143,7 +161,7 @@ void kciControlCenterLeftBar::lstClick(int Index)
         WholeAnimeGroup->addAnimation(MainAnimeGroup);
 
         //Show Anime
-        QPropertyAnimation *showListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry");
+        QPropertyAnimation *showListButton=new QPropertyAnimation(lsbLeftButtons[lstSelect],"geometry",this);
         animeEndPos=lsbLeftButtons[Index]->geometry();
         animeStartPos=animeEndPos;
         animeStartPos.setX(-animeStartPos.width());
@@ -164,6 +182,10 @@ void kciControlCenterLeftBar::lstClick(int Index)
     }
 }
 
+/********************************************/
+/*          Contorl Center Contents         */
+/********************************************/
+//---------------Gerneral------------------------
 kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     QWidget(parent)
 {
@@ -212,6 +234,7 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(slnEnableAnime);
 }
 
+//--------------------Editor------------------
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     QWidget(parent)
 {
@@ -254,7 +277,8 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(txeCCompilerPath);
 }
 
-kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
+//------------------Container----------------------
+kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
     QWidget(parent)
 {
     setAutoFillBackground(true);
@@ -270,68 +294,40 @@ kciControlCenterTabGerneral::kciControlCenterTabGerneral(QWidget *parent) :
     FakeLayout->setSpacing(0);
     setLayout(FakeLayout);
 
-    //Set Main Widget.
-    mainScrollArea=new QScrollArea(this);
-    mainScrollArea->setAutoFillBackground(true);
-    mainScrollArea->setFrameShape(QFrame::NoFrame);
-    FakeLayout->addWidget(mainScrollArea);
-
-    //Set Contents.
-    contentWidget=new kciCCTabGerneralContent(this);
-    mainScrollArea->setContentsMargins(0,0,0,0);
-    mainScrollArea->setWidget(contentWidget);
-}
-
-kciControlCenterTabEditor::kciControlCenterTabEditor(QWidget *parent) :
-    QWidget(parent)
-{
-    setAutoFillBackground(true);
-    setContentsMargins(0,0,0,0);
-
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
-
-    //Set FakeLayout.
-    FakeLayout=new QVBoxLayout(this);
-    FakeLayout->setContentsMargins(0,0,0,0);
-    FakeLayout->setSpacing(0);
-    setLayout(FakeLayout);
+    //Set Content.
+    contentWidget->setParent(this);
+    contentMWidget=contentWidget;
 
     //Set Main Widget.
-    mainScrollArea=new QScrollArea(this);
+    mainScrollArea=new kciScrollArea(this);
     mainScrollArea->setAutoFillBackground(true);
     mainScrollArea->setFrameShape(QFrame::NoFrame);
-    FakeLayout->addWidget(mainScrollArea);
-
-    //Set Contents.
-    contentWidget=new kciCCTabEditorContent(this);
     mainScrollArea->setContentsMargins(0,0,0,0);
     mainScrollArea->setWidget(contentWidget);
+    FakeLayout->addWidget(mainScrollArea);
 
-    contentWidget->setFixedWidth(500);
+    connect(mainScrollArea, SIGNAL(sizeChanged()),
+            this, SLOT(sizeChangeResize()));
 }
 
-void kciControlCenterTabEditor::resizeEvent(QResizeEvent *e)
+void kciControlCenterTab::sizeChangeResize()
 {
-    QWidget::resizeEvent(e);
-    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
+    contentMWidget->setFixedWidth(mainScrollArea->viewport()->width());
 }
 
-void kciControlCenterTabGerneral::resizeEvent(QResizeEvent *e)
-{
-    e->accept();
-    QWidget::resizeEvent(e);
-    contentWidget->setFixedWidth(mainScrollArea->viewport()->width());
-}
-
+/*************************************/
+/*      Control Center Contents      */
+/*************************************/
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
 {
     contentIndex=0;
 
-    tabGerneral=new kciControlCenterTabGerneral(this);
-    tabEditor=new kciControlCenterTabEditor(this);
+    contentWidgetGerneral=new kciCCTabGerneralContent();
+    contentWidgetEditor=new kciCCTabEditorContent();
+
+    tabGerneral=new kciControlCenterTab(contentWidgetGerneral, this);
+    tabEditor=new kciControlCenterTab(contentWidgetEditor, this);
 }
 
 void kciControlCenterContents::animeToIndex(int Index)
@@ -376,7 +372,7 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
 kciControlCenter::kciControlCenter(QWidget *parent) :
     QDialog(parent)
 {
-    setFont(QFont("Kreogist-UI"));
+
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);
     WholeTitleBarSplit->setContentsMargins(0,0,0,0);
@@ -402,4 +398,22 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     ContentLayout->addWidget(CCMainContents);
     connect(ccLeftBar,SIGNAL(NowSelectChanged(int)),
             CCMainContents,SLOT(animeToIndex(int)));
+
+    //Main Buttom
+    QHBoxLayout *BottomButton=new QHBoxLayout();
+    btYes=new QToolButton(this);
+    btCancel=new QToolButton(this);
+    btApply=new QToolButton(this);
+
+    btYes->setText(tr("Ok"));
+    btCancel->setText(tr("Cancel"));
+    connect(btCancel, SIGNAL(clicked()),
+            this, SLOT(close()));
+    btApply->setText(tr("Apply"));
+
+    BottomButton->addStretch();
+    BottomButton->addWidget(btYes);
+    BottomButton->addWidget(btCancel);
+    BottomButton->addWidget(btApply);
+    WholeTitleBarSplit->addLayout(BottomButton);
 }

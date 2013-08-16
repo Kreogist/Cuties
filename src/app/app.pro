@@ -68,12 +68,12 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemcombo.cpp \
     compileoutputreceiver.cpp \
     Controls/SettingItems/kcisettinglistitemlinetext.cpp \
-    Controls/UserControls/kciscrollarea.cpp \
     dbgoutputreceiver.cpp \
     connectionhandler.cpp \
     Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
     kciplaintextbrowser.cpp \
-    kcimessagebox.cpp
+    kcimessagebox.cpp \
+    kcidragproxy.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -114,12 +114,12 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemcombo.h \
     compileoutputreceiver.h \
     Controls/SettingItems/kcisettinglistitemlinetext.h \
-    Controls/UserControls/kciscrollarea.h \
     dbgoutputreceiver.h \
     connectionhandler.h \
     Controls/SettingItems/kcisettinglistitemfoldertext.h \
     kciplaintextbrowser.h \
-    kcimessagebox.h
+    kcimessagebox.h \
+    kcidragproxy.h
 
 # Enable C++11
 CONFIG += c++11
@@ -127,10 +127,15 @@ CONFIG += c++11
 RESOURCES += \
     rc.qrc
 
+RC_FILE += winico.rc
+
+ICON = Cuties.icns
+
 TRANSLATIONS += zh_CN.ts
 
 OTHER_FILES += \
     zh_CN.ts \
     lang.map \
     default.style \
-    COPYING.txt
+    COPYING.txt \
+    Cuties.icns

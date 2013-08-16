@@ -123,7 +123,7 @@ void kciStatusCursorInfo::HideGotoBox()
         gotoBarShowed=false;
         QRect animeStartPos=spbLineNum->rect();
         QRect animeEndPos=animeStartPos;
-        animeEndPos.setTop(spbLineNum->rect().height()+3);
+        animeEndPos.setY(spbLineNum->height());
         gotoHideAnime->setStartValue(animeStartPos);
         gotoHideAnime->setEndValue(animeEndPos);
         gotoHideAnime->setEasingCurve(QEasingCurve::OutCubic);
