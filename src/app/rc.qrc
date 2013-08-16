@@ -43,12 +43,12 @@
         <file>image/MenuIcons/mnuFileClose.png</file>
     </qresource>
     <qresource prefix="/controlcenter">
-        <file>image/Control Center/cciLanguage.png</file>
         <file>image/Control Center/cciCompiler.png</file>
         <file>image/Control Center/cciDebugger.png</file>
         <file>image/Control Center/cciEditor.png</file>
         <file>image/Control Center/cciFileAssociation.png</file>
         <file>image/Control Center/cciGeneral.png</file>
+        <file>image/Control Center/cciLanguage.png</file>
     </qresource>
     <qresource prefix="/JudgeToolBar">
         <file>image/Judge Dock/ToolBarAdd.png</file>
@@ -73,14 +73,16 @@
         <file>image/Debug Docks/JumpFunction.png</file>
     </qresource>
     <qresource prefix="/ToolBar">
+        <file>image/ToolBar/new.png</file>
+        <file>image/ToolBar/open.png</file>
+        <file>image/ToolBar/save.png</file>
         <file>image/ToolBar/cut.png</file>
         <file>image/ToolBar/copy.png</file>
-        <file>image/ToolBar/new.png</file>
+        <file>image/ToolBar/paste.png</file>
         <file>image/ToolBar/search.png</file>
         <file>image/ToolBar/compile&amp;run.png</file>
-        <file>image/ToolBar/open.png</file>
-        <file>image/ToolBar/paste.png</file>
-        <file>image/ToolBar/save.png</file>
+        <file>image/ToolBar/redo.png</file>
+        <file>image/ToolBar/undo.png</file>
     </qresource>
     <qresource prefix="/Controls">
         <file>image/Controls/BooleanFalse.png</file>

@@ -36,7 +36,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     //Set TextEditor Properties.
     //Tab Width
-    setTabStopWidth(4);
+    setTabStopWidth(33);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));

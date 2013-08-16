@@ -93,6 +93,7 @@ protected:
 private:
     bool hasPressed;
     bool isShowingNormalButton;   //false when show minimizeButton, true when show normalButton
+    bool toolbarShown;
     QPoint mousePosStart;
     QWidget *mainWindow;
 
