@@ -23,6 +23,8 @@
 
 #include "kcitexteditor.h"
 
+static int elideWidth=500;
+
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
@@ -32,11 +34,15 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setAcceptDrops(false);
 
+    clipboard=kciClipboard::getInstance();
+    clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
+    connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
+            this,SLOT(insertPlainText(QString)));
+
     QFontMetrics fm=this->fontMetrics();
 
     //Set TextEditor Properties.
-    //Tab Width
-    setTabStopWidth(33);
+    setTabStopWidth(fm.width(' ')<<2);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -155,4 +161,91 @@ void kciTextEditor::setSearchResults(QList<searchResult> *results)
     resultList=*results;
 
     updateHighlights();
+}
+
+void kciTextEditor::pasteFromeHistory()
+{
+    QMenu* menu=new QMenu(this);
+
+    QStringList texts=clipboard->getClipboardTexts();
+    for(int i=0,l=texts.size();
+        i<l;
+        i++)
+    {
+        QString elidedText=fontMetrics().elidedText(texts.at(i),
+                                                    Qt::ElideRight,
+                                                    elideWidth);
+        QAction *action=menu->addAction(elidedText,
+                                        clipboardHistoryMenuSignalMapper,
+                                        SLOT(map()));
+
+        clipboardHistoryMenuSignalMapper->setMapping(action,texts.at(i));
+    }
+
+    menu->exec(contextMenuPos);
+
+    delete menu;
+}
+
+void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
+{
+    contextMenuPos=event->globalPos();
+
+    QMenu *menu=createStandardContextMenu();
+    menu->addAction(tr("paste from clipboard history"),
+                    this,SLOT(pasteFromeHistory()));
+    menu->exec(event->globalPos());
+    delete menu;
+}
+
+void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
+                                            QTextCursor& currTextCursor,
+                                            const QChar& rightParentheses)
+{
+    QPlainTextEdit::keyPressEvent(e);
+    insertPlainText(QString(rightParentheses));
+    currTextCursor.movePosition(QTextCursor::Left);
+    setTextCursor(currTextCursor);
+}
+
+void kciTextEditor::keyPressEvent(QKeyEvent *e)
+{
+    QTextCursor _textCursor=textCursor();
+    switch (e->key()) {
+    case Qt::Key_ParenLeft:
+    {
+        autoCompleteParentheses(e,_textCursor,')');
+        break;
+    }
+    case Qt::Key_QuoteDbl:
+    {
+        QString text=_textCursor.selectedText();
+        if(text.isEmpty())
+        {
+            autoCompleteParentheses(e,_textCursor,'\"');
+        }
+        else
+        {
+            int start=_textCursor.selectionStart(),
+                    end=_textCursor.selectionEnd();
+            _textCursor.beginEditBlock();
+            _textCursor.clearSelection();
+            _textCursor.setPosition(start);
+            _textCursor.insertText("\"");
+            _textCursor.setPosition(end+1);
+            _textCursor.insertText("\"");
+            _textCursor.endEditBlock();
+            setTextCursor(_textCursor);
+        }
+        break;
+    }
+    case Qt::Key_BracketLeft:
+    {
+        autoCompleteParentheses(e,_textCursor,']');
+        break;
+    }
+    default:
+        QPlainTextEdit::keyPressEvent(e);
+        break;
+    }
 }

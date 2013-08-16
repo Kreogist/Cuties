@@ -28,7 +28,6 @@ static const int SearchBarOffset = 20;
 kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
-    setVisible(false);
     //setWindowFlags(Qt::AnchorPoint);
     mainLayout=new QHBoxLayout(this);
     mainLayout->setSpacing(0);
