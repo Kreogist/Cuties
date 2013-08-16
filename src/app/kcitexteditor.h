@@ -55,10 +55,14 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent (QContextMenuEvent * event);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
+    void autoCompleteParentheses(QKeyEvent *e,
+                                 QTextCursor &currTextCursor,
+                                 const QChar &rightParentheses);
 
     kciClipboard* clipboard;
     QSignalMapper* clipboardHistoryMenuSignalMapper;

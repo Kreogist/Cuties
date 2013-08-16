@@ -197,3 +197,50 @@ void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
     menu->exec(event->globalPos());
     delete menu;
 }
+
+void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
+                                            QTextCursor& currTextCursor,
+                                            const QChar& rightParentheses)
+{
+    QPlainTextEdit::keyPressEvent(e);
+    insertPlainText(QString(rightParentheses));
+    currTextCursor.movePosition(QTextCursor::Left);
+    setTextCursor(currTextCursor);
+}
+
+void kciTextEditor::keyPressEvent(QKeyEvent *e)
+{
+    QTextCursor _textCursor=textCursor();
+    switch (e->key()) {
+    case Qt::Key_ParenLeft:
+    {
+        autoCompleteParentheses(e,_textCursor,')');
+        break;
+    }
+    case Qt::Key_QuoteDbl:
+    {
+        QString text=_textCursor.selectedText();
+        if(text.isEmpty())
+        {
+            autoCompleteParentheses(e,_textCursor,'\"');
+        }
+        else
+        {
+            int start=_textCursor.selectionStart(),
+                    end=_textCursor.selectionEnd();
+            _textCursor.beginEditBlock();
+            _textCursor.clearSelection();
+            _textCursor.setPosition(start);
+            _textCursor.insertText("\"");
+            _textCursor.setPosition(end+1);
+            _textCursor.insertText("\"");
+            _textCursor.endEditBlock();
+            setTextCursor(_textCursor);
+        }
+        break;
+    }
+    default:
+        QPlainTextEdit::keyPressEvent(e);
+        break;
+    }
+}
