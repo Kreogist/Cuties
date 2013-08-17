@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
@@ -24,8 +20,11 @@
 #ifndef COMPILERBASE_H
 #define COMPILERBASE_H
 
+#include <QScopedPointer>
 #include <QProcess>
 #include <QFileInfo>
+
+#include "connectionhandler.h"
 
 struct ErrInfo
 {
@@ -35,7 +34,7 @@ struct ErrInfo
     QString strErrDescription;
 };
 
-class compilerBase : public QProcess
+class compilerBase : public QObject
 {
     Q_OBJECT
 public:
@@ -44,7 +43,7 @@ public:
     QString version();
     void startCompile(const QString& filePath);
     virtual void setCompilerPath(const QString& ) = 0;
-    virtual QString path(){return "";}
+    virtual QString path()=0;
     virtual bool checkCompilerPath(const QString& path);
     virtual QString compilerName() = 0;
 
@@ -52,10 +51,10 @@ signals:
     void compileCmd(QString cmd);
     void compileError(ErrInfo errInfo);
     void output(QString msg);
-    void compileFinished(bool hasError);
+    void compileFinished(int exitNum);
 
 public slots:
-    virtual void onOutputReady() = 0;
+    void onOutputReady();
 
 protected:
     void emitCompileCmd(const QString& compilerPath,
@@ -66,11 +65,14 @@ protected:
 
     virtual bool checkHasErrorByExitNum(const int& exitNum){return exitNum > 0;}
 
+    virtual void parseLine(const QString& text) = 0;
+
 private slots:
     void onFinished(int exitNum);
 
 private:
-    QMetaObject::Connection connectionHandle;
+    connectionHandler connectionHandles;
+    QScopedPointer<QProcess> compiler;
 };
 
 #endif // COMPILERBASE_H

@@ -14,18 +14,15 @@ public:
     QString path(){return fpcPath;}
     void setCompilerPath(const QString& path);
     virtual QString compilerName() { return "fpc";}
-signals:
-    
-public slots:
-    void onOutputReady();
     
 protected:
     QStringList getVersionArg();
     QStringList getCompileArg(const QString &filePath);
     QStringList getcompileEnv();
 
+    void parseLine(const QString &text);
+
 private:
-    void parseMessage(const QString& msg);
     static QString fpcPath;
 };
 

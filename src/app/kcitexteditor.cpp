@@ -39,10 +39,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
             this,SLOT(insertPlainText(QString)));
 
-    QFontMetrics fm=this->fontMetrics();
-
     //Set TextEditor Properties.
-    setTabStopWidth(fm.width(' ')<<2);
+    setTabStopWidth(fontMetrics().width(' ')<<2);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -238,6 +236,10 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
             setTextCursor(_textCursor);
         }
         break;
+    }
+    case Qt::Key_Apostrophe:
+    {
+        autoCompleteParentheses(e,_textCursor,'\'');
     }
     case Qt::Key_BracketLeft:
     {

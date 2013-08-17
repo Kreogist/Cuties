@@ -49,6 +49,8 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     windowTitle=parent->windowTitle();
 
+    hasPressed=false;
+
 #ifndef Q_OS_MACX
     closeButton = new QToolButton(this);
     closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));

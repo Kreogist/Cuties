@@ -37,22 +37,11 @@ void fpc::setCompilerPath(const QString &path)
     fpcPath=path;
 }
 
-void fpc::onOutputReady()
-{
-    char str_msg[1024];
-    while(readLine(str_msg,1024))
-    {
-        QString msg=QString::fromUtf8(str_msg);
-        emit output(msg);
-        parseMessage(msg);
-    }
-}
-
-void fpc::parseMessage(const QString &msg)
+void fpc::parseLine(const QString &text)
 {
     QRegularExpression regexp("([A-Za-z]+\\.pas)\\((\\d+),(\\d+)\\)");
 
-    QRegularExpressionMatch match=regexp.match(msg);
+    QRegularExpressionMatch match=regexp.match(text);
 
     if(match.hasMatch())
     {
@@ -60,14 +49,14 @@ void fpc::parseMessage(const QString &msg)
         error.strFilePath=match.captured(1);
         error.nLineNum=match.captured(2).toInt();
         error.nColumnNum=match.captured(3).toInt();
-        error.strErrDescription=msg.mid(match.capturedLength());
+        error.strErrDescription=text.mid(match.capturedLength());
 
         emit compileError(error);
     }
     else
     {
         regexp.setPattern("(Fatal|Error|Warning|Hint|Note)");
-        match=regexp.match(msg);
+        match=regexp.match(text);
 
         if(match.hasMatch())
         {
@@ -75,7 +64,7 @@ void fpc::parseMessage(const QString &msg)
             error.strFilePath.clear();
             error.nLineNum=-1;
             error.nColumnNum=-1;
-            error.strErrDescription=msg;
+            error.strErrDescription=text;
         }
     }
 

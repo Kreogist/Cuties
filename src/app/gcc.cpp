@@ -34,7 +34,6 @@ QString gcc::gccPath="C:/MinGW/bin/g++.exe";
 gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
-    setReadChannelMode(QProcess::MergedChannels);
 }
 
 QStringList gcc::getVersionArg()
@@ -48,6 +47,8 @@ QStringList gcc::getCompileArg(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QStringList arg;
+    //arg<<"/home/wlm/桌面/test.cpp"<<"-g"<<"-Wall"<<"-lm"<<"-static"<<"-o"<<"/home/wlm/桌面/test";
+    //return arg;
     arg<<filePath<<"-g"<<"-Wall"<<"-lm"<<"-static";
 
     QString programName;
@@ -90,26 +91,15 @@ void gcc::setCompilerPath(const QString &path)
     gccPath=path;
 }
 
-void gcc::onOutputReady()
+void gcc::parseLine(const QString &text)
 {
-    char str_msg[1024];
-    while(readLine(str_msg,1024))
-    {
-        QString msg=QString::fromUtf8(str_msg);
-        emit output(msg);
-        parseMessage(msg);
-    }
-}
-
-void gcc::parseMessage(const QString &msg)
-{
-    QString strJudgedStr=msg.left(2).toLower();
+    QString strJudgedStr=text.left(2).toLower();
     if(strJudgedStr=="in" || strJudgedStr=="  ")
     {
         ErrInfo error;
         error.nColumnNum=-1;
         error.nLineNum=-1;
-        error.strErrDescription=msg;
+        error.strErrDescription=text;
         error.strErrDescription=error.strErrDescription.remove(
                     error.strErrDescription.length()-1,1);
         error.strFilePath="";
@@ -119,7 +109,7 @@ void gcc::parseMessage(const QString &msg)
     else
     {
         QRegularExpression expressMsg("(<command[ -]line>|([A-Za-z]:)?[^:]+):");
-        QRegularExpressionMatch match=expressMsg.match(msg);
+        QRegularExpressionMatch match=expressMsg.match(text);
         if(match.hasMatch())
         {
             QString FileName=match.captured();
@@ -129,7 +119,7 @@ void gcc::parseMessage(const QString &msg)
             //for example ,match.captured() is "/home/user/desktop/test.cpp:"
             //and the FileName should be "/home/user/desktop/test.cpp"
 
-            QString ErrorDetailInfo=msg.mid(NewHead);
+            QString ErrorDetailInfo=text.mid(NewHead);
             ErrorDetailInfo.chop(1);    //remove :
 
 
