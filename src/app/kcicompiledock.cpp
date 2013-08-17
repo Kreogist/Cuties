@@ -162,11 +162,13 @@ void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
 {
     Q_ASSERT(currReceiver!=NULL);
 
-    disconnect(receiverConnectionHandle);
+    receiverConnectionHandles.disConnectAll();
 
     erifList=currReceiver->getErifList();
-    compileOutput->setDocument(currReceiver->getCompilerOutputText());
+    compileOutput->setPlainText(currReceiver->getCompilerOutputText());
     trevwCompileInfo->setModel(currReceiver->getCompilerOutputModel());
-    receiverConnectionHandle=connect(currReceiver, SIGNAL(requireShowError()),
-                                     this, SLOT(animeShowError()));
+    receiverConnectionHandles+=connect(currReceiver, SIGNAL(requireShowError()),
+                                       this, SLOT(animeShowError()));
+    receiverConnectionHandles+=connect(currReceiver,SIGNAL(compilerOutputTextChanged(QString)),
+                                       compileOutput,SLOT(setPlainText(QString)));
 }

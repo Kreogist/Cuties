@@ -2,6 +2,7 @@
 #define KCILANGUAGEMODE_H
 
 #include <QReadWriteLock>
+#include <QScopedPointer>
 
 #include "kcicodeeditor.h"
 
@@ -10,7 +11,7 @@
 #include "gdb.h"
 #include "dbgoutputreceiver.h"
 
-//c/cpp
+//cpp
 #include "gcc.h"
 #include "cpphighlighter.h"
 
@@ -59,12 +60,14 @@ private:
     void resetCompilerAndHighlighter();
     void connectCompilerAndOutputReceiver();
     void connectGDBAndDbgReceiver();
+    bool checkIfIsCompiling();
+    void setCompileState(const compileState& state);
 
     modeType m_type;
     kciCodeEditor *m_parent;
-    QSyntaxHighlighter *m_highlighter;
+    QScopedPointer<QSyntaxHighlighter> m_highlighter;
 
-    compilerBase *compiler;
+    QScopedPointer<compilerBase> compiler;
     compileOutputReceiver *compilerReceiver;
     connectionHandler compilerConnectionHandles,gdbConnectionHandles;
     compileState state;

@@ -434,23 +434,12 @@ void MainWindow::createMenu()
     int i;
 
 #ifdef Q_OS_MACX
-    QMenuBar *_mainMenuBar=new QMenuBar();
+    QMenuBar *_mainMenu=new QMenuBar();
 #else
     QMenu *_mainMenu=new QMenu(this);
 #endif
     QIcon *MenuIconAddor=new QIcon;
 
-#ifdef Q_OS_MACX
-    menu[mnuFile]   = _mainMenuBar->addMenu(tr("&File"));
-    menu[mnuEdit]   = _mainMenuBar->addMenu(tr("&Edit"));
-    menu[mnuView]   = _mainMenuBar->addMenu(tr("&View"));
-    menu[mnuSearch] = _mainMenuBar->addMenu(tr("&Search"));
-    menu[mnuExecute]= _mainMenuBar->addMenu(tr("E&xecute"));
-    menu[mnuDebug]  = _mainMenuBar->addMenu(tr("&Debug"));
-    menu[mnuTools]  = _mainMenuBar->addMenu(tr("&Tools"));
-    menu[mnuWindow] = _mainMenuBar->addMenu(tr("&Window"));
-    menu[mnuHelp]   = _mainMenuBar->addMenu(tr("&Help"));
-#else
     menu[mnuFile]   = _mainMenu->addMenu(tr("&File"));
     menu[mnuEdit]   = _mainMenu->addMenu(tr("&Edit"));
     menu[mnuView]   = _mainMenu->addMenu(tr("&View"));
@@ -460,7 +449,6 @@ void MainWindow::createMenu()
     menu[mnuTools]  = _mainMenu->addMenu(tr("&Tools"));
     menu[mnuWindow] = _mainMenu->addMenu(tr("&Window"));
     menu[mnuHelp]   = _mainMenu->addMenu(tr("&Help"));
-#endif
 
     //Create File Menu
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));

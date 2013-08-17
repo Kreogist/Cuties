@@ -2,10 +2,6 @@
 #
 #   Copyright 2013 Kreogist Dev Team
 #
-#       Wang Luming <wlm199558@126.com>
-#       Miyanaga Saki <tomguts@126.com>
-#       Zhang Jiayi <bf109g2@126.com>
-#
 #     Kreogist-Cute-IDE is free software: you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as published
 #   by the Free Software Foundation, either version 3 of the License, or
@@ -73,7 +69,8 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
     kciplaintextbrowser.cpp \
     kcimessagebox.cpp \
-    kcidragproxy.cpp
+    kcidragproxy.cpp \
+    kciclipboard.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -119,7 +116,8 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemfoldertext.h \
     kciplaintextbrowser.h \
     kcimessagebox.h \
-    kcidragproxy.h
+    kcidragproxy.h \
+    kciclipboard.h
 
 # Enable C++11
 CONFIG += c++11
