@@ -32,6 +32,8 @@ void kciTextSearchWorker::setResults(QList<searchResult> *results)
 void kciTextSearchWorker::setDocument(QTextDocument *value)
 {
     document = value;
+    connect(value,SIGNAL(contentsChanged()),
+            this,SLOT());
 }
 
 void kciTextSearchWorker::setIsCaseSensitive(bool value)

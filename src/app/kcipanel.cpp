@@ -108,6 +108,7 @@ void kciPanel::paintEvent(QPaintEvent *event)
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();
+
     if(autoWidth)
     {
         setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);
