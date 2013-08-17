@@ -30,7 +30,7 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
     setMenuWidget(m_titleBar);
     setAcceptDrops(true);
 
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(2,2,2,2);
 
 #ifdef Q_OS_MACX
     QMainWindow::setUnifiedTitleAndToolBarOnMac(false);
@@ -40,14 +40,6 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
 
     kciDragProxy *dragProxy=new kciDragProxy(this);
     dragProxy->setBorderWidth(8,8,8,8);
-}
-
-void kciMainWindow::setWindowTitle(const QString &title)
-{
-#ifndef Q_OS_MACX
-    m_titleBar->setTitle(title);
-#endif
-    QMainWindow::setWindowTitle(title);
 }
 
 kciTitleBar *kciMainWindow::titleBar() const

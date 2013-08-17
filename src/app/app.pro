@@ -133,4 +133,5 @@ OTHER_FILES += \
     zh_CN.ts \
     lang.map \
     default.style \
-    COPYING.txt
+    COPYING.txt \
+    winico.rc

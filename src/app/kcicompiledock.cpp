@@ -133,22 +133,22 @@ void kcicompiledock::selectAnError(QModelIndex ItemIndex)
 
 void kcicompiledock::animeShowError()
 {
-    /*animeHideTimeLine->stop();
-    if(animeShowTimeLine->state() == QTimeLine::NotRunning)
+    animeHideTimeLine->stop();
+    if(animeShowTimeLine->state()!=QTimeLine::Running)
     {
         animeShowTimeLine->setFrameRange(compileOutput->width(), int(width()/5));
         animeShowTimeLine->start();
-    }*/
+    }
 }
 
 void kcicompiledock::animeHideError()
 {
-    /*animeShowTimeLine->stop();
-    if(animeHideTimeLine->state() != QTimeLine::NotRunning)
+    animeShowTimeLine->stop();
+    if(animeHideTimeLine->state()!=QTimeLine::Running)
     {
         animeHideTimeLine->setFrameRange(compileOutput->width(), width());
         animeHideTimeLine->start();
-    }*/
+    }
 }
 
 void kcicompiledock::changeDockCompileWidth(int dockCompileWidth)
