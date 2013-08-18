@@ -374,6 +374,7 @@ void kciControlCenterContents::resizeEvent(QResizeEvent *e)
 kciControlCenter::kciControlCenter(QWidget *parent) :
     QDialog(parent)
 {
+    setWindowTitle(tr("Cuties Control Center"));
 
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);
