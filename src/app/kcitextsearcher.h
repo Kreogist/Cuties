@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cute-IDE.
+ *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,10 +20,12 @@
 #ifndef KCITEXTSEARCHER_H
 #define KCITEXTSEARCHER_H
 
+#define SEARCH_UNTIL_END_MARK -0xfffffff
+
 #include <QRegularExpression>
 #include <QStringMatcher>
 #include <QTextBlock>
-#include <QDebug>
+#include <QMutex>
 
 #include "kcitextblockdata.h"
 
@@ -35,10 +37,12 @@ public:
 
     void search(const QTextBlock &begin,
                 int lineCount,
-                const unsigned long long &searchCode);
+                const unsigned long long &searchCode, const bool &forward);
 
     void setIsCaseSensitive(bool value);
     void setPatternString(const QString& pattern);
+
+    void requireStop();
 
 protected:
     virtual void setPattern(const QString& pattern) = 0;
@@ -50,6 +54,9 @@ private:
     kciTextBlockData *currBlockData;
     bool isCaseSensitive;
     bool resetMark;
+
+    QMutex quitLock;
+    bool needQuit;
 };
 
 class kciTextSearcherRegexp : public kciTextSearcher

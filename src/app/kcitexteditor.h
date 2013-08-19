@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cute-IDE.
+ *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@
 #include <QScopedPointer>
 #include <QMenu>
 #include <QSignalMapper>
+#include <QtConcurrent/QtConcurrent>
+#include <QFuture>
 #include <QDebug>
 
 #include "kcitextsearcher.h"
@@ -69,7 +71,14 @@ private:
                                  QTextCursor &currTextCursor,
                                  const QChar &rightParentheses);
     void findString(bool forward);
-    void generalSearch(const QTextBlock& block,int lines);
+    void generalSearch(const QTextBlock& block,
+                       const int lines,
+                       const bool forward);
+    void searchOnOtherThread(QScopedPointer<kciTextSearcher> &searcher,
+                             QFuture<void> &thread,
+                             const QTextBlock &block,
+                             const bool forward);
+    void initTextSearcher(QScopedPointer<kciTextSearcher> &searcher);
     void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block);
 
     kciClipboard* clipboard;
@@ -82,6 +91,8 @@ private:
     bool caseSensitively;
     bool wholeWord;
     unsigned long long int searchCode;
+    QScopedPointer<kciTextSearcher> searcherForPrev,searcherForNext;
+    QFuture<void> threadPrev,threadNext;
 };
 
 #endif // CODEEDITOR_H

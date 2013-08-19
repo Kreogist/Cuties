@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cute-IDE.
+ *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ void kciTextEditor::checkWhetherBlockSearchedAndDealWith(
     if(!hasSearched)
     {
         data->endUsingDatas();
-        generalSearch(block,50);    //search 50 lines
+        generalSearch(block,50,true);    //search 50 lines
         data->beginUsingDatas();
     }
     data->endUsingDatas();
@@ -250,19 +250,57 @@ void kciTextEditor::searchString(QString text,
     }
 
     updateSearchResults();
+
+    searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
+    searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
 }
 
 void kciTextEditor::updateSearchResults()
 {
-    generalSearch(firstVisibleBlock(), height()/fontMetrics().lineSpacing()+2);
+    generalSearch(firstVisibleBlock(),
+                  height()/fontMetrics().lineSpacing()+2,
+                  true);
 
     updateHighlights();
 }
 
-void kciTextEditor::generalSearch(const QTextBlock &block, int lines)
+void kciTextEditor::generalSearch(const QTextBlock &block,
+                                  const int lines,
+                                  const bool forward)
 {
     QScopedPointer<kciTextSearcher> searcher;
 
+    initTextSearcher(searcher);
+
+    searcher->search(block,
+                     lines,
+                     searchCode,
+                     forward);
+}
+
+void kciTextEditor::searchOnOtherThread(QScopedPointer<kciTextSearcher> &searcher,
+                                        QFuture<void> &thread,
+                                        const QTextBlock &block,
+                                        const bool forward)
+{
+    if(!searcher.isNull())
+    {
+        searcher->requireStop();
+        thread.waitForFinished();
+    }
+
+    initTextSearcher(searcher);
+
+    thread=QtConcurrent::run(searcher.data(),
+                             &kciTextSearcher::search,
+                             block,
+                             SEARCH_UNTIL_END_MARK,
+                             searchCode,
+                             forward);
+}
+
+void kciTextEditor::initTextSearcher(QScopedPointer<kciTextSearcher> &searcher)
+{
     if(regularExpression || wholeWord)
     {
         searcher.reset(new kciTextSearcherRegexp);
@@ -274,9 +312,6 @@ void kciTextEditor::generalSearch(const QTextBlock &block, int lines)
 
     searcher->setPatternString(text);
     searcher->setIsCaseSensitive(caseSensitively);
-    searcher->search(block,
-                     lines,
-                     searchCode);
 }
 
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)

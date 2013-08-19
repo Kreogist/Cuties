@@ -2,10 +2,6 @@
 #
 #   Copyright 2013 Kreogist Dev Team
 #
-#       Wang Luming <wlm199558@126.com>
-#       Miyanaga Saki <tomguts@126.com>
-#       Zhang Jiayi <bf109g2@126.com>
-#
 #     Kreogist-Cuties is free software: you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as published
 #   by the Free Software Foundation, either version 3 of the License, or

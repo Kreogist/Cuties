@@ -1,7 +1,7 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cute-IDE.
+ *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,11 +23,13 @@
 kciTextSearcher::kciTextSearcher()
 {
     resetMark=false;
+    needQuit=false;
 }
 
 void kciTextSearcher::search(const QTextBlock& begin,
                              int lineCount,
-                             const unsigned long long int& searchCode)
+                             const unsigned long long int& searchCode,
+                             const bool& forward)
 {
     setCaseSensitive(isCaseSensitive);
 
@@ -51,12 +53,24 @@ void kciTextSearcher::search(const QTextBlock& begin,
      * So we let lineCount+=begin.lineCount(); to avoid this.Search a little
      * more text won't take bad effect to our program's user experience
      */
-    lineCount+=begin.lineCount();
+    lineCount+=(lineCount==SEARCH_UNTIL_END_MARK)?0:begin.lineCount();
 
-    for(QTextBlock i=begin;i.isValid() && lineCount>=0;i=i.next())
+    for(QTextBlock i=begin;
+        i.isValid() && (lineCount>=0 || lineCount==SEARCH_UNTIL_END_MARK);
+        i= (forward==true)?i.next():i.previous())
     {
+        //---check whether need quit---
+        quitLock.lock();
+        if(needQuit)
+        {
+            quitLock.unlock();
+            return ;
+        }
+        quitLock.unlock();
+        //------------
+
         currBlockData=(kciTextBlockData*)i.userData();
-        lineCount-=i.lineCount();
+        lineCount-=(lineCount==SEARCH_UNTIL_END_MARK)?0:i.lineCount();
         if(Q_UNLIKELY(currBlockData==NULL))
         {
             continue;
@@ -68,7 +82,7 @@ void kciTextSearcher::search(const QTextBlock& begin,
             continue;
         }
         currBlockData->setSearchCode(searchCode);
-        currBlockData->resetMatchedTextPositions();
+        currBlockData->resetForSearch();
         if(!resetMark)
             match(i.text());
         currBlockData->endUsingDatas();
@@ -94,6 +108,13 @@ void kciTextSearcher::setIsCaseSensitive(bool value)
 void kciTextSearcher::recordResult(int startPos, int length)
 {
     currBlockData->insertMatchedTextPositions(startPos,length);
+}
+
+void kciTextSearcher::requireStop()
+{
+    quitLock.lock();
+    needQuit=true;
+    quitLock.unlock();
 }
 
 //======kciTextSearchWorkerRegexp======

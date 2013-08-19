@@ -1,20 +1,20 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cute-IDE.
+ *  This file is part of Kreogist-Cuties.
  *
- *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "kcitextblockdata.h"
@@ -22,11 +22,12 @@
 kciTextBlockData::kciTextBlockData()
 {
     searchCode=0;
-    resetMatchedTextPositions();
+    resetForSearch();
 }
 
-void kciTextBlockData::resetMatchedTextPositions()
+void kciTextBlockData::resetForSearch()
 {
+    isChanged=false;
     matchedTextPositions.clear();
     matchedInfo gmin,gmax;
     gmin.pos=INT_MIN;
@@ -70,7 +71,12 @@ void kciTextBlockData::insertMatchedTextPositions(const int& pos,
 
 bool kciTextBlockData::isSearched(const unsigned long long &searchCodeNow)
 {
-    return searchCodeNow==searchCode;
+    return (searchCodeNow==searchCode) && (!isChanged);
+}
+
+void kciTextBlockData::onBlockChanged()
+{
+    isChanged=true;
 }
 
 void kciTextBlockData::beginUsingDatas()
@@ -87,3 +93,4 @@ bool kciTextBlockData::hasMatched()
 {
     return matchedTextPositions.size()>2;
 }
+
