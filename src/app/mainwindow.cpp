@@ -5,20 +5,20 @@
  *      Miyanaga Saki <tomguts@126.com>
  *      Zhang Jiayi <bf109g2@126.com>
  *
- *  This file is part of Kreogist-Cute-IDE.
+ *  This file is part of Kreogist-Cuties.
  *
- *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "mainwindow.h"
@@ -459,6 +459,16 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuFile]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuFileOpen:
+        case mnuFileSaveAll:
+        case mnuFileCloseAllExceptThis:
+            menu[mnuFile]->addSeparator();
+            break;
+        }
+#endif
     }
 
     //Create Edit Menu
@@ -470,6 +480,16 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuEdit]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuEditRedo:
+        case mnuEditPaste:
+        case mnuEditSelectAll:
+            menu[mnuEdit]->addSeparator();
+            break;
+        }
+#endif
     }
 
     //Create View Menu
@@ -492,6 +512,16 @@ void MainWindow::createMenu()
         act[i]->setStatusTip(actStatusTips[i]);
         act[i]->setIcon(*MenuIconAddor);
         menu[mnuSearch]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuSearchReplaceInFiles:
+        case mnuSearchSearchOnline:
+            menu[mnuSearch]->addSeparator();
+            break;
+        }
+
+#endif
     }
 
     //Create Execute Menu
@@ -503,6 +533,15 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuExecute]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuExecuteRun:
+        case mnuExecuteParameters:
+            menu[mnuExecute]->addSeparator();
+            break;
+        }
+#endif
     }
 
     //Create Debug Menu
@@ -514,6 +553,17 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuDebug]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuDebugStopExecute:
+        case mnuDebugSetBreakPoint:
+        case mnuDebugSkipFunction:
+            menu[mnuDebug]->addSeparator();
+            break;
+        }
+
+#endif
     }
 
     //Create Tool Menu
