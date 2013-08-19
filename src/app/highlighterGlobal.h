@@ -25,9 +25,9 @@
 #define HIGHLIGHTERGLOBAL_H
 
 //all file that should be included by highlighter define here
-#include <QSyntaxHighlighter>
 #include <QList>
 #include <QRegularExpression>
+#include "kcihighlighter.h"
 
 struct highlight_rule
 {

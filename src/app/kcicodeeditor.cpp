@@ -75,6 +75,13 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     searchBar=new kciSearchWindow(editor);
     searchBar->hide();
     connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
+    connect(searchBar,&kciSearchWindow::requireSearch,
+            editor,&kciTextEditor::searchString);
+    connect(searchBar,&kciSearchWindow::requireShowNextResult,
+            editor,&kciTextEditor::showNextSearchResult);
+    connect(searchBar,&kciSearchWindow::requireShowPreviousResult,
+            editor,&kciTextEditor::showPreviousSearchResult);
+
 }
 
 QString kciCodeEditor::getExecFileName()

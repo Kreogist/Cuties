@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
@@ -23,83 +19,133 @@
 
 #include "kcitextsearcher.h"
 
-kciTextSearcher::kciTextSearcher(QObject *parent) :
-    QObject(parent)
+//======kciTextSearchWorker======
+kciTextSearcher::kciTextSearcher()
 {
-    p_document=nullptr;
-    worker=nullptr;
-    qRegisterMetaType<searchResult>("searchResult");
+    resetMark=false;
 }
 
-void kciTextSearcher::search()
+void kciTextSearcher::search(const QTextBlock& begin,
+                             int lineCount,
+                             const unsigned long long int& searchCode)
 {
-    cancelPrevSearch();
+    setCaseSensitive(isCaseSensitive);
 
-    if((flags & RegularExpress) || (flags & WholeWord))
+    /*This is a "lazy-search" which means that we just search the part
+     *of the document which is visiable for user. So we need to guarantee
+     *that all the parts that user can see are searched. Because the editor
+     *may not display the whole part of the first block. If we just let
+     *lineCount-=i.lineCount() , some part which user could see won't
+     *be searched. And that's why we let lineCount+=begin.lineCount(); first.
+     *
+     *For example: the editor display 4 lines
+     *   [first block begin            | lineCount=4;(the editor can display
+     *                                 |               4 lines)
+     **********************************| lineCount-=4(first block->line count);
+     *                                *|
+     *               first block end] *|
+     *   [second block]               *| lineCount-=1(second block->line count);
+     *   [third block]                *| Because the lineCount<0 at that time,
+     **********************************| the third block won't be searched.
+     *
+     * So we let lineCount+=begin.lineCount(); to avoid this.Search a little
+     * more text won't take bad effect to our program's user experience
+     */
+    lineCount+=begin.lineCount();
+
+    for(QTextBlock i=begin;i.isValid() && lineCount>=0;i=i.next())
     {
-        worker=new kciTextSearchWorkerRegexp;
-
-        if(!(flags & RegularExpress))
-            subString=QRegularExpression::escape(subString);
-
-        if(flags & WholeWord)
+        currBlockData=(kciTextBlockData*)i.userData();
+        lineCount-=i.lineCount();
+        if(Q_UNLIKELY(currBlockData==NULL))
         {
-            subString.prepend(QString("\\b("));
-            subString.append(QString(")\\b"));
+            continue;
         }
+        currBlockData->beginUsingDatas();
+        if(currBlockData->isSearched(searchCode))
+        {
+            currBlockData->endUsingDatas();
+            continue;
+        }
+        currBlockData->setSearchCode(searchCode);
+        currBlockData->resetMatchedTextPositions();
+        if(!resetMark)
+            match(i.text());
+        currBlockData->endUsingDatas();
+    }
+}
+
+void kciTextSearcher::setPatternString(const QString &pattern)
+{
+    if(!pattern.isEmpty())
+    {
+        setPattern(pattern);
+        resetMark=false;
     }
     else
+        resetMark=true;
+}
+
+void kciTextSearcher::setIsCaseSensitive(bool value)
+{
+    isCaseSensitive = value;
+}
+
+void kciTextSearcher::recordResult(int startPos, int length)
+{
+    currBlockData->insertMatchedTextPositions(startPos,length);
+}
+
+//======kciTextSearchWorkerRegexp======
+void kciTextSearcherRegexp::setPattern(const QString &pattern)
+{
+    regexp.setPattern(pattern);
+}
+
+void kciTextSearcherRegexp::setCaseSensitive(bool value)
+{
+    QRegularExpression::PatternOptions po=regexp.patternOptions();
+    if(!value)
+        po|=QRegularExpression::CaseInsensitiveOption;
+    else
+        po&=~QRegularExpression::CaseInsensitiveOption;
+
+    regexp.setPatternOptions(po);
+}
+
+void kciTextSearcherRegexp::match(const QString &text)
+{
+    QRegularExpressionMatchIterator matchResultIt=regexp.globalMatch(text);
+
+    while(matchResultIt.hasNext())
     {
-        worker=new kciTextSearchWorkerStringMatcher;
+        QRegularExpressionMatch match=matchResultIt.next();
+
+        recordResult(match.capturedStart(),match.capturedLength());
     }
-
-    worker->setPattern(subString);
-    worker->setIsCaseSensitive(flags & MatchCase);
-    worker->setDocument(p_document);
-    worker->setResults(&resultList);
-
-    connect(worker,SIGNAL(finished()),this,SLOT(onWorkerFinished()));
-    worker->start(QThread::NormalPriority);
 }
 
-void kciTextSearcher::cancelPrevSearch()
+//======kciTextSearchWorkerStringMatcher
+void kciTextSearcherStringMatcher::setPattern(const QString &pattern)
 {
-    if(worker)
+    matcher.setPattern(pattern);
+}
+
+void kciTextSearcherStringMatcher::setCaseSensitive(bool value)
+{
+    Qt::CaseSensitivity cs = (value) ? Qt::CaseSensitive : Qt::CaseInsensitive;
+
+    matcher.setCaseSensitivity(cs);
+}
+
+void kciTextSearcherStringMatcher::match(const QString &text)
+{
+    int length=matcher.pattern().length(),from=0;
+    for(int i=matcher.indexIn(text,from);
+        i!=-1;
+        from=i+length,i=matcher.indexIn(text,from))
     {
-        worker->lock.lockForWrite();
-        worker->needQuit=true;
-        worker->lock.unlock();
-        worker->quit();
-        worker->wait();
-        worker->deleteLater();
-        worker=nullptr;
+        recordResult(i,length);
     }
-
-    resultList.clear();
 }
 
-void kciTextSearcher::setDocument(QTextDocument *value)
-{
-    p_document = value;
-}
-
-void kciTextSearcher::setSubString(const QString &value)
-{
-    subString = value;
-}
-
-
-int kciTextSearcher::getFlags() const
-{
-    return flags;
-}
-
-void kciTextSearcher::setFlags(int value)
-{
-    flags = value;
-}
-
-void kciTextSearcher::onWorkerFinished()
-{
-    emit finished(&resultList);
-}

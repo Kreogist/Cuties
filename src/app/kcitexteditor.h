@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cute-IDE.
  *
  *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
@@ -29,11 +25,13 @@
 #include <QTextBlock>
 #include <QPalette>
 #include <QScrollBar>
+#include <QScopedPointer>
 #include <QMenu>
 #include <QSignalMapper>
 #include <QDebug>
 
 #include "kcitextsearcher.h"
+#include "kcitextblockdata.h"
 #include "kciclipboard.h"
 
 class kciTextEditor : public QPlainTextEdit
@@ -42,8 +40,6 @@ class kciTextEditor : public QPlainTextEdit
 public:
     explicit kciTextEditor(QWidget *parent = 0);
     void setDocumentCursor(int nLine, int linePos);
-    void setSearchResults(QList<searchResult> *results);
-    void showSearchResultAt(int num);
     
 signals:
     void updated();
@@ -51,6 +47,15 @@ signals:
 public slots:
     void updateHighlights();
     void pasteFromeHistory();
+    void showPreviousSearchResult();
+    void showNextSearchResult();
+    void searchString(QString text,
+                      bool regularExpression,
+                      bool caseSensitively,
+                      bool wholeWord);
+
+private slots:
+    void updateSearchResults();
 
 protected:
     void paintEvent(QPaintEvent *e);
@@ -63,12 +68,20 @@ private:
     void autoCompleteParentheses(QKeyEvent *e,
                                  QTextCursor &currTextCursor,
                                  const QChar &rightParentheses);
+    void findString(bool forward);
+    void generalSearch(const QTextBlock& block,int lines);
+    void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block);
 
     kciClipboard* clipboard;
     QSignalMapper* clipboardHistoryMenuSignalMapper;
-    QList<searchResult> resultList;
     QColor lineColor,searchResultColor;
     QPoint contextMenuPos;
+
+    QString text;
+    bool regularExpression;
+    bool caseSensitively;
+    bool wholeWord;
+    unsigned long long int searchCode;
 };
 
 #endif // CODEEDITOR_H

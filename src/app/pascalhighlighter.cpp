@@ -24,7 +24,7 @@
 #include "pascalhighlighter.h"
 
 pascalHighlighter::pascalHighlighter(QObject *parent) :
-    QSyntaxHighlighter(parent)
+    kciHighlighter(parent)
 {
     //get textCharFormatMap instance
     instance = textCharFormatMap::getInstance();
@@ -75,7 +75,7 @@ pascalHighlighter::pascalHighlighter(QObject *parent) :
     rules<<hlrSpTypes;
 }
 
-void pascalHighlighter::highlightBlock(const QString &text)
+void pascalHighlighter::kciHighlightBlock(const QString &text)
 {
     //!TODO: unsupport multiline comment
     for(int i=0;i<rules.size();i++)

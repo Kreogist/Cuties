@@ -24,7 +24,7 @@
 #include "cpphighlighter.h"
 
 cppHighlighter::cppHighlighter(QObject *parent) :
-    QSyntaxHighlighter(parent)
+    kciHighlighter(parent)
 {
     //get textCharFormatMap instance
     instance = textCharFormatMap::getInstance();
@@ -120,7 +120,7 @@ void cppHighlighter::conmmentHighlightBlock(const QString &text)
     }
 }
 
-void cppHighlighter::highlightBlock(const QString &text)
+void cppHighlighter::kciHighlightBlock(const QString &text)
 {
     for(int i=0;i<rules.size();i++)
     {

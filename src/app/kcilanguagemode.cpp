@@ -72,14 +72,16 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
     }
     else
     {
+        if(m_type==plainText) //file type doesn't change,so return.
+            return ;
+
         m_type=plainText;
         compiler.reset();
-        m_highlighter.reset();
+        m_highlighter.reset(new kciHighlighter(this));
     }
 
 
-    if(m_highlighter.isNull())
-        return ;
+    Q_ASSERT(!m_highlighter.isNull());
     m_highlighter->setDocument(m_parent->document);
 }
 

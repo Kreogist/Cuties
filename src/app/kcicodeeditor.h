@@ -24,7 +24,6 @@
 #ifndef TEXTEDITOR_H
 #define TEXTEDITOR_H
 
-#include <QWidget>
 #include <QHBoxLayout>
 #include <QPalette>
 #include <QFile>

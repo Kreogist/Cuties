@@ -65,7 +65,7 @@ private:
 
     modeType m_type;
     kciCodeEditor *m_parent;
-    QScopedPointer<QSyntaxHighlighter> m_highlighter;
+    QScopedPointer<kciHighlighter> m_highlighter;
 
     QScopedPointer<compilerBase> compiler;
     compileOutputReceiver *compilerReceiver;

@@ -28,14 +28,14 @@
 #include "textcharformatmap.h"
 
 
-class cppHighlighter : public QSyntaxHighlighter
+class cppHighlighter : public kciHighlighter
 {
     Q_OBJECT
 public:
     explicit cppHighlighter(QObject *parent = 0);
 
 protected:
-    void highlightBlock(const QString &text);
+    void kciHighlightBlock(const QString &text);
 
 private:
     QList<highlight_rule> rules;

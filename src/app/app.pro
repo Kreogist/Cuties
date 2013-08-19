@@ -56,7 +56,6 @@ SOURCES += \
     kcilanguagemode.cpp \
     kcisearchlinetext.cpp \
     kcidebugdock.cpp \
-    kcitextsearchworker.cpp \
     fpc.cpp \
     kcilistbutton.cpp \
     Controls/SettingItems/kcisettinglistitemboolean.cpp \
@@ -70,7 +69,9 @@ SOURCES += \
     kciplaintextbrowser.cpp \
     kcimessagebox.cpp \
     kcidragproxy.cpp \
-    kciclipboard.cpp
+    kciclipboard.cpp \
+    kcitextblockdata.cpp \
+    kcihighlighter.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -103,7 +104,6 @@ HEADERS += \
     kcilanguagemode.h \
     kcisearchlinetext.h \
     kcidebugdock.h \
-    kcitextsearchworker.h \
     fpc.h \
     kcilistbutton.h \
     Controls/SettingItems/kcisettinglistitemboolean.h \
@@ -117,7 +117,9 @@ HEADERS += \
     kciplaintextbrowser.h \
     kcimessagebox.h \
     kcidragproxy.h \
-    kciclipboard.h
+    kciclipboard.h \
+    kcitextblockdata.h \
+    kcihighlighter.h
 
 # Enable C++11
 CONFIG += c++11
