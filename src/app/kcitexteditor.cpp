@@ -434,6 +434,7 @@ void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
 void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
+
     switch (e->key()) {
     case Qt::Key_ParenLeft:
     {

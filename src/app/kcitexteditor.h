@@ -45,6 +45,7 @@ public:
     
 signals:
     void updated();
+    void searchStringChangedByShortCut(QString text);
 
 public slots:
     void updateHighlights();

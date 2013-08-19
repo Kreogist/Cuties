@@ -23,12 +23,14 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
     QObject(parent)
 {
     m_parent=qobject_cast<kciCodeEditor*>(parent);
-    m_type=plainText;
     compilerReceiver=NULL;
     dbgReceiver=NULL;
     gdbInstance=NULL;
 
     setCompileState(uncompiled);
+    m_type=plainText;
+    m_highlighter.reset(new kciHighlighter(this));
+    m_highlighter->setDocument(m_parent->document);
 
     Q_ASSERT(m_parent!=NULL);
 }

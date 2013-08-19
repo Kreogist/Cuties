@@ -44,6 +44,7 @@ public:
 
     explicit kciSearchWindow(QWidget *parent);
     void setTextFocus();
+    void setText(const QString& text);
 
 signals:
     void requireShowPreviousResult();

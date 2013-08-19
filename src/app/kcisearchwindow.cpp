@@ -141,6 +141,11 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
     this->setGraphicsEffect(wndShadow);
 }
 
+void kciSearchWindow::setText(const QString &text)
+{
+    SearchTexts->setText(text);
+}
+
 void kciSearchWindow::onTextChanged(const QString &text)
 {
     bool Regexp=menuAction[menuRegularExpress]->isChecked();

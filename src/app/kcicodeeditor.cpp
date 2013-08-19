@@ -109,8 +109,12 @@ void kciCodeEditor::showSearchBar()
         searchAnime->setEasingCurve(QEasingCurve::OutCubic);
         searchBar->show();
         searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
-        searchBar->setTextFocus();
     }
+
+    QTextCursor _textCursor=editor->textCursor();
+    if(_textCursor.hasSelection())
+        searchBar->setText(_textCursor.selectedText());
+    searchBar->setTextFocus();
 }
 
 bool kciCodeEditor::open(const QString &fileName)
