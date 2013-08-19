@@ -26,6 +26,7 @@
     </qresource>
     <qresource prefix="/mainicon">
         <file>image/Cuties.icns</file>
+        <file>image/Cuties.ico</file>
     </qresource>
     <qresource prefix="/menuicon">
         <file>image/MenuIcons/mnuEditPerformance.png</file>

@@ -38,6 +38,7 @@
 
 #include "kciplaintextbrowser.h"
 #include "compileoutputreceiver.h"
+#include "connectionhandler.h"
 
 class kcicompiledock : public QDockWidget
 {
@@ -59,7 +60,7 @@ private:
     QModelIndex lastSelIndex;
     QTimeLine *animeShowTimeLine, *animeHideTimeLine;
     const QVector<ErrInfo> *erifList;
-    QMetaObject::Connection receiverConnectionHandle;
+    connectionHandler receiverConnectionHandles;
 
 signals:
     void requireOpenErrFile(QString filePath);

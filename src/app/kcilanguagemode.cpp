@@ -3,13 +3,13 @@
 kciLanguageMode::kciLanguageMode(QWidget *parent) :
     QObject(parent)
 {
-    compiler=NULL;
-    m_highlighter=NULL;
     m_parent=qobject_cast<kciCodeEditor*>(parent);
     m_type=plainText;
     compilerReceiver=NULL;
     dbgReceiver=NULL;
     gdbInstance=NULL;
+
+    setCompileState(uncompiled);
 
     Q_ASSERT(m_parent!=NULL);
 }
@@ -21,7 +21,7 @@ void kciLanguageMode::setMode(const modeType &type)
 
 void kciLanguageMode::compile()
 {
-    if(compiler==NULL)
+    if(compiler.isNull())
     {
         qDebug()<<"compiler is NULL";
         return ;
@@ -33,12 +33,14 @@ void kciLanguageMode::compile()
         connectCompilerAndOutputReceiver();
     }
 
-    compilerReceiver->addForwardText();
-
-    if(compiler->state() != QProcess::NotRunning)
+    if(checkIfIsCompiling())
         return ;
 
-    compilerFinishedConnection=connect(compiler,&compilerBase::compileFinished,
+    setCompileState(compiling);
+
+    compilerReceiver->addForwardText();
+
+    compilerFinishedConnection=connect(compiler.data(),&compilerBase::compileFinished,
                                        this,&kciLanguageMode::onCompileFinished);
     compiler->startCompile(m_parent->filePath);
 }
@@ -55,28 +57,28 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
         if(m_type==cpp) //file type doesn't change,so return.
             return ;
 
-        resetCompilerAndHighlighter();
-
         m_type=cpp;
-        compiler=new gcc(this);
-        m_highlighter=new cppHighlighter(this);
+        compiler.reset(new gcc(this));
+        m_highlighter.reset(new cppHighlighter(this));
     }
     else if(suffix.contains(_regexp_pascal))
     {
         if(m_type==pascal) //file type doesn't change,so return.
             return ;
 
-        resetCompilerAndHighlighter();
-
         m_type=pascal;
-        compiler=new fpc(this);
-        m_highlighter=new pascalHighlighter(this);
+        compiler.reset(new fpc(this));
+        m_highlighter.reset(new pascalHighlighter(this));
     }
     else
+    {
         m_type=plainText;
+        compiler.reset();
+        m_highlighter.reset();
+    }
 
 
-    if(m_highlighter==NULL)
+    if(m_highlighter.isNull())
         return ;
     m_highlighter->setDocument(m_parent->document);
 }
@@ -115,23 +117,11 @@ void kciLanguageMode::onCompileFinished(bool hasError)
     if((bool)compilerFinishedConnection)
         disconnect(compilerFinishedConnection);
 
+    setCompileState(compiled);
+
     if(!hasError)
     {
         emit compileSuccessfully(m_parent->execFileName);
-    }
-}
-
-void kciLanguageMode::resetCompilerAndHighlighter()
-{
-    if(compiler!=NULL)
-    {
-        compiler->deleteLater();
-        compiler=NULL;
-    }
-    if(m_highlighter!=NULL)
-    {
-        m_highlighter->deleteLater();
-        m_highlighter=NULL;
     }
 }
 
@@ -144,13 +134,13 @@ void kciLanguageMode::connectCompilerAndOutputReceiver()
                                                compiler->version());
 
     //Output Compile Message:
-    compilerConnectionHandles+=connect(compiler,&compilerBase::compileCmd,
+    compilerConnectionHandles+=connect(compiler.data(),&compilerBase::compileCmd,
                                compilerReceiver,&compileOutputReceiver::addText);
-    compilerConnectionHandles+=connect(compiler,&compilerBase::output,
+    compilerConnectionHandles+=connect(compiler.data(),&compilerBase::output,
                                compilerReceiver,&compileOutputReceiver::addText);
-    compilerConnectionHandles+=connect(compiler,&compilerBase::compileError,
+    compilerConnectionHandles+=connect(compiler.data(),&compilerBase::compileError,
                                compilerReceiver,&compileOutputReceiver::onCompileMsgReceived);
-    compilerConnectionHandles+=connect(compiler,&compilerBase::compileFinished,
+    compilerConnectionHandles+=connect(compiler.data(),&compilerBase::compileFinished,
                                compilerReceiver,&compileOutputReceiver::onCompileFinished);
 }
 
@@ -168,4 +158,23 @@ void kciLanguageMode::connectGDBAndDbgReceiver()
                                dbgReceiver,&dbgOutputReceiver::receivelogOutput);
     gdbConnectionHandles+=connect(gdbInstance,&gdb::locals,
                                dbgReceiver,&dbgOutputReceiver::receiveLocals);
+}
+
+bool kciLanguageMode::checkIfIsCompiling()
+{
+    bool ret=false;
+
+    stateLock.lockForRead();
+    if(state==compiling)
+        ret=true;
+    stateLock.unlock();
+
+    return ret;
+}
+
+void kciLanguageMode::setCompileState(const compileState &state)
+{
+    stateLock.lockForWrite();
+    this->state=state;
+    stateLock.unlock();
 }

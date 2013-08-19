@@ -4,13 +4,11 @@ compileOutputReceiver::compileOutputReceiver(QObject *parent) :
     QObject(parent)
 {
     compilerOutputModel=new QStandardItemModel(this);
-    compilerOutputText=new QTextDocument(this);
 
-    plainTextLayout=new QPlainTextDocumentLayout(compilerOutputText);
-    compilerOutputText->setDocumentLayout(plainTextLayout);
+    reset();
 }
 
-QTextDocument *compileOutputReceiver::getCompilerOutputText() const
+const QString &compileOutputReceiver::getCompilerOutputText() const
 {
     return compilerOutputText;
 }
@@ -22,14 +20,13 @@ QStandardItemModel *compileOutputReceiver::getCompilerOutputModel() const
 
 void compileOutputReceiver::clearText()
 {
-   compilerOutputText->clear();
+   compilerOutputText.clear();
 }
 
-void compileOutputReceiver::addText(const QString NewText)
+void compileOutputReceiver::addText(const QString &NewText)
 {
-    QTextCursor text_cursor(compilerOutputText);
-    text_cursor.movePosition(QTextCursor::End);
-    text_cursor.insertText(NewText);
+    compilerOutputText.append(NewText);
+    emit compilerOutputTextChanged(compilerOutputText);
 }
 
 void compileOutputReceiver::addForwardText()
@@ -93,6 +90,7 @@ void compileOutputReceiver::onCompileMsgReceived(ErrInfo error)
     if(!hasOutput)
     {
         emit requireShowError();
+
         addText(QTime::currentTime().toString("hh:mm:ss") +
                 " " +
                 tr("Compile Output:") +

@@ -69,7 +69,6 @@ public:
 #ifndef Q_OS_MACX
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString& mainIcon);
-    void setTitle(const QString &title);
 #endif
 
 signals:
@@ -102,7 +101,6 @@ private:
 
     QVBoxLayout *vMinLayout, *vMaxLayout, *vCloseLayout;
     QHBoxLayout *hLayout;
-    QLabel *titleLabel;
     QString windowTitle;
 
 #ifndef Q_OS_MACX

@@ -49,6 +49,8 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     windowTitle=parent->windowTitle();
 
+    hasPressed=false;
+
 #ifndef Q_OS_MACX
     closeButton = new QToolButton(this);
     closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));
@@ -76,7 +78,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
             this,SLOT(_exchange_button_state()));
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
-    mainButton->setFixedSize(32,32);
+    mainButton->setFixedHeight(32);
     mainButton->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_1));
     connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
     mainButton->setPalette(bpal);
@@ -99,11 +101,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
                              mainToolBar->width(),
                              mainToolBar->height());
 
-    titleLabel=new QLabel(windowTitle,this);
-    pal=titleLabel->palette();
-    pal.setColor(QPalette::WindowText,QColor(208,208,208));
-    titleLabel->setPalette(pal);
-
     autoFill=new kciTitleBarAutoFill(this);
     connect(autoFill, SIGNAL(dblClickEmit()),
             this, SLOT(spacingDblClick()));
@@ -123,7 +120,6 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
     hLayout->addSpacerItem(NoUseSpacing);
     hLayout->addWidget(autoFill, 1);
 
-    hLayout->addWidget(titleLabel);
     hLayout->addSpacing(3);
 
     vMinLayout = new QVBoxLayout();
@@ -255,11 +251,6 @@ void kciTitleBar::setMainButtonIcon(const QString &mainIcon)
 {
     mainButtonIcon.addFile(mainIcon);
     mainButton->setIcon(mainButtonIcon);
-}
-
-void kciTitleBar::setTitle(const QString &title)
-{
-    titleLabel->setText(title);
 }
 #endif
 

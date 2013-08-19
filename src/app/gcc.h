@@ -39,16 +39,14 @@ public:
     void setCompilerPath(const QString& path);
     QString compilerName(){return "g++";}
 
-public slots:
-    void onOutputReady();
-
 protected:
     QStringList getVersionArg();
     QStringList getCompileArg(const QString &filePath);
     QStringList getcompileEnv();
 
+    void parseLine(const QString &text);
+
 private:
-    void parseMessage(const QString& msg);
 
     static QString gccPath;
 };

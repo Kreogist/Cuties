@@ -27,6 +27,10 @@
 #include <QFont>
 #include <QFile>
 #include <QString>
+#include <QDir>
+#include <QList>
+#include <QFileInfo>
+#include <QStringList>
 #include <QStyleFactory>
 #include <QDebug>
 
@@ -49,21 +53,22 @@ int main(int argc, char *argv[])
     //Initialize Application Icon.
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.ico"));
 
-    //Initialize Application Language.
-    QTranslator appTrans;
-    appTrans.load(qApp->applicationDirPath() + "/Locale/" + QLocale::system().name());
-    app.installTranslator(&appTrans);
+    //Initialize Application Fonts.
+    QStringList filter;
+    QDir *dir=new QDir(QString(qApp->applicationDirPath() + "/Fonts/"));
+    QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
 
-    //Initialize Application Fonts
-    QStringList list;
-    list << "monaco.ttf" << "Kreogist-UI.ttf";
     int fontID(-1);
     bool fontWarningShown(false);
-    for (auto constIterator = list.constBegin();
-         constIterator != list.constEnd();
-         ++constIterator)
+    for (QList<QFileInfo>::iterator i=list->begin();
+         i!=list->end();
+         ++i)
     {
-        QFile res(qApp->applicationDirPath() + "/Fonts/" + *constIterator);
+        if(i->fileName().length() < 4)
+        {
+            continue;
+        }
+        QFile res(i->filePath());
         if (res.open(QIODevice::ReadOnly) == false) {
             if (fontWarningShown == false) {
                 QMessageBox::warning(0,
@@ -87,6 +92,12 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+
+    //Initialize Application Language.
+    QTranslator appTrans;
+    appTrans.load(qApp->applicationDirPath() + "/Locale/" + QLocale::system().name());
+    app.installTranslator(&appTrans);
 
     //Initalize Application Palette.
     QPalette pal=app.palette();

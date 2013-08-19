@@ -24,10 +24,8 @@
 #include "compilerbase.h"
 
 compilerBase::compilerBase(QObject *parent) :
-    QProcess(parent)
+    QObject(parent)
 {
-    connect(this,SIGNAL(finished(int)),
-            this,SLOT(onFinished(int)));
 }
 
 void compilerBase::emitCompileCmd(const QString &compilerPath,
@@ -49,11 +47,12 @@ QString compilerBase::version()
     //Initalize Values:
     QString strReturnValue;
 
-    start(path(),getVersionArg());
-    waitForFinished();
+    compiler.reset(new QProcess(this));
+    compiler->start(path(),getVersionArg());
+    compiler->waitForFinished();
 
     //Save Second Part Of Compiler:
-    strReturnValue=QString::fromUtf8(readAllStandardOutput().constData());
+    strReturnValue=QString::fromUtf8(compiler->readAllStandardOutput().constData());
     return strReturnValue;
 }
 
@@ -64,14 +63,19 @@ void compilerBase::startCompile(const QString &filePath)
 
     emitCompileCmd(compilerPath,getCompileArg(filePath));
 
-    connectionHandle=connect(this,SIGNAL(readyRead()),
-            this,SLOT(onOutputReady()));
+    compiler.reset(new QProcess(this));
+    compiler->setReadChannelMode(QProcess::MergedChannels);
+
+    connectionHandles+=connect(compiler.data(),SIGNAL(readyRead()),
+                               this,SLOT(onOutputReady()));
+    connectionHandles+=connect(compiler.data(),SIGNAL(finished(int)),
+                               this,SLOT(onFinished(int)));
 
     QStringList env=getcompileEnv();
     if(!env.isEmpty())
-        setEnvironment(env);
+        compiler->setEnvironment(env);
 
-    start(compilerPath,getCompileArg(filePath));
+    compiler->start(compilerPath,getCompileArg(filePath));
 }
 
 bool compilerBase::checkCompilerPath(const QString& path)
@@ -88,11 +92,19 @@ bool compilerBase::checkCompilerPath(const QString& path)
 
 void compilerBase::onFinished(int exitNum)
 {
-    if((bool)connectionHandle)
-    {
-        disconnect(connectionHandle);
-    }
+    connectionHandles.disConnectAll();
 
-    int hasErr=checkHasErrorByExitNum(exitNum);
+    bool hasErr=checkHasErrorByExitNum(exitNum);
     emit compileFinished(hasErr);
+}
+
+void compilerBase::onOutputReady()
+{
+    char str_msg[1024];
+    while(compiler->readLine(str_msg,1024))
+    {
+        QString msg=QString::fromUtf8(str_msg);
+        emit output(msg);
+        parseLine(msg);
+    }
 }

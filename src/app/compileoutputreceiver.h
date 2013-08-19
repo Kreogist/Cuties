@@ -2,9 +2,6 @@
 #define COMPILEOUTPUTRECEIVER_H
 
 #include <QStandardItemModel>
-#include <QTextDocument>
-#include <QPlainTextDocumentLayout>
-#include <QTextCursor>
 #include <QTime>
 #include <QDebug>
 
@@ -21,13 +18,13 @@ public:
 
     //Text Controls:
     void clearText();
-    void addText(const QString NewText);
+    void addText(const QString& NewText);
     void addForwardText();
 
     void reset();
 
     QStandardItemModel *getCompilerOutputModel() const;
-    QTextDocument *getCompilerOutputText() const;
+    const QString& getCompilerOutputText() const;
     const QVector<ErrInfo> *getErifList() const;
 
     bool hasCompileError();
@@ -37,6 +34,7 @@ public:
 
 signals:
     void requireShowError();
+    void compilerOutputTextChanged(QString text);
     
 public slots:
     void onCompileMsgReceived(ErrInfo error);
@@ -45,8 +43,7 @@ public slots:
 private:
     bool hasOutput;
     QStandardItemModel *compilerOutputModel;
-    QTextDocument *compilerOutputText;
-    QPlainTextDocumentLayout *plainTextLayout;
+    QString compilerOutputText;
     QModelIndex lastSelIndex;
     QVector<ErrInfo> erifList;
     QString compilerVersion;

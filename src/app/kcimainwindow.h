@@ -43,7 +43,6 @@ public:
     
     kciTitleBar *titleBar() const;
     void setTitleBar(kciTitleBar *titleBar);
-    void setWindowTitle(const QString &title);
 #ifndef Q_OS_MACX
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString& mainIcon);

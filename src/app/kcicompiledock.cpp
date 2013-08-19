@@ -133,22 +133,22 @@ void kcicompiledock::selectAnError(QModelIndex ItemIndex)
 
 void kcicompiledock::animeShowError()
 {
-    /*animeHideTimeLine->stop();
-    if(animeShowTimeLine->state() == QTimeLine::NotRunning)
+    animeHideTimeLine->stop();
+    if(animeShowTimeLine->state()!=QTimeLine::Running)
     {
         animeShowTimeLine->setFrameRange(compileOutput->width(), int(width()/5));
         animeShowTimeLine->start();
-    }*/
+    }
 }
 
 void kcicompiledock::animeHideError()
 {
-    /*animeShowTimeLine->stop();
-    if(animeHideTimeLine->state() != QTimeLine::NotRunning)
+    animeShowTimeLine->stop();
+    if(animeHideTimeLine->state()!=QTimeLine::Running)
     {
         animeHideTimeLine->setFrameRange(compileOutput->width(), width());
         animeHideTimeLine->start();
-    }*/
+    }
 }
 
 void kcicompiledock::changeDockCompileWidth(int dockCompileWidth)
@@ -162,11 +162,13 @@ void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
 {
     Q_ASSERT(currReceiver!=NULL);
 
-    disconnect(receiverConnectionHandle);
+    receiverConnectionHandles.disConnectAll();
 
     erifList=currReceiver->getErifList();
-    compileOutput->setDocument(currReceiver->getCompilerOutputText());
+    compileOutput->setPlainText(currReceiver->getCompilerOutputText());
     trevwCompileInfo->setModel(currReceiver->getCompilerOutputModel());
-    receiverConnectionHandle=connect(currReceiver, SIGNAL(requireShowError()),
-                                     this, SLOT(animeShowError()));
+    receiverConnectionHandles+=connect(currReceiver, SIGNAL(requireShowError()),
+                                       this, SLOT(animeShowError()));
+    receiverConnectionHandles+=connect(currReceiver,SIGNAL(compilerOutputTextChanged(QString)),
+                                       compileOutput,SLOT(setPlainText(QString)));
 }
