@@ -30,6 +30,9 @@ public:
     void setPushed(bool newValue);
     bool getPushed();
 
+    QWidget *getUserInterfaceWidget() const;
+    void setUserInterfaceWidget(QWidget *value);
+
 signals:
     void click();
     
@@ -47,6 +50,7 @@ private:
     QHBoxLayout *mLayout;
     QPalette pal;
     QColor *bgColor, *pushedColor, *textColor, *pushedTextColor, *hoverColor;
+    QWidget *UserInterfaceWidget;
 };
 
 #endif // KCILISTBUTTON_H

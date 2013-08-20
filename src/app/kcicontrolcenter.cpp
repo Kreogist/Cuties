@@ -116,7 +116,6 @@ kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
                                        40);
         connect(lsbLeftButtons[i],SIGNAL(click()),lstMapper,SLOT(map()));
         lstMapper->setMapping(lsbLeftButtons[i],i);
-
     }
     connect(lstMapper,SIGNAL(mapped(int)),this,SLOT(lstClick(int)));
 
@@ -128,6 +127,11 @@ kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
 
     //Set Anime.
     WholeAnimeGroup=new QSequentialAnimationGroup(this);
+}
+
+void kciControlCenterLeftBar::connectLeftAndRight(const int& lstButtonID, QWidget *userInterface)
+{
+    lsbLeftButtons[lstButtonID]->setUserInterfaceWidget(userInterface);
 }
 
 void kciControlCenterLeftBar::lstClick(int Index)
@@ -180,7 +184,7 @@ void kciControlCenterLeftBar::lstClick(int Index)
         lstSelect=Index;
 
         //Emit Signal.
-        emit NowSelectChanged(Index);
+        emit NowSelectChanged(lsbLeftButtons[Index]->getUserInterfaceWidget());
     }
 }
 
@@ -274,8 +278,6 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     txeCCompilerPath=new kciSettingListItemLineText(this);
     txeCCompilerPath->Caption->setText(tr("g++/gcc Path:"));
     txeCCompilerPath->setTextValue("C:/MinGW/bin/g++.exe");
-
-
     MainLayout->addWidget(txeCCompilerPath);
 }
 
@@ -323,50 +325,47 @@ void kciControlCenterTab::sizeChangeResize()
 kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     QWidget(parent)
 {
-    contentIndex=0;
+    contentWidgets[cclstGerneral]=new kciCCTabGerneralContent(this);
+    contentWidgets[cclstEditor]=new kciCCTabEditorContent(this);
+    contentWidgets[cclstCompiler]=new QWidget(this);
+    contentWidgets[cclstDebugger]=new QWidget(this);
+    contentWidgets[cclstFileAssociation]=new QWidget(this);
+    contentWidgets[cclstLanguage]=new QWidget(this);
 
-    contentWidgetGerneral=new kciCCTabGerneralContent();
-    contentWidgetEditor=new kciCCTabEditorContent();
+    ccTab[cclstGerneral]=new kciControlCenterTab(contentWidgets[cclstGerneral], this);
+    ccTab[cclstEditor]=new kciControlCenterTab(contentWidgets[cclstEditor], this);
+    ccTab[cclstCompiler]=new kciControlCenterTab(contentWidgets[cclstCompiler], this);
+    ccTab[cclstDebugger]=new kciControlCenterTab(contentWidgets[cclstDebugger], this);
+    ccTab[cclstFileAssociation]=new kciControlCenterTab(contentWidgets[cclstFileAssociation], this);
+    ccTab[cclstLanguage]=new kciControlCenterTab(contentWidgets[cclstLanguage], this);
 
-    tabGerneral=new kciControlCenterTab(contentWidgetGerneral, this);
-    tabEditor=new kciControlCenterTab(contentWidgetEditor, this);
+    contentIndex=ccTab[cclstGerneral];
 }
 
-void kciControlCenterContents::animeToIndex(int Index)
+QWidget *kciControlCenterContents::getCCTab(const int &Index)
 {
-    switch(Index)
-    {
-    case 0:
-        tabGerneral->setGeometry(0,0,this->width(),this->height());
-        break;
-    case 1:
-        tabEditor->setGeometry(0,0,this->width(),this->height());
-        break;
-    }
-    switch(contentIndex)
-    {
-    case 0:
-        tabGerneral->setGeometry(this->width(),0,this->width(),this->height());
-        break;
-    case 1:
-        tabEditor->setGeometry(this->width(),0,this->width(),this->height());
-        break;
-    }
+    return ccTab[Index];
+}
+
+void kciControlCenterContents::animeToIndex(QWidget *Index)
+{
+    Index->setGeometry(0,0,width(),height());
+    contentIndex->setGeometry(this->width(),0,this->width(),this->height());
     contentIndex=Index;
 }
 
 void kciControlCenterContents::resizeEvent(QResizeEvent *e)
 {
-    switch(contentIndex)
+    for(int i=cclstGerneral; i<cclist_count; i++)
     {
-    case 0:
-        tabGerneral->setGeometry(0,0,this->width(),this->height());
-        tabEditor->setGeometry(this->width(),0,this->width(),this->height());
-        break;
-    case 1:
-        tabEditor->setGeometry(0,0,this->width(),this->height());
-        tabGerneral->setGeometry(this->width(),0,this->width(),this->height());
-        break;
+        if(contentIndex==ccTab[i])
+        {
+            contentIndex->setGeometry(0,0,width(),height());
+        }
+        else
+        {
+            ccTab[i]->setGeometry(width(),0,width(),height());
+        }
     }
     e->accept();
 }
@@ -399,8 +398,13 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     //This widget ONLY use to get size, no use.
     CCMainContents=new kciControlCenterContents(this);
     ContentLayout->addWidget(CCMainContents);
-    connect(ccLeftBar,SIGNAL(NowSelectChanged(int)),
-            CCMainContents,SLOT(animeToIndex(int)));
+    connect(ccLeftBar,SIGNAL(NowSelectChanged(QWidget*)),
+            CCMainContents,SLOT(animeToIndex(QWidget*)));
+
+    for(int i=cclstGerneral; i<cclist_count;i++)
+    {
+        ccLeftBar->connectLeftAndRight(i, CCMainContents->getCCTab(i));
+    }
 
     //Main Buttom
     QHBoxLayout *BottomButton=new QHBoxLayout();

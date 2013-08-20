@@ -145,3 +145,12 @@ QColor kciListButton::getHoverColor()
     return *hoverColor;
 }
 
+QWidget *kciListButton::getUserInterfaceWidget() const
+{
+    return UserInterfaceWidget;
+}
+
+void kciListButton::setUserInterfaceWidget(QWidget *value)
+{
+    UserInterfaceWidget = value;
+}
