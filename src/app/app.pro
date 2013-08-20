@@ -70,6 +70,7 @@ SOURCES += \
     kcimessagebox.cpp \
     kcidragproxy.cpp \
     kciclipboard.cpp \
+    kcidebugwatchdock.cpp \
     kcitextblockdata.cpp \
     kcihighlighter.cpp
 
@@ -118,6 +119,7 @@ HEADERS += \
     kcimessagebox.h \
     kcidragproxy.h \
     kciclipboard.h \
+    kcidebugwatchdock.h \
     kcitextblockdata.h \
     kcihighlighter.h
 

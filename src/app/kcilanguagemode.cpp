@@ -28,7 +28,7 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
     gdbInstance=NULL;
 
     setCompileState(uncompiled);
-    m_type=plainText;
+    m_type=PlainText;
     m_highlighter.reset(new kciHighlighter(this));
     m_highlighter->setDocument(m_parent->document);
 
@@ -75,28 +75,32 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
 
     if(suffix.contains(_regexp_cpp))
     {
-        if(m_type==cpp) //file type doesn't change,so return.
+        if(m_type==Cpp) //file type doesn't change,so return.
             return ;
 
-        m_type=cpp;
+        m_type=Cpp;
         compiler.reset(new gcc(this));
         m_highlighter.reset(new cppHighlighter(this));
     }
     else if(suffix.contains(_regexp_pascal))
     {
-        if(m_type==pascal) //file type doesn't change,so return.
+        if(m_type==Pascal) //file type doesn't change,so return.
+        {
             return ;
+        }
 
-        m_type=pascal;
+        m_type=Pascal;
         compiler.reset(new fpc(this));
         m_highlighter.reset(new pascalHighlighter(this));
     }
     else
     {
-        if(m_type==plainText) //file type doesn't change,so return.
+        if(m_type==PlainText) //file type doesn't change,so return.
+        {
             return ;
+        }
 
-        m_type=plainText;
+        m_type=PlainText;
         compiler.reset();
         m_highlighter.reset(new kciHighlighter(this));
     }

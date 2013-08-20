@@ -46,9 +46,9 @@ class kciLanguageMode : public QObject
 public:
     enum modeType
     {
-        plainText,
-        cpp,
-        pascal
+        PlainText,
+        Cpp,
+        Pascal
     };
 
     enum compileState
