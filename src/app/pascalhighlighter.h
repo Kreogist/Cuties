@@ -27,7 +27,7 @@
 #include "highlighterGlobal.h"
 #include "textcharformatmap.h"
 
-class pascalHighlighter : public QSyntaxHighlighter
+class pascalHighlighter : public kciHighlighter
 {
     Q_OBJECT
 public:
@@ -38,7 +38,7 @@ signals:
 public slots:
 
 protected:
-    void highlightBlock(const QString &text);
+    void kciHighlightBlock(const QString &text);
     
 private:
     QList<highlight_rule> rules;

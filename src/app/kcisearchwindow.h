@@ -37,21 +37,26 @@
 #include <QLabel>
 #include <QMenu>
 
-#include "kcitexteditor.h"
-#include "kcitextsearcher.h"
-
 class kciSearchWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciSearchWindow(kciTextEditor *parent);
+
+    explicit kciSearchWindow(QWidget *parent);
     void setTextFocus();
+    void setText(const QString& text);
+
+signals:
+    void requireShowPreviousResult();
+    void requireShowNextResult();
+
+    void requireSearch(QString text,
+                             bool regularExpression,
+                             bool caseSensitively,
+                             bool wholeWorld);
 
 public slots:
     void onTextChanged(const QString &text);
-    void onSearcherFinished(QList<searchResult>* results);
-    void moveToPrevResult();
-    void moveToNextResult();
     void onMenuClicked();
 
 protected:
@@ -61,38 +66,26 @@ signals:
     void hideButtonPressed();
 
 private:
-    /*kciSearchWindow must be a child of a kciTextEditor,
-     *otherwise parent may be NULL.
-     *Because we assume parent isn't NULL,
-     *so if parent is NULL, the program will crash.
-     */
-    kciSearchWindow();
     void showCurrResult();
 
     enum menuItem
     {
-        RegularExpress,
-        MatchCase,
-        WholeWord,
+        menuRegularExpress,
+        menuMatchCase,
+        menuWholeWord,
         menuItemCount
     };
 
     int currResultNum;
 
-    kciTextEditor* parent;
-
     QHBoxLayout *searchLayout;
     QToolButton *closeButton, *upButton, *downButton;
-    QLabel *lblSearchInfo;
 
     //TextBox
     QWidget *searchText;
     QLineEdit *SearchTexts;
     QHBoxLayout *Layout;
     QPushButton *SearchIcon;
-    kciTextSearcher *searcher;
-
-    int resultSize;
 
     QMenu *menu;
     QAction *menuAction[menuItemCount];

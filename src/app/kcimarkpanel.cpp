@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -88,7 +84,7 @@ void kciMarkPanel::mouseReleaseEvent(QMouseEvent *e)
         // l==-1 means that the document is reach at the end.
         // So l should be vecMark.size().
 
-        for(;i<=l;i++)
+        for(;i<l;i++)
         {
             if(vecMark[i].rect.contains(pressedPos,true))
             {

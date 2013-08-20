@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -75,6 +71,13 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     searchBar=new kciSearchWindow(editor);
     searchBar->hide();
     connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
+    connect(searchBar,&kciSearchWindow::requireSearch,
+            editor,&kciTextEditor::searchString);
+    connect(searchBar,&kciSearchWindow::requireShowNextResult,
+            editor,&kciTextEditor::showNextSearchResult);
+    connect(searchBar,&kciSearchWindow::requireShowPreviousResult,
+            editor,&kciTextEditor::showPreviousSearchResult);
+
 }
 
 QString kciCodeEditor::getExecFileName()
@@ -106,8 +109,12 @@ void kciCodeEditor::showSearchBar()
         searchAnime->setEasingCurve(QEasingCurve::OutCubic);
         searchBar->show();
         searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
-        searchBar->setTextFocus();
     }
+
+    QTextCursor _textCursor=editor->textCursor();
+    if(_textCursor.hasSelection())
+        searchBar->setText(_textCursor.selectedText());
+    searchBar->setTextFocus();
 }
 
 bool kciCodeEditor::open(const QString &fileName)

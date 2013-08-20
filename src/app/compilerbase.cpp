@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -60,6 +56,11 @@ void compilerBase::startCompile(const QString &filePath)
 {
     QStringList arg=getCompileArg(filePath);
     QString compilerPath=path();
+    /* Note: path() shouldn't be called before getCompileArg(), because
+     * some subclass may need filePath to select the right compiler. For
+     * example, gcc class use gcc(program name) to compile c files and use
+     * g++ to compile cpp files.
+     */
 
     emitCompileCmd(compilerPath,getCompileArg(filePath));
 

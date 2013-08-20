@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -108,6 +104,7 @@ void kciPanel::paintEvent(QPaintEvent *event)
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();
+
     if(autoWidth)
     {
         setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);

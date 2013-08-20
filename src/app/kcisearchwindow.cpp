@@ -25,12 +25,9 @@
 
 static const int nFixedWidth=290;
 
-kciSearchWindow::kciSearchWindow(kciTextEditor *parent) :
+kciSearchWindow::kciSearchWindow(QWidget *parent) :
     QWidget(parent)
 {
-    Q_ASSERT(parent!=NULL);
-
-    this->parent=parent;
     //--------TextBox Init-----------------
     searchText=new QWidget(this);
     //Set Background Fill.
@@ -66,9 +63,9 @@ kciSearchWindow::kciSearchWindow(kciTextEditor *parent) :
 
     //Init menu
     menu=new QMenu(searchText);
-    menuAction[RegularExpress]=menu->addAction(tr("Regular Expression"));
-    menuAction[MatchCase]=menu->addAction(tr("Match Case"));
-    menuAction[WholeWord]=menu->addAction(tr("Match whole word"));
+    menuAction[menuRegularExpress]=menu->addAction(tr("Regular Expression"));
+    menuAction[menuMatchCase]=menu->addAction(tr("Match Case"));
+    menuAction[menuWholeWord]=menu->addAction(tr("Match whole word"));
 
     for(int i=0;i<menuItemCount;i++)
     {
@@ -99,12 +96,6 @@ kciSearchWindow::kciSearchWindow(kciTextEditor *parent) :
     searchLayout->addSpacing(3);
 
     //Set Search Details.
-    lblSearchInfo=new QLabel(this);
-    pal=lblSearchInfo->palette();
-    pal.setColor(QPalette::WindowText,QColor(255,255,255));
-    lblSearchInfo->setPalette(pal);
-    lblSearchInfo->setText(" 0/0 ");
-    searchLayout->addWidget(lblSearchInfo);
     setFixedSize(nFixedWidth,38);
 
     //Set Up Button
@@ -116,7 +107,7 @@ kciSearchWindow::kciSearchWindow(kciTextEditor *parent) :
     upButton->setAutoRaise(true);
     upButton->setFixedSize(26,26);
     searchLayout->addWidget(upButton);
-    connect(upButton,SIGNAL(clicked()),this,SLOT(moveToPrevResult()));
+    connect(upButton,SIGNAL(clicked()),this,SIGNAL(requireShowPreviousResult()));
     //Set Down Button
     downButton=new QToolButton(this);
     downButton->setIcon(QIcon(":/img/image/rightSearchButton.png"));
@@ -124,7 +115,7 @@ kciSearchWindow::kciSearchWindow(kciTextEditor *parent) :
     downButton->setFixedSize(26,26);
     downButton->setPalette(pal);
     searchLayout->addWidget(downButton);
-    connect(downButton,SIGNAL(clicked()),this,SLOT(moveToNextResult()));
+    connect(downButton,SIGNAL(clicked()),this,SIGNAL(requireShowNextResult()));
 
     searchLayout->addSpacing(3);
 
@@ -148,95 +139,25 @@ kciSearchWindow::kciSearchWindow(kciTextEditor *parent) :
     wndShadow->setColor(QColor(0, 0, 0, 200));
     wndShadow->setOffset(0);
     this->setGraphicsEffect(wndShadow);
+}
 
-    //Set Searcher
-    searcher=new kciTextSearcher(this);
-    searcher->setDocument(parent->document());
-    resultSize=0;
-    connect(searcher,SIGNAL(finished(QList<searchResult>*)),
-            this,SLOT(onSearcherFinished(QList<searchResult>*)));
+void kciSearchWindow::setText(const QString &text)
+{
+    SearchTexts->setText(text);
 }
 
 void kciSearchWindow::onTextChanged(const QString &text)
 {
-    if(!text.isEmpty())
-    {
-        searcher->setSubString(text);
+    bool Regexp=menuAction[menuRegularExpress]->isChecked();
+    bool MatchCase=menuAction[menuMatchCase]->isChecked();
+    bool WholeWord=menuAction[menuWholeWord]->isChecked();
 
-        int flags=0;
-        if(menuAction[RegularExpress]->isChecked())
-            flags|=kciTextSearcher::RegularExpress;
-        if(menuAction[WholeWord]->isChecked())
-            flags|=kciTextSearcher::WholeWord;
-        if(menuAction[MatchCase]->isChecked())
-            flags|=kciTextSearcher::MatchCase;
-
-        searcher->setFlags(flags);
-        searcher->setSubString(text);
-        searcher->search();
-    }
-    else
-    {
-        /*If a kciTextSearchWorker is running, it may change the result after
-         *lblSearchInfo->setText(" 0/0 "); So we cancel it first.
-         */
-        searcher->cancelPrevSearch();
-
-        QList<searchResult> *results=new QList<searchResult>();
-        parent->setSearchResults(results);
-        delete results;
-
-        lblSearchInfo->setText(" 0/0 ");
-    }
+    emit requireSearch(text,Regexp,MatchCase,WholeWord);
 }
 
 void kciSearchWindow::onMenuClicked()
 {
     onTextChanged(SearchTexts->text());
-}
-
-void kciSearchWindow::onSearcherFinished(QList<searchResult> *results)
-{
-
-    resultSize=results->size();
-    parent->setSearchResults(results);
-
-    if(resultSize>0)
-    {
-        currResultNum=0;
-
-        showCurrResult();
-    }
-}
-
-void kciSearchWindow::moveToNextResult()
-{
-    if(resultSize>0)
-    {
-        if(currResultNum+1<resultSize)
-            currResultNum++;
-        else
-            currResultNum=0;
-
-        showCurrResult();
-    }
-}
-
-void kciSearchWindow::moveToPrevResult()
-{
-    if(resultSize>0)
-    {
-        if(currResultNum-1 >= 0)
-        {
-            currResultNum--;
-        }
-        else
-        {
-            currResultNum=resultSize-1;
-        }
-
-        showCurrResult();
-    }
 }
 
 void kciSearchWindow::setTextFocus()
@@ -250,13 +171,3 @@ void kciSearchWindow::hideEvent(QHideEvent *e)
     emit hideButtonPressed();
 }
 
-void kciSearchWindow::showCurrResult()
-{
-    parent->showSearchResultAt(currResultNum);
-
-    lblSearchInfo->setText(QString(" ")+
-                           QString::number(currResultNum+1)+
-                           QString("/")+
-                           QString::number(resultSize)+
-                           QString(" "));
-}

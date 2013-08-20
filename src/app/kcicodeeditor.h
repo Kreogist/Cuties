@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -24,7 +20,6 @@
 #ifndef TEXTEDITOR_H
 #define TEXTEDITOR_H
 
-#include <QWidget>
 #include <QHBoxLayout>
 #include <QPalette>
 #include <QFile>

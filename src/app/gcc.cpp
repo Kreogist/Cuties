@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -24,16 +20,19 @@
 #include "gcc.h"
 
 #ifdef Q_OS_UNIX
-QString gcc::gccPath="/usr/bin/g++";
+QString gcc::gccPath="/usr/bin/gcc";
+QString gcc::gppPath="/usr/bin/g++";
 #endif
 
 #ifdef Q_OS_WIN
-QString gcc::gccPath="C:/MinGW/bin/g++.exe";
+QString gcc::gccPath="C:/MinGW/bin/gcc.exe";
+QString gcc::gppPath="C:/MinGW/bin/g++.exe";
 #endif
 
 gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
+    isCompileCpp=true;
 }
 
 QStringList gcc::getVersionArg()
@@ -47,9 +46,13 @@ QStringList gcc::getCompileArg(const QString &filePath)
 {
     QFileInfo fileInfo(filePath);
     QStringList arg;
-    //arg<<"/home/wlm/桌面/test.cpp"<<"-g"<<"-Wall"<<"-lm"<<"-static"<<"-o"<<"/home/wlm/桌面/test";
-    //return arg;
-    arg<<filePath<<"-g"<<"-Wall"<<"-lm"<<"-static";
+
+    if(fileInfo.suffix() == "c")
+        isCompileCpp=false;
+    else
+        isCompileCpp=true;
+
+    arg<<filePath<<"-lm"<<"-g"<<"-Wall"<<"-static";
 
     QString programName;
 

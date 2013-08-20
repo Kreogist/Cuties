@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -35,7 +31,7 @@ class gcc : public compilerBase
     Q_OBJECT
 public:
     explicit gcc(QObject *parent = 0);
-    QString path(){return gccPath;}
+    QString path(){return isCompileCpp?gppPath:gccPath;}
     void setCompilerPath(const QString& path);
     QString compilerName(){return "g++";}
 
@@ -47,8 +43,9 @@ protected:
     void parseLine(const QString &text);
 
 private:
-
+    bool isCompileCpp;
     static QString gccPath;
+    static QString gppPath;
 };
 
 #endif // GCC_H
