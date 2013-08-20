@@ -48,6 +48,17 @@
 #include "Controls/SettingItems/kcisettinglistitemlinetext.h"
 #include "kcilistbutton.h"
 
+enum kciCCLists
+{
+    cclstGerneral,
+    cclstEditor,
+    cclstCompiler,
+    cclstDebugger,
+    cclstFileAssociation,
+    cclstLanguage,
+    cclist_count
+};
+
 //------------------------------Based Widget-------------------------------
 //Our Scroll Area, Can emit resize signal.
 class kciScrollArea : public QScrollArea
@@ -83,27 +94,18 @@ class kciControlCenterLeftBar : public QWidget
     Q_OBJECT
 public:
     explicit kciControlCenterLeftBar(QWidget *parent = 0);
+    void connectLeftAndRight(const int &lstButtonID, QWidget *userInterface);
 
 signals:
-    void NowSelectChanged(int newIndex);
+    void NowSelectChanged(QWidget *newIndex);
 
 private slots:
     void lstClick(int Index);
 
 private:
-    enum kciCCLists
-    {
-        cclstGerneral,
-        cclstEditor,
-        cclstCompiler,
-        cclstDebugger,
-        cclstFileAssociation,
-        cclstLanguage,
-        cclist_count
-    };
+    kciListButton *lsbLeftButtons[cclist_count];
 
     QSequentialAnimationGroup *WholeAnimeGroup;
-    kciListButton *lsbLeftButtons[cclist_count];
     QSignalMapper *lstMapper;
     int lstSelect;
 
@@ -160,9 +162,10 @@ class kciControlCenterContents : public QWidget
     Q_OBJECT
 public:
     explicit kciControlCenterContents(QWidget *parent = 0);
+    QWidget *getCCTab(const int& Index);
 
 public slots:
-    void animeToIndex(int Index);
+    void animeToIndex(QWidget *Index);
 
 protected:
     void resizeEvent(QResizeEvent *e);
@@ -170,13 +173,10 @@ protected:
 private:
     QParallelAnimationGroup *tabModeAnime;
 
-    kciControlCenterTab *tabGerneral;
-    kciControlCenterTab *tabEditor;
+    kciControlCenterTab *ccTab[cclist_count];
+    QWidget *contentWidgets[cclist_count];
 
-    kciCCTabGerneralContent *contentWidgetGerneral;
-    kciCCTabEditorContent   *contentWidgetEditor;
-
-    int contentIndex;
+    QWidget *contentIndex;
 };
 class kciControlCenter : public QDialog
 {
