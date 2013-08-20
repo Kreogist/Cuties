@@ -136,10 +136,15 @@ void kciPanel::paintEvent(QPaintEvent *event)
         painter.restore();
 
         block_top += block_height;
-        bottom-=block.lineCount();
+        bottom-=getRealLineCount(block,line_count-top);
     }
 
     last=block.blockNumber();
+    while(last == -1)
+    {
+        block=block.previous();
+        last=block.blockNumber();
+    }
 }
 
 int kciPanel::getFirstVisiableBlockNumber()
