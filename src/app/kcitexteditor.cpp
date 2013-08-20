@@ -1,24 +1,20 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
+ *  This file is part of Kreogist-Cuties.
  *
- *  This file is part of Kreogist-Cute-IDE.
- *
- *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "kcitexteditor.h"
@@ -52,11 +48,17 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     lineColor = QColor(0x64,0x64,0x64);
     searchResultColor = QColor(0xf7,0xcf,0x3d);
 
+    searchCode=0;
+
     //Solve the default line's bug.
     updateHighlights();
 
     connect(this,&kciTextEditor::cursorPositionChanged,
             this,&kciTextEditor::updateHighlights);
+    connect(this,SIGNAL(textChanged()),
+            this,SLOT(updateSearchResults()));
+    connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
+            this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
 }
@@ -67,10 +69,249 @@ void kciTextEditor::paintEvent(QPaintEvent *e)
     emit updated();
 }
 
-void kciTextEditor::showSearchResultAt(int num)
+void kciTextEditor::checkWhetherBlockSearchedAndDealWith(
+        const QTextBlock& block)
 {
-    searchResult result=resultList[num];
-    setDocumentCursor(result.lineNum,result.startPos);
+    kciTextBlockData *data=(kciTextBlockData*)block.userData();
+    //check whether the block has been searched
+    data->beginUsingDatas();
+    bool hasSearched=data->isSearched(searchCode);
+    if(!hasSearched)
+    {
+        data->endUsingDatas();
+        generalSearch(block,50,true);    //search 50 lines
+        data->beginUsingDatas();
+    }
+    data->endUsingDatas();
+}
+
+void kciTextEditor::showPreviousSearchResult()
+{
+    findString(false);
+}
+
+void kciTextEditor::showNextSearchResult()
+{
+    findString(true);
+}
+
+void kciTextEditor::findString(bool forward)
+{
+    QTextCursor _textCursor;
+
+    bool hasMatch=false;
+    _textCursor=textCursor();
+    if(!forward)
+        _textCursor.setPosition(_textCursor.selectionStart());
+
+    for(QTextBlock i=_textCursor.block();
+        i.isValid() && !hasMatch;
+        i=(forward==true)?i.next():i.previous())
+    {
+        kciTextBlockData *blockData=(kciTextBlockData *)i.userData();
+
+        checkWhetherBlockSearchedAndDealWith(i);
+
+        blockData->beginUsingDatas();
+        if(blockData->hasMatched())
+        {
+            if(forward)
+            {
+                auto end=blockData->getEndMatchedTextPosition();
+                for(auto j=blockData->getFirstMatchedTextPosition();
+                    j<end;
+                    j++)
+                {
+                    if(j->pos >= ((i.blockNumber() == _textCursor.blockNumber())?
+                            _textCursor.positionInBlock():0))
+                    {
+                        hasMatch=true;
+                        _textCursor.setPosition(i.position()+j->pos);
+                        _textCursor.movePosition(QTextCursor::NextCharacter,
+                                                 QTextCursor::KeepAnchor,
+                                                 j->matchedLength);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                auto end=blockData->getFirstMatchedTextPosition();
+                for(auto j=blockData->getEndMatchedTextPosition()-1;
+                    j>=end;
+                    j--)
+                {
+                    if((i.blockNumber() == _textCursor.blockNumber() &&
+                        j->pos < _textCursor.positionInBlock()) ||
+                        i.blockNumber() != _textCursor.blockNumber())
+                    {
+                        hasMatch=true;
+                        _textCursor.setPosition(i.position()+j->pos);
+                        _textCursor.movePosition(QTextCursor::NextCharacter,
+                                                 QTextCursor::KeepAnchor,
+                                                 j->matchedLength);
+                        break;
+                    }
+                }
+            }
+        }
+        blockData->endUsingDatas();
+    }
+
+    if(!hasMatch)
+    {
+        int endBlockNumber=_textCursor.blockNumber();
+        for(QTextBlock i= (forward==true)?
+            document()->firstBlock():
+            document()->lastBlock().previous();
+
+            i.isValid() &&
+            (forward==true?
+             i.blockNumber()<endBlockNumber:
+             i.blockNumber()>endBlockNumber) &&
+            !hasMatch;
+
+            i=(forward==true)?i.next():i.previous())
+        {
+            kciTextBlockData *blockData=(kciTextBlockData *)i.userData();
+            checkWhetherBlockSearchedAndDealWith(i);
+
+            blockData->beginUsingDatas();
+            if(blockData->hasMatched())
+            {
+                if(forward)
+                {
+                    auto end=blockData->getEndMatchedTextPosition();
+                    for(auto j=blockData->getFirstMatchedTextPosition();
+                        j<end;
+                        j++)
+                    {
+                        if(j->pos >= (i.blockNumber() == _textCursor.blockNumber())?
+                                _textCursor.positionInBlock():0)
+                        {
+                            hasMatch=true;
+                            _textCursor.setPosition(i.position()+j->pos);
+                            _textCursor.movePosition(QTextCursor::NextCharacter,
+                                                     QTextCursor::KeepAnchor,
+                                                     j->matchedLength);
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    auto end=blockData->getFirstMatchedTextPosition();
+                    for(auto j=blockData->getEndMatchedTextPosition()-1;
+                        j>=end;
+                        j--)
+                    {
+                        if((i.blockNumber() == _textCursor.blockNumber() &&
+                            j->pos < _textCursor.positionInBlock()) ||
+                            i.blockNumber() != _textCursor.blockNumber())
+                        {
+                            hasMatch=true;
+                            _textCursor.setPosition(i.position()+j->pos);
+                            _textCursor.movePosition(QTextCursor::NextCharacter,
+                                                     QTextCursor::KeepAnchor,
+                                                     j->matchedLength);
+                            break;
+                        }
+                    }
+                }
+            }
+            blockData->endUsingDatas();
+        }
+    }
+
+    if(hasMatch)
+    {
+        setTextCursor(_textCursor);
+    }
+}
+
+void kciTextEditor::searchString(QString text,
+                                 bool regularExpression,
+                                 bool caseSensitively,
+                                 bool wholeWord)
+{
+    this->text=text;
+    this->regularExpression=regularExpression;
+    this->caseSensitively=caseSensitively;
+    this->wholeWord=wholeWord;
+    searchCode++;
+
+    if(wholeWord)
+    {
+        if(!regularExpression)
+            this->text=QRegularExpression::escape(text);
+
+        this->text.prepend(QString("\\b("));
+        this->text.append(QString(")\\b"));
+    }
+
+    updateSearchResults();
+
+    searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
+    searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
+}
+
+void kciTextEditor::updateSearchResults()
+{
+    generalSearch(firstVisibleBlock(),
+                  height()/fontMetrics().lineSpacing()+2,
+                  true);
+
+    updateHighlights();
+}
+
+void kciTextEditor::generalSearch(const QTextBlock &block,
+                                  const int lines,
+                                  const bool forward)
+{
+    QScopedPointer<kciTextSearcher> searcher;
+
+    initTextSearcher(searcher);
+
+    searcher->search(block,
+                     lines,
+                     searchCode,
+                     forward);
+}
+
+void kciTextEditor::searchOnOtherThread(QScopedPointer<kciTextSearcher> &searcher,
+                                        QFuture<void> &thread,
+                                        const QTextBlock &block,
+                                        const bool forward)
+{
+    if(!searcher.isNull())
+    {
+        searcher->requireStop();
+        thread.waitForFinished();
+    }
+
+    initTextSearcher(searcher);
+
+    thread=QtConcurrent::run(searcher.data(),
+                             &kciTextSearcher::search,
+                             block,
+                             SEARCH_UNTIL_END_MARK,
+                             searchCode,
+                             forward);
+}
+
+void kciTextEditor::initTextSearcher(QScopedPointer<kciTextSearcher> &searcher)
+{
+    if(regularExpression || wholeWord)
+    {
+        searcher.reset(new kciTextSearcherRegexp);
+    }
+    else
+    {
+        searcher.reset(new kciTextSearcherStringMatcher);
+    }
+
+    searcher->setPatternString(text);
+    searcher->setIsCaseSensitive(caseSensitively);
 }
 
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)
@@ -110,55 +351,39 @@ void kciTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& sele
 {
     QTextCursor _cursor(document());
 
-    int lastLineNum=0;
-
     QTextBlock block=firstVisibleBlock();
-    int firstBlockNumber=block.blockNumber();
-    int bottom=height()/fontMetrics().lineSpacing();
-    int lastBlockNumber=firstBlockNumber;
+    int bottom=height()/fontMetrics().lineSpacing()+block.lineCount();
 
-    for(;block.isValid() && bottom>0;block=block.next(),lastBlockNumber++)
+    for(;block.isValid() && bottom>0;block=block.next())
     {
         bottom-=block.lineCount();
+        kciTextBlockData* currBlockData=(kciTextBlockData*)block.userData();
+        if(currBlockData==NULL)
+            continue;
+        checkWhetherBlockSearchedAndDealWith(block);
+        currBlockData->beginUsingDatas();
+        if(currBlockData->hasMatched())
+        {
+            for(auto i=currBlockData->getFirstMatchedTextPosition(),
+                end=currBlockData->getEndMatchedTextPosition();
+                i<end;
+                i++)
+            {
+                QTextEdit::ExtraSelection selection;
+
+                _cursor.clearSelection();
+                _cursor.setPosition(block.position()+i->pos);
+                _cursor.movePosition(QTextCursor::NextCharacter,
+                                     QTextCursor::KeepAnchor,
+                                     i->matchedLength);
+                selection.cursor=_cursor;
+
+                selection.format.setBackground(searchResultColor);
+                selections.append(selection);
+            }
+        }
+        currBlockData->endUsingDatas();
     }
-
-    auto i=resultList.begin();
-    auto l=resultList.end();
-    while(i<l && i->lineNum < firstBlockNumber)
-    {
-        i++;
-    }
-
-    for(;i<l && i->lineNum <= lastBlockNumber;i++)
-    {
-        QTextEdit::ExtraSelection selection;
-
-        _cursor.clearSelection();
-        _cursor.movePosition(QTextCursor::NextBlock,
-                             QTextCursor::MoveAnchor,
-                             i->lineNum-lastLineNum);
-        _cursor.movePosition(QTextCursor::StartOfBlock,
-                             QTextCursor::MoveAnchor);
-        _cursor.movePosition(QTextCursor::NextCharacter,
-                             QTextCursor::MoveAnchor,
-                             i->startPos);
-        _cursor.movePosition(QTextCursor::NextCharacter,
-                             QTextCursor::KeepAnchor,
-                             i->length);
-        selection.cursor=_cursor;
-
-        selection.format.setBackground(searchResultColor);
-        selections.append(selection);
-
-        lastLineNum=i->lineNum;
-    }
-}
-
-void kciTextEditor::setSearchResults(QList<searchResult> *results)
-{
-    resultList=*results;
-
-    updateHighlights();
 }
 
 void kciTextEditor::pasteFromeHistory()
@@ -209,6 +434,7 @@ void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
 void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
+
     switch (e->key()) {
     case Qt::Key_ParenLeft:
     {
@@ -240,6 +466,7 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Apostrophe:
     {
         autoCompleteParentheses(e,_textCursor,'\'');
+        break;
     }
     case Qt::Key_BracketLeft:
     {

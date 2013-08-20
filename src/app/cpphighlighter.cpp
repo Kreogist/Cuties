@@ -1,30 +1,26 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
+ *  This file is part of Kreogist-Cuties.
  *
- *  This file is part of Kreogist-Cute-IDE.
- *
- *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "cpphighlighter.h"
 
 cppHighlighter::cppHighlighter(QObject *parent) :
-    QSyntaxHighlighter(parent)
+    kciHighlighter(parent)
 {
     //get textCharFormatMap instance
     instance = textCharFormatMap::getInstance();
@@ -46,11 +42,10 @@ cppHighlighter::cppHighlighter(QObject *parent) :
     <<"__fastcall|__fortran|__import|"
     <<"__pascal|__rtti|__stdcall|_asm|_cdecl|"
     <<"__except|_export|_far16|_fastcall|"
-    <<"__finally|_fortran|_import|_pascal|_stdcall|__thread|__try|asm|auto|"
+    <<"__finally|_fortran|_import|_stdcall|__thread|__try|asm|auto|"
     <<"break|case|catch|cdecl|const|continue|default|"
     <<"do|else|enum|extern|for|goto|"
-    <<"if|pascal|"
-    <<"register|return|sizeof|static|"
+    <<"if|register|return|sizeof|static|"
     <<"struct|switch|"
     <<"typedef|union|"
     <<"volatile|while|"
@@ -120,7 +115,7 @@ void cppHighlighter::conmmentHighlightBlock(const QString &text)
     }
 }
 
-void cppHighlighter::highlightBlock(const QString &text)
+void cppHighlighter::kciHighlightBlock(const QString &text)
 {
     for(int i=0;i<rules.size();i++)
     {

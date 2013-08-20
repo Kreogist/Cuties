@@ -2,22 +2,22 @@
 #
 #   Copyright 2013 Kreogist Dev Team
 #
-#     Kreogist-Cute-IDE is free software: you can redistribute it and/or
+#     Kreogist-Cuties is free software: you can redistribute it and/or
 #   modify it under the terms of the GNU General Public License as published
 #   by the Free Software Foundation, either version 3 of the License, or
 #   (at your option) any later version.
 #
-#   Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+#   Kreogist-Cuties is distributed in the hope that it will be useful,
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+#   along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
 #
 #-------------------------------------------------
 
-TARGET = Kreogist-Cute-Ide
+TARGET = Kreogist-Cuties
 
 TEMPLATE = app
 
@@ -56,7 +56,6 @@ SOURCES += \
     kcilanguagemode.cpp \
     kcisearchlinetext.cpp \
     kcidebugdock.cpp \
-    kcitextsearchworker.cpp \
     fpc.cpp \
     kcilistbutton.cpp \
     Controls/SettingItems/kcisettinglistitemboolean.cpp \
@@ -71,7 +70,9 @@ SOURCES += \
     kcimessagebox.cpp \
     kcidragproxy.cpp \
     kciclipboard.cpp \
-    kcidebugwatchdock.cpp
+    kcidebugwatchdock.cpp \
+    kcitextblockdata.cpp \
+    kcihighlighter.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -104,7 +105,6 @@ HEADERS += \
     kcilanguagemode.h \
     kcisearchlinetext.h \
     kcidebugdock.h \
-    kcitextsearchworker.h \
     fpc.h \
     kcilistbutton.h \
     Controls/SettingItems/kcisettinglistitemboolean.h \
@@ -119,7 +119,9 @@ HEADERS += \
     kcimessagebox.h \
     kcidragproxy.h \
     kciclipboard.h \
-    kcidebugwatchdock.h
+    kcidebugwatchdock.h \
+    kcitextblockdata.h \
+    kcihighlighter.h
 
 # Enable C++11
 CONFIG += c++11
@@ -129,6 +131,8 @@ RESOURCES += \
 
 RC_FILE += winico.rc
 
+ICON += Cuties.icns
+
 TRANSLATIONS += zh_CN.ts
 
 OTHER_FILES += \
@@ -136,4 +140,5 @@ OTHER_FILES += \
     lang.map \
     default.style \
     COPYING.txt \
+    Cuties.icns
     winico.rc

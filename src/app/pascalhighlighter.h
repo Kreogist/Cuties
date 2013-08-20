@@ -5,20 +5,20 @@
  *      Miyanaga Saki <tomguts@126.com>
  *      Zhang Jiayi <bf109g2@126.com>
  *
- *  This file is part of Kreogist-Cute-IDE.
+ *  This file is part of Kreogist-Cuties.
  *
- *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef PASCALHIGHLIGHTER_H
@@ -27,7 +27,7 @@
 #include "highlighterGlobal.h"
 #include "textcharformatmap.h"
 
-class pascalHighlighter : public QSyntaxHighlighter
+class pascalHighlighter : public kciHighlighter
 {
     Q_OBJECT
 public:
@@ -38,7 +38,7 @@ signals:
 public slots:
 
 protected:
-    void highlightBlock(const QString &text);
+    void kciHighlightBlock(const QString &text);
     
 private:
     QList<highlight_rule> rules;

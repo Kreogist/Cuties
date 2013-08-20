@@ -1,15 +1,36 @@
+/*
+ *  Copyright 2013 Kreogist Dev Team
+ *
+ *  This file is part of Kreogist-Cuties.
+ *
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "kcilanguagemode.h"
 
 kciLanguageMode::kciLanguageMode(QWidget *parent) :
     QObject(parent)
 {
     m_parent=qobject_cast<kciCodeEditor*>(parent);
-    m_type=plainText;
     compilerReceiver=NULL;
     dbgReceiver=NULL;
     gdbInstance=NULL;
 
     setCompileState(uncompiled);
+    m_type=PlainText;
+    m_highlighter.reset(new kciHighlighter(this));
+    m_highlighter->setDocument(m_parent->document);
 
     Q_ASSERT(m_parent!=NULL);
 }
@@ -54,32 +75,38 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
 
     if(suffix.contains(_regexp_cpp))
     {
-        if(m_type==cpp) //file type doesn't change,so return.
+        if(m_type==Cpp) //file type doesn't change,so return.
             return ;
 
-        m_type=cpp;
+        m_type=Cpp;
         compiler.reset(new gcc(this));
         m_highlighter.reset(new cppHighlighter(this));
     }
     else if(suffix.contains(_regexp_pascal))
     {
-        if(m_type==pascal) //file type doesn't change,so return.
+        if(m_type==Pascal) //file type doesn't change,so return.
+        {
             return ;
+        }
 
-        m_type=pascal;
+        m_type=Pascal;
         compiler.reset(new fpc(this));
         m_highlighter.reset(new pascalHighlighter(this));
     }
     else
     {
-        m_type=plainText;
+        if(m_type==PlainText) //file type doesn't change,so return.
+        {
+            return ;
+        }
+
+        m_type=PlainText;
         compiler.reset();
-        m_highlighter.reset();
+        m_highlighter.reset(new kciHighlighter(this));
     }
 
 
-    if(m_highlighter.isNull())
-        return ;
+    Q_ASSERT(!m_highlighter.isNull());
     m_highlighter->setDocument(m_parent->document);
 }
 

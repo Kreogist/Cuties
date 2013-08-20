@@ -1,69 +1,84 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
+ *  This file is part of Kreogist-Cuties.
  *
- *  This file is part of Kreogist-Cute-IDE.
- *
- *    Kreogist-Cute-IDE is free software: you can redistribute it and/or modify
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cute-IDE is distributed in the hope that it will be useful,
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cute-IDE.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef KCITEXTSEARCHER_H
 #define KCITEXTSEARCHER_H
 
-#include <QRegularExpression>
-#include <QTextDocument>
-#include <QTextBlock>
-#include <QDebug>
+#define SEARCH_UNTIL_END_MARK -0xfffffff
 
-#include "kcitextsearchworker.h"
+#include <QRegularExpression>
+#include <QStringMatcher>
+#include <QTextBlock>
+#include <QMutex>
+
+#include "kcitextblockdata.h"
 
 class kciTextSearcher : public QObject
 {
     Q_OBJECT
 public:
-    enum seacherFlags
-    {
-        RegularExpress =   0x1,
-        MatchCase =        0x2,
-        WholeWord =        0x4
-    };
+    kciTextSearcher();
 
-    explicit kciTextSearcher(QObject *parent = 0);
+    void search(const QTextBlock &begin,
+                int lineCount,
+                const unsigned long long &searchCode, const bool &forward);
 
-    void search();
+    void setIsCaseSensitive(bool value);
+    void setPatternString(const QString& pattern);
 
-    void setDocument(QTextDocument *value);
-    void setSubString(const QString &value);
-    int getFlags() const;
-    void setFlags(int value);
-    void cancelPrevSearch();
+    void requireStop();
 
-signals:
-    void finished(QList<searchResult>* results);
-    
-public slots:
-    void onWorkerFinished();
-    
+protected:
+    virtual void setPattern(const QString& pattern) = 0;
+    void recordResult(int startPos, int length);
+    virtual void match(const QString& text) = 0;
+    virtual void setCaseSensitive(bool value) = 0;
+
 private:
-    QList<searchResult> resultList;
-    QString subString;
-    QTextDocument* p_document;
-    int flags;
-    kciTextSearchWorker* worker;
+    kciTextBlockData *currBlockData;
+    bool isCaseSensitive;
+    bool resetMark;
+
+    QMutex quitLock;
+    bool needQuit;
+};
+
+class kciTextSearcherRegexp : public kciTextSearcher
+{
+protected:
+    void setPattern(const QString &pattern);
+    void match(const QString& text);
+    void setCaseSensitive(bool value);
+
+private:
+    QRegularExpression regexp;
+};
+
+class kciTextSearcherStringMatcher : public kciTextSearcher
+{
+protected:
+    void setPattern(const QString& pattern);
+    void match(const QString& text);
+    void setCaseSensitive(bool value);
+
+private:
+    QStringMatcher matcher;
 };
 
 #endif // KCITEXTSEARCHER_H
