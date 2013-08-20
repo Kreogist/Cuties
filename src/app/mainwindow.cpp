@@ -170,6 +170,11 @@ void MainWindow::createActions()
     actStatusTips[mnuViewDebugDock]=QString(tr("Show or hide the Debug Dock."));
     connect(act[mnuViewDebugDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugDock()));
 
+    //View -> Debug Watch Dock
+    act[mnuViewDebugWatchDock]=new QAction(tr("Debug Watch Dock"),this);
+    actStatusTips[mnuViewDebugWatchDock]=QString(tr("Show or hide the Debug Watch Dock."));
+    connect(act[mnuViewDebugWatchDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugWatchDock()));
+
     //View -> Judge Dock
     /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
@@ -365,7 +370,7 @@ void MainWindow::createToolBar()
     strIconPath[tlbUndo]=":/ToolBar/image/ToolBar/undo.png";
     strIconPath[tlbRedo]=":/ToolBar/image/ToolBar/redo.png";
     strIconPath[tlbSearch]=":/ToolBar/image/ToolBar/search.png";
-    strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compile&run.png";
+    strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compileandrun.png";
 
     //Set Other Buttons.
     for(int i=tlbNewFile;i<tlbbutton_count;i++)
@@ -427,6 +432,10 @@ void MainWindow::createDocks()
     connect(debugDock,SIGNAL(requireStartDebug()),
             this,SLOT(startDebug()));
     debugDock->hide();
+    //Debug Watch Dock
+    debugWatchDock=new kciDebugWatchDock(this);
+    addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
+    debugWatchDock->hide();
 }
 
 void MainWindow::createMenu()
@@ -475,7 +484,7 @@ void MainWindow::createMenu()
     //Create View Menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewCompileDock;i<=mnuViewDebugDock/*mnuViewJudgeDock*/;i++)
+    for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -830,6 +839,11 @@ void MainWindow::diffVisibleCompileDock()
 void MainWindow::diffVisibleDebugDock()
 {
     debugDock->setVisible(!debugDock->isVisible());
+}
+
+void MainWindow::diffVisibleDebugWatchDock()
+{
+    debugWatchDock->setVisible(!debugWatchDock->isVisible());
 }
 
 void MainWindow::diffVisibleJudgeDock()

@@ -47,6 +47,7 @@
 #include "kcicompiledock.h"
 #include "kcijudgedock.h"
 #include "kcidebugdock.h"
+#include "kcidebugwatchdock.h"
 #include "kcititlebar.h"
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
@@ -76,6 +77,7 @@ public slots:
     void diffVisibleCompileDock();
     void diffVisibleDebugDock();
     void diffVisibleJudgeDock();
+    void diffVisibleDebugWatchDock();
     void statusShowGoto();
 
     void setNoDocOpenMenuEnabled();
@@ -114,6 +116,7 @@ private:
         mnuEditPreference,
         mnuViewCompileDock,
         mnuViewDebugDock,
+        mnuViewDebugWatchDock,
         //mnuViewJudgeDock,
         mnuSearchFind,
         mnuSearchFindInFiles,
@@ -188,6 +191,7 @@ private:
     QToolButton *tblMainButton[tlbbutton_count];
     kcicompiledock *compileDock;
     kciDebugDock *debugDock;
+    kciDebugWatchDock *debugWatchDock;
     kciJudgeDock *judgeDock;
     kciTitleBar *titlebar;
     kciStatusBar *myStatusBar;

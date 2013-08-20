@@ -81,9 +81,9 @@
         <file>image/ToolBar/copy.png</file>
         <file>image/ToolBar/paste.png</file>
         <file>image/ToolBar/search.png</file>
-        <file>image/ToolBar/compile&amp;run.png</file>
         <file>image/ToolBar/redo.png</file>
         <file>image/ToolBar/undo.png</file>
+        <file>image/ToolBar/compileandrun.png</file>
     </qresource>
     <qresource prefix="/Controls">
         <file>image/Controls/BooleanFalse.png</file>

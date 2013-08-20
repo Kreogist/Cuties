@@ -70,7 +70,8 @@ SOURCES += \
     kciplaintextbrowser.cpp \
     kcimessagebox.cpp \
     kcidragproxy.cpp \
-    kciclipboard.cpp
+    kciclipboard.cpp \
+    kcidebugwatchdock.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -117,7 +118,8 @@ HEADERS += \
     kciplaintextbrowser.h \
     kcimessagebox.h \
     kcidragproxy.h \
-    kciclipboard.h
+    kciclipboard.h \
+    kcidebugwatchdock.h
 
 # Enable C++11
 CONFIG += c++11
