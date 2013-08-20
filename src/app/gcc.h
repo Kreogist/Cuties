@@ -31,7 +31,7 @@ class gcc : public compilerBase
     Q_OBJECT
 public:
     explicit gcc(QObject *parent = 0);
-    QString path(){return gccPath;}
+    QString path(){return isCompileCpp?gppPath:gccPath;}
     void setCompilerPath(const QString& path);
     QString compilerName(){return "g++";}
 
@@ -43,8 +43,9 @@ protected:
     void parseLine(const QString &text);
 
 private:
-
+    bool isCompileCpp;
     static QString gccPath;
+    static QString gppPath;
 };
 
 #endif // GCC_H
