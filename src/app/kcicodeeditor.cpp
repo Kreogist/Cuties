@@ -152,7 +152,7 @@ bool kciCodeEditor::save()
     }
     else
     {
-        if(!dosaveas(tr("save")))
+        if(!dosaveas(tr("Save")))
         {
             if(fileError!=QFileDevice::AbortError)
             {
@@ -171,7 +171,7 @@ bool kciCodeEditor::save()
 
 bool kciCodeEditor::saveAs()
 {
-    if(!dosaveas(tr("save as")))
+    if(!dosaveas(tr("Save As")))
     {
         if(fileError!=QFileDevice::AbortError)
         {

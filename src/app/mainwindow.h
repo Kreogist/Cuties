@@ -44,6 +44,7 @@
 #endif
 
 #include "kciglobal.h"
+#include "kcisidebar.h"
 #include "kcicompiledock.h"
 #include "kcijudgedock.h"
 #include "kcidebugdock.h"
@@ -74,6 +75,7 @@ public slots:
     void run();
     void compileAndRun();
     void searchOnline();
+    void diffVisibleSidebar();
     void diffVisibleCompileDock();
     void diffVisibleDebugDock();
     void diffVisibleJudgeDock();
@@ -114,6 +116,7 @@ private:
         mnuEditPaste,
         mnuEditSelectAll,
         mnuEditPreference,
+        mnuViewSidebar,
         mnuViewCompileDock,
         mnuViewDebugDock,
         mnuViewDebugWatchDock,
@@ -189,6 +192,7 @@ private:
     QMenu *menu[menu_count];
     QString actStatusTips[act_count], actMenuIconPath[act_count];
     QToolButton *tblMainButton[tlbbutton_count];
+    kciSideBar *sidebarDock;
     kcicompiledock *compileDock;
     kciDebugDock *debugDock;
     kciDebugWatchDock *debugWatchDock;

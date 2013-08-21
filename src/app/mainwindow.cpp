@@ -160,6 +160,11 @@ void MainWindow::createActions()
     actStatusTips[mnuEditPreference]=QString(tr("Customize your Cuties."));
     connect(act[mnuEditPreference],SIGNAL(triggered()),this,SLOT(showPreference()));
 
+    //View -> Sidebar
+    act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
+    actStatusTips[mnuViewSidebar]=QString(tr("Show or hide the Sidebar."));
+    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
+
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
     actStatusTips[mnuViewCompileDock]=QString(tr("Show or hide the Compile Dock."));
@@ -402,6 +407,8 @@ void MainWindow::createToolBar()
             tabManager,SLOT(undo()));
     connect(tblMainButton[tlbRedo],SIGNAL(clicked()),
             tabManager,SLOT(redo()));
+    connect(tblMainButton[tlbSearch],SIGNAL(clicked()),
+            tabManager,SLOT(showSearchBar()));
 
 }
 
@@ -432,10 +439,16 @@ void MainWindow::createDocks()
     connect(debugDock,SIGNAL(requireStartDebug()),
             this,SLOT(startDebug()));
     debugDock->hide();
+
     //Debug Watch Dock
     debugWatchDock=new kciDebugWatchDock(this);
     addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
     debugWatchDock->hide();
+
+    //Sidebar Dock
+    sidebarDock=new kciSideBar(this);
+    addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
+
 }
 
 void MainWindow::createMenu()
@@ -504,7 +517,7 @@ void MainWindow::createMenu()
     //Create View Menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
+    for(i=mnuViewSidebar;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -653,13 +666,11 @@ void MainWindow::setDocOpenMenuState(bool state)
     }
 
     //View Menu
-    for(i=mnuViewCompileDock;i<=mnuViewDebugDock;i++)
+    for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }
-    menu[mnuView]->menuAction()->setEnabled(state);
-    menu[mnuView]->menuAction()->setVisible(state);
 
     //Search Menu
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
@@ -879,6 +890,11 @@ void MainWindow::searchOnline()
 {
     QString strURL="http://www.baidu.com/s?wd="+tabManager->textNowSelect();
     QDesktopServices::openUrl(QUrl(strURL));
+}
+
+void MainWindow::diffVisibleSidebar()
+{
+    sidebarDock->setVisible(!sidebarDock->isVisible());
 }
 
 void MainWindow::diffVisibleCompileDock()

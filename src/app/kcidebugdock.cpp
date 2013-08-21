@@ -108,7 +108,6 @@ void kciDebugWidget::createToolBar()
     tblRunToCursor->setIcon(QIcon(":/DebugToolBar/image/Debug Docks/RunToCursor.png"));
     tblRunToCursor->setFixedSize(26,26);
     DebugToolBar->addWidget(tblRunToCursor);
-    DebugToolBar->addSeparator();
 
     ControlPanel->addWidget(DebugToolBar);
 }

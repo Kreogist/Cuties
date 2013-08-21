@@ -271,7 +271,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(slnEnableLineNum);
 
     //Text Edit Test.
-    txeCCompilerPath=new kciSettingListItemLineText(this);
+    txeCCompilerPath=new kciSettingListItemBrowseText(this);
     txeCCompilerPath->Caption->setText(tr("g++/gcc Path:"));
     txeCCompilerPath->setTextValue("C:/MinGW/bin/g++.exe");
     MainLayout->addWidget(txeCCompilerPath);

@@ -65,14 +65,15 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemlinetext.cpp \
     dbgoutputreceiver.cpp \
     connectionhandler.cpp \
-    Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
     kciplaintextbrowser.cpp \
     kcimessagebox.cpp \
     kcidragproxy.cpp \
     kciclipboard.cpp \
     kcidebugwatchdock.cpp \
     kcitextblockdata.cpp \
-    kcihighlighter.cpp
+    kcihighlighter.cpp \
+    kcisidebar.cpp \
+    Controls/SettingItems/kcisettinglistitembrowsetext.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -114,14 +115,15 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemlinetext.h \
     dbgoutputreceiver.h \
     connectionhandler.h \
-    Controls/SettingItems/kcisettinglistitemfoldertext.h \
     kciplaintextbrowser.h \
     kcimessagebox.h \
     kcidragproxy.h \
     kciclipboard.h \
     kcidebugwatchdock.h \
     kcitextblockdata.h \
-    kcihighlighter.h
+    kcihighlighter.h \
+    kcisidebar.h \
+    Controls/SettingItems/kcisettinglistitembrowsetext.h
 
 # Enable C++11
 CONFIG += c++11

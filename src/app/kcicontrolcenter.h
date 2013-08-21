@@ -46,6 +46,7 @@
 #include "Controls/SettingItems/kcisettinglistitemcombo.h"
 #include "Controls/SettingItems/kcisettinglistitemboolean.h"
 #include "Controls/SettingItems/kcisettinglistitemlinetext.h"
+#include "Controls/SettingItems/kcisettinglistitembrowsetext.h"
 #include "kcilistbutton.h"
 
 enum kciCCLists
@@ -136,7 +137,7 @@ public:
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemBoolean *slnEnableLineNum;
-    kciSettingListItemLineText *txeCCompilerPath;
+    kciSettingListItemBrowseText *txeCCompilerPath;
 };
 //-------------------Container--------------------
 class kciControlCenterTab : public QWidget
