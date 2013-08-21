@@ -63,7 +63,7 @@ private slots:
 protected:
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent (QContextMenuEvent * event);
-    void keyPressEvent(QKeyEvent *e);
+    //void keyPressEvent(QKeyEvent *e);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);

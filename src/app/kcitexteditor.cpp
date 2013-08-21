@@ -48,7 +48,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     lineColor = QColor(0x64,0x64,0x64);
     searchResultColor = QColor(0xf7,0xcf,0x3d);
     noMatchedParenthesesColor = QColor(0xc8,0x0,0x0);
-    matchedParenthesesColor = QColor(0x8e,0xff,0x41);
+    matchedParenthesesColor = QColor(0xfd,0x95,0x00);
 
     searchCode=0;
 
@@ -577,56 +577,69 @@ void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
                                             QTextCursor& currTextCursor,
                                             const QChar& rightParentheses)
 {
-    QPlainTextEdit::keyPressEvent(e);
     insertPlainText(QString(rightParentheses));
     currTextCursor.movePosition(QTextCursor::Left);
     setTextCursor(currTextCursor);
 }
 
-void kciTextEditor::keyPressEvent(QKeyEvent *e)
+/*void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
+
 
     switch (e->key()) {
     case Qt::Key_ParenLeft:
     {
-        autoCompleteParentheses(e,_textCursor,')');
-        break;
-    }
-    case Qt::Key_QuoteDbl:
-    {
-        QString text=_textCursor.selectedText();
-        if(text.isEmpty())
+        if(!(e->modifiers()&Qt::ShiftModifier))
         {
-            autoCompleteParentheses(e,_textCursor,'\"');
-        }
-        else
-        {
-            int start=_textCursor.selectionStart(),
-                    end=_textCursor.selectionEnd();
-            _textCursor.beginEditBlock();
-            _textCursor.clearSelection();
-            _textCursor.setPosition(start);
-            _textCursor.insertText("\"");
-            _textCursor.setPosition(end+1);
-            _textCursor.insertText("\"");
-            _textCursor.endEditBlock();
-            setTextCursor(_textCursor);
+            QPlainTextEdit::keyPressEvent(e);
+            autoCompleteParentheses(e,_textCursor,')');
         }
         break;
     }
     case Qt::Key_Apostrophe:
     {
-        autoCompleteParentheses(e,_textCursor,'\'');
+        if(!(e->modifiers()&Qt::ShiftModifier))
+        {
+            QPlainTextEdit::keyPressEvent(e);
+            autoCompleteParentheses(e,_textCursor,'\'');
+        }
+        else
+        {
+            QString text=_textCursor.selectedText();
+            if(text.isEmpty())
+            {
+                QPlainTextEdit::keyPressEvent(e);
+                autoCompleteParentheses(e,_textCursor,'\"');
+            }
+            else
+            {
+                int start=_textCursor.selectionStart(),
+                        end=_textCursor.selectionEnd();
+                _textCursor.beginEditBlock();
+                _textCursor.clearSelection();
+                _textCursor.setPosition(start);
+                _textCursor.insertText("\"");
+                _textCursor.setPosition(end+1);
+                _textCursor.insertText("\"");
+                _textCursor.endEditBlock();
+                setTextCursor(_textCursor);
+            }
+        }
         break;
     }
     case Qt::Key_BracketLeft:
     {
-        autoCompleteParentheses(e,_textCursor,']');
+        QPlainTextEdit::keyPressEvent(e);
+        if(!(e->modifiers()&Qt::ShiftModifier))
+        {
+            autoCompleteParentheses(e,_textCursor,']');
+        }
+
         break;
     }
     default:
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
-}
+}*/
