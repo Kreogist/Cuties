@@ -68,12 +68,13 @@ protected:
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
+    void highlightParenthesis(QList<QTextEdit::ExtraSelection>& selections);
     void autoCompleteParentheses(QKeyEvent *e,
                                  QTextCursor &currTextCursor,
                                  const QChar &rightParentheses);
     void findString(bool forward);
     void generalSearch(const QTextBlock& block,
-                       const int lines,
+                       const int& lines,
                        const bool forward);
     void searchOnOtherThread(QScopedPointer<kciTextSearcher> &searcher,
                              QFuture<void> &thread,
@@ -81,10 +82,16 @@ private:
                              const bool forward);
     void initTextSearcher(QScopedPointer<kciTextSearcher> &searcher);
     void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block);
+    int matchParentheses(const char& parenthesesA,
+                         const char& parenthesesB,
+                         QList<parenthesesInfo>::iterator startPos,
+                         QTextBlock block,
+                         bool forward);
 
     kciClipboard* clipboard;
     QSignalMapper* clipboardHistoryMenuSignalMapper;
     QColor lineColor,searchResultColor;
+    QColor noMatchedParenthesesColor,matchedParenthesesColor;
     QPoint contextMenuPos;
 
     QString text;

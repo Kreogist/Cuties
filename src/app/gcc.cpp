@@ -52,7 +52,7 @@ QStringList gcc::getCompileArg(const QString &filePath)
     else
         isCompileCpp=true;
 
-    arg<<filePath<<"-lm"<<"-g"<<"-Wall"<<"-static";
+    arg<<filePath<<"-lm"<<"-ggdb"<<"-Wall"<<"-static";
 
     QString programName;
 
