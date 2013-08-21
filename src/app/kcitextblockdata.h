@@ -32,12 +32,18 @@ struct matchedInfo
     int matchedLength;
 };
 
+struct parenthesesInfo
+{
+    char character;
+    int pos;
+};
+
 class kciTextBlockData : public QTextBlockUserData
 {
 public:
     kciTextBlockData();
-    void beginUsingDatas();
-    void endUsingDatas();
+    void beginUsingSearchDatas();
+    void endUsingSearchDatas();
 
     void resetForSearch();
     void setSearchCode(const unsigned long long int& searchCode);
@@ -48,11 +54,17 @@ public:
     bool hasMatched();
     void onBlockChanged();
 
+    void insertParenthesesInfo(const int& pos, const char& character);
+    void resetParentheseInfos();
+    QList<parenthesesInfo>::iterator getFirstParenthesesInfo();
+    QList<parenthesesInfo>::iterator getEndParenthesesInfo();
+
 private:
     unsigned long long int searchCode;
-    bool isChanged;
+    bool needSearchAgain;
     QMutex mutex;
     QList<matchedInfo> matchedTextPositions;
+    QList<parenthesesInfo> parenthesesInfos;
 };
 
 #endif // KCITEXTBLOCKDATA_H

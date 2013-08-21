@@ -18,6 +18,9 @@ public slots:
 private slots:
     void onScrollValueChanged(int value);
 
+protected:
+    void resizeEvent(QResizeEvent *e);
+
 private:
     bool autoScrollEnabled;
     QMetaObject::Connection autoScrollHandle;

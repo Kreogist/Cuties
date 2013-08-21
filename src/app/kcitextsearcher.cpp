@@ -75,17 +75,17 @@ void kciTextSearcher::search(const QTextBlock& begin,
         {
             continue;
         }
-        currBlockData->beginUsingDatas();
+        currBlockData->beginUsingSearchDatas();
         if(currBlockData->isSearched(searchCode))
         {
-            currBlockData->endUsingDatas();
+            currBlockData->endUsingSearchDatas();
             continue;
         }
         currBlockData->setSearchCode(searchCode);
         currBlockData->resetForSearch();
         if(!resetMark)
             match(i.text());
-        currBlockData->endUsingDatas();
+        currBlockData->endUsingSearchDatas();
     }
 }
 
