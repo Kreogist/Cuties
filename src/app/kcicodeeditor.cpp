@@ -189,8 +189,8 @@ bool kciCodeEditor::saveAs()
 
 bool kciCodeEditor::dosaveas(const QString &Caption)
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
-    filePath=QFileDialog::getSaveFileName(this,Caption,settings.value("texteditor/historyDir").toString(),strFileFilter);
+    /*QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    filePath=QFileDialog::getSaveFileName(this,Caption,settings.value("texteditor/historyDir").toString(),strFileFilter);*/
 
     if(!filePath.isEmpty())
     {

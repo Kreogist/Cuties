@@ -116,7 +116,7 @@ private:
         mnuEditPaste,
         mnuEditSelectAll,
         mnuEditPreference,
-        mnuViewSidebar,
+        //mnuViewSidebar,
         mnuViewCompileDock,
         mnuViewDebugDock,
         mnuViewDebugWatchDock,

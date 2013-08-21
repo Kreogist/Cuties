@@ -23,19 +23,31 @@
 
 #include "kciglobal.h"
 
-const QString kciGlobal::settingsFileName("Cuties.ini");
-
 kciGlobal::kciGlobal()
 {
-    kciMainConfig=new QSettings(settingsFileName, QSettings::IniFormat);
+    settingsFileName=QString("Cuties.ini");
+    kciConfigure::setCfgFileName(settingsFileName);
+
+    cfgConfiger.append(kciGeneralConfigure::getInstance());
+    cfgConfiger.append(kciEditorConfigure::getInstance());
+    cfgConfiger.append(kciCompilerConfigure::getInstance());
+    cfgConfiger.append(kciDebuggerConfigure::getInstance());
+    cfgConfiger.append(kciFileAssociationConfigure::getInstance());
+    cfgConfiger.append(kciLanguageConfigure::getInstance());
 }
 
 void kciGlobal::readSettings()
 {
-
+    for(int i=0; i<cfgConfiger.size(); i++)
+    {
+        cfgConfiger.at(i)->readConfigure();
+    }
 }
 
 void kciGlobal::writeSettings()
 {
-
+    for(int i=0; i<cfgConfiger.size(); i++)
+    {
+        cfgConfiger.at(i)->writeConfigure();
+    }
 }

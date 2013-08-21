@@ -139,6 +139,47 @@ private:
     kciSettingListItemBoolean *slnEnableLineNum;
     kciSettingListItemBrowseText *txeCCompilerPath;
 };
+//------------------Compiler--------------
+class kciCCTabCompilerContent : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabCompilerContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+};
+//-----------------Debugger-----------------
+class kciCCTabDebuggerContent : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabDebuggerContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+};
+//---------------File Association-------------
+class kciCCTabFileAssociationContent : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabFileAssociationContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+};
+//--------------Language-------------------
+class kciCCTabLanguageContent : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabLanguageContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+};
+
 //-------------------Container--------------------
 class kciControlCenterTab : public QWidget
 {

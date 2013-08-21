@@ -19,16 +19,6 @@
 
 #include "gcc.h"
 
-#ifdef Q_OS_UNIX
-QString gcc::gccPath="/usr/bin/gcc";
-QString gcc::gppPath="/usr/bin/g++";
-#endif
-
-#ifdef Q_OS_WIN
-QString gcc::gccPath="C:/MinGW/bin/gcc.exe";
-QString gcc::gppPath="C:/MinGW/bin/g++.exe";
-#endif
-
 gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {

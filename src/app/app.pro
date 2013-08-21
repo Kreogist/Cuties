@@ -73,7 +73,15 @@ SOURCES += \
     kcitextblockdata.cpp \
     kcihighlighter.cpp \
     kcisidebar.cpp \
-    Controls/SettingItems/kcisettinglistitembrowsetext.cpp
+    Controls/SettingItems/kcisettinglistitembrowsetext.cpp \
+    Controls/SettingItems/kcisettinglistitemlanguageitem.cpp \
+    kcigeneralconfigure.cpp \
+    kcieditorconfigure.cpp \
+    kcicompilerconfigure.cpp \
+    kcidebuggerconfigure.cpp \
+    kcifileassociationconfigure.cpp \
+    kcilanguageconfigure.cpp \
+    kcifileassociation.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -123,7 +131,16 @@ HEADERS += \
     kcitextblockdata.h \
     kcihighlighter.h \
     kcisidebar.h \
-    Controls/SettingItems/kcisettinglistitembrowsetext.h
+    Controls/SettingItems/kcisettinglistitembrowsetext.h \
+    Controls/SettingItems/kcisettinglistitemlanguageitem.h \
+    kciconfigure.h \
+    kcigeneralconfigure.h \
+    kcieditorconfigure.h \
+    kcicompilerconfigure.h \
+    kcidebuggerconfigure.h \
+    kcifileassociationconfigure.h \
+    kcilanguageconfigure.h \
+    kcifileassociation.h
 
 # Enable C++11
 CONFIG += c++11

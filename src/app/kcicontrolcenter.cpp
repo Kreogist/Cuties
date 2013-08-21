@@ -277,6 +277,34 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(txeCCompilerPath);
 }
 
+//-----------------Compiler----------------
+kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
+    QWidget(parent)
+{
+    ;
+}
+
+//-----------------Debugger-----------------
+kciCCTabDebuggerContent::kciCCTabDebuggerContent(QWidget *parent) :
+    QWidget(parent)
+{
+    ;
+}
+
+//-----------------File Association-----------
+kciCCTabFileAssociationContent::kciCCTabFileAssociationContent(QWidget *parent) :
+    QWidget(parent)
+{
+    ;
+}
+
+//-----------------Language-------------------
+kciCCTabLanguageContent::kciCCTabLanguageContent(QWidget *parent) :
+    QWidget(parent)
+{
+    ;
+}
+
 //------------------Container----------------------
 kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
     QWidget(parent)
@@ -323,10 +351,10 @@ kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
 {
     contentWidgets[cclstGerneral]=new kciCCTabGerneralContent(this);
     contentWidgets[cclstEditor]=new kciCCTabEditorContent(this);
-    contentWidgets[cclstCompiler]=new QWidget(this);
-    contentWidgets[cclstDebugger]=new QWidget(this);
-    contentWidgets[cclstFileAssociation]=new QWidget(this);
-    contentWidgets[cclstLanguage]=new QWidget(this);
+    contentWidgets[cclstCompiler]=new kciCCTabCompilerContent(this);
+    contentWidgets[cclstDebugger]=new kciCCTabDebuggerContent(this);
+    contentWidgets[cclstFileAssociation]=new kciCCTabFileAssociationContent(this);
+    contentWidgets[cclstLanguage]=new kciCCTabLanguageContent(this);
 
     ccTab[cclstGerneral]=new kciControlCenterTab(contentWidgets[cclstGerneral], this);
     ccTab[cclstEditor]=new kciControlCenterTab(contentWidgets[cclstEditor], this);

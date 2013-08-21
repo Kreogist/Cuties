@@ -160,10 +160,10 @@ void MainWindow::createActions()
     actStatusTips[mnuEditPreference]=QString(tr("Customize your Cuties."));
     connect(act[mnuEditPreference],SIGNAL(triggered()),this,SLOT(showPreference()));
 
-    //View -> Sidebar
+    /*//View -> Sidebar
     act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
     actStatusTips[mnuViewSidebar]=QString(tr("Show or hide the Sidebar."));
-    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
+    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));*/
 
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
@@ -343,7 +343,7 @@ void MainWindow::createActions()
 
 void MainWindow::aboutKCI()
 {
-    QMessageBox::about(this,tr("about"),
+    QMessageBox::about(this,tr("About Cuties"),
                        tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
 }
 
@@ -444,11 +444,11 @@ void MainWindow::createDocks()
     debugWatchDock=new kciDebugWatchDock(this);
     addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
     debugWatchDock->hide();
-
+/*
     //Sidebar Dock
     sidebarDock=new kciSideBar(this);
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
-
+*/
 }
 
 void MainWindow::createMenu()
@@ -517,7 +517,7 @@ void MainWindow::createMenu()
     //Create View Menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewSidebar;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
+    for(i=/*mnuViewSidebar*/mnuViewCompileDock;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -671,6 +671,8 @@ void MainWindow::setDocOpenMenuState(bool state)
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }
+    menu[mnuView]->menuAction()->setEnabled(state);
+    menu[mnuView]->menuAction()->setVisible(state);
 
     //Search Menu
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
