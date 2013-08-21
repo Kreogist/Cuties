@@ -8,7 +8,7 @@ class kciConfigure
 public:
     virtual void readConfigure() = 0;
     virtual void writeConfigure() = 0;
-    static QString getCfgFileName() const {return cfgFileName;}
+    static QString getCfgFileName(){return cfgFileName;}
     static void setCfgFileName(const QString &value){cfgFileName = value;}
 
 private:
