@@ -409,6 +409,8 @@ void MainWindow::createToolBar()
             tabManager,SLOT(redo()));
     connect(tblMainButton[tlbSearch],SIGNAL(clicked()),
             tabManager,SLOT(showSearchBar()));
+    connect(tblMainButton[tlbCompileAndRun],SIGNAL(clicked()),
+            this,SLOT(compileAndRun()));
 
 }
 
