@@ -69,9 +69,9 @@ private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
     void highlightParenthesis(QList<QTextEdit::ExtraSelection>& selections);
-    void autoCompleteParentheses(QKeyEvent *e,
+    /*void autoCompleteParentheses(QKeyEvent *e,
                                  QTextCursor &currTextCursor,
-                                 const QChar &rightParentheses);
+                                 const QChar &rightParentheses);*/
     void findString(bool forward);
     void generalSearch(const QTextBlock& block,
                        const int& lines,

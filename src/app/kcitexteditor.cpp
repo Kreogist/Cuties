@@ -255,6 +255,8 @@ void kciTextEditor::searchString(QString text,
 
     searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
     searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
+
+    findString(true);
 }
 
 void kciTextEditor::updateSearchResults()
@@ -573,7 +575,7 @@ void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
     delete menu;
 }
 
-void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
+/*void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
                                             QTextCursor& currTextCursor,
                                             const QChar& rightParentheses)
 {
@@ -582,7 +584,7 @@ void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
     setTextCursor(currTextCursor);
 }
 
-/*void kciTextEditor::keyPressEvent(QKeyEvent *e)
+void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
 
