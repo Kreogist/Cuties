@@ -218,22 +218,10 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     sboDefaultLanguage=new kciSettingListItemCombo(this);
     sboDefaultLanguage->Caption->setText(tr("Default Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
-    sboDefaultLanguage->addListItem(tr("C/C++"));
+    sboDefaultLanguage->addListItem(tr("C++"));
+    sboDefaultLanguage->addListItem(tr("C"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
-    sboDefaultLanguage->setCurrentItemIndex(2);
     MainLayout->addWidget(sboDefaultLanguage);
-
-    sboDefaultEncode=new kciSettingListItemCombo(this);
-    sboDefaultEncode->Caption->setText(tr("Default Encoder:"));
-    sboDefaultEncode->addListItem(tr("Unicode"));
-    sboDefaultEncode->addListItem(tr("ANSI"));
-    sboDefaultEncode->addListItem(tr("UTF-8"));
-    MainLayout->addWidget(sboDefaultEncode);
-
-    slnEnableAnime=new kciSettingListItemBoolean(this);
-    slnEnableAnime->setEnabledText(tr("Enabled Animation Effect."));
-    slnEnableAnime->setDisabledText(tr("Disabled Animation Effect."));
-    MainLayout->addWidget(slnEnableAnime);
 }
 
 //--------------------Editor------------------
@@ -257,38 +245,93 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     setLayout(MainLayout);
 
     //Title Label.
-    QLabel *tblLanguage=new QLabel(this);
-    tblLanguage->setText(" " + tr("Editor Component"));
-    tblLanguage->setFont(TitleFont);
-    tblLanguage->setFixedHeight(30);
+    QLabel *tblCompilerPath=new QLabel(this);
+    tblCompilerPath->setText(" " + tr("Editor Option"));
+    tblCompilerPath->setFont(TitleFont);
+    tblCompilerPath->setFixedHeight(30);
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(tblLanguage);
+    MainLayout->addWidget(tblCompilerPath);
 
-    //Set Line Text.
-    slnEnableLineNum=new kciSettingListItemBoolean(this);
-    slnEnableLineNum->setEnabledText(tr("Enabled Line Number Panel."));
-    slnEnableLineNum->setDisabledText(tr("Disabled Line Number Panel."));
-    MainLayout->addWidget(slnEnableLineNum);
-
-    //Text Edit Test.
-    txeCCompilerPath=new kciSettingListItemBrowseText(this);
-    txeCCompilerPath->Caption->setText(tr("g++/gcc Path:"));
-    txeCCompilerPath->setTextValue("C:/MinGW/bin/g++.exe");
-    MainLayout->addWidget(txeCCompilerPath);
+    tabSpaceNum=new kciSettingListItemNumInput(this);
+    tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
+    tabSpaceNum->setValue(4);
+    MainLayout->addWidget(tabSpaceNum);
 }
 
 //-----------------Compiler----------------
 kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
     QWidget(parent)
 {
-    ;
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
+    QFont TitleFont=this->font();
+    TitleFont.setPixelSize(20);
+
+    //Set Layout.
+    MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
+
+    //Title Label.
+    QLabel *tblCompilerPath=new QLabel(this);
+    tblCompilerPath->setText(" " + tr("Compiler Path"));
+    tblCompilerPath->setFont(TitleFont);
+    tblCompilerPath->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblCompilerPath);
+
+    txeGppCompilerPath=new kciSettingListItemBrowseText(this);
+    txeGppCompilerPath->Caption->setText(tr("G++ Compiler Path:"));
+    MainLayout->addWidget(txeGppCompilerPath);
+
+    txeGccCompilerPath=new kciSettingListItemBrowseText(this);
+    txeGccCompilerPath->Caption->setText(tr("GCC Compiler Path:"));
+    MainLayout->addWidget(txeGccCompilerPath);
+
+    txeFpcCompilerPath=new kciSettingListItemBrowseText(this);
+    txeFpcCompilerPath->Caption->setText(tr("FPC Compiler Path:"));
+    MainLayout->addWidget(txeFpcCompilerPath);
+
 }
 
 //-----------------Debugger-----------------
 kciCCTabDebuggerContent::kciCCTabDebuggerContent(QWidget *parent) :
     QWidget(parent)
 {
-    ;
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
+    QFont TitleFont=this->font();
+    TitleFont.setPixelSize(20);
+
+    //Set Layout.
+    MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
+
+    //Title Label.
+    QLabel *tblGDBSettings=new QLabel(this);
+    tblGDBSettings->setText(" " + tr("GDB Settings"));
+    tblGDBSettings->setFont(TitleFont);
+    tblGDBSettings->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblGDBSettings);
+
+    txeGDBDebuggerPath=new kciSettingListItemBrowseText(this);
+    txeGDBDebuggerPath->Caption->setText(tr("GDB Path:"));
+    MainLayout->addWidget(txeGDBDebuggerPath);
+
 }
 
 //-----------------File Association-----------

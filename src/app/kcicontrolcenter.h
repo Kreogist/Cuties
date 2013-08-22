@@ -47,6 +47,7 @@
 #include "Controls/SettingItems/kcisettinglistitemboolean.h"
 #include "Controls/SettingItems/kcisettinglistitemlinetext.h"
 #include "Controls/SettingItems/kcisettinglistitembrowsetext.h"
+#include "Controls/SettingItems/kcisettinglistitemnuminput.h"
 #include "kcilistbutton.h"
 
 enum kciCCLists
@@ -124,8 +125,6 @@ public:
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
-    kciSettingListItemCombo *sboDefaultEncode;
-    kciSettingListItemBoolean *slnEnableAnime;
 };
 //------------------Editor---------------
 class kciCCTabEditorContent : public QWidget
@@ -136,8 +135,7 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
-    kciSettingListItemBoolean *slnEnableLineNum;
-    kciSettingListItemBrowseText *txeCCompilerPath;
+    kciSettingListItemNumInput *tabSpaceNum;
 };
 //------------------Compiler--------------
 class kciCCTabCompilerContent : public QWidget
@@ -148,6 +146,9 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
+    kciSettingListItemBrowseText *txeGppCompilerPath;
+    kciSettingListItemBrowseText *txeGccCompilerPath;
+    kciSettingListItemBrowseText *txeFpcCompilerPath;
 };
 //-----------------Debugger-----------------
 class kciCCTabDebuggerContent : public QWidget
@@ -158,6 +159,7 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
+    kciSettingListItemBrowseText *txeGDBDebuggerPath;
 };
 //---------------File Association-------------
 class kciCCTabFileAssociationContent : public QWidget
