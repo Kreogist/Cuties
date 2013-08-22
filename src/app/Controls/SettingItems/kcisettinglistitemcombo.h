@@ -12,8 +12,8 @@ public:
     explicit kciSettingListItemCombo(QWidget *parent = 0);
     void addListItem(const QString& ItemText);
     void clearList();
-    void setCurrentItemIndex(int Index);
-    int getCurrentItemIndex();
+    void setValue(int Index);
+    int getValue();
 
 private slots:
     void valueChangedEvent(int newValue);

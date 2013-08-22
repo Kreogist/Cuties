@@ -43,12 +43,12 @@ void kciSettingListItemCombo::clearList()
     cboList->clear();
 }
 
-int kciSettingListItemCombo::getCurrentItemIndex()
+int kciSettingListItemCombo::getValue()
 {
     return cboList->currentIndex();
 }
 
-void kciSettingListItemCombo::setCurrentItemIndex(int Index)
+void kciSettingListItemCombo::setValue(int Index)
 {
     cboList->setCurrentIndex(Index);
 }

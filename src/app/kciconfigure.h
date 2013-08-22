@@ -1,6 +1,7 @@
 #ifndef KCICONFIGURE_H
 #define KCICONFIGURE_H
 
+#include <QSettings>
 #include <QString>
 
 class kciConfigure

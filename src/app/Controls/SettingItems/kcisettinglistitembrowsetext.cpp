@@ -53,14 +53,14 @@ void kciSettingListItemBrowseText::setFolderMode(bool value)
     folderMode = value;
 }
 
-void kciSettingListItemBrowseText::setTextValue(const QString &NewTextValue)
+void kciSettingListItemBrowseText::setValue(const QString &NewTextValue)
 {
     ItemValue=NewTextValue;
     ValueEditor->setText(ItemValue);
     ValueDisplayer->setText(ItemValue);
 }
 
-QString kciSettingListItemBrowseText::getTextValue()
+QString kciSettingListItemBrowseText::getValue()
 {
     return ItemValue;
 }
@@ -92,6 +92,6 @@ void kciSettingListItemBrowseText::getFolderPath()
     }
     if(!newPath.isEmpty())
     {
-        setTextValue(newPath);
+        setValue(newPath);
     }
 }

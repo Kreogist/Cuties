@@ -30,14 +30,14 @@ kciSettingListItemLineText::kciSettingListItemLineText(QWidget *parent) :
     MainLayout->addStretch();
 }
 
-void kciSettingListItemLineText::setTextValue(const QString &NewTextValue)
+void kciSettingListItemLineText::setValue(const QString &NewTextValue)
 {
     ItemValue=NewTextValue;
     ValueEditor->setText(ItemValue);
     ValueDisplayer->setText(ItemValue);
 }
 
-QString kciSettingListItemLineText::getTextValue()
+QString kciSettingListItemLineText::getValue()
 {
     return ItemValue;
 }

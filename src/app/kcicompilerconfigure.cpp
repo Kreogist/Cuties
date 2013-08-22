@@ -8,7 +8,7 @@ kciCompilerConfigure* kciCompilerConfigure::getInstance()
 }
 
 kciCompilerConfigure::kciCompilerConfigure()
-{
+{   
 #ifdef Q_OS_UNIX
     gccPath="/usr/bin/gcc";
     gppPath="/usr/bin/g++";
@@ -24,12 +24,22 @@ kciCompilerConfigure::kciCompilerConfigure()
 
 void kciCompilerConfigure::readConfigure()
 {
-
+    QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
+    cfgOperator.beginGroup("Compiler");
+    gccPath=cfgOperator.value("Gcc Path", gccPath).toString();
+    gppPath=cfgOperator.value("G++ Path", gppPath).toString();
+    fpcPath=cfgOperator.value("FPC Path", fpcPath).toString();
+    cfgOperator.endGroup();
 }
 
 void kciCompilerConfigure::writeConfigure()
 {
-
+    QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
+    cfgOperator.beginGroup("Compiler");
+    gccPath=cfgOperator.value("Gcc Path", gccPath).toString();
+    gppPath=cfgOperator.value("G++ Path", gppPath).toString();
+    fpcPath=cfgOperator.value("FPC Path", fpcPath).toString();
+    cfgOperator.endGroup();
 }
 
 QString kciCompilerConfigure::getGccPath() const
