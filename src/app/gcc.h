@@ -25,13 +25,15 @@
 #include <QDebug>
 
 #include "compilerbase.h"
+#include "kcicompilerconfigure.h"
 
 class gcc : public compilerBase
 {
     Q_OBJECT
 public:
     explicit gcc(QObject *parent = 0);
-    QString path(){return isCompileCpp?gppPath:gccPath;}
+    QString path(){return isCompileCpp?
+                    instance->getGppPath():instance->getGccPath();}
     void setCompilerPath(const QString& path);
     QString compilerName(){return "g++";}
 
@@ -44,8 +46,7 @@ protected:
 
 private:
     bool isCompileCpp;
-    static QString gccPath;
-    static QString gppPath;
+    kciCompilerConfigure* instance;
 };
 
 #endif // GCC_H

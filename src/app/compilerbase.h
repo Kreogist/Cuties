@@ -42,7 +42,6 @@ public:
 
     QString version();
     void startCompile(const QString& filePath);
-    virtual void setCompilerPath(const QString& ) = 0;
     virtual QString path()=0;
     virtual bool checkCompilerPath(const QString& path);
     virtual QString compilerName() = 0;

@@ -41,6 +41,8 @@ class kciGlobal
 public:
     void readSettings();
     void writeSettings();
+    QString getSettingsFileName() const;
+    void setSettingsFileName(const QString& filePath);
     static kciGlobal* getInstance();
 
 private:
