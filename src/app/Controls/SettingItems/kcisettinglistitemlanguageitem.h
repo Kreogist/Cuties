@@ -1,6 +1,8 @@
 #ifndef KCISETTINGLISTITEMLANGUAGEITEM_H
 #define KCISETTINGLISTITEMLANGUAGEITEM_H
 
+#include "kcisettinglistitembase.h"
+
 class kciSettingListItemLanguageItem : public kciSettingListItemBase
 {
     Q_OBJECT

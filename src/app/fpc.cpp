@@ -19,16 +19,10 @@
 
 #include "fpc.h"
 
-#ifdef Q_OS_WIN32
-//TODO: need fpc's default path on Windows
-QString fpc::fpcPath="c:/fpc/fpc.exe";
-#else
-QString fpc::fpcPath="/usr/bin/fpc";
-#endif
-
 fpc::fpc(QObject *parent) :
     compilerBase(parent)
 {
+    instance=kciCompilerConfigure::getInstance();
 }
 
 QStringList fpc::getVersionArg()
@@ -49,11 +43,6 @@ QStringList fpc::getcompileEnv()
 {
     QStringList env;
     return env;
-}
-
-void fpc::setCompilerPath(const QString &path)
-{
-    fpcPath=path;
 }
 
 void fpc::parseLine(const QString &text)

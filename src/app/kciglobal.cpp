@@ -23,6 +23,8 @@
 
 #include "kciglobal.h"
 
+kciGlobal* kciGlobal::instance=nullptr;
+
 kciGlobal::kciGlobal()
 {
     settingsFileName=QString("Cuties.ini");
@@ -50,4 +52,19 @@ void kciGlobal::writeSettings()
     {
         cfgConfiger.at(i)->writeConfigure();
     }
+}
+
+void kciGlobal::setSettingsFileName(const QString& filePath)
+{
+    settingsFileName=filePath;
+}
+
+QString kciGlobal::getSettingsFileName() const
+{
+    return settingsFileName;
+}
+
+kciGlobal* kciGlobal::getInstance()
+{
+    return instance==nullptr?instance=new kciGlobal:instance;
 }

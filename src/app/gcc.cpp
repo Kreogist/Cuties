@@ -23,6 +23,7 @@ gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
     isCompileCpp=true;
+    instance=kciCompilerConfigure::getInstance();
 }
 
 QStringList gcc::getVersionArg()
@@ -73,15 +74,10 @@ QStringList gcc::getcompileEnv()
     QStringList env;
 
 #ifdef Q_OS_WIN
-    env<<gccPath;
+    env<<this->path();
 #endif
 
     return env;
-}
-
-void gcc::setCompilerPath(const QString &path)
-{
-    gccPath=path;
 }
 
 void gcc::parseLine(const QString &text)

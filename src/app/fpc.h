@@ -22,7 +22,9 @@
 
 #include <QRegularExpression>
 #include <QDebug>
+
 #include "compilerbase.h"
+#include "kcicompilerconfigure.h"
 
 class fpc : public compilerBase
 {
@@ -30,8 +32,7 @@ class fpc : public compilerBase
 public:
     explicit fpc(QObject *parent = 0);
     void startCompile(const QString &filePath);
-    QString path(){return fpcPath;}
-    void setCompilerPath(const QString& path);
+    QString path(){return instance->getFpcPath();}
     virtual QString compilerName() { return "fpc";}
     
 protected:
@@ -42,7 +43,7 @@ protected:
     void parseLine(const QString &text);
 
 private:
-    static QString fpcPath;
+    kciCompilerConfigure* instance;
 };
 
 #endif // FPC_H

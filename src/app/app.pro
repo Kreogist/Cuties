@@ -79,9 +79,9 @@ SOURCES += \
     kcieditorconfigure.cpp \
     kcicompilerconfigure.cpp \
     kcidebuggerconfigure.cpp \
-    kcifileassociationconfigure.cpp \
     kcilanguageconfigure.cpp \
-    kcifileassociation.cpp
+    kcifileassociation.cpp \
+    kciconfigure.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -138,7 +138,6 @@ HEADERS += \
     kcieditorconfigure.h \
     kcicompilerconfigure.h \
     kcidebuggerconfigure.h \
-    kcifileassociationconfigure.h \
     kcilanguageconfigure.h \
     kcifileassociation.h
 

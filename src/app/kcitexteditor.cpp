@@ -331,6 +331,7 @@ void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 void kciTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
 {
     QTextCursor cursor = textCursor();
+    cursor.clearSelection();
     int pos=cursor.position()-cursor.block().position();
 
     char all[]="{[()]}";
@@ -416,6 +417,7 @@ void kciTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selec
             }
 
             cursor=textCursor();
+            cursor.clearSelection();
         }
     }
 }

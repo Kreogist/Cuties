@@ -725,7 +725,7 @@ void MainWindow::setDocOpenMenuEnabled()
 
 void MainWindow::restoreSettings()
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
 
@@ -778,7 +778,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::saveSettings()
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     if(!(this->isMaximized() || this->isFullScreen()))
     {
