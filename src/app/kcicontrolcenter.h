@@ -137,7 +137,6 @@ public:
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemBoolean *slnEnableLineNum;
-    kciSettingListItemBrowseText *txeCCompilerPath;
 };
 //------------------Compiler--------------
 class kciCCTabCompilerContent : public QWidget
@@ -148,6 +147,9 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
+    kciSettingListItemBrowseText *txeGppCompilerPath;
+    kciSettingListItemBrowseText *txeGccCompilerPath;
+    kciSettingListItemBrowseText *txeFpcCompilerPath;
 };
 //-----------------Debugger-----------------
 class kciCCTabDebuggerContent : public QWidget

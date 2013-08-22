@@ -269,12 +269,6 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     slnEnableLineNum->setEnabledText(tr("Enabled Line Number Panel."));
     slnEnableLineNum->setDisabledText(tr("Disabled Line Number Panel."));
     MainLayout->addWidget(slnEnableLineNum);
-
-    //Text Edit Test.
-    txeCCompilerPath=new kciSettingListItemBrowseText(this);
-    txeCCompilerPath->Caption->setText(tr("g++/gcc Path:"));
-    txeCCompilerPath->setTextValue("C:/MinGW/bin/g++.exe");
-    MainLayout->addWidget(txeCCompilerPath);
 }
 
 //-----------------Compiler----------------
