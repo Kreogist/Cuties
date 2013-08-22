@@ -90,8 +90,8 @@ private:
                          QTextBlock block,
                          bool forward);
     int findFirstCharacter(const QTextBlock& block);
-    void insertTab(QTextCursor cursor, int count);
-    void removeTab(QTextCursor cursor, int count);
+    void insertTab(QTextCursor cursor, int count = 1);
+    void removeTab(QTextCursor cursor, int count = 1);
 
     kciEditorConfigure* configureInstance;
     kciClipboard* clipboard;
