@@ -20,6 +20,7 @@
 #include "kcitexteditor.h"
 
 static int elideWidth=500;
+static int tabWidth=4;
 
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
@@ -30,13 +31,15 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setAcceptDrops(false);
 
+    configureInstance=kciEditorConfigure::getInstance();
+
     clipboard=kciClipboard::getInstance();
     clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
             this,SLOT(insertPlainText(QString)));
 
     //Set TextEditor Properties.
-    setTabStopWidth(fontMetrics().width(' ')<<2);
+    setTabStopWidth(fontMetrics().width(' ')*tabWidth);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -318,6 +321,83 @@ void kciTextEditor::initTextSearcher(QScopedPointer<kciTextSearcher> &searcher)
     searcher->setIsCaseSensitive(caseSensitively);
 }
 
+void kciTextEditor::autoIndent()
+{
+    QTextCursor _textCursor=textCursor();
+    QTextBlock currBlock=_textCursor.block();
+    QTextBlock prevBlock=currBlock.previous();
+    _textCursor.setPosition(currBlock.position());
+    int basePos=findFirstCharacter(prevBlock);
+    int pos=findFirstCharacter(currBlock);
+
+    QTextCursor _prevTextCursor(prevBlock);
+    _prevTextCursor.movePosition(QTextCursor::Right,
+                                 QTextCursor::KeepAnchor,
+                                 basePos);
+    QString tabs=_prevTextCursor.selectedText();
+
+    _textCursor.setPosition(currBlock.position()+pos);
+    _textCursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::KeepAnchor);
+    _textCursor.removeSelectedText();
+    _textCursor.insertText(tabs);
+
+    kciTextBlockData* prevData=(kciTextBlockData*)prevBlock.userData();
+    kciTextBlockData* CurrData=(kciTextBlockData*)currBlock.userData();
+    int baseLevel=prevData->getCodeLevel();
+    int currLevel=CurrData->getCodeLevel();
+
+    if(currLevel>=baseLevel)
+        insertTab(_textCursor,currLevel-baseLevel);
+    else
+        removeTab(_textCursor,baseLevel-currLevel);
+}
+
+void kciTextEditor::insertTab(QTextCursor cursor, int count)
+{
+    cursor.clearSelection();
+    while(count--)
+    {
+        if(configureInstance->usingBlankInsteadTab())
+        {
+            for(int i=0;i<tabWidth;i++)
+                cursor.insertText(" ");
+
+        }
+        else
+        {
+            cursor.insertText("\t");
+        }
+    }
+}
+
+void kciTextEditor::removeTab(QTextCursor cursor, int count)
+{
+    cursor.clearSelection();
+    while(count--)
+    {
+        if(configureInstance->usingBlankInsteadTab())
+        {
+            cursor.movePosition(QTextCursor::Left,
+                                QTextCursor::KeepAnchor,
+                                tabWidth);
+        }
+        else
+        {
+            cursor.movePosition(QTextCursor::Left,
+                                QTextCursor::KeepAnchor);
+        }
+    }
+
+    cursor.removeSelectedText();
+}
+
+int kciTextEditor::findFirstCharacter(const QTextBlock &block)
+{
+    QString text=block.text();
+    int ret=text.indexOf(QRegularExpression("\\S"));
+    return ret==-1?block.text().length():ret;
+}
+
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 {
      QTextCursor cursor = textCursor();
@@ -584,15 +664,14 @@ void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
     insertPlainText(QString(rightParentheses));
     currTextCursor.movePosition(QTextCursor::Left);
     setTextCursor(currTextCursor);
-}
+}*/
 
 void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
 
-
     switch (e->key()) {
-    case Qt::Key_ParenLeft:
+    /*case Qt::Key_ParenLeft:
     {
         if(!(e->modifiers()&Qt::ShiftModifier))
         {
@@ -641,9 +720,16 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
         }
 
         break;
+    }*/
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+    {
+        QPlainTextEdit::keyPressEvent(e);
+        autoIndent();
+        break;
     }
     default:
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
-}*/
+}

@@ -59,12 +59,16 @@ public:
     QList<parenthesesInfo>::iterator getFirstParenthesesInfo();
     QList<parenthesesInfo>::iterator getEndParenthesesInfo();
 
+    void setCodeLevel(const int& level);
+    int getCodeLevel() const;
+
 private:
     unsigned long long int searchCode;
     bool needSearchAgain;
     QMutex mutex;
     QList<matchedInfo> matchedTextPositions;
     QList<parenthesesInfo> parenthesesInfos;
+    int codeLevel;
 };
 
 #endif // KCITEXTBLOCKDATA_H

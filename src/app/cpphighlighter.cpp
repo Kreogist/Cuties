@@ -128,5 +128,32 @@ void cppHighlighter::kciHighlightBlock(const QString &text)
                       instance->getTextCharFormat(rules[i].type_name));
         }
     }
+
+    kciTextBlockData *data=(kciTextBlockData*)currentBlockUserData();
+
+    Q_ASSERT(data!=NULL);
+
+    QTextBlock prevBlock=currentBlock().previous();
+
+    int baseLevel=0;
+    if(prevBlock.isValid())
+    {
+        kciTextBlockData *prevData=(kciTextBlockData*)prevBlock.userData();
+        Q_ASSERT(prevData!=NULL);
+        baseLevel=prevData->getCodeLevel();
+
+        for(auto i=prevData->getFirstParenthesesInfo(),
+            l=prevData->getEndParenthesesInfo();
+            i<l;
+            i++)
+        {
+            if(i->character == '{')
+                baseLevel++;
+            else if(i->character == '}')
+                baseLevel--;
+        }
+    }
+    data->setCodeLevel(baseLevel);
+
     conmmentHighlightBlock(text);
 }
