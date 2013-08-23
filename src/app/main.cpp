@@ -116,5 +116,9 @@ int main(int argc, char *argv[])
     MainWindow mainwindow;
     mainwindow.show();
 
-    return app.exec();
+    int ret=app.exec();
+
+    kciGlobalInstance->writeSettings();
+
+    return ret;
 }

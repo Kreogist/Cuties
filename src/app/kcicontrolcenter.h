@@ -51,6 +51,7 @@
 #include "kcilistbutton.h"
 
 #include "kcigeneralconfigure.h"
+#include "kcicompilerconfigure.h"
 
 enum kciCCLists
 {
@@ -117,19 +118,27 @@ private:
 
 //----------------------------Contents Widget-----------------------
 
+class kciAbstractCCTabContent : public QWidget
+{
+public:
+    explicit kciAbstractCCTabContent(QWidget *parent = 0);
+    virtual void apply() {}
+};
+
 //-------------Gerneral-----------------
-class kciCCTabGerneralContent : public QWidget
+class kciCCTabGerneralContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
     explicit kciCCTabGerneralContent(QWidget *parent = 0);
+    void apply();
 
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
 };
 //------------------Editor---------------
-class kciCCTabEditorContent : public QWidget
+class kciCCTabEditorContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
@@ -140,11 +149,12 @@ private:
     kciSettingListItemNumInput *tabSpaceNum;
 };
 //------------------Compiler--------------
-class kciCCTabCompilerContent : public QWidget
+class kciCCTabCompilerContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
     explicit kciCCTabCompilerContent(QWidget *parent = 0);
+    void apply();
 
 private:
     QVBoxLayout *MainLayout;
@@ -153,7 +163,7 @@ private:
     kciSettingListItemBrowseText *txeFpcCompilerPath;
 };
 //-----------------Debugger-----------------
-class kciCCTabDebuggerContent : public QWidget
+class kciCCTabDebuggerContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
@@ -164,7 +174,7 @@ private:
     kciSettingListItemBrowseText *txeGDBDebuggerPath;
 };
 //---------------File Association-------------
-class kciCCTabFileAssociationContent : public QWidget
+class kciCCTabFileAssociationContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
@@ -174,7 +184,7 @@ private:
     QVBoxLayout *MainLayout;
 };
 //--------------Language-------------------
-class kciCCTabLanguageContent : public QWidget
+class kciCCTabLanguageContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
@@ -185,7 +195,7 @@ private:
 };
 
 //-------------------Container--------------------
-class kciControlCenterTab : public QWidget
+class kciControlCenterTab : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
@@ -203,12 +213,14 @@ private:
 /********************************************************/
 /*                  Main Control Center                 */
 /********************************************************/
+
 class kciControlCenterContents : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciControlCenterContents(QWidget *parent = 0);
-    QWidget *getCCTab(const int& Index);
+    QWidget *getCCTab(const int& index);
+    kciAbstractCCTabContent* getContentWidgets(const int& index);
 
 public slots:
     void animeToIndex(QWidget *Index);
@@ -220,7 +232,7 @@ private:
     QParallelAnimationGroup *tabModeAnime;
 
     kciControlCenterTab *ccTab[cclist_count];
-    QWidget *contentWidgets[cclist_count];
+    kciAbstractCCTabContent *contentWidgets[cclist_count];
 
     QWidget *contentIndex;
 };
@@ -233,6 +245,8 @@ public:
 signals:
     
 public slots:
+    void onApply();
+    void onYes();
 
 private slots:
 

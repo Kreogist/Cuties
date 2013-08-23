@@ -187,9 +187,28 @@ void kciControlCenterLeftBar::lstClick(int Index)
 /********************************************/
 /*          Contorl Center Contents         */
 /********************************************/
-//---------------Gerneral------------------------
-kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+kciAbstractCCTabContent::kciAbstractCCTabContent(QWidget *parent):
     QWidget(parent)
+{
+
+}
+//---------------Gerneral------------------------
+static int QStringToValue(const QString& text)
+{
+    if(text=="cpp")
+    {
+        return 1;
+    }
+    if(text=="pas")
+    {
+        return 2;
+    }
+
+    return 0;
+}
+
+kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -218,15 +237,39 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     sboDefaultLanguage=new kciSettingListItemCombo(this);
     sboDefaultLanguage->Caption->setText(tr("Default Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
-    sboDefaultLanguage->addListItem(tr("C++"));
-    sboDefaultLanguage->addListItem(tr("C"));
+    sboDefaultLanguage->addListItem(tr("C/C++"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
+    sboDefaultLanguage->setValue(QStringToValue(kciGeneralConfigure::getInstance()->getDefaultLanguageMode()));
     MainLayout->addWidget(sboDefaultLanguage);
+}
+
+void kciCCTabGerneralContent::apply()
+{
+    switch(sboDefaultLanguage->getValue())
+    {
+    case 0:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("plainText");
+        break;
+    }
+    case 1:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("cpp");
+        break;
+    }
+    case 2:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("pas");
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 //--------------------Editor------------------
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -260,7 +303,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
 //-----------------Compiler----------------
 kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -286,23 +329,35 @@ kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
     MainLayout->addSpacing(5);
     MainLayout->addWidget(tblCompilerPath);
 
+    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+
     txeGppCompilerPath=new kciSettingListItemBrowseText(this);
     txeGppCompilerPath->Caption->setText(tr("G++ Compiler Path:"));
+    txeGppCompilerPath->setValue(instance->getGppPath());
     MainLayout->addWidget(txeGppCompilerPath);
 
     txeGccCompilerPath=new kciSettingListItemBrowseText(this);
     txeGccCompilerPath->Caption->setText(tr("GCC Compiler Path:"));
+    txeGccCompilerPath->setValue(instance->getGccPath());
     MainLayout->addWidget(txeGccCompilerPath);
 
     txeFpcCompilerPath=new kciSettingListItemBrowseText(this);
     txeFpcCompilerPath->Caption->setText(tr("FPC Compiler Path:"));
+    txeFpcCompilerPath->setValue(instance->getFpcPath());
     MainLayout->addWidget(txeFpcCompilerPath);
+}
 
+void kciCCTabCompilerContent::apply()
+{
+    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+    instance->setGccPath(txeGccCompilerPath->getValue());
+    instance->setGppPath(txeGppCompilerPath->getValue());
+    instance->setFpcPath(txeFpcCompilerPath->getValue());
 }
 
 //-----------------Debugger-----------------
 kciCCTabDebuggerContent::kciCCTabDebuggerContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -336,21 +391,21 @@ kciCCTabDebuggerContent::kciCCTabDebuggerContent(QWidget *parent) :
 
 //-----------------File Association-----------
 kciCCTabFileAssociationContent::kciCCTabFileAssociationContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     ;
 }
 
 //-----------------Language-------------------
 kciCCTabLanguageContent::kciCCTabLanguageContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     ;
 }
 
 //------------------Container----------------------
 kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -409,9 +464,14 @@ kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     contentIndex=ccTab[cclstGerneral];
 }
 
-QWidget *kciControlCenterContents::getCCTab(const int &Index)
+QWidget *kciControlCenterContents::getCCTab(const int& index)
 {
-    return ccTab[Index];
+    return ccTab[index];
+}
+
+kciAbstractCCTabContent* kciControlCenterContents::getContentWidgets(const int& index)
+{
+    return contentWidgets[index];
 }
 
 void kciControlCenterContents::animeToIndex(QWidget *Index)
@@ -485,6 +545,10 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     connect(btCancel, SIGNAL(clicked()),
             this, SLOT(close()));
     btApply->setText(tr("Apply"));
+    connect(btApply,SIGNAL(clicked()),
+            this,SLOT(onApply()));
+    connect(btYes,SIGNAL(clicked()),
+            this,SLOT(onYes()));
 
     BottomButton->addStretch();
     BottomButton->addWidget(btYes);
@@ -493,4 +557,18 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     BottomButton->addSpacing(3);
     BottomButton->addWidget(btApply);
     WholeTitleBarSplit->addLayout(BottomButton);
+}
+
+void kciControlCenter::onApply()
+{
+    for(int i=cclstGerneral; i<cclist_count;i++)
+    {
+        CCMainContents->getContentWidgets(i)->apply();
+    }
+}
+
+void kciControlCenter::onYes()
+{
+    onApply();
+    close();
 }
