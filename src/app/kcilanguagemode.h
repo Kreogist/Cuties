@@ -37,6 +37,7 @@
 //pascal
 #include "fpc.h"
 #include "pascalhighlighter.h"
+#include "kcigeneralconfigure.h"
 
 class kciCodeEditor;
 
@@ -46,6 +47,7 @@ class kciLanguageMode : public QObject
 public:
     enum modeType
     {
+        Invalid,
         PlainText,
         Cpp,
         Pascal

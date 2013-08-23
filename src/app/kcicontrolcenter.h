@@ -50,6 +50,8 @@
 #include "Controls/SettingItems/kcisettinglistitemnuminput.h"
 #include "kcilistbutton.h"
 
+#include "kcigeneralconfigure.h"
+
 enum kciCCLists
 {
     cclstGerneral,

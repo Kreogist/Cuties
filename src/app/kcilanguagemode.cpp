@@ -28,9 +28,8 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
     gdbInstance=NULL;
 
     setCompileState(uncompiled);
-    m_type=PlainText;
-    m_highlighter.reset(new kciHighlighter(this));
-    m_highlighter->setDocument(m_parent->document);
+    m_type=Invalid;
+    setFileSuffix(kciGeneralConfigure::getInstance()->getDefaultLanguageMode());
 
     Q_ASSERT(m_parent!=NULL);
 }

@@ -373,7 +373,7 @@ void kciTextEditor::insertTab(QTextCursor cursor, int count)
 void kciTextEditor::removeTab(QTextCursor cursor, int count)
 {
     cursor.clearSelection();
-    while(count--)
+    while(count-- && !cursor.atBlockStart())
     {
         if(configureInstance->usingBlankInsteadTab())
         {
