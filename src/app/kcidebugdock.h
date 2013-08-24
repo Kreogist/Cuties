@@ -35,40 +35,21 @@ private slots:
 
 private:
     QToolButton *tblStartDebug, *tblStopDebug, *tblRunToCursor,
-                *tblNextStep, *tblNextLine, *tblIntoInstruction,
-                *tblNextInstruction, *tblSkipInstruction, *tblContinue;
-
-    QToolBar *DebugToolBar;
-    QToolButton *tblAddWatch, *tblEditWatch,* tblRemoveWatch;
+                *tblNextLine, *tblIntoLine, *tblNextInstruction,
+                *tblIntoInstruction, *tblContinue, *tblSkipFunction;
 
     kciPlainTextBrowser *GDBInfo;
     //Main Widget Layout.
-    QVBoxLayout *MainWidgetLayout;
-    QHBoxLayout *MainShownLayout;
+    QHBoxLayout *MainWidgetLayout;
 
     //Control Panel Layout.
-    QVBoxLayout *ControlPanel1, *ControlPanel2;
-    QHBoxLayout *ControlPanelM;
-
-    //Stack View.
-    QVBoxLayout *stackMain;
-    QLabel *lblStackView;
-    QTreeView *trevwStackView;
-
-    //Combine.
-    QVBoxLayout *CombinePanelStack;
+    QToolBar *DebugToolBar;
+    QVBoxLayout *ControlPanel;
 
     //GDB Layout.
     QHBoxLayout *InputToGDB;
     QVBoxLayout *GDBMainLayout;
     QComboBox *GDBCmd;
-
-    //Watch Layout.
-    QVBoxLayout *WatchLayout;
-    QLabel *lblLocalWatch;
-    QTreeView *localWatchView;
-    QLabel *lblWatch;
-    QTreeView *watchView;
 
     kciDebugDock *m_parent;
     gdb *gdbInstance;
@@ -76,7 +57,7 @@ private:
     connectionHandler connectionHandles;
 
     void createToolBar();
-    void createControlButtons();
+    void createControlPanel();
     void createStackView();
     void createGDBConversation();
     void createWatchLayout();

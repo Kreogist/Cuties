@@ -22,12 +22,13 @@
 kciTextBlockData::kciTextBlockData()
 {
     searchCode=0;
+    codeLevel=0;
     resetForSearch();
 }
 
 void kciTextBlockData::resetForSearch()
 {
-    isChanged=false;
+    needSearchAgain=false;
     matchedTextPositions.clear();
     matchedInfo gmin,gmax;
     gmin.pos=INT_MIN;
@@ -71,20 +72,20 @@ void kciTextBlockData::insertMatchedTextPositions(const int& pos,
 
 bool kciTextBlockData::isSearched(const unsigned long long &searchCodeNow)
 {
-    return (searchCodeNow==searchCode) && (!isChanged);
+    return (searchCodeNow==searchCode) && (!needSearchAgain);
 }
 
 void kciTextBlockData::onBlockChanged()
 {
-    isChanged=true;
+    needSearchAgain=true;
 }
 
-void kciTextBlockData::beginUsingDatas()
+void kciTextBlockData::beginUsingSearchDatas()
 {
     mutex.lock();
 }
 
-void kciTextBlockData::endUsingDatas()
+void kciTextBlockData::endUsingSearchDatas()
 {
     mutex.unlock();
 }
@@ -94,3 +95,45 @@ bool kciTextBlockData::hasMatched()
     return matchedTextPositions.size()>2;
 }
 
+void kciTextBlockData::resetParentheseInfos()
+{
+    parenthesesInfos.clear();
+}
+
+void kciTextBlockData::insertParenthesesInfo(const int &pos,
+                                             const char &character)
+{
+    auto i=parenthesesInfos.begin(),
+         l=parenthesesInfos.end();
+    while(i<l)
+    {
+        if(i->pos > pos)
+            break;
+        i++;
+    }
+
+    parenthesesInfo info;
+    info.pos=pos;
+    info.character=character;
+    parenthesesInfos.insert(i,info);
+}
+
+QList<parenthesesInfo>::iterator kciTextBlockData::getFirstParenthesesInfo()
+{
+    return parenthesesInfos.begin();
+}
+
+QList<parenthesesInfo>::iterator kciTextBlockData::getEndParenthesesInfo()
+{
+    return parenthesesInfos.end();
+}
+
+void kciTextBlockData::setCodeLevel(const int &level)
+{
+    codeLevel=level;
+}
+
+int kciTextBlockData::getCodeLevel() const
+{
+    return codeLevel;
+}

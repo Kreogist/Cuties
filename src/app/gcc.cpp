@@ -19,20 +19,11 @@
 
 #include "gcc.h"
 
-#ifdef Q_OS_UNIX
-QString gcc::gccPath="/usr/bin/gcc";
-QString gcc::gppPath="/usr/bin/g++";
-#endif
-
-#ifdef Q_OS_WIN
-QString gcc::gccPath="C:/MinGW/bin/gcc.exe";
-QString gcc::gppPath="C:/MinGW/bin/g++.exe";
-#endif
-
 gcc::gcc(QObject *parent) :
     compilerBase(parent)
 {
     isCompileCpp=true;
+    instance=kciCompilerConfigure::getInstance();
 }
 
 QStringList gcc::getVersionArg()
@@ -52,7 +43,7 @@ QStringList gcc::getCompileArg(const QString &filePath)
     else
         isCompileCpp=true;
 
-    arg<<filePath<<"-lm"<<"-g"<<"-Wall"<<"-static";
+    arg<<filePath<<"-lm"<<"-ggdb"<<"-Wall"<<"-static";
 
     QString programName;
 
@@ -83,15 +74,10 @@ QStringList gcc::getcompileEnv()
     QStringList env;
 
 #ifdef Q_OS_WIN
-    env<<gccPath;
+    env<<this->path();
 #endif
 
     return env;
-}
-
-void gcc::setCompilerPath(const QString &path)
-{
-    gccPath=path;
 }
 
 void gcc::parseLine(const QString &text)

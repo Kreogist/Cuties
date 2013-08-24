@@ -11,16 +11,16 @@ class kciSettingListItemLineText : public kciSettingListItemBase
     Q_OBJECT
 public:
     explicit kciSettingListItemLineText(QWidget *parent = 0);
-    void setTextValue(const QString& NewTextValue);
-    QString getTextValue();
+    void setValue(const QString& NewTextValue);
+    QString getValue();
 
 protected:
     void mousePressEvent(QMouseEvent *e);
 
 private:
-    QLineEdit *ValueEditor;
     QHBoxLayout *MainLayout;
     QLabel *ValueDisplayer;
+    QLineEdit *ValueEditor;
     QString ItemValue;
 };
 

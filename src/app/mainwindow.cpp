@@ -160,6 +160,11 @@ void MainWindow::createActions()
     actStatusTips[mnuEditPreference]=QString(tr("Customize your Cuties."));
     connect(act[mnuEditPreference],SIGNAL(triggered()),this,SLOT(showPreference()));
 
+    /*//View -> Sidebar
+    act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
+    actStatusTips[mnuViewSidebar]=QString(tr("Show or hide the Sidebar."));
+    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));*/
+
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
     actStatusTips[mnuViewCompileDock]=QString(tr("Show or hide the Compile Dock."));
@@ -169,6 +174,11 @@ void MainWindow::createActions()
     act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
     actStatusTips[mnuViewDebugDock]=QString(tr("Show or hide the Debug Dock."));
     connect(act[mnuViewDebugDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugDock()));
+
+    //View -> Debug Watch Dock
+    act[mnuViewDebugWatchDock]=new QAction(tr("Debug Watch Dock"),this);
+    actStatusTips[mnuViewDebugWatchDock]=QString(tr("Show or hide the Debug Watch Dock."));
+    connect(act[mnuViewDebugWatchDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugWatchDock()));
 
     //View -> Judge Dock
     /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
@@ -333,7 +343,7 @@ void MainWindow::createActions()
 
 void MainWindow::aboutKCI()
 {
-    QMessageBox::about(this,tr("about"),
+    QMessageBox::about(this,tr("About Cuties"),
                        tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
 }
 
@@ -365,7 +375,7 @@ void MainWindow::createToolBar()
     strIconPath[tlbUndo]=":/ToolBar/image/ToolBar/undo.png";
     strIconPath[tlbRedo]=":/ToolBar/image/ToolBar/redo.png";
     strIconPath[tlbSearch]=":/ToolBar/image/ToolBar/search.png";
-    strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compile&run.png";
+    strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compileandrun.png";
 
     //Set Other Buttons.
     for(int i=tlbNewFile;i<tlbbutton_count;i++)
@@ -397,6 +407,10 @@ void MainWindow::createToolBar()
             tabManager,SLOT(undo()));
     connect(tblMainButton[tlbRedo],SIGNAL(clicked()),
             tabManager,SLOT(redo()));
+    connect(tblMainButton[tlbSearch],SIGNAL(clicked()),
+            tabManager,SLOT(showSearchBar()));
+    connect(tblMainButton[tlbCompileAndRun],SIGNAL(clicked()),
+            this,SLOT(compileAndRun()));
 
 }
 
@@ -427,6 +441,16 @@ void MainWindow::createDocks()
     connect(debugDock,SIGNAL(requireStartDebug()),
             this,SLOT(startDebug()));
     debugDock->hide();
+
+    //Debug Watch Dock
+    debugWatchDock=new kciDebugWatchDock(this);
+    addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
+    debugWatchDock->hide();
+/*
+    //Sidebar Dock
+    sidebarDock=new kciSideBar(this);
+    addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
+*/
 }
 
 void MainWindow::createMenu()
@@ -495,7 +519,7 @@ void MainWindow::createMenu()
     //Create View Menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=mnuViewCompileDock;i<=mnuViewDebugDock/*mnuViewJudgeDock*/;i++)
+    for(i=/*mnuViewSidebar*/mnuViewCompileDock;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -644,7 +668,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     }
 
     //View Menu
-    for(i=mnuViewCompileDock;i<=mnuViewDebugDock;i++)
+    for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
@@ -701,7 +725,7 @@ void MainWindow::setDocOpenMenuEnabled()
 
 void MainWindow::restoreSettings()
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
 
@@ -754,7 +778,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::saveSettings()
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     if(!(this->isMaximized() || this->isFullScreen()))
     {
@@ -872,6 +896,11 @@ void MainWindow::searchOnline()
     QDesktopServices::openUrl(QUrl(strURL));
 }
 
+void MainWindow::diffVisibleSidebar()
+{
+    sidebarDock->setVisible(!sidebarDock->isVisible());
+}
+
 void MainWindow::diffVisibleCompileDock()
 {
     compileDock->setVisible(!compileDock->isVisible());
@@ -880,6 +909,11 @@ void MainWindow::diffVisibleCompileDock()
 void MainWindow::diffVisibleDebugDock()
 {
     debugDock->setVisible(!debugDock->isVisible());
+}
+
+void MainWindow::diffVisibleDebugWatchDock()
+{
+    debugWatchDock->setVisible(!debugWatchDock->isVisible());
 }
 
 void MainWindow::diffVisibleJudgeDock()

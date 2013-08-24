@@ -52,7 +52,7 @@ static const Terminal knownTerminals[terminalCount] =
 
 Terminal kciRunner::getDefaultTerminal()
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
     settings.beginGroup("DefaultTerminal");
     Terminal ret(
                 settings.value("name", knownTerminals[0].terminal_name).toByteArray().constData(),
@@ -74,7 +74,7 @@ void kciExecutor::setDefaultTerminal(const int& num)
 {
     if(Q_LIKELY(num<terminalCount))
     {
-        QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+        QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
         settings.beginGroup("DefaultTerminal");
         settings.setValue("name",knownTerminals[num].terminal_name);
         settings.value("arg",knownTerminals[num].arg);

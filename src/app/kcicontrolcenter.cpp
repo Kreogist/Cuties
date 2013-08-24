@@ -187,9 +187,28 @@ void kciControlCenterLeftBar::lstClick(int Index)
 /********************************************/
 /*          Contorl Center Contents         */
 /********************************************/
-//---------------Gerneral------------------------
-kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+kciAbstractCCTabContent::kciAbstractCCTabContent(QWidget *parent):
     QWidget(parent)
+{
+
+}
+//---------------Gerneral------------------------
+static int QStringToValue(const QString& text)
+{
+    if(text=="cpp")
+    {
+        return 1;
+    }
+    if(text=="pas")
+    {
+        return 2;
+    }
+
+    return 0;
+}
+
+kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -220,25 +239,37 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     sboDefaultLanguage->addListItem(tr("Plain Text"));
     sboDefaultLanguage->addListItem(tr("C/C++"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
-    sboDefaultLanguage->setCurrentItemIndex(2);
+    sboDefaultLanguage->setValue(QStringToValue(kciGeneralConfigure::getInstance()->getDefaultLanguageMode()));
     MainLayout->addWidget(sboDefaultLanguage);
+}
 
-    sboDefaultEncode=new kciSettingListItemCombo(this);
-    sboDefaultEncode->Caption->setText(tr("Default Encoder:"));
-    sboDefaultEncode->addListItem(tr("Unicode"));
-    sboDefaultEncode->addListItem(tr("ANSI"));
-    sboDefaultEncode->addListItem(tr("UTF-8"));
-    MainLayout->addWidget(sboDefaultEncode);
-
-    slnEnableAnime=new kciSettingListItemBoolean(this);
-    slnEnableAnime->setEnabledText(tr("Enabled Animation Effect."));
-    slnEnableAnime->setDisabledText(tr("Disabled Animation Effect."));
-    MainLayout->addWidget(slnEnableAnime);
+void kciCCTabGerneralContent::apply()
+{
+    switch(sboDefaultLanguage->getValue())
+    {
+    case 0:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("plainText");
+        break;
+    }
+    case 1:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("cpp");
+        break;
+    }
+    case 2:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("pas");
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 //--------------------Editor------------------
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -257,29 +288,124 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     setLayout(MainLayout);
 
     //Title Label.
-    QLabel *tblLanguage=new QLabel(this);
-    tblLanguage->setText(" " + tr("Editor Component"));
-    tblLanguage->setFont(TitleFont);
-    tblLanguage->setFixedHeight(30);
+    QLabel *tblCompilerPath=new QLabel(this);
+    tblCompilerPath->setText(" " + tr("Editor Option"));
+    tblCompilerPath->setFont(TitleFont);
+    tblCompilerPath->setFixedHeight(30);
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(tblLanguage);
+    MainLayout->addWidget(tblCompilerPath);
 
-    //Set Line Text.
-    slnEnableLineNum=new kciSettingListItemBoolean(this);
-    slnEnableLineNum->setEnabledText(tr("Enabled Line Number Panel."));
-    slnEnableLineNum->setDisabledText(tr("Disabled Line Number Panel."));
-    MainLayout->addWidget(slnEnableLineNum);
+    tabSpaceNum=new kciSettingListItemNumInput(this);
+    tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
+    tabSpaceNum->setValue(4);
+    MainLayout->addWidget(tabSpaceNum);
+}
 
-    //Text Edit Test.
-    txeCCompilerPath=new kciSettingListItemLineText(this);
-    txeCCompilerPath->Caption->setText(tr("g++/gcc Path:"));
-    txeCCompilerPath->setTextValue("C:/MinGW/bin/g++.exe");
-    MainLayout->addWidget(txeCCompilerPath);
+//-----------------Compiler----------------
+kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
+    kciAbstractCCTabContent(parent)
+{
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
+    QFont TitleFont=this->font();
+    TitleFont.setPixelSize(20);
+
+    //Set Layout.
+    MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
+
+    //Title Label.
+    QLabel *tblCompilerPath=new QLabel(this);
+    tblCompilerPath->setText(" " + tr("Compiler Path"));
+    tblCompilerPath->setFont(TitleFont);
+    tblCompilerPath->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblCompilerPath);
+
+    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+
+    txeGppCompilerPath=new kciSettingListItemBrowseText(this);
+    txeGppCompilerPath->Caption->setText(tr("G++ Compiler Path:"));
+    txeGppCompilerPath->setValue(instance->getGppPath());
+    MainLayout->addWidget(txeGppCompilerPath);
+
+    txeGccCompilerPath=new kciSettingListItemBrowseText(this);
+    txeGccCompilerPath->Caption->setText(tr("GCC Compiler Path:"));
+    txeGccCompilerPath->setValue(instance->getGccPath());
+    MainLayout->addWidget(txeGccCompilerPath);
+
+    txeFpcCompilerPath=new kciSettingListItemBrowseText(this);
+    txeFpcCompilerPath->Caption->setText(tr("FPC Compiler Path:"));
+    txeFpcCompilerPath->setValue(instance->getFpcPath());
+    MainLayout->addWidget(txeFpcCompilerPath);
+}
+
+void kciCCTabCompilerContent::apply()
+{
+    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+    instance->setGccPath(txeGccCompilerPath->getValue());
+    instance->setGppPath(txeGppCompilerPath->getValue());
+    instance->setFpcPath(txeFpcCompilerPath->getValue());
+}
+
+//-----------------Debugger-----------------
+kciCCTabDebuggerContent::kciCCTabDebuggerContent(QWidget *parent) :
+    kciAbstractCCTabContent(parent)
+{
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
+    QFont TitleFont=this->font();
+    TitleFont.setPixelSize(20);
+
+    //Set Layout.
+    MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
+
+    //Title Label.
+    QLabel *tblGDBSettings=new QLabel(this);
+    tblGDBSettings->setText(" " + tr("GDB Settings"));
+    tblGDBSettings->setFont(TitleFont);
+    tblGDBSettings->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblGDBSettings);
+
+    txeGDBDebuggerPath=new kciSettingListItemBrowseText(this);
+    txeGDBDebuggerPath->Caption->setText(tr("GDB Path:"));
+    MainLayout->addWidget(txeGDBDebuggerPath);
+
+}
+
+//-----------------File Association-----------
+kciCCTabFileAssociationContent::kciCCTabFileAssociationContent(QWidget *parent) :
+    kciAbstractCCTabContent(parent)
+{
+    ;
+}
+
+//-----------------Language-------------------
+kciCCTabLanguageContent::kciCCTabLanguageContent(QWidget *parent) :
+    kciAbstractCCTabContent(parent)
+{
+    ;
 }
 
 //------------------Container----------------------
 kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -323,10 +449,10 @@ kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
 {
     contentWidgets[cclstGerneral]=new kciCCTabGerneralContent(this);
     contentWidgets[cclstEditor]=new kciCCTabEditorContent(this);
-    contentWidgets[cclstCompiler]=new QWidget(this);
-    contentWidgets[cclstDebugger]=new QWidget(this);
-    contentWidgets[cclstFileAssociation]=new QWidget(this);
-    contentWidgets[cclstLanguage]=new QWidget(this);
+    contentWidgets[cclstCompiler]=new kciCCTabCompilerContent(this);
+    contentWidgets[cclstDebugger]=new kciCCTabDebuggerContent(this);
+    contentWidgets[cclstFileAssociation]=new kciCCTabFileAssociationContent(this);
+    contentWidgets[cclstLanguage]=new kciCCTabLanguageContent(this);
 
     ccTab[cclstGerneral]=new kciControlCenterTab(contentWidgets[cclstGerneral], this);
     ccTab[cclstEditor]=new kciControlCenterTab(contentWidgets[cclstEditor], this);
@@ -338,9 +464,14 @@ kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     contentIndex=ccTab[cclstGerneral];
 }
 
-QWidget *kciControlCenterContents::getCCTab(const int &Index)
+QWidget *kciControlCenterContents::getCCTab(const int& index)
 {
-    return ccTab[Index];
+    return ccTab[index];
+}
+
+kciAbstractCCTabContent* kciControlCenterContents::getContentWidgets(const int& index)
+{
+    return contentWidgets[index];
 }
 
 void kciControlCenterContents::animeToIndex(QWidget *Index)
@@ -414,6 +545,10 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     connect(btCancel, SIGNAL(clicked()),
             this, SLOT(close()));
     btApply->setText(tr("Apply"));
+    connect(btApply,SIGNAL(clicked()),
+            this,SLOT(onApply()));
+    connect(btYes,SIGNAL(clicked()),
+            this,SLOT(onYes()));
 
     BottomButton->addStretch();
     BottomButton->addWidget(btYes);
@@ -422,4 +557,18 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     BottomButton->addSpacing(3);
     BottomButton->addWidget(btApply);
     WholeTitleBarSplit->addLayout(BottomButton);
+}
+
+void kciControlCenter::onApply()
+{
+    for(int i=cclstGerneral; i<cclist_count;i++)
+    {
+        CCMainContents->getContentWidgets(i)->apply();
+    }
+}
+
+void kciControlCenter::onYes()
+{
+    onApply();
+    close();
 }

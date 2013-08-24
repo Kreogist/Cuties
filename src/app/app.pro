@@ -65,13 +65,24 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemlinetext.cpp \
     dbgoutputreceiver.cpp \
     connectionhandler.cpp \
-    Controls/SettingItems/kcisettinglistitemfoldertext.cpp \
     kciplaintextbrowser.cpp \
     kcimessagebox.cpp \
     kcidragproxy.cpp \
     kciclipboard.cpp \
+    kcidebugwatchdock.cpp \
     kcitextblockdata.cpp \
-    kcihighlighter.cpp
+    kcihighlighter.cpp \
+    kcisidebar.cpp \
+    Controls/SettingItems/kcisettinglistitembrowsetext.cpp \
+    Controls/SettingItems/kcisettinglistitemlanguageitem.cpp \
+    kcigeneralconfigure.cpp \
+    kcieditorconfigure.cpp \
+    kcicompilerconfigure.cpp \
+    kcidebuggerconfigure.cpp \
+    kcilanguageconfigure.cpp \
+    kcifileassociation.cpp \
+    kciconfigure.cpp \
+    Controls/SettingItems/kcisettinglistitemnuminput.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -113,13 +124,24 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemlinetext.h \
     dbgoutputreceiver.h \
     connectionhandler.h \
-    Controls/SettingItems/kcisettinglistitemfoldertext.h \
     kciplaintextbrowser.h \
     kcimessagebox.h \
     kcidragproxy.h \
     kciclipboard.h \
+    kcidebugwatchdock.h \
     kcitextblockdata.h \
-    kcihighlighter.h
+    kcihighlighter.h \
+    kcisidebar.h \
+    Controls/SettingItems/kcisettinglistitembrowsetext.h \
+    Controls/SettingItems/kcisettinglistitemlanguageitem.h \
+    kciconfigure.h \
+    kcigeneralconfigure.h \
+    kcieditorconfigure.h \
+    kcicompilerconfigure.h \
+    kcidebuggerconfigure.h \
+    kcilanguageconfigure.h \
+    kcifileassociation.h \
+    Controls/SettingItems/kcisettinglistitemnuminput.h
 
 # Enable C++11
 CONFIG += c++11

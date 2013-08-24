@@ -152,7 +152,7 @@ bool kciCodeEditor::save()
     }
     else
     {
-        if(!dosaveas(tr("save")))
+        if(!dosaveas(tr("Save")))
         {
             if(fileError!=QFileDevice::AbortError)
             {
@@ -171,7 +171,7 @@ bool kciCodeEditor::save()
 
 bool kciCodeEditor::saveAs()
 {
-    if(!dosaveas(tr("save as")))
+    if(!dosaveas(tr("Save As")))
     {
         if(fileError!=QFileDevice::AbortError)
         {
@@ -189,7 +189,8 @@ bool kciCodeEditor::saveAs()
 
 bool kciCodeEditor::dosaveas(const QString &Caption)
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),
+                       QSettings::IniFormat);
     filePath=QFileDialog::getSaveFileName(this,Caption,settings.value("texteditor/historyDir").toString(),strFileFilter);
 
     if(!filePath.isEmpty())
@@ -401,7 +402,8 @@ void kciCodeEditor::fileInfoChanged(const QFile &file)
 
     computeExecFileName();
 
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),
+                       QSettings::IniFormat);
     settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
 }
 

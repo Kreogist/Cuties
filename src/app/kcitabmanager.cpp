@@ -97,7 +97,7 @@ void kciTabManager::openAndJumpTo(const QString &filePath)
 
 void kciTabManager::open()
 {
-    QSettings settings(kciGlobal::settingsFileName,QSettings::IniFormat);
+    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
     QStringList file_name_list=QFileDialog::getOpenFileNames(this,
                                                              tr("Open File"),
                                                              settings.value("files/historyDir").toString(),

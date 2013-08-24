@@ -46,7 +46,12 @@
 #include "Controls/SettingItems/kcisettinglistitemcombo.h"
 #include "Controls/SettingItems/kcisettinglistitemboolean.h"
 #include "Controls/SettingItems/kcisettinglistitemlinetext.h"
+#include "Controls/SettingItems/kcisettinglistitembrowsetext.h"
+#include "Controls/SettingItems/kcisettinglistitemnuminput.h"
 #include "kcilistbutton.h"
+
+#include "kcigeneralconfigure.h"
+#include "kcicompilerconfigure.h"
 
 enum kciCCLists
 {
@@ -113,21 +118,27 @@ private:
 
 //----------------------------Contents Widget-----------------------
 
+class kciAbstractCCTabContent : public QWidget
+{
+public:
+    explicit kciAbstractCCTabContent(QWidget *parent = 0);
+    virtual void apply() {}
+};
+
 //-------------Gerneral-----------------
-class kciCCTabGerneralContent : public QWidget
+class kciCCTabGerneralContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
     explicit kciCCTabGerneralContent(QWidget *parent = 0);
+    void apply();
 
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
-    kciSettingListItemCombo *sboDefaultEncode;
-    kciSettingListItemBoolean *slnEnableAnime;
 };
 //------------------Editor---------------
-class kciCCTabEditorContent : public QWidget
+class kciCCTabEditorContent : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
@@ -135,11 +146,56 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
-    kciSettingListItemBoolean *slnEnableLineNum;
-    kciSettingListItemLineText *txeCCompilerPath;
+    kciSettingListItemNumInput *tabSpaceNum;
 };
+//------------------Compiler--------------
+class kciCCTabCompilerContent : public kciAbstractCCTabContent
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabCompilerContent(QWidget *parent = 0);
+    void apply();
+
+private:
+    QVBoxLayout *MainLayout;
+    kciSettingListItemBrowseText *txeGppCompilerPath;
+    kciSettingListItemBrowseText *txeGccCompilerPath;
+    kciSettingListItemBrowseText *txeFpcCompilerPath;
+};
+//-----------------Debugger-----------------
+class kciCCTabDebuggerContent : public kciAbstractCCTabContent
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabDebuggerContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+    kciSettingListItemBrowseText *txeGDBDebuggerPath;
+};
+//---------------File Association-------------
+class kciCCTabFileAssociationContent : public kciAbstractCCTabContent
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabFileAssociationContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+};
+//--------------Language-------------------
+class kciCCTabLanguageContent : public kciAbstractCCTabContent
+{
+    Q_OBJECT
+public:
+    explicit kciCCTabLanguageContent(QWidget *parent = 0);
+
+private:
+    QVBoxLayout *MainLayout;
+};
+
 //-------------------Container--------------------
-class kciControlCenterTab : public QWidget
+class kciControlCenterTab : public kciAbstractCCTabContent
 {
     Q_OBJECT
 public:
@@ -157,12 +213,14 @@ private:
 /********************************************************/
 /*                  Main Control Center                 */
 /********************************************************/
+
 class kciControlCenterContents : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciControlCenterContents(QWidget *parent = 0);
-    QWidget *getCCTab(const int& Index);
+    QWidget *getCCTab(const int& index);
+    kciAbstractCCTabContent* getContentWidgets(const int& index);
 
 public slots:
     void animeToIndex(QWidget *Index);
@@ -174,7 +232,7 @@ private:
     QParallelAnimationGroup *tabModeAnime;
 
     kciControlCenterTab *ccTab[cclist_count];
-    QWidget *contentWidgets[cclist_count];
+    kciAbstractCCTabContent *contentWidgets[cclist_count];
 
     QWidget *contentIndex;
 };
@@ -187,6 +245,8 @@ public:
 signals:
     
 public slots:
+    void onApply();
+    void onYes();
 
 private slots:
 

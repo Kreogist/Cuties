@@ -44,9 +44,11 @@
 #endif
 
 #include "kciglobal.h"
+#include "kcisidebar.h"
 #include "kcicompiledock.h"
 #include "kcijudgedock.h"
 #include "kcidebugdock.h"
+#include "kcidebugwatchdock.h"
 #include "kcititlebar.h"
 #include "kcistatusbar.h"
 #include "kcitabmanager.h"
@@ -73,9 +75,11 @@ public slots:
     void run();
     void compileAndRun();
     void searchOnline();
+    void diffVisibleSidebar();
     void diffVisibleCompileDock();
     void diffVisibleDebugDock();
     void diffVisibleJudgeDock();
+    void diffVisibleDebugWatchDock();
     void statusShowGoto();
 
     void setNoDocOpenMenuEnabled();
@@ -112,8 +116,10 @@ private:
         mnuEditPaste,
         mnuEditSelectAll,
         mnuEditPreference,
+        //mnuViewSidebar,
         mnuViewCompileDock,
         mnuViewDebugDock,
+        mnuViewDebugWatchDock,
         //mnuViewJudgeDock,
         mnuSearchFind,
         mnuSearchFindInFiles,
@@ -186,8 +192,10 @@ private:
     QMenu *menu[menu_count];
     QString actStatusTips[act_count], actMenuIconPath[act_count];
     QToolButton *tblMainButton[tlbbutton_count];
+    kciSideBar *sidebarDock;
     kcicompiledock *compileDock;
     kciDebugDock *debugDock;
+    kciDebugWatchDock *debugWatchDock;
     kciJudgeDock *judgeDock;
     kciTitleBar *titlebar;
     kciStatusBar *myStatusBar;
