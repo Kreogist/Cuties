@@ -51,6 +51,9 @@ public:
 signals:
     
 public slots:
+#ifdef Q_OS_MACX
+    void setFullScreen();
+#endif
 
 private:
 

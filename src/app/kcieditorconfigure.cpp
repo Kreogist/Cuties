@@ -15,12 +15,18 @@ kciEditorConfigure* kciEditorConfigure::getInstance()
 
 void kciEditorConfigure::readConfigure()
 {
-
+    QSettings settings(getCfgFileName(), QSettings::IniFormat);
+    settings.beginGroup("Editor");
+    tabWidth=settings.value("TabWidth",tabWidth).toInt();
+    settings.endGroup();
 }
 
 void kciEditorConfigure::writeConfigure()
 {
-
+    QSettings settings(getCfgFileName(), QSettings::IniFormat);
+    settings.beginGroup("Editor");
+    settings.setValue("TabWidth",tabWidth);
+    settings.endGroup();
 }
 
 bool kciEditorConfigure::usingBlankInsteadTab() const

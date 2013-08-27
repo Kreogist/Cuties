@@ -289,7 +289,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     //Title Label.
     QLabel *tblCompilerPath=new QLabel(this);
-    tblCompilerPath->setText(" " + tr("Editor Option"));
+    tblCompilerPath->setText(" " + tr("View Option"));
     tblCompilerPath->setFont(TitleFont);
     tblCompilerPath->setFixedHeight(30);
     MainLayout->addSpacing(5);
@@ -299,6 +299,24 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
     tabSpaceNum->setValue(4);
     MainLayout->addWidget(tabSpaceNum);
+
+    wrapMode=new kciSettingListItemCombo(this);
+    wrapMode->Caption->setText(tr("Word Wrap Mode:"));
+    wrapMode->addListItem(tr("No Word Wrap"));
+    wrapMode->addListItem(tr("Wrap At Any Point."));
+    wrapMode->addListItem(tr("Wrap At Word Boundary Or Anywhere."));
+    MainLayout->addWidget(wrapMode);
+
+    cursorWidth=new kciSettingListItemNumInput(this);
+    cursorWidth->Caption->setText(tr("Cursor Width:"));
+    cursorWidth->setValue(1);
+    MainLayout->addWidget(cursorWidth);
+}
+
+void kciCCTabEditorContent::apply()
+{
+    kciEditorConfigure* instance=kciEditorConfigure::getInstance();
+    instance->setTabWidth(tabSpaceNum->getValue());
 }
 
 //-----------------Compiler----------------

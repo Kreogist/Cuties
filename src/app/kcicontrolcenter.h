@@ -51,6 +51,7 @@
 #include "kcilistbutton.h"
 
 #include "kcigeneralconfigure.h"
+#include "kcieditorconfigure.h"
 #include "kcicompilerconfigure.h"
 
 enum kciCCLists
@@ -143,10 +144,13 @@ class kciCCTabEditorContent : public kciAbstractCCTabContent
     Q_OBJECT
 public:
     explicit kciCCTabEditorContent(QWidget *parent = 0);
+    void apply();
 
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemNumInput *tabSpaceNum;
+    kciSettingListItemCombo *wrapMode;
+    kciSettingListItemNumInput *cursorWidth;
 };
 //------------------Compiler--------------
 class kciCCTabCompilerContent : public kciAbstractCCTabContent

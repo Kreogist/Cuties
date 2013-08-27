@@ -107,6 +107,7 @@ void MainWindow::createActions()
     //File -> Exit
     act[mnuFileExit]=new QAction(tr("E&xit"),this);
     act[mnuFileExit]->setShortcut(QKeySequence(Qt::ALT+Qt::Key_F4));
+    act[mnuFileExit]->setMenuRole(QAction::QuitRole);
     actMenuIconPath[mnuFileExit]=QString(":/menuicon/image/MenuIcons/mnuFileExit.png");
     actStatusTips[mnuFileExit]=QString(tr("Quit applications; prompts to save documents."));
     connect(act[mnuFileExit],SIGNAL(triggered()),this,SLOT(close()));
@@ -153,12 +154,13 @@ void MainWindow::createActions()
     actStatusTips[mnuEditSelectAll]=QString(tr("Select the entire document."));
     connect(act[mnuEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(select_all()));
 
-    //Edit -> Preference
-    act[mnuEditPreference]=new QAction(tr("Pr&eference"),this);
-    act[mnuEditPreference]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
-    actMenuIconPath[mnuEditPreference]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
-    actStatusTips[mnuEditPreference]=QString(tr("Customize your Cuties."));
-    connect(act[mnuEditPreference],SIGNAL(triggered()),this,SLOT(showPreference()));
+    //Edit -> Preferences
+    act[mnuEditPreferences]=new QAction(tr("Preferences"),this);
+    act[mnuEditPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
+    act[mnuEditPreferences]->setMenuRole(QAction::PreferencesRole);
+    actMenuIconPath[mnuEditPreferences]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
+    actStatusTips[mnuEditPreferences]=QString(tr("Customize your Cuties."));
+    connect(act[mnuEditPreferences],SIGNAL(triggered()),this,SLOT(showPreference()));
 
     /*//View -> Sidebar
     act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
@@ -184,6 +186,12 @@ void MainWindow::createActions()
     /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
     connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));*/
+
+    //View -> Show Fullscreen
+    act[mnuViewShowFullscreen]=new QAction(tr("Show Fullscreen"), this);
+    actStatusTips[mnuViewShowFullscreen]=QString(tr("Show or hide fullscreen mode of Cuties."));
+    connect(act[mnuViewShowFullscreen], SIGNAL(triggered()),
+            this, SLOT(showFullScreen()));
 
     //Search -> Search
     act[mnuSearchFind]=new QAction(tr("&Find"),this);
@@ -332,6 +340,7 @@ void MainWindow::createActions()
 
     //Help -> About
     act[mnuHelpAbout]=new QAction(tr("&About..."),this);
+    act[mnuHelpAbout]->setMenuRole(QAction::AboutRole);
     actStatusTips[mnuHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
     connect(act[mnuHelpAbout],SIGNAL(triggered()),this,SLOT(aboutKCI()));
 
@@ -458,7 +467,7 @@ void MainWindow::createMenu()
     int i;
 
 #ifdef Q_OS_MACX
-    QMenuBar *_mainMenu=new QMenuBar();
+    QMenuBar *_mainMenu=new QMenuBar(0);
 #else
     QMenu *_mainMenu=new QMenu(this);
 #endif
@@ -498,7 +507,7 @@ void MainWindow::createMenu()
     //Create Edit Menu
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
     menu[mnuEdit]->setIcon(*MenuIconAddor);
-    for(i=mnuEditUndo;i<=mnuEditPreference;i++)
+    for(i=mnuEditUndo;i<=mnuEditPreferences;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -509,7 +518,6 @@ void MainWindow::createMenu()
         {
         case mnuEditRedo:
         case mnuEditPaste:
-        case mnuEditSelectAll:
             menu[mnuEdit]->addSeparator();
             break;
         }
@@ -519,7 +527,7 @@ void MainWindow::createMenu()
     //Create View Menu
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=/*mnuViewSidebar*/mnuViewCompileDock;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
+    for(i=/*mnuViewSidebar*/mnuViewCompileDock;i<mnuViewEnd;i++)
     {
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
@@ -666,6 +674,10 @@ void MainWindow::setDocOpenMenuState(bool state)
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }
+#ifdef Q_OS_MACX
+    menu[mnuEdit]->menuAction()->setEnabled(state);
+    menu[mnuEdit]->menuAction()->setVisible(state);
+#endif
 
     //View Menu
     for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)

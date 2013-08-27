@@ -115,12 +115,16 @@ private:
         mnuEditCopy,
         mnuEditPaste,
         mnuEditSelectAll,
-        mnuEditPreference,
+        mnuEditPreferences,
         //mnuViewSidebar,
         mnuViewCompileDock,
         mnuViewDebugDock,
         mnuViewDebugWatchDock,
         //mnuViewJudgeDock,
+#ifdef Q_OS_MACX
+        mnuViewShowFullscreen,
+#endif
+        mnuViewEnd,
         mnuSearchFind,
         mnuSearchFindInFiles,
         mnuSearchReplace,

@@ -38,8 +38,15 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
             this,SLOT(insertPlainText(QString)));
 
-    //Set TextEditor Properties.
+    //Set Customize TextEditor Properties.
+    //Set Tab Width.
     setTabStopWidth(fontMetrics().width(' ')*tabWidth);
+    //Set WordWarp Mode.
+    setWordWrapMode(QTextOption::NoWrap);
+    //Set Cursor Width.
+    setCursorWidth(1);
+    //Set OverWrite Mode.
+    setOverwriteMode(false);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
