@@ -187,11 +187,14 @@ void MainWindow::createActions()
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
     connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));*/
 
-    //View -> Show Fullscreen
-    act[mnuViewShowFullscreen]=new QAction(tr("Show Fullscreen"), this);
-    actStatusTips[mnuViewShowFullscreen]=QString(tr("Show or hide fullscreen mode of Cuties."));
-    connect(act[mnuViewShowFullscreen], SIGNAL(triggered()),
-            this, SLOT(showFullScreen()));
+#ifdef Q_OS_MACX
+    //View -> Fullscreen
+    act[mnuViewFullscreen]=new QAction(tr("Fullscreen"), this);
+    act[mnuViewFullscreen]->setShortcut(Qt::CTRL+Qt::META+Qt::Key_F);
+    actStatusTips[mnuViewFullscreen]=QString(tr("Show or hide fullscreen mode of Cuties."));
+    connect(act[mnuViewFullscreen], SIGNAL(triggered()),
+            this, SLOT(setFullScreen()));
+#endif
 
     //Search -> Search
     act[mnuSearchFind]=new QAction(tr("&Find"),this);
@@ -533,6 +536,14 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuView]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuViewDebugWatchDock:
+            menu[mnuView]->addSeparator();
+        }
+
+#endif
     }
 
     //Create Search Menu
@@ -685,8 +696,10 @@ void MainWindow::setDocOpenMenuState(bool state)
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }
+#ifndef Q_OS_MACX
     menu[mnuView]->menuAction()->setEnabled(state);
     menu[mnuView]->menuAction()->setVisible(state);
+#endif
 
     //Search Menu
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)

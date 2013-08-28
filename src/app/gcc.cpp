@@ -43,7 +43,7 @@ QStringList gcc::getCompileArg(const QString &filePath)
     else
         isCompileCpp=true;
 
-    arg<<filePath<<"-lm"<<"-ggdb"<<"-Wall"<<"-static";
+    arg<<filePath<<"-lm"<<"-ggdb"<<"-Wall";
 
     QString programName;
 
@@ -59,9 +59,10 @@ QStringList gcc::getCompileArg(const QString &filePath)
                 +fileInfo.completeBaseName();
     }
 
-#ifdef Q_OS_WIN
+#ifdef Q_OS_WIN32
     //Windows
     programName+=".exe";
+    arg<<"-static";
 #endif
 
     arg<<"-o"<<programName;
