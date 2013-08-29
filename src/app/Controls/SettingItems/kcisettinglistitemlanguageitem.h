@@ -8,11 +8,13 @@ class kciSettingListItemLanguageItem : public kciSettingListItemBase
     Q_OBJECT
 public:
     explicit kciSettingListItemLanguageItem(QWidget *parent = 0);
-    
-signals:
-    
-public slots:
-    
+
+private slots:
+
+private:
+    bool blnSel;
+    QHBoxLayout *MainLayout;
+    QLabel *lblLanguageIcon;
 };
 
 #endif // KCISETTINGLISTITEMLANGUAGEITEM_H

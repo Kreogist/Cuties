@@ -473,8 +473,8 @@ void MainWindow::createMenu()
     QMenuBar *_mainMenu=new QMenuBar(0);
 #else
     QMenu *_mainMenu=new QMenu(this);
-#endif
     QIcon *MenuIconAddor=new QIcon;
+#endif
 
     menu[mnuFile]   = _mainMenu->addMenu(tr("&File"));
     menu[mnuEdit]   = _mainMenu->addMenu(tr("&Edit"));
@@ -487,12 +487,16 @@ void MainWindow::createMenu()
     menu[mnuHelp]   = _mainMenu->addMenu(tr("&Help"));
 
     //Create File Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menu[mnuFile]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuFileNewFile;i<=mnuFileExit;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuFile]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -508,12 +512,16 @@ void MainWindow::createMenu()
     }
 
     //Create Edit Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
     menu[mnuEdit]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuEditUndo;i<=mnuEditPreferences;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuEdit]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -528,12 +536,16 @@ void MainWindow::createMenu()
     }
 
     //Create View Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
+#endif
     for(i=/*mnuViewSidebar*/mnuViewCompileDock;i<mnuViewEnd;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuView]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -547,13 +559,17 @@ void MainWindow::createMenu()
     }
 
     //Create Search Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
     menu[mnuSearch]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {
-        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setStatusTip(actStatusTips[i]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         menu[mnuSearch]->addAction(act[i]);
 #ifdef Q_OS_MACX
         switch(i)
@@ -568,12 +584,16 @@ void MainWindow::createMenu()
     }
 
     //Create Execute Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
     menu[mnuExecute]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuExecuteCompileAndRun;i<=mnuExecuteSetInputRunShowOutput;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuExecute]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -588,12 +608,16 @@ void MainWindow::createMenu()
     }
 
     //Create Debug Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
     menu[mnuDebug]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuDebug]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -610,28 +634,38 @@ void MainWindow::createMenu()
     }
 
     //Create Tool Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
     menu[mnuTools]->setIcon(*MenuIconAddor);
+#endif
 
     //Create Window Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
     menu[mnuWindow]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuWindow]->addAction(act[i]);
     }
 
     //Create Help Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
     menu[mnuHelp]->setIcon(*MenuIconAddor);
+#endif
     //from about to about_qt add into help menu
     for(i=mnuHelpAbout;i<=mnuHelpAboutQt;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuHelp]->addAction(act[i]);
     }
@@ -649,8 +683,9 @@ void MainWindow::createMenu()
             this,SLOT(setNoDocOpenMenuEnabled()));
     connect(tabManager,SIGNAL(tabClear()),
             titlebar,SLOT(hideToolBar()));
-
+#ifndef Q_OS_MACX
     delete MenuIconAddor;
+#endif
 }
 
 void MainWindow::createStatusbar()

@@ -2,7 +2,6 @@
 #define KCISETTINGLISTITEMCOMBO_H
 
 #include <QComboBox>
-#include <QHBoxLayout>
 #include "kcisettinglistitembase.h"
 
 class kciSettingListItemCombo : public kciSettingListItemBase
