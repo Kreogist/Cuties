@@ -30,8 +30,8 @@ Cuties is a cross-platform application. It is supported on a variety of 32-bit a
 
 To build the source the following must first be installed on your system:
 
-* [Qt 5.1.1][]      — to compile, link and debug the source.
-* [Github][]        - to clone our project or fork our project on Github.
+* [Qt 5.1.1][http://qt-project.org]      — to compile, link and debug the source.
+* [Github][https://github.com]        - to clone our project or fork our project on Github.
 
 You can find Qt Creator and Qt Linguist on http://qt-project.org. We suggest you to download a binary package which includes Qt libraries and Qt Creator from http://qt-project.org/downloads. 
 
@@ -41,7 +41,7 @@ You can find Github on https://help.github.com/articles/set-up-git. You can also
 
 ###Building Cuties
 
-You should install the [Qt 5.1.1][] and [Github][]. [Github][] has been well configured.
+You should install the [Qt 5.1.1][http://qt-project.org] and [Github][https://github.com]. [Github][https://github.com] has been well configured.
 
 After this you can clone our projects on either GUI or Command-Line. Here we are using Command-Line.
 
