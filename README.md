@@ -33,6 +33,9 @@ To build the source the following must first be installed on your system:
 * `Qt` — to compile, link and debug the source.
 * `Github` - to clone our project or fork our project on Github.
 
+IMPORTANT:
+You should build Cuties via Qt 5.0.1 or later version. 
+
 You can find Qt Creator and Qt Linguist on http://qt-project.org. We suggest you to download a binary package which includes Qt libraries and Qt Creator from http://qt-project.org/downloads. 
 
 We build Cuties on Windows Platform via Qt 5.1.1 for Windows 32-bit (MinGW 4.8, OpenGL, 666 MB), on Mac OS X Platform via Qt 5.1.1 for Mac (425 MB), and on Linux via Qt 5.1.1 for Linux 64-bit (415 MB).
