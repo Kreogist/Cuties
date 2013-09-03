@@ -189,7 +189,7 @@ void MainWindow::createActions()
 
 #ifdef Q_OS_MACX
     //View -> Fullscreen
-    act[mnuViewFullscreen]=new QAction(tr("Fullscreen"), this);
+    act[mnuViewFullscreen]=new QAction(tr("Enter Full Screen"), this);
     act[mnuViewFullscreen]->setShortcut(Qt::CTRL+Qt::META+Qt::Key_F);
     actStatusTips[mnuViewFullscreen]=QString(tr("Show or hide fullscreen mode of Cuties."));
     connect(act[mnuViewFullscreen], SIGNAL(triggered()),
@@ -201,22 +201,22 @@ void MainWindow::createActions()
     act[mnuSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     actStatusTips[mnuSearchFind]=QString(tr("Search for text in the active document."));
     connect(act[mnuSearchFind],SIGNAL(triggered()),tabManager,SLOT(showSearchBar()));
-
+/*
     //Search -> Find In Files
     act[mnuSearchFindInFiles]=new QAction(tr("Fin&d In Files"),this);
     act[mnuSearchFindInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
-
+*/
     //Search -> Replace
     act[mnuSearchReplace]=new QAction(tr("&Replace"),this);
     act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
     actStatusTips[mnuSearchReplace]=QString(tr("Replace occurrences of search string."));
-
+/*
     //Search -> Replace In Files
     act[mnuSearchReplaceInFiles]=new QAction(tr("R&eplace In Files"),this);
     act[mnuSearchReplaceInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actStatusTips[mnuSearchReplaceInFiles]=QString(tr("Replace occurrences of a text partten in multiple files."));
-
+*/
     //Search -> Search Online
     act[mnuSearchSearchOnline]=new QAction(tr("&Search Online"),this);
     act[mnuSearchSearchOnline]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
@@ -574,7 +574,8 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuSearchReplaceInFiles:
+        case mnuSearchReplace:
+        //case mnuSearchReplaceInFiles:
         case mnuSearchSearchOnline:
             menu[mnuSearch]->addSeparator();
             break;
@@ -1066,3 +1067,20 @@ void MainWindow::connectDebugDockWithCurrEditor()
         debugDock->setGdbInstance(gdbInstance);
     }
 }
+
+#ifdef Q_OS_MACX
+void MainWindow::setFullScreen()
+{
+    if(this->isFullScreen())
+    {
+        //TODO: The title of the menu can be replaced by a QString.
+        act[mnuViewFullscreen]->setText(tr("Enter Full Screen"));
+        this->showNormal();
+    }
+    else
+    {
+        act[mnuViewFullscreen]->setText(tr("Exit Full Screen"));
+        this->showFullScreen();
+    }
+}
+#endif

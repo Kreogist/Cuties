@@ -1,6 +1,7 @@
 #include "kcimessagebox.h"
 
 kciMessageBox::kciMessageBox(QWidget *parent) :
-    QDialog(parent)
+    QWidget(parent)
 {
+    ;
 }

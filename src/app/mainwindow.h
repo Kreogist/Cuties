@@ -57,6 +57,7 @@
 #include "kcicontrolcenter.h"
 #include "kciexecutor.h"
 #include "kreogistcutestyle.h"
+#include "kcimessagebox.h"
 
 class MainWindow : public kciMainWindow
 {
@@ -90,6 +91,9 @@ public slots:
 
 private slots:
     void showPreference();
+#ifdef Q_OS_MACX
+    void setFullScreen();
+#endif
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -126,9 +130,9 @@ private:
 #endif
         mnuViewEnd,
         mnuSearchFind,
-        mnuSearchFindInFiles,
+        //mnuSearchFindInFiles,
         mnuSearchReplace,
-        mnuSearchReplaceInFiles,
+        //mnuSearchReplaceInFiles,
         mnuSearchSearchOnline,
         mnuSearchGoto,
         mnuExecuteCompileAndRun,

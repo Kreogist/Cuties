@@ -26,13 +26,20 @@
 kciStatusBar::kciStatusBar(QWidget *parent):
     QStatusBar(parent)
 {
+    //Set Margins
     setContentsMargins(0,0,0,0);
+
+    //Add File Type Display Widget
+    kscFileTypeDisplay=new kciFileType(this);
+
+    //Add Cursor Position Widget
     kscCursorPosition=new kciStatusCursorInfo(this);
     connect(this,SIGNAL(newUpdateCursorPosition(int,int)),
             kscCursorPosition,SLOT(updateCursorPosition(int,int)));
     connect(kscCursorPosition,SIGNAL(ToLineNum(int)),
             this, SIGNAL(ToNewPosition(int)));
 
+    addPermanentWidget(kscFileTypeDisplay);
     addPermanentWidget(kscCursorPosition);
 }
 

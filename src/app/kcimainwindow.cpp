@@ -51,20 +51,6 @@ void kciMainWindow::setTitleBar(kciTitleBar *titleBar)
     m_titleBar = titleBar;
 }
 
-#ifdef Q_OS_MACX
-void kciMainWindow::setFullScreen()
-{
-    if(this->isFullScreen())
-    {
-        this->showNormal();
-    }
-    else
-    {
-        this->showFullScreen();
-    }
-}
-#endif
-
 #ifndef Q_OS_MACX
 void kciMainWindow::setMainButtonIcon(const QString &mainIcon)
 {

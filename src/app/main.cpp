@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 
     int ret=app.exec();
 
-    kciGlobalInstance->writeSettings();
+    //kciGlobalInstance->writeSettings();
 
     return ret;
 }

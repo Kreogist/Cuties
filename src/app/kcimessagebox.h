@@ -1,9 +1,9 @@
 #ifndef KCIMESSAGEBOX_H
 #define KCIMESSAGEBOX_H
 
-#include <QDialog>
+#include <QWidget>
 
-class kciMessageBox : public QDialog
+class kciMessageBox : public QWidget
 {
     Q_OBJECT
 public:

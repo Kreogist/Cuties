@@ -128,6 +128,7 @@ void kciRunner::run()
 #endif
                <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
 
+            qDebug()<<arg;
             connect(process,SIGNAL(finished(int)),
                     this,SLOT(quit()));
             connect(this,SIGNAL(finished()),

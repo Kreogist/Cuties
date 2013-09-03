@@ -34,6 +34,7 @@ kciStatusCursorInfo::kciStatusCursorInfo(QWidget *parent) :
     setLayout(TextLayout);
 
     lblCursorPosition=new QLabel(this);
+    lblCursorPosition->setContentsMargins(0,0,0,0);
     TextLayout->addWidget(lblCursorPosition);
 
     spbLineNum=new QSpinBox(this);

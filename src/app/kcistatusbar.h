@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QStatusBar>
 
+#include "kcifiletype.h"
 #include "kcistatuscursorinfo.h"
 
 class kciStatusBar : public QStatusBar
@@ -45,6 +46,7 @@ public slots:
     void updateCursorPosition(int LineNum, int ColNum);
 
 private:
+    kciFileType *kscFileTypeDisplay;
     kciStatusCursorInfo *kscCursorPosition;
 };
 

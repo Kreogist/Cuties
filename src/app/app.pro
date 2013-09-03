@@ -82,7 +82,8 @@ SOURCES += \
     kcilanguageconfigure.cpp \
     kcifileassociation.cpp \
     kciconfigure.cpp \
-    Controls/SettingItems/kcisettinglistitemnuminput.cpp
+    Controls/SettingItems/kcisettinglistitemnuminput.cpp \
+    kcifiletype.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -141,7 +142,8 @@ HEADERS += \
     kcidebuggerconfigure.h \
     kcilanguageconfigure.h \
     kcifileassociation.h \
-    Controls/SettingItems/kcisettinglistitemnuminput.h
+    Controls/SettingItems/kcisettinglistitemnuminput.h \
+    kcifiletype.h
 
 # Enable C++11
 CONFIG += c++11
