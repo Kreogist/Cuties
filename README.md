@@ -41,7 +41,7 @@ You can find Github on https://help.github.com/articles/set-up-git. You can also
 
 ###Building Cuties
 
-You should install the [Qt 5.1.1][http://qt-project.org] and [Github][https://github.com]. [Github][https://github.com] has been well configured.
+You should install the `Qt` and `Github`, and both of the tools have been well configured.
 
 After this you can clone our projects on either GUI or Command-Line. Here we are using Command-Line.
 
