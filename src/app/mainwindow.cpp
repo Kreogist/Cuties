@@ -884,6 +884,12 @@ void MainWindow::closeEvent(QCloseEvent *e)
     }
 }
 
+void MainWindow::show()
+{
+    kciMainWindow::show();
+    tabManager->openHistoryFiles();
+}
+
 void MainWindow::compileCurrentFile()
 {
     kciCodeEditor *currentEditor=tabManager->getCurrentEditor();

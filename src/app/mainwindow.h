@@ -69,6 +69,7 @@ signals:
     
 
 public slots:
+    void show();
     void aboutQt();
     void aboutKCI();
     void compileCurrentFile();
