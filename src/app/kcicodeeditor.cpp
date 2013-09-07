@@ -49,7 +49,6 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     editor=new kciTextEditor(this);
     linePanel->setKciTextEditor(editor);
     markPanel->setKciTextEditor(editor);
-    document=editor->document();
     mainLayout->addWidget(editor);
     mainLayout->addSpacing(1);
 
@@ -83,6 +82,11 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 QString kciCodeEditor::getExecFileName()
 {
     return execFileName;
+}
+
+QTextDocument* kciCodeEditor::document()
+{
+    return editor->document();
 }
 
 void kciCodeEditor::computeExecFileName()

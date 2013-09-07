@@ -106,7 +106,7 @@ void kciLanguageMode::setFileSuffix(const QString& suffix)
 
 
     Q_ASSERT(!m_highlighter.isNull());
-    m_highlighter->setDocument(m_parent->document);
+    m_highlighter->setDocument(m_parent->document());
 }
 
 compileOutputReceiver* kciLanguageMode::getCompilerReceiver() const

@@ -64,9 +64,7 @@ public:
     QTextCursor getTextCursor();
     int getTextLines();
     bool isModified();
-
-    QTextDocument *document;
-
+    QTextDocument* document();
     kciLanguageMode *langMode() const;
 
 signals:

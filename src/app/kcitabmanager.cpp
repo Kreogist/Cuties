@@ -67,6 +67,11 @@ kciCodeEditor* kciTabManager::getCurrentEditor() const
     return currentEditor;
 }
 
+/*!
+ * \brief kciTabManager::open will open the file and switch to it.
+ * \param filePath the path of the file that should be opened.
+ * \return the index of the tab of this file.
+ */
 int kciTabManager::open(const QString& filePath)
 {
     QString name=QFileInfo(filePath).fileName();
@@ -86,11 +91,18 @@ int kciTabManager::open(const QString& filePath)
     //File has not been opened, then open it and add tab.
     kciCodeEditor *tmp;
     tmp=new kciCodeEditor(this);
-    tmp->open(filePath);
-    tmp->setDocumentTitle(name);
-    connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
-    emit tabAdded();
-    return addTab(tmp,name);
+    if(tmp->open(filePath))
+    {
+        tmp->setDocumentTitle(name);
+        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+        emit tabAdded();
+        return addTab(tmp,name);
+    }
+    else
+    {
+        tmp->deleteLater();
+        return currentIndex();
+    }
 }
 
 void kciTabManager::openAndJumpTo(const QString &filePath)
@@ -155,20 +167,14 @@ void kciTabManager::new_file()
 void kciTabManager::switchNextTab()
 {
     int current=currentIndex();
-    if(++current>=count())
-    {
-        current=0;
-    }
+    current=(current+1)%count();
     setCurrentIndex(current);
 }
 
 void kciTabManager::switchPrevTab()
 {
-    int current=currentIndex();
-    if(--current<0)
-    {
-        current=count()-1;
-    }
+    int current=currentIndex()+count();
+    current=(current-1)%count();
     setCurrentIndex(current);
 }
 
@@ -422,7 +428,7 @@ int kciTabManager::getCurrentLineCount() const
 {
     if(currentEditor!=NULL)
     {
-        return currentEditor->document->blockCount();
+        return currentEditor->document()->blockCount();
     }
     else
     {
