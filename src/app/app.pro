@@ -54,7 +54,6 @@ SOURCES += \
     kciexecutor.cpp \
     kcijudgedock.cpp \
     kcilanguagemode.cpp \
-    kcisearchlinetext.cpp \
     kcidebugdock.cpp \
     fpc.cpp \
     kcilistbutton.cpp \
@@ -66,7 +65,6 @@ SOURCES += \
     dbgoutputreceiver.cpp \
     connectionhandler.cpp \
     kciplaintextbrowser.cpp \
-    kcimessagebox.cpp \
     kcidragproxy.cpp \
     kciclipboard.cpp \
     kcidebugwatchdock.cpp \
@@ -83,7 +81,10 @@ SOURCES += \
     kcifileassociation.cpp \
     kciconfigure.cpp \
     Controls/SettingItems/kcisettinglistitemnuminput.cpp \
-    kcifiletype.cpp
+    kcifiletype.cpp \
+    kcimessagebox.cpp \
+    kcireplacedock.cpp \
+    kcisearchlinetext.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -126,7 +127,6 @@ HEADERS += \
     dbgoutputreceiver.h \
     connectionhandler.h \
     kciplaintextbrowser.h \
-    kcimessagebox.h \
     kcidragproxy.h \
     kciclipboard.h \
     kcidebugwatchdock.h \
@@ -143,7 +143,9 @@ HEADERS += \
     kcilanguageconfigure.h \
     kcifileassociation.h \
     Controls/SettingItems/kcisettinglistitemnuminput.h \
-    kcifiletype.h
+    kcifiletype.h \
+    kcimessagebox.h \
+    kcireplacedock.h
 
 # Enable C++11
 CONFIG += c++11

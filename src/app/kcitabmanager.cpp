@@ -374,6 +374,12 @@ void kciTabManager::showSearchBar()
         currentEditor->showSearchBar();
 }
 
+void kciTabManager::showReplaceBar()
+{
+    if(currentEditor!=NULL)
+        currentEditor->showReplaceBar();
+}
+
 QString kciTabManager::textNowSelect()
 {\
     QString returnValue;

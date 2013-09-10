@@ -44,6 +44,7 @@
 #include "kcimarkpanel.h"
 #include "kcisearchwindow.h"
 #include "kcilanguagemode.h"
+#include "kcireplacedock.h"
 
 class kciSearchWindow;
 class kciLanguageMode;
@@ -53,6 +54,7 @@ class kciCodeEditor : public QWidget
     Q_OBJECT
 public:
     explicit kciCodeEditor(QWidget *parent = 0);
+    ~kciCodeEditor();
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString& title);
@@ -87,6 +89,7 @@ public slots:
     void cursorChanged();
     QString getSelectedText();
     void showSearchBar();
+    void showReplaceBar();
 
 private slots:
     void onModificationChanged(bool changed);
@@ -104,6 +107,7 @@ private:
 
     kciLanguageMode *m_langMode;
 
+    QVBoxLayout *replaceLayout;
     QHBoxLayout *mainLayout;
     kciTextEditor *editor;
     kciLinenumPanel *linePanel;
@@ -115,6 +119,7 @@ private:
     QTextCursor fileTextCursor;
 
     kciSearchWindow *searchBar;
+    kciReplaceDock *replaceBar;
 
     friend class kciLanguageMode;
 };

@@ -85,9 +85,11 @@ private slots:
 #endif
 
 protected:
+#ifndef Q_OS_MACX
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+#endif
 
 private:
     bool hasPressed;
