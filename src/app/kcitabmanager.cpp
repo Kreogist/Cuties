@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -57,6 +53,13 @@ kciTabManager::kciTabManager(QWidget *parent) :
     tab_count=1;
     new_file_count=1;
     currentEditor=NULL;
+}
+
+void kciTabManager::openHistoryFiles()
+{
+    QList<QString> lastTimeUnClosedFiles=kciEditorConfigure::getInstance()->getAllUnClosedFilePaths();
+    for(int i=0;i<lastTimeUnClosedFiles.size();i++)
+        open(lastTimeUnClosedFiles.at(i));
 }
 
 kciCodeEditor* kciTabManager::getCurrentEditor() const
@@ -318,10 +321,17 @@ void kciTabManager::on_current_tab_change(int index)
 void kciTabManager::closeEvent(QCloseEvent *e)
 {
     e->accept();//set the accept flag
+
+    kciEditorConfigure::getInstance()->clearAllUnClosedFilePaths();
     int i=count();
     while(i--)
     {
         QWidget *page=widget(i);
+
+        kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(page);
+        if(editor!=NULL)
+            kciEditorConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath());
+
         if(!page->close())
         {
             e->ignore();//clean the accept flag

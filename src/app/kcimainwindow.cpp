@@ -63,7 +63,7 @@ void kciMainWindow::setMainButtonIcon(const QString &mainIcon)
 void kciMainWindow::setMenu(QMenu *menu)
 {
     if(m_titleBar)
-    {ß
+    {
         m_titleBar->setMenu(menu);
     }
 }
