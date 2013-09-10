@@ -97,5 +97,8 @@ QList<QString> kciEditorConfigure::getAllUnClosedFilePaths() const
 
 void kciEditorConfigure::addUnClosedFilePath(const QString &path)
 {
-    unClosedFilePaths.append(path);
+    if(path.length()>0)
+    {
+        unClosedFilePaths.append(path);
+    }
 }
