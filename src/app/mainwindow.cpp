@@ -795,7 +795,9 @@ void MainWindow::restoreSettings()
 
     settings.beginGroup("MainWindow");
 
+#ifndef Q_OS_MACX
     int n_WindowState;
+#endif
     float n_X, n_Y, n_width, n_height;
 
     float deskWidth=float(QApplication::desktop()->width()),

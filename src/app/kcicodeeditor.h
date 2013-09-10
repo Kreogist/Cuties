@@ -37,6 +37,7 @@
 #include <QTimeLine>
 #include <QGraphicsOpacityEffect>
 #include <QDebug>
+#include <QScrollBar>
 
 #include "kciglobal.h"
 #include "kcitexteditor.h"
@@ -64,10 +65,17 @@ public:
     QString getFilePath();
     QString getExecFileName();
     QTextCursor getTextCursor();
+
+    void setScrollValue(int x, int y);
+    void setHScrollValue(int x);
+    void setVScrollValue(int y);
+
     int getTextLines();
     bool isModified();
 
     QTextDocument *document;
+    QScrollBar *getVScrollBar();
+    QScrollBar *getHScrollBar();
 
     kciLanguageMode *langMode() const;
 

@@ -58,8 +58,25 @@ kciTabManager::kciTabManager(QWidget *parent) :
 void kciTabManager::openHistoryFiles()
 {
     QList<QString> lastTimeUnClosedFiles=kciEditorConfigure::getInstance()->getAllUnClosedFilePaths();
+    QList<int> lastTimeUnClosedHs=kciEditorConfigure::getInstance()->getAllUnClosedFileHs();
+    QList<int> lastTimeUnClosedVs=kciEditorConfigure::getInstance()->getAllUnClosedFileVs();
+
+    int hisItem;
+
     for(int i=0;i<lastTimeUnClosedFiles.size();i++)
-        open(lastTimeUnClosedFiles.at(i));
+    {
+        hisItem=open(lastTimeUnClosedFiles.at(i));
+        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(hisItem));
+
+        /*editor->setHScrollValue(lastTimeUnClosedHs.at(i));
+        editor->setVScrollValue(lastTimeUnClosedVs.at(i));*/
+        editor->setScrollValue(lastTimeUnClosedHs.at(i),
+                               lastTimeUnClosedVs.at(i));
+    }
+    if(kciEditorConfigure::getInstance()->getUnClosedCurrent()>-1)
+    {
+        setCurrentIndex(kciEditorConfigure::getInstance()->getUnClosedCurrent());
+    }
 }
 
 kciCodeEditor* kciTabManager::getCurrentEditor() const
@@ -320,17 +337,35 @@ void kciTabManager::on_current_tab_change(int index)
 
 void kciTabManager::closeEvent(QCloseEvent *e)
 {
-    e->accept();//set the accept flag
+    //set the accept flag
+    e->accept();
 
+    //Cleae the last UnClosed File Paths.
     kciEditorConfigure::getInstance()->clearAllUnClosedFilePaths();
-    int i=count();
+    int i=count(), cIndex=currentIndex();
     while(i--)
     {
         QWidget *page=widget(i);
 
+        //Save the current opened file.
         kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(page);
         if(editor!=NULL)
-            kciEditorConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath());
+        {
+            if(editor->getFilePath().length()>0)
+            {
+                kciEditorConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
+                                                                       editor->getHScrollBar()->value(),
+                                                                       editor->getVScrollBar()->value());
+
+            }
+            else
+            {
+                if(i<cIndex)
+                {
+                    cIndex--;
+                }
+            }
+        }
 
         if(!page->close())
         {
@@ -342,6 +377,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
             removeTab(i);
         }
     }
+    kciEditorConfigure::getInstance()->setUnClosedCurrent(cIndex);
 }
 
 void kciTabManager::renameTabTitle(QString title)

@@ -88,7 +88,6 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
             editor,&kciTextEditor::showNextSearchResult);
     connect(searchBar,&kciSearchWindow::requireShowPreviousResult,
             editor,&kciTextEditor::showPreviousSearchResult);
-
 }
 
 kciCodeEditor::~kciCodeEditor()
@@ -436,4 +435,29 @@ kciLanguageMode *kciCodeEditor::langMode() const
 bool kciCodeEditor::isModified()
 {
     return editor->document()->isModified();
+}
+
+QScrollBar *kciCodeEditor::getHScrollBar()
+{
+    return editor->horizontalScrollBar();
+}
+
+QScrollBar *kciCodeEditor::getVScrollBar()
+{
+    return editor->verticalScrollBar();
+}
+
+void kciCodeEditor::setHScrollValue(int x)
+{
+    editor->horizontalScrollBar()->setValue(x);
+}
+
+void kciCodeEditor::setVScrollValue(int y)
+{
+    editor->verticalScrollBar()->setValue(y);
+}
+
+void kciCodeEditor::setScrollValue(int x, int y)
+{
+    editor->scroll(x, y);
 }

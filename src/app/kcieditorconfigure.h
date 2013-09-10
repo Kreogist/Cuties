@@ -21,6 +21,7 @@
 #define KCIEDITORCONFIGURE_H
 
 #include <QList>
+#include <QDebug>
 
 #include "kciconfigure.h"
 
@@ -36,7 +37,11 @@ public:
     void setTabWidth(const int& width);
     void clearAllUnClosedFilePaths();
     QList<QString> getAllUnClosedFilePaths() const;
-    void addUnClosedFilePath(const QString& path);
+    QList<int> getAllUnClosedFileVs() const;
+    QList<int> getAllUnClosedFileHs() const;
+    void addUnClosedFilePath(const QString& path, const int &HValue, const int &VValue);
+    int getUnClosedCurrent() const;
+    void setUnClosedCurrent(int value);
 
 private:
     kciEditorConfigure();
@@ -44,6 +49,9 @@ private:
     bool isUsingBlankInsteadTab;
     int tabWidth;
     QList<QString> unClosedFilePaths;
+    QList<int> unClosedFileV;
+    QList<int> unClosedFileH;
+    int unClosedCurrent;
 };
 
 
