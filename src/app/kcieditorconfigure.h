@@ -21,7 +21,6 @@
 #define KCIEDITORCONFIGURE_H
 
 #include <QList>
-#include <QDebug>
 
 #include "kciconfigure.h"
 
