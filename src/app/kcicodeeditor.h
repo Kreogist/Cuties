@@ -38,7 +38,7 @@
 #include <QGraphicsOpacityEffect>
 #include <QDebug>
 
-#include "kciglobal.h"
+#include "kcihistoryconfigure.h"
 #include "kcitexteditor.h"
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"

@@ -57,6 +57,7 @@ void kciEditorConfigure::writeConfigure()
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
 
     settings.beginGroup("unClosedFilePaths");
+    settings.remove("");
     settings.setValue("PathCount",unClosedFilePaths.size());
     for(int i=0;i<unClosedFilePaths.size();i++)
         settings.setValue(QString::number(i),unClosedFilePaths.at(i));
