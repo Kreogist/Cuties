@@ -57,7 +57,7 @@ kciTabManager::kciTabManager(QWidget *parent) :
 
 void kciTabManager::openHistoryFiles()
 {
-    QList<QString> lastTimeUnClosedFiles=kciEditorConfigure::getInstance()->getAllUnClosedFilePaths();
+    QList<QString> lastTimeUnClosedFiles=kciHistoryConfigure::getInstance()->getAllUnClosedFilePaths();
     for(int i=0;i<lastTimeUnClosedFiles.size();i++)
         open(lastTimeUnClosedFiles.at(i));
 }
@@ -112,21 +112,17 @@ void kciTabManager::openAndJumpTo(const QString &filePath)
 
 void kciTabManager::open()
 {
-    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
     QStringList file_name_list=QFileDialog::getOpenFileNames(this,
                                                              tr("Open File"),
-                                                             settings.value("files/historyDir").toString(),
+                                                             kciHistoryConfigure::getInstance()->getHistoryDir(),
                                                              strFileFilter);
-    int i;
+
     QString name;
 
     if(!file_name_list.isEmpty())
     {
-        name=*file_name_list.begin();
-        for(i=name.size()-1;i>=0;i--)
-            if(name[i]=='/')
-                break;
-        settings.setValue("files/historyDir",name.left(i));
+        QFileInfo _fileInfo(*file_name_list.begin());
+        kciHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
     }
 
     int _last_tab_index=currentIndex();
@@ -328,7 +324,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
 {
     e->accept();//set the accept flag
 
-    kciEditorConfigure::getInstance()->clearAllUnClosedFilePaths();
+    kciHistoryConfigure::getInstance()->clearAllUnClosedFilePaths();
     int i=count();
     while(i--)
     {
@@ -336,7 +332,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
 
         kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(page);
         if(editor!=NULL)
-            kciEditorConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath());
+            kciHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath());
 
         if(!page->close())
         {

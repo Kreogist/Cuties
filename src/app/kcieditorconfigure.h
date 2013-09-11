@@ -34,16 +34,12 @@ public:
     void setUsingBlankInsteadTab(bool enabled);
     int getTabWidth() const;
     void setTabWidth(const int& width);
-    void clearAllUnClosedFilePaths();
-    QList<QString> getAllUnClosedFilePaths() const;
-    void addUnClosedFilePath(const QString& path);
 
 private:
     kciEditorConfigure();
     static kciEditorConfigure* instance;
     bool isUsingBlankInsteadTab;
     int tabWidth;
-    QList<QString> unClosedFilePaths;
 };
 
 

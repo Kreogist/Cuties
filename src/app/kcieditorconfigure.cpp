@@ -40,12 +40,6 @@ void kciEditorConfigure::readConfigure()
     isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
                                           isUsingBlankInsteadTab).toBool();
 
-    settings.beginGroup("unClosedFilePaths");
-    int i=settings.value("PathCount",0).toInt();
-    while(i--)
-        unClosedFilePaths.append(settings.value(QString::number(i)).toString());
-    settings.endGroup();
-
     settings.endGroup();
 }
 
@@ -55,13 +49,6 @@ void kciEditorConfigure::writeConfigure()
     settings.beginGroup("Editor");
     settings.setValue("TabWidth",tabWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
-
-    settings.beginGroup("unClosedFilePaths");
-    settings.remove("");
-    settings.setValue("PathCount",unClosedFilePaths.size());
-    for(int i=0;i<unClosedFilePaths.size();i++)
-        settings.setValue(QString::number(i),unClosedFilePaths.at(i));
-    settings.endGroup();
 
     settings.endGroup();
 }
@@ -84,19 +71,4 @@ int kciEditorConfigure::getTabWidth() const
 void kciEditorConfigure::setTabWidth(const int &width)
 {
     tabWidth=width;
-}
-
-void kciEditorConfigure::clearAllUnClosedFilePaths()
-{
-    unClosedFilePaths.clear();
-}
-
-QList<QString> kciEditorConfigure::getAllUnClosedFilePaths() const
-{
-    return unClosedFilePaths;
-}
-
-void kciEditorConfigure::addUnClosedFilePath(const QString &path)
-{
-    unClosedFilePaths.append(path);
 }

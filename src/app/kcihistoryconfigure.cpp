@@ -24,6 +24,7 @@ kciHistoryConfigure* kciHistoryConfigure::instance = nullptr;
 kciHistoryConfigure::kciHistoryConfigure()
 {
     cleanMark=false;
+    trackUserHistory=true;
 }
 
 kciHistoryConfigure* kciHistoryConfigure::getInstance()
@@ -38,7 +39,18 @@ void kciHistoryConfigure::readConfigure()
     QSettings settings(getCfgFileName(),
                        QSettings::IniFormat);
 
-    historyDirPath=settings.value("History/historyDir").toString();
+    settings.beginGroup("History");
+    historyDirPath=settings.value("historyDir").toString();
+
+    int size=settings.beginReadArray("unClosedFilePaths");
+    for(int i=0;i<size;i++)
+    {
+        settings.setArrayIndex(i);
+        unClosedFilePaths.append(settings.value("filePath").toString());
+    }
+    settings.endArray();
+
+    settings.endGroup();
 }
 
 void kciHistoryConfigure::writeConfigure()
@@ -52,6 +64,14 @@ void kciHistoryConfigure::writeConfigure()
     else
     {
         settings.setValue("historyDir",historyDirPath);
+
+        settings.beginWriteArray("unClosedFilePaths");
+        for(int i=0;i<unClosedFilePaths.size();i++)
+        {
+           settings.setArrayIndex(i);
+           settings.setValue("filePath",unClosedFilePaths.at(i));
+        }
+        settings.endArray();
     }
     settings.endGroup();
 }
@@ -79,4 +99,19 @@ void kciHistoryConfigure::setTrackUserHistoryEnabled(bool enabled)
 bool kciHistoryConfigure::isTrackUserHistoryEnabled() const
 {
     return trackUserHistory;
+}
+
+void kciHistoryConfigure::clearAllUnClosedFilePaths()
+{
+    unClosedFilePaths.clear();
+}
+
+QList<QString> kciHistoryConfigure::getAllUnClosedFilePaths() const
+{
+    return unClosedFilePaths;
+}
+
+void kciHistoryConfigure::addUnClosedFilePath(const QString &path)
+{
+    unClosedFilePaths.append(path);
 }

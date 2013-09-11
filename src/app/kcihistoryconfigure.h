@@ -41,6 +41,10 @@ public:
     void setHistoryDir(const QString& dirPath);
     QString getHistoryDir() const;
 
+    void clearAllUnClosedFilePaths();
+    QList<QString> getAllUnClosedFilePaths() const;
+    void addUnClosedFilePath(const QString& path);
+
 private:
     kciHistoryConfigure();
     QString historyDirPath;
@@ -48,6 +52,7 @@ private:
     int RecentlyOpenedFileListSize;
     bool trackUserHistory;
     bool cleanMark;
+    QList<QString> unClosedFilePaths;
     static kciHistoryConfigure* instance;
 };
 
