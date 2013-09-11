@@ -209,8 +209,9 @@ void MainWindow::createActions()
 */
     //Search -> Replace
     act[mnuSearchReplace]=new QAction(tr("&Replace"),this);
-    act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
+    act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
     actStatusTips[mnuSearchReplace]=QString(tr("Replace occurrences of search string."));
+    connect(act[mnuSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
 /*
     //Search -> Replace In Files
     act[mnuSearchReplaceInFiles]=new QAction(tr("R&eplace In Files"),this);
@@ -355,8 +356,12 @@ void MainWindow::createActions()
 
 void MainWindow::aboutKCI()
 {
-    QMessageBox::about(this,tr("About Cuties"),
-                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
+    kciMessageBox *test=new kciMessageBox(this);
+    //test->setTitleText(tr("About"));
+    //test->addText(tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
+    //test->addText("Hello World");
+    test->startAnime();
+    test->exec();
 }
 
 void MainWindow::aboutQt()
@@ -818,6 +823,7 @@ void MainWindow::restoreSettings()
                       static_cast<int>(n_Y),
                       static_cast<int>(n_width),
                       static_cast<int>(n_height));
+#ifndef Q_OS_MACX
     n_WindowState=settings.value("state").toInt();
     switch(n_WindowState)
     {
@@ -826,6 +832,7 @@ void MainWindow::restoreSettings()
     case 2:
         titlebar->setWindowMax();
     }
+#endif
     settings.endGroup();
 }
 
@@ -869,6 +876,7 @@ void MainWindow::saveSettings()
     settings.setValue("x",float(sgoX)/deskWidth);
     settings.setValue("y",float(sgoY)/deskHeight);
 
+#ifndef Q_OS_MACX
     switch(windowState())
     {
     case Qt::WindowMinimized:n_WindowState=1;break;
@@ -876,6 +884,7 @@ void MainWindow::saveSettings()
     default:n_WindowState=0;break;
     }
     settings.setValue("state",n_WindowState);
+#endif
     settings.endGroup();
 }
 

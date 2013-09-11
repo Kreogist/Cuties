@@ -12,11 +12,11 @@ class kciSearchLineText : public QWidget
     Q_OBJECT
 public:
     explicit kciSearchLineText(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
-    
+
 private:
     QLineEdit *searchTextBox;
     QHBoxLayout *MainLayout;

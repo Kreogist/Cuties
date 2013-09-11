@@ -24,12 +24,18 @@ static const int SearchBarOffset = 20;
 kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
+    replaceLayout=new QVBoxLayout(this);
+    replaceLayout->setContentsMargins(0,0,0,0);
+    replaceLayout->setMargin(0);
+    replaceLayout->setSpacing(0);
+    setLayout(replaceLayout);
+
     //setWindowFlags(Qt::AnchorPoint);
-    mainLayout=new QHBoxLayout(this);
+    mainLayout=new QHBoxLayout();
     mainLayout->setSpacing(0);
     setContentsMargins(0,0,0,0);
     mainLayout->setMargin(0);
-    setLayout(mainLayout);
+    mainLayout->setSpacing(0);
 
     strFileFilter = QObject::tr("All Support Files")+
             "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
@@ -50,7 +56,12 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     linePanel->setKciTextEditor(editor);
     markPanel->setKciTextEditor(editor);
     mainLayout->addWidget(editor);
-    mainLayout->addSpacing(1);
+
+    replaceLayout->addLayout(mainLayout);
+
+    replaceBar=new kciReplaceDock(this);
+    replaceBar->hide();
+    replaceLayout->addWidget(replaceBar);
 
     connect(editor->document(),SIGNAL(modificationChanged(bool)),
             this,SLOT(onModificationChanged(bool)));
@@ -77,6 +88,11 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     connect(searchBar,&kciSearchWindow::requireShowPreviousResult,
             editor,&kciTextEditor::showPreviousSearchResult);
 
+}
+
+kciCodeEditor::~kciCodeEditor()
+{
+    mainLayout->deleteLater();
 }
 
 QString kciCodeEditor::getExecFileName()
@@ -119,6 +135,11 @@ void kciCodeEditor::showSearchBar()
     if(_textCursor.hasSelection())
         searchBar->setText(_textCursor.selectedText());
     searchBar->setTextFocus();
+}
+
+void kciCodeEditor::showReplaceBar()
+{
+    replaceBar->show();
 }
 
 bool kciCodeEditor::open(const QString &fileName)

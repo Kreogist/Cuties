@@ -77,6 +77,7 @@ public slots:
     void renameTabTitle(QString title);
     void currentTextCursorChanged();
     void showSearchBar();
+    void showReplaceBar();
     void setFocus();
     void switchCurrentToLine(int nLineNum, int nColNum);
     QString textNowSelect();

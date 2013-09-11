@@ -252,7 +252,6 @@ void kciTitleBar::setMainButtonIcon(const QString &mainIcon)
     mainButtonIcon.addFile(mainIcon);
     mainButton->setIcon(mainButtonIcon);
 }
-#endif
 
 void kciTitleBar::mousePressEvent(QMouseEvent *event)
 {
@@ -291,7 +290,6 @@ void kciTitleBar::mouseReleaseEvent(QMouseEvent *event)
         event->ignore();
 }
 
-#ifndef Q_OS_MACX
 void kciTitleBar::spacingDblClick()
 {
     _exchange_button_state();
