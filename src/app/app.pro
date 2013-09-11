@@ -84,7 +84,8 @@ SOURCES += \
     kciconfigure.cpp \
     Controls/SettingItems/kcisettinglistitemnuminput.cpp \
     kcifiletype.cpp \
-    kcihistoryconfigure.cpp
+    kcihistoryconfigure.cpp \
+    kcirecentlyfilesmenu.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -145,7 +146,8 @@ HEADERS += \
     kcifileassociation.h \
     Controls/SettingItems/kcisettinglistitemnuminput.h \
     kcifiletype.h \
-    kcihistoryconfigure.h
+    kcihistoryconfigure.h \
+    kcirecentlyfilesmenu.h
 
 # Enable C++11
 CONFIG += c++11

@@ -408,6 +408,7 @@ void kciCodeEditor::fileInfoChanged(const QFile &file)
     computeExecFileName();
 
     kciHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
+    kciHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
 }
 
 kciLanguageMode *kciCodeEditor::langMode() const

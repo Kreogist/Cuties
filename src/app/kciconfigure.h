@@ -1,11 +1,14 @@
 #ifndef KCICONFIGURE_H
 #define KCICONFIGURE_H
 
+#include <QObject>
 #include <QSettings>
 #include <QString>
 
-class kciConfigure
+class kciConfigure : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual void readConfigure() = 0;
     virtual void writeConfigure() = 0;

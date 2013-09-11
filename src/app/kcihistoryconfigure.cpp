@@ -25,6 +25,7 @@ kciHistoryConfigure::kciHistoryConfigure()
 {
     cleanMark=false;
     trackUserHistory=true;
+    maxRecentFilesSize=10;
 }
 
 kciHistoryConfigure* kciHistoryConfigure::getInstance()
@@ -42,11 +43,19 @@ void kciHistoryConfigure::readConfigure()
     settings.beginGroup("History");
     historyDirPath=settings.value("historyDir").toString();
 
-    int size=settings.beginReadArray("unClosedFilePaths");
-    for(int i=0;i<size;i++)
+    int unClosedFilePathsSize=settings.beginReadArray("unClosedFilePaths");
+    for(int i=0;i<unClosedFilePathsSize;i++)
     {
         settings.setArrayIndex(i);
         unClosedFilePaths.append(settings.value("filePath").toString());
+    }
+    settings.endArray();
+
+    int recentOpenedFilesSize=settings.beginReadArray("recentOpenedFiles");
+    for(int i=0;i<recentOpenedFilesSize;i++)
+    {
+        settings.setArrayIndex(i);
+        RecentOpenedFiles.append(settings.value("filePath").toString());
     }
     settings.endArray();
 
@@ -70,6 +79,14 @@ void kciHistoryConfigure::writeConfigure()
         {
            settings.setArrayIndex(i);
            settings.setValue("filePath",unClosedFilePaths.at(i));
+        }
+        settings.endArray();
+
+        settings.beginWriteArray("recentOpenedFiles");
+        for(int i=0;i<RecentOpenedFiles.size();i++)
+        {
+            settings.setArrayIndex(i);
+            settings.setValue("filePath",RecentOpenedFiles.at(i));
         }
         settings.endArray();
     }
@@ -106,7 +123,7 @@ void kciHistoryConfigure::clearAllUnClosedFilePaths()
     unClosedFilePaths.clear();
 }
 
-QList<QString> kciHistoryConfigure::getAllUnClosedFilePaths() const
+QStringList kciHistoryConfigure::getAllUnClosedFilePaths() const
 {
     return unClosedFilePaths;
 }
@@ -114,4 +131,41 @@ QList<QString> kciHistoryConfigure::getAllUnClosedFilePaths() const
 void kciHistoryConfigure::addUnClosedFilePath(const QString &path)
 {
     unClosedFilePaths.append(path);
+}
+
+int kciHistoryConfigure::getMaxRecentFilesSize() const
+{
+    return maxRecentFilesSize;
+}
+
+void kciHistoryConfigure::setMaxRecentFilesSize(int value)
+{
+    maxRecentFilesSize = value;
+}
+
+void kciHistoryConfigure::clearAllRecentFilesRecord()
+{
+    RecentOpenedFiles.clear();
+
+    emit recentFilesRecordsChanged();
+}
+
+void kciHistoryConfigure::addRecentFileRecord(const QString &path)
+{
+    int index=RecentOpenedFiles.indexOf(path);
+    if(index!=-1)
+    {
+        RecentOpenedFiles.removeAt(index);
+    }
+    RecentOpenedFiles.prepend(path);
+
+    while(RecentOpenedFiles.size()>maxRecentFilesSize)
+        RecentOpenedFiles.removeLast();
+
+    emit recentFilesRecordsChanged();
+}
+
+QStringList kciHistoryConfigure::getAllRecentOpenedFilesRecord() const
+{
+    return RecentOpenedFiles;
 }

@@ -496,6 +496,15 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+
+        if(i == mnuFileOpen)
+        {
+            kciRecentlyFilesMenu* recentlyFiles=new kciRecentlyFilesMenu(this);
+            menu[mnuFileRecentOpenedFiles]=(QMenu*)recentlyFiles;
+            menu[mnuFile]->addMenu(menu[mnuFileRecentOpenedFiles]);
+            connect(recentlyFiles,SIGNAL(requireOpenFile(QString)),
+                    tabManager,SLOT(openAndJumpTo(QString)));
+        }
 #endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuFile]->addAction(act[i]);
