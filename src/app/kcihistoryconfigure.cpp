@@ -194,7 +194,9 @@ void kciHistoryConfigure::addRecentFileRecord(const QString &path)
     RecentOpenedFiles.prepend(path);
 
     while(RecentOpenedFiles.size()>maxRecentFilesSize)
+    {
         RecentOpenedFiles.removeLast();
+    }
 
     emit recentFilesRecordsChanged();
 }

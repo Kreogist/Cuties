@@ -576,19 +576,19 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     BottomButton->addSpacing(3);
     BottomButton->addWidget(btApply);
 
-    /*int maxButtonWidth=btYes->width();
-    if(btCancel->width()>maxButtonWidth)
+    int maxButtonWidth=btYes->sizeHint().width();
+    if(btCancel->sizeHint().width()>maxButtonWidth)
     {
-        maxButtonWidth=btCancel->width();
+        maxButtonWidth=btCancel->sizeHint().width();
     }
-    if(btApply->width()>maxButtonWidth)
+    if(btApply->sizeHint().width()>maxButtonWidth)
     {
-        maxButtonWidth=btApply->width();
+        maxButtonWidth=btApply->sizeHint().width();
     }
 
     btYes->setFixedWidth(maxButtonWidth);
     btCancel->setFixedWidth(maxButtonWidth);
-    btApply->setFixedWidth(maxButtonWidth);*/
+    btApply->setFixedWidth(maxButtonWidth);
 
     WholeTitleBarSplit->addLayout(BottomButton);
 }

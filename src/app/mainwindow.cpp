@@ -173,7 +173,7 @@ void MainWindow::createActions()
     connect(act[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
 
     //View -> Debug Dock
-    act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
+    /*act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
     actStatusTips[mnuViewDebugDock]=QString(tr("Show or hide the Debug Dock."));
     connect(act[mnuViewDebugDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugDock()));
 
@@ -183,7 +183,7 @@ void MainWindow::createActions()
     connect(act[mnuViewDebugWatchDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugWatchDock()));
 
     //View -> Judge Dock
-    /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
+    act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
     connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));*/
 
@@ -566,7 +566,7 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuViewDebugWatchDock:
+        case mnuViewCompileDock:
             menu[mnuView]->addSeparator();
         }
 
@@ -743,11 +743,13 @@ void MainWindow::setDocOpenMenuState(bool state)
 #endif
 
     //View Menu
-    for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)
+    /*for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
-    }
+    }*/
+    act[mnuViewCompileDock]->setEnabled(state);
+    act[mnuViewCompileDock]->setVisible(state);
 #ifndef Q_OS_MACX
     menu[mnuView]->menuAction()->setEnabled(state);
     menu[mnuView]->menuAction()->setVisible(state);

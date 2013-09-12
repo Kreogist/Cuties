@@ -4,8 +4,10 @@ kciReplaceDock::kciReplaceDock(QWidget *parent) :
     QWidget(parent)
 {
     setMinimumHeight(0);
+    setAutoFillBackground(true);
 
     QPalette pal=this->palette();
+    pal.setColor(QPalette::Window,QColor(128,128,128));
     pal.setColor(QPalette::Base,QColor(255,255,255));
     pal.setColor(QPalette::WindowText,QColor(0,0,0));
     pal.setColor(QPalette::Button,QColor(83,83,83));

@@ -125,8 +125,8 @@ private:
         mnuEditPreferences,
         mnuViewSidebar,
         mnuViewCompileDock,
-        mnuViewDebugDock,
-        mnuViewDebugWatchDock,
+        //mnuViewDebugDock,
+        //mnuViewDebugWatchDock,
         //mnuViewJudgeDock,
 #ifdef Q_OS_MACX
         mnuViewFullscreen,
