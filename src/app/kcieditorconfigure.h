@@ -26,6 +26,8 @@
 
 class kciEditorConfigure : public kciConfigure
 {
+    Q_OBJECT
+
 public:
     void readConfigure();
     void writeConfigure();
@@ -34,6 +36,9 @@ public:
     void setUsingBlankInsteadTab(bool enabled);
     int getTabWidth() const;
     void setTabWidth(const int& width);
+
+signals:
+    void tabWidthChanged(int newValue);
 
 private:
     kciEditorConfigure();

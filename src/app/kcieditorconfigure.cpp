@@ -71,4 +71,6 @@ int kciEditorConfigure::getTabWidth() const
 void kciEditorConfigure::setTabWidth(const int &width)
 {
     tabWidth=width;
+
+    emit tabWidthChanged(tabWidth);
 }

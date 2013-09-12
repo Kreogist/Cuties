@@ -58,6 +58,7 @@ public slots:
                       bool caseSensitively,
                       bool wholeWord);
     void autoIndent();
+    void setTabWidth(int width);
 
 private slots:
     void updateSearchResults();
