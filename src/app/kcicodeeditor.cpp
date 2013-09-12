@@ -159,7 +159,7 @@ void kciCodeEditor::hideSearchBar()
 
 void kciCodeEditor::showReplaceBar()
 {
-    replaceBar->show();
+    replaceBar->showAnime();
 }
 
 bool kciCodeEditor::open(const QString &fileName)

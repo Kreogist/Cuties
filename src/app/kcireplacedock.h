@@ -7,18 +7,31 @@
 #include <QIcon>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QToolButton>
+#include <QResizeEvent>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QTimeLine>
+#include <QDebug>
 
 class kciReplaceDock : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciReplaceDock(QWidget *parent = 0);
+    ~kciReplaceDock();
 
 signals:
     
 public slots:
+    void showAnime();
+    void hideAnime();
+
+private slots:
+    void resizeDock(int newHeight);
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 
 private:
     QVBoxLayout *mainLayout;
@@ -33,11 +46,14 @@ private:
     };
 
     QWidget *searchText;
-    QHBoxLayout *Layout;
+    QHBoxLayout *Layout, *searchLayout, *replaceLayout;
     QPushButton *SearchIcon;
     QLineEdit *SearchTexts;
     QMenu *menu;
     QAction *menuAction[menuItemCount];
+
+    QToolButton *upButton, *downButton, *closeButton;
+    QToolButton *replaceButton, *findAndReplaceButton, *replaceAllButton;
 };
 
 #endif // KCIREPLACEDOCK_H
