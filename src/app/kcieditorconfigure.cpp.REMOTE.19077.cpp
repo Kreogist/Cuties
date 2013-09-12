@@ -39,6 +39,7 @@ void kciEditorConfigure::readConfigure()
     tabWidth=settings.value("TabWidth",tabWidth).toInt();
     isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
                                           isUsingBlankInsteadTab).toBool();
+
     settings.endGroup();
 }
 
@@ -48,6 +49,7 @@ void kciEditorConfigure::writeConfigure()
     settings.beginGroup("Editor");
     settings.setValue("TabWidth",tabWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
+
     settings.endGroup();
 }
 
@@ -69,5 +71,6 @@ int kciEditorConfigure::getTabWidth() const
 void kciEditorConfigure::setTabWidth(const int &width)
 {
     tabWidth=width;
+
     emit tabWidthChanged(tabWidth);
 }

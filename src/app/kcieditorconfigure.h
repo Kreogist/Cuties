@@ -27,6 +27,8 @@
 
 class kciEditorConfigure : public kciConfigure
 {
+    Q_OBJECT
+
 public:
     void readConfigure();
     void writeConfigure();
@@ -35,23 +37,15 @@ public:
     void setUsingBlankInsteadTab(bool enabled);
     int getTabWidth() const;
     void setTabWidth(const int& width);
-    void clearAllUnClosedFilePaths();
-    QList<QString> getAllUnClosedFilePaths() const;
-    QList<int> getAllUnClosedFileVs() const;
-    QList<int> getAllUnClosedFileHs() const;
-    void addUnClosedFilePath(const QString& path, const int &HValue, const int &VValue);
-    int getUnClosedCurrent() const;
-    void setUnClosedCurrent(int value);
+
+signals:
+    void tabWidthChanged(int newValue);
 
 private:
     kciEditorConfigure();
     static kciEditorConfigure* instance;
     bool isUsingBlankInsteadTab;
     int tabWidth;
-    QList<QString> unClosedFilePaths;
-    QList<int> unClosedFileV;
-    QList<int> unClosedFileH;
-    int unClosedCurrent;
 };
 
 

@@ -40,7 +40,7 @@
 #include <QDebug>
 #include <QScrollBar>
 
-#include "kciglobal.h"
+#include "kcihistoryconfigure.h"
 #include "kcitexteditor.h"
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"
@@ -69,9 +69,7 @@ public:
 
     int getTextLines();
     bool isModified();
-
-    QTextDocument *document;
-
+    QTextDocument* document();
     kciLanguageMode *langMode() const;
 
 signals:

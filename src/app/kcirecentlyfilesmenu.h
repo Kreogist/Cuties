@@ -17,40 +17,33 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KCIGLOBAL_H
-#define KCIGLOBAL_H
+#ifndef KCIRECENTLYFILESMENU_H
+#define KCIRECENTLYFILESMENU_H
 
-#include <QString>
-#include <QList>
-#include <QSettings>
+#include <QMenu>
+#include <QFileInfo>
+#include <QSignalMapper>
 
-#include "kcigeneralconfigure.h"
-#include "kcieditorconfigure.h"
-#include "kcicompilerconfigure.h"
-#include "kcidebuggerconfigure.h"
-#include "kcifileassociation.h"
-#include "kcilanguageconfigure.h"
 #include "kcihistoryconfigure.h"
+#include "connectionhandler.h"
 
-//Global Variables
-class kciGlobal
+class kciRecentlyFilesMenu : public QMenu
 {
+    Q_OBJECT
 public:
-    void readSettings();
-    void writeSettings();
-    QString getSettingsFileName() const;
-    void setSettingsFileName(const QString& filePath);
-    static kciGlobal* getInstance();
+    explicit kciRecentlyFilesMenu(QWidget *parent = 0);
+    
+signals:
+    void requireOpenFile(QString filePath);
 
+public slots:
+    void onRecordsChanged();
+    
 private:
-    kciGlobal();
+    void generateMenuItems();
 
-    //Environment Variables.
-    QString settingsFileName;
-
-    QSettings *kciMainConfig;
-    static kciGlobal* instance;
-    QList<kciConfigure*> cfgConfiger;
+    QSignalMapper *mapper;
+    connectionHandler connections;
 };
 
-#endif // KCIGLOBAL_H
+#endif // KCIRECENTLYFILESMENU_H

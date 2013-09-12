@@ -20,7 +20,6 @@
 #include "kcitexteditor.h"
 
 static int elideWidth=500;
-static int tabWidth=4;
 
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
@@ -40,7 +39,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     //Set Customize TextEditor Properties.
     //Set Tab Width.
-    setTabStopWidth(fontMetrics().width(' ')*tabWidth);
+    setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabWidth());
     //Set WordWarp Mode.
     setWordWrapMode(QTextOption::NoWrap);
     //Set Cursor Width.
@@ -73,6 +72,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
+    connect(configureInstance,SIGNAL(tabWidthChanged(int)),
+            this,SLOT(setTabWidth(int)));
 }
 
 void kciTextEditor::paintEvent(QPaintEvent *e)
@@ -105,6 +106,11 @@ void kciTextEditor::showPreviousSearchResult()
 void kciTextEditor::showNextSearchResult()
 {
     findString(true);
+}
+
+void kciTextEditor::setTabWidth(int width)
+{
+    setTabStopWidth(fontMetrics().width(' ')*width);
 }
 
 void kciTextEditor::findString(bool forward)
@@ -366,7 +372,7 @@ void kciTextEditor::insertTab(QTextCursor cursor, int count)
     {
         if(configureInstance->usingBlankInsteadTab())
         {
-            for(int i=0;i<tabWidth;i++)
+            for(int i=0;i<configureInstance->getTabWidth();i++)
                 cursor.insertText(" ");
 
         }
@@ -386,7 +392,7 @@ void kciTextEditor::removeTab(QTextCursor cursor, int count)
         {
             cursor.movePosition(QTextCursor::Left,
                                 QTextCursor::KeepAnchor,
-                                tabWidth);
+                                configureInstance->getTabWidth());
         }
         else
         {
@@ -728,6 +734,11 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
 
         break;
     }*/
+    case Qt::Key_Tab:
+    {
+        insertTab(_textCursor);
+        break;
+    }
     case Qt::Key_Backspace:
     {
         int pos=findFirstCharacter(_textCursor.block());

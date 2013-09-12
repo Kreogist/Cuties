@@ -57,12 +57,11 @@ kciTabManager::kciTabManager(QWidget *parent) :
 
 void kciTabManager::openHistoryFiles()
 {
-    QList<QString> lastTimeUnClosedFiles=kciEditorConfigure::getInstance()->getAllUnClosedFilePaths();
-    QList<int> lastTimeUnClosedHs=kciEditorConfigure::getInstance()->getAllUnClosedFileHs();
-    QList<int> lastTimeUnClosedVs=kciEditorConfigure::getInstance()->getAllUnClosedFileVs();
+    QList<QString> lastTimeUnClosedFiles=kciHistoryConfigure::getInstance()->getAllUnClosedFilePaths();
+    QList<int> lastTimeUnClosedHs=kciHistoryConfigure::getInstance()->getAllUnClosedFileHs();
+    QList<int> lastTimeUnClosedVs=kciHistoryConfigure::getInstance()->getAllUnClosedFileVs();
 
     int hisItem;
-
     for(int i=0;i<lastTimeUnClosedFiles.size();i++)
     {
         hisItem=open(lastTimeUnClosedFiles.at(i));
@@ -70,9 +69,9 @@ void kciTabManager::openHistoryFiles()
 
         editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
     }
-    if(kciEditorConfigure::getInstance()->getUnClosedCurrent()>-1)
+    if(kciHistoryConfigure::getInstance()->getUnClosedCurrent()>-1)
     {
-        setCurrentIndex(kciEditorConfigure::getInstance()->getUnClosedCurrent());
+        setCurrentIndex(kciHistoryConfigure::getInstance()->getUnClosedCurrent());
     }
 }
 
@@ -81,6 +80,11 @@ kciCodeEditor* kciTabManager::getCurrentEditor() const
     return currentEditor;
 }
 
+/*!
+ * \brief kciTabManager::open will open the file and switch to it.
+ * \param filePath the path of the file that should be opened.
+ * \return the index of the tab of this file.
+ */
 int kciTabManager::open(const QString& filePath)
 {
     QString name=QFileInfo(filePath).fileName();
@@ -100,11 +104,18 @@ int kciTabManager::open(const QString& filePath)
     //File has not been opened, then open it and add tab.
     kciCodeEditor *tmp;
     tmp=new kciCodeEditor(this);
-    tmp->open(filePath);
-    tmp->setDocumentTitle(name);
-    connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
-    emit tabAdded();
-    return addTab(tmp,name);
+    if(tmp->open(filePath))
+    {
+        tmp->setDocumentTitle(name);
+        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+        emit tabAdded();
+        return addTab(tmp,name);
+    }
+    else
+    {
+        tmp->deleteLater();
+        return currentIndex();
+    }
 }
 
 void kciTabManager::openAndJumpTo(const QString &filePath)
@@ -114,21 +125,17 @@ void kciTabManager::openAndJumpTo(const QString &filePath)
 
 void kciTabManager::open()
 {
-    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
     QStringList file_name_list=QFileDialog::getOpenFileNames(this,
                                                              tr("Open File"),
-                                                             settings.value("files/historyDir").toString(),
+                                                             kciHistoryConfigure::getInstance()->getHistoryDir(),
                                                              strFileFilter);
-    int i;
+
     QString name;
 
     if(!file_name_list.isEmpty())
     {
-        name=*file_name_list.begin();
-        for(i=name.size()-1;i>=0;i--)
-            if(name[i]=='/')
-                break;
-        settings.setValue("files/historyDir",name.left(i));
+        QFileInfo _fileInfo(*file_name_list.begin());
+        kciHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
     }
 
     int _last_tab_index=currentIndex();
@@ -169,20 +176,14 @@ void kciTabManager::new_file()
 void kciTabManager::switchNextTab()
 {
     int current=currentIndex();
-    if(++current>=count())
-    {
-        current=0;
-    }
+    current=(current+1)%count();
     setCurrentIndex(current);
 }
 
 void kciTabManager::switchPrevTab()
 {
-    int current=currentIndex();
-    if(--current<0)
-    {
-        current=count()-1;
-    }
+    int current=currentIndex()+count();
+    current=(current-1)%count();
     setCurrentIndex(current);
 }
 
@@ -338,7 +339,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
     e->accept();
 
     //Cleae the last UnClosed File Paths.
-    kciEditorConfigure::getInstance()->clearAllUnClosedFilePaths();
+    kciHistoryConfigure::getInstance()->clearAllUnClosedFilePaths();
     int i=count(), cIndex=currentIndex();
     while(i--)
     {
@@ -350,9 +351,9 @@ void kciTabManager::closeEvent(QCloseEvent *e)
         {
             if(editor->getFilePath().length()>0)
             {
-                kciEditorConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
-                                                                       editor->getTextCursor().blockNumber(),
-                                                                       editor->getTextCursor().columnNumber());
+                kciHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
+                                                                        editor->getTextCursor().blockNumber(),
+                                                                        editor->getTextCursor().columnNumber());
 
             }
             else
@@ -374,7 +375,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
             removeTab(i);
         }
     }
-    kciEditorConfigure::getInstance()->setUnClosedCurrent(cIndex);
+    kciHistoryConfigure::getInstance()->setUnClosedCurrent(cIndex);
 }
 
 void kciTabManager::renameTabTitle(QString title)
@@ -461,7 +462,7 @@ int kciTabManager::getCurrentLineCount() const
 {
     if(currentEditor!=NULL)
     {
-        return currentEditor->document->blockCount();
+        return currentEditor->document()->blockCount();
     }
     else
     {

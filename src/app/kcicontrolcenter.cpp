@@ -297,7 +297,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     tabSpaceNum=new kciSettingListItemNumInput(this);
     tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
-    tabSpaceNum->setValue(4);
+    tabSpaceNum->setValue(kciEditorConfigure::getInstance()->getTabWidth());
     MainLayout->addWidget(tabSpaceNum);
 
     wrapMode=new kciSettingListItemCombo(this);

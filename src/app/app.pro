@@ -82,6 +82,8 @@ SOURCES += \
     kciconfigure.cpp \
     Controls/SettingItems/kcisettinglistitemnuminput.cpp \
     kcifiletype.cpp \
+    kcihistoryconfigure.cpp \
+    kcirecentlyfilesmenu.cpp \
     kcimessagebox.cpp \
     kcireplacedock.cpp \
     kcisearchlinetext.cpp
@@ -144,6 +146,8 @@ HEADERS += \
     kcifileassociation.h \
     Controls/SettingItems/kcisettinglistitemnuminput.h \
     kcifiletype.h \
+    kcihistoryconfigure.h \
+    kcirecentlyfilesmenu.h \
     kcimessagebox.h \
     kcireplacedock.h
 

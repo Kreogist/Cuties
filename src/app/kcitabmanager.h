@@ -33,7 +33,7 @@
 #include <QPalette>
 #include <QUrl>
 
-#include "kciglobal.h"
+#include "kcihistoryconfigure.h"
 #include "kcisearchwindow.h"
 #include "kcicodeeditor.h"
 
