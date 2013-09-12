@@ -137,6 +137,7 @@ public:
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
+    kciSettingListItemBoolean *sbnAutoOpenUnclosed;
 };
 //------------------Editor---------------
 class kciCCTabEditorContent : public kciAbstractCCTabContent

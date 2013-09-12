@@ -15,6 +15,7 @@ public:
     explicit kciSettingListItemBooleanSwitcher(QWidget *parent = 0);
     void setValue(bool NewValue);
     bool getValue();
+    void setTheValue(bool NewValue);
 
 signals:
     void valueChanged();
@@ -34,8 +35,9 @@ public:
     QString getEnabledText();
     void setDisabledText(const QString& Text);
     QString getDisabledText();
-    void setItemValue(bool NewValue);
-    bool getItemValue();
+    void setValue(bool NewValue);
+    void setTheValue(bool NewValue);
+    bool getValue();
 
 signals:
     

@@ -35,6 +35,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QFrame>
 #include <QLabel>
+#include <QKeyEvent>
 #include <QMenu>
 
 class kciSearchWindow : public QWidget
@@ -63,6 +64,9 @@ public slots:
 
 signals:
     void hideButtonPressed();
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     void showCurrResult();

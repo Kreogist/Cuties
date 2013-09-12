@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QTimeLine>
+#include <QKeyEvent>
 #include <QDebug>
 
 class kciReplaceDock : public QWidget
@@ -32,6 +33,7 @@ private slots:
 
 protected:
     void resizeEvent(QResizeEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     QVBoxLayout *mainLayout;

@@ -226,16 +226,21 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->setSpacing(0);
     setLayout(MainLayout);
 
-    //Title Label.
-    QLabel *tblLanguage=new QLabel(this);
-    tblLanguage->setText(" " + tr("Language Settings"));
-    tblLanguage->setFont(TitleFont);
-    tblLanguage->setFixedHeight(30);
+    QLabel *tblEnvironment=new QLabel(this);
+    tblEnvironment->setText(" " + tr("Envronment"));
+    tblEnvironment->setFont(TitleFont);
+    tblEnvironment->setFixedHeight(30);
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(tblLanguage);
+    MainLayout->addWidget(tblEnvironment);
+
+    sbnAutoOpenUnclosed=new kciSettingListItemBoolean(this);
+    sbnAutoOpenUnclosed->setEnabledText(tr("Restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setDisabledText(tr("Don't restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setTheValue(kciGeneralConfigure::getInstance()->getRememberUnclosedFile());
+    MainLayout->addWidget(sbnAutoOpenUnclosed);
 
     sboDefaultLanguage=new kciSettingListItemCombo(this);
-    sboDefaultLanguage->Caption->setText(tr("Default Language:"));
+    sboDefaultLanguage->Caption->setText(tr("Default Programming Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
     sboDefaultLanguage->addListItem(tr("C/C++"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
@@ -245,6 +250,9 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
 
 void kciCCTabGerneralContent::apply()
 {
+    //Remember Unclosed Set.
+    kciGeneralConfigure::getInstance()->setRememberUnclosedFile(sbnAutoOpenUnclosed->getValue());
+    //Default Language Mode Sets.
     switch(sboDefaultLanguage->getValue())
     {
     case 0:
@@ -519,7 +527,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle(tr("Cuties Control Center"));
-    setMinimumSize(480, 320);
+    setMinimumSize(640, 400);
 
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);

@@ -165,3 +165,12 @@ void kciSearchWindow::setTextFocus()
     SearchTexts->setFocus();
 }
 
+void kciSearchWindow::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key()){
+    case Qt::Key_Escape:
+        emit hideButtonPressed();
+    default:
+        QWidget::keyPressEvent(event);
+    }
+}

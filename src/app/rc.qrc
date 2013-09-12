@@ -86,8 +86,8 @@
         <file>image/ToolBar/compileandrun.png</file>
     </qresource>
     <qresource prefix="/Controls">
-        <file>image/Controls/BooleanFalse.png</file>
         <file>image/Controls/BooleanTrue.png</file>
+        <file>image/Controls/BooleanFalse.png</file>
     </qresource>
     <qresource prefix="/MsgBox">
         <file>image/MessageBox/Title.png</file>

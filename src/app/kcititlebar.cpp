@@ -146,8 +146,12 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
     tlbHideAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
-    connect(tlbHideAnime,SIGNAL(finished()),
-            this,SLOT(hideRealToolBar()));
+    connect(tlbHideAnime,SIGNAL(finished()),mainToolBar,SLOT(hide()));
+    connect(tlbHideAnime,SIGNAL(finished()),this,SLOT(hide()));
+
+#ifdef Q_OS_MACX
+    this->hide();
+#endif
 }
 
 void kciTitleBar::showToolBar()
@@ -168,6 +172,7 @@ void kciTitleBar::showToolBar()
         tlbShowAnime->setEndValue(animeEndPos);
         tlbShowAnime->setEasingCurve(QEasingCurve::OutCubic);
         NoUseSpacing->changeSize(mainToolBar->width(),this->height());
+        this->show();
         mainToolBar->show();
         toolbarShown=true;
 
@@ -191,11 +196,6 @@ void kciTitleBar::hideToolBar()
         tlbHideAnime->start();
         toolbarShown=false;
     }
-}
-
-void kciTitleBar::hideRealToolBar()
-{
-    mainToolBar->hide();
 }
 
 void kciTitleBar::addToolSeparator()

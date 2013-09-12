@@ -187,3 +187,14 @@ void kciReplaceDock::hideAnime()
             this, SLOT(hide()));
     hideAnimation->start();
 }
+
+void kciReplaceDock::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+    case Qt::Key_Escape:
+        hideAnime();
+    default:
+        QWidget::keyPressEvent(event);
+    }
+}
