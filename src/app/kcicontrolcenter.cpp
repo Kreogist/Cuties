@@ -519,6 +519,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle(tr("Cuties Control Center"));
+    setMinimumSize(480, 320);
 
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);

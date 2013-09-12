@@ -35,6 +35,7 @@
 #include <QIcon>
 #include <QPropertyAnimation>
 #include <QTimeLine>
+#include <QScrollBar>
 #include <QGraphicsOpacityEffect>
 #include <QDebug>
 #include <QScrollBar>
@@ -66,16 +67,10 @@ public:
     QString getExecFileName();
     QTextCursor getTextCursor();
 
-    void setScrollValue(int x, int y);
-    void setHScrollValue(int x);
-    void setVScrollValue(int y);
-
     int getTextLines();
     bool isModified();
 
     QTextDocument *document;
-    QScrollBar *getVScrollBar();
-    QScrollBar *getHScrollBar();
 
     kciLanguageMode *langMode() const;
 
@@ -98,6 +93,7 @@ public slots:
     QString getSelectedText();
     void showSearchBar();
     void showReplaceBar();
+    void hideSearchBar();
 
 private slots:
     void onModificationChanged(bool changed);

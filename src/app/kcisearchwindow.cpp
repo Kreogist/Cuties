@@ -129,8 +129,8 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
     pal.setColor(QPalette::Button, QColor(190,0,0));
     closeButton->setPalette(pal);
     //Set Button Action
-    connect(closeButton,SIGNAL(clicked()),
-            this,SLOT(hide()));
+    connect(closeButton, SIGNAL(clicked()),
+            this, SIGNAL(hideButtonPressed()));
 
     searchLayout->addWidget(closeButton);
 
@@ -163,11 +163,5 @@ void kciSearchWindow::onMenuClicked()
 void kciSearchWindow::setTextFocus()
 {
     SearchTexts->setFocus();
-}
-
-void kciSearchWindow::hideEvent(QHideEvent *e)
-{
-    QWidget::hideEvent(e);
-    emit hideButtonPressed();
 }
 

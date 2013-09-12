@@ -55,12 +55,11 @@ signals:
                              bool caseSensitively,
                              bool wholeWorld);
 
+    void hideBar();
+
 public slots:
     void onTextChanged(const QString &text);
     void onMenuClicked();
-
-protected:
-    void hideEvent(QHideEvent *e);
 
 signals:
     void hideButtonPressed();

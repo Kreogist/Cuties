@@ -68,10 +68,7 @@ void kciTabManager::openHistoryFiles()
         hisItem=open(lastTimeUnClosedFiles.at(i));
         kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(hisItem));
 
-        /*editor->setHScrollValue(lastTimeUnClosedHs.at(i));
-        editor->setVScrollValue(lastTimeUnClosedVs.at(i));*/
-        editor->setScrollValue(lastTimeUnClosedHs.at(i),
-                               lastTimeUnClosedVs.at(i));
+        editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
     }
     if(kciEditorConfigure::getInstance()->getUnClosedCurrent()>-1)
     {
@@ -354,8 +351,8 @@ void kciTabManager::closeEvent(QCloseEvent *e)
             if(editor->getFilePath().length()>0)
             {
                 kciEditorConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
-                                                                       editor->getHScrollBar()->value(),
-                                                                       editor->getVScrollBar()->value());
+                                                                       editor->getTextCursor().blockNumber(),
+                                                                       editor->getTextCursor().columnNumber());
 
             }
             else

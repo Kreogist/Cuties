@@ -75,7 +75,6 @@ void kciEditorConfigure::writeConfigure()
         settings.setValue("f" + numberString,unClosedFilePaths.at(i));
         settings.setValue("v" + numberString, unClosedFileV.at(i));
         settings.setValue("h" + numberString, unClosedFileH.at(i));
-        qDebug()<<unClosedFileV.at(i);
     }
     settings.endGroup();
 

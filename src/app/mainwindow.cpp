@@ -162,10 +162,10 @@ void MainWindow::createActions()
     actStatusTips[mnuEditPreferences]=QString(tr("Customize your Cuties."));
     connect(act[mnuEditPreferences],SIGNAL(triggered()),this,SLOT(showPreference()));
 
-    /*//View -> Sidebar
+    //View -> Sidebar
     act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
     actStatusTips[mnuViewSidebar]=QString(tr("Show or hide the Sidebar."));
-    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));*/
+    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
 
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
@@ -249,7 +249,7 @@ void MainWindow::createActions()
     act[mnuExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
     actStatusTips[mnuExecuteRun]=QString(tr("Run the compiled execution."));
     connect(act[mnuExecuteRun],SIGNAL(triggered()),this,SLOT(run()));
-
+/*
     //Execute -> Parameters
     act[mnuExecuteParameters]=new QAction(tr("P&arameters"),this);
     actStatusTips[mnuExecuteParameters]=QString(tr("Run the compiled execution with parameters."));
@@ -271,7 +271,8 @@ void MainWindow::createActions()
                 tr("Se&t Input, Run and show Output"), this);
     actStatusTips[mnuExecuteSetInputRunShowOutput]=
             QString(tr("Set the input file, compile and run the document, and show output file."));
-
+*/
+/*
     //Debug -> Debug Start
     act[mnuDebugStart]=new QAction(tr("Start &Debug"),this);
     act[mnuDebugStart]->setShortcut(QKeySequence(Qt::Key_F5));
@@ -325,7 +326,7 @@ void MainWindow::createActions()
     //Debug -> Remove Watch
     act[mnuDebugRemoveWatch]=new QAction(tr("&Remove Watch"),this);
     actStatusTips[mnuDebugRemoveWatch]=QString(tr("Remove a variable in debug watch list."));
-
+*/
     //Window -> Window Split
     act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
     actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));
@@ -463,11 +464,11 @@ void MainWindow::createDocks()
     debugWatchDock=new kciDebugWatchDock(this);
     addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
     debugWatchDock->hide();
-/*
+
     //Sidebar Dock
     sidebarDock=new kciSideBar(this);
+    sidebarDock->hide();
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
-*/
 }
 
 void MainWindow::createMenu()
@@ -486,7 +487,7 @@ void MainWindow::createMenu()
     menu[mnuView]   = _mainMenu->addMenu(tr("&View"));
     menu[mnuSearch] = _mainMenu->addMenu(tr("&Search"));
     menu[mnuExecute]= _mainMenu->addMenu(tr("E&xecute"));
-    menu[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
+    //menu[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
     menu[mnuTools]  = _mainMenu->addMenu(tr("&Tools"));
     menu[mnuWindow] = _mainMenu->addMenu(tr("&Window"));
     menu[mnuHelp]   = _mainMenu->addMenu(tr("&Help"));
@@ -545,7 +546,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
 #endif
-    for(i=/*mnuViewSidebar*/mnuViewCompileDock;i<mnuViewEnd;i++)
+    for(i=mnuViewSidebar;i<mnuViewEnd;i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
@@ -594,7 +595,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
     menu[mnuExecute]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteSetInputRunShowOutput;i++)
+    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteRun/*mnuExecuteSetInputRunShowOutput*/;i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
@@ -606,7 +607,7 @@ void MainWindow::createMenu()
         switch(i)
         {
         case mnuExecuteRun:
-        case mnuExecuteParameters:
+        //case mnuExecuteParameters:
             menu[mnuExecute]->addSeparator();
             break;
         }
@@ -614,6 +615,7 @@ void MainWindow::createMenu()
     }
 
     //Create Debug Menu
+    /*
 #ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
     menu[mnuDebug]->setIcon(*MenuIconAddor);
@@ -637,7 +639,7 @@ void MainWindow::createMenu()
         }
 
 #endif
-    }
+    }*/
 
     //Create Tool Menu
 #ifndef Q_OS_MACX
@@ -752,14 +754,14 @@ void MainWindow::setDocOpenMenuState(bool state)
     menu[mnuSearch]->menuAction()->setVisible(state);
 
     //Execute Menu
-    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteSetInputRunShowOutput;i++)
+    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteRun/*mnuExecuteSetInputRunShowOutput*/;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }
     menu[mnuExecute]->menuAction()->setEnabled(state);
     menu[mnuExecute]->menuAction()->setVisible(state);
-
+/*
     //Debug Menu
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
@@ -768,7 +770,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     }
     menu[mnuDebug]->menuAction()->setEnabled(state);
     menu[mnuDebug]->menuAction()->setVisible(state);
-
+*/
     //Window Menu
     for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
     {
@@ -857,7 +859,9 @@ void MainWindow::saveSettings()
         sgoH=this->height();
         sgoW=this->width();
     }
+#ifndef Q_OS_MACX
     int n_WindowState;
+#endif
 
     //Save ALL settings.
     float deskWidth=float(QApplication::desktop()->width()),
@@ -976,7 +980,14 @@ void MainWindow::searchOnline()
 
 void MainWindow::diffVisibleSidebar()
 {
-    sidebarDock->setVisible(!sidebarDock->isVisible());
+    if(sidebarDock->isVisible())
+    {
+        sidebarDock->hideAnime();
+    }
+    else
+    {
+        sidebarDock->showAnime();
+    }
 }
 
 void MainWindow::diffVisibleCompileDock()

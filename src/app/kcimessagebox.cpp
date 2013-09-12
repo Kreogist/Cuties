@@ -85,7 +85,7 @@ void kciMessageBox::startAnime()
 void kciMessageBox::heightExpandAnime()
 {
     QPropertyAnimation *heightAnime=new QPropertyAnimation(this, "geometry");
-    QRect StartGeo=this->geometry();
+    QRect StartGeo=this->rect();
     QRect EndGeo=StartGeo;
 
     int nHeight=150;

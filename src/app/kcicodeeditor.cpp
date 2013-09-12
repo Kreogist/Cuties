@@ -47,6 +47,8 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
             QObject::tr("All Files")+"(*.*)";
 
     markPanel=new kciMarkPanel(this);
+    markPanel->setVisible(false);
+    markPanel->setEnabled(false);
     mainLayout->addWidget(markPanel);
 
     linePanel=new kciLinenumPanel(this);
@@ -81,7 +83,8 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 
     searchBar=new kciSearchWindow(editor);
     searchBar->hide();
-    connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
+    connect(searchBar, &kciSearchWindow::hideButtonPressed,
+            this, &kciCodeEditor::hideSearchBar);
     connect(searchBar,&kciSearchWindow::requireSearch,
             editor,&kciTextEditor::searchString);
     connect(searchBar,&kciSearchWindow::requireShowNextResult,
@@ -128,8 +131,30 @@ void kciCodeEditor::showSearchBar()
 
     QTextCursor _textCursor=editor->textCursor();
     if(_textCursor.hasSelection())
+    {
         searchBar->setText(_textCursor.selectedText());
+    }
     searchBar->setTextFocus();
+}
+
+void kciCodeEditor::hideSearchBar()
+{
+    if(searchBar->isVisible())
+    {
+        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
+        QRect animeStartPos=searchBar->geometry();
+        QRect animeEndPos=animeStartPos;
+        animeEndPos.setTop(-animeStartPos.height() - 20);
+        searchAnime->setStartValue(animeStartPos);
+        searchAnime->setDuration(300);
+        searchAnime->setEndValue(animeEndPos);
+        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+        connect(searchAnime, SIGNAL(finished()),
+                searchBar, SLOT(hide()));
+        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
+    }
+
+    editor->setFocus();
 }
 
 void kciCodeEditor::showReplaceBar()
@@ -437,27 +462,3 @@ bool kciCodeEditor::isModified()
     return editor->document()->isModified();
 }
 
-QScrollBar *kciCodeEditor::getHScrollBar()
-{
-    return editor->horizontalScrollBar();
-}
-
-QScrollBar *kciCodeEditor::getVScrollBar()
-{
-    return editor->verticalScrollBar();
-}
-
-void kciCodeEditor::setHScrollValue(int x)
-{
-    editor->horizontalScrollBar()->setValue(x);
-}
-
-void kciCodeEditor::setVScrollValue(int y)
-{
-    editor->verticalScrollBar()->setValue(y);
-}
-
-void kciCodeEditor::setScrollValue(int x, int y)
-{
-    editor->scroll(x, y);
-}
