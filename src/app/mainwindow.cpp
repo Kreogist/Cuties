@@ -913,7 +913,10 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::show()
 {
     kciMainWindow::show();
-    tabManager->openHistoryFiles();
+    if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
+    {
+        tabManager->openHistoryFiles();
+    }
 }
 
 void MainWindow::compileCurrentFile()

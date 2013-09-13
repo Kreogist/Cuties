@@ -5,7 +5,7 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
 {
     QButtonGroup *switcherGroup=new QButtonGroup(this);
     buttonGroupLayout=new QHBoxLayout();
-    buttonGroupLayout->setContentsMargins(0,0,0,0);
+    buttonGroupLayout->setContentsMargins(4,4,4,4);
     buttonGroupLayout->setSpacing(0);
 
     mainLayout=new QVBoxLayout(this);
@@ -17,9 +17,9 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     buttonRecent=new QToolButton(this);
     buttonRecent->setAutoRaise(true);
     buttonRecent->setCheckable(true);
-    buttonRecent->setFixedSize(30,18);
+    buttonRecent->setFixedSize(35,20);
     buttonRecent->setToolTip(tr("History"));
-    buttonRecent->setIcon(QIcon(":/img/image/HelpMenuIcon.png"));
+    buttonRecent->setIcon(QIcon(":/Sidebar/image/Sidebar/History.png"));
     switcherGroup->addButton(buttonRecent, 0);
     buttonGroupLayout->addWidget(buttonRecent);
 
@@ -43,46 +43,14 @@ kciSideBarContent::~kciSideBarContent()
     buttonGroupLayout->deleteLater();
 }
 
-kciSideBarTitle::kciSideBarTitle(QWidget *parent) :
-    QWidget(parent)
-{
-    setFixedHeight(16);
-    setMinimumWidth(0);
-
-    titleMainLayout=new QHBoxLayout(this);
-    titleMainLayout->setContentsMargins(0,0,0,0);
-    titleMainLayout->setSpacing(0);
-    setLayout(titleMainLayout);
-
-    titleMainLayout->addSpacing(3);
-    sidebarTitle=new QLabel(this);
-    sidebarTitle->setText(tr("Siderbar"));
-    titleMainLayout->addWidget(sidebarTitle);
-
-    titleMainLayout->addStretch();
-
-    sidebarClose=new QToolButton(this);
-    sidebarClose->setFixedSize(13, 15);
-    sidebarClose->setIcon(QIcon(QPixmap(":/toolbutton/image/Close.png")));
-    titleMainLayout->addWidget(sidebarClose);
-
-    connect(sidebarClose, SIGNAL(clicked()),
-            this, SIGNAL(closePressed()));
-}
-
-void kciSideBarTitle::setSidebarTitle(const QString title)
-{
-    sidebarTitle->setText(title);
-}
-
 kciSideBar::kciSideBar(QWidget *parent) :
     QDockWidget(parent)
 {
     //Set ObjectName
     setObjectName("Sidebar");
     //Claer Title bar.
-    sidebarTitleBar=new kciSideBarTitle(this);
-    setTitleBarWidget(sidebarTitleBar);
+    QWidget *clearTitleBar=new QWidget(this);
+    setTitleBarWidget(clearTitleBar);
     //Set Features.
     setFeatures(QDockWidget::NoDockWidgetFeatures);
     //Set Fixed Size.
@@ -99,9 +67,6 @@ kciSideBar::kciSideBar(QWidget *parent) :
     pal.setColor(QPalette::ButtonText,QColor(255,255,255));
     setPalette(pal);
     setWindowTitle(" " + tr("Sidebar") + " ");
-
-    connect(sidebarTitleBar, SIGNAL(closePressed()),
-            this, SLOT(hideAnime()));
 
     //New Central Widget
     CentralWidget=new kciSideBarContent(this);

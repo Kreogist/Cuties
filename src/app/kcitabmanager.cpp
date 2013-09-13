@@ -347,20 +347,23 @@ void kciTabManager::closeEvent(QCloseEvent *e)
 
         //Save the current opened file.
         kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(page);
-        if(editor!=NULL)
+        if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
         {
-            if(editor->getFilePath().length()>0)
+            if(editor!=NULL)
             {
-                kciHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
-                                                                        editor->getTextCursor().blockNumber(),
-                                                                        editor->getTextCursor().columnNumber());
-
-            }
-            else
-            {
-                if(i<cIndex)
+                if(editor->getFilePath().length()>0)
                 {
-                    cIndex--;
+                    kciHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
+                                                                            editor->getTextCursor().blockNumber(),
+                                                                            editor->getTextCursor().columnNumber());
+
+                }
+                else
+                {
+                    if(i<cIndex)
+                    {
+                        cIndex--;
+                    }
                 }
             }
         }

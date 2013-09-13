@@ -30,22 +30,6 @@ private:
     QListView *historyStack;
 };
 
-class kciSideBarTitle : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit kciSideBarTitle(QWidget *parent = 0);
-    void setSidebarTitle(const QString title);
-
-signals:
-    void closePressed();
-
-private:
-    QHBoxLayout *titleMainLayout;
-    QLabel *sidebarTitle;
-    QToolButton *sidebarClose;
-};
-
 class kciSideBar : public QDockWidget
 {
     Q_OBJECT
@@ -63,7 +47,6 @@ private slots:
 
 private:
     kciSideBarContent *CentralWidget;
-    kciSideBarTitle *sidebarTitleBar;
 };
 
 #endif // KCISIDEBAR_H

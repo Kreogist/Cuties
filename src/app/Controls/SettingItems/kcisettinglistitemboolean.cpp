@@ -157,6 +157,17 @@ void kciSettingListItemBoolean::mousePressEvent(QMouseEvent *e)
         MainLayout->insertSpacing(2, 5);
         //Set Edit Mode Switcher.
         blnEditMode=true;
+        //Set Palette.
+        if(ValueSetter->getValue())
+        {
+            pal.setColor(QPalette::Window, QColor(123,170,43,100));
+            setPalette(pal);
+        }
+        else
+        {
+            pal.setColor(QPalette::Window, QColor(222,2,28,100));
+            setPalette(pal);
+        }
     }
     else
     {

@@ -95,4 +95,7 @@
         <file>image/MessageBox/DownBound.png</file>
         <file>image/MessageBox/UpBound.png</file>
     </qresource>
+    <qresource prefix="/Sidebar">
+        <file>image/Sidebar/History.png</file>
+    </qresource>
 </RCC>
