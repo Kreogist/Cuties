@@ -38,6 +38,7 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QVariant>
+#include <QWidget>
 
 #ifdef Q_OS_MACX
 #include <QMenuBar>
@@ -58,6 +59,8 @@
 #include "kciexecutor.h"
 #include "kreogistcutestyle.h"
 
+#include "kcimessagebox.h"
+
 class MainWindow : public kciMainWindow
 {
     Q_OBJECT
@@ -66,7 +69,6 @@ public:
     
 signals:
     
-
 public slots:
     void aboutQt();
     void aboutKCI();
