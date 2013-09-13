@@ -22,6 +22,7 @@
 kciTextBlockData::kciTextBlockData()
 {
     searchCode=0;
+    codeLevel=0;
     resetForSearch();
 }
 
@@ -125,4 +126,14 @@ QList<parenthesesInfo>::iterator kciTextBlockData::getFirstParenthesesInfo()
 QList<parenthesesInfo>::iterator kciTextBlockData::getEndParenthesesInfo()
 {
     return parenthesesInfos.end();
+}
+
+void kciTextBlockData::setCodeLevel(const int &level)
+{
+    codeLevel=level;
+}
+
+int kciTextBlockData::getCodeLevel() const
+{
+    return codeLevel;
 }

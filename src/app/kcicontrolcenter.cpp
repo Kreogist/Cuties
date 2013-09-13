@@ -187,9 +187,28 @@ void kciControlCenterLeftBar::lstClick(int Index)
 /********************************************/
 /*          Contorl Center Contents         */
 /********************************************/
-//---------------Gerneral------------------------
-kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+kciAbstractCCTabContent::kciAbstractCCTabContent(QWidget *parent):
     QWidget(parent)
+{
+
+}
+//---------------Gerneral------------------------
+static int QStringToValue(const QString& text)
+{
+    if(text=="cpp")
+    {
+        return 1;
+    }
+    if(text=="pas")
+    {
+        return 2;
+    }
+
+    return 0;
+}
+
+kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -207,26 +226,58 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->setSpacing(0);
     setLayout(MainLayout);
 
-    //Title Label.
-    QLabel *tblLanguage=new QLabel(this);
-    tblLanguage->setText(" " + tr("Language Settings"));
-    tblLanguage->setFont(TitleFont);
-    tblLanguage->setFixedHeight(30);
+    QLabel *tblEnvironment=new QLabel(this);
+    tblEnvironment->setText(" " + tr("Envronment"));
+    tblEnvironment->setFont(TitleFont);
+    tblEnvironment->setFixedHeight(30);
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(tblLanguage);
+    MainLayout->addWidget(tblEnvironment);
+
+    sbnAutoOpenUnclosed=new kciSettingListItemBoolean(this);
+    sbnAutoOpenUnclosed->setEnabledText(tr("Restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setDisabledText(tr("Don't restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setTheValue(kciGeneralConfigure::getInstance()->getRememberUnclosedFile());
+    MainLayout->addWidget(sbnAutoOpenUnclosed);
 
     sboDefaultLanguage=new kciSettingListItemCombo(this);
-    sboDefaultLanguage->Caption->setText(tr("Default Language:"));
+    sboDefaultLanguage->Caption->setText(tr("Default Programming Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
-    sboDefaultLanguage->addListItem(tr("C++"));
-    sboDefaultLanguage->addListItem(tr("C"));
+    sboDefaultLanguage->addListItem(tr("C/C++"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
+    sboDefaultLanguage->setValue(QStringToValue(kciGeneralConfigure::getInstance()->getDefaultLanguageMode()));
     MainLayout->addWidget(sboDefaultLanguage);
+}
+
+void kciCCTabGerneralContent::apply()
+{
+    //Remember Unclosed Set.
+    kciGeneralConfigure::getInstance()->setRememberUnclosedFile(sbnAutoOpenUnclosed->getValue());
+    //Default Language Mode Sets.
+    switch(sboDefaultLanguage->getValue())
+    {
+    case 0:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("plainText");
+        break;
+    }
+    case 1:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("cpp");
+        break;
+    }
+    case 2:
+    {
+        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("pas");
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 //--------------------Editor------------------
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -246,7 +297,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     //Title Label.
     QLabel *tblCompilerPath=new QLabel(this);
-    tblCompilerPath->setText(" " + tr("Editor Option"));
+    tblCompilerPath->setText(" " + tr("View Option"));
     tblCompilerPath->setFont(TitleFont);
     tblCompilerPath->setFixedHeight(30);
     MainLayout->addSpacing(5);
@@ -254,13 +305,31 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     tabSpaceNum=new kciSettingListItemNumInput(this);
     tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
-    tabSpaceNum->setValue(4);
+    tabSpaceNum->setValue(kciEditorConfigure::getInstance()->getTabWidth());
     MainLayout->addWidget(tabSpaceNum);
+
+    wrapMode=new kciSettingListItemCombo(this);
+    wrapMode->Caption->setText(tr("Word Wrap Mode:"));
+    wrapMode->addListItem(tr("No Word Wrap"));
+    wrapMode->addListItem(tr("Wrap At Any Point."));
+    wrapMode->addListItem(tr("Wrap At Word Boundary Or Anywhere."));
+    MainLayout->addWidget(wrapMode);
+
+    cursorWidth=new kciSettingListItemNumInput(this);
+    cursorWidth->Caption->setText(tr("Cursor Width:"));
+    cursorWidth->setValue(1);
+    MainLayout->addWidget(cursorWidth);
+}
+
+void kciCCTabEditorContent::apply()
+{
+    kciEditorConfigure* instance=kciEditorConfigure::getInstance();
+    instance->setTabWidth(tabSpaceNum->getValue());
 }
 
 //-----------------Compiler----------------
 kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -286,23 +355,35 @@ kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
     MainLayout->addSpacing(5);
     MainLayout->addWidget(tblCompilerPath);
 
+    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+
     txeGppCompilerPath=new kciSettingListItemBrowseText(this);
     txeGppCompilerPath->Caption->setText(tr("G++ Compiler Path:"));
+    txeGppCompilerPath->setValue(instance->getGppPath());
     MainLayout->addWidget(txeGppCompilerPath);
 
     txeGccCompilerPath=new kciSettingListItemBrowseText(this);
     txeGccCompilerPath->Caption->setText(tr("GCC Compiler Path:"));
+    txeGccCompilerPath->setValue(instance->getGccPath());
     MainLayout->addWidget(txeGccCompilerPath);
 
     txeFpcCompilerPath=new kciSettingListItemBrowseText(this);
     txeFpcCompilerPath->Caption->setText(tr("FPC Compiler Path:"));
+    txeFpcCompilerPath->setValue(instance->getFpcPath());
     MainLayout->addWidget(txeFpcCompilerPath);
+}
 
+void kciCCTabCompilerContent::apply()
+{
+    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+    instance->setGccPath(txeGccCompilerPath->getValue());
+    instance->setGppPath(txeGppCompilerPath->getValue());
+    instance->setFpcPath(txeFpcCompilerPath->getValue());
 }
 
 //-----------------Debugger-----------------
 kciCCTabDebuggerContent::kciCCTabDebuggerContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -336,21 +417,21 @@ kciCCTabDebuggerContent::kciCCTabDebuggerContent(QWidget *parent) :
 
 //-----------------File Association-----------
 kciCCTabFileAssociationContent::kciCCTabFileAssociationContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     ;
 }
 
 //-----------------Language-------------------
 kciCCTabLanguageContent::kciCCTabLanguageContent(QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     ;
 }
 
 //------------------Container----------------------
 kciControlCenterTab::kciControlCenterTab(QWidget *contentWidget, QWidget *parent) :
-    QWidget(parent)
+    kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -409,9 +490,14 @@ kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     contentIndex=ccTab[cclstGerneral];
 }
 
-QWidget *kciControlCenterContents::getCCTab(const int &Index)
+QWidget *kciControlCenterContents::getCCTab(const int& index)
 {
-    return ccTab[Index];
+    return ccTab[index];
+}
+
+kciAbstractCCTabContent* kciControlCenterContents::getContentWidgets(const int& index)
+{
+    return contentWidgets[index];
 }
 
 void kciControlCenterContents::animeToIndex(QWidget *Index)
@@ -441,6 +527,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle(tr("Cuties Control Center"));
+    setMinimumSize(640, 400);
 
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);
@@ -485,6 +572,10 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     connect(btCancel, SIGNAL(clicked()),
             this, SLOT(close()));
     btApply->setText(tr("Apply"));
+    connect(btApply,SIGNAL(clicked()),
+            this,SLOT(onApply()));
+    connect(btYes,SIGNAL(clicked()),
+            this,SLOT(onYes()));
 
     BottomButton->addStretch();
     BottomButton->addWidget(btYes);
@@ -492,5 +583,34 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     BottomButton->addWidget(btCancel);
     BottomButton->addSpacing(3);
     BottomButton->addWidget(btApply);
+
+    int maxButtonWidth=btYes->sizeHint().width();
+    if(btCancel->sizeHint().width()>maxButtonWidth)
+    {
+        maxButtonWidth=btCancel->sizeHint().width();
+    }
+    if(btApply->sizeHint().width()>maxButtonWidth)
+    {
+        maxButtonWidth=btApply->sizeHint().width();
+    }
+
+    btYes->setFixedWidth(maxButtonWidth);
+    btCancel->setFixedWidth(maxButtonWidth);
+    btApply->setFixedWidth(maxButtonWidth);
+
     WholeTitleBarSplit->addLayout(BottomButton);
+}
+
+void kciControlCenter::onApply()
+{
+    for(int i=cclstGerneral; i<cclist_count;i++)
+    {
+        CCMainContents->getContentWidgets(i)->apply();
+    }
+}
+
+void kciControlCenter::onYes()
+{
+    onApply();
+    close();
 }

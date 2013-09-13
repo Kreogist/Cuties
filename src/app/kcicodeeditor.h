@@ -35,15 +35,18 @@
 #include <QIcon>
 #include <QPropertyAnimation>
 #include <QTimeLine>
+#include <QScrollBar>
 #include <QGraphicsOpacityEffect>
 #include <QDebug>
+#include <QScrollBar>
 
-#include "kciglobal.h"
+#include "kcihistoryconfigure.h"
 #include "kcitexteditor.h"
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"
 #include "kcisearchwindow.h"
 #include "kcilanguagemode.h"
+#include "kcireplacedock.h"
 
 class kciSearchWindow;
 class kciLanguageMode;
@@ -53,6 +56,7 @@ class kciCodeEditor : public QWidget
     Q_OBJECT
 public:
     explicit kciCodeEditor(QWidget *parent = 0);
+    ~kciCodeEditor();
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString& title);
@@ -62,11 +66,10 @@ public:
     QString getFilePath();
     QString getExecFileName();
     QTextCursor getTextCursor();
+
     int getTextLines();
     bool isModified();
-
-    QTextDocument *document;
-
+    QTextDocument* document();
     kciLanguageMode *langMode() const;
 
 signals:
@@ -87,6 +90,8 @@ public slots:
     void cursorChanged();
     QString getSelectedText();
     void showSearchBar();
+    void showReplaceBar();
+    void hideSearchBar();
 
 private slots:
     void onModificationChanged(bool changed);
@@ -104,6 +109,7 @@ private:
 
     kciLanguageMode *m_langMode;
 
+    QVBoxLayout *replaceLayout;
     QHBoxLayout *mainLayout;
     kciTextEditor *editor;
     kciLinenumPanel *linePanel;
@@ -115,6 +121,7 @@ private:
     QTextCursor fileTextCursor;
 
     kciSearchWindow *searchBar;
+    kciReplaceDock *replaceBar;
 
     friend class kciLanguageMode;
 };

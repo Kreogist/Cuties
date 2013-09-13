@@ -38,8 +38,7 @@
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
 #include <QVariant>
-#include <QWidget>
-
+#include <QSignalMapper>
 #ifdef Q_OS_MACX
 #include <QMenuBar>
 #endif
@@ -58,6 +57,8 @@
 #include "kcicontrolcenter.h"
 #include "kciexecutor.h"
 #include "kreogistcutestyle.h"
+#include "kcimessagebox.h"
+#include "kcirecentlyfilesmenu.h"
 
 #include "kcimessagebox.h"
 
@@ -70,6 +71,7 @@ public:
 signals:
     
 public slots:
+    void show();
     void aboutQt();
     void aboutKCI();
     void compileCurrentFile();
@@ -92,6 +94,9 @@ public slots:
 
 private slots:
     void showPreference();
+#ifdef Q_OS_MACX
+    void setFullScreen();
+#endif
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -117,27 +122,31 @@ private:
         mnuEditCopy,
         mnuEditPaste,
         mnuEditSelectAll,
-        mnuEditPreference,
-        //mnuViewSidebar,
+        mnuEditPreferences,
+        mnuViewSidebar,
         mnuViewCompileDock,
-        mnuViewDebugDock,
-        mnuViewDebugWatchDock,
+        //mnuViewDebugDock,
+        //mnuViewDebugWatchDock,
         //mnuViewJudgeDock,
+#ifdef Q_OS_MACX
+        mnuViewFullscreen,
+#endif
+        mnuViewEnd,
         mnuSearchFind,
-        mnuSearchFindInFiles,
+        //mnuSearchFindInFiles,
         mnuSearchReplace,
-        mnuSearchReplaceInFiles,
+        //mnuSearchReplaceInFiles,
         mnuSearchSearchOnline,
         mnuSearchGoto,
         mnuExecuteCompileAndRun,
         mnuExecuteCompile,
         mnuExecuteRun,
-        mnuExecuteParameters,
+        /*mnuExecuteParameters,
         mnuExecuteSetInputFile,
         mnuExecuteShowOutputFile,
         mnuExecuteRunAndShowOutputFile,
-        mnuExecuteSetInputRunShowOutput,
-        mnuDebugStart,
+        mnuExecuteSetInputRunShowOutput,*/
+        /*mnuDebugStart,
         mnuDebugStopExecute,
         mnuDebugSetBreakPoint,
         mnuDebugNextLine,
@@ -148,7 +157,7 @@ private:
         mnuDebugSkipFunction,
         mnuDebugAddWatch,
         mnuDebugModifyWatch,
-        mnuDebugRemoveWatch,
+        mnuDebugRemoveWatch,*/
         mnuWindowSplit,
         mnuWindowPrev,
         mnuWindowNext,
@@ -160,11 +169,12 @@ private:
     enum MainWindowMenu
     {
         mnuFile,
+        mnuFileRecentOpenedFiles,
         mnuEdit,
         mnuView,
         mnuSearch,
         mnuExecute,
-        mnuDebug,
+        //mnuDebug,
         mnuTools,
         mnuWindow,
         mnuHelp,

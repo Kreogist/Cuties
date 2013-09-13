@@ -24,12 +24,18 @@ static const int SearchBarOffset = 20;
 kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
+    replaceLayout=new QVBoxLayout(this);
+    replaceLayout->setContentsMargins(0,0,0,0);
+    replaceLayout->setMargin(0);
+    replaceLayout->setSpacing(0);
+    setLayout(replaceLayout);
+
     //setWindowFlags(Qt::AnchorPoint);
-    mainLayout=new QHBoxLayout(this);
+    mainLayout=new QHBoxLayout();
     mainLayout->setSpacing(0);
     setContentsMargins(0,0,0,0);
     mainLayout->setMargin(0);
-    setLayout(mainLayout);
+    mainLayout->setSpacing(0);
 
     strFileFilter = QObject::tr("All Support Files")+
             "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
@@ -41,6 +47,8 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
             QObject::tr("All Files")+"(*.*)";
 
     markPanel=new kciMarkPanel(this);
+    markPanel->setVisible(false);
+    markPanel->setEnabled(false);
     mainLayout->addWidget(markPanel);
 
     linePanel=new kciLinenumPanel(this);
@@ -49,9 +57,13 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     editor=new kciTextEditor(this);
     linePanel->setKciTextEditor(editor);
     markPanel->setKciTextEditor(editor);
-    document=editor->document();
     mainLayout->addWidget(editor);
-    mainLayout->addSpacing(1);
+
+    replaceLayout->addLayout(mainLayout);
+
+    replaceBar=new kciReplaceDock(this);
+    replaceBar->hide();
+    replaceLayout->addWidget(replaceBar);
 
     connect(editor->document(),SIGNAL(modificationChanged(bool)),
             this,SLOT(onModificationChanged(bool)));
@@ -70,19 +82,29 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 
     searchBar=new kciSearchWindow(editor);
     searchBar->hide();
-    connect(searchBar,SIGNAL(hideButtonPressed()),editor,SLOT(setFocus()));
+    connect(searchBar, &kciSearchWindow::hideButtonPressed,
+            this, &kciCodeEditor::hideSearchBar);
     connect(searchBar,&kciSearchWindow::requireSearch,
             editor,&kciTextEditor::searchString);
     connect(searchBar,&kciSearchWindow::requireShowNextResult,
             editor,&kciTextEditor::showNextSearchResult);
     connect(searchBar,&kciSearchWindow::requireShowPreviousResult,
             editor,&kciTextEditor::showPreviousSearchResult);
+}
 
+kciCodeEditor::~kciCodeEditor()
+{
+    mainLayout->deleteLater();
 }
 
 QString kciCodeEditor::getExecFileName()
 {
     return execFileName;
+}
+
+QTextDocument* kciCodeEditor::document()
+{
+    return editor->document();
 }
 
 void kciCodeEditor::computeExecFileName()
@@ -113,8 +135,35 @@ void kciCodeEditor::showSearchBar()
 
     QTextCursor _textCursor=editor->textCursor();
     if(_textCursor.hasSelection())
+    {
         searchBar->setText(_textCursor.selectedText());
+    }
     searchBar->setTextFocus();
+}
+
+void kciCodeEditor::hideSearchBar()
+{
+    if(searchBar->isVisible())
+    {
+        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
+        QRect animeStartPos=searchBar->geometry();
+        QRect animeEndPos=animeStartPos;
+        animeEndPos.setTop(-animeStartPos.height() - 20);
+        searchAnime->setStartValue(animeStartPos);
+        searchAnime->setDuration(300);
+        searchAnime->setEndValue(animeEndPos);
+        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+        connect(searchAnime, SIGNAL(finished()),
+                searchBar, SLOT(hide()));
+        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
+    }
+
+    editor->setFocus();
+}
+
+void kciCodeEditor::showReplaceBar()
+{
+    replaceBar->showAnime();
 }
 
 bool kciCodeEditor::open(const QString &fileName)
@@ -189,9 +238,10 @@ bool kciCodeEditor::saveAs()
 
 bool kciCodeEditor::dosaveas(const QString &Caption)
 {
-    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),
-                       QSettings::IniFormat);
-    filePath=QFileDialog::getSaveFileName(this,Caption,settings.value("texteditor/historyDir").toString(),strFileFilter);
+    filePath=QFileDialog::getSaveFileName(this,
+                                          Caption,
+                                          kciHistoryConfigure::getInstance()->getHistoryDir(),
+                                          strFileFilter);
 
     if(!filePath.isEmpty())
     {
@@ -402,9 +452,8 @@ void kciCodeEditor::fileInfoChanged(const QFile &file)
 
     computeExecFileName();
 
-    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),
-                       QSettings::IniFormat);
-    settings.setValue("texteditor/historyDir",_fileInfo.absolutePath());
+    kciHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
+    kciHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
 }
 
 kciLanguageMode *kciCodeEditor::langMode() const
@@ -416,3 +465,4 @@ bool kciCodeEditor::isModified()
 {
     return editor->document()->isModified();
 }
+

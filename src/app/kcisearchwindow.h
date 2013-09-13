@@ -35,6 +35,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QFrame>
 #include <QLabel>
+#include <QKeyEvent>
 #include <QMenu>
 
 class kciSearchWindow : public QWidget
@@ -55,15 +56,17 @@ signals:
                              bool caseSensitively,
                              bool wholeWorld);
 
+    void hideBar();
+
 public slots:
     void onTextChanged(const QString &text);
     void onMenuClicked();
 
-protected:
-    void hideEvent(QHideEvent *e);
-
 signals:
     void hideButtonPressed();
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     void showCurrResult();

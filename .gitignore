@@ -24,3 +24,7 @@ Makefile
 
 #gedit temp file
 *~
+
+#Mac Spotlight Search
+
+.DS_Store

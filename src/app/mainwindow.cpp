@@ -107,6 +107,7 @@ void MainWindow::createActions()
     //File -> Exit
     act[mnuFileExit]=new QAction(tr("E&xit"),this);
     act[mnuFileExit]->setShortcut(QKeySequence(Qt::ALT+Qt::Key_F4));
+    act[mnuFileExit]->setMenuRole(QAction::QuitRole);
     actMenuIconPath[mnuFileExit]=QString(":/menuicon/image/MenuIcons/mnuFileExit.png");
     actStatusTips[mnuFileExit]=QString(tr("Quit applications; prompts to save documents."));
     connect(act[mnuFileExit],SIGNAL(triggered()),this,SLOT(close()));
@@ -153,17 +154,18 @@ void MainWindow::createActions()
     actStatusTips[mnuEditSelectAll]=QString(tr("Select the entire document."));
     connect(act[mnuEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(select_all()));
 
-    //Edit -> Preference
-    act[mnuEditPreference]=new QAction(tr("Pr&eference"),this);
-    act[mnuEditPreference]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
-    actMenuIconPath[mnuEditPreference]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
-    actStatusTips[mnuEditPreference]=QString(tr("Customize your Cuties."));
-    connect(act[mnuEditPreference],SIGNAL(triggered()),this,SLOT(showPreference()));
+    //Edit -> Preferences
+    act[mnuEditPreferences]=new QAction(tr("Preferences"),this);
+    act[mnuEditPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
+    act[mnuEditPreferences]->setMenuRole(QAction::PreferencesRole);
+    actMenuIconPath[mnuEditPreferences]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
+    actStatusTips[mnuEditPreferences]=QString(tr("Customize your Cuties."));
+    connect(act[mnuEditPreferences],SIGNAL(triggered()),this,SLOT(showPreference()));
 
-    /*//View -> Sidebar
+    //View -> Sidebar
     act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
     actStatusTips[mnuViewSidebar]=QString(tr("Show or hide the Sidebar."));
-    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));*/
+    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
 
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
@@ -171,7 +173,7 @@ void MainWindow::createActions()
     connect(act[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
 
     //View -> Debug Dock
-    act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
+    /*act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
     actStatusTips[mnuViewDebugDock]=QString(tr("Show or hide the Debug Dock."));
     connect(act[mnuViewDebugDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugDock()));
 
@@ -181,31 +183,41 @@ void MainWindow::createActions()
     connect(act[mnuViewDebugWatchDock],SIGNAL(triggered()),this,SLOT(diffVisibleDebugWatchDock()));
 
     //View -> Judge Dock
-    /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
+    act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
     connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));*/
+
+#ifdef Q_OS_MACX
+    //View -> Fullscreen
+    act[mnuViewFullscreen]=new QAction(tr("Enter Full Screen"), this);
+    act[mnuViewFullscreen]->setShortcut(Qt::CTRL+Qt::META+Qt::Key_F);
+    actStatusTips[mnuViewFullscreen]=QString(tr("Show or hide fullscreen mode of Cuties."));
+    connect(act[mnuViewFullscreen], SIGNAL(triggered()),
+            this, SLOT(setFullScreen()));
+#endif
 
     //Search -> Search
     act[mnuSearchFind]=new QAction(tr("&Find"),this);
     act[mnuSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     actStatusTips[mnuSearchFind]=QString(tr("Search for text in the active document."));
     connect(act[mnuSearchFind],SIGNAL(triggered()),tabManager,SLOT(showSearchBar()));
-
+/*
     //Search -> Find In Files
     act[mnuSearchFindInFiles]=new QAction(tr("Fin&d In Files"),this);
     act[mnuSearchFindInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
     actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
-
+*/
     //Search -> Replace
     act[mnuSearchReplace]=new QAction(tr("&Replace"),this);
-    act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
+    act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
     actStatusTips[mnuSearchReplace]=QString(tr("Replace occurrences of search string."));
-
+    connect(act[mnuSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
+/*
     //Search -> Replace In Files
     act[mnuSearchReplaceInFiles]=new QAction(tr("R&eplace In Files"),this);
     act[mnuSearchReplaceInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
     actStatusTips[mnuSearchReplaceInFiles]=QString(tr("Replace occurrences of a text partten in multiple files."));
-
+*/
     //Search -> Search Online
     act[mnuSearchSearchOnline]=new QAction(tr("&Search Online"),this);
     act[mnuSearchSearchOnline]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
@@ -237,7 +249,7 @@ void MainWindow::createActions()
     act[mnuExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
     actStatusTips[mnuExecuteRun]=QString(tr("Run the compiled execution."));
     connect(act[mnuExecuteRun],SIGNAL(triggered()),this,SLOT(run()));
-
+/*
     //Execute -> Parameters
     act[mnuExecuteParameters]=new QAction(tr("P&arameters"),this);
     actStatusTips[mnuExecuteParameters]=QString(tr("Run the compiled execution with parameters."));
@@ -259,7 +271,8 @@ void MainWindow::createActions()
                 tr("Se&t Input, Run and show Output"), this);
     actStatusTips[mnuExecuteSetInputRunShowOutput]=
             QString(tr("Set the input file, compile and run the document, and show output file."));
-
+*/
+/*
     //Debug -> Debug Start
     act[mnuDebugStart]=new QAction(tr("Start &Debug"),this);
     act[mnuDebugStart]->setShortcut(QKeySequence(Qt::Key_F5));
@@ -313,7 +326,7 @@ void MainWindow::createActions()
     //Debug -> Remove Watch
     act[mnuDebugRemoveWatch]=new QAction(tr("&Remove Watch"),this);
     actStatusTips[mnuDebugRemoveWatch]=QString(tr("Remove a variable in debug watch list."));
-
+*/
     //Window -> Window Split
     act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
     actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));
@@ -332,6 +345,7 @@ void MainWindow::createActions()
 
     //Help -> About
     act[mnuHelpAbout]=new QAction(tr("&About..."),this);
+    act[mnuHelpAbout]->setMenuRole(QAction::AboutRole);
     actStatusTips[mnuHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
     connect(act[mnuHelpAbout],SIGNAL(triggered()),this,SLOT(aboutKCI()));
 
@@ -343,8 +357,12 @@ void MainWindow::createActions()
 
 void MainWindow::aboutKCI()
 {
-    QMessageBox::about(this,tr("About Cuties"),
-                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
+    kciMessageBox *test=new kciMessageBox(this);
+    //test->setTitleText(tr("About"));
+    //test->addText(tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
+    //test->addText("Hello World");
+    test->startAnime();
+    test->exec();
 }
 
 void MainWindow::aboutQt()
@@ -446,11 +464,11 @@ void MainWindow::createDocks()
     debugWatchDock=new kciDebugWatchDock(this);
     addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
     debugWatchDock->hide();
-/*
+
     //Sidebar Dock
     sidebarDock=new kciSideBar(this);
+    sidebarDock->hide();
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
-*/
 }
 
 void MainWindow::createMenu()
@@ -458,29 +476,42 @@ void MainWindow::createMenu()
     int i;
 
 #ifdef Q_OS_MACX
-    QMenuBar *_mainMenu=new QMenuBar();
+    QMenuBar *_mainMenu=new QMenuBar(0);
 #else
     QMenu *_mainMenu=new QMenu(this);
-#endif
     QIcon *MenuIconAddor=new QIcon;
+#endif
 
     menu[mnuFile]   = _mainMenu->addMenu(tr("&File"));
     menu[mnuEdit]   = _mainMenu->addMenu(tr("&Edit"));
     menu[mnuView]   = _mainMenu->addMenu(tr("&View"));
     menu[mnuSearch] = _mainMenu->addMenu(tr("&Search"));
     menu[mnuExecute]= _mainMenu->addMenu(tr("E&xecute"));
-    menu[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
+    //menu[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
     menu[mnuTools]  = _mainMenu->addMenu(tr("&Tools"));
     menu[mnuWindow] = _mainMenu->addMenu(tr("&Window"));
     menu[mnuHelp]   = _mainMenu->addMenu(tr("&Help"));
 
     //Create File Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menu[mnuFile]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuFileNewFile;i<=mnuFileExit;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+
+        if(i == mnuFileOpen)
+        {
+            kciRecentlyFilesMenu* recentlyFiles=new kciRecentlyFilesMenu(this);
+            menu[mnuFileRecentOpenedFiles]=(QMenu*)recentlyFiles;
+            menu[mnuFile]->addMenu(menu[mnuFileRecentOpenedFiles]);
+            connect(recentlyFiles,SIGNAL(requireOpenFile(QString)),
+                    tabManager,SLOT(openAndJumpTo(QString)));
+        }
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuFile]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -496,12 +527,16 @@ void MainWindow::createMenu()
     }
 
     //Create Edit Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
     menu[mnuEdit]->setIcon(*MenuIconAddor);
-    for(i=mnuEditUndo;i<=mnuEditPreference;i++)
+#endif
+    for(i=mnuEditUndo;i<=mnuEditPreferences;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuEdit]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -509,7 +544,6 @@ void MainWindow::createMenu()
         {
         case mnuEditRedo:
         case mnuEditPaste:
-        case mnuEditSelectAll:
             menu[mnuEdit]->addSeparator();
             break;
         }
@@ -517,29 +551,46 @@ void MainWindow::createMenu()
     }
 
     //Create View Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
-    for(i=/*mnuViewSidebar*/mnuViewCompileDock;i<=mnuViewDebugWatchDock/*mnuViewJudgeDock*/;i++)
+#endif
+    for(i=mnuViewSidebar;i<mnuViewEnd;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuView]->addAction(act[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case mnuViewCompileDock:
+            menu[mnuView]->addSeparator();
+        }
+
+#endif
     }
 
     //Create Search Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
     menu[mnuSearch]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
     {
-        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setStatusTip(actStatusTips[i]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         menu[mnuSearch]->addAction(act[i]);
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuSearchReplaceInFiles:
+        case mnuSearchReplace:
+        //case mnuSearchReplaceInFiles:
         case mnuSearchSearchOnline:
             menu[mnuSearch]->addSeparator();
             break;
@@ -549,19 +600,23 @@ void MainWindow::createMenu()
     }
 
     //Create Execute Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
     menu[mnuExecute]->setIcon(*MenuIconAddor);
-    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteSetInputRunShowOutput;i++)
+#endif
+    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteRun/*mnuExecuteSetInputRunShowOutput*/;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuExecute]->addAction(act[i]);
 #ifdef Q_OS_MACX
         switch(i)
         {
         case mnuExecuteRun:
-        case mnuExecuteParameters:
+        //case mnuExecuteParameters:
             menu[mnuExecute]->addSeparator();
             break;
         }
@@ -569,12 +624,17 @@ void MainWindow::createMenu()
     }
 
     //Create Debug Menu
+    /*
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
     menu[mnuDebug]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuDebug]->addAction(act[i]);
 #ifdef Q_OS_MACX
@@ -588,31 +648,41 @@ void MainWindow::createMenu()
         }
 
 #endif
-    }
+    }*/
 
     //Create Tool Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
     menu[mnuTools]->setIcon(*MenuIconAddor);
+#endif
 
     //Create Window Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
     menu[mnuWindow]->setIcon(*MenuIconAddor);
+#endif
     for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuWindow]->addAction(act[i]);
     }
 
     //Create Help Menu
+#ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
     menu[mnuHelp]->setIcon(*MenuIconAddor);
+#endif
     //from about to about_qt add into help menu
     for(i=mnuHelpAbout;i<=mnuHelpAboutQt;i++)
     {
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuHelp]->addAction(act[i]);
     }
@@ -630,8 +700,9 @@ void MainWindow::createMenu()
             this,SLOT(setNoDocOpenMenuEnabled()));
     connect(tabManager,SIGNAL(tabClear()),
             titlebar,SLOT(hideToolBar()));
-
+#ifndef Q_OS_MACX
     delete MenuIconAddor;
+#endif
 }
 
 void MainWindow::createStatusbar()
@@ -666,15 +737,23 @@ void MainWindow::setDocOpenMenuState(bool state)
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }
+#ifdef Q_OS_MACX
+    menu[mnuEdit]->menuAction()->setEnabled(state);
+    menu[mnuEdit]->menuAction()->setVisible(state);
+#endif
 
     //View Menu
-    for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)
+    /*for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
-    }
+    }*/
+    act[mnuViewCompileDock]->setEnabled(state);
+    act[mnuViewCompileDock]->setVisible(state);
+#ifndef Q_OS_MACX
     menu[mnuView]->menuAction()->setEnabled(state);
     menu[mnuView]->menuAction()->setVisible(state);
+#endif
 
     //Search Menu
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
@@ -686,14 +765,14 @@ void MainWindow::setDocOpenMenuState(bool state)
     menu[mnuSearch]->menuAction()->setVisible(state);
 
     //Execute Menu
-    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteSetInputRunShowOutput;i++)
+    for(i=mnuExecuteCompileAndRun;i<=mnuExecuteRun/*mnuExecuteSetInputRunShowOutput*/;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }
     menu[mnuExecute]->menuAction()->setEnabled(state);
     menu[mnuExecute]->menuAction()->setVisible(state);
-
+/*
     //Debug Menu
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
@@ -702,7 +781,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     }
     menu[mnuDebug]->menuAction()->setEnabled(state);
     menu[mnuDebug]->menuAction()->setVisible(state);
-
+*/
     //Window Menu
     for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
     {
@@ -729,7 +808,9 @@ void MainWindow::restoreSettings()
 
     settings.beginGroup("MainWindow");
 
+#ifndef Q_OS_MACX
     int n_WindowState;
+#endif
     float n_X, n_Y, n_width, n_height;
 
     float deskWidth=float(QApplication::desktop()->width()),
@@ -748,6 +829,7 @@ void MainWindow::restoreSettings()
                       static_cast<int>(n_Y),
                       static_cast<int>(n_width),
                       static_cast<int>(n_height));
+#ifndef Q_OS_MACX
     n_WindowState=settings.value("state").toInt();
     switch(n_WindowState)
     {
@@ -756,6 +838,7 @@ void MainWindow::restoreSettings()
     case 2:
         titlebar->setWindowMax();
     }
+#endif
     settings.endGroup();
 }
 
@@ -787,7 +870,9 @@ void MainWindow::saveSettings()
         sgoH=this->height();
         sgoW=this->width();
     }
+#ifndef Q_OS_MACX
     int n_WindowState;
+#endif
 
     //Save ALL settings.
     float deskWidth=float(QApplication::desktop()->width()),
@@ -799,6 +884,7 @@ void MainWindow::saveSettings()
     settings.setValue("x",float(sgoX)/deskWidth);
     settings.setValue("y",float(sgoY)/deskHeight);
 
+#ifndef Q_OS_MACX
     switch(windowState())
     {
     case Qt::WindowMinimized:n_WindowState=1;break;
@@ -806,6 +892,7 @@ void MainWindow::saveSettings()
     default:n_WindowState=0;break;
     }
     settings.setValue("state",n_WindowState);
+#endif
     settings.endGroup();
 }
 
@@ -820,6 +907,15 @@ void MainWindow::closeEvent(QCloseEvent *e)
     else
     {
         e->ignore();
+    }
+}
+
+void MainWindow::show()
+{
+    kciMainWindow::show();
+    if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
+    {
+        tabManager->openHistoryFiles();
     }
 }
 
@@ -898,7 +994,14 @@ void MainWindow::searchOnline()
 
 void MainWindow::diffVisibleSidebar()
 {
-    sidebarDock->setVisible(!sidebarDock->isVisible());
+    if(sidebarDock->isVisible())
+    {
+        sidebarDock->hideAnime();
+    }
+    else
+    {
+        sidebarDock->showAnime();
+    }
 }
 
 void MainWindow::diffVisibleCompileDock()
@@ -1006,3 +1109,20 @@ void MainWindow::connectDebugDockWithCurrEditor()
         debugDock->setGdbInstance(gdbInstance);
     }
 }
+
+#ifdef Q_OS_MACX
+void MainWindow::setFullScreen()
+{
+    if(this->isFullScreen())
+    {
+        //TODO: The title of the menu can be replaced by a QString.
+        act[mnuViewFullscreen]->setText(tr("Enter Full Screen"));
+        this->showNormal();
+    }
+    else
+    {
+        act[mnuViewFullscreen]->setText(tr("Exit Full Screen"));
+        this->showFullScreen();
+    }
+}
+#endif

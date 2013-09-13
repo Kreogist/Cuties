@@ -17,45 +17,33 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KCISTATUSCURSORINFO_H
-#define KCISTATUSCURSORINFO_H
+#ifndef KCIRECENTLYFILESMENU_H
+#define KCIRECENTLYFILESMENU_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QPropertyAnimation>
-#include <QSpinBox>
+#include <QMenu>
+#include <QFileInfo>
+#include <QSignalMapper>
 
-class kciStatusCursorInfo : public QWidget
+#include "kcihistoryconfigure.h"
+#include "connectionhandler.h"
+
+class kciRecentlyFilesMenu : public QMenu
 {
     Q_OBJECT
 public:
-    explicit kciStatusCursorInfo(QWidget *parent = 0);
-    void ShowGotoBox(int currentValue, int MaxValue);
-    void HideGotoBox();
-    bool getGotoShowed();
+    explicit kciRecentlyFilesMenu(QWidget *parent = 0);
     
 signals:
-    void ToLineNum(int LineNum);
-
-protected:
-    void resizeEvent(QResizeEvent *e);
+    void requireOpenFile(QString filePath);
 
 public slots:
-    void updateCursorPosition(int LineNum, int ColNum);
-    void gotoLineNumber(int NewNum);
-    void finishedHideGotoBox();
-
-private slots:
-    void setHideGotoBox();
-
+    void onRecordsChanged();
+    
 private:
-    QSpinBox *spbLineNum;
-    QLabel *lblCursorPosition;
-    bool gotoBarShowed;
+    void generateMenuItems();
 
-    QPropertyAnimation *gotoHideAnime;
-
+    QSignalMapper *mapper;
+    connectionHandler connections;
 };
 
-#endif // KCISTATUSCURSORINFO_H
+#endif // KCIRECENTLYFILESMENU_H

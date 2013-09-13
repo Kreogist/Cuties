@@ -25,7 +25,8 @@ kciPanel::kciPanel(QWidget *parent) :
 {
     setContentsMargins(0,0,0,0);
     autoWidth=false;
-    setFixedWidth(1);
+    setMinimumWidth(18);
+    setFixedWidth(18);
     setAutoFillBackground(true);
 }
 

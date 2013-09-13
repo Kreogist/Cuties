@@ -30,13 +30,22 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setAcceptDrops(false);
 
+    configureInstance=kciEditorConfigure::getInstance();
+
     clipboard=kciClipboard::getInstance();
     clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
             this,SLOT(insertPlainText(QString)));
 
-    //Set TextEditor Properties.
-    setTabStopWidth(fontMetrics().width(' ')<<2);
+    //Set Customize TextEditor Properties.
+    //Set Tab Width.
+    setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabWidth());
+    //Set WordWarp Mode.
+    setWordWrapMode(QTextOption::NoWrap);
+    //Set Cursor Width.
+    setCursorWidth(1);
+    //Set OverWrite Mode.
+    setOverwriteMode(false);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -63,6 +72,8 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
+    connect(configureInstance,SIGNAL(tabWidthChanged(int)),
+            this,SLOT(setTabWidth(int)));
 }
 
 void kciTextEditor::paintEvent(QPaintEvent *e)
@@ -95,6 +106,11 @@ void kciTextEditor::showPreviousSearchResult()
 void kciTextEditor::showNextSearchResult()
 {
     findString(true);
+}
+
+void kciTextEditor::setTabWidth(int width)
+{
+    setTabStopWidth(fontMetrics().width(' ')*width);
 }
 
 void kciTextEditor::findString(bool forward)
@@ -316,6 +332,83 @@ void kciTextEditor::initTextSearcher(QScopedPointer<kciTextSearcher> &searcher)
 
     searcher->setPatternString(text);
     searcher->setIsCaseSensitive(caseSensitively);
+}
+
+void kciTextEditor::autoIndent()
+{
+    QTextCursor _textCursor=textCursor();
+    QTextBlock currBlock=_textCursor.block();
+    QTextBlock prevBlock=currBlock.previous();
+    _textCursor.setPosition(currBlock.position());
+    int basePos=findFirstCharacter(prevBlock);
+    int pos=findFirstCharacter(currBlock);
+
+    QTextCursor _prevTextCursor(prevBlock);
+    _prevTextCursor.movePosition(QTextCursor::Right,
+                                 QTextCursor::KeepAnchor,
+                                 basePos);
+    QString tabs=_prevTextCursor.selectedText();
+
+    _textCursor.setPosition(currBlock.position()+pos);
+    _textCursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::KeepAnchor);
+    _textCursor.removeSelectedText();
+    _textCursor.insertText(tabs);
+
+    kciTextBlockData* prevData=(kciTextBlockData*)prevBlock.userData();
+    kciTextBlockData* CurrData=(kciTextBlockData*)currBlock.userData();
+    int baseLevel=prevData->getCodeLevel();
+    int currLevel=CurrData->getCodeLevel();
+
+    if(currLevel>=baseLevel)
+        insertTab(_textCursor,currLevel-baseLevel);
+    else
+        removeTab(_textCursor,baseLevel-currLevel);
+}
+
+void kciTextEditor::insertTab(QTextCursor cursor, int count)
+{
+    cursor.clearSelection();
+    while(count--)
+    {
+        if(configureInstance->usingBlankInsteadTab())
+        {
+            for(int i=0;i<configureInstance->getTabWidth();i++)
+                cursor.insertText(" ");
+
+        }
+        else
+        {
+            cursor.insertText("\t");
+        }
+    }
+}
+
+void kciTextEditor::removeTab(QTextCursor cursor, int count)
+{
+    cursor.clearSelection();
+    while(count-- && !cursor.atBlockStart())
+    {
+        if(configureInstance->usingBlankInsteadTab())
+        {
+            cursor.movePosition(QTextCursor::Left,
+                                QTextCursor::KeepAnchor,
+                                configureInstance->getTabWidth());
+        }
+        else
+        {
+            cursor.movePosition(QTextCursor::Left,
+                                QTextCursor::KeepAnchor);
+        }
+    }
+
+    cursor.removeSelectedText();
+}
+
+int kciTextEditor::findFirstCharacter(const QTextBlock &block)
+{
+    QString text=block.text();
+    int ret=text.indexOf(QRegularExpression("\\S"));
+    return ret==-1?block.text().length():ret;
 }
 
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)
@@ -584,15 +677,14 @@ void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
     insertPlainText(QString(rightParentheses));
     currTextCursor.movePosition(QTextCursor::Left);
     setTextCursor(currTextCursor);
-}
+}*/
 
 void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
 
-
     switch (e->key()) {
-    case Qt::Key_ParenLeft:
+    /*case Qt::Key_ParenLeft:
     {
         if(!(e->modifiers()&Qt::ShiftModifier))
         {
@@ -641,9 +733,42 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
         }
 
         break;
+    }*/
+    case Qt::Key_Tab:
+    {
+        insertTab(_textCursor);
+        break;
+    }
+    case Qt::Key_Backspace:
+    {
+        int pos=findFirstCharacter(_textCursor.block());
+        if(_textCursor.positionInBlock()<=pos && pos!=0)
+        {
+            if(pos<configureInstance->getTabWidth())
+            {
+                _textCursor.beginEditBlock();
+                while(pos--)
+                    _textCursor.deletePreviousChar();
+                _textCursor.endEditBlock();
+            }
+            else
+            {
+                removeTab(_textCursor);
+            }
+        }
+        else
+            QPlainTextEdit::keyPressEvent(e);
+        break;
+    }
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+    {
+        QPlainTextEdit::keyPressEvent(e);
+        autoIndent();
+        break;
     }
     default:
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
-}*/
+}

@@ -35,6 +35,7 @@
 #include "kcitextsearcher.h"
 #include "kcitextblockdata.h"
 #include "kciclipboard.h"
+#include "kcieditorconfigure.h"
 
 class kciTextEditor : public QPlainTextEdit
 {
@@ -56,6 +57,8 @@ public slots:
                       bool regularExpression,
                       bool caseSensitively,
                       bool wholeWord);
+    void autoIndent();
+    void setTabWidth(int width);
 
 private slots:
     void updateSearchResults();
@@ -63,7 +66,7 @@ private slots:
 protected:
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent (QContextMenuEvent * event);
-    //void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
@@ -87,7 +90,11 @@ private:
                          QList<parenthesesInfo>::iterator startPos,
                          QTextBlock block,
                          bool forward);
+    int findFirstCharacter(const QTextBlock& block);
+    void insertTab(QTextCursor cursor, int count = 1);
+    void removeTab(QTextCursor cursor, int count = 1);
 
+    kciEditorConfigure* configureInstance;
     kciClipboard* clipboard;
     QSignalMapper* clipboardHistoryMenuSignalMapper;
     QColor lineColor,searchResultColor;

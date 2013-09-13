@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -59,11 +55,36 @@ kciTabManager::kciTabManager(QWidget *parent) :
     currentEditor=NULL;
 }
 
+void kciTabManager::openHistoryFiles()
+{
+    QList<QString> lastTimeUnClosedFiles=kciHistoryConfigure::getInstance()->getAllUnClosedFilePaths();
+    QList<int> lastTimeUnClosedHs=kciHistoryConfigure::getInstance()->getAllUnClosedFileHs();
+    QList<int> lastTimeUnClosedVs=kciHistoryConfigure::getInstance()->getAllUnClosedFileVs();
+
+    int hisItem;
+    for(int i=0;i<lastTimeUnClosedFiles.size();i++)
+    {
+        hisItem=open(lastTimeUnClosedFiles.at(i));
+        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(hisItem));
+
+        editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
+    }
+    if(kciHistoryConfigure::getInstance()->getUnClosedCurrent()>-1)
+    {
+        setCurrentIndex(kciHistoryConfigure::getInstance()->getUnClosedCurrent());
+    }
+}
+
 kciCodeEditor* kciTabManager::getCurrentEditor() const
 {
     return currentEditor;
 }
 
+/*!
+ * \brief kciTabManager::open will open the file and switch to it.
+ * \param filePath the path of the file that should be opened.
+ * \return the index of the tab of this file.
+ */
 int kciTabManager::open(const QString& filePath)
 {
     QString name=QFileInfo(filePath).fileName();
@@ -83,11 +104,18 @@ int kciTabManager::open(const QString& filePath)
     //File has not been opened, then open it and add tab.
     kciCodeEditor *tmp;
     tmp=new kciCodeEditor(this);
-    tmp->open(filePath);
-    tmp->setDocumentTitle(name);
-    connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
-    emit tabAdded();
-    return addTab(tmp,name);
+    if(tmp->open(filePath))
+    {
+        tmp->setDocumentTitle(name);
+        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+        emit tabAdded();
+        return addTab(tmp,name);
+    }
+    else
+    {
+        tmp->deleteLater();
+        return currentIndex();
+    }
 }
 
 void kciTabManager::openAndJumpTo(const QString &filePath)
@@ -97,21 +125,17 @@ void kciTabManager::openAndJumpTo(const QString &filePath)
 
 void kciTabManager::open()
 {
-    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
     QStringList file_name_list=QFileDialog::getOpenFileNames(this,
                                                              tr("Open File"),
-                                                             settings.value("files/historyDir").toString(),
+                                                             kciHistoryConfigure::getInstance()->getHistoryDir(),
                                                              strFileFilter);
-    int i;
+
     QString name;
 
     if(!file_name_list.isEmpty())
     {
-        name=*file_name_list.begin();
-        for(i=name.size()-1;i>=0;i--)
-            if(name[i]=='/')
-                break;
-        settings.setValue("files/historyDir",name.left(i));
+        QFileInfo _fileInfo(*file_name_list.begin());
+        kciHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
     }
 
     int _last_tab_index=currentIndex();
@@ -152,20 +176,14 @@ void kciTabManager::new_file()
 void kciTabManager::switchNextTab()
 {
     int current=currentIndex();
-    if(++current>=count())
-    {
-        current=0;
-    }
+    current=(current+1)%count();
     setCurrentIndex(current);
 }
 
 void kciTabManager::switchPrevTab()
 {
-    int current=currentIndex();
-    if(--current<0)
-    {
-        current=count()-1;
-    }
+    int current=currentIndex()+count();
+    current=(current-1)%count();
     setCurrentIndex(current);
 }
 
@@ -317,11 +335,39 @@ void kciTabManager::on_current_tab_change(int index)
 
 void kciTabManager::closeEvent(QCloseEvent *e)
 {
-    e->accept();//set the accept flag
-    int i=count();
+    //set the accept flag
+    e->accept();
+
+    //Cleae the last UnClosed File Paths.
+    kciHistoryConfigure::getInstance()->clearAllUnClosedFilePaths();
+    int i=count(), cIndex=currentIndex();
     while(i--)
     {
         QWidget *page=widget(i);
+
+        //Save the current opened file.
+        kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(page);
+        if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
+        {
+            if(editor!=NULL)
+            {
+                if(editor->getFilePath().length()>0)
+                {
+                    kciHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
+                                                                            editor->getTextCursor().blockNumber(),
+                                                                            editor->getTextCursor().columnNumber());
+
+                }
+                else
+                {
+                    if(i<cIndex)
+                    {
+                        cIndex--;
+                    }
+                }
+            }
+        }
+
         if(!page->close())
         {
             e->ignore();//clean the accept flag
@@ -332,6 +378,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
             removeTab(i);
         }
     }
+    kciHistoryConfigure::getInstance()->setUnClosedCurrent(cIndex);
 }
 
 void kciTabManager::renameTabTitle(QString title)
@@ -374,6 +421,12 @@ void kciTabManager::showSearchBar()
         currentEditor->showSearchBar();
 }
 
+void kciTabManager::showReplaceBar()
+{
+    if(currentEditor!=NULL)
+        currentEditor->showReplaceBar();
+}
+
 QString kciTabManager::textNowSelect()
 {\
     QString returnValue;
@@ -412,7 +465,7 @@ int kciTabManager::getCurrentLineCount() const
 {
     if(currentEditor!=NULL)
     {
-        return currentEditor->document->blockCount();
+        return currentEditor->document()->blockCount();
     }
     else
     {

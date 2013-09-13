@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
     //Initialize Application Language.
     QTranslator appTrans;
     appTrans.load(qApp->applicationDirPath() + "/Locale/" + QLocale::system().name());
+    qDebug()<<QLocale::system().name();
     app.installTranslator(&appTrans);
 
     //Initalize Application Palette.
@@ -116,5 +117,9 @@ int main(int argc, char *argv[])
     MainWindow mainwindow;
     mainwindow.show();
 
-    return app.exec();
+    int ret=app.exec();
+
+    kciGlobalInstance->writeSettings();
+
+    return ret;
 }

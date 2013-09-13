@@ -79,15 +79,16 @@ public slots:
 
 private slots:
     void _exchange_button_state();
-    void hideRealToolBar();
 #ifndef Q_OS_MACX
     void spacingDblClick();
 #endif
 
 protected:
+#ifndef Q_OS_MACX
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+#endif
 
 private:
     bool hasPressed;

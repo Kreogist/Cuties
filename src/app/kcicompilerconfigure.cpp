@@ -26,9 +26,9 @@ void kciCompilerConfigure::readConfigure()
 {
     QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
     cfgOperator.beginGroup("Compiler");
-    gccPath=cfgOperator.value("Gcc Path", gccPath).toString();
-    gppPath=cfgOperator.value("G++ Path", gppPath).toString();
-    fpcPath=cfgOperator.value("FPC Path", fpcPath).toString();
+    gccPath=cfgOperator.value("GCC-Path", gccPath).toString();
+    gppPath=cfgOperator.value("GPP-Path", gppPath).toString();
+    fpcPath=cfgOperator.value("FPC-Path", fpcPath).toString();
     cfgOperator.endGroup();
 }
 
@@ -36,9 +36,9 @@ void kciCompilerConfigure::writeConfigure()
 {
     QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
     cfgOperator.beginGroup("Compiler");
-    gccPath=cfgOperator.value("Gcc Path", gccPath).toString();
-    gppPath=cfgOperator.value("G++ Path", gppPath).toString();
-    fpcPath=cfgOperator.value("FPC Path", fpcPath).toString();
+    cfgOperator.setValue("GCC-Path", gccPath);
+    cfgOperator.setValue("GPP-Path", gppPath);
+    cfgOperator.setValue("FPC-Path", fpcPath);
     cfgOperator.endGroup();
 }
 

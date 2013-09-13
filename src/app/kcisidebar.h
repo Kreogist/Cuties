@@ -3,29 +3,31 @@
 
 #include <QDockWidget>
 #include <QLabel>
+#include <QTimeLine>
+#include <QIcon>
 #include <QToolButton>
+#include <QPushButton>
+#include <QButtonGroup>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
+
+#include <QStackedWidget>
+#include <QListView>
 
 class kciSideBarContent : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciSideBarContent(QWidget *parent = 0);
-
-
-};
-
-class kciSideBarTitle : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit kciSideBarTitle(QWidget *parent = 0);
-    void setSidebarTitle(const QString title);
+    ~kciSideBarContent();
 
 private:
-    QHBoxLayout *titleMainLayout;
-    QLabel *sidebarTitle;
-    QToolButton *sidebarLock;
+    QVBoxLayout *mainLayout;
+    QHBoxLayout *buttonGroupLayout;
+    QToolButton *buttonRecent;
+
+    QStackedWidget *contents;
+    QListView *historyStack;
 };
 
 class kciSideBar : public QDockWidget
@@ -37,10 +39,14 @@ public:
 signals:
     
 public slots:
-    
+    void showAnime();
+    void hideAnime();
+
+private slots:
+    void resizeDock(int newWidth);
+
 private:
     kciSideBarContent *CentralWidget;
-    kciSideBarTitle *sidebarTitleBar;
 };
 
 #endif // KCISIDEBAR_H
