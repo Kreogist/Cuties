@@ -14,6 +14,16 @@
 #include <QStackedWidget>
 #include <QListView>
 
+class kciHistoryStack : public QListView
+{
+    Q_OBJECT
+public:
+    explicit kciHistoryStack(QWidget *parent = 0);
+
+private:
+
+};
+
 class kciSideBarContent : public QWidget
 {
     Q_OBJECT

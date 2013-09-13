@@ -357,17 +357,13 @@ void MainWindow::createActions()
 
 void MainWindow::aboutKCI()
 {
-    kciMessageBox *test=new kciMessageBox(this);
-    //test->setTitleText(tr("About"));
-    //test->addText(tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
-    //test->addText("Hello World");
-    test->startAnime();
-    test->exec();
+    QMessageBox::about(this,tr("About Cuties"),
+                           tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
 }
 
 void MainWindow::aboutQt()
 {
-    QMessageBox::aboutQt(this,tr("about Qt"));
+    QMessageBox::aboutQt(this,tr("About Qt"));
 }
 
 void MainWindow::createTitlebar()
@@ -750,10 +746,6 @@ void MainWindow::setDocOpenMenuState(bool state)
     }*/
     act[mnuViewCompileDock]->setEnabled(state);
     act[mnuViewCompileDock]->setVisible(state);
-#ifndef Q_OS_MACX
-    menu[mnuView]->menuAction()->setEnabled(state);
-    menu[mnuView]->menuAction()->setVisible(state);
-#endif
 
     //Search Menu
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
