@@ -22,7 +22,7 @@
 kciRecentlyFilesMenu::kciRecentlyFilesMenu(QWidget *parent) :
     QMenu(parent)
 {
-    setTitle(tr("recently opened files"));
+    setTitle(tr("Recently Opened Files"));
 
     mapper=new QSignalMapper(this);
 

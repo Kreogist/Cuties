@@ -498,6 +498,9 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
+#endif
+        act[i]->setStatusTip(actStatusTips[i]);
+        menu[mnuFile]->addAction(act[i]);
 
         if(i == mnuFileOpen)
         {
@@ -507,9 +510,7 @@ void MainWindow::createMenu()
             connect(recentlyFiles,SIGNAL(requireOpenFile(QString)),
                     tabManager,SLOT(openAndJumpTo(QString)));
         }
-#endif
-        act[i]->setStatusTip(actStatusTips[i]);
-        menu[mnuFile]->addAction(act[i]);
+
 #ifdef Q_OS_MACX
         switch(i)
         {

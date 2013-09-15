@@ -132,6 +132,7 @@ void kcicompiledock::animeShowError()
     animeHideTimeLine->stop();
     if(animeShowTimeLine->state()!=QTimeLine::Running)
     {
+        compileOutput->setFocus();
         animeShowTimeLine->setFrameRange(compileOutput->width(), int(width()/5));
         animeShowTimeLine->start();
     }
