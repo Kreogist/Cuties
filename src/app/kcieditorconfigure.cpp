@@ -23,6 +23,7 @@ kciEditorConfigure* kciEditorConfigure::instance=nullptr;
 
 kciEditorConfigure::kciEditorConfigure()
 {
+    wrapMode=QTextOption::NoWrap;
     isUsingBlankInsteadTab=true;
     tabWidth=4;
 }
@@ -39,6 +40,29 @@ void kciEditorConfigure::readConfigure()
     tabWidth=settings.value("TabWidth",tabWidth).toInt();
     isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
                                           isUsingBlankInsteadTab).toBool();
+    int wMode=settings.value("WordWrap", wrapMode).toInt();
+    switch(wMode)
+    {
+    case 0:
+        wrapMode=QTextOption::NoWrap;
+        break;
+    case 1:
+        wrapMode=QTextOption::WordWrap;
+        break;
+    case 2:
+        wrapMode=QTextOption::ManualWrap;
+        break;
+    case 3:
+        wrapMode=QTextOption::WrapAnywhere;
+        break;
+    case 4:
+        wrapMode=QTextOption::WrapAtWordBoundaryOrAnywhere;
+        break;
+    default:
+        wrapMode=QTextOption::NoWrap;
+        break;
+    }
+
     settings.endGroup();
 }
 
@@ -46,6 +70,7 @@ void kciEditorConfigure::writeConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Editor");
+    settings.setValue("WordWrap", wrapMode);
     settings.setValue("TabWidth",tabWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
     settings.endGroup();
@@ -70,4 +95,15 @@ void kciEditorConfigure::setTabWidth(const int &width)
 {
     tabWidth=width;
     emit tabWidthChanged(tabWidth);
+}
+
+QTextOption::WrapMode kciEditorConfigure::getWrapMode() const
+{
+    return wrapMode;
+}
+
+void kciEditorConfigure::setWrapMode(QTextOption::WrapMode value)
+{
+    wrapMode = value;
+    emit wrapModeChanged(value);
 }

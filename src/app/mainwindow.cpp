@@ -163,9 +163,9 @@ void MainWindow::createActions()
     connect(act[mnuEditPreferences],SIGNAL(triggered()),this,SLOT(showPreference()));
 
     //View -> Sidebar
-    act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
+    /*act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
     actStatusTips[mnuViewSidebar]=QString(tr("Show or hide the Sidebar."));
-    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
+    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));*/
 
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
@@ -208,10 +208,10 @@ void MainWindow::createActions()
     actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
 */
     //Search -> Replace
-    act[mnuSearchReplace]=new QAction(tr("&Replace"),this);
+    /*act[mnuSearchReplace]=new QAction(tr("&Replace"),this);
     act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
     actStatusTips[mnuSearchReplace]=QString(tr("Replace occurrences of search string."));
-    connect(act[mnuSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
+    connect(act[mnuSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));*/
 /*
     //Search -> Replace In Files
     act[mnuSearchReplaceInFiles]=new QAction(tr("R&eplace In Files"),this);
@@ -328,8 +328,8 @@ void MainWindow::createActions()
     actStatusTips[mnuDebugRemoveWatch]=QString(tr("Remove a variable in debug watch list."));
 */
     //Window -> Window Split
-    act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
-    actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));
+    /*act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
+    actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));*/
 
     //Window -> Next
     act[mnuWindowNext]=new QAction(tr("&Next"),this);
@@ -552,7 +552,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuViewSidebar;i<mnuViewEnd;i++)
+    for(i=mnuViewCompileDock;i<mnuViewEnd;i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
@@ -586,7 +586,7 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuSearchReplace:
+        case mnuSearchFind:
         //case mnuSearchReplaceInFiles:
         case mnuSearchSearchOnline:
             menu[mnuSearch]->addSeparator();
@@ -658,7 +658,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
     menu[mnuWindow]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
+    for(i=mnuWindowPrev;i<=mnuWindowNext;i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
@@ -776,7 +776,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     menu[mnuDebug]->menuAction()->setVisible(state);
 */
     //Window Menu
-    for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
+    for(i=mnuWindowNext;i<=mnuWindowNext;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);

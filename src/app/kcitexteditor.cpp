@@ -41,7 +41,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     //Set Tab Width.
     setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabWidth());
     //Set WordWarp Mode.
-    setWordWrapMode(QTextOption::NoWrap);
+    setWordWrapMode(configureInstance->getWrapMode());
     //Set Cursor Width.
     setCursorWidth(1);
     //Set OverWrite Mode.
@@ -72,8 +72,11 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
+
     connect(configureInstance,SIGNAL(tabWidthChanged(int)),
             this,SLOT(setTabWidth(int)));
+    connect(configureInstance,SIGNAL(wrapModeChanged(QTextOption::WrapMode)),
+            this,SLOT(setWordWrap(QTextOption::WrapMode)));
 }
 
 void kciTextEditor::paintEvent(QPaintEvent *e)
@@ -771,4 +774,9 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
+}
+
+void kciTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
+{
+    setWordWrapMode(wrapMode);
 }

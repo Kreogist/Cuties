@@ -59,6 +59,7 @@ public slots:
                       bool wholeWord);
     void autoIndent();
     void setTabWidth(int width);
+    void setWordWrap(QTextOption::WrapMode wrapMode);
 
 private slots:
     void updateSearchResults();

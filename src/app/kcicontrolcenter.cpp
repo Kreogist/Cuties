@@ -310,9 +310,31 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     wrapMode=new kciSettingListItemCombo(this);
     wrapMode->Caption->setText(tr("Word Wrap Mode:"));
-    wrapMode->addListItem(tr("No Word Wrap"));
-    wrapMode->addListItem(tr("Wrap At Any Point."));
-    wrapMode->addListItem(tr("Wrap At Word Boundary Or Anywhere."));
+    wrapMode->addListItem(tr("No word wrapped"));
+    wrapMode->addListItem(tr("Wrapped at word boundaries"));
+    wrapMode->addListItem(tr("Wrapped at any point."));
+    wrapMode->addListItem(tr("Wrapping at word boundary or anywhere."));
+    switch(kciEditorConfigure::getInstance()->getWrapMode())
+    {
+    case QTextOption::NoWrap:
+        wrapMode->setValue(0);
+        break;
+    case QTextOption::WordWrap:
+        wrapMode->setValue(1);
+        break;
+    case QTextOption::WrapAnywhere:
+        wrapMode->setValue(2);
+        break;
+    case QTextOption::WrapAtWordBoundaryOrAnywhere:
+        wrapMode->setValue(3);
+        break;
+    default:
+        //This should be no way to execute.
+
+        wrapMode->setValue(0);
+    }
+
+    wrapMode->setValue(kciEditorConfigure::getInstance()->getWrapMode());
     MainLayout->addWidget(wrapMode);
 
     cursorWidth=new kciSettingListItemNumInput(this);
@@ -325,6 +347,21 @@ void kciCCTabEditorContent::apply()
 {
     kciEditorConfigure* instance=kciEditorConfigure::getInstance();
     instance->setTabWidth(tabSpaceNum->getValue());
+    switch(wrapMode->getValue())
+    {
+    case 0:
+        instance->setWrapMode(QTextOption::NoWrap);
+        break;
+    case 1:
+        instance->setWrapMode(QTextOption::WordWrap);
+        break;
+    case 2:
+        instance->setWrapMode(QTextOption::WrapAnywhere);
+        break;
+    case 3:
+        instance->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        break;
+    }
 }
 
 //-----------------Compiler----------------

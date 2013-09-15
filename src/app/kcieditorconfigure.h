@@ -22,6 +22,7 @@
 
 #include <QList>
 #include <QDebug>
+#include <QTextOption>
 
 #include "kciconfigure.h"
 
@@ -38,12 +39,19 @@ public:
     int getTabWidth() const;
     void setTabWidth(const int& width);
 
+    QTextOption::WrapMode getWrapMode() const;
+    void setWrapMode(QTextOption::WrapMode value);
+
 signals:
     void tabWidthChanged(int newValue);
+    void wrapModeChanged(QTextOption::WrapMode newWrapMode);
 
 private:
     kciEditorConfigure();
     static kciEditorConfigure* instance;
+
+    //Values:
+    QTextOption::WrapMode wrapMode;
     bool isUsingBlankInsteadTab;
     int tabWidth;
 };
