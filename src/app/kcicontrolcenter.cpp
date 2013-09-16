@@ -339,7 +339,9 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     cursorWidth=new kciSettingListItemNumInput(this);
     cursorWidth->Caption->setText(tr("Cursor Width:"));
-    cursorWidth->setValue(1);
+    cursorWidth->setMinValue(1);
+    cursorWidth->setMaxValue(10);
+    cursorWidth->setValue(kciEditorConfigure::getInstance()->getCursorWidth());
     MainLayout->addWidget(cursorWidth);
 }
 
@@ -347,6 +349,7 @@ void kciCCTabEditorContent::apply()
 {
     kciEditorConfigure* instance=kciEditorConfigure::getInstance();
     instance->setTabWidth(tabSpaceNum->getValue());
+    instance->setCursorWidth(cursorWidth->getValue());
     switch(wrapMode->getValue())
     {
     case 0:

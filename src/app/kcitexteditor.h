@@ -60,6 +60,7 @@ public slots:
     void autoIndent();
     void setTabWidth(int width);
     void setWordWrap(QTextOption::WrapMode wrapMode);
+    void setTheCursorWidth(int width);
 
 private slots:
     void updateSearchResults();

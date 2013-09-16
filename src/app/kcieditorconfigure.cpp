@@ -26,6 +26,7 @@ kciEditorConfigure::kciEditorConfigure()
     wrapMode=QTextOption::NoWrap;
     isUsingBlankInsteadTab=true;
     tabWidth=4;
+    cursorWidth=1;
 }
 
 kciEditorConfigure* kciEditorConfigure::getInstance()
@@ -62,6 +63,7 @@ void kciEditorConfigure::readConfigure()
         wrapMode=QTextOption::NoWrap;
         break;
     }
+    cursorWidth=settings.value("CursorWidth", cursorWidth).toInt();
 
     settings.endGroup();
 }
@@ -72,6 +74,7 @@ void kciEditorConfigure::writeConfigure()
     settings.beginGroup("Editor");
     settings.setValue("WordWrap", wrapMode);
     settings.setValue("TabWidth",tabWidth);
+    settings.setValue("CursorWidth", cursorWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
     settings.endGroup();
 }
@@ -106,4 +109,15 @@ void kciEditorConfigure::setWrapMode(QTextOption::WrapMode value)
 {
     wrapMode = value;
     emit wrapModeChanged(value);
+}
+
+int kciEditorConfigure::getCursorWidth() const
+{
+    return cursorWidth;
+}
+
+void kciEditorConfigure::setCursorWidth(int value)
+{
+    cursorWidth = value;
+    emit cursorWidthChanged(value);
 }

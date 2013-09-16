@@ -38,13 +38,15 @@ public:
     void setUsingBlankInsteadTab(bool enabled);
     int getTabWidth() const;
     void setTabWidth(const int& width);
-
     QTextOption::WrapMode getWrapMode() const;
     void setWrapMode(QTextOption::WrapMode value);
+    int getCursorWidth() const;
+    void setCursorWidth(int value);
 
 signals:
     void tabWidthChanged(int newValue);
     void wrapModeChanged(QTextOption::WrapMode newWrapMode);
+    void cursorWidthChanged(int newValue);
 
 private:
     kciEditorConfigure();
@@ -53,7 +55,7 @@ private:
     //Values:
     QTextOption::WrapMode wrapMode;
     bool isUsingBlankInsteadTab;
-    int tabWidth;
+    int tabWidth, cursorWidth;
 };
 
 
