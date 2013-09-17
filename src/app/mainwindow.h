@@ -58,7 +58,6 @@
 #include "kciexecutor.h"
 #include "kreogistcutestyle.h"
 #include "kcimessagebox.h"
-#include "kcirecentlyfilesmenu.h"
 
 #include "kcimessagebox.h"
 

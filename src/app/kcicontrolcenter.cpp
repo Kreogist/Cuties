@@ -233,12 +233,6 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->addSpacing(5);
     MainLayout->addWidget(tblEnvironment);
 
-    sbnAutoOpenUnclosed=new kciSettingListItemBoolean(this);
-    sbnAutoOpenUnclosed->setEnabledText(tr("Restore files when quitting and re-opening files."));
-    sbnAutoOpenUnclosed->setDisabledText(tr("Don't restore files when quitting and re-opening files."));
-    sbnAutoOpenUnclosed->setTheValue(kciGeneralConfigure::getInstance()->getRememberUnclosedFile());
-    MainLayout->addWidget(sbnAutoOpenUnclosed);
-
     sboDefaultLanguage=new kciSettingListItemCombo(this);
     sboDefaultLanguage->Caption->setText(tr("Default Programming Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
@@ -246,6 +240,26 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     sboDefaultLanguage->addListItem(tr("Pascal"));
     sboDefaultLanguage->setValue(QStringToValue(kciGeneralConfigure::getInstance()->getDefaultLanguageMode()));
     MainLayout->addWidget(sboDefaultLanguage);
+
+    QLabel *tblRemember=new QLabel(this);
+    tblRemember->setText(" " + tr("Auto Remember"));
+    tblRemember->setFont(TitleFont);
+    tblRemember->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblRemember);
+
+    sbnAutoOpenUnclosed=new kciSettingListItemBoolean(this);
+    sbnAutoOpenUnclosed->setEnabledText(tr("Restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setDisabledText(tr("Don't restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setTheValue(kciGeneralConfigure::getInstance()->getRememberUnclosedFile());
+    MainLayout->addWidget(sbnAutoOpenUnclosed);
+
+    slnHistoryMax=new kciSettingListItemNumInput(this);
+    slnHistoryMax->Caption->setText(tr("Maximum History Tracking Items:"));
+    slnHistoryMax->setMinValue(4);
+    slnHistoryMax->setMaxValue(100);
+    slnHistoryMax->setValue(kciHistoryConfigure::getInstance()->getMaxRecentFilesSize());
+    MainLayout->addWidget(slnHistoryMax);
 }
 
 void kciCCTabGerneralContent::apply()
@@ -273,6 +287,8 @@ void kciCCTabGerneralContent::apply()
     default:
         break;
     }
+    //History Settings.
+    kciHistoryConfigure::getInstance()->setMaxRecentFilesSize(slnHistoryMax->getValue());
 }
 
 //--------------------Editor------------------

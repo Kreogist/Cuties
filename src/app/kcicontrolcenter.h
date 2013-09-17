@@ -53,6 +53,7 @@
 #include "kcigeneralconfigure.h"
 #include "kcieditorconfigure.h"
 #include "kcicompilerconfigure.h"
+#include "kcihistoryconfigure.h"
 
 enum kciCCLists
 {
@@ -138,6 +139,7 @@ private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
     kciSettingListItemBoolean *sbnAutoOpenUnclosed;
+    kciSettingListItemNumInput *slnHistoryMax;
 };
 //------------------Editor---------------
 class kciCCTabEditorContent : public kciAbstractCCTabContent

@@ -58,7 +58,12 @@ void kciHistoryConfigure::readConfigure()
     settings.endArray();
 
     QString filePath;
+    maxRecentFilesSize=settings.value("maxRecentFilesSize", 10).toInt();
     int recentOpenedFilesSize=settings.beginReadArray("recentOpenedFiles");
+    if(recentOpenedFilesSize > maxRecentFilesSize)
+    {
+        recentOpenedFilesSize=maxRecentFilesSize;
+    }
     for(int i=0;i<recentOpenedFilesSize;i++)
     {
         settings.setArrayIndex(i);
@@ -104,6 +109,7 @@ void kciHistoryConfigure::writeConfigure()
         }
         settings.endArray();
 
+        settings.setValue("maxRecentFilesSize", maxRecentFilesSize);
         settings.beginWriteArray("recentOpenedFiles");
 
         int recentOpenedCounts=recentOpenedFileModel->rowCount()-1;
@@ -204,6 +210,10 @@ void kciHistoryConfigure::addRecentFileRecord(const QString &path)
     QStandardItem *item=new QStandardItem(historyFileInfo.fileName());
     item->setToolTip(path);
     item->setEditable(false);
+    if(recentRootItem->rowCount() > maxRecentFilesSize)
+    {
+        recentRootItem->removeRow(maxRecentFilesSize);
+    }
     recentRootItem->insertRow(0, item);
 }
 
