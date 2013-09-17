@@ -123,7 +123,7 @@ private:
         mnuEditPaste,
         mnuEditSelectAll,
         mnuEditPreferences,
-        //mnuViewSidebar,
+        mnuViewSidebar,
         mnuViewCompileDock,
         //mnuViewDebugDock,
         //mnuViewDebugWatchDock,
@@ -169,7 +169,6 @@ private:
     enum MainWindowMenu
     {
         mnuFile,
-        mnuFileRecentOpenedFiles,
         mnuEdit,
         mnuView,
         mnuSearch,

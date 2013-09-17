@@ -14,11 +14,19 @@
 #include <QStackedWidget>
 #include <QListView>
 
+#include "kcihistoryconfigure.h"
+
 class kciHistoryStack : public QListView
 {
     Q_OBJECT
 public:
     explicit kciHistoryStack(QWidget *parent = 0);
+
+signals:
+    void requiredOpenFiles(QString filePath);
+
+private slots:
+    void dblClickHistoryItems(QModelIndex ItemID);
 
 private:
 
@@ -31,13 +39,16 @@ public:
     explicit kciSideBarContent(QWidget *parent = 0);
     ~kciSideBarContent();
 
+signals:
+    void historyRequiredOpenFiles(QString filePath);
+
 private:
     QVBoxLayout *mainLayout;
     QHBoxLayout *buttonGroupLayout;
     QToolButton *buttonRecent;
 
     QStackedWidget *contents;
-    QListView *historyStack;
+    kciHistoryStack *historyStack;
 };
 
 class kciSideBar : public QDockWidget
@@ -47,7 +58,8 @@ public:
     explicit kciSideBar(QWidget *parent = 0);
     
 signals:
-    
+    void historyRequiredOpenFiles(QString filePath);
+
 public slots:
     void showAnime();
     void hideAnime();

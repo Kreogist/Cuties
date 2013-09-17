@@ -26,6 +26,8 @@ kciHistoryConfigure::kciHistoryConfigure()
     cleanMark=false;
     trackUserHistory=true;
     maxRecentFilesSize=10;
+    recentOpenedFileModel=new QStandardItemModel(this);
+    recentRootItem=recentOpenedFileModel->invisibleRootItem();
 }
 
 kciHistoryConfigure* kciHistoryConfigure::getInstance()
@@ -55,11 +57,21 @@ void kciHistoryConfigure::readConfigure()
     }
     settings.endArray();
 
+    QString filePath;
     int recentOpenedFilesSize=settings.beginReadArray("recentOpenedFiles");
     for(int i=0;i<recentOpenedFilesSize;i++)
     {
         settings.setArrayIndex(i);
-        RecentOpenedFiles.append(settings.value("filePath").toString());
+        filePath=settings.value("filePath").toString();
+        QFile *historyFileItem=new QFile(filePath);
+        if(historyFileItem->exists())
+        {
+            QFileInfo historyFileInfo(filePath);
+            QStandardItem *item=new QStandardItem(historyFileInfo.fileName());
+            item->setToolTip(filePath);
+            item->setEditable(false);
+            recentRootItem->insertRow(0, item);
+        }
     }
     settings.endArray();
 
@@ -93,10 +105,12 @@ void kciHistoryConfigure::writeConfigure()
         settings.endArray();
 
         settings.beginWriteArray("recentOpenedFiles");
-        for(int i=0;i<RecentOpenedFiles.size();i++)
+
+        int recentOpenedCounts=recentOpenedFileModel->rowCount()-1;
+        for(int i=0; i<=recentOpenedCounts;i++)
         {
-            settings.setArrayIndex(i);
-            settings.setValue("filePath",RecentOpenedFiles.at(i));
+            settings.setArrayIndex(recentOpenedCounts-i);
+            settings.setValue("filePath",recentOpenedFileModel->item(i)->toolTip());
         }
         settings.endArray();
     }
@@ -179,29 +193,26 @@ void kciHistoryConfigure::setMaxRecentFilesSize(int value)
 
 void kciHistoryConfigure::clearAllRecentFilesRecord()
 {
-    RecentOpenedFiles.clear();
-
-    emit recentFilesRecordsChanged();
+    delete recentOpenedFileModel;
+    recentOpenedFileModel=new QStandardItemModel(this);
+    recentRootItem=recentOpenedFileModel->invisibleRootItem();
 }
 
 void kciHistoryConfigure::addRecentFileRecord(const QString &path)
 {
-    int index=RecentOpenedFiles.indexOf(path);
-    if(index!=-1)
-    {
-        RecentOpenedFiles.removeAt(index);
-    }
-    RecentOpenedFiles.prepend(path);
-
-    while(RecentOpenedFiles.size()>maxRecentFilesSize)
-    {
-        RecentOpenedFiles.removeLast();
-    }
-
-    emit recentFilesRecordsChanged();
+    QFileInfo historyFileInfo(path);
+    QStandardItem *item=new QStandardItem(historyFileInfo.fileName());
+    item->setToolTip(path);
+    item->setEditable(false);
+    recentRootItem->insertRow(0, item);
 }
 
-QStringList kciHistoryConfigure::getAllRecentOpenedFilesRecord() const
+QStandardItemModel *kciHistoryConfigure::getRecentOpenedFileModel() const
 {
-    return RecentOpenedFiles;
+    return recentOpenedFileModel;
+}
+
+void kciHistoryConfigure::setRecentOpenedFileModel(QStandardItemModel *value)
+{
+    recentOpenedFileModel = value;
 }

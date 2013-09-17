@@ -163,9 +163,9 @@ void MainWindow::createActions()
     connect(act[mnuEditPreferences],SIGNAL(triggered()),this,SLOT(showPreference()));
 
     //View -> Sidebar
-    /*act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
+    act[mnuViewSidebar]=new QAction(tr("Sidebar"), this);
     actStatusTips[mnuViewSidebar]=QString(tr("Show or hide the Sidebar."));
-    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));*/
+    connect(act[mnuViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
 
     //View -> Compile Dock
     act[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
@@ -465,6 +465,8 @@ void MainWindow::createDocks()
     sidebarDock=new kciSideBar(this);
     sidebarDock->hide();
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
+    connect(sidebarDock, SIGNAL(historyRequiredOpenFiles(QString)),
+            tabManager, SLOT(openAndJumpTo(QString)));
 }
 
 void MainWindow::createMenu()
@@ -501,16 +503,6 @@ void MainWindow::createMenu()
 #endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuFile]->addAction(act[i]);
-
-        if(i == mnuFileOpen)
-        {
-            kciRecentlyFilesMenu* recentlyFiles=new kciRecentlyFilesMenu(this);
-            menu[mnuFileRecentOpenedFiles]=(QMenu*)recentlyFiles;
-            menu[mnuFile]->addMenu(menu[mnuFileRecentOpenedFiles]);
-            connect(recentlyFiles,SIGNAL(requireOpenFile(QString)),
-                    tabManager,SLOT(openAndJumpTo(QString)));
-        }
-
 #ifdef Q_OS_MACX
         switch(i)
         {
@@ -552,7 +544,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menu[mnuView]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuViewCompileDock;i<mnuViewEnd;i++)
+    for(i=mnuViewSidebar;i<mnuViewEnd;i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);

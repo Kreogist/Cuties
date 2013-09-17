@@ -1,5 +1,18 @@
 #include "kcisidebar.h"
 
+kciHistoryStack::kciHistoryStack(QWidget *parent) :
+    QListView(parent)
+{
+    setModel(kciHistoryConfigure::getInstance()->getRecentOpenedFileModel());
+    connect(this, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(dblClickHistoryItems(QModelIndex)));
+}
+
+void kciHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
+{
+    emit requiredOpenFiles(kciHistoryConfigure::getInstance()->getRecentOpenedFileModel()->item(ItemID.row())->toolTip());
+}
+
 kciSideBarContent::kciSideBarContent(QWidget *parent) :
     QWidget(parent)
 {
@@ -17,6 +30,7 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     buttonRecent=new QToolButton(this);
     buttonRecent->setAutoRaise(true);
     buttonRecent->setCheckable(true);
+    buttonRecent->setChecked(true);
     buttonRecent->setFixedSize(35,20);
     buttonRecent->setToolTip(tr("History"));
     buttonRecent->setIcon(QIcon(":/Sidebar/image/Sidebar/History.png"));
@@ -33,9 +47,10 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     mainLayout->addWidget(contents);
 
     //Add Widgets
-    historyStack=new QListView(this);
+    historyStack=new kciHistoryStack(this);
     contents->addWidget(historyStack);
-
+    connect(historyStack, SIGNAL(requiredOpenFiles(QString)),
+            this, SIGNAL(historyRequiredOpenFiles(QString)));
 }
 
 kciSideBarContent::~kciSideBarContent()
@@ -71,6 +86,9 @@ kciSideBar::kciSideBar(QWidget *parent) :
     //New Central Widget
     CentralWidget=new kciSideBarContent(this);
     setWidget(CentralWidget);
+
+    connect(CentralWidget, SIGNAL(historyRequiredOpenFiles(QString)),
+            this, SIGNAL(historyRequiredOpenFiles(QString)));
 }
 
 void kciSideBar::showAnime()

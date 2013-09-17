@@ -22,7 +22,11 @@
 
 #include <QString>
 #include <QStringList>
+#include <QStandardItemModel>
 #include <QList>
+#include <QFile>
+#include <QFileInfo>
+#include <QDebug>
 
 #include "kciconfigure.h"
 
@@ -59,14 +63,16 @@ public:
     int getUnClosedCurrent() const;
     void setUnClosedCurrent(int value);
 
-
-signals:
-    void recentFilesRecordsChanged();
+    QStandardItemModel *getRecentOpenedFileModel() const;
+    void setRecentOpenedFileModel(QStandardItemModel *value);
 
 private:
     kciHistoryConfigure();
     QString historyDirPath;
-    QStringList RecentOpenedFiles;
+
+    QStandardItemModel *recentOpenedFileModel;
+    QStandardItem *recentRootItem;
+
     int maxRecentFilesSize;
     bool trackUserHistory;
     bool cleanMark;
