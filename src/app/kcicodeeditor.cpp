@@ -69,6 +69,11 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
             this,SLOT(onModificationChanged(bool)));
     connect(editor,SIGNAL(cursorPositionChanged()),
             this,SLOT(cursorChanged()));
+    connect(editor,SIGNAL(overwriteModeChanged(bool)),
+            this, SIGNAL(rewriteStateChanged(bool)));
+
+    //Default Disable Overwrite Mode.
+    editor->setOverwriteMode(false);
 
     m_langMode=new kciLanguageMode(this);
 
@@ -95,6 +100,17 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 kciCodeEditor::~kciCodeEditor()
 {
     mainLayout->deleteLater();
+}
+
+bool kciCodeEditor::getOverwriteMode()
+{
+    return editor->overwriteMode();
+}
+
+void kciCodeEditor::setOverwriteMode(bool newValue)
+{
+    editor->setOverwriteMode(newValue);
+    emit rewriteStateChanged(newValue);
 }
 
 QString kciCodeEditor::getExecFileName()
@@ -464,5 +480,10 @@ kciLanguageMode *kciCodeEditor::langMode() const
 bool kciCodeEditor::isModified()
 {
     return editor->document()->isModified();
+}
+
+void kciCodeEditor::insertTextAtCursor(QString insertText)
+{
+    editor->insertPlainText(insertText);
 }
 

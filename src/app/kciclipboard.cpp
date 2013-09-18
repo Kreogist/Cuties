@@ -24,6 +24,9 @@ int kciClipboard::maxDataCount=10;
 
 kciClipboard::kciClipboard()
 {
+    clipboardTextsModel=new QStandardItemModel(this);
+    clipboardTextsModelRoot=clipboardTextsModel->invisibleRootItem();
+
     connect(qApp->clipboard(),&QClipboard::dataChanged,
             this,&kciClipboard::onSystemClipboardChanged);
 }
@@ -39,26 +42,22 @@ void kciClipboard::onSystemClipboardChanged()
 {
     QClipboard* _clipboard=qApp->clipboard();
     QString _text=_clipboard->text();
-    int index=clipboardTexts.indexOf(_text);
-    if(index==-1)
-    {
-        clipboardTexts.prepend(_text);
-    }
-    else
-    {
-        clipboardTexts.removeAt(index);
-        clipboardTexts.prepend(_text);
-    }
 
-    removeLastTextIfNeeded();
+    QStandardItem *clipItem=new QStandardItem(_text);
+    clipItem->setEditable(false);
+    if(clipboardTextsModelRoot->rowCount() > maxDataCount)
+    {
+        clipboardTextsModelRoot->removeRow(maxDataCount);
+    }
+    clipboardTextsModelRoot->insertRow(0, clipItem);
 }
 
-void kciClipboard::removeLastTextIfNeeded()
+QStandardItemModel *kciClipboard::getClipboardTextsModel() const
 {
-    int size=clipboardTexts.size();
-    while(size>maxDataCount)
-    {
-        clipboardTexts.removeLast();
-        size--;
-    }
+    return clipboardTextsModel;
+}
+
+void kciClipboard::setClipboardTextsModel(QStandardItemModel *value)
+{
+    clipboardTextsModel = value;
 }

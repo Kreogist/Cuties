@@ -68,10 +68,10 @@ kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     //Set Stretch
     TitleLayout->addStretch(0);
     //Set Search Bar
-    CCSearch=new kciSearchLineText();
+    /*CCSearch=new kciSearchLineText();
     CCSearch->setFixedWidth(250);
     TitleLayout->addWidget(CCSearch);
-    TitleLayout->addSpacing(7);
+    TitleLayout->addSpacing(7);*/
 }
 
 //----------------Left Bar-------------------
@@ -211,7 +211,7 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(0, 0, 0, 0);
 
     QPalette pal=this->palette();
     pal.setColor(QPalette::Window, QColor(255,255,255));
@@ -242,7 +242,7 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(sboDefaultLanguage);
 
     QLabel *tblRemember=new QLabel(this);
-    tblRemember->setText(" " + tr("Auto Remember"));
+    tblRemember->setText(" " + tr("Automatic Remember"));
     tblRemember->setFont(TitleFont);
     tblRemember->setFixedHeight(30);
     MainLayout->addSpacing(5);

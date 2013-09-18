@@ -85,7 +85,8 @@ SOURCES += \
     kcihistoryconfigure.cpp \
     kcimessagebox.cpp \
     kcireplacedock.cpp \
-    kcisearchlinetext.cpp
+    kcisearchlinetext.cpp \
+    kcistatusrewriteinfo.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -147,7 +148,8 @@ HEADERS += \
     kcifiletype.h \
     kcihistoryconfigure.h \
     kcimessagebox.h \
-    kcireplacedock.h
+    kcireplacedock.h \
+    kcistatusrewriteinfo.h
 
 # Enable C++11
 CONFIG += c++11

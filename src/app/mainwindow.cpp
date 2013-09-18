@@ -467,6 +467,8 @@ void MainWindow::createDocks()
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
     connect(sidebarDock, SIGNAL(historyRequiredOpenFiles(QString)),
             tabManager, SLOT(openAndJumpTo(QString)));
+    connect(sidebarDock, SIGNAL(clipboardRequiredInsertText(QString)),
+            tabManager, SLOT(insertToCurrentEditor(QString)));
 }
 
 void MainWindow::createMenu()
@@ -704,6 +706,10 @@ void MainWindow::createStatusbar()
     pal.setColor(QPalette::Foreground,QColor(255,255,255));
     myStatusBar->setPalette(pal);
 
+    connect(tabManager,SIGNAL(rewriteDataChanged(bool)),
+            myStatusBar,SLOT(updateRewriteMode(bool)));
+    connect(tabManager, SIGNAL(rewriteDisVisible()),
+            myStatusBar,SLOT(hideRewriteDisplay()));
     connect(tabManager,SIGNAL(cursorDataChanged(int,int)),
             myStatusBar,SLOT(updateCursorPosition(int,int)));
     connect(myStatusBar,SIGNAL(ToNewPosition(int)),

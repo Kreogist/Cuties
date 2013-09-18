@@ -19,7 +19,7 @@
 
 #include "kcitexteditor.h"
 
-static int elideWidth=500;
+//static int elideWidth=500;
 
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
@@ -32,10 +32,10 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     configureInstance=kciEditorConfigure::getInstance();
 
-    clipboard=kciClipboard::getInstance();
+    /*clipboard=kciClipboard::getInstance();
     clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
-            this,SLOT(insertPlainText(QString)));
+            this,SLOT(insertPlainText(QString)));*/
 
     //Set Customize TextEditor Properties.
     //Set Tab Width.
@@ -45,7 +45,7 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
     //Set Cursor Width.
     setCursorWidth(configureInstance->getCursorWidth());
     //Set OverWrite Mode.
-    setOverwriteMode(false);
+    setOverwriteMode(configureInstance->getOverwriteMode());
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -640,7 +640,7 @@ void kciTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& sele
     }
 }
 
-void kciTextEditor::pasteFromeHistory()
+/*void kciTextEditor::pasteFromeHistory()
 {
     QMenu* menu=new QMenu(this);
 
@@ -662,17 +662,18 @@ void kciTextEditor::pasteFromeHistory()
     menu->exec(contextMenuPos);
 
     delete menu;
-}
+}*/
 
 void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
 {
-    contextMenuPos=event->globalPos();
+    /*contextMenuPos=event->globalPos();
 
     QMenu *menu=createStandardContextMenu();
     menu->addAction(tr("paste from clipboard history"),
                     this,SLOT(pasteFromeHistory()));
     menu->exec(event->globalPos());
-    delete menu;
+    delete menu;*/
+    QPlainTextEdit::contextMenuEvent(event);
 }
 
 /*void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
@@ -687,6 +688,8 @@ void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
 void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
+
+    //qDebug()<<e->key()<<Qt::Key_Insert;
 
     switch (e->key()) {
     /*case Qt::Key_ParenLeft:
@@ -770,6 +773,12 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
     {
         QPlainTextEdit::keyPressEvent(e);
         autoIndent();
+        break;
+    }
+    case Qt::Key_Insert:
+    {
+        setOverwriteMode(!overwriteMode());
+        emit overwriteModeChanged(overwriteMode());
         break;
     }
     default:

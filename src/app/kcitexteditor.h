@@ -47,10 +47,11 @@ public:
 signals:
     void updated();
     void searchStringChangedByShortCut(QString text);
+    void overwriteModeChanged(bool newValue);
 
 public slots:
     void updateHighlights();
-    void pasteFromeHistory();
+    //void pasteFromeHistory();
     void showPreviousSearchResult();
     void showNextSearchResult();
     void searchString(QString text,
@@ -98,7 +99,6 @@ private:
 
     kciEditorConfigure* configureInstance;
     kciClipboard* clipboard;
-    QSignalMapper* clipboardHistoryMenuSignalMapper;
     QColor lineColor,searchResultColor;
     QColor noMatchedParenthesesColor,matchedParenthesesColor;
     QPoint contextMenuPos;

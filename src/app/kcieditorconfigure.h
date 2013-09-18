@@ -42,6 +42,8 @@ public:
     void setWrapMode(QTextOption::WrapMode value);
     int getCursorWidth() const;
     void setCursorWidth(int value);
+    bool getOverwriteMode() const;
+    void setOverwriteMode(bool value);
 
 signals:
     void tabWidthChanged(int newValue);
@@ -54,7 +56,7 @@ private:
 
     //Values:
     QTextOption::WrapMode wrapMode;
-    bool isUsingBlankInsteadTab;
+    bool isUsingBlankInsteadTab, overwriteMode;
     int tabWidth, cursorWidth;
 };
 

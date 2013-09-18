@@ -50,6 +50,8 @@ public:
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
+    void rewriteDataChanged(bool bRewriteMode);
+    void rewriteDisVisible();
     void tabAdded();
     void tabClear();
 
@@ -80,6 +82,7 @@ public slots:
     void showReplaceBar();
     void setFocus();
     void switchCurrentToLine(int nLineNum, int nColNum);
+    void insertToCurrentEditor(QString insertText);
     QString textNowSelect();
 
 protected:

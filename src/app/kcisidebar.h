@@ -15,6 +15,23 @@
 #include <QListView>
 
 #include "kcihistoryconfigure.h"
+#include "kciclipboard.h"
+
+class kciClipboardHistoryStack : public QListView
+{
+    Q_OBJECT
+public:
+    explicit kciClipboardHistoryStack(QWidget *parent = 0);
+
+signals:
+    void requiredInsertText(QString insertText);
+
+private slots:
+    void dblClickClipboardItems(QModelIndex ItemID);
+
+private:
+
+};
 
 class kciHistoryStack : public QListView
 {
@@ -41,14 +58,16 @@ public:
 
 signals:
     void historyRequiredOpenFiles(QString filePath);
+    void clipRequiredInsertText(QString insertText);
 
 private:
     QVBoxLayout *mainLayout;
     QHBoxLayout *buttonGroupLayout;
-    QToolButton *buttonRecent;
+    QToolButton *buttonRecent, *buttonClipboard;
 
     QStackedWidget *contents;
     kciHistoryStack *historyStack;
+    kciClipboardHistoryStack *clipboardStack;
 };
 
 class kciSideBar : public QDockWidget
@@ -59,6 +78,7 @@ public:
     
 signals:
     void historyRequiredOpenFiles(QString filePath);
+    void clipboardRequiredInsertText(QString insertText);
 
 public slots:
     void showAnime();

@@ -1,11 +1,26 @@
 #include "kcisidebar.h"
 
+kciClipboardHistoryStack::kciClipboardHistoryStack(QWidget *parent) :
+    QListView(parent)
+{
+    setModel(kciClipboard::getInstance()->getClipboardTextsModel());
+    connect(this, &kciClipboardHistoryStack::doubleClicked,
+            this, &kciClipboardHistoryStack::dblClickClipboardItems);
+}
+
+void kciClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
+{
+    emit requiredInsertText(kciClipboard::getInstance()->getClipboardTextsModel()->item(ItemID.row())->text());
+}
+
 kciHistoryStack::kciHistoryStack(QWidget *parent) :
     QListView(parent)
 {
     setModel(kciHistoryConfigure::getInstance()->getRecentOpenedFileModel());
-    connect(this, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(dblClickHistoryItems(QModelIndex)));
+    connect(this, &kciHistoryStack::doubleClicked,
+            this, &kciHistoryStack::dblClickHistoryItems);
+    connect(this, &kciHistoryStack::activated,
+            this, &kciHistoryStack::dblClickHistoryItems);
 }
 
 void kciHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
@@ -37,6 +52,16 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     switcherGroup->addButton(buttonRecent, 0);
     buttonGroupLayout->addWidget(buttonRecent);
 
+    //Add Clipboard History Button.
+    buttonClipboard=new QToolButton(this);
+    buttonClipboard->setAutoRaise(true);
+    buttonClipboard->setCheckable(true);
+    buttonClipboard->setFixedSize(35,20);
+    buttonClipboard->setToolTip(tr("Clipboard"));
+    buttonClipboard->setIcon(QIcon(":/Sidebar/image/Sidebar/History.png"));
+    switcherGroup->addButton(buttonClipboard, 1);
+    buttonGroupLayout->addWidget(buttonClipboard);
+
     buttonGroupLayout->addStretch();
     //Add Layout.
     mainLayout->addLayout(buttonGroupLayout);
@@ -51,6 +76,14 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     contents->addWidget(historyStack);
     connect(historyStack, SIGNAL(requiredOpenFiles(QString)),
             this, SIGNAL(historyRequiredOpenFiles(QString)));
+
+    clipboardStack=new kciClipboardHistoryStack(this);
+    contents->addWidget(clipboardStack);
+    connect(clipboardStack, SIGNAL(requiredInsertText(QString)),
+            this, SIGNAL(clipRequiredInsertText(QString)));
+
+    connect(switcherGroup, SIGNAL(buttonPressed(int)),
+            contents, SLOT(setCurrentIndex(int)));
 }
 
 kciSideBarContent::~kciSideBarContent()
@@ -89,6 +122,8 @@ kciSideBar::kciSideBar(QWidget *parent) :
 
     connect(CentralWidget, SIGNAL(historyRequiredOpenFiles(QString)),
             this, SIGNAL(historyRequiredOpenFiles(QString)));
+    connect(CentralWidget, SIGNAL(clipRequiredInsertText(QString)),
+            this, SIGNAL(clipboardRequiredInsertText(QString)));
 }
 
 void kciSideBar::showAnime()

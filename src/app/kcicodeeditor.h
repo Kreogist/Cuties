@@ -71,10 +71,14 @@ public:
     bool isModified();
     QTextDocument* document();
     kciLanguageMode *langMode() const;
+    bool getOverwriteMode();
+
+    void insertTextAtCursor(QString insertText);
 
 signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
+    void rewriteStateChanged(bool nowValue);
     
 public slots:
     bool open(const QString& fileName);
@@ -92,6 +96,7 @@ public slots:
     void showSearchBar();
     void showReplaceBar();
     void hideSearchBar();
+    void setOverwriteMode(bool newValue);
 
 private slots:
     void onModificationChanged(bool changed);

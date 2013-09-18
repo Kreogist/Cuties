@@ -27,6 +27,7 @@ kciEditorConfigure::kciEditorConfigure()
     isUsingBlankInsteadTab=true;
     tabWidth=4;
     cursorWidth=1;
+    overwriteMode=false;
 }
 
 kciEditorConfigure* kciEditorConfigure::getInstance()
@@ -64,6 +65,7 @@ void kciEditorConfigure::readConfigure()
         break;
     }
     cursorWidth=settings.value("CursorWidth", cursorWidth).toInt();
+    overwriteMode=settings.value("OverwriteMode", overwriteMode).toBool();
 
     settings.endGroup();
 }
@@ -76,6 +78,7 @@ void kciEditorConfigure::writeConfigure()
     settings.setValue("TabWidth",tabWidth);
     settings.setValue("CursorWidth", cursorWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
+    settings.setValue("OverwriteMode", overwriteMode);
     settings.endGroup();
 }
 
@@ -120,4 +123,14 @@ void kciEditorConfigure::setCursorWidth(int value)
 {
     cursorWidth = value;
     emit cursorWidthChanged(value);
+}
+
+bool kciEditorConfigure::getOverwriteMode() const
+{
+    return overwriteMode;
+}
+
+void kciEditorConfigure::setOverwriteMode(bool value)
+{
+    overwriteMode = value;
 }
