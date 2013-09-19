@@ -58,7 +58,7 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     buttonClipboard->setCheckable(true);
     buttonClipboard->setFixedSize(35,20);
     buttonClipboard->setToolTip(tr("Clipboard"));
-    buttonClipboard->setIcon(QIcon(":/Sidebar/image/Sidebar/History.png"));
+    buttonClipboard->setIcon(QIcon(":/Sidebar/image/Sidebar/Clipboard.png"));
     switcherGroup->addButton(buttonClipboard, 1);
     buttonGroupLayout->addWidget(buttonClipboard);
 

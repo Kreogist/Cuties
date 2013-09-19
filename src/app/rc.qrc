@@ -97,5 +97,6 @@
     </qresource>
     <qresource prefix="/Sidebar">
         <file>image/Sidebar/History.png</file>
+        <file>image/Sidebar/Clipboard.png</file>
     </qresource>
 </RCC>
