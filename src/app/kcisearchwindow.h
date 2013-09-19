@@ -24,70 +24,22 @@
 #ifndef KCISEARCHWINDOW_H
 #define KCISEARCHWINDOW_H
 
-#include <QWidget>
-#include <QPushButton>
-#include <QToolButton>
-#include <QHBoxLayout>
-#include <QLineEdit>
-#include <QDebug>
-#include <QPalette>
-#include <QKeySequence>
 #include <QGraphicsDropShadowEffect>
-#include <QFrame>
-#include <QLabel>
-#include <QMenu>
 
-class kciSearchWindow : public QWidget
+#include "kcisearchwidget.h"
+
+class kciSearchWindow : public kciSearchWidget
 {
     Q_OBJECT
+
 public:
-
     explicit kciSearchWindow(QWidget *parent);
-    void setTextFocus();
-    void setText(const QString& text);
-
-signals:
-    void requireShowPreviousResult();
-    void requireShowNextResult();
-
-    void requireSearch(QString text,
-                             bool regularExpression,
-                             bool caseSensitively,
-                             bool wholeWorld);
-
-    void hideBar();
-
-public slots:
-    void onTextChanged(const QString &text);
-    void onMenuClicked();
 
 signals:
     void hideButtonPressed();
 
 private:
-    void showCurrResult();
-
-    enum menuItem
-    {
-        menuRegularExpress,
-        menuMatchCase,
-        menuWholeWord,
-        menuItemCount
-    };
-
-    int currResultNum;
-
-    QHBoxLayout *searchLayout;
-    QToolButton *closeButton, *upButton, *downButton;
-
-    //TextBox
-    QWidget *searchText;
-    QLineEdit *SearchTexts;
-    QHBoxLayout *Layout;
-    QPushButton *SearchIcon;
-
-    QMenu *menu;
-    QAction *menuAction[menuItemCount];
+    QToolButton *closeButton;
 };
 
 #endif // KCISEARCHWINDOW_H

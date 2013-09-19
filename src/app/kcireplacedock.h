@@ -9,20 +9,17 @@
 #include <QPushButton>
 #include <QToolButton>
 #include <QResizeEvent>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QTimeLine>
 #include <QDebug>
 
-class kciReplaceDock : public QWidget
+#include "kcisearchwidget.h"
+
+class kciReplaceDock : public kciSearchWidget
 {
     Q_OBJECT
 public:
     explicit kciReplaceDock(QWidget *parent = 0);
-    ~kciReplaceDock();
 
-signals:
-    
 public slots:
     void showAnime();
     void hideAnime();
@@ -30,30 +27,11 @@ public slots:
 private slots:
     void resizeDock(int newHeight);
 
-protected:
-    void resizeEvent(QResizeEvent *event);
-
 private:
-    QVBoxLayout *mainLayout;
+    QGridLayout *mainLayout;
     QLineEdit *replaceText;
-
-    enum menuItem
-    {
-        menuRegularExpress,
-        menuMatchCase,
-        menuWholeWord,
-        menuItemCount
-    };
-
-    QWidget *searchText;
-    QHBoxLayout *Layout, *searchLayout, *replaceLayout;
-    QPushButton *SearchIcon;
-    QLineEdit *SearchTexts;
-    QMenu *menu;
-    QAction *menuAction[menuItemCount];
-
-    QToolButton *upButton, *downButton, *closeButton;
     QToolButton *replaceButton, *findAndReplaceButton, *replaceAllButton;
+    QToolButton *closeButton;
 };
 
 #endif // KCIREPLACEDOCK_H

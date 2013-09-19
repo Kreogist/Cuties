@@ -37,8 +37,8 @@
 #include <QTimeLine>
 #include <QScrollBar>
 #include <QGraphicsOpacityEffect>
-#include <QDebug>
 #include <QScrollBar>
+#include <QDebug>
 
 #include "kcihistoryconfigure.h"
 #include "kcitexteditor.h"
