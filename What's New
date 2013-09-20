@@ -1,16 +1,17 @@
 0.0.0.4
 Updates:
 1. New Assistant Documents.
-2. Enhanced Clipboard History Stack Display.
+2. Enhanced clipboard history stack display.
 3. Real clipboard copy support.
-4. Enhanced History Opened Stack.
+4. Clipboard maximum limit support.
+5. Enhanced history stack.
 
 0.0.0.3
-New Featues:
+New Features:
 1. Added Sidebar.
 2. Simple Help Assistant Documents.
 3. Add Help Assistant Documents.
 
 Updates:
 1. Clipboard history.
-2. Simplify Statusbar Position Display Widget.
+2. Simplify status bar Position Display Widget.
