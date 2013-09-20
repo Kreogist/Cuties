@@ -28,6 +28,8 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 
+#include <QDebug>
+
 class kciClipboard : public QObject
 {
     Q_OBJECT
@@ -36,6 +38,10 @@ public:
     
     QStandardItemModel *getClipboardTextsModel() const;
     void setClipboardTextsModel(QStandardItemModel *value);
+    QString getHistoryClipboardText(int ItemID);
+
+    int getMaxDataCount();
+    void setMaxDataCount(int value);
 
 signals:
     
@@ -45,10 +51,12 @@ public slots:
 private:
     kciClipboard();
     static kciClipboard* instance;
-    static int maxDataCount;
+    int maxDataCount;
 
     QStandardItemModel *clipboardTextsModel;
     QStandardItem *clipboardTextsModelRoot;
+
+    bool ignoreSignal;
 };
 
 #endif // KCICLIPBOARD_H

@@ -20,12 +20,14 @@
 #include "kciclipboard.h"
 
 kciClipboard* kciClipboard::instance=nullptr;
-int kciClipboard::maxDataCount=10;
 
 kciClipboard::kciClipboard()
 {
     clipboardTextsModel=new QStandardItemModel(this);
     clipboardTextsModelRoot=clipboardTextsModel->invisibleRootItem();
+
+    ignoreSignal=false;
+    maxDataCount=10;
 
     connect(qApp->clipboard(),&QClipboard::dataChanged,
             this,&kciClipboard::onSystemClipboardChanged);
@@ -40,16 +42,35 @@ kciClipboard* kciClipboard::getInstance()
 
 void kciClipboard::onSystemClipboardChanged()
 {
-    QClipboard* _clipboard=qApp->clipboard();
-    QString _text=_clipboard->text();
-
-    QStandardItem *clipItem=new QStandardItem(_text);
-    clipItem->setEditable(false);
-    if(clipboardTextsModelRoot->rowCount() > maxDataCount)
+    if(!ignoreSignal)
     {
-        clipboardTextsModelRoot->removeRow(maxDataCount);
+        QClipboard* _clipboard=qApp->clipboard();
+        QString _text=_clipboard->text();
+        QString _caption;
+        int firstNextLineChar=_text.indexOf("\n");
+        if(firstNextLineChar!=-1)
+        {
+            _caption=_text.left(firstNextLineChar) + "...";
+        }
+        else
+        {
+            _caption=_text;
+        }
+
+        QStandardItem *clipItem=new QStandardItem(_caption);
+        clipItem->setEditable(false);
+        clipItem->setToolTip(_text);
+        qDebug()<<clipboardTextsModelRoot->rowCount()<<maxDataCount;
+        if(clipboardTextsModelRoot->rowCount() >= maxDataCount)
+        {
+            clipboardTextsModelRoot->removeRow(maxDataCount - 1);
+        }
+        clipboardTextsModelRoot->insertRow(0, clipItem);
     }
-    clipboardTextsModelRoot->insertRow(0, clipItem);
+    else
+    {
+        ignoreSignal=false;
+    }
 }
 
 QStandardItemModel *kciClipboard::getClipboardTextsModel() const
@@ -60,4 +81,30 @@ QStandardItemModel *kciClipboard::getClipboardTextsModel() const
 void kciClipboard::setClipboardTextsModel(QStandardItemModel *value)
 {
     clipboardTextsModel = value;
+}
+
+QString kciClipboard::getHistoryClipboardText(int ItemID)
+{
+    QString newClipData=clipboardTextsModel->item(ItemID)->toolTip();
+    ignoreSignal=true;
+    qApp->clipboard()->setText(newClipData);
+    return newClipData;
+}
+
+int kciClipboard::getMaxDataCount()
+{
+    return maxDataCount;
+}
+
+void kciClipboard::setMaxDataCount(int value)
+{
+    if(maxDataCount>value)
+    {
+        do
+        {
+            clipboardTextsModelRoot->removeRow(clipboardTextsModelRoot->rowCount()-1);
+        }
+        while(clipboardTextsModelRoot->rowCount() > value);
+    }
+    maxDataCount = value;
 }

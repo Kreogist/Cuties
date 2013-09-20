@@ -1,6 +1,9 @@
 0.0.0.4
-New Features:
-
+Updates:
+1. New Assistant Documents.
+2. Enhanced Clipboard History Stack Display.
+3. Real clipboard copy support.
+4. Enhanced History Opened Stack.
 
 0.0.0.3
 New Featues:
@@ -8,6 +11,6 @@ New Featues:
 2. Simple Help Assistant Documents.
 3. Add Help Assistant Documents.
 
-Functions Improved:
+Updates:
 1. Clipboard history.
 2. Simplify Statusbar Position Display Widget.

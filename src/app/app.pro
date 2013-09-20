@@ -86,7 +86,8 @@ SOURCES += \
     kcimessagebox.cpp \
     kcireplacedock.cpp \
     kcisearchlinetext.cpp \
-    kcistatusrewriteinfo.cpp
+    kcistatusrewriteinfo.cpp \
+    Controls/SettingItems/kcisettinglistitembutton.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -149,7 +150,8 @@ HEADERS += \
     kcihistoryconfigure.h \
     kcimessagebox.h \
     kcireplacedock.h \
-    kcistatusrewriteinfo.h
+    kcistatusrewriteinfo.h \
+    Controls/SettingItems/kcisettinglistitembutton.h
 
 # Enable C++11
 CONFIG += c++11
@@ -168,5 +170,5 @@ OTHER_FILES += \
     lang.map \
     default.style \
     COPYING.txt \
-    Cuties.icns
+    Cuties.icns \
     winico.rc

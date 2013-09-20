@@ -23,11 +23,18 @@ kciHistoryConfigure* kciHistoryConfigure::instance = nullptr;
 
 kciHistoryConfigure::kciHistoryConfigure()
 {
+    //Load Default Value.
     cleanMark=false;
     trackUserHistory=true;
     maxRecentFilesSize=10;
     recentOpenedFileModel=new QStandardItemModel(this);
     recentRootItem=recentOpenedFileModel->invisibleRootItem();
+
+    //Load File Icon.
+    cFileIcon=QIcon(":/Sidebar/image/Sidebar/source_c.png");
+    cppFileIcon=QIcon(":/Sidebar/image/Sidebar/source_cpp.png");
+    otherFileIcon=QIcon(":/Sidebar/image/Sidebar/source_others.png");
+    pasFileIcon=QIcon(":/Sidebar/image/Sidebar/source_pas.png");
 }
 
 kciHistoryConfigure* kciHistoryConfigure::getInstance()
@@ -35,6 +42,26 @@ kciHistoryConfigure* kciHistoryConfigure::getInstance()
     return instance==nullptr?
                 instance=new kciHistoryConfigure:
                 instance;
+}
+
+QIcon kciHistoryConfigure::getFileIcon(QString fileExtName)
+{
+    if(fileExtName==QString("c"))
+    {
+        return cFileIcon;
+    }
+    else if(fileExtName==QString("cpp"))
+    {
+        return cppFileIcon;
+    }
+    else if(fileExtName==QString("pas"))
+    {
+        return pasFileIcon;
+    }
+    else
+    {
+        return otherFileIcon;
+    }
 }
 
 void kciHistoryConfigure::readConfigure()
@@ -75,7 +102,8 @@ void kciHistoryConfigure::readConfigure()
             QStandardItem *item=new QStandardItem(historyFileInfo.fileName());
             item->setToolTip(filePath);
             item->setEditable(false);
-            recentRootItem->insertRow(0, item);
+            item->setIcon(getFileIcon(historyFileInfo.suffix().toLower()));
+            recentRootItem->insertRow(0,item);
         }
     }
     settings.endArray();
@@ -199,9 +227,7 @@ void kciHistoryConfigure::setMaxRecentFilesSize(int value)
 
 void kciHistoryConfigure::clearAllRecentFilesRecord()
 {
-    delete recentOpenedFileModel;
-    recentOpenedFileModel=new QStandardItemModel(this);
-    recentRootItem=recentOpenedFileModel->invisibleRootItem();
+    recentOpenedFileModel->clear();
 }
 
 void kciHistoryConfigure::addRecentFileRecord(const QString &path)
@@ -210,9 +236,10 @@ void kciHistoryConfigure::addRecentFileRecord(const QString &path)
     QStandardItem *item=new QStandardItem(historyFileInfo.fileName());
     item->setToolTip(path);
     item->setEditable(false);
-    if(recentRootItem->rowCount() > maxRecentFilesSize)
+    item->setIcon(getFileIcon(historyFileInfo.suffix().toLower()));
+    if(recentRootItem->rowCount() >= maxRecentFilesSize)
     {
-        recentRootItem->removeRow(maxRecentFilesSize);
+        recentRootItem->removeRow(recentRootItem->rowCount() - 1);
     }
     recentRootItem->insertRow(0, item);
 }
