@@ -121,19 +121,25 @@ void kciRunner::run()
 
             path.prepend('\"');
             path.append('\"');
-
+#ifdef Q_OS_MACX
+            arg
+#else
             arg<<terminal.arg
+#endif
 #ifdef Q_OS_WIN
                <<"start"
 #endif
                <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
 
-            qDebug()<<arg;
             connect(process,SIGNAL(finished(int)),
                     this,SLOT(quit()));
             connect(this,SIGNAL(finished()),
                     this,SLOT(deleteLater()));
+#ifdef Q_OS_MACX
+            process->start(qApp->applicationDirPath() + "/openTerminal.command",arg);
+#else
             process->start(QLatin1String(terminal.terminal_name),arg);
+#endif
         }
 
         if(enabledAutoInput)
