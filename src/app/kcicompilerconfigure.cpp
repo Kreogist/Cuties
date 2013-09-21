@@ -8,7 +8,7 @@ kciCompilerConfigure* kciCompilerConfigure::getInstance()
 }
 
 kciCompilerConfigure::kciCompilerConfigure()
-{   
+{
 #ifdef Q_OS_UNIX
     gccPath="/usr/bin/gcc";
     gppPath="/usr/bin/g++";
@@ -16,9 +16,9 @@ kciCompilerConfigure::kciCompilerConfigure()
 #endif
 
 #ifdef Q_OS_WIN32
-    gccPath="C:/MinGW/bin/gcc.exe";
-    gppPath="C:/MinGW/bin/g++.exe";
-    fpcPath="c:/fpc/fpc.exe";
+    gccPath="/MinGW/bin/gcc.exe";
+    gppPath="/MinGW/bin/g++.exe";
+    fpcPath="/fpc/fpc.exe";
 #endif
 }
 
@@ -44,7 +44,18 @@ void kciCompilerConfigure::writeConfigure()
 
 QString kciCompilerConfigure::getGccPath() const
 {
+#ifdef Q_OS_WIN32
+    if(gccPath.mid(2,1)==":")
+    {
+        return gccPath;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + gccPath;
+    }
+#else
     return gccPath;
+#endif
 }
 
 void kciCompilerConfigure::setGccPath(const QString &value)
@@ -54,7 +65,18 @@ void kciCompilerConfigure::setGccPath(const QString &value)
 
 QString kciCompilerConfigure::getGppPath() const
 {
+#ifdef Q_OS_WIN32
+    if(gppPath.mid(2,1)==":")
+    {
+        return gppPath;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + gppPath;
+    }
+#else
     return gppPath;
+#endif
 }
 
 void kciCompilerConfigure::setGppPath(const QString &value)
@@ -64,7 +86,18 @@ void kciCompilerConfigure::setGppPath(const QString &value)
 
 QString kciCompilerConfigure::getFpcPath() const
 {
+#ifdef Q_OS_WIN32
+    if(fpcPath.mid(2,1)==":")
+    {
+        return fpcPath;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + fpcPath;
+    }
+#else
     return fpcPath;
+#endif
 }
 
 void kciCompilerConfigure::setFpcPath(const QString &value)
