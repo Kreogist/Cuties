@@ -24,6 +24,8 @@ static const int SearchBarOffset = 20;
 kciCodeEditor::kciCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
+    setFont(QString("Monaco"));
+
     replaceLayout=new QVBoxLayout(this);
     replaceLayout->setContentsMargins(0,0,0,0);
     replaceLayout->setMargin(0);

@@ -8,7 +8,7 @@ kciCompilerConfigure* kciCompilerConfigure::getInstance()
 }
 
 kciCompilerConfigure::kciCompilerConfigure()
-{
+{   
 #ifdef Q_OS_UNIX
     gccPath="/usr/bin/gcc";
     gppPath="/usr/bin/g++";
@@ -16,9 +16,9 @@ kciCompilerConfigure::kciCompilerConfigure()
 #endif
 
 #ifdef Q_OS_WIN32
-    gccPath="/MinGW/bin/gcc.exe";
-    gppPath="/MinGW/bin/g++.exe";
-    fpcPath="/fpc/fpc.exe";
+    gccPath="/Compiler/MinGW/bin/gcc.exe";
+    gppPath="/Compiler/MinGW/bin/g++.exe";
+    fpcPath="/Compiler/fpc/fpc.exe";
 #endif
 }
 
@@ -45,7 +45,7 @@ void kciCompilerConfigure::writeConfigure()
 QString kciCompilerConfigure::getGccPath() const
 {
 #ifdef Q_OS_WIN32
-    if(gccPath.mid(2,1)==":")
+    if(gccPath.mid(1,1)==":")
     {
         return gccPath;
     }
@@ -60,13 +60,20 @@ QString kciCompilerConfigure::getGccPath() const
 
 void kciCompilerConfigure::setGccPath(const QString &value)
 {
-    gccPath = value;
+    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
+    {
+        gccPath = value.mid(qApp->applicationDirPath().length());
+    }
+    else
+    {
+        gccPath = value;
+    }
 }
 
 QString kciCompilerConfigure::getGppPath() const
 {
 #ifdef Q_OS_WIN32
-    if(gppPath.mid(2,1)==":")
+    if(gppPath.mid(1,1)==":")
     {
         return gppPath;
     }
@@ -81,13 +88,20 @@ QString kciCompilerConfigure::getGppPath() const
 
 void kciCompilerConfigure::setGppPath(const QString &value)
 {
-    gppPath = value;
+    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
+    {
+        gppPath = value.mid(qApp->applicationDirPath().length());
+    }
+    else
+    {
+        gppPath = value;
+    }
 }
 
 QString kciCompilerConfigure::getFpcPath() const
 {
 #ifdef Q_OS_WIN32
-    if(fpcPath.mid(2,1)==":")
+    if(fpcPath.mid(1,1)==":")
     {
         return fpcPath;
     }
@@ -102,5 +116,12 @@ QString kciCompilerConfigure::getFpcPath() const
 
 void kciCompilerConfigure::setFpcPath(const QString &value)
 {
-    fpcPath = value;
+    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
+    {
+        fpcPath = value.mid(qApp->applicationDirPath().length());
+    }
+    else
+    {
+        fpcPath = value;
+    }
 }

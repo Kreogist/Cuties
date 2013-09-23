@@ -39,8 +39,12 @@
 #include <QFile>
 #include <QDebug>
 
+#include <fstream>
+
 #include "kciglobal.h"
 #include "fpc.h"
+
+using namespace std;
 
 struct Terminal
 {

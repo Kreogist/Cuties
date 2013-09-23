@@ -48,7 +48,7 @@ private:
     //Environment Variables.
     QString settingsFileName;
 
-    QSettings *kciMainConfig;
+    //QSettings *kciMainConfig;
     static kciGlobal* instance;
     QList<kciConfigure*> cfgConfiger;
 };

@@ -23,6 +23,7 @@
 #include <QFileInfo>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "compilerbase.h"
 #include "kcicompilerconfigure.h"
