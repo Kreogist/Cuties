@@ -32,14 +32,17 @@ kciStatusBar::kciStatusBar(QWidget *parent):
     //Add File Type Display Widget
     //kscFileTypeDisplay=new kciFileType(this);
 
+    //Add Rewrite Mode Display Widget
+    lblRewriteMode=new kciStatusRewriteInfo(this);
+    lblRewriteMode->hide();
+
     //Add Cursor Position Widget
     kscCursorPosition=new kciStatusCursorInfo(this);
-    connect(this,SIGNAL(newUpdateCursorPosition(int,int)),
-            kscCursorPosition,SLOT(updateCursorPosition(int,int)));
     connect(kscCursorPosition,SIGNAL(ToLineNum(int)),
             this, SIGNAL(ToNewPosition(int)));
 
     //addPermanentWidget(kscFileTypeDisplay);
+    addPermanentWidget(lblRewriteMode);
     addPermanentWidget(kscCursorPosition);
 }
 
@@ -50,5 +53,16 @@ void kciStatusBar::showGotoBar(int currentValue, int MaxValue)
 
 void kciStatusBar::updateCursorPosition(int LineNum, int ColNum)
 {
-    emit newUpdateCursorPosition(LineNum, ColNum);
+    kscCursorPosition->updateCursorPosition(LineNum, ColNum);
+}
+
+void kciStatusBar::updateRewriteMode(bool NewValue)
+{
+    lblRewriteMode->show();
+    lblRewriteMode->setTextMode(NewValue);
+}
+
+void kciStatusBar::hideRewriteDisplay()
+{
+    lblRewriteMode->hide();
 }

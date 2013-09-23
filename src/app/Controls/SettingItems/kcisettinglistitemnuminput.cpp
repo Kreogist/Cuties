@@ -96,7 +96,6 @@ void kciSettingListItemNumInput::setMaxValue(int NewValue)
     ValueSpin->setMaximum(NewValue);
     ValueSlider->setMaximum(NewValue);
     ValueDial->setMaximum(NewValue);
-    setValue(MaxValue);
 }
 
 
@@ -112,8 +111,7 @@ void kciSettingListItemNumInput::setMinValue(int NewValue)
         NewValue = MaxValue;
     }
     MinValue = NewValue;
-    ValueSpin->setMaximum(NewValue);
-    ValueSlider->setMaximum(NewValue);
-    ValueDial->setMaximum(NewValue);
-    setValue(MinValue);
+    ValueSpin->setMinimum(NewValue);
+    ValueSlider->setMinimum(NewValue);
+    ValueDial->setMinimum(NewValue);
 }

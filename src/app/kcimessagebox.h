@@ -3,6 +3,8 @@
 
 //Base Dialog
 #include <QDialog>
+#include <QPainter>
+#include <QPalette>
 
 //Display Graphic
 #include <QLabel>
@@ -47,7 +49,7 @@ public:
     void startAnime();
     
 signals:
-    
+
 public slots:
 
 private slots:
@@ -57,7 +59,6 @@ private:
     kciMessageBoxTitle *titleWidget;
     QVBoxLayout *mainLayout;
     QRect parentGeometry;
-
 };
 
 #endif // KCIMESSAGEBOX_H

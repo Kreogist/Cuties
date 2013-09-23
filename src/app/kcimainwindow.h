@@ -30,6 +30,7 @@
 #include <QCursor>
 #include <QPoint>
 #include <QDebug>
+#include <QGraphicsDropShadowEffect>
 
 #include "kcititlebar.h"
 #include "kreogistcutestyle.h"

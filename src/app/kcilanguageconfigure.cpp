@@ -9,6 +9,7 @@ kciLanguageConfigure* kciLanguageConfigure::getInstance()
 
 kciLanguageConfigure::kciLanguageConfigure()
 {
+    loadLanguageList();
 }
 
 void kciLanguageConfigure::readConfigure()
@@ -19,4 +20,22 @@ void kciLanguageConfigure::readConfigure()
 void kciLanguageConfigure::writeConfigure()
 {
 
+}
+
+void kciLanguageConfigure::loadLanguageList()
+{
+    //Initialize Application Languages.
+    QStringList filter;
+    QDir *dir=new QDir(QString(qApp->applicationDirPath() + "/Locale/"));
+    QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
+    for (QList<QFileInfo>::iterator i=list->begin();
+         i!=list->end();
+         ++i)
+    {
+        if(i->fileName().length() < 4)
+        {
+            continue;
+        }
+
+    }
 }

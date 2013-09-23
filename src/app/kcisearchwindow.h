@@ -25,6 +25,7 @@
 #define KCISEARCHWINDOW_H
 
 #include <QGraphicsDropShadowEffect>
+#include <QApplication>
 
 #include "kcisearchwidget.h"
 
@@ -34,9 +35,6 @@ class kciSearchWindow : public kciSearchWidget
 
 public:
     explicit kciSearchWindow(QWidget *parent);
-
-signals:
-    void hideButtonPressed();
 
 private:
     QToolButton *closeButton;

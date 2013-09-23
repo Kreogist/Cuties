@@ -105,6 +105,11 @@ kciSearchWidget::kciSearchWidget(QWidget *parent) :
     connect(downButton,SIGNAL(clicked()),this,SIGNAL(requireShowNextResult()));
 }
 
+QString kciSearchWidget::text() const
+{
+    return SearchTexts->text();
+}
+
 void kciSearchWidget::onTextChanged(const QString &text)
 {
     bool Regexp=menuAction[menuRegularExpress]->isChecked();
@@ -133,3 +138,14 @@ void kciSearchWidget::resizeEvent(QResizeEvent *event)
 {
     SearchTexts->setFixedWidth(event->size().width());
 }
+
+void kciSearchWidget::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key()){
+    case Qt::Key_Escape:
+        emit requireHide();
+    default:
+        QWidget::keyPressEvent(event);
+    }
+}
+

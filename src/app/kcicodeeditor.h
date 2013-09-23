@@ -47,6 +47,7 @@
 #include "kcisearchwindow.h"
 #include "kcilanguagemode.h"
 #include "kcireplacedock.h"
+#include "connectionhandler.h"
 
 class kciSearchWindow;
 class kciLanguageMode;
@@ -71,10 +72,14 @@ public:
     bool isModified();
     QTextDocument* document();
     kciLanguageMode *langMode() const;
+    bool getOverwriteMode();
+
+    void insertTextAtCursor(QString insertText);
 
 signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
+    void rewriteStateChanged(bool nowValue);
     
 public slots:
     bool open(const QString& fileName);
@@ -92,6 +97,7 @@ public slots:
     void showSearchBar();
     void showReplaceBar();
     void hideSearchBar();
+    void setOverwriteMode(bool newValue);
 
 private slots:
     void onModificationChanged(bool changed);
@@ -104,6 +110,7 @@ private:
     void computeExecFileName();
     void fileInfoChanged(const QFile& file);
     bool dosaveas(const QString& Caption);
+    void connectSearchWidgetWithEditor(kciSearchWidget *widget);
 
     QGraphicsOpacityEffect *initEffect;
 
@@ -122,6 +129,8 @@ private:
 
     kciSearchWindow *searchBar;
     kciReplaceDock *replaceBar;
+
+    connectionHandler searcherConnections;
 
     friend class kciLanguageMode;
 };

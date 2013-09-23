@@ -108,6 +108,7 @@ int kciTabManager::open(const QString& filePath)
     {
         tmp->setDocumentTitle(name);
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+        connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
         emit tabAdded();
         return addTab(tmp,name);
     }
@@ -157,6 +158,7 @@ void kciTabManager::new_file()
     {
         tmp->setGeometry(0, -this->height(), this->width(), this->height());
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
+        connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
         QString _new_file_title=
                 tr("Untitled")+ " " +QString::number(new_file_count++);
         tmp->setDocumentTitle(_new_file_title);
@@ -328,7 +330,10 @@ void kciTabManager::on_current_tab_change(int index)
     if(currentEditor!=NULL)
     {
         currentEditor->setTextFocus();
+        emit rewriteDataChanged(currentEditor->getOverwriteMode());
     }
+    else
+        emit rewriteDisVisible();
 
     currentTextCursorChanged();
 }
@@ -347,20 +352,23 @@ void kciTabManager::closeEvent(QCloseEvent *e)
 
         //Save the current opened file.
         kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(page);
-        if(editor!=NULL)
+        if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
         {
-            if(editor->getFilePath().length()>0)
+            if(editor!=NULL)
             {
-                kciHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
-                                                                        editor->getTextCursor().blockNumber(),
-                                                                        editor->getTextCursor().columnNumber());
-
-            }
-            else
-            {
-                if(i<cIndex)
+                if(editor->getFilePath().length()>0)
                 {
-                    cIndex--;
+                    kciHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
+                                                                            editor->getTextCursor().blockNumber(),
+                                                                            editor->getTextCursor().columnNumber());
+
+                }
+                else
+                {
+                    if(i<cIndex)
+                    {
+                        cIndex--;
+                    }
                 }
             }
         }
@@ -425,7 +433,7 @@ void kciTabManager::showReplaceBar()
 }
 
 QString kciTabManager::textNowSelect()
-{\
+{
     QString returnValue;
     if(currentEditor!=NULL)
     {
@@ -479,6 +487,14 @@ int kciTabManager::getCurrentLineNum() const
     else
     {
         return -1;
+    }
+}
+
+void kciTabManager::insertToCurrentEditor(QString insertText)
+{
+    if(currentEditor!=NULL)
+    {
+        currentEditor->insertTextAtCursor(insertText);
     }
 }
 

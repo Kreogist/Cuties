@@ -1,11 +1,39 @@
 #include "kcisidebar.h"
 
+kciClipboardHistoryStack::kciClipboardHistoryStack(QWidget *parent) :
+    QListView(parent)
+{
+    setModel(kciClipboard::getInstance()->getClipboardTextsModel());
+    connect(this, &kciClipboardHistoryStack::doubleClicked,
+            this, &kciClipboardHistoryStack::dblClickClipboardItems);
+}
+
+void kciClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
+{
+    emit requiredInsertText(kciClipboard::getInstance()->getClipboardTextsModel()->item(ItemID.row())->text());
+}
+
+kciHistoryStack::kciHistoryStack(QWidget *parent) :
+    QListView(parent)
+{
+    setModel(kciHistoryConfigure::getInstance()->getRecentOpenedFileModel());
+    connect(this, &kciHistoryStack::doubleClicked,
+            this, &kciHistoryStack::dblClickHistoryItems);
+    connect(this, &kciHistoryStack::activated,
+            this, &kciHistoryStack::dblClickHistoryItems);
+}
+
+void kciHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
+{
+    emit requiredOpenFiles(kciHistoryConfigure::getInstance()->getRecentOpenedFileModel()->item(ItemID.row())->toolTip());
+}
+
 kciSideBarContent::kciSideBarContent(QWidget *parent) :
     QWidget(parent)
 {
     QButtonGroup *switcherGroup=new QButtonGroup(this);
     buttonGroupLayout=new QHBoxLayout();
-    buttonGroupLayout->setContentsMargins(0,0,0,0);
+    buttonGroupLayout->setContentsMargins(4,4,4,4);
     buttonGroupLayout->setSpacing(0);
 
     mainLayout=new QVBoxLayout(this);
@@ -17,11 +45,22 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     buttonRecent=new QToolButton(this);
     buttonRecent->setAutoRaise(true);
     buttonRecent->setCheckable(true);
-    buttonRecent->setFixedSize(30,18);
+    buttonRecent->setChecked(true);
+    buttonRecent->setFixedSize(35,20);
     buttonRecent->setToolTip(tr("History"));
-    buttonRecent->setIcon(QIcon(":/img/image/HelpMenuIcon.png"));
+    buttonRecent->setIcon(QIcon(":/Sidebar/image/Sidebar/History.png"));
     switcherGroup->addButton(buttonRecent, 0);
     buttonGroupLayout->addWidget(buttonRecent);
+
+    //Add Clipboard History Button.
+    buttonClipboard=new QToolButton(this);
+    buttonClipboard->setAutoRaise(true);
+    buttonClipboard->setCheckable(true);
+    buttonClipboard->setFixedSize(35,20);
+    buttonClipboard->setToolTip(tr("Clipboard"));
+    buttonClipboard->setIcon(QIcon(":/Sidebar/image/Sidebar/Clipboard.png"));
+    switcherGroup->addButton(buttonClipboard, 1);
+    buttonGroupLayout->addWidget(buttonClipboard);
 
     buttonGroupLayout->addStretch();
     //Add Layout.
@@ -33,46 +72,23 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     mainLayout->addWidget(contents);
 
     //Add Widgets
-    historyStack=new QListView(this);
+    historyStack=new kciHistoryStack(this);
     contents->addWidget(historyStack);
+    connect(historyStack, SIGNAL(requiredOpenFiles(QString)),
+            this, SIGNAL(historyRequiredOpenFiles(QString)));
 
+    clipboardStack=new kciClipboardHistoryStack(this);
+    contents->addWidget(clipboardStack);
+    connect(clipboardStack, SIGNAL(requiredInsertText(QString)),
+            this, SIGNAL(clipRequiredInsertText(QString)));
+
+    connect(switcherGroup, SIGNAL(buttonPressed(int)),
+            contents, SLOT(setCurrentIndex(int)));
 }
 
 kciSideBarContent::~kciSideBarContent()
 {
     buttonGroupLayout->deleteLater();
-}
-
-kciSideBarTitle::kciSideBarTitle(QWidget *parent) :
-    QWidget(parent)
-{
-    setFixedHeight(16);
-    setMinimumWidth(0);
-
-    titleMainLayout=new QHBoxLayout(this);
-    titleMainLayout->setContentsMargins(0,0,0,0);
-    titleMainLayout->setSpacing(0);
-    setLayout(titleMainLayout);
-
-    titleMainLayout->addSpacing(3);
-    sidebarTitle=new QLabel(this);
-    sidebarTitle->setText(tr("Siderbar"));
-    titleMainLayout->addWidget(sidebarTitle);
-
-    titleMainLayout->addStretch();
-
-    sidebarClose=new QToolButton(this);
-    sidebarClose->setFixedSize(13, 15);
-    sidebarClose->setIcon(QIcon(QPixmap(":/toolbutton/image/Close.png")));
-    titleMainLayout->addWidget(sidebarClose);
-
-    connect(sidebarClose, SIGNAL(clicked()),
-            this, SIGNAL(closePressed()));
-}
-
-void kciSideBarTitle::setSidebarTitle(const QString title)
-{
-    sidebarTitle->setText(title);
 }
 
 kciSideBar::kciSideBar(QWidget *parent) :
@@ -81,8 +97,8 @@ kciSideBar::kciSideBar(QWidget *parent) :
     //Set ObjectName
     setObjectName("Sidebar");
     //Claer Title bar.
-    sidebarTitleBar=new kciSideBarTitle(this);
-    setTitleBarWidget(sidebarTitleBar);
+    QWidget *clearTitleBar=new QWidget(this);
+    setTitleBarWidget(clearTitleBar);
     //Set Features.
     setFeatures(QDockWidget::NoDockWidgetFeatures);
     //Set Fixed Size.
@@ -100,12 +116,14 @@ kciSideBar::kciSideBar(QWidget *parent) :
     setPalette(pal);
     setWindowTitle(" " + tr("Sidebar") + " ");
 
-    connect(sidebarTitleBar, SIGNAL(closePressed()),
-            this, SLOT(hideAnime()));
-
     //New Central Widget
     CentralWidget=new kciSideBarContent(this);
     setWidget(CentralWidget);
+
+    connect(CentralWidget, SIGNAL(historyRequiredOpenFiles(QString)),
+            this, SIGNAL(historyRequiredOpenFiles(QString)));
+    connect(CentralWidget, SIGNAL(clipRequiredInsertText(QString)),
+            this, SIGNAL(clipboardRequiredInsertText(QString)));
 }
 
 void kciSideBar::showAnime()

@@ -16,3 +16,13 @@ kciSettingListItemLanguageItem::kciSettingListItemLanguageItem(QWidget *parent) 
 
     blnSel=false;
 }
+
+void kciSettingListItemLanguageItem::setLanguageImage(QString imgFilePath)
+{
+    lblLanguageIcon->setPixmap(QPixmap(imgFilePath));
+}
+
+void kciSettingListItemLanguageItem::setLanguageName(QString strLanName)
+{
+    Caption->setText(strLanName);
+}

@@ -23,11 +23,8 @@ kciEditorConfigure* kciEditorConfigure::instance=nullptr;
 
 kciEditorConfigure::kciEditorConfigure()
 {
-    wrapMode=QTextOption::NoWrap;
     isUsingBlankInsteadTab=true;
     tabWidth=4;
-    cursorWidth=1;
-    overwriteMode=false;
 }
 
 kciEditorConfigure* kciEditorConfigure::getInstance()
@@ -42,31 +39,23 @@ void kciEditorConfigure::readConfigure()
     tabWidth=settings.value("TabWidth",tabWidth).toInt();
     isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
                                           isUsingBlankInsteadTab).toBool();
-    int wMode=settings.value("WordWrap", wrapMode).toInt();
-    switch(wMode)
-    {
-    case 0:
-        wrapMode=QTextOption::NoWrap;
-        break;
-    case 1:
-        wrapMode=QTextOption::WordWrap;
-        break;
-    case 2:
-        wrapMode=QTextOption::ManualWrap;
-        break;
-    case 3:
-        wrapMode=QTextOption::WrapAnywhere;
-        break;
-    case 4:
-        wrapMode=QTextOption::WrapAtWordBoundaryOrAnywhere;
-        break;
-    default:
-        wrapMode=QTextOption::NoWrap;
-        break;
-    }
-    cursorWidth=settings.value("CursorWidth", cursorWidth).toInt();
-    overwriteMode=settings.value("OverwriteMode", overwriteMode).toBool();
 
+<<<<<<< HEAD
+    settings.beginGroup("unClosedFilePaths");
+    unClosedCurrent=settings.value("CurrIndex", -1).toInt();
+    int i=settings.value("PathCount",0).toInt();
+    QString numberString;
+    while(i--)
+    {
+        numberString=QString::number(i);
+        unClosedFilePaths.append(settings.value("f" + numberString).toString());
+        unClosedFileH.append(settings.value("h" + numberString).toInt());
+        unClosedFileV.append(settings.value("v" + numberString).toInt());
+    }
+    settings.endGroup();
+
+=======
+>>>>>>> aa3bff707487a2b0bea90da2a4b2f5ce4c4f0e91
     settings.endGroup();
 }
 
@@ -74,11 +63,27 @@ void kciEditorConfigure::writeConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Editor");
-    settings.setValue("WordWrap", wrapMode);
     settings.setValue("TabWidth",tabWidth);
-    settings.setValue("CursorWidth", cursorWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
-    settings.setValue("OverwriteMode", overwriteMode);
+
+<<<<<<< HEAD
+    settings.beginGroup("unClosedFilePaths");
+    settings.setValue("CurrIndex", unClosedCurrent);
+    settings.setValue("PathCount",unClosedFilePaths.size());
+
+    QString numberString;
+
+    for(int i=0;i<unClosedFilePaths.size();i++)
+    {
+        numberString=QString::number(i);
+        settings.setValue("f" + numberString,unClosedFilePaths.at(i));
+        settings.setValue("v" + numberString, unClosedFileV.at(i));
+        settings.setValue("h" + numberString, unClosedFileH.at(i));
+    }
+    settings.endGroup();
+
+=======
+>>>>>>> aa3bff707487a2b0bea90da2a4b2f5ce4c4f0e91
     settings.endGroup();
 }
 
@@ -100,37 +105,48 @@ int kciEditorConfigure::getTabWidth() const
 void kciEditorConfigure::setTabWidth(const int &width)
 {
     tabWidth=width;
+<<<<<<< HEAD
+}
+
+void kciEditorConfigure::clearAllUnClosedFilePaths()
+{
+    unClosedFilePaths.clear();
+    unClosedFileH.clear();
+    unClosedFileV.clear();
+}
+
+QList<QString> kciEditorConfigure::getAllUnClosedFilePaths() const
+{
+    return unClosedFilePaths;
+}
+
+QList<int> kciEditorConfigure::getAllUnClosedFileHs() const
+{
+    return unClosedFileH;
+}
+
+QList<int> kciEditorConfigure::getAllUnClosedFileVs() const
+{
+    return unClosedFileV;
+}
+
+void kciEditorConfigure::addUnClosedFilePath(const QString &path, const int &HValue, const int &VValue)
+{
+    unClosedFilePaths.append(path);
+    unClosedFileH.append(HValue);
+    unClosedFileV.append(VValue);
+}
+
+int kciEditorConfigure::getUnClosedCurrent() const
+{
+    return unClosedCurrent;
+}
+
+void kciEditorConfigure::setUnClosedCurrent(int value)
+{
+    unClosedCurrent = value;
+=======
+
     emit tabWidthChanged(tabWidth);
-}
-
-QTextOption::WrapMode kciEditorConfigure::getWrapMode() const
-{
-    return wrapMode;
-}
-
-void kciEditorConfigure::setWrapMode(QTextOption::WrapMode value)
-{
-    wrapMode = value;
-    emit wrapModeChanged(value);
-}
-
-int kciEditorConfigure::getCursorWidth() const
-{
-    return cursorWidth;
-}
-
-void kciEditorConfigure::setCursorWidth(int value)
-{
-    cursorWidth = value;
-    emit cursorWidthChanged(value);
-}
-
-bool kciEditorConfigure::getOverwriteMode() const
-{
-    return overwriteMode;
-}
-
-void kciEditorConfigure::setOverwriteMode(bool value)
-{
-    overwriteMode = value;
+>>>>>>> aa3bff707487a2b0bea90da2a4b2f5ce4c4f0e91
 }

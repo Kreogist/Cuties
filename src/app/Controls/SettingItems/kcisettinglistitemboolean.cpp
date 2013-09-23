@@ -10,10 +10,16 @@ kciSettingListItemBooleanSwitcher::kciSettingListItemBooleanSwitcher(QWidget *pa
     setValue(false);
 }
 
-void kciSettingListItemBooleanSwitcher::setValue(bool NewValue)
+void kciSettingListItemBooleanSwitcher::setTheValue(bool NewValue)
 {
     Value=NewValue;
     setImage(Value);
+}
+
+void kciSettingListItemBooleanSwitcher::setValue(bool NewValue)
+{
+    setTheValue(NewValue);
+    emit valueChanged();
 }
 
 void kciSettingListItemBooleanSwitcher::setImage(bool NewValue)
@@ -26,7 +32,6 @@ void kciSettingListItemBooleanSwitcher::setImage(bool NewValue)
     {
         setPixmap(*pxpFalse);
     }
-    emit valueChanged();
 }
 
 bool kciSettingListItemBooleanSwitcher::getValue()
@@ -47,7 +52,7 @@ kciSettingListItemBoolean::kciSettingListItemBoolean(QWidget *parent) :
     setLayout(MainLayout);
 
     //Set Layout.
-    MainLayout->addSpacing(1);
+    MainLayout->addSpacing(3);
     //Set Anime.
     ChangedAnime=new QTimeLine(500);
     connect(ChangedAnime,SIGNAL(frameChanged(int)),
@@ -61,7 +66,7 @@ kciSettingListItemBoolean::kciSettingListItemBoolean(QWidget *parent) :
     ValueSetter->hide();
     MainLayout->addWidget(ValueSetter);
     connect(ValueSetter,SIGNAL(valueChanged()),this,SLOT(valueChangedAnimeEvent()));
-    MainLayout->addSpacing(4);
+    MainLayout->addSpacing(2);
     //Set Widget.
     MainLayout->addWidget(Caption);
 
@@ -109,7 +114,7 @@ QString kciSettingListItemBoolean::getDisabledText()
     return strDisabledInfo;
 }
 
-bool kciSettingListItemBoolean::getItemValue()
+bool kciSettingListItemBoolean::getValue()
 {
     return ValueSetter->getValue();
 }
@@ -149,14 +154,27 @@ void kciSettingListItemBoolean::mousePressEvent(QMouseEvent *e)
         //Set Edit Mode
         ValueSetter->setEnabled(true);
         ValueSetter->show();
+        MainLayout->insertSpacing(2, 5);
         //Set Edit Mode Switcher.
         blnEditMode=true;
+        //Set Palette.
+        if(ValueSetter->getValue())
+        {
+            pal.setColor(QPalette::Window, QColor(123,170,43,100));
+            setPalette(pal);
+        }
+        else
+        {
+            pal.setColor(QPalette::Window, QColor(222,2,28,100));
+            setPalette(pal);
+        }
     }
     else
     {
-        setItemValue(!getItemValue());
+        setValue(!getValue());
     }
     e->accept();
+    QWidget::mousePressEvent(e);
 }
 
 void kciSettingListItemBoolean::leaveEvent(QEvent *e)
@@ -174,9 +192,15 @@ void kciSettingListItemBoolean::leaveEvent(QEvent *e)
     }
 }
 
-void kciSettingListItemBoolean::setItemValue(bool NewValue)
+void kciSettingListItemBoolean::setValue(bool NewValue)
 {
     ValueSetter->setValue(NewValue);
+}
+
+void kciSettingListItemBoolean::setTheValue(bool NewValue)
+{
+    ValueSetter->setTheValue(NewValue);
+    refreshCaption();
 }
 
 void kciSettingListItemBoolean::enterEvent(QEvent *e)

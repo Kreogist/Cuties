@@ -19,7 +19,7 @@
 
 #include "kcitexteditor.h"
 
-static int elideWidth=500;
+//static int elideWidth=500;
 
 kciTextEditor::kciTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
@@ -32,20 +32,20 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
 
     configureInstance=kciEditorConfigure::getInstance();
 
-    clipboard=kciClipboard::getInstance();
+    /*clipboard=kciClipboard::getInstance();
     clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
-            this,SLOT(insertPlainText(QString)));
+            this,SLOT(insertPlainText(QString)));*/
 
     //Set Customize TextEditor Properties.
     //Set Tab Width.
     setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabWidth());
     //Set WordWarp Mode.
-    setWordWrapMode(QTextOption::NoWrap);
+    setWordWrapMode(configureInstance->getWrapMode());
     //Set Cursor Width.
-    setCursorWidth(1);
+    setCursorWidth(configureInstance->getCursorWidth());
     //Set OverWrite Mode.
-    setOverwriteMode(false);
+    setOverwriteMode(configureInstance->getOverwriteMode());
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
@@ -72,8 +72,13 @@ kciTextEditor::kciTextEditor(QWidget *parent) :
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
+
     connect(configureInstance,SIGNAL(tabWidthChanged(int)),
             this,SLOT(setTabWidth(int)));
+    connect(configureInstance,SIGNAL(wrapModeChanged(QTextOption::WrapMode)),
+            this,SLOT(setWordWrap(QTextOption::WrapMode)));
+    connect(configureInstance,SIGNAL(cursorWidthChanged(int)),
+            this,SLOT(setTheCursorWidth(int)));
 }
 
 void kciTextEditor::paintEvent(QPaintEvent *e)
@@ -98,14 +103,14 @@ void kciTextEditor::checkWhetherBlockSearchedAndDealWith(
     data->endUsingSearchDatas();
 }
 
-void kciTextEditor::showPreviousSearchResult()
+bool kciTextEditor::showPreviousSearchResult()
 {
-    findString(false);
+    return findString(false);
 }
 
-void kciTextEditor::showNextSearchResult()
+bool kciTextEditor::showNextSearchResult()
 {
-    findString(true);
+    return findString(true);
 }
 
 void kciTextEditor::setTabWidth(int width)
@@ -113,7 +118,7 @@ void kciTextEditor::setTabWidth(int width)
     setTabStopWidth(fontMetrics().width(' ')*width);
 }
 
-void kciTextEditor::findString(bool forward)
+bool kciTextEditor::findString(bool forward)
 {
     QTextCursor _textCursor;
 
@@ -244,7 +249,10 @@ void kciTextEditor::findString(bool forward)
     if(hasMatch)
     {
         setTextCursor(_textCursor);
+        return true;
     }
+
+    return false;
 }
 
 void kciTextEditor::searchString(QString text,
@@ -332,6 +340,37 @@ void kciTextEditor::initTextSearcher(QScopedPointer<kciTextSearcher> &searcher)
 
     searcher->setPatternString(text);
     searcher->setIsCaseSensitive(caseSensitively);
+}
+
+bool kciTextEditor::replace(const QString &oldText, const QString &newText)
+{
+    QTextCursor _cursor=textCursor();
+
+    if(_cursor.hasSelection() && _cursor.selectedText() == oldText)
+    {
+        _cursor.beginEditBlock();
+        _cursor.removeSelectedText();
+        _cursor.insertText(newText);
+        _cursor.endEditBlock();
+        setTextCursor(_cursor);
+        return true;
+    }
+
+    return false;
+}
+
+bool kciTextEditor::replaceAndFind(const QString &oldText,
+                                   const QString &newText)
+{
+    bool ret=replace(oldText,newText);
+    return ret|showNextSearchResult();
+}
+
+bool kciTextEditor::replaceAll(const QString &oldText, const QString &newText)
+{
+    bool ret=replaceAndFind(oldText,newText);
+    while(replaceAndFind(oldText,newText));
+    return ret;
 }
 
 void kciTextEditor::autoIndent()
@@ -635,7 +674,7 @@ void kciTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& sele
     }
 }
 
-void kciTextEditor::pasteFromeHistory()
+/*void kciTextEditor::pasteFromeHistory()
 {
     QMenu* menu=new QMenu(this);
 
@@ -657,17 +696,18 @@ void kciTextEditor::pasteFromeHistory()
     menu->exec(contextMenuPos);
 
     delete menu;
-}
+}*/
 
 void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
 {
-    contextMenuPos=event->globalPos();
+    /*contextMenuPos=event->globalPos();
 
     QMenu *menu=createStandardContextMenu();
     menu->addAction(tr("paste from clipboard history"),
                     this,SLOT(pasteFromeHistory()));
     menu->exec(event->globalPos());
-    delete menu;
+    delete menu;*/
+    QPlainTextEdit::contextMenuEvent(event);
 }
 
 /*void kciTextEditor::autoCompleteParentheses(QKeyEvent *e,
@@ -682,6 +722,8 @@ void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
 void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
+
+    //qDebug()<<e->key()<<Qt::Key_Insert;
 
     switch (e->key()) {
     /*case Qt::Key_ParenLeft:
@@ -767,8 +809,24 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
         autoIndent();
         break;
     }
+    case Qt::Key_Insert:
+    {
+        setOverwriteMode(!overwriteMode());
+        emit overwriteModeChanged(overwriteMode());
+        break;
+    }
     default:
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
+}
+
+void kciTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
+{
+    setWordWrapMode(wrapMode);
+}
+
+void kciTextEditor::setTheCursorWidth(int width)
+{
+    setCursorWidth(width);
 }

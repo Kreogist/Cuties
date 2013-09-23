@@ -25,14 +25,18 @@
 #include <QStringList>
 #include <QClipboard>
 #include <QApplication>
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 class kciClipboard : public QObject
 {
     Q_OBJECT
 public:
     static kciClipboard* getInstance();
-    const QStringList& getClipboardTexts(){return clipboardTexts;}
     
+    QStandardItemModel *getClipboardTextsModel() const;
+    void setClipboardTextsModel(QStandardItemModel *value);
+
 signals:
     
 public slots:
@@ -40,11 +44,11 @@ public slots:
 
 private:
     kciClipboard();
-    void removeLastTextIfNeeded();
-
-    QStringList clipboardTexts;
     static kciClipboard* instance;
     static int maxDataCount;
+
+    QStandardItemModel *clipboardTextsModel;
+    QStandardItem *clipboardTextsModelRoot;
 };
 
 #endif // KCICLIPBOARD_H

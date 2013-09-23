@@ -69,6 +69,11 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
             this,SLOT(onModificationChanged(bool)));
     connect(editor,SIGNAL(cursorPositionChanged()),
             this,SLOT(cursorChanged()));
+    connect(editor,SIGNAL(overwriteModeChanged(bool)),
+            this, SIGNAL(rewriteStateChanged(bool)));
+
+    //Default Disable Overwrite Mode.
+    editor->setOverwriteMode(false);
 
     m_langMode=new kciLanguageMode(this);
 
@@ -82,19 +87,22 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
 
     searchBar=new kciSearchWindow(editor);
     searchBar->hide();
-    connect(searchBar, &kciSearchWindow::hideButtonPressed,
-            this, &kciCodeEditor::hideSearchBar);
-    connect(searchBar,&kciSearchWindow::requireSearch,
-            editor,&kciTextEditor::searchString);
-    connect(searchBar,&kciSearchWindow::requireShowNextResult,
-            editor,&kciTextEditor::showNextSearchResult);
-    connect(searchBar,&kciSearchWindow::requireShowPreviousResult,
-            editor,&kciTextEditor::showPreviousSearchResult);
 }
 
 kciCodeEditor::~kciCodeEditor()
 {
     mainLayout->deleteLater();
+}
+
+bool kciCodeEditor::getOverwriteMode()
+{
+    return editor->overwriteMode();
+}
+
+void kciCodeEditor::setOverwriteMode(bool newValue)
+{
+    editor->setOverwriteMode(newValue);
+    emit rewriteStateChanged(newValue);
 }
 
 QString kciCodeEditor::getExecFileName()
@@ -116,8 +124,26 @@ void kciCodeEditor::computeExecFileName()
     #endif
 }
 
+void kciCodeEditor::connectSearchWidgetWithEditor(kciSearchWidget *widget)
+{
+    searcherConnections+=connect(widget, &kciSearchWidget::requireHide,
+                                 this, &kciCodeEditor::hideSearchBar);
+    searcherConnections+=connect(widget,&kciSearchWidget::requireSearch,
+                                 editor,&kciTextEditor::searchString);
+    searcherConnections+=connect(widget,&kciSearchWidget::requireShowNextResult,
+                                 editor,&kciTextEditor::showNextSearchResult);
+    searcherConnections+=connect(widget,&kciSearchWidget::requireShowPreviousResult,
+                                 editor,&kciTextEditor::showPreviousSearchResult);
+}
+
 void kciCodeEditor::showSearchBar()
 {
+    if(replaceBar->isVisible())
+    {
+        searcherConnections.disConnectAll();
+        replaceBar->hideAnime();
+    }
+
     if(!searchBar->isVisible())
     {
         QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
@@ -131,6 +157,8 @@ void kciCodeEditor::showSearchBar()
         searchAnime->setEasingCurve(QEasingCurve::OutCubic);
         searchBar->show();
         searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
+
+        connectSearchWidgetWithEditor(searchBar);
     }
 
     QTextCursor _textCursor=editor->textCursor();
@@ -163,7 +191,32 @@ void kciCodeEditor::hideSearchBar()
 
 void kciCodeEditor::showReplaceBar()
 {
-    replaceBar->showAnime();
+    if(searchBar->isVisible())
+    {
+        hideSearchBar();
+        searcherConnections.disConnectAll();
+    }
+
+    if(!replaceBar->isVisible())
+    {
+        replaceBar->showAnime();
+
+        connectSearchWidgetWithEditor(replaceBar);
+
+        searcherConnections+=connect(replaceBar,&kciReplaceDock::requireReplace,
+                                     editor,&kciTextEditor::replace);
+        searcherConnections+=connect(replaceBar,&kciReplaceDock::requireReplaceAndFind,
+                                     editor,&kciTextEditor::replaceAndFind);
+        searcherConnections+=connect(replaceBar,&kciReplaceDock::requireReplaceAll,
+                                     editor,&kciTextEditor::replaceAll);
+    }
+
+    QTextCursor _textCursor=editor->textCursor();
+    if(_textCursor.hasSelection())
+    {
+        replaceBar->setText(_textCursor.selectedText());
+    }
+    replaceBar->setTextFocus();
 }
 
 bool kciCodeEditor::open(const QString &fileName)
@@ -464,5 +517,10 @@ kciLanguageMode *kciCodeEditor::langMode() const
 bool kciCodeEditor::isModified()
 {
     return editor->document()->isModified();
+}
+
+void kciCodeEditor::insertTextAtCursor(QString insertText)
+{
+    editor->insertPlainText(insertText);
 }
 

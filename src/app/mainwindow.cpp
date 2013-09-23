@@ -328,8 +328,8 @@ void MainWindow::createActions()
     actStatusTips[mnuDebugRemoveWatch]=QString(tr("Remove a variable in debug watch list."));
 */
     //Window -> Window Split
-    act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
-    actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));
+    /*act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
+    actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));*/
 
     //Window -> Next
     act[mnuWindowNext]=new QAction(tr("&Next"),this);
@@ -357,17 +357,13 @@ void MainWindow::createActions()
 
 void MainWindow::aboutKCI()
 {
-    kciMessageBox *test=new kciMessageBox(this);
-    //test->setTitleText(tr("About"));
-    //test->addText(tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
-    //test->addText("Hello World");
-    test->startAnime();
-    test->exec();
+    QMessageBox::about(this,tr("About Cuties"),
+                           tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
 }
 
 void MainWindow::aboutQt()
 {
-    QMessageBox::aboutQt(this,tr("about Qt"));
+    QMessageBox::aboutQt(this,tr("About Qt"));
 }
 
 void MainWindow::createTitlebar()
@@ -469,6 +465,10 @@ void MainWindow::createDocks()
     sidebarDock=new kciSideBar(this);
     sidebarDock->hide();
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
+    connect(sidebarDock, SIGNAL(historyRequiredOpenFiles(QString)),
+            tabManager, SLOT(openAndJumpTo(QString)));
+    connect(sidebarDock, SIGNAL(clipboardRequiredInsertText(QString)),
+            tabManager, SLOT(insertToCurrentEditor(QString)));
 }
 
 void MainWindow::createMenu()
@@ -502,15 +502,6 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
         act[i]->setIcon(*MenuIconAddor);
-
-        if(i == mnuFileOpen)
-        {
-            kciRecentlyFilesMenu* recentlyFiles=new kciRecentlyFilesMenu(this);
-            menu[mnuFileRecentOpenedFiles]=(QMenu*)recentlyFiles;
-            menu[mnuFile]->addMenu(menu[mnuFileRecentOpenedFiles]);
-            connect(recentlyFiles,SIGNAL(requireOpenFile(QString)),
-                    tabManager,SLOT(openAndJumpTo(QString)));
-        }
 #endif
         act[i]->setStatusTip(actStatusTips[i]);
         menu[mnuFile]->addAction(act[i]);
@@ -589,7 +580,7 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuSearchReplace:
+        case mnuSearchFind:
         //case mnuSearchReplaceInFiles:
         case mnuSearchSearchOnline:
             menu[mnuSearch]->addSeparator();
@@ -661,7 +652,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
     menu[mnuWindow]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
+    for(i=mnuWindowPrev;i<=mnuWindowNext;i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(actMenuIconPath[i]);
@@ -715,6 +706,10 @@ void MainWindow::createStatusbar()
     pal.setColor(QPalette::Foreground,QColor(255,255,255));
     myStatusBar->setPalette(pal);
 
+    connect(tabManager,SIGNAL(rewriteDataChanged(bool)),
+            myStatusBar,SLOT(updateRewriteMode(bool)));
+    connect(tabManager, SIGNAL(rewriteDisVisible()),
+            myStatusBar,SLOT(hideRewriteDisplay()));
     connect(tabManager,SIGNAL(cursorDataChanged(int,int)),
             myStatusBar,SLOT(updateCursorPosition(int,int)));
     connect(myStatusBar,SIGNAL(ToNewPosition(int)),
@@ -750,10 +745,6 @@ void MainWindow::setDocOpenMenuState(bool state)
     }*/
     act[mnuViewCompileDock]->setEnabled(state);
     act[mnuViewCompileDock]->setVisible(state);
-#ifndef Q_OS_MACX
-    menu[mnuView]->menuAction()->setEnabled(state);
-    menu[mnuView]->menuAction()->setVisible(state);
-#endif
 
     //Search Menu
     for(i=mnuSearchFind;i<=mnuSearchGoto;i++)
@@ -783,7 +774,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     menu[mnuDebug]->menuAction()->setVisible(state);
 */
     //Window Menu
-    for(i=mnuWindowSplit;i<=mnuWindowNext;i++)
+    for(i=mnuWindowNext;i<=mnuWindowNext;i++)
     {
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
@@ -913,7 +904,10 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::show()
 {
     kciMainWindow::show();
-    tabManager->openHistoryFiles();
+    if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
+    {
+        tabManager->openHistoryFiles();
+    }
 }
 
 void MainWindow::compileCurrentFile()

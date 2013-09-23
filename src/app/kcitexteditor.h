@@ -47,18 +47,24 @@ public:
 signals:
     void updated();
     void searchStringChangedByShortCut(QString text);
+    void overwriteModeChanged(bool newValue);
 
 public slots:
     void updateHighlights();
-    void pasteFromeHistory();
-    void showPreviousSearchResult();
-    void showNextSearchResult();
+    //void pasteFromeHistory();
+    bool showPreviousSearchResult();
+    bool showNextSearchResult();
     void searchString(QString text,
                       bool regularExpression,
                       bool caseSensitively,
                       bool wholeWord);
+    bool replace(const QString& oldText,const QString& newText);
+    bool replaceAndFind(const QString &oldText, const QString &newText);
+    bool replaceAll(const QString &oldText, const QString &newText);
     void autoIndent();
     void setTabWidth(int width);
+    void setWordWrap(QTextOption::WrapMode wrapMode);
+    void setTheCursorWidth(int width);
 
 private slots:
     void updateSearchResults();
@@ -75,7 +81,7 @@ private:
     /*void autoCompleteParentheses(QKeyEvent *e,
                                  QTextCursor &currTextCursor,
                                  const QChar &rightParentheses);*/
-    void findString(bool forward);
+    bool findString(bool forward);
     void generalSearch(const QTextBlock& block,
                        const int& lines,
                        const bool forward);
@@ -96,7 +102,6 @@ private:
 
     kciEditorConfigure* configureInstance;
     kciClipboard* clipboard;
-    QSignalMapper* clipboardHistoryMenuSignalMapper;
     QColor lineColor,searchResultColor;
     QColor noMatchedParenthesesColor,matchedParenthesesColor;
     QPoint contextMenuPos;

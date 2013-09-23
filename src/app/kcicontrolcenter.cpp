@@ -68,10 +68,10 @@ kciControlCenterBanner::kciControlCenterBanner(QWidget *parent):
     //Set Stretch
     TitleLayout->addStretch(0);
     //Set Search Bar
-    CCSearch=new kciSearchLineText();
+    /*CCSearch=new kciSearchLineText();
     CCSearch->setFixedWidth(250);
     TitleLayout->addWidget(CCSearch);
-    TitleLayout->addSpacing(7);
+    TitleLayout->addSpacing(7);*/
 }
 
 //----------------Left Bar-------------------
@@ -211,7 +211,7 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     kciAbstractCCTabContent(parent)
 {
     setAutoFillBackground(true);
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(0, 0, 0, 0);
 
     QPalette pal=this->palette();
     pal.setColor(QPalette::Window, QColor(255,255,255));
@@ -226,25 +226,47 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     MainLayout->setSpacing(0);
     setLayout(MainLayout);
 
-    //Title Label.
-    QLabel *tblLanguage=new QLabel(this);
-    tblLanguage->setText(" " + tr("Language Settings"));
-    tblLanguage->setFont(TitleFont);
-    tblLanguage->setFixedHeight(30);
+    QLabel *tblEnvironment=new QLabel(this);
+    tblEnvironment->setText(" " + tr("Envronment"));
+    tblEnvironment->setFont(TitleFont);
+    tblEnvironment->setFixedHeight(30);
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(tblLanguage);
+    MainLayout->addWidget(tblEnvironment);
 
     sboDefaultLanguage=new kciSettingListItemCombo(this);
-    sboDefaultLanguage->Caption->setText(tr("Default Language:"));
+    sboDefaultLanguage->Caption->setText(tr("Default Programming Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
     sboDefaultLanguage->addListItem(tr("C/C++"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
     sboDefaultLanguage->setValue(QStringToValue(kciGeneralConfigure::getInstance()->getDefaultLanguageMode()));
     MainLayout->addWidget(sboDefaultLanguage);
+
+    QLabel *tblRemember=new QLabel(this);
+    tblRemember->setText(" " + tr("Automatic Remember"));
+    tblRemember->setFont(TitleFont);
+    tblRemember->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblRemember);
+
+    sbnAutoOpenUnclosed=new kciSettingListItemBoolean(this);
+    sbnAutoOpenUnclosed->setEnabledText(tr("Restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setDisabledText(tr("Don't restore files when quitting and re-opening files."));
+    sbnAutoOpenUnclosed->setTheValue(kciGeneralConfigure::getInstance()->getRememberUnclosedFile());
+    MainLayout->addWidget(sbnAutoOpenUnclosed);
+
+    slnHistoryMax=new kciSettingListItemNumInput(this);
+    slnHistoryMax->Caption->setText(tr("Maximum History Tracking Items:"));
+    slnHistoryMax->setMinValue(4);
+    slnHistoryMax->setMaxValue(100);
+    slnHistoryMax->setValue(kciHistoryConfigure::getInstance()->getMaxRecentFilesSize());
+    MainLayout->addWidget(slnHistoryMax);
 }
 
 void kciCCTabGerneralContent::apply()
 {
+    //Remember Unclosed Set.
+    kciGeneralConfigure::getInstance()->setRememberUnclosedFile(sbnAutoOpenUnclosed->getValue());
+    //Default Language Mode Sets.
     switch(sboDefaultLanguage->getValue())
     {
     case 0:
@@ -265,6 +287,8 @@ void kciCCTabGerneralContent::apply()
     default:
         break;
     }
+    //History Settings.
+    kciHistoryConfigure::getInstance()->setMaxRecentFilesSize(slnHistoryMax->getValue());
 }
 
 //--------------------Editor------------------
@@ -302,14 +326,38 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     wrapMode=new kciSettingListItemCombo(this);
     wrapMode->Caption->setText(tr("Word Wrap Mode:"));
-    wrapMode->addListItem(tr("No Word Wrap"));
-    wrapMode->addListItem(tr("Wrap At Any Point."));
-    wrapMode->addListItem(tr("Wrap At Word Boundary Or Anywhere."));
+    wrapMode->addListItem(tr("No word wrapped"));
+    wrapMode->addListItem(tr("Wrapped at word boundaries"));
+    wrapMode->addListItem(tr("Wrapped at any point."));
+    wrapMode->addListItem(tr("Wrapping at word boundary or anywhere."));
+    switch(kciEditorConfigure::getInstance()->getWrapMode())
+    {
+    case QTextOption::NoWrap:
+        wrapMode->setValue(0);
+        break;
+    case QTextOption::WordWrap:
+        wrapMode->setValue(1);
+        break;
+    case QTextOption::WrapAnywhere:
+        wrapMode->setValue(2);
+        break;
+    case QTextOption::WrapAtWordBoundaryOrAnywhere:
+        wrapMode->setValue(3);
+        break;
+    default:
+        //This should be no way to execute.
+
+        wrapMode->setValue(0);
+    }
+
+    wrapMode->setValue(kciEditorConfigure::getInstance()->getWrapMode());
     MainLayout->addWidget(wrapMode);
 
     cursorWidth=new kciSettingListItemNumInput(this);
     cursorWidth->Caption->setText(tr("Cursor Width:"));
-    cursorWidth->setValue(1);
+    cursorWidth->setMinValue(1);
+    cursorWidth->setMaxValue(10);
+    cursorWidth->setValue(kciEditorConfigure::getInstance()->getCursorWidth());
     MainLayout->addWidget(cursorWidth);
 }
 
@@ -317,6 +365,22 @@ void kciCCTabEditorContent::apply()
 {
     kciEditorConfigure* instance=kciEditorConfigure::getInstance();
     instance->setTabWidth(tabSpaceNum->getValue());
+    instance->setCursorWidth(cursorWidth->getValue());
+    switch(wrapMode->getValue())
+    {
+    case 0:
+        instance->setWrapMode(QTextOption::NoWrap);
+        break;
+    case 1:
+        instance->setWrapMode(QTextOption::WordWrap);
+        break;
+    case 2:
+        instance->setWrapMode(QTextOption::WrapAnywhere);
+        break;
+    case 3:
+        instance->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        break;
+    }
 }
 
 //-----------------Compiler----------------
@@ -519,7 +583,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle(tr("Cuties Control Center"));
-    setMinimumSize(480, 320);
+    setMinimumSize(640, 400);
 
     //Set Whole Layout
     WholeTitleBarSplit=new QVBoxLayout(this);

@@ -22,6 +22,7 @@
 
 #include <QList>
 #include <QDebug>
+#include <QTextOption>
 
 #include "kciconfigure.h"
 
@@ -37,15 +38,26 @@ public:
     void setUsingBlankInsteadTab(bool enabled);
     int getTabWidth() const;
     void setTabWidth(const int& width);
+    QTextOption::WrapMode getWrapMode() const;
+    void setWrapMode(QTextOption::WrapMode value);
+    int getCursorWidth() const;
+    void setCursorWidth(int value);
+    bool getOverwriteMode() const;
+    void setOverwriteMode(bool value);
 
 signals:
     void tabWidthChanged(int newValue);
+    void wrapModeChanged(QTextOption::WrapMode newWrapMode);
+    void cursorWidthChanged(int newValue);
 
 private:
     kciEditorConfigure();
     static kciEditorConfigure* instance;
-    bool isUsingBlankInsteadTab;
-    int tabWidth;
+
+    //Values:
+    QTextOption::WrapMode wrapMode;
+    bool isUsingBlankInsteadTab, overwriteMode;
+    int tabWidth, cursorWidth;
 };
 
 

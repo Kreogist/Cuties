@@ -17,6 +17,8 @@ kciReplaceDock::kciReplaceDock(QWidget *parent) :
     pal.setColor(QPalette::ButtonText,QColor(255,255,255));
     setPalette(pal);
 
+    mapper=new QSignalMapper(this);
+
     mainLayout=(QGridLayout*)layout();
 
     replaceText=new QLineEdit(this);
@@ -25,23 +27,31 @@ kciReplaceDock::kciReplaceDock(QWidget *parent) :
     replaceText->setFixedHeight(replaceWidgetsHeight);
     mainLayout->addWidget(replaceText,1,0,1,kciSearchWidget::searchTextPartWidth);
 
-    replaceButton=new QToolButton(this);
-    replaceButton->setText(tr("Replace"));
-    replaceButton->setAutoRaise(true);
-    replaceButton->setFixedHeight(replaceWidgetsHeight);
-    mainLayout->addWidget(replaceButton,1,kciSearchWidget::searchTextPartWidth,1,2);
+    replaceButtons[replace]=new QToolButton(this);
+    replaceButtons[replace]->setText(tr("Replace"));
+    replaceButtons[replace]->setAutoRaise(true);
+    replaceButtons[replace]->setFixedHeight(replaceWidgetsHeight);
+    mainLayout->addWidget(replaceButtons[replace],1,kciSearchWidget::searchTextPartWidth,1,2);
 
-    findAndReplaceButton=new QToolButton(this);
-    findAndReplaceButton->setText(tr("Find And Replace"));
-    findAndReplaceButton->setAutoRaise(true);
-    findAndReplaceButton->setFixedHeight(replaceWidgetsHeight);
-    mainLayout->addWidget(findAndReplaceButton,1,kciSearchWidget::searchTextPartWidth+2,1,2);
+    replaceButtons[findAndReplace]=new QToolButton(this);
+    replaceButtons[findAndReplace]->setText(tr("Find And Replace"));
+    replaceButtons[findAndReplace]->setAutoRaise(true);
+    replaceButtons[findAndReplace]->setFixedHeight(replaceWidgetsHeight);
+    mainLayout->addWidget(replaceButtons[findAndReplace],1,kciSearchWidget::searchTextPartWidth+2,1,2);
 
-    replaceAllButton=new QToolButton(this);
-    replaceAllButton->setText(tr("Replace All"));
-    replaceAllButton->setAutoRaise(true);
-    replaceAllButton->setFixedHeight(replaceWidgetsHeight);
-    mainLayout->addWidget(replaceAllButton,1,kciSearchWidget::searchTextPartWidth+4,1,2);
+    replaceButtons[replaceAll]=new QToolButton(this);
+    replaceButtons[replaceAll]->setText(tr("Replace All"));
+    replaceButtons[replaceAll]->setAutoRaise(true);
+    replaceButtons[replaceAll]->setFixedHeight(replaceWidgetsHeight);
+    mainLayout->addWidget(replaceButtons[replaceAll],1,kciSearchWidget::searchTextPartWidth+4,1,2);
+
+    for(int i=0;i<typeCount;i++)
+    {
+        mapper->setMapping(replaceButtons[i],i);
+        connect(replaceButtons[i],SIGNAL(clicked()),mapper,SLOT(map()));
+    }
+    connect(mapper,SIGNAL(mapped(int)),
+            this,SLOT(onOneOfReplaceButtonsClicked(int)));
 
     //Set Close Button
     closeButton=new QToolButton(this);
@@ -90,4 +100,24 @@ void kciReplaceDock::hideAnime()
     connect(hideAnimation, SIGNAL(finished()),
             this, SLOT(hide()));
     hideAnimation->start();
+}
+
+void kciReplaceDock::onOneOfReplaceButtonsClicked(int type)
+{
+    QString newText=replaceText->text(),
+            oldText=text();
+    switch(type)
+    {
+    case replace:
+        emit requireReplace(oldText,newText);
+        break;
+    case findAndReplace:
+        emit requireReplaceAndFind(oldText,newText);
+        break;
+    case replaceAll:
+        emit requireReplaceAll(oldText,newText);
+        break;
+    default:
+        qDebug()<<"unknow replace button type!";
+    }
 }

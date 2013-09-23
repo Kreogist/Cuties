@@ -30,6 +30,7 @@
 
 //#include "kcifiletype.h"
 #include "kcistatuscursorinfo.h"
+#include "kcistatusrewriteinfo.h"
 
 class kciStatusBar : public QStatusBar
 {
@@ -39,15 +40,17 @@ public:
     void showGotoBar(int currentValue, int MaxValue);
 
 signals:
-    void newUpdateCursorPosition(int LineNum, int ColNum);
     void ToNewPosition(int NewLineNum);
 
 public slots:
     void updateCursorPosition(int LineNum, int ColNum);
+    void updateRewriteMode(bool NewValue);
+    void hideRewriteDisplay();
 
 private:
     //kciFileType *kscFileTypeDisplay;
     kciStatusCursorInfo *kscCursorPosition;
+    kciStatusRewriteInfo *lblRewriteMode;
 };
 
 #endif // KCISTATUSBAR_H

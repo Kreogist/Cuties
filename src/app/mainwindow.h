@@ -39,7 +39,6 @@
 #include <QGraphicsDropShadowEffect>
 #include <QVariant>
 #include <QSignalMapper>
-
 #ifdef Q_OS_MACX
 #include <QMenuBar>
 #endif
@@ -59,7 +58,8 @@
 #include "kciexecutor.h"
 #include "kreogistcutestyle.h"
 #include "kcimessagebox.h"
-#include "kcirecentlyfilesmenu.h"
+
+#include "kcimessagebox.h"
 
 class MainWindow : public kciMainWindow
 {
@@ -69,7 +69,6 @@ public:
     
 signals:
     
-
 public slots:
     void show();
     void aboutQt();
@@ -158,7 +157,7 @@ private:
         mnuDebugAddWatch,
         mnuDebugModifyWatch,
         mnuDebugRemoveWatch,*/
-        mnuWindowSplit,
+        //mnuWindowSplit,
         mnuWindowPrev,
         mnuWindowNext,
         mnuHelpAbout,
@@ -169,7 +168,6 @@ private:
     enum MainWindowMenu
     {
         mnuFile,
-        mnuFileRecentOpenedFiles,
         mnuEdit,
         mnuView,
         mnuSearch,

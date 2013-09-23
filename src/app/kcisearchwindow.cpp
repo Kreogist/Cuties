@@ -56,6 +56,7 @@ kciSearchWindow::kciSearchWindow(QWidget *parent) :
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton, SIGNAL(clicked()),
-            this, SIGNAL(hideButtonPressed()));
-}
+            this, SIGNAL(requireHide()));
 
+    qApp->installEventFilter(this);
+}

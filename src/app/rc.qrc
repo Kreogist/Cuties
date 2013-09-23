@@ -86,13 +86,17 @@
         <file>image/ToolBar/compileandrun.png</file>
     </qresource>
     <qresource prefix="/Controls">
-        <file>image/Controls/BooleanFalse.png</file>
         <file>image/Controls/BooleanTrue.png</file>
+        <file>image/Controls/BooleanFalse.png</file>
     </qresource>
     <qresource prefix="/MsgBox">
         <file>image/MessageBox/Title.png</file>
         <file>image/MessageBox/Bottom.png</file>
         <file>image/MessageBox/DownBound.png</file>
         <file>image/MessageBox/UpBound.png</file>
+    </qresource>
+    <qresource prefix="/Sidebar">
+        <file>image/Sidebar/History.png</file>
+        <file>image/Sidebar/Clipboard.png</file>
     </qresource>
 </RCC>

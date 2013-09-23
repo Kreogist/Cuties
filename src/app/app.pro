@@ -83,11 +83,11 @@ SOURCES += \
     Controls/SettingItems/kcisettinglistitemnuminput.cpp \
     kcifiletype.cpp \
     kcihistoryconfigure.cpp \
-    kcirecentlyfilesmenu.cpp \
     kcimessagebox.cpp \
     kcireplacedock.cpp \
     kcisearchlinetext.cpp \
-    kcisearchwidget.cpp
+    kcisearchwidget.cpp \
+    kcistatusrewriteinfo.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -148,10 +148,10 @@ HEADERS += \
     Controls/SettingItems/kcisettinglistitemnuminput.h \
     kcifiletype.h \
     kcihistoryconfigure.h \
-    kcirecentlyfilesmenu.h \
     kcimessagebox.h \
     kcireplacedock.h \
-    kcisearchwidget.h
+    kcisearchwidget.h \
+    kcistatusrewriteinfo.h
 
 # Enable C++11
 CONFIG += c++11

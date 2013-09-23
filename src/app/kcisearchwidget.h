@@ -35,9 +35,11 @@ public:
     explicit kciSearchWidget(QWidget *parent);
     void setTextFocus();
     void setText(const QString& text);
+    QString text() const;
     static const int searchTextPartWidth;
 
 signals:
+    void requireHide();
     void requireShowPreviousResult();
     void requireShowNextResult();
     void requireSearch(QString text,
@@ -51,6 +53,7 @@ public slots:
 
 protected:
     void resizeEvent(QResizeEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     enum menuItem
