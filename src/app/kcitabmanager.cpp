@@ -24,31 +24,29 @@ kciTabManager::kciTabManager(QWidget *parent) :
 {
     clear();
 
-    connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(on_tab_close_requested(int)));
-    connect(this,SIGNAL(currentChanged(int)),this,SLOT(on_current_tab_change(int)));
+    editorConfigureInstance=kciEditorConfigure::getInstance();
 
-    strFileFilter = QObject::tr("All Support Files")+
-            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
-            QObject::tr("Plain Text Files")+"(*.txt);;"+
-            QObject::tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
-            QObject::tr("C Source Files")+"(*.c);;"+
-            QObject::tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
-            QObject::tr("Pascal Source Files")+"(*.pas);;"+
-            QObject::tr("All Files")+"(*.*)";
-
-    QTabBar *tmpTabBar = this->tabBar();
-    QPalette pal=tmpTabBar->palette();
+    tabBarControl = this->tabBar();
+    QPalette pal=tabBarControl->palette();
     pal.setColor(QPalette::WindowText,QColor(200,200,200));
     pal.setColor(QPalette::HighlightedText,QColor(255,255,255));
     pal.setColor(QPalette::Button,QColor(83,83,83));
-    tmpTabBar->setPalette(pal);
+    tabBarControl->setPalette(pal);
+    tabBarControl->setMinimumHeight(0);
+    tabBarControl->setContentsMargins(0,0,0,0);
 
     setAcceptDrops(true);
     setDocumentMode(true);
-    setMovable(true);
-    setTabsClosable(true);
+    setContentsMargins(0,0,0,0);
+    setMovable(editorConfigureInstance->getTabMoveable());
+    setTabsClosable(editorConfigureInstance->getTabCloseable());
     setElideMode(Qt::ElideRight);
     setTabPosition(QTabWidget::South);
+
+    connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(on_tab_close_requested(int)));
+    connect(this,SIGNAL(currentChanged(int)),this,SLOT(on_current_tab_change(int)));
+    connect(editorConfigureInstance, SIGNAL(tabMoveableChanged(bool)),this,SLOT(setTabMoveableValue(bool)));
+    connect(editorConfigureInstance, SIGNAL(tabCloseableChanged(bool)),this,SLOT(setTabCloseable(bool)));
 
     tab_count=1;
     new_file_count=1;
@@ -126,10 +124,37 @@ void kciTabManager::openAndJumpTo(const QString &filePath)
 
 void kciTabManager::open()
 {
-    QStringList file_name_list=QFileDialog::getOpenFileNames(this,
-                                                             tr("Open File"),
-                                                             kciHistoryConfigure::getInstance()->getHistoryDir(),
-                                                             strFileFilter);
+    QStringList file_name_list;
+    if(kciGeneralConfigure::getInstance()->getUseDefaultLanguageWhenOpen())
+    {
+        QString defaultSelectFilter;
+        switch(kciGeneralConfigure::getInstance()->getDefaultLanguageMode())
+        {
+        case 1:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getCfFilter();
+            break;
+        case 2:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getCppfFilter();
+            break;
+        case 3:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getPasfFilter();
+            break;
+        default:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getAsfFilter();
+        }
+        file_name_list=QFileDialog::getOpenFileNames(this,
+                                                     tr("Open File"),
+                                                     kciHistoryConfigure::getInstance()->getHistoryDir(),
+                                                     kciGeneralConfigure::getInstance()->getStrFileFilter(),
+                                                     &defaultSelectFilter);
+    }
+    else
+    {
+        file_name_list=QFileDialog::getOpenFileNames(this,
+                                                     tr("Open File"),
+                                                     kciHistoryConfigure::getInstance()->getHistoryDir(),
+                                                     kciGeneralConfigure::getInstance()->getStrFileFilter());
+    }
 
     QString name;
 
@@ -223,6 +248,11 @@ bool kciTabManager::save_all_file()
         }
     }
     return true;
+}
+
+void kciTabManager::setTabMoveableValue(bool newValue)
+{
+    setMovable(newValue);
 }
 
 void kciTabManager::close_all_tab()
@@ -384,6 +414,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
         }
     }
     kciHistoryConfigure::getInstance()->setUnClosedCurrent(cIndex);
+    kciHistoryConfigure::getInstance()->writeConfigure();
 }
 
 void kciTabManager::renameTabTitle(QString title)
@@ -498,3 +529,7 @@ void kciTabManager::insertToCurrentEditor(QString insertText)
     }
 }
 
+void kciTabManager::setTabCloseable(bool newValue)
+{
+    setTabsClosable(newValue);
+}

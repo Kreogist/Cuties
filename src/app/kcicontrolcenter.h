@@ -39,6 +39,8 @@
 #include <QSequentialAnimationGroup>
 #include <QPropertyAnimation>
 #include <QComboBox>
+#include <QDebug>
+#include <QStringList>
 
 #include <QDialog>
 
@@ -52,9 +54,11 @@
 #include "Controls/SettingItems/kcisettinglistitembutton.h"
 #include "kcilistbutton.h"
 
+#include "kciglobal.h"
 #include "kcigeneralconfigure.h"
 #include "kcieditorconfigure.h"
 #include "kcicompilerconfigure.h"
+#include "kcilanguageconfigure.h"
 #include "kciclipboard.h"
 #include "kcihistoryconfigure.h"
 
@@ -145,6 +149,7 @@ private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
     kciSettingListItemBoolean *sbnAutoOpenUnclosed;
+    kciSettingListItemBoolean *sboUseDefaultLanguageOnOpen, *sboUseDefaultLanguageOnSave;
     kciSettingListItemNumInput *slnHistoryMax;
     kciSettingListItemButton *sbtClearHistory;
 };
@@ -158,6 +163,7 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
+    kciSettingListItemBoolean *slnTabMoveable, *slnTabCloseable;
     kciSettingListItemNumInput *tabSpaceNum;
     kciSettingListItemCombo *wrapMode;
     kciSettingListItemNumInput *cursorWidth;

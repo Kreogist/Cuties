@@ -31,6 +31,7 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
 #include <QDebug>
+#include <QCommonStyle>
 
 #include "kcitextsearcher.h"
 #include "kcitextblockdata.h"

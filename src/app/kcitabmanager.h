@@ -33,6 +33,8 @@
 #include <QPalette>
 #include <QUrl>
 
+#include "kcigeneralconfigure.h"
+#include "kcieditorconfigure.h"
 #include "kcihistoryconfigure.h"
 #include "kcisearchwindow.h"
 #include "kcicodeeditor.h"
@@ -89,12 +91,17 @@ protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
 
+private slots:
+    void setTabMoveableValue(bool newValue);
+    void setTabCloseable(bool newValue);
+
 private:
     int tab_count;
     int new_file_count;
-    QString strFileFilter;
     QTextCursor currentTextCursor;
     kciCodeEditor *currentEditor;
+    kciEditorConfigure* editorConfigureInstance;
+    QTabBar *tabBarControl;
 
     bool save_all_file();
 };

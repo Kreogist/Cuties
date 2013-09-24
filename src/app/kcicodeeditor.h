@@ -41,6 +41,7 @@
 #include <QScrollBar>
 
 #include "kcihistoryconfigure.h"
+#include "kcigeneralconfigure.h"
 #include "kcitexteditor.h"
 #include "kcilinenumpanel.h"
 #include "kcimarkpanel.h"

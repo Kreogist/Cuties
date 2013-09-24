@@ -39,15 +39,6 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
-    strFileFilter = QObject::tr("All Support Files")+
-            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas);;"+
-            QObject::tr("Plain Text Files")+"(*.txt);;"+
-            QObject::tr("Hearder Files")+"(*.h *.hpp *.rh *.hh);;"+
-            QObject::tr("C Source Files")+"(*.c);;"+
-            QObject::tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp);;"+
-            QObject::tr("Pascal Source Files")+"(*.pas);;"+
-            QObject::tr("All Files")+"(*.*)";
-
     markPanel=new kciMarkPanel(this);
     markPanel->setVisible(false);
     markPanel->setEnabled(false);
@@ -196,7 +187,7 @@ bool kciCodeEditor::open(const QString &fileName)
         editor->setPlainText(QString(_textIn.readAll()));
 
         fileInfoChanged(_file);
-
+        kciHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
         return true;
     }
     else
@@ -256,11 +247,36 @@ bool kciCodeEditor::saveAs()
 
 bool kciCodeEditor::dosaveas(const QString &Caption)
 {
-    filePath=QFileDialog::getSaveFileName(this,
-                                          Caption,
-                                          kciHistoryConfigure::getInstance()->getHistoryDir(),
-                                          strFileFilter);
-
+    if(kciGeneralConfigure::getInstance()->getUseDefaultLanguageWhenSave())
+    {
+        QString defaultSelectFilter;
+        switch(kciGeneralConfigure::getInstance()->getDefaultLanguageMode())
+        {
+        case 1:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getCfFilter();
+            break;
+        case 2:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getCppfFilter();
+            break;
+        case 3:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getPasfFilter();
+            break;
+        default:
+            defaultSelectFilter=kciGeneralConfigure::getInstance()->getAsfFilter();
+        }
+        filePath=QFileDialog::getSaveFileName(this,
+                                              Caption,
+                                              kciHistoryConfigure::getInstance()->getHistoryDir(),
+                                              kciGeneralConfigure::getInstance()->getStrFileFilter(),
+                                              &defaultSelectFilter);
+    }
+    else
+    {
+        filePath=QFileDialog::getSaveFileName(this,
+                                              Caption,
+                                              kciHistoryConfigure::getInstance()->getHistoryDir(),
+                                              kciGeneralConfigure::getInstance()->getStrFileFilter());
+    }
     if(!filePath.isEmpty())
     {
         return saveAs(filePath);
@@ -469,9 +485,7 @@ void kciCodeEditor::fileInfoChanged(const QFile &file)
     editor->document()->setModified(false);
 
     computeExecFileName();
-
     kciHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
-    kciHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
 }
 
 kciLanguageMode *kciCodeEditor::langMode() const

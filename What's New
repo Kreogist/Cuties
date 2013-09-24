@@ -1,3 +1,12 @@
+0.0.1.0
+New Features:
+1. Auto selected to the default language suffix when opening and saving files.
+2. Multi-Tab option support.
+
+Updates:
+1. Independent History record as single database file.
+2. Rewrite sidebar.
+
 0.0.0.5
 New Features:
 1. Mac console runner support.

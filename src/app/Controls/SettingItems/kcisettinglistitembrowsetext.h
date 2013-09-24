@@ -18,10 +18,13 @@ public:
     void setFolderMode(bool value);
 
 protected:
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
 private slots:
     void getFolderPath();
+    void setEditModeEnabled();
 
 private:
     QLineEdit *ValueEditor;
@@ -29,7 +32,7 @@ private:
     QLabel *ValueDisplayer;
     QString ItemValue;
     QToolButton *browseFolder;
-    bool folderMode;
+    bool folderMode, blnEditMode;
 };
 
 #endif // KCISETTINGLISTITEMFOLDERTEXT_H
