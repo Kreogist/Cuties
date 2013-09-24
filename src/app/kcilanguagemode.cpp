@@ -29,7 +29,7 @@ kciLanguageMode::kciLanguageMode(QWidget *parent) :
 
     setCompileState(uncompiled);
     m_type=Invalid;
-    setFileSuffix(kciGeneralConfigure::getInstance()->getDefaultLanguageMode());
+    setFileSuffix(kciGeneralConfigure::getInstance()->getDefaultLanguageModeString());
 
     Q_ASSERT(m_parent!=NULL);
 }

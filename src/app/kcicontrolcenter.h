@@ -52,6 +52,7 @@
 #include "Controls/SettingItems/kcisettinglistitembutton.h"
 #include "kcilistbutton.h"
 
+#include "kciglobal.h"
 #include "kcigeneralconfigure.h"
 #include "kcieditorconfigure.h"
 #include "kcicompilerconfigure.h"
@@ -145,6 +146,7 @@ private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
     kciSettingListItemBoolean *sbnAutoOpenUnclosed;
+    kciSettingListItemBoolean *sboUseDefaultLanguageOnOpen, *sboUseDefaultLanguageOnSave;
     kciSettingListItemNumInput *slnHistoryMax;
     kciSettingListItemButton *sbtClearHistory;
 };
@@ -158,6 +160,7 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
+    kciSettingListItemBoolean *slnTabMoveable, *slnTabCloseable;
     kciSettingListItemNumInput *tabSpaceNum;
     kciSettingListItemCombo *wrapMode;
     kciSettingListItemNumInput *cursorWidth;

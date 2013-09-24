@@ -10,7 +10,6 @@ kciClipboardHistoryStack::kciClipboardHistoryStack(QWidget *parent) :
 
 void kciClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
 {
-    //emit requiredInsertText(kciClipboard::getInstance()->getClipboardTextsModel()->item(ItemID.row())->text());
     emit requiredInsertText(kciClipboard::getInstance()->getHistoryClipboardText(ItemID.row()));
 }
 
@@ -32,12 +31,13 @@ void kciHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
 kciSideBarContent::kciSideBarContent(QWidget *parent) :
     QWidget(parent)
 {
+    setMinimumWidth(0);
     QButtonGroup *switcherGroup=new QButtonGroup(this);
-    buttonGroupLayout=new QHBoxLayout();
-    buttonGroupLayout->setContentsMargins(4,4,4,4);
+    buttonGroupLayout=new QVBoxLayout();
+    buttonGroupLayout->setContentsMargins(0,0,0,0);
     buttonGroupLayout->setSpacing(0);
 
-    mainLayout=new QVBoxLayout(this);
+    mainLayout=new QHBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
@@ -46,8 +46,7 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     buttonRecent=new QToolButton(this);
     buttonRecent->setAutoRaise(true);
     buttonRecent->setCheckable(true);
-    buttonRecent->setChecked(true);
-    buttonRecent->setFixedSize(35,20);
+    buttonRecent->setFixedSize(30, 35);
     buttonRecent->setToolTip(tr("History"));
     buttonRecent->setIcon(QIcon(":/Sidebar/image/Sidebar/History.png"));
     switcherGroup->addButton(buttonRecent, 0);
@@ -57,7 +56,7 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     buttonClipboard=new QToolButton(this);
     buttonClipboard->setAutoRaise(true);
     buttonClipboard->setCheckable(true);
-    buttonClipboard->setFixedSize(35,20);
+    buttonClipboard->setFixedSize(30, 35);
     buttonClipboard->setToolTip(tr("Clipboard"));
     buttonClipboard->setIcon(QIcon(":/Sidebar/image/Sidebar/Clipboard.png"));
     switcherGroup->addButton(buttonClipboard, 1);
@@ -70,7 +69,9 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     //Ready Stacked Widget.
     contents=new QStackedWidget(this);
     contents->setContentsMargins(0,0,0,0);
-    mainLayout->addWidget(contents);
+    contents->hide();
+    mainLayout->addWidget(contents,1);
+    mainLayout->addStretch();
 
     //Add Widgets
     historyStack=new kciHistoryStack(this);
@@ -84,12 +85,24 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
             this, SIGNAL(clipRequiredInsertText(QString)));
 
     connect(switcherGroup, SIGNAL(buttonPressed(int)),
+            this, SIGNAL(expandRequest()));
+    connect(switcherGroup, SIGNAL(buttonPressed(int)),
             contents, SLOT(setCurrentIndex(int)));
 }
 
 kciSideBarContent::~kciSideBarContent()
 {
     buttonGroupLayout->deleteLater();
+}
+
+void kciSideBarContent::showContent()
+{
+    contents->show();
+}
+
+void kciSideBarContent::hideContent()
+{
+    contents->hide();
 }
 
 kciSideBar::kciSideBar(QWidget *parent) :
@@ -104,7 +117,7 @@ kciSideBar::kciSideBar(QWidget *parent) :
     setFeatures(QDockWidget::NoDockWidgetFeatures);
     //Set Fixed Size.
     setMinimumWidth(0);
-    setFixedWidth(0);
+    setFixedWidth(30);
     //Set Style
     setContentsMargins(0,0,0,0);
     QPalette pal=this->palette();
@@ -119,24 +132,35 @@ kciSideBar::kciSideBar(QWidget *parent) :
 
     //New Central Widget
     CentralWidget=new kciSideBarContent(this);
+    CentralWidget->setMinimumWidth(0);
     setWidget(CentralWidget);
 
     connect(CentralWidget, SIGNAL(historyRequiredOpenFiles(QString)),
             this, SIGNAL(historyRequiredOpenFiles(QString)));
     connect(CentralWidget, SIGNAL(clipRequiredInsertText(QString)),
             this, SIGNAL(clipboardRequiredInsertText(QString)));
+    connect(CentralWidget, SIGNAL(expandRequest()),
+            this, SLOT(showAnime()));
+
+    showAnimation=new QTimeLine(250, this);
+    hideAnimation=new QTimeLine(250, this);
+    expandState=true;
 }
 
 void kciSideBar::showAnime()
 {
-    QTimeLine *showAnimation=new QTimeLine(250, this);
-    showAnimation->setEasingCurve(QEasingCurve::OutCubic);
-    showAnimation->setStartFrame(0);
-    showAnimation->setEndFrame(230);
-    connect(showAnimation, SIGNAL(frameChanged(int)),
-            this, SLOT(resizeDock(int)));
-    this->show();
-    showAnimation->start();
+    if(showAnimation->state()!=QTimeLine::Running)
+    {
+        hideAnimation->stop();
+        showAnimation->setEasingCurve(QEasingCurve::OutCubic);
+        showAnimation->setStartFrame(this->width());
+        showAnimation->setEndFrame(230);
+        connect(showAnimation, SIGNAL(frameChanged(int)),
+                this, SLOT(resizeDock(int)));
+        CentralWidget->showContent();
+        expandState=true;
+        showAnimation->start();
+    }
 }
 
 void kciSideBar::resizeDock(int newWidth)
@@ -146,13 +170,27 @@ void kciSideBar::resizeDock(int newWidth)
 
 void kciSideBar::hideAnime()
 {
-    QTimeLine *hideAnimation=new QTimeLine(250, this);
-    hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
-    hideAnimation->setStartFrame(230);
-    hideAnimation->setEndFrame(0);
-    connect(hideAnimation, SIGNAL(frameChanged(int)),
-            this, SLOT(resizeDock(int)));
-    connect(hideAnimation, SIGNAL(finished()),
-            this, SLOT(hide()));
-    hideAnimation->start();
+    if(hideAnimation->state()!=QTimeLine::Running)
+    {
+        showAnimation->stop();
+        hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
+        hideAnimation->setStartFrame(230);
+        hideAnimation->setEndFrame(30);
+        connect(hideAnimation, SIGNAL(frameChanged(int)),
+                this, SLOT(resizeDock(int)));
+        connect(hideAnimation, SIGNAL(finished()),
+                CentralWidget, SLOT(hideContent()));
+        expandState=false;
+        hideAnimation->start();
+    }
+}
+
+bool kciSideBar::getExpandState() const
+{
+    return expandState;
+}
+
+void kciSideBar::setExpandState(bool value)
+{
+    expandState = value;
 }

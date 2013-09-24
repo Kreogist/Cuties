@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
     //Initialize Application Infomation.
     QApplication::setApplicationName(QString("Kreogist Cuties"));
-    QApplication::setApplicationVersion(QString("0.0.0.5"));
+    QApplication::setApplicationVersion(QString("0.0.1.0"));
     QApplication::setOrganizationName("Kreogist Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
@@ -113,9 +113,7 @@ int main(int argc, char *argv[])
     MainWindow mainwindow;
     mainwindow.show();
 
-    int ret=app.exec();
+    //kciGlobalInstance->writeSettings();
 
-    kciGlobalInstance->writeSettings();
-
-    return ret;
+    return app.exec();
 }

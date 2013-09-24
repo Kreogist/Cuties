@@ -23,6 +23,7 @@
 #include <QString>
 #include <QList>
 #include <QSettings>
+#include <QStyle>
 
 #include "kcigeneralconfigure.h"
 #include "kcieditorconfigure.h"

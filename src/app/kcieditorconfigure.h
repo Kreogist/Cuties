@@ -44,11 +44,17 @@ public:
     void setCursorWidth(int value);
     bool getOverwriteMode() const;
     void setOverwriteMode(bool value);
+    bool getTabMoveable() const;
+    void setTabMoveable(bool value);
+    bool getTabCloseable() const;
+    void setTabCloseable(bool value);
 
 signals:
     void tabWidthChanged(int newValue);
     void wrapModeChanged(QTextOption::WrapMode newWrapMode);
     void cursorWidthChanged(int newValue);
+    void tabMoveableChanged(bool newValue);
+    void tabCloseableChanged(bool newValue);
 
 private:
     kciEditorConfigure();
@@ -58,6 +64,7 @@ private:
     QTextOption::WrapMode wrapMode;
     bool isUsingBlankInsteadTab, overwriteMode;
     int tabWidth, cursorWidth;
+    bool tabMoveable, tabCloseable;
 };
 
 
