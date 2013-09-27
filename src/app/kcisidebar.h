@@ -29,6 +29,9 @@
 #include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QSignalMapper>
 
 #include <QStackedWidget>
 #include <QListView>
@@ -68,22 +71,31 @@ private:
 
 };
 
-class kciSidebarButton : public QToolButton
+class kciSidebarButton : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciSidebarButton(QWidget *parent = 0);
+    void setIcon(QString IconPath);
 
 signals:
-    void buttonUpByClick();
+    void mouseEnter();
+    void mouseExit();
+    void mousePressed(bool buttonState);
 
-private slots:
-    void sidebarButtonClick();
+protected:
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+    void mousePressEvent(QMouseEvent *e);
 
 private:
     QPalette pal;
-    QColor buttonColor;
+    QColor buttonBackcolor;
+    QVBoxLayout *mainLayout;
+    QLabel *iconDisplayer;
 
+    bool buttonPressed;
+    bool buttonLocked;
 };
 
 class kciSideBarContent : public QWidget
@@ -107,12 +119,21 @@ public slots:
 private:
     QHBoxLayout *mainLayout;
     QVBoxLayout *buttonGroupLayout;
-    kciSidebarButton *buttonRecent, *buttonClipboard;
+    enum sidebarButtons
+    {
+        sideButtonHistory,
+        sideButtonClipboard,
+        sidebarButtonCount
+    };
+
+    kciSidebarButton *sidebarButton[sidebarButtonCount];
+    QSignalMapper *sidebarButtonMapper;
 
     QStackedWidget *contents;
     kciHistoryStack *historyStack;
     kciClipboardHistoryStack *clipboardStack;
-    QButtonGroup *switcherGroup;
+
+    int sidebarButtonIndex;
 };
 
 class kciSideBar : public QDockWidget
