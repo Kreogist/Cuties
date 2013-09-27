@@ -177,6 +177,7 @@ kciSideBar::kciSideBar(QWidget *parent) :
             this, SLOT(showAnime()));
 
     showAnimation=new QTimeLine(250, this);
+
     connect(showAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
     hideAnimation=new QTimeLine(250, this);
