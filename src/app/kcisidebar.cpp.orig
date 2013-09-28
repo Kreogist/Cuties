@@ -111,6 +111,13 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
 {
     //Set Properties.
     setMinimumWidth(0);
+<<<<<<< HEAD
+=======
+    switcherGroup=new QButtonGroup(this);
+    buttonGroupLayout=new QVBoxLayout();
+    buttonGroupLayout->setContentsMargins(0,0,0,0);
+    buttonGroupLayout->setSpacing(0);
+>>>>>>> 438f9334ba043d4ded93f61e8ded08e8d22bb47e
 
     //Set Main Layout.
     mainLayout=new QHBoxLayout(this);
@@ -118,6 +125,7 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
+<<<<<<< HEAD
     //Set Button Group Layout.
     buttonGroupLayout=new QVBoxLayout();
     buttonGroupLayout->setContentsMargins(0,0,0,0);
@@ -137,6 +145,22 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     sidebarButton[sideButtonClipboard]->setToolTip(tr("Clipboard"));
     sidebarButton[sideButtonClipboard]->setIcon(":/Sidebar/image/Sidebar/Clipboard.png");
     buttonGroupLayout->addWidget(sidebarButton[sideButtonClipboard]);
+=======
+    //Add History Button.
+    buttonRecent=new kciSidebarButton(this);
+    buttonRecent->setToolTip(tr("History"));
+    buttonRecent->setIcon(QIcon(":/Sidebar/image/Sidebar/History.png"));
+    switcherGroup->addButton(buttonRecent, 0);
+    buttonGroupLayout->addWidget(buttonRecent);
+
+    //Add Clipboard History Button.
+    buttonClipboard=new kciSidebarButton(this);
+    buttonClipboard->setToolTip(tr("Clipboard"));
+    buttonClipboard->setIcon(QIcon(":/Sidebar/image/Sidebar/Clipboard.png"));
+    switcherGroup->addButton(buttonClipboard, 1);
+    buttonGroupLayout->addWidget(buttonClipboard);
+>>>>>>> 438f9334ba043d4ded93f61e8ded08e8d22bb47e
+
     buttonGroupLayout->addStretch();
     mainLayout->addLayout(buttonGroupLayout);
 
@@ -159,7 +183,12 @@ kciSideBarContent::kciSideBarContent(QWidget *parent) :
     connect(clipboardStack, SIGNAL(requiredInsertText(QString)),
             this, SIGNAL(clipRequiredInsertText(QString)));
 
+<<<<<<< HEAD
     sidebarButtonIndex=-1;
+=======
+    connect(switcherGroup, SIGNAL(buttonClicked(int)),
+            this, SLOT(listButtonClicked(int)));
+>>>>>>> 438f9334ba043d4ded93f61e8ded08e8d22bb47e
 }
 
 kciSideBarContent::~kciSideBarContent()
@@ -226,6 +255,10 @@ kciSideBar::kciSideBar(QWidget *parent) :
             this, SLOT(showAnime()));
 
     showAnimation=new QTimeLine(250, this);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 438f9334ba043d4ded93f61e8ded08e8d22bb47e
     connect(showAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
 
@@ -234,7 +267,10 @@ kciSideBar::kciSideBar(QWidget *parent) :
             this, SLOT(resizeDock(int)));
     connect(hideAnimation, SIGNAL(finished()),
             CentralWidget, SLOT(hideContent()));
+<<<<<<< HEAD
 
+=======
+>>>>>>> 438f9334ba043d4ded93f61e8ded08e8d22bb47e
     expandState=true;
 }
 
