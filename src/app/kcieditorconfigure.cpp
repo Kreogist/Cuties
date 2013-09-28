@@ -28,6 +28,8 @@ kciEditorConfigure::kciEditorConfigure()
     tabWidth=4;
     cursorWidth=1;
     overwriteMode=false;
+    tabMoveable=true;
+    tabCloseable=true;
 }
 
 kciEditorConfigure* kciEditorConfigure::getInstance()
@@ -66,7 +68,8 @@ void kciEditorConfigure::readConfigure()
     }
     cursorWidth=settings.value("CursorWidth", cursorWidth).toInt();
     overwriteMode=settings.value("OverwriteMode", overwriteMode).toBool();
-
+    tabMoveable=settings.value("TabMoveable", tabMoveable).toBool();
+    tabCloseable=settings.value("TabCloseable", tabCloseable).toBool();
     settings.endGroup();
 }
 
@@ -79,6 +82,8 @@ void kciEditorConfigure::writeConfigure()
     settings.setValue("CursorWidth", cursorWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
     settings.setValue("OverwriteMode", overwriteMode);
+    settings.setValue("TabMoveable", tabMoveable);
+    settings.setValue("TabCloseable", tabCloseable);
     settings.endGroup();
 }
 
@@ -133,4 +138,26 @@ bool kciEditorConfigure::getOverwriteMode() const
 void kciEditorConfigure::setOverwriteMode(bool value)
 {
     overwriteMode = value;
+}
+
+bool kciEditorConfigure::getTabMoveable() const
+{
+    return tabMoveable;
+}
+
+void kciEditorConfigure::setTabMoveable(bool value)
+{
+    tabMoveable = value;
+    emit tabMoveableChanged(value);
+}
+
+bool kciEditorConfigure::getTabCloseable() const
+{
+    return tabCloseable;
+}
+
+void kciEditorConfigure::setTabCloseable(bool value)
+{
+    tabCloseable = value;
+    emit tabCloseableChanged(value);
 }

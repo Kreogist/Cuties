@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -21,6 +17,7 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include "kcimainwindow.h"
 
 kciMainWindow::kciMainWindow(QWidget *parent) :
@@ -30,11 +27,10 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
     setMenuWidget(m_titleBar);
     setAcceptDrops(true);
 
-    setContentsMargins(2,2,2,2);
-
 #ifdef Q_OS_MACX
     QMainWindow::setUnifiedTitleAndToolBarOnMac(false);
 #else
+    setContentsMargins(2,2,2,2);
     setWindowFlags(Qt::FramelessWindowHint);
     kciDragProxy *dragProxy=new kciDragProxy(this);
     dragProxy->setBorderWidth(8,8,8,8);

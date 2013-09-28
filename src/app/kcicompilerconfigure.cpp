@@ -16,9 +16,9 @@ kciCompilerConfigure::kciCompilerConfigure()
 #endif
 
 #ifdef Q_OS_WIN32
-    gccPath="C:/MinGW/bin/gcc.exe";
-    gppPath="C:/MinGW/bin/g++.exe";
-    fpcPath="c:/fpc/fpc.exe";
+    gccPath="/Compiler/MinGW/bin/gcc.exe";
+    gppPath="/Compiler/MinGW/bin/g++.exe";
+    fpcPath="/Compiler/fpc/fpc.exe";
 #endif
 }
 
@@ -44,30 +44,84 @@ void kciCompilerConfigure::writeConfigure()
 
 QString kciCompilerConfigure::getGccPath() const
 {
+#ifdef Q_OS_WIN32
+    if(gccPath.mid(1,1)==":")
+    {
+        return gccPath;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + gccPath;
+    }
+#else
     return gccPath;
+#endif
 }
 
 void kciCompilerConfigure::setGccPath(const QString &value)
 {
-    gccPath = value;
+    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
+    {
+        gccPath = value.mid(qApp->applicationDirPath().length());
+    }
+    else
+    {
+        gccPath = value;
+    }
 }
 
 QString kciCompilerConfigure::getGppPath() const
 {
+#ifdef Q_OS_WIN32
+    if(gppPath.mid(1,1)==":")
+    {
+        return gppPath;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + gppPath;
+    }
+#else
     return gppPath;
+#endif
 }
 
 void kciCompilerConfigure::setGppPath(const QString &value)
 {
-    gppPath = value;
+    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
+    {
+        gppPath = value.mid(qApp->applicationDirPath().length());
+    }
+    else
+    {
+        gppPath = value;
+    }
 }
 
 QString kciCompilerConfigure::getFpcPath() const
 {
+#ifdef Q_OS_WIN32
+    if(fpcPath.mid(1,1)==":")
+    {
+        return fpcPath;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + fpcPath;
+    }
+#else
     return fpcPath;
+#endif
 }
 
 void kciCompilerConfigure::setFpcPath(const QString &value)
 {
-    fpcPath = value;
+    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
+    {
+        fpcPath = value.mid(qApp->applicationDirPath().length());
+    }
+    else
+    {
+        fpcPath = value;
+    }
 }

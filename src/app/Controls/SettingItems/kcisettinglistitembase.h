@@ -23,6 +23,8 @@ signals:
     void ItemLostFocus();
 
 public slots:
+    void enableEditMode();
+    void disableEditMode();
 
 private slots:
     void changeBackgroundAlpha(int alpha);
@@ -36,6 +38,7 @@ private:
     QPalette pal;
     QTimeLine *animeFadeOut;
     bool itemSelected;
+    bool blnEditMode;
 };
 
 #endif // KCISETTINGLISTITEMBASE_H

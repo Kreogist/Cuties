@@ -193,20 +193,6 @@ kciAbstractCCTabContent::kciAbstractCCTabContent(QWidget *parent):
 
 }
 //---------------Gerneral------------------------
-static int QStringToValue(const QString& text)
-{
-    if(text=="cpp")
-    {
-        return 1;
-    }
-    if(text=="pas")
-    {
-        return 2;
-    }
-
-    return 0;
-}
-
 kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     kciAbstractCCTabContent(parent)
 {
@@ -236,10 +222,23 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     sboDefaultLanguage=new kciSettingListItemCombo(this);
     sboDefaultLanguage->Caption->setText(tr("Default Programming Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
-    sboDefaultLanguage->addListItem(tr("C/C++"));
+    sboDefaultLanguage->addListItem(tr("C"));
+    sboDefaultLanguage->addListItem(tr("C++"));
     sboDefaultLanguage->addListItem(tr("Pascal"));
-    sboDefaultLanguage->setValue(QStringToValue(kciGeneralConfigure::getInstance()->getDefaultLanguageMode()));
+    sboDefaultLanguage->setValue(kciGeneralConfigure::getInstance()->getDefaultLanguageMode());
     MainLayout->addWidget(sboDefaultLanguage);
+
+    sboUseDefaultLanguageOnOpen=new kciSettingListItemBoolean(this);
+    sboUseDefaultLanguageOnOpen->setEnabledText(tr("Auto select default language file suffix when opening files."));
+    sboUseDefaultLanguageOnOpen->setDisabledText(tr("Don't select default language file suffix when opening files."));
+    sboUseDefaultLanguageOnOpen->setTheValue(kciGeneralConfigure::getInstance()->getUseDefaultLanguageWhenOpen());
+    MainLayout->addWidget(sboUseDefaultLanguageOnOpen);
+
+    sboUseDefaultLanguageOnSave=new kciSettingListItemBoolean(this);
+    sboUseDefaultLanguageOnSave->setEnabledText(tr("Auto select default language file suffix when saving files."));
+    sboUseDefaultLanguageOnSave->setDisabledText(tr("Don't select default language file suffix when saving files."));
+    sboUseDefaultLanguageOnSave->setTheValue(kciGeneralConfigure::getInstance()->getUseDefaultLanguageWhenSave());
+    MainLayout->addWidget(sboUseDefaultLanguageOnSave);
 
     QLabel *tblRemember=new QLabel(this);
     tblRemember->setText(" " + tr("Automatic Remember"));
@@ -280,26 +279,10 @@ void kciCCTabGerneralContent::apply()
     //Remember Unclosed Set.
     kciGeneralConfigure::getInstance()->setRememberUnclosedFile(sbnAutoOpenUnclosed->getValue());
     //Default Language Mode Sets.
-    switch(sboDefaultLanguage->getValue())
-    {
-    case 0:
-    {
-        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("plainText");
-        break;
-    }
-    case 1:
-    {
-        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("cpp");
-        break;
-    }
-    case 2:
-    {
-        kciGeneralConfigure::getInstance()->setDefaultLanguageMode("pas");
-        break;
-    }
-    default:
-        break;
-    }
+    kciGeneralConfigure::getInstance()->setDefaultLanguageMode(sboDefaultLanguage->getValue());
+    //Save and Open States using language mode.
+    kciGeneralConfigure::getInstance()->setUseDefaultLanguageWhenOpen(sboUseDefaultLanguageOnOpen->getValue());
+    kciGeneralConfigure::getInstance()->setUseDefaultLanguageWhenSave(sboUseDefaultLanguageOnSave->getValue());
     //History Settings.
     kciHistoryConfigure::getInstance()->setMaxRecentFilesSize(slnHistoryMax->getValue());
 }
@@ -346,8 +329,8 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     wrapMode->Caption->setText(tr("Word Wrap Mode:"));
     wrapMode->addListItem(tr("No word wrapped"));
     wrapMode->addListItem(tr("Wrapped at word boundaries"));
-    wrapMode->addListItem(tr("Wrapped at any point."));
-    wrapMode->addListItem(tr("Wrapping at word boundary or anywhere."));
+    wrapMode->addListItem(tr("Wrapped at any point"));
+    wrapMode->addListItem(tr("Wrapping at word boundary or anywhere"));
     switch(kciEditorConfigure::getInstance()->getWrapMode())
     {
     case QTextOption::NoWrap:
@@ -378,6 +361,28 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     cursorWidth->setValue(kciEditorConfigure::getInstance()->getCursorWidth());
     MainLayout->addWidget(cursorWidth);
 
+    //Multi-Tab Editing.
+    QLabel *tblMultiTab=new QLabel(this);
+    tblMultiTab->setText(" " + tr("Multi-Tab Option"));
+    tblMultiTab->setFont(TitleFont);
+    tblMultiTab->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblMultiTab);
+
+    //Tab Movealbe.
+    slnTabMoveable=new kciSettingListItemBoolean(this);
+    slnTabMoveable->setEnabledText(tr("Enable tab moving."));
+    slnTabMoveable->setDisabledText(tr("Disable tab moving."));
+    slnTabMoveable->setTheValue(kciEditorConfigure::getInstance()->getTabMoveable());
+    MainLayout->addWidget(slnTabMoveable);
+
+    //Tab Closable.
+    slnTabCloseable=new kciSettingListItemBoolean(this);
+    slnTabCloseable->setEnabledText(tr("Enable tab closable."));
+    slnTabCloseable->setDisabledText(tr("Disable tab closable."));
+    slnTabCloseable->setTheValue(kciEditorConfigure::getInstance()->getTabCloseable());
+    MainLayout->addWidget(slnTabCloseable);
+
     //Title Label.
     QLabel *tblClipboard=new QLabel(this);
     tblClipboard->setText(" " + tr("Clipboard"));
@@ -388,7 +393,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
     //Clipboard Max
     clipboardMax=new kciSettingListItemNumInput(this);
-    clipboardMax->Caption->setText("Maximum Clipboard Tracking Items: ");
+    clipboardMax->Caption->setText(tr("Maximum Clipboard Tracking Items: "));
     clipboardMax->setMinValue(5);
     clipboardMax->setMaxValue(100);
     clipboardMax->setValue(kciClipboard::getInstance()->getMaxDataCount());
@@ -415,6 +420,8 @@ void kciCCTabEditorContent::apply()
         instance->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
         break;
     }
+    instance->setTabMoveable(slnTabMoveable->getValue());
+    instance->setTabCloseable(slnTabCloseable->getValue());
     kciClipboard::getInstance()->setMaxDataCount(clipboardMax->getValue());
 }
 
@@ -517,7 +524,28 @@ kciCCTabFileAssociationContent::kciCCTabFileAssociationContent(QWidget *parent) 
 kciCCTabLanguageContent::kciCCTabLanguageContent(QWidget *parent) :
     kciAbstractCCTabContent(parent)
 {
-    ;
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
+    //Set Layout.
+    MainLayout=new QVBoxLayout(this);
+    MainLayout->setContentsMargins(0,0,0,0);
+    MainLayout->setSpacing(0);
+    setLayout(MainLayout);
+
+    kciLanguageConfigure* instance=kciLanguageConfigure::getInstance();
+    int languageNum=instance->getLanguageList().count(),i;
+    for(i=0;i<languageNum;i++)
+    {
+        kciSettingListItemLanguageItem* lanItem=new kciSettingListItemLanguageItem(this);
+        lanItem->setLanguageName(instance->getLanguageNameList().at(i));
+        languageItem.append(lanItem);
+        MainLayout->addWidget(languageItem.at(i));
+    }
 }
 
 //------------------Container----------------------
@@ -690,6 +718,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     btApply->setFixedWidth(maxButtonWidth);
 
     WholeTitleBarSplit->addLayout(BottomButton);
+    setFocus();
 }
 
 void kciControlCenter::onApply()
@@ -698,6 +727,7 @@ void kciControlCenter::onApply()
     {
         CCMainContents->getContentWidgets(i)->apply();
     }
+    kciGlobal::getInstance()->writeSettings();
 }
 
 void kciControlCenter::onYes()

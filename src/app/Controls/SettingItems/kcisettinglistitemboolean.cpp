@@ -73,6 +73,9 @@ kciSettingListItemBoolean::kciSettingListItemBoolean(QWidget *parent) :
     MainLayout->addStretch();
 
     blnEditMode=false;
+    animeMouseLeaveFadeOut=new QTimeLine(200, this);
+    connect(animeMouseLeaveFadeOut, SIGNAL(frameChanged(int)),
+            this, SLOT(setValueChangedAlpha(int)));
 }
 
 void kciSettingListItemBoolean::valueChangedEvent()
@@ -133,7 +136,7 @@ void kciSettingListItemBoolean::valueChangedAnimeEvent()
         pal.setColor(QPalette::Window, QColor(222,2,28,255));
         setPalette(pal);
     }
-    ChangedAnime->setFrameRange(255,0);
+    ChangedAnime->setFrameRange(255,100);
     ChangedAnime->start();
     animeChangedBugFixed=true;
 }
@@ -151,44 +154,65 @@ void kciSettingListItemBoolean::mousePressEvent(QMouseEvent *e)
     if(!blnEditMode)
     {
         kciSettingListItemBase::mousePressEvent(e);
-        //Set Edit Mode
-        ValueSetter->setEnabled(true);
-        ValueSetter->show();
-        MainLayout->insertSpacing(2, 5);
         //Set Edit Mode Switcher.
         blnEditMode=true;
-        //Set Palette.
-        if(ValueSetter->getValue())
+    }
+    setValue(!getValue());
+    e->accept();
+    QWidget::mousePressEvent(e);
+}
+
+void kciSettingListItemBoolean::enterEvent(QEvent *e)
+{
+    if(!blnEditMode)
+    {
+        ValueSetter->setEnabled(true);
+        ValueSetter->show();
+    }
+    if(ValueSetter->getValue())
+    {
+        if(animeMouseLeaveFadeOut->state()==QTimeLine::NotRunning)
         {
             pal.setColor(QPalette::Window, QColor(123,170,43,100));
-            setPalette(pal);
-        }
-        else
-        {
-            pal.setColor(QPalette::Window, QColor(222,2,28,100));
             setPalette(pal);
         }
     }
     else
     {
-        setValue(!getValue());
+        if(animeMouseLeaveFadeOut->state()==QTimeLine::NotRunning)
+        {
+            pal.setColor(QPalette::Window, QColor(222,2,28,100));
+            setPalette(pal);
+        }
     }
-    e->accept();
-    QWidget::mousePressEvent(e);
+    QWidget::enterEvent(e);
 }
 
 void kciSettingListItemBoolean::leaveEvent(QEvent *e)
 {
-    if(!blnEditMode || (blnEditMode && ChangedAnime->state()==QTimeLine::NotRunning))
+    QWidget::leaveEvent(e);
+    if(!blnEditMode)
     {
-        if(!animeChangedBugFixed)
-        {
-            kciSettingListItemBase::leaveEvent(e);
-        }
-        else
-        {
-            animeChangedBugFixed=false;
-        }
+        //Set Value Setter
+        ValueSetter->setEnabled(false);
+        ValueSetter->hide();
+    }
+    if(ChangedAnime->state()==QTimeLine::NotRunning)
+    {
+        //Stop Leave Animation.
+        animeMouseLeaveFadeOut->stop();
+        //Set Leave Animation.
+        animeMouseLeaveFadeOut->setStartFrame(100);
+        animeMouseLeaveFadeOut->setEndFrame(0);
+        animeMouseLeaveFadeOut->start();
+    }
+    else
+    {
+        ChangedAnime->stop();
+        //Set Leave Animation.
+        animeMouseLeaveFadeOut->setStartFrame(this->palette().window().color().alpha());
+        animeMouseLeaveFadeOut->setEndFrame(0);
+        animeMouseLeaveFadeOut->start();
     }
 }
 
@@ -201,19 +225,4 @@ void kciSettingListItemBoolean::setTheValue(bool NewValue)
 {
     ValueSetter->setTheValue(NewValue);
     refreshCaption();
-}
-
-void kciSettingListItemBoolean::enterEvent(QEvent *e)
-{
-    if(!blnEditMode || (blnEditMode && ChangedAnime->state()==QTimeLine::NotRunning))
-    {
-        if(!animeChangedBugFixed)
-        {
-            kciSettingListItemBase::enterEvent(e);
-        }
-        else
-        {
-            animeChangedBugFixed=false;
-        }
-    }
 }

@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -44,9 +40,9 @@ int main(int argc, char *argv[])
     QApplication app(argc,argv);
 
     //Initialize Application Infomation.
-    QApplication::setApplicationName(QString("Kreogist Cuties"));
-    QApplication::setApplicationVersion(QString("0.0.0.4"));
-    QApplication::setOrganizationName("Kreogist Team");
+    QApplication::setApplicationName(QString("Cuties"));
+    QApplication::setApplicationVersion(QString("0.0.1.0"));
+    QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
     //Initialize Application Icon.
@@ -97,10 +93,6 @@ int main(int argc, char *argv[])
     kciGlobalInstance->readSettings();
 
     //Initialize Application Language.
-    QTranslator appTrans;
-    appTrans.load(qApp->applicationDirPath() + "/Locale/" + QLocale::system().name());
-    qDebug()<<QLocale::system().name();
-    app.installTranslator(&appTrans);
 
     //Initalize Application Palette.
     QPalette pal=app.palette();
@@ -117,9 +109,7 @@ int main(int argc, char *argv[])
     MainWindow mainwindow;
     mainwindow.show();
 
-    int ret=app.exec();
+    //kciGlobalInstance->writeSettings();
 
-    kciGlobalInstance->writeSettings();
-
-    return ret;
+    return app.exec();
 }

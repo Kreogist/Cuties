@@ -38,7 +38,12 @@ kciSettingListItemBrowseText::kciSettingListItemBrowseText(QWidget *parent) :
     MainLayout->addStretch();
 
     folderMode=false;
+    blnEditMode=false;
 
+    connect(browseFolder,SIGNAL(clicked()),
+            this, SLOT(setEditModeEnabled()));
+    connect(ValueEditor,SIGNAL(cursorPositionChanged(int,int)),
+            this, SLOT(setEditModeEnabled()));
     connect(browseFolder,SIGNAL(clicked()),
             this,SLOT(getFolderPath()));
 }
@@ -65,14 +70,41 @@ QString kciSettingListItemBrowseText::getValue()
     return ItemValue;
 }
 
+void kciSettingListItemBrowseText::enterEvent(QEvent *e)
+{
+    if(!blnEditMode)
+    {
+        ValueDisplayer->hide();
+        ValueEditor->setEnabled(true);
+        ValueEditor->show();
+        browseFolder->setEnabled(true);
+        browseFolder->show();
+    }
+    kciSettingListItemBase::enterEvent(e);
+}
+
+void kciSettingListItemBrowseText::leaveEvent(QEvent *e)
+{
+    if(!blnEditMode)
+    {
+        ValueEditor->setEnabled(false);
+        ValueEditor->hide();
+        browseFolder->setEnabled(false);
+        browseFolder->hide();
+        ValueDisplayer->show();
+    }
+    kciSettingListItemBase::leaveEvent(e);
+}
+
+void kciSettingListItemBrowseText::setEditModeEnabled()
+{
+    blnEditMode=true;
+}
+
 void kciSettingListItemBrowseText::mousePressEvent(QMouseEvent *e)
 {
-    ValueDisplayer->hide();
-    ValueEditor->setEnabled(true);
-    ValueEditor->show();
-    browseFolder->setEnabled(true);
-    browseFolder->show();
-    e->accept();
+    setEditModeEnabled();
+    kciSettingListItemBase::mousePressEvent(e);
 }
 
 void kciSettingListItemBrowseText::getFolderPath()

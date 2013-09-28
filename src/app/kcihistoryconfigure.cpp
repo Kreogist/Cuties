@@ -20,9 +20,12 @@
 #include "kcihistoryconfigure.h"
 
 kciHistoryConfigure* kciHistoryConfigure::instance = nullptr;
+QString kciHistoryConfigure::historyFileName;
 
 kciHistoryConfigure::kciHistoryConfigure()
 {
+    setHistoryFileName(QString("History.db"));
+
     //Load Default Value.
     cleanMark=false;
     trackUserHistory=true;
@@ -66,7 +69,7 @@ QIcon kciHistoryConfigure::getFileIcon(QString fileExtName)
 
 void kciHistoryConfigure::readConfigure()
 {
-    QSettings settings(getCfgFileName(),
+    QSettings settings(getHistoryFileName(),
                        QSettings::IniFormat);
 
     settings.beginGroup("History");
@@ -113,7 +116,7 @@ void kciHistoryConfigure::readConfigure()
 
 void kciHistoryConfigure::writeConfigure()
 {
-    QSettings settings(getCfgFileName(),
+    QSettings settings(getHistoryFileName(),
                        QSettings::IniFormat);
 
     settings.beginGroup("History");
@@ -252,4 +255,14 @@ QStandardItemModel *kciHistoryConfigure::getRecentOpenedFileModel() const
 void kciHistoryConfigure::setRecentOpenedFileModel(QStandardItemModel *value)
 {
     recentOpenedFileModel = value;
+}
+
+QString kciHistoryConfigure::getHistoryFileName()
+{
+    return historyFileName;
+}
+
+void kciHistoryConfigure::setHistoryFileName(const QString &value)
+{
+    historyFileName = value;
 }

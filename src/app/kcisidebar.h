@@ -1,3 +1,22 @@
+/*
+ *  Copyright 2013 Kreogist Dev Team
+ *
+ *  This file is part of Kreogist-Cuties.
+ *
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef KCISIDEBAR_H
 #define KCISIDEBAR_H
 
@@ -10,6 +29,9 @@
 #include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QSignalMapper>
 
 #include <QStackedWidget>
 #include <QListView>
@@ -49,25 +71,69 @@ private:
 
 };
 
+class kciSidebarButton : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit kciSidebarButton(QWidget *parent = 0);
+    void setIcon(QString IconPath);
+
+signals:
+    void mouseEnter();
+    void mouseExit();
+    void mousePressed(bool buttonState);
+
+protected:
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+
+private:
+    QPalette pal;
+    QColor buttonBackcolor;
+    QVBoxLayout *mainLayout;
+    QLabel *iconDisplayer;
+
+    bool buttonPressed;
+    bool buttonLocked;
+};
+
 class kciSideBarContent : public QWidget
 {
     Q_OBJECT
 public:
     explicit kciSideBarContent(QWidget *parent = 0);
     ~kciSideBarContent();
+    void setContentFixedWidth(int newContentWidth);
 
 signals:
     void historyRequiredOpenFiles(QString filePath);
     void clipRequiredInsertText(QString insertText);
+    void expandRequest();
+
+public slots:
+    void showContent();
+    void hideContent();
+    void listButtonClicked(int Index);
 
 private:
-    QVBoxLayout *mainLayout;
-    QHBoxLayout *buttonGroupLayout;
-    QToolButton *buttonRecent, *buttonClipboard;
+    QHBoxLayout *mainLayout;
+    QVBoxLayout *buttonGroupLayout;
+    enum sidebarButtons
+    {
+        sideButtonHistory,
+        sideButtonClipboard,
+        sidebarButtonCount
+    };
+
+    kciSidebarButton *sidebarButton[sidebarButtonCount];
+    QSignalMapper *sidebarButtonMapper;
 
     QStackedWidget *contents;
     kciHistoryStack *historyStack;
     kciClipboardHistoryStack *clipboardStack;
+
+    int sidebarButtonIndex;
 };
 
 class kciSideBar : public QDockWidget
@@ -76,6 +142,9 @@ class kciSideBar : public QDockWidget
 public:
     explicit kciSideBar(QWidget *parent = 0);
     
+    bool getExpandState() const;
+    void setExpandState(bool value);
+
 signals:
     void historyRequiredOpenFiles(QString filePath);
     void clipboardRequiredInsertText(QString insertText);
@@ -88,6 +157,8 @@ private slots:
     void resizeDock(int newWidth);
 
 private:
+    bool expandState;
+    QTimeLine *showAnimation, *hideAnimation;
     kciSideBarContent *CentralWidget;
 };
 
