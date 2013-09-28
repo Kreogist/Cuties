@@ -77,11 +77,12 @@ class kciSidebarButton : public QWidget
 public:
     explicit kciSidebarButton(QWidget *parent = 0);
     void setIcon(QString IconPath);
+    void setPressed(bool newValue, bool force);
 
 signals:
     void mouseEnter();
     void mouseExit();
-    void mousePressed(bool buttonState);
+    void mousePressed();
 
 protected:
     void enterEvent(QEvent *e);
@@ -105,11 +106,14 @@ public:
     explicit kciSideBarContent(QWidget *parent = 0);
     ~kciSideBarContent();
     void setContentFixedWidth(int newContentWidth);
+    void forceClearButtonState();
+    void forceShowButtonState();
 
 signals:
     void historyRequiredOpenFiles(QString filePath);
     void clipRequiredInsertText(QString insertText);
     void expandRequest();
+    void foldRequest();
 
 public slots:
     void showContent();
@@ -134,6 +138,7 @@ private:
     kciClipboardHistoryStack *clipboardStack;
 
     int sidebarButtonIndex;
+    QToolButton *sidebarLock;
 };
 
 class kciSideBar : public QDockWidget
@@ -141,6 +146,8 @@ class kciSideBar : public QDockWidget
     Q_OBJECT
 public:
     explicit kciSideBar(QWidget *parent = 0);
+    void forceClearButtonState();
+    void forceShowButtonState();
     
     bool getExpandState() const;
     void setExpandState(bool value);
@@ -152,6 +159,7 @@ signals:
 public slots:
     void showAnime();
     void hideAnime();
+
 
 private slots:
     void resizeDock(int newWidth);

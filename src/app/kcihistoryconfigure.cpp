@@ -24,7 +24,7 @@ QString kciHistoryConfigure::historyFileName;
 
 kciHistoryConfigure::kciHistoryConfigure()
 {
-    setHistoryFileName(QString("History.db"));
+    setHistoryFileName(QString("Settings/History.db"));
 
     //Load Default Value.
     cleanMark=false;

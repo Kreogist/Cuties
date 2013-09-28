@@ -981,10 +981,12 @@ void MainWindow::diffVisibleSidebar()
 {
     if(sidebarDock->getExpandState())
     {
+        sidebarDock->forceClearButtonState();
         sidebarDock->hideAnime();
     }
     else
     {
+        sidebarDock->forceShowButtonState();
         sidebarDock->showAnime();
     }
 }
