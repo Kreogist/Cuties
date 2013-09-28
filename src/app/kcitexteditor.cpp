@@ -689,8 +689,6 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
 
-    //qDebug()<<e->key()<<Qt::Key_Insert;
-
     switch (e->key()) {
     /*case Qt::Key_ParenLeft:
     {
