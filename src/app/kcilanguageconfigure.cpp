@@ -38,8 +38,12 @@ void kciLanguageConfigure::writeConfigure()
 
 void kciLanguageConfigure::setLanguage(QString newLanguageName)
 {
-    appTrans.load(languageFileList.at(languageName.indexOf(newLanguageName + ".qm")));
-    qApp->installTranslator(&appTrans);
+    int languageID=languageName.indexOf(newLanguageName + ".qm");
+    if(languageID != -1)
+    {
+        appTrans.load(languageFileList.at(languageID));
+        qApp->installTranslator(&appTrans);
+    }
 }
 
 QStringList kciLanguageConfigure::getLanguageList() const

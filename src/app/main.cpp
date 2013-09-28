@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
+
     //Initialize Application Icon.
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.ico"));
 
@@ -108,8 +109,6 @@ int main(int argc, char *argv[])
     //Initalize and show Application MainWindow.
     MainWindow mainwindow;
     mainwindow.show();
-
-    //kciGlobalInstance->writeSettings();
 
     return app.exec();
 }

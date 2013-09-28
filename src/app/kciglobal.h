@@ -24,6 +24,7 @@
 #include <QList>
 #include <QSettings>
 #include <QStyle>
+#include <QDebug>
 
 #include "kcigeneralconfigure.h"
 #include "kcieditorconfigure.h"
