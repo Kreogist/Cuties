@@ -3,6 +3,10 @@
 kciClipboardHistoryStack::kciClipboardHistoryStack(QWidget *parent) :
     QListView(parent)
 {
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(69,69,69));
+    setPalette(pal);
+
     setModel(kciClipboard::getInstance()->getClipboardTextsModel());
     connect(this, &kciClipboardHistoryStack::activated,
             this, &kciClipboardHistoryStack::dblClickClipboardItems);
@@ -16,6 +20,10 @@ void kciClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
 kciHistoryStack::kciHistoryStack(QWidget *parent) :
     QListView(parent)
 {
+    QPalette pal=this->palette();
+    pal.setColor(QPalette::Window, QColor(69,69,69));
+    setPalette(pal);
+
     setModel(kciHistoryConfigure::getInstance()->getRecentOpenedFileModel());
     connect(this, &kciHistoryStack::activated,
             this, &kciHistoryStack::dblClickHistoryItems);
@@ -41,9 +49,9 @@ kciSidebarButton::kciSidebarButton(QWidget *parent) :
     setLayout(mainLayout);
 
     //Set Background Color.
+    pal=this->palette();
     buttonBackcolor=QColor(0x35,0x35,0x35,0);
-    pal.setColor(QPalette::Window, buttonBackcolor);
-    setPalette(pal);
+    setBackgroundColor();
 
     //Set Displayer.
     iconDisplayer=new QLabel(this);
@@ -65,15 +73,19 @@ void kciSidebarButton::setPressed(bool newValue, bool force)
     if(buttonPressed)
     {
         buttonBackcolor.setAlpha(255);
-        pal.setColor(QPalette::Window, buttonBackcolor);
-        setPalette(pal);
+        setBackgroundColor();
     }
     else
     {
         buttonBackcolor.setAlpha(force?0:100);
-        pal.setColor(QPalette::Window, buttonBackcolor);
-        setPalette(pal);
+        setBackgroundColor();
     }
+}
+
+void kciSidebarButton::setBackgroundColor()
+{
+    pal.setColor(QPalette::Window, buttonBackcolor);
+    setPalette(pal);
 }
 
 void kciSidebarButton::enterEvent(QEvent *e)
@@ -81,8 +93,7 @@ void kciSidebarButton::enterEvent(QEvent *e)
     if(!buttonPressed)
     {
         buttonBackcolor.setAlpha(100);
-        pal.setColor(QPalette::Window, buttonBackcolor);
-        setPalette(pal);
+        setBackgroundColor();
         emit mouseEnter();
     }
     QWidget::enterEvent(e);
@@ -93,8 +104,7 @@ void kciSidebarButton::leaveEvent(QEvent *e)
     if(!buttonPressed)
     {
         buttonBackcolor.setAlpha(0);
-        pal.setColor(QPalette::Window, buttonBackcolor);
-        setPalette(pal);
+        setBackgroundColor();
         emit mouseExit();
     }
     QWidget::leaveEvent(e);

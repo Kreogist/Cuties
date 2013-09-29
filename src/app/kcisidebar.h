@@ -78,6 +78,7 @@ public:
     explicit kciSidebarButton(QWidget *parent = 0);
     void setIcon(QString IconPath);
     void setPressed(bool newValue, bool force);
+    void setBackgroundColor();
 
 signals:
     void mouseEnter();

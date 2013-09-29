@@ -979,16 +979,7 @@ void MainWindow::searchOnline()
 
 void MainWindow::diffVisibleSidebar()
 {
-    if(sidebarDock->getExpandState())
-    {
-        sidebarDock->forceClearButtonState();
-        sidebarDock->hideAnime();
-    }
-    else
-    {
-        sidebarDock->forceShowButtonState();
-        sidebarDock->showAnime();
-    }
+    sidebarDock->setVisible(!sidebarDock->isVisible());
 }
 
 void MainWindow::diffVisibleCompileDock()
