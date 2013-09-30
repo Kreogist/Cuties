@@ -22,7 +22,7 @@ double gettime()
 #include <unistd.h>
 #define wait_key getchar
 
-double gettime()
+inline double gettime()
 {
     timeval tv;
     gettimeofday(&tv, NULL);

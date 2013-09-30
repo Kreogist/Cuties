@@ -9,53 +9,47 @@
 #include <QPushButton>
 #include <QToolButton>
 #include <QResizeEvent>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QTimeLine>
 #include <QKeyEvent>
+#include <QSignalMapper>
 #include <QDebug>
 
-class kciReplaceDock : public QWidget
+#include "kcisearchwidget.h"
+
+class kciReplaceDock : public kciSearchWidget
 {
     Q_OBJECT
 public:
     explicit kciReplaceDock(QWidget *parent = 0);
-    ~kciReplaceDock();
 
 signals:
-    
+    void requireReplace(const QString& oldText,const QString& newText);
+    void requireReplaceAndFind(const QString &oldText, const QString &newText);
+    void requireReplaceAll(const QString &oldText, const QString &newText);
+
 public slots:
     void showAnime();
     void hideAnime();
 
 private slots:
     void resizeDock(int newHeight);
-
-protected:
-    void resizeEvent(QResizeEvent *event);
-    void keyPressEvent(QKeyEvent *event);
+    void onOneOfReplaceButtonsClicked(int type);
 
 private:
-    QVBoxLayout *mainLayout;
-    QLineEdit *replaceText;
-
-    enum menuItem
+    enum replaceButtonType
     {
-        menuRegularExpress,
-        menuMatchCase,
-        menuWholeWord,
-        menuItemCount
+        replace,
+        findAndReplace,
+        replaceAll,
+        typeCount
     };
 
-    QWidget *searchText;
-    QHBoxLayout *Layout, *searchLayout, *replaceLayout;
-    QPushButton *SearchIcon;
-    QLineEdit *SearchTexts;
-    QMenu *menu;
-    QAction *menuAction[menuItemCount];
+    QGridLayout *mainLayout;
+    QLineEdit *replaceText;
+    QToolButton *replaceButtons[typeCount];
+    QToolButton *closeButton;
 
-    QToolButton *upButton, *downButton, *closeButton;
-    QToolButton *replaceButton, *findAndReplaceButton, *replaceAllButton;
+    QSignalMapper* mapper;
 };
 
 #endif // KCIREPLACEDOCK_H

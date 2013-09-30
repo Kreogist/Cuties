@@ -203,10 +203,10 @@ void MainWindow::createActions()
     actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
 */
     //Search -> Replace
-    /*act[mnuSearchReplace]=new QAction(tr("&Replace"),this);
+    act[mnuSearchReplace]=new QAction(tr("&Replace"),this);
     act[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
     actStatusTips[mnuSearchReplace]=QString(tr("Replace occurrences of search string."));
-    connect(act[mnuSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));*/
+    connect(act[mnuSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
 /*
     //Search -> Replace In Files
     act[mnuSearchReplaceInFiles]=new QAction(tr("R&eplace In Files"),this);

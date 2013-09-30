@@ -37,8 +37,8 @@
 #include <QTimeLine>
 #include <QScrollBar>
 #include <QGraphicsOpacityEffect>
-#include <QDebug>
 #include <QScrollBar>
+#include <QDebug>
 
 #include "kcihistoryconfigure.h"
 #include "kcigeneralconfigure.h"
@@ -48,6 +48,7 @@
 #include "kcisearchwindow.h"
 #include "kcilanguagemode.h"
 #include "kcireplacedock.h"
+#include "connectionhandler.h"
 
 class kciSearchWindow;
 class kciLanguageMode;
@@ -110,6 +111,7 @@ private:
     void computeExecFileName();
     void fileInfoChanged(const QFile& file);
     bool dosaveas(const QString& Caption);
+    void connectSearchWidgetWithEditor(kciSearchWidget *widget);
 
     QGraphicsOpacityEffect *initEffect;
 
@@ -128,6 +130,8 @@ private:
 
     kciSearchWindow *searchBar;
     kciReplaceDock *replaceBar;
+
+    connectionHandler searcherConnections;
 
     friend class kciLanguageMode;
 };

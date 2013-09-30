@@ -129,7 +129,7 @@ private:
         mnuViewEnd,
         mnuSearchFind,
         //mnuSearchFindInFiles,
-        //mnuSearchReplace,
+        mnuSearchReplace,
         //mnuSearchReplaceInFiles,
         mnuSearchSearchOnline,
         mnuSearchGoto,

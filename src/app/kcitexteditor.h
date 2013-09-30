@@ -53,12 +53,15 @@ signals:
 public slots:
     void updateHighlights();
     //void pasteFromeHistory();
-    void showPreviousSearchResult();
-    void showNextSearchResult();
+    bool showPreviousSearchResult();
+    bool showNextSearchResult();
     void searchString(QString text,
                       bool regularExpression,
                       bool caseSensitively,
                       bool wholeWord);
+    bool replace(const QString& oldText,const QString& newText);
+    bool replaceAndFind(const QString &oldText, const QString &newText);
+    bool replaceAll(const QString &oldText, const QString &newText);
     void autoIndent();
     void setTabWidth(int width);
     void setWordWrap(QTextOption::WrapMode wrapMode);
@@ -79,7 +82,7 @@ private:
     /*void autoCompleteParentheses(QKeyEvent *e,
                                  QTextCursor &currTextCursor,
                                  const QChar &rightParentheses);*/
-    void findString(bool forward);
+    bool findString(bool forward);
     void generalSearch(const QTextBlock& block,
                        const int& lines,
                        const bool forward);

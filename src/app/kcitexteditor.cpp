@@ -103,14 +103,14 @@ void kciTextEditor::checkWhetherBlockSearchedAndDealWith(
     data->endUsingSearchDatas();
 }
 
-void kciTextEditor::showPreviousSearchResult()
+bool kciTextEditor::showPreviousSearchResult()
 {
-    findString(false);
+    return findString(false);
 }
 
-void kciTextEditor::showNextSearchResult()
+bool kciTextEditor::showNextSearchResult()
 {
-    findString(true);
+    return findString(true);
 }
 
 void kciTextEditor::setTabWidth(int width)
@@ -118,7 +118,7 @@ void kciTextEditor::setTabWidth(int width)
     setTabStopWidth(fontMetrics().width(' ')*width);
 }
 
-void kciTextEditor::findString(bool forward)
+bool kciTextEditor::findString(bool forward)
 {
     QTextCursor _textCursor;
 
@@ -249,7 +249,10 @@ void kciTextEditor::findString(bool forward)
     if(hasMatch)
     {
         setTextCursor(_textCursor);
+        return true;
     }
+
+    return false;
 }
 
 void kciTextEditor::searchString(QString text,
@@ -337,6 +340,37 @@ void kciTextEditor::initTextSearcher(QScopedPointer<kciTextSearcher> &searcher)
 
     searcher->setPatternString(text);
     searcher->setIsCaseSensitive(caseSensitively);
+}
+
+bool kciTextEditor::replace(const QString &oldText, const QString &newText)
+{
+    QTextCursor _cursor=textCursor();
+
+    if(_cursor.hasSelection() && _cursor.selectedText() == oldText)
+    {
+        _cursor.beginEditBlock();
+        _cursor.removeSelectedText();
+        _cursor.insertText(newText);
+        _cursor.endEditBlock();
+        setTextCursor(_cursor);
+        return true;
+    }
+
+    return false;
+}
+
+bool kciTextEditor::replaceAndFind(const QString &oldText,
+                                   const QString &newText)
+{
+    bool ret=replace(oldText,newText);
+    return ret|showNextSearchResult();
+}
+
+bool kciTextEditor::replaceAll(const QString &oldText, const QString &newText)
+{
+    bool ret=replaceAndFind(oldText,newText);
+    while(replaceAndFind(oldText,newText));
+    return ret;
 }
 
 void kciTextEditor::autoIndent()

@@ -86,6 +86,7 @@ SOURCES += \
     kcimessagebox.cpp \
     kcireplacedock.cpp \
     kcisearchlinetext.cpp \
+    kcisearchwidget.cpp \
     kcistatusrewriteinfo.cpp \
     Controls/SettingItems/kcisettinglistitembutton.cpp
 
@@ -150,6 +151,7 @@ HEADERS += \
     kcihistoryconfigure.h \
     kcimessagebox.h \
     kcireplacedock.h \
+    kcisearchwidget.h \
     kcistatusrewriteinfo.h \
     Controls/SettingItems/kcisettinglistitembutton.h
 
