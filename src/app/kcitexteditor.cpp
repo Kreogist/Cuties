@@ -259,7 +259,7 @@ void kciTextEditor::searchString(QString text,
                                  bool regularExpression,
                                  bool caseSensitively,
                                  bool wholeWord)
-{
+{   
     this->text=text;
     this->regularExpression=regularExpression;
     this->caseSensitively=caseSensitively;
@@ -280,7 +280,16 @@ void kciTextEditor::searchString(QString text,
     searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
     searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
 
-    findString(true);
+    if(text.isEmpty())
+    {
+        QTextCursor clearCursor=textCursor();
+        clearCursor.clearSelection();
+        setTextCursor(clearCursor);
+    }
+    else
+    {
+        findString(true);
+    }
 }
 
 void kciTextEditor::updateSearchResults()

@@ -5,6 +5,7 @@ static int replaceWidgetsHeight=25;
 kciReplaceDock::kciReplaceDock(QWidget *parent) :
     kciSearchWidget(parent)
 {
+    setContentsMargins(0,0,0,0);
     setMinimumHeight(0);
     setAutoFillBackground(true);
 
@@ -20,6 +21,7 @@ kciReplaceDock::kciReplaceDock(QWidget *parent) :
     mapper=new QSignalMapper(this);
 
     mainLayout=(QGridLayout*)layout();
+    mainLayout->setVerticalSpacing(3);
 
     replaceText=new QLineEdit(this);
     replaceText->setPlaceholderText(tr("Replace with"));

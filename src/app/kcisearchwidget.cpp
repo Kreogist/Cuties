@@ -24,6 +24,8 @@ const int kciSearchWidget::searchTextPartWidth=3;
 kciSearchWidget::kciSearchWidget(QWidget *parent) :
     QWidget(parent)
 {
+    setContentsMargins(0,0,0,0);
+
     searchText=new QWidget(this);
     //Set Background Fill.
     searchText->setAutoFillBackground(true);
