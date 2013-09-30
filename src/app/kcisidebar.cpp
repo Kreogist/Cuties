@@ -10,7 +10,8 @@ kciClipboardHistoryStack::kciClipboardHistoryStack(QWidget *parent) :
 
 void kciClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
 {
-    emit requiredInsertText(kciClipboard::getInstance()->getClipboardTextsModel()->item(ItemID.row())->text());
+    //emit requiredInsertText(kciClipboard::getInstance()->getClipboardTextsModel()->item(ItemID.row())->text());
+    emit requiredInsertText(kciClipboard::getInstance()->getHistoryClipboardText(ItemID.row()));
 }
 
 kciHistoryStack::kciHistoryStack(QWidget *parent) :

@@ -48,11 +48,14 @@
 #include "Controls/SettingItems/kcisettinglistitemlinetext.h"
 #include "Controls/SettingItems/kcisettinglistitembrowsetext.h"
 #include "Controls/SettingItems/kcisettinglistitemnuminput.h"
+#include "Controls/SettingItems/kcisettinglistitemlanguageitem.h"
+#include "Controls/SettingItems/kcisettinglistitembutton.h"
 #include "kcilistbutton.h"
 
 #include "kcigeneralconfigure.h"
 #include "kcieditorconfigure.h"
 #include "kcicompilerconfigure.h"
+#include "kciclipboard.h"
 #include "kcihistoryconfigure.h"
 
 enum kciCCLists
@@ -135,11 +138,15 @@ public:
     explicit kciCCTabGerneralContent(QWidget *parent = 0);
     void apply();
 
+private slots:
+    void clearHistoryFilesRecord();
+
 private:
     QVBoxLayout *MainLayout;
     kciSettingListItemCombo *sboDefaultLanguage;
     kciSettingListItemBoolean *sbnAutoOpenUnclosed;
     kciSettingListItemNumInput *slnHistoryMax;
+    kciSettingListItemButton *sbtClearHistory;
 };
 //------------------Editor---------------
 class kciCCTabEditorContent : public kciAbstractCCTabContent
@@ -154,6 +161,7 @@ private:
     kciSettingListItemNumInput *tabSpaceNum;
     kciSettingListItemCombo *wrapMode;
     kciSettingListItemNumInput *cursorWidth;
+    kciSettingListItemNumInput *clipboardMax;
 };
 //------------------Compiler--------------
 class kciCCTabCompilerContent : public kciAbstractCCTabContent
@@ -199,6 +207,7 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
+    QList<kciSettingListItemLanguageItem*> languageItem;
 };
 
 //-------------------Container--------------------

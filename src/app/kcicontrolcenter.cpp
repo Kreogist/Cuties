@@ -254,12 +254,25 @@ kciCCTabGerneralContent::kciCCTabGerneralContent(QWidget *parent) :
     sbnAutoOpenUnclosed->setTheValue(kciGeneralConfigure::getInstance()->getRememberUnclosedFile());
     MainLayout->addWidget(sbnAutoOpenUnclosed);
 
+    QLabel *tblHistoryLabel=new QLabel(this);
+    tblHistoryLabel->setText(" " + tr("History"));
+    tblHistoryLabel->setFont(TitleFont);
+    tblHistoryLabel->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblHistoryLabel);
+
     slnHistoryMax=new kciSettingListItemNumInput(this);
     slnHistoryMax->Caption->setText(tr("Maximum History Tracking Items:"));
     slnHistoryMax->setMinValue(4);
     slnHistoryMax->setMaxValue(100);
     slnHistoryMax->setValue(kciHistoryConfigure::getInstance()->getMaxRecentFilesSize());
     MainLayout->addWidget(slnHistoryMax);
+
+    sbtClearHistory=new kciSettingListItemButton(this);
+    sbtClearHistory->setButtonText(tr("Clear History Record."));
+    connect(sbtClearHistory, &kciSettingListItemButton::buttonPressed,
+            this, &kciCCTabGerneralContent::clearHistoryFilesRecord);
+    MainLayout->addWidget(sbtClearHistory);
 }
 
 void kciCCTabGerneralContent::apply()
@@ -291,6 +304,11 @@ void kciCCTabGerneralContent::apply()
     kciHistoryConfigure::getInstance()->setMaxRecentFilesSize(slnHistoryMax->getValue());
 }
 
+void kciCCTabGerneralContent::clearHistoryFilesRecord()
+{
+    kciHistoryConfigure::getInstance()->clearAllRecentFilesRecord();
+}
+
 //--------------------Editor------------------
 kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     kciAbstractCCTabContent(parent)
@@ -312,12 +330,12 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     setLayout(MainLayout);
 
     //Title Label.
-    QLabel *tblCompilerPath=new QLabel(this);
-    tblCompilerPath->setText(" " + tr("View Option"));
-    tblCompilerPath->setFont(TitleFont);
-    tblCompilerPath->setFixedHeight(30);
+    QLabel *tblViewOption=new QLabel(this);
+    tblViewOption->setText(" " + tr("View Option"));
+    tblViewOption->setFont(TitleFont);
+    tblViewOption->setFixedHeight(30);
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(tblCompilerPath);
+    MainLayout->addWidget(tblViewOption);
 
     tabSpaceNum=new kciSettingListItemNumInput(this);
     tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
@@ -359,6 +377,22 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
     cursorWidth->setMaxValue(10);
     cursorWidth->setValue(kciEditorConfigure::getInstance()->getCursorWidth());
     MainLayout->addWidget(cursorWidth);
+
+    //Title Label.
+    QLabel *tblClipboard=new QLabel(this);
+    tblClipboard->setText(" " + tr("Clipboard"));
+    tblClipboard->setFont(TitleFont);
+    tblClipboard->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblClipboard);
+
+    //Clipboard Max
+    clipboardMax=new kciSettingListItemNumInput(this);
+    clipboardMax->Caption->setText("Maximum Clipboard Tracking Items: ");
+    clipboardMax->setMinValue(5);
+    clipboardMax->setMaxValue(100);
+    clipboardMax->setValue(kciClipboard::getInstance()->getMaxDataCount());
+    MainLayout->addWidget(clipboardMax);
 }
 
 void kciCCTabEditorContent::apply()
@@ -381,6 +415,7 @@ void kciCCTabEditorContent::apply()
         instance->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
         break;
     }
+    kciClipboard::getInstance()->setMaxDataCount(clipboardMax->getValue());
 }
 
 //-----------------Compiler----------------

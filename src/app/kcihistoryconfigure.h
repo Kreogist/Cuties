@@ -25,6 +25,7 @@
 #include <QStandardItemModel>
 #include <QList>
 #include <QFile>
+#include <QIcon>
 #include <QFileInfo>
 #include <QDebug>
 
@@ -39,6 +40,9 @@ public:
 
     void readConfigure();
     void writeConfigure();
+
+    void writeHistoryConfigure();
+    void writeLastSessionConfigure();
 
     void cleanAllHistorys();
 
@@ -70,6 +74,8 @@ private:
     kciHistoryConfigure();
     QString historyDirPath;
 
+    QIcon getFileIcon(QString fileExtName);
+
     QStandardItemModel *recentOpenedFileModel;
     QStandardItem *recentRootItem;
 
@@ -82,6 +88,8 @@ private:
     QList<int> unClosedFileV;
     QList<int> unClosedFileH;
     int unClosedCurrent;
+
+    QIcon cFileIcon, cppFileIcon, pasFileIcon, otherFileIcon;
 };
 
 #endif // KCIHISTORYCONFIGURE_H
