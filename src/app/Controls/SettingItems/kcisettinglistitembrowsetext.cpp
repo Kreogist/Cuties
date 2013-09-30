@@ -42,7 +42,7 @@ kciSettingListItemBrowseText::kciSettingListItemBrowseText(QWidget *parent) :
 
     connect(browseFolder,SIGNAL(clicked()),
             this, SLOT(setEditModeEnabled()));
-    connect(ValueEditor,SIGNAL(cursorPositionChanged(int,int)),
+    connect(ValueEditor,SIGNAL(textChanged(QString)),
             this, SLOT(setEditModeEnabled()));
     connect(browseFolder,SIGNAL(clicked()),
             this,SLOT(getFolderPath()));
