@@ -23,6 +23,8 @@
 #include <QString>
 #include <QList>
 #include <QSettings>
+#include <QStyle>
+#include <QDebug>
 
 #include "kcigeneralconfigure.h"
 #include "kcieditorconfigure.h"
@@ -48,7 +50,7 @@ private:
     //Environment Variables.
     QString settingsFileName;
 
-    QSettings *kciMainConfig;
+    //QSettings *kciMainConfig;
     static kciGlobal* instance;
     QList<kciConfigure*> cfgConfiger;
 };

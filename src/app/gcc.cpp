@@ -66,7 +66,6 @@ QStringList gcc::getCompileArg(const QString &filePath)
 #endif
 
     arg<<"-o"<<programName;
-
     return arg;
 }
 

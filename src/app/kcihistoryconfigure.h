@@ -41,7 +41,6 @@ public:
     void readConfigure();
     void writeConfigure();
 
-    void writeHistoryConfigure();
     void writeLastSessionConfigure();
 
     void cleanAllHistorys();
@@ -70,8 +69,12 @@ public:
     QStandardItemModel *getRecentOpenedFileModel() const;
     void setRecentOpenedFileModel(QStandardItemModel *value);
 
+    static QString getHistoryFileName();
+    static void setHistoryFileName(const QString &value);
+
 private:
     kciHistoryConfigure();
+    static QString historyFileName;
     QString historyDirPath;
 
     QIcon getFileIcon(QString fileExtName);

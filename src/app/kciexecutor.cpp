@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -20,6 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 
 #include "kciexecutor.h"
 
@@ -117,19 +114,25 @@ void kciRunner::run()
 
             process->setWorkingDirectory(info.absoluteDir().absolutePath());
 
+#ifndef Q_OS_MACX
             Terminal terminal=getDefaultTerminal();
+#endif
 
-            path.prepend('\"');
-            path.append('\"');
+            path.prepend('"');
+            path.append('"');
+
 #ifdef Q_OS_MACX
             arg
 #else
             arg<<terminal.arg
 #endif
-#ifdef Q_OS_WIN
+#ifdef Q_OS_WIN32
                <<"start"
 #endif
                <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
+
+            //ofstream fout("debug.txt");
+            //for(int )
 
             connect(process,SIGNAL(finished(int)),
                     this,SLOT(quit()));
@@ -225,7 +228,14 @@ kciExecutor::~kciExecutor()
 void kciExecutor::exec(const QString &programPath)
 {
     kciRunner* runner=new kciRunner;
+#ifdef Q_OS_WIN32
+    QString winPath;
+    winPath=programPath;
+    winPath=winPath.replace("//","/");
+    runner->setPath(winPath);
+#else
     runner->setPath(programPath);
+#endif
     runner->setBackgroundExec(false);
     runner->setEnabledAutoInput(false);
     runner->start();

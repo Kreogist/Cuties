@@ -2,6 +2,8 @@
 #define KCICOMPILERCONFIGURE_H
 
 #include <QString>
+#include <QApplication>
+#include <QDebug>
 
 #include "kciconfigure.h"
 

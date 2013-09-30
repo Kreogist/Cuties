@@ -1,10 +1,6 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *      Wang Luming <wlm199558@126.com>
- *      Miyanaga Saki <tomguts@126.com>
- *      Zhang Jiayi <bf109g2@126.com>
- *
  *  This file is part of Kreogist-Cuties.
  *
  *    Kreogist-Cuties is free software: you can redistribute it and/or modify
@@ -20,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -463,7 +458,6 @@ void MainWindow::createDocks()
 
     //Sidebar Dock
     sidebarDock=new kciSideBar(this);
-    sidebarDock->hide();
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
     connect(sidebarDock, SIGNAL(historyRequiredOpenFiles(QString)),
             tabManager, SLOT(openAndJumpTo(QString)));
@@ -985,14 +979,7 @@ void MainWindow::searchOnline()
 
 void MainWindow::diffVisibleSidebar()
 {
-    if(sidebarDock->isVisible())
-    {
-        sidebarDock->hideAnime();
-    }
-    else
-    {
-        sidebarDock->showAnime();
-    }
+    sidebarDock->setVisible(!sidebarDock->isVisible());
 }
 
 void MainWindow::diffVisibleCompileDock()

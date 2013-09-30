@@ -59,6 +59,7 @@ private:
     kciSettingListItemBooleanSwitcher *ValueSetter;
     bool ItemValue, blnEditMode;
     QTimeLine *ChangedAnime;
+    QTimeLine *animeMouseLeaveFadeOut;
     QPalette pal;
 
     void refreshCaption();

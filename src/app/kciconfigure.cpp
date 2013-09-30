@@ -11,3 +11,5 @@ void kciConfigure::setCfgFileName(const QString &value)
 {
     cfgFileName = value;
 }
+
+

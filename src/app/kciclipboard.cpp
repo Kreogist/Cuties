@@ -60,7 +60,6 @@ void kciClipboard::onSystemClipboardChanged()
         QStandardItem *clipItem=new QStandardItem(_caption);
         clipItem->setEditable(false);
         clipItem->setToolTip(_text);
-        qDebug()<<clipboardTextsModelRoot->rowCount()<<maxDataCount;
         if(clipboardTextsModelRoot->rowCount() >= maxDataCount)
         {
             clipboardTextsModelRoot->removeRow(maxDataCount - 1);

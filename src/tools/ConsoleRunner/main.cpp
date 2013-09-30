@@ -35,6 +35,10 @@ inline double gettime()
 
 int main(int argc, char *argv[])
 {
+#ifdef _OS_MAC_X_
+    system("clear");
+#endif
+
     if(argc<2)
     {
         printf("Usage: KciConsoleRunner <console program path>\n");
@@ -63,6 +67,7 @@ int main(int argc, char *argv[])
     printf("Program execution time : %0.3lf s",exec_time);
 
     printf("\nPress "
+
     #ifdef _OS_WIN32_
             "any key"
     #else

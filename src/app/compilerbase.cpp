@@ -62,7 +62,8 @@ void compilerBase::startCompile(const QString &filePath)
      * g++ to compile cpp files.
      */
 
-    emitCompileCmd(compilerPath,getCompileArg(filePath));
+    //emitCompileCmd(compilerPath,getCompileArg(filePath));
+    emitCompileCmd(compilerPath,arg);
 
     compiler.reset(new QProcess(this));
     compiler->setReadChannelMode(QProcess::MergedChannels);
@@ -76,7 +77,7 @@ void compilerBase::startCompile(const QString &filePath)
     if(!env.isEmpty())
         compiler->setEnvironment(env);
 
-    compiler->start(compilerPath,getCompileArg(filePath));
+    compiler->start(compilerPath,arg);
 }
 
 bool compilerBase::checkCompilerPath(const QString& path)

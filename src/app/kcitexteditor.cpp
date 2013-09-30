@@ -394,14 +394,18 @@ void kciTextEditor::autoIndent()
     _textCursor.insertText(tabs);
 
     kciTextBlockData* prevData=(kciTextBlockData*)prevBlock.userData();
-    kciTextBlockData* CurrData=(kciTextBlockData*)currBlock.userData();
+    kciTextBlockData* currData=(kciTextBlockData*)currBlock.userData();
     int baseLevel=prevData->getCodeLevel();
-    int currLevel=CurrData->getCodeLevel();
+    int currLevel=currData->getCodeLevel();
 
     if(currLevel>=baseLevel)
+    {
         insertTab(_textCursor,currLevel-baseLevel);
+    }
     else
+    {
         removeTab(_textCursor,baseLevel-currLevel);
+    }
 }
 
 void kciTextEditor::insertTab(QTextCursor cursor, int count)
@@ -722,8 +726,6 @@ void kciTextEditor::contextMenuEvent(QContextMenuEvent *event)
 void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
-
-    //qDebug()<<e->key()<<Qt::Key_Insert;
 
     switch (e->key()) {
     /*case Qt::Key_ParenLeft:

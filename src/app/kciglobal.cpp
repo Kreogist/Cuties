@@ -23,7 +23,7 @@ kciGlobal* kciGlobal::instance=nullptr;
 
 kciGlobal::kciGlobal()
 {
-    settingsFileName=QString("Cuties.ini");
+    settingsFileName=QString("Settings/Cuties.ini");
     kciConfigure::setCfgFileName(settingsFileName);
 
     cfgConfiger.append(kciGeneralConfigure::getInstance());

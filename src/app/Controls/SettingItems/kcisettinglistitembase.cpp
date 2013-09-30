@@ -60,3 +60,13 @@ void kciSettingListItemBase::mousePressEvent(QMouseEvent *e)
     e->accept();
     emit ItemGetFocus();
 }
+
+void kciSettingListItemBase::enableEditMode()
+{
+    blnEditMode=true;
+}
+
+void kciSettingListItemBase::disableEditMode()
+{
+    blnEditMode=false;
+}
