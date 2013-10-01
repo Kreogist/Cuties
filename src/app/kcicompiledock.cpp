@@ -19,7 +19,7 @@
 
 #include "kcicompiledock.h"
 
-kcicompiledock::kcicompiledock(QWidget *parent):
+KCICompiledock::KCICompiledock(QWidget *parent):
     QDockWidget(parent)
 {
     //Set Object Name.
@@ -96,7 +96,7 @@ static inline QModelIndex getRootItem(QModelIndex item)
     return item;
 }
 
-void kcicompiledock::jumpToError(QModelIndex ItemID)
+void KCICompiledock::jumpToError(QModelIndex ItemID)
 {
     ItemID=getRootItem(ItemID);
 
@@ -114,7 +114,7 @@ void kcicompiledock::jumpToError(QModelIndex ItemID)
     }
 }
 
-void kcicompiledock::selectAnError(QModelIndex ItemIndex)
+void KCICompiledock::selectAnError(QModelIndex ItemIndex)
 {
     ItemIndex=getRootItem(ItemIndex);
 
@@ -127,7 +127,7 @@ void kcicompiledock::selectAnError(QModelIndex ItemIndex)
     lastSelIndex=ItemIndex;
 }
 
-void kcicompiledock::animeShowError()
+void KCICompiledock::animeShowError()
 {
     animeHideTimeLine->stop();
     if(animeShowTimeLine->state()!=QTimeLine::Running)
@@ -138,7 +138,7 @@ void kcicompiledock::animeShowError()
     }
 }
 
-void kcicompiledock::animeHideError()
+void KCICompiledock::animeHideError()
 {
     animeShowTimeLine->stop();
     if(animeHideTimeLine->state()!=QTimeLine::Running)
@@ -148,14 +148,14 @@ void kcicompiledock::animeHideError()
     }
 }
 
-void kcicompiledock::changeDockCompileWidth(int dockCompileWidth)
+void KCICompiledock::changeDockCompileWidth(int dockCompileWidth)
 {
     QList<int> l_sizes_finish;
     l_sizes_finish << dockCompileWidth << width() - dockCompileWidth;
     splCombine->setSizes(l_sizes_finish);
 }
 
-void kcicompiledock::setReceiver(const compileOutputReceiver *currReceiver)
+void KCICompiledock::setReceiver(const compileOutputReceiver *currReceiver)
 {
     Q_ASSERT(currReceiver!=NULL);
 

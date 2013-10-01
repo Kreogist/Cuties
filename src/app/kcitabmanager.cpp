@@ -19,7 +19,7 @@
 
 #include "kcitabmanager.h"
 
-kciTabManager::kciTabManager(QWidget *parent) :
+KCITabManager::KCITabManager(QWidget *parent) :
     QTabWidget(parent)
 {
     clear();
@@ -53,7 +53,7 @@ kciTabManager::kciTabManager(QWidget *parent) :
     currentEditor=NULL;
 }
 
-void kciTabManager::openHistoryFiles()
+void KCITabManager::openHistoryFiles()
 {
     QList<QString> lastTimeUnClosedFiles=kciHistoryConfigure::getInstance()->getAllUnClosedFilePaths();
     QList<int> lastTimeUnClosedHs=kciHistoryConfigure::getInstance()->getAllUnClosedFileHs();
@@ -63,7 +63,7 @@ void kciTabManager::openHistoryFiles()
     for(int i=0;i<lastTimeUnClosedFiles.size();i++)
     {
         hisItem=open(lastTimeUnClosedFiles.at(i));
-        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(hisItem));
+        KCICodeEditor *editor = qobject_cast<KCICodeEditor *>(widget(hisItem));
 
         editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
     }
@@ -73,7 +73,7 @@ void kciTabManager::openHistoryFiles()
     }
 }
 
-kciCodeEditor* kciTabManager::getCurrentEditor() const
+KCICodeEditor* KCITabManager::getCurrentEditor() const
 {
     return currentEditor;
 }
@@ -83,14 +83,14 @@ kciCodeEditor* kciTabManager::getCurrentEditor() const
  * \param filePath the path of the file that should be opened.
  * \return the index of the tab of this file.
  */
-int kciTabManager::open(const QString& filePath)
+int KCITabManager::open(const QString& filePath)
 {
     QString name=QFileInfo(filePath).fileName();
     //Check if file has been opened.
     int i=count();
     while(i--)
     {
-        kciCodeEditor *judgeEditor=qobject_cast<kciCodeEditor *>(widget(i));
+        KCICodeEditor *judgeEditor=qobject_cast<KCICodeEditor *>(widget(i));
         if(judgeEditor!=NULL)
         {
             if(judgeEditor->getDocumentTitle() == name)
@@ -100,8 +100,8 @@ int kciTabManager::open(const QString& filePath)
         }
     }
     //File has not been opened, then open it and add tab.
-    kciCodeEditor *tmp;
-    tmp=new kciCodeEditor(this);
+    KCICodeEditor *tmp;
+    tmp=new KCICodeEditor(this);
     if(tmp->open(filePath))
     {
         tmp->setDocumentTitle(name);
@@ -117,12 +117,12 @@ int kciTabManager::open(const QString& filePath)
     }
 }
 
-void kciTabManager::openAndJumpTo(const QString &filePath)
+void KCITabManager::openAndJumpTo(const QString &filePath)
 {
     setCurrentIndex(open(filePath));
 }
 
-void kciTabManager::open()
+void KCITabManager::open()
 {
     QStringList file_name_list;
     if(kciGeneralConfigure::getInstance()->getUseDefaultLanguageWhenOpen())
@@ -176,9 +176,9 @@ void kciTabManager::open()
     currentTextCursorChanged();
 }
 
-void kciTabManager::new_file()
+void KCITabManager::new_file()
 {
-    kciCodeEditor *tmp=new kciCodeEditor(this);
+    KCICodeEditor *tmp=new KCICodeEditor(this);
     if(tmp!=NULL)
     {
         tmp->setGeometry(0, -this->height(), this->width(), this->height());
@@ -200,21 +200,21 @@ void kciTabManager::new_file()
     }
 }
 
-void kciTabManager::switchNextTab()
+void KCITabManager::switchNextTab()
 {
     int current=currentIndex();
     current=(current+1)%count();
     setCurrentIndex(current);
 }
 
-void kciTabManager::switchPrevTab()
+void KCITabManager::switchPrevTab()
 {
     int current=currentIndex()+count();
     current=(current-1)%count();
     setCurrentIndex(current);
 }
 
-void kciTabManager::save()
+void KCITabManager::save()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -222,7 +222,7 @@ void kciTabManager::save()
     }
 }
 
-void kciTabManager::save_as()
+void KCITabManager::save_as()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -230,17 +230,17 @@ void kciTabManager::save_as()
     }
 }
 
-void kciTabManager::save_all()
+void KCITabManager::save_all()
 {
     save_all_file();
 }
 
-bool kciTabManager::save_all_file()
+bool KCITabManager::save_all_file()
 {
     int i=count();
     while(i--)
     {
-        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(i));
+        KCICodeEditor *editor = qobject_cast<KCICodeEditor *>(widget(i));
 
         if(Q_LIKELY(editor != NULL))
         {
@@ -250,17 +250,17 @@ bool kciTabManager::save_all_file()
     return true;
 }
 
-void kciTabManager::setTabMoveableValue(bool newValue)
+void KCITabManager::setTabMoveableValue(bool newValue)
 {
     setMovable(newValue);
 }
 
-void kciTabManager::close_all_tab()
+void KCITabManager::close_all_tab()
 {
     int i=count();
     while(i--)
     {
-        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(i));
+        KCICodeEditor *editor = qobject_cast<KCICodeEditor *>(widget(i));
         if(Q_LIKELY(editor != NULL))
         {
             on_tab_close_requested(i);
@@ -268,12 +268,12 @@ void kciTabManager::close_all_tab()
     }
 }
 
-void kciTabManager::close_all_other_tab()
+void KCITabManager::close_all_other_tab()
 {
     int i=count();
     while(i--)
     {
-        kciCodeEditor *editor = qobject_cast<kciCodeEditor *>(widget(i));
+        KCICodeEditor *editor = qobject_cast<KCICodeEditor *>(widget(i));
 
         if(Q_LIKELY(editor!=NULL) && i!=currentIndex())
         {
@@ -282,7 +282,7 @@ void kciTabManager::close_all_other_tab()
     }
 }
 
-void kciTabManager::undo()
+void KCITabManager::undo()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -290,7 +290,7 @@ void kciTabManager::undo()
     }
 }
 
-void kciTabManager::redo()
+void KCITabManager::redo()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -298,7 +298,7 @@ void kciTabManager::redo()
     }
 }
 
-void kciTabManager::copy()
+void KCITabManager::copy()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -306,7 +306,7 @@ void kciTabManager::copy()
     }
 }
 
-void kciTabManager::cut()
+void KCITabManager::cut()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -314,7 +314,7 @@ void kciTabManager::cut()
     }
 }
 
-void kciTabManager::paste()
+void KCITabManager::paste()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -322,7 +322,7 @@ void kciTabManager::paste()
     }
 }
 
-void kciTabManager::select_all()
+void KCITabManager::select_all()
 {
     if(Q_LIKELY(currentEditor!=NULL))
     {
@@ -330,7 +330,7 @@ void kciTabManager::select_all()
     }
 }
 
-void kciTabManager::on_tab_close_requested(int index)
+void KCITabManager::on_tab_close_requested(int index)
 {
     QWidget *tab=widget(index);
 
@@ -348,14 +348,14 @@ void kciTabManager::on_tab_close_requested(int index)
     }
 }
 
-void kciTabManager::close_current_tab()
+void KCITabManager::close_current_tab()
 {
     on_tab_close_requested(currentIndex());
 }
 
-void kciTabManager::on_current_tab_change(int index)
+void KCITabManager::on_current_tab_change(int index)
 {
-    currentEditor=qobject_cast<kciCodeEditor *>(widget(index));
+    currentEditor=qobject_cast<KCICodeEditor *>(widget(index));
 
     if(currentEditor!=NULL)
     {
@@ -368,7 +368,7 @@ void kciTabManager::on_current_tab_change(int index)
     currentTextCursorChanged();
 }
 
-void kciTabManager::closeEvent(QCloseEvent *e)
+void KCITabManager::closeEvent(QCloseEvent *e)
 {
     //set the accept flag
     e->accept();
@@ -381,7 +381,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
         QWidget *page=widget(i);
 
         //Save the current opened file.
-        kciCodeEditor *editor=qobject_cast<kciCodeEditor*>(page);
+        KCICodeEditor *editor=qobject_cast<KCICodeEditor*>(page);
         if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
         {
             if(editor!=NULL)
@@ -417,7 +417,7 @@ void kciTabManager::closeEvent(QCloseEvent *e)
     kciHistoryConfigure::getInstance()->writeConfigure();
 }
 
-void kciTabManager::renameTabTitle(QString title)
+void KCITabManager::renameTabTitle(QString title)
 {
     QWidget* page=qobject_cast<QWidget*>(sender());
     if(page!=NULL)
@@ -428,16 +428,16 @@ void kciTabManager::renameTabTitle(QString title)
         qWarning()<<"in kciTabManager::renameTabTitle(QString title): a wrong sender!";
 }
 
-void kciTabManager::tabInserted(int index)
+void KCITabManager::tabInserted(int index)
 {
-    kciCodeEditor* editor=qobject_cast<kciCodeEditor *>(widget(index));
+    KCICodeEditor* editor=qobject_cast<KCICodeEditor *>(widget(index));
     if(editor!=NULL)
     {
         connect(editor,SIGNAL(filenameChanged(QString)),this,SLOT(renameTabTitle(QString)));
     }
 }
 
-void kciTabManager::currentTextCursorChanged()
+void KCITabManager::currentTextCursorChanged()
 {
     if(currentEditor!=NULL)
     {
@@ -451,19 +451,19 @@ void kciTabManager::currentTextCursorChanged()
     }
 }
 
-void kciTabManager::showSearchBar()
+void KCITabManager::showSearchBar()
 {
     if(currentEditor!=NULL)
         currentEditor->showSearchBar();
 }
 
-void kciTabManager::showReplaceBar()
+void KCITabManager::showReplaceBar()
 {
     if(currentEditor!=NULL)
         currentEditor->showReplaceBar();
 }
 
-QString kciTabManager::textNowSelect()
+QString KCITabManager::textNowSelect()
 {
     QString returnValue;
     if(currentEditor!=NULL)
@@ -481,7 +481,7 @@ QString kciTabManager::textNowSelect()
     return returnValue;
 }
 
-void kciTabManager::switchCurrentToLine(int nLineNum, int nColNum)
+void KCITabManager::switchCurrentToLine(int nLineNum, int nColNum)
 {
     if(currentEditor!=NULL)
     {
@@ -489,7 +489,7 @@ void kciTabManager::switchCurrentToLine(int nLineNum, int nColNum)
     }
 }
 
-void kciTabManager::setFocus()
+void KCITabManager::setFocus()
 {
     if(currentEditor!=NULL)
     {
@@ -497,7 +497,7 @@ void kciTabManager::setFocus()
     }
 }
 
-int kciTabManager::getCurrentLineCount() const
+int KCITabManager::getCurrentLineCount() const
 {
     if(currentEditor!=NULL)
     {
@@ -509,7 +509,7 @@ int kciTabManager::getCurrentLineCount() const
     }
 }
 
-int kciTabManager::getCurrentLineNum() const
+int KCITabManager::getCurrentLineNum() const
 {
     if(currentEditor!=NULL)
     {
@@ -521,7 +521,7 @@ int kciTabManager::getCurrentLineNum() const
     }
 }
 
-void kciTabManager::insertToCurrentEditor(QString insertText)
+void KCITabManager::insertToCurrentEditor(QString insertText)
 {
     if(currentEditor!=NULL)
     {
@@ -529,7 +529,7 @@ void kciTabManager::insertToCurrentEditor(QString insertText)
     }
 }
 
-void kciTabManager::setTabCloseable(bool newValue)
+void KCITabManager::setTabCloseable(bool newValue)
 {
     setTabsClosable(newValue);
 }

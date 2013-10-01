@@ -36,7 +36,7 @@ class kciPanel : public QWidget
     Q_OBJECT
 public:
     explicit kciPanel(QWidget *parent = 0);
-    void setKciTextEditor(kciTextEditor *editor);
+    void setKciTextEditor(KCITextEditor *editor);
     void setAutoAdaptWidth(bool newValue);
     bool autoAdaptWidth();
     
@@ -54,7 +54,7 @@ protected:
     
 private:
     int getRealLineCount(const QTextBlock& block, const int &offset);
-    kciTextEditor *e;
+    KCITextEditor *e;
 
     int first,last;
 

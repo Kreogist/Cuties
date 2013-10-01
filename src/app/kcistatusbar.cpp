@@ -20,7 +20,7 @@
 
 #include "kcistatusbar.h"
 
-kciStatusBar::kciStatusBar(QWidget *parent):
+KCIStatusBar::KCIStatusBar(QWidget *parent):
     QStatusBar(parent)
 {
     //Set Margins
@@ -43,23 +43,23 @@ kciStatusBar::kciStatusBar(QWidget *parent):
     addPermanentWidget(kscCursorPosition);
 }
 
-void kciStatusBar::showGotoBar(int currentValue, int MaxValue)
+void KCIStatusBar::showGotoBar(int currentValue, int MaxValue)
 {
     kscCursorPosition->ShowGotoBox(currentValue, MaxValue);
 }
 
-void kciStatusBar::updateCursorPosition(int LineNum, int ColNum)
+void KCIStatusBar::updateCursorPosition(int LineNum, int ColNum)
 {
     kscCursorPosition->updateCursorPosition(LineNum, ColNum);
 }
 
-void kciStatusBar::updateRewriteMode(bool NewValue)
+void KCIStatusBar::updateRewriteMode(bool NewValue)
 {
     lblRewriteMode->show();
     lblRewriteMode->setTextMode(NewValue);
 }
 
-void kciStatusBar::hideRewriteDisplay()
+void KCIStatusBar::hideRewriteDisplay()
 {
     lblRewriteMode->hide();
 }

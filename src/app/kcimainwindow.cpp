@@ -20,10 +20,10 @@
 
 #include "kcimainwindow.h"
 
-kciMainWindow::kciMainWindow(QWidget *parent) :
+KCIMainWindow::KCIMainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    m_titleBar=new kciTitleBar(this);
+    m_titleBar=new KCITitleBar(this);
     setMenuWidget(m_titleBar);
     setAcceptDrops(true);
 
@@ -37,18 +37,18 @@ kciMainWindow::kciMainWindow(QWidget *parent) :
 #endif
 }
 
-kciTitleBar *kciMainWindow::titleBar() const
+KCITitleBar *KCIMainWindow::titleBar() const
 {
     return m_titleBar;
 }
 
-void kciMainWindow::setTitleBar(kciTitleBar *titleBar)
+void KCIMainWindow::setTitleBar(KCITitleBar *titleBar)
 {
     m_titleBar = titleBar;
 }
 
 #ifndef Q_OS_MACX
-void kciMainWindow::setMainButtonIcon(const QString &mainIcon)
+void KCIMainWindow::setMainButtonIcon(const QString &mainIcon)
 {
     if(m_titleBar)
     {
@@ -56,7 +56,7 @@ void kciMainWindow::setMainButtonIcon(const QString &mainIcon)
     }
 }
 
-void kciMainWindow::setMenu(QMenu *menu)
+void KCIMainWindow::setMenu(QMenu *menu)
 {
     if(m_titleBar)
     {

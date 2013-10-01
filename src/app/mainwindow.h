@@ -57,7 +57,7 @@
 
 #include "kcimessagebox.h"
 
-class MainWindow : public kciMainWindow
+class MainWindow : public KCIMainWindow
 {
     Q_OBJECT
 public:
@@ -74,11 +74,6 @@ public slots:
     void run();
     void compileAndRun();
     void searchOnline();
-    void diffVisibleSidebar();
-    void diffVisibleCompileDock();
-    void diffVisibleDebugDock();
-    void diffVisibleJudgeDock();
-    void diffVisibleDebugWatchDock();
     void statusShowGoto();
 
     void setNoDocOpenMenuEnabled();
@@ -88,6 +83,11 @@ public slots:
     void onCurrentTabChanged();
 
 private slots:
+    void diffVisibleSidebar();
+    void diffVisibleCompileDock();
+    void diffVisibleDebugDock();
+    void diffVisibleJudgeDock();
+    void diffVisibleDebugWatchDock();
     void showPreference();
 #ifdef Q_OS_MACX
     void setFullScreen();
@@ -193,18 +193,18 @@ private:
     int sgoX, sgoY, sgoH, sgoW;
 
     //kciTextEditor *editor;
-    kciTabManager *tabManager;
+    KCITabManager *tabManager;
     QAction *act[act_count];
     QMenu *menu[menu_count];
     QString actStatusTips[act_count], actMenuIconPath[act_count];
     QToolButton *tblMainButton[tlbbutton_count];
-    kciSideBar *sidebarDock;
-    kcicompiledock *compileDock;
-    kciDebugDock *debugDock;
-    kciDebugWatchDock *debugWatchDock;
-    kciJudgeDock *judgeDock;
-    kciTitleBar *titlebar;
-    kciStatusBar *myStatusBar;
+    KCISideBar *sidebarDock;
+    KCICompiledock *compileDock;
+    KCIDebugDock *debugDock;
+    KCIDebugWatchDock *debugWatchDock;
+    KCIJudgeDock *judgeDock;
+    KCITitleBar *titlebar;
+    KCIStatusBar *myStatusBar;
     QMetaObject::Connection compileFinishedConnection;
 
     void saveSettings();

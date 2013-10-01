@@ -21,7 +21,7 @@
 
 static const int SearchBarOffset = 20;
 
-kciCodeEditor::kciCodeEditor(QWidget *parent) :
+KCICodeEditor::KCICodeEditor(QWidget *parent) :
     QWidget(parent)
 {
     setFont(QString("Monaco"));
@@ -39,22 +39,22 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
 
-    markPanel=new kciMarkPanel(this);
+    markPanel=new KCIMarkPanel(this);
     markPanel->setVisible(false);
     markPanel->setEnabled(false);
     mainLayout->addWidget(markPanel);
 
-    linePanel=new kciLinenumPanel(this);
+    linePanel=new KCILinenumPanel(this);
     mainLayout->addWidget(linePanel);
 
-    editor=new kciTextEditor(this);
+    editor=new KCITextEditor(this);
     linePanel->setKciTextEditor(editor);
     markPanel->setKciTextEditor(editor);
     mainLayout->addWidget(editor);
 
     replaceLayout->addLayout(mainLayout);
 
-    replaceBar=new kciReplaceDock(this);
+    replaceBar=new KCIReplaceDock(this);
     replaceBar->hide();
     replaceLayout->addWidget(replaceBar);
 
@@ -68,7 +68,7 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
 
-    m_langMode=new kciLanguageMode(this);
+    m_langMode=new KCILanguageMode(this);
 
     QPalette pal = palette();
     pal.setColor(QPalette::Base,QColor(0x53,0x53,0x53));
@@ -78,37 +78,37 @@ kciCodeEditor::kciCodeEditor(QWidget *parent) :
     filePath.clear();
     fileError=QFileDevice::NoError;
 
-    searchBar=new kciSearchWindow(editor);
+    searchBar=new KCISearchWindow(editor);
     searchBar->hide();
 }
 
-kciCodeEditor::~kciCodeEditor()
+KCICodeEditor::~KCICodeEditor()
 {
     mainLayout->deleteLater();
 }
 
-bool kciCodeEditor::getOverwriteMode()
+bool KCICodeEditor::getOverwriteMode()
 {
     return editor->overwriteMode();
 }
 
-void kciCodeEditor::setOverwriteMode(bool newValue)
+void KCICodeEditor::setOverwriteMode(bool newValue)
 {
     editor->setOverwriteMode(newValue);
     emit rewriteStateChanged(newValue);
 }
 
-QString kciCodeEditor::getExecFileName()
+QString KCICodeEditor::getExecFileName()
 {
     return execFileName;
 }
 
-QTextDocument* kciCodeEditor::document()
+QTextDocument* KCICodeEditor::document()
 {
     return editor->document();
 }
 
-void kciCodeEditor::computeExecFileName()
+void KCICodeEditor::computeExecFileName()
 {
     QFileInfo _fileInfo(filePath);
     execFileName=_fileInfo.absolutePath()+QString("/")+_fileInfo.completeBaseName();
@@ -117,19 +117,19 @@ void kciCodeEditor::computeExecFileName()
     #endif
 }
 
-void kciCodeEditor::connectSearchWidgetWithEditor(kciSearchWidget *widget)
+void KCICodeEditor::connectSearchWidgetWithEditor(KCISearchWidget *widget)
 {
-    searcherConnections+=connect(widget, &kciSearchWidget::requireHide,
-                                 this, &kciCodeEditor::hideSearchBar);
-    searcherConnections+=connect(widget,&kciSearchWidget::requireSearch,
-                                 editor,&kciTextEditor::searchString);
-    searcherConnections+=connect(widget,&kciSearchWidget::requireShowNextResult,
-                                 editor,&kciTextEditor::showNextSearchResult);
-    searcherConnections+=connect(widget,&kciSearchWidget::requireShowPreviousResult,
-                                 editor,&kciTextEditor::showPreviousSearchResult);
+    searcherConnections+=connect(widget, &KCISearchWidget::requireHide,
+                                 this, &KCICodeEditor::hideSearchBar);
+    searcherConnections+=connect(widget,&KCISearchWidget::requireSearch,
+                                 editor,&KCITextEditor::searchString);
+    searcherConnections+=connect(widget,&KCISearchWidget::requireShowNextResult,
+                                 editor,&KCITextEditor::showNextSearchResult);
+    searcherConnections+=connect(widget,&KCISearchWidget::requireShowPreviousResult,
+                                 editor,&KCITextEditor::showPreviousSearchResult);
 }
 
-void kciCodeEditor::showSearchBar()
+void KCICodeEditor::showSearchBar()
 {
     if(replaceBar->isVisible())
     {
@@ -162,7 +162,7 @@ void kciCodeEditor::showSearchBar()
     searchBar->setTextFocus();
 }
 
-void kciCodeEditor::hideSearchBar()
+void KCICodeEditor::hideSearchBar()
 {
     if(searchBar->isVisible())
     {
@@ -182,7 +182,7 @@ void kciCodeEditor::hideSearchBar()
     editor->setFocus();
 }
 
-void kciCodeEditor::showReplaceBar()
+void KCICodeEditor::showReplaceBar()
 {
     if(searchBar->isVisible())
     {
@@ -196,12 +196,12 @@ void kciCodeEditor::showReplaceBar()
 
         connectSearchWidgetWithEditor(replaceBar);
 
-        searcherConnections+=connect(replaceBar,&kciReplaceDock::requireReplace,
-                                     editor,&kciTextEditor::replace);
-        searcherConnections+=connect(replaceBar,&kciReplaceDock::requireReplaceAndFind,
-                                     editor,&kciTextEditor::replaceAndFind);
-        searcherConnections+=connect(replaceBar,&kciReplaceDock::requireReplaceAll,
-                                     editor,&kciTextEditor::replaceAll);
+        searcherConnections+=connect(replaceBar,&KCIReplaceDock::requireReplace,
+                                     editor,&KCITextEditor::replace);
+        searcherConnections+=connect(replaceBar,&KCIReplaceDock::requireReplaceAndFind,
+                                     editor,&KCITextEditor::replaceAndFind);
+        searcherConnections+=connect(replaceBar,&KCIReplaceDock::requireReplaceAll,
+                                     editor,&KCITextEditor::replaceAll);
     }
 
     QTextCursor _textCursor=editor->textCursor();
@@ -212,7 +212,7 @@ void kciCodeEditor::showReplaceBar()
     replaceBar->setTextFocus();
 }
 
-bool kciCodeEditor::open(const QString &fileName)
+bool KCICodeEditor::open(const QString &fileName)
 {
     QFile _file(fileName);
 
@@ -234,12 +234,12 @@ bool kciCodeEditor::open(const QString &fileName)
     }
 }
 
-QFileDevice::FileError kciCodeEditor::error()
+QFileDevice::FileError KCICodeEditor::error()
 {
     return fileError;
 }
 
-bool kciCodeEditor::save()
+bool KCICodeEditor::save()
 {
     if(!filePath.isEmpty())
     {
@@ -264,7 +264,7 @@ bool kciCodeEditor::save()
     }
 }
 
-bool kciCodeEditor::saveAs()
+bool KCICodeEditor::saveAs()
 {
     if(!dosaveas(tr("Save As")))
     {
@@ -282,7 +282,7 @@ bool kciCodeEditor::saveAs()
     }
 }
 
-bool kciCodeEditor::dosaveas(const QString &Caption)
+bool KCICodeEditor::dosaveas(const QString &Caption)
 {
     if(kciGeneralConfigure::getInstance()->getUseDefaultLanguageWhenSave())
     {
@@ -325,7 +325,7 @@ bool kciCodeEditor::dosaveas(const QString &Caption)
     }
 }
 
-bool kciCodeEditor::saveAs(const QString &fileName)
+bool KCICodeEditor::saveAs(const QString &fileName)
 {
 
     QFile _file(fileName);
@@ -344,7 +344,7 @@ bool kciCodeEditor::saveAs(const QString &fileName)
     }
 }
 
-void kciCodeEditor::closeEvent(QCloseEvent *e)
+void KCICodeEditor::closeEvent(QCloseEvent *e)
 {
     if(editor->document()->isModified())
     {
@@ -410,53 +410,53 @@ void kciCodeEditor::closeEvent(QCloseEvent *e)
     return ;
 }
 
-void kciCodeEditor::setDocumentTitle(const QString& title)
+void KCICodeEditor::setDocumentTitle(const QString& title)
 {
     editor->setDocumentTitle(title);
     emit filenameChanged(title);
 }
 
-QString kciCodeEditor::getDocumentTitle()
+QString KCICodeEditor::getDocumentTitle()
 {
     return editor->documentTitle();
 }
 
-void kciCodeEditor::redo()
+void KCICodeEditor::redo()
 {
     editor->redo();
 }
 
-void kciCodeEditor::undo()
+void KCICodeEditor::undo()
 {
     editor->undo();
 }
 
-void kciCodeEditor::copy()
+void KCICodeEditor::copy()
 {
     editor->copy();
 }
 
-void kciCodeEditor::cut()
+void KCICodeEditor::cut()
 {
     editor->cut();
 }
 
-void kciCodeEditor::paste()
+void KCICodeEditor::paste()
 {
     editor->paste();
 }
 
-void kciCodeEditor::selectAll()
+void KCICodeEditor::selectAll()
 {
     editor->selectAll();
 }
 
-void kciCodeEditor::setTextFocus()
+void KCICodeEditor::setTextFocus()
 {
     editor->setFocus();
 }
 
-void kciCodeEditor::onModificationChanged(bool changed)
+void KCICodeEditor::onModificationChanged(bool changed)
 {
     if(changed)
     {
@@ -468,38 +468,38 @@ void kciCodeEditor::onModificationChanged(bool changed)
     }
 }
 
-QString kciCodeEditor::getFilePath()
+QString KCICodeEditor::getFilePath()
 {
     return filePath;
 }
 
-QString kciCodeEditor::getSelectedText()
+QString KCICodeEditor::getSelectedText()
 {
     return editor->textCursor().selectedText();
 }
 
-void kciCodeEditor::cursorChanged()
+void KCICodeEditor::cursorChanged()
 {
     fileTextCursor=editor->textCursor();
     emit fileTextCursorChanged();
 }
 
-QTextCursor kciCodeEditor::getTextCursor()
+QTextCursor KCICodeEditor::getTextCursor()
 {
     return fileTextCursor;
 }
 
-int kciCodeEditor::getTextLines()
+int KCICodeEditor::getTextLines()
 {
     return editor->document()->blockCount();
 }
 
-void kciCodeEditor::setDocumentCursor(int nLine, int linePos)
+void KCICodeEditor::setDocumentCursor(int nLine, int linePos)
 {
      editor->setDocumentCursor(nLine,linePos);
 }
 
-void kciCodeEditor::resizeEvent(QResizeEvent *e)
+void KCICodeEditor::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
 
@@ -509,7 +509,7 @@ void kciCodeEditor::resizeEvent(QResizeEvent *e)
                            searchBar->height());
 }
 
-void kciCodeEditor::fileInfoChanged(const QFile &file)
+void KCICodeEditor::fileInfoChanged(const QFile &file)
 {
     QFileInfo _fileInfo(file);
     editor->setDocumentTitle(_fileInfo.fileName());
@@ -525,17 +525,17 @@ void kciCodeEditor::fileInfoChanged(const QFile &file)
     kciHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
 }
 
-kciLanguageMode *kciCodeEditor::langMode() const
+KCILanguageMode *KCICodeEditor::langMode() const
 {
     return m_langMode;
 }
 
-bool kciCodeEditor::isModified()
+bool KCICodeEditor::isModified()
 {
     return editor->document()->isModified();
 }
 
-void kciCodeEditor::insertTextAtCursor(QString insertText)
+void KCICodeEditor::insertTextAtCursor(QString insertText)
 {
     editor->insertPlainText(insertText);
 }

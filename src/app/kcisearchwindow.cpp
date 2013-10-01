@@ -22,8 +22,8 @@
 
 static const int nFixedWidth=290;
 
-kciSearchWindow::kciSearchWindow(QWidget *parent) :
-    kciSearchWidget(parent)
+KCISearchWindow::KCISearchWindow(QWidget *parent) :
+    KCISearchWidget(parent)
 {
     //Set Search Details.
     setFixedSize(nFixedWidth,38);

@@ -37,11 +37,11 @@
 #include <QDebug>
 
 #ifndef Q_OS_MACX
-class kciTitleBarAutoFill : public QWidget
+class KCITitleBarAutoFill : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciTitleBarAutoFill(QWidget *parent = 0);
+    explicit KCITitleBarAutoFill(QWidget *parent = 0);
 
 signals:
     void dblClickEmit();
@@ -53,11 +53,11 @@ private:
 };
 #endif
 
-class kciTitleBar : public QWidget
+class KCITitleBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciTitleBar(QWidget *parent = 0);
+    explicit KCITitleBar(QWidget *parent = 0);
     void addToolButton(QToolButton *tblMainButton);
     void addToolSeparator();
     void setWindowMax();
@@ -102,7 +102,7 @@ private:
     QString windowTitle;
 
 #ifndef Q_OS_MACX
-    kciTitleBarAutoFill *autoFill;
+    KCITitleBarAutoFill *autoFill;
     QToolButton *mainButton;
 #endif
 

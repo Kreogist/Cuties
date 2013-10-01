@@ -14,6 +14,7 @@
         <file>image/WindowMenuItem.png</file>
         <file>image/ToolMenuIcon.png</file>
         <file>image/BreakPoint.png</file>
+        <file>image/Splash.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>

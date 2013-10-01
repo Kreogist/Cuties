@@ -26,11 +26,11 @@ private:
     QTreeView *watchView;
 };
 
-class kciDebugWatchDock : public QDockWidget
+class KCIDebugWatchDock : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit kciDebugWatchDock(QWidget *parent = 0);
+    explicit KCIDebugWatchDock(QWidget *parent = 0);
     
 signals:
     

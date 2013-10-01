@@ -113,26 +113,16 @@ void kciRunner::run()
             QFileInfo info(path);
 
             process->setWorkingDirectory(info.absoluteDir().absolutePath());
-
-#ifndef Q_OS_MACX
-            Terminal terminal=getDefaultTerminal();
-#endif
-
-            path.prepend('"');
-            path.append('"');
-
 #ifdef Q_OS_MACX
             arg
 #else
+            Terminal terminal=getDefaultTerminal();
             arg<<terminal.arg
 #endif
 #ifdef Q_OS_WIN32
                <<"start"
 #endif
                <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
-
-            //ofstream fout("debug.txt");
-            //for(int )
 
             connect(process,SIGNAL(finished(int)),
                     this,SLOT(quit()));

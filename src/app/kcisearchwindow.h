@@ -26,12 +26,12 @@
 
 #include "kcisearchwidget.h"
 
-class kciSearchWindow : public kciSearchWidget
+class KCISearchWindow : public KCISearchWidget
 {
     Q_OBJECT
 
 public:
-    explicit kciSearchWindow(QWidget *parent);
+    explicit KCISearchWindow(QWidget *parent);
 
 private:
     QToolButton *closeButton;

@@ -17,7 +17,7 @@
 #include "dbgoutputreceiver.h"
 #include "connectionhandler.h"
 
-class kciDebugDock;
+class KCIDebugDock;
 
 class kciDebugWidget : public QWidget
 {
@@ -51,7 +51,7 @@ private:
     QVBoxLayout *GDBMainLayout;
     QComboBox *GDBCmd;
 
-    kciDebugDock *m_parent;
+    KCIDebugDock *m_parent;
     gdb *gdbInstance;
 
     connectionHandler connectionHandles;
@@ -63,11 +63,11 @@ private:
     void createWatchLayout();
 };
 
-class kciDebugDock : public QDockWidget
+class KCIDebugDock : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit kciDebugDock(QWidget *parent = 0);
+    explicit KCIDebugDock(QWidget *parent = 0);
     void setDbgReceiver(dbgOutputReceiver *receiver);
     void setGdbInstance(gdb* instance);
 

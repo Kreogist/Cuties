@@ -19,21 +19,26 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    kciMainWindow(parent)
+    KCIMainWindow(parent)
 {
+    //Set MainWindow Properties.
+    //Set MainWindow Title.
     setWindowTitle(tr("Kreogist Cuties"));
-
-    tabManager=new kciTabManager(this);
-    connect(tabManager,SIGNAL(currentChanged(int)),
-            this,SLOT(onCurrentTabChanged()));
-
-    setCentralWidget(tabManager);
+    //Minimum Window Size.
     setMinimumSize(500,450);
 
+    //Set Palette.
     QPalette QPpal = palette();
     QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
     setPalette(QPpal);
 
+    //Set Central Widget.
+    tabManager=new KCITabManager(this);
+    connect(tabManager,SIGNAL(currentChanged(int)),
+            this,SLOT(onCurrentTabChanged()));
+    setCentralWidget(tabManager);
+
+    //Create All Window Contents Widgets.
     createActions();
     createDocks();
     createTitlebar();
@@ -433,7 +438,7 @@ void MainWindow::createDocks()
     */
 
     //Compile Dock
-    compileDock=new kcicompiledock(this);
+    compileDock=new KCICompiledock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
             tabManager,SLOT(openAndJumpTo(QString)));
     connect(compileDock,SIGNAL(requireGotoLine(int,int)),
@@ -445,19 +450,19 @@ void MainWindow::createDocks()
     compileDock->hide();
 
     //Debug Dock
-    debugDock=new kciDebugDock(this);
+    debugDock=new KCIDebugDock(this);
     addDockWidget(Qt::BottomDockWidgetArea,debugDock);
     connect(debugDock,SIGNAL(requireStartDebug()),
             this,SLOT(startDebug()));
     debugDock->hide();
 
     //Debug Watch Dock
-    debugWatchDock=new kciDebugWatchDock(this);
+    debugWatchDock=new KCIDebugWatchDock(this);
     addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
     debugWatchDock->hide();
 
     //Sidebar Dock
-    sidebarDock=new kciSideBar(this);
+    sidebarDock=new KCISideBar(this);
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
     connect(sidebarDock, SIGNAL(historyRequiredOpenFiles(QString)),
             tabManager, SLOT(openAndJumpTo(QString)));
@@ -692,7 +697,7 @@ void MainWindow::createMenu()
 
 void MainWindow::createStatusbar()
 {
-    myStatusBar=new kciStatusBar(this);
+    myStatusBar=new KCIStatusBar(this);
     setStatusBar(myStatusBar);
 
     QPalette pal=myStatusBar->palette();
@@ -829,7 +834,7 @@ void MainWindow::restoreSettings()
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
-    kciMainWindow::resizeEvent(e);
+    KCIMainWindow::resizeEvent(e);
     if(this->isMaximized())
     {
         sgoH=e->oldSize().height();
@@ -897,7 +902,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::show()
 {
-    kciMainWindow::show();
+    KCIMainWindow::show();
     if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
     {
         tabManager->openHistoryFiles();
@@ -906,7 +911,7 @@ void MainWindow::show()
 
 void MainWindow::compileCurrentFile()
 {
-    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
+    KCICodeEditor *currentEditor=tabManager->getCurrentEditor();
 
     //Check Tab Status.
     if(currentEditor!=NULL)
@@ -945,7 +950,7 @@ void MainWindow::compileCurrentFile()
 
 void MainWindow::run()
 {
-    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
+    KCICodeEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
     {
         //execute file name
@@ -955,7 +960,7 @@ void MainWindow::run()
 
 void MainWindow::compileAndRun()
 {\
-    kciCodeEditor *currentEditor=tabManager->getCurrentEditor();
+    KCICodeEditor *currentEditor=tabManager->getCurrentEditor();
 
     //Check Tab Status.
     if(currentEditor!=NULL)
@@ -1046,11 +1051,11 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::onCurrentTabChanged()
 {
-    kciCodeEditor* currEditor=tabManager->getCurrentEditor();
+    KCICodeEditor* currEditor=tabManager->getCurrentEditor();
     if(currEditor==NULL)
         return ;
 
-    kciLanguageMode* currLangMode=currEditor->langMode();
+    KCILanguageMode* currLangMode=currEditor->langMode();
 
     compileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
     if(compilerReceiver!=NULL)
@@ -1063,8 +1068,8 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    kciCodeEditor* currEditor=tabManager->getCurrentEditor();
-    kciLanguageMode* currLangMode=currEditor->langMode();
+    KCICodeEditor* currEditor=tabManager->getCurrentEditor();
+    KCILanguageMode* currLangMode=currEditor->langMode();
     currLangMode->startDebug();
 
     connectDebugDockWithCurrEditor();
@@ -1073,7 +1078,7 @@ void MainWindow::startDebug()
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
-    kciLanguageMode* currLangMode=tabManager->getCurrentEditor()->langMode();
+    KCILanguageMode* currLangMode=tabManager->getCurrentEditor()->langMode();
 
     dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
     if(dbgReceiver!=NULL)

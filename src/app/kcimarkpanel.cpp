@@ -19,7 +19,7 @@
 
 #include "kcimarkpanel.h"
 
-kciMarkPanel::kciMarkPanel(QWidget *parent) :
+KCIMarkPanel::KCIMarkPanel(QWidget *parent) :
     kciPanel(parent)
 {
     markPix.load(":/img/image/BreakPoint.png");
@@ -28,17 +28,17 @@ kciMarkPanel::kciMarkPanel(QWidget *parent) :
     isPressed=false;
 }
 
-QPixmap kciMarkPanel::getMarkPix() const
+QPixmap KCIMarkPanel::getMarkPix() const
 {
     return markPix;
 }
 
-void kciMarkPanel::setMarkPix(const QPixmap &value)
+void KCIMarkPanel::setMarkPix(const QPixmap &value)
 {
     markPix = value;
 }
 
-void kciMarkPanel::draw(QPainter *painter, QTextBlock *block,
+void KCIMarkPanel::draw(QPainter *painter, QTextBlock *block,
           int x, int y, int w, int h,
           bool isCurrentLine)
 {
@@ -64,7 +64,7 @@ void kciMarkPanel::draw(QPainter *painter, QTextBlock *block,
     }
 }
 
-void kciMarkPanel::mousePressEvent(QMouseEvent *e)
+void KCIMarkPanel::mousePressEvent(QMouseEvent *e)
 {
     if(e->buttons() == Qt::LeftButton)
     {
@@ -73,7 +73,7 @@ void kciMarkPanel::mousePressEvent(QMouseEvent *e)
     }
 }
 
-void kciMarkPanel::mouseReleaseEvent(QMouseEvent *e)
+void KCIMarkPanel::mouseReleaseEvent(QMouseEvent *e)
 {
     if(isPressed)
     {

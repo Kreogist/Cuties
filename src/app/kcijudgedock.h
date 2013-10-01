@@ -55,11 +55,11 @@ private:
     QVBoxLayout *EditLayout;
 };
 
-class kciJudgeEditWidget : public QWidget
+class KCIJudgeEditWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciJudgeEditWidget(QWidget *parent = 0);
+    explicit KCIJudgeEditWidget(QWidget *parent = 0);
 
 private slots:
     void addNewTab();
@@ -82,11 +82,11 @@ private:
     void removeTabIndex(int TabIndex);
 };
 
-class kciJudgeDock : public QDockWidget
+class KCIJudgeDock : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit kciJudgeDock(QWidget *parent = 0);
+    explicit KCIJudgeDock(QWidget *parent = 0);
     
 signals:
     
@@ -97,7 +97,7 @@ private:
     QSplitter *splCombine;
     QList<int> l_sizes;
     QToolButton *addANewTab;
-    kciJudgeEditWidget *kjwEditWidget;
+    KCIJudgeEditWidget *kjwEditWidget;
 };
 
 #endif // KCIJUDGEDOCK_H

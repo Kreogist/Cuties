@@ -28,6 +28,7 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QStyleFactory>
+#include <QSplashScreen>
 #include <QDebug>
 
 #include "mainwindow.h"
@@ -38,6 +39,11 @@ int main(int argc, char *argv[])
 {
     //Load QApplication Object.
     QApplication app(argc,argv);
+
+    //Load Splash Screen
+    QSplashScreen *splash=new QSplashScreen;
+    splash->setPixmap(QPixmap(":/img/image/Splash.png"));
+    splash->show();
 
     //Initialize Application Infomation.
     QApplication::setApplicationName(QString("Cuties"));
@@ -108,6 +114,8 @@ int main(int argc, char *argv[])
     //Initalize and show Application MainWindow.
     MainWindow mainwindow;
     mainwindow.show();
+    splash->finish(&mainwindow);
+    delete splash;
 
     return app.exec();
 }

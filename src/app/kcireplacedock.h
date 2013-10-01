@@ -16,11 +16,11 @@
 
 #include "kcisearchwidget.h"
 
-class kciReplaceDock : public kciSearchWidget
+class KCIReplaceDock : public KCISearchWidget
 {
     Q_OBJECT
 public:
-    explicit kciReplaceDock(QWidget *parent = 0);
+    explicit KCIReplaceDock(QWidget *parent = 0);
 
 signals:
     void requireReplace(const QString& oldText,const QString& newText);

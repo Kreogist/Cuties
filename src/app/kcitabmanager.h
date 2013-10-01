@@ -39,16 +39,16 @@
 #include "kcisearchwindow.h"
 #include "kcicodeeditor.h"
 
-class kciTabManager : public QTabWidget
+class KCITabManager : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit kciTabManager(QWidget *parent = 0);
+    explicit KCITabManager(QWidget *parent = 0);
     int getCurrentLineCount() const;
     int getCurrentLineNum() const;
     void openHistoryFiles();
 
-    kciCodeEditor* getCurrentEditor() const;
+    KCICodeEditor* getCurrentEditor() const;
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -99,7 +99,7 @@ private:
     int tab_count;
     int new_file_count;
     QTextCursor currentTextCursor;
-    kciCodeEditor *currentEditor;
+    KCICodeEditor *currentEditor;
     kciEditorConfigure* editorConfigureInstance;
     QTabBar *tabBarControl;
 

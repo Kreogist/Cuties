@@ -28,11 +28,11 @@
 #include <QResizeEvent>
 #include <QMenu>
 
-class kciSearchWidget : public QWidget
+class KCISearchWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciSearchWidget(QWidget *parent);
+    explicit KCISearchWidget(QWidget *parent);
     void setTextFocus();
     void setText(const QString& text);
     QString text() const;

@@ -39,11 +39,11 @@
 #include "kcihistoryconfigure.h"
 #include "kciclipboard.h"
 
-class kciClipboardHistoryStack : public QListView
+class KCIClipboardHistoryStack : public QListView
 {
     Q_OBJECT
 public:
-    explicit kciClipboardHistoryStack(QWidget *parent = 0);
+    explicit KCIClipboardHistoryStack(QWidget *parent = 0);
 
 signals:
     void requiredInsertText(QString insertText);
@@ -55,11 +55,11 @@ private:
 
 };
 
-class kciHistoryStack : public QListView
+class KCIHistoryStack : public QListView
 {
     Q_OBJECT
 public:
-    explicit kciHistoryStack(QWidget *parent = 0);
+    explicit KCIHistoryStack(QWidget *parent = 0);
 
 signals:
     void requiredOpenFiles(QString filePath);
@@ -71,11 +71,11 @@ private:
 
 };
 
-class kciSidebarButton : public QWidget
+class KCISidebarButton : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciSidebarButton(QWidget *parent = 0);
+    explicit KCISidebarButton(QWidget *parent = 0);
     void setIcon(QString IconPath);
     void setPressed(bool newValue, bool force);
     void setBackgroundColor();
@@ -100,12 +100,12 @@ private:
     bool buttonLocked;
 };
 
-class kciSideBarContent : public QWidget
+class KCISideBarContent : public QWidget
 {
     Q_OBJECT
 public:
-    explicit kciSideBarContent(QWidget *parent = 0);
-    ~kciSideBarContent();
+    explicit KCISideBarContent(QWidget *parent = 0);
+    ~KCISideBarContent();
     void setContentFixedWidth(int newContentWidth);
     void forceClearButtonState();
     void forceShowButtonState();
@@ -131,22 +131,22 @@ private:
         sidebarButtonCount
     };
 
-    kciSidebarButton *sidebarButton[sidebarButtonCount];
+    KCISidebarButton *sidebarButton[sidebarButtonCount];
     QSignalMapper *sidebarButtonMapper;
 
     QStackedWidget *contents;
-    kciHistoryStack *historyStack;
-    kciClipboardHistoryStack *clipboardStack;
+    KCIHistoryStack *historyStack;
+    KCIClipboardHistoryStack *clipboardStack;
 
     int sidebarButtonIndex;
     QToolButton *sidebarLock;
 };
 
-class kciSideBar : public QDockWidget
+class KCISideBar : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit kciSideBar(QWidget *parent = 0);
+    explicit KCISideBar(QWidget *parent = 0);
     void forceClearButtonState();
     void forceShowButtonState();
     
@@ -168,7 +168,7 @@ private slots:
 private:
     bool expandState;
     QTimeLine *showAnimation, *hideAnimation;
-    kciSideBarContent *CentralWidget;
+    KCISideBarContent *CentralWidget;
 };
 
 #endif // KCISIDEBAR_H
