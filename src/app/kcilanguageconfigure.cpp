@@ -1,8 +1,8 @@
 #include "kcilanguageconfigure.h"
 
-kciLanguageConfigure* kciLanguageConfigure::instance=nullptr;
+kciLanguageConfigure *kciLanguageConfigure::instance=nullptr;
 
-kciLanguageConfigure* kciLanguageConfigure::getInstance()
+kciLanguageConfigure *kciLanguageConfigure::getInstance()
 {
     return instance==nullptr?instance=new kciLanguageConfigure:instance;
 }
@@ -63,9 +63,9 @@ void kciLanguageConfigure::loadLanguageList()
     QStringList filter;
     QDir *dir=new QDir(languageFileDir);
     QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
-    for (QList<QFileInfo>::iterator i=list->begin();
-         i!=list->end();
-         ++i)
+    for(QList<QFileInfo>::iterator i=list->begin();
+        i!=list->end();
+        ++i)
     {
         currFileName=i->fileName();
         if(currFileName.length() < 4)

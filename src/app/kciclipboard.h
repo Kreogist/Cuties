@@ -34,8 +34,8 @@ class kciClipboard : public QObject
 {
     Q_OBJECT
 public:
-    static kciClipboard* getInstance();
-    
+    static kciClipboard *getInstance();
+
     QStandardItemModel *getClipboardTextsModel() const;
     void setClipboardTextsModel(QStandardItemModel *value);
     QString getHistoryClipboardText(int ItemID);
@@ -44,13 +44,13 @@ public:
     void setMaxDataCount(int value);
 
 signals:
-    
+
 public slots:
     void onSystemClipboardChanged();
 
 private:
     kciClipboard();
-    static kciClipboard* instance;
+    static kciClipboard *instance;
     int maxDataCount;
 
     QStandardItemModel *clipboardTextsModel;

@@ -40,14 +40,14 @@ public:
                 const unsigned long long &searchCode, const bool &forward);
 
     void setIsCaseSensitive(bool value);
-    void setPatternString(const QString& pattern);
+    void setPatternString(const QString &pattern);
 
     void requireStop();
 
 protected:
-    virtual void setPattern(const QString& pattern) = 0;
+    virtual void setPattern(const QString &pattern) = 0;
     void recordResult(int startPos, int length);
-    virtual void match(const QString& text) = 0;
+    virtual void match(const QString &text) = 0;
     virtual void setCaseSensitive(bool value) = 0;
 
 private:
@@ -63,7 +63,7 @@ class kciTextSearcherRegexp : public kciTextSearcher
 {
 protected:
     void setPattern(const QString &pattern);
-    void match(const QString& text);
+    void match(const QString &text);
     void setCaseSensitive(bool value);
 
 private:
@@ -73,8 +73,8 @@ private:
 class kciTextSearcherStringMatcher : public kciTextSearcher
 {
 protected:
-    void setPattern(const QString& pattern);
-    void match(const QString& text);
+    void setPattern(const QString &pattern);
+    void match(const QString &text);
     void setCaseSensitive(bool value);
 
 private:

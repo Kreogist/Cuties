@@ -39,7 +39,7 @@ QStandardItemModel *compileOutputReceiver::getCompilerOutputModel() const
 
 void compileOutputReceiver::clearText()
 {
-   compilerOutputText.clear();
+    compilerOutputText.clear();
 }
 
 void compileOutputReceiver::addText(const QString &NewText)
@@ -52,22 +52,22 @@ void compileOutputReceiver::addForwardText()
 {
     //Prepare Compiler
     addText(QTime::currentTime().toString("hh:mm:ss") +
-                      " " +
-                      tr("Preparing Compiler.")+
-                      "\n");
+            " " +
+            tr("Preparing Compiler.")+
+            "\n");
     //Get Compiler Info.
     addText(QTime::currentTime().toString("hh:mm:ss") +
-                      " " +
-                      tr("Current Compiler Details:\n") +
-                      compilerVersion
-                       +
-                      "\n");
+            " " +
+            tr("Current Compiler Details:\n") +
+            compilerVersion
+            +
+            "\n");
 
     //Output Compile Info:
     addText(QTime::currentTime().toString("hh:mm:ss") +
-                      " " +
-                      tr("Compile Command:") +
-                      "\n");
+            " " +
+            tr("Compile Command:") +
+            "\n");
     //compile command will be output when compiler emit signal compileinfo
 }
 
@@ -77,13 +77,13 @@ void compileOutputReceiver::addRootItem(const ErrInfo &error)
 
     if(error.nLineNum>-1)
     {
-        QList<QStandardItem*> column;
+        QList<QStandardItem *> column;
         column<<new QStandardItem(tr("Line ") +
                                   QString::number(error.nLineNum) +
                                   tr(", ") + tr("Column ") +
                                   QString::number(error.nColumnNum)
                                   + tr(". "))
-             <<new QStandardItem(tr("At file: ") + error.strFilePath);
+              <<new QStandardItem(tr("At file: ") + error.strFilePath);
 
         itemAdd->appendColumn(column);
     }

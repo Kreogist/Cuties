@@ -9,7 +9,7 @@ class kciSettingListItemCombo : public kciSettingListItemBase
     Q_OBJECT
 public:
     explicit kciSettingListItemCombo(QWidget *parent = 0);
-    void addListItem(const QString& ItemText);
+    void addListItem(const QString &ItemText);
     void clearList();
     void setValue(int Index);
     int getValue();

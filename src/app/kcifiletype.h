@@ -11,11 +11,11 @@ class kciFileType : public QWidget
     Q_OBJECT
 public:
     explicit kciFileType(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
-    
+
 private:
     QHBoxLayout *mainLayout;
     QComboBox *fileType;

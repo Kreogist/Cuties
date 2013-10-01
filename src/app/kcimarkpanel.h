@@ -36,7 +36,7 @@ public:
     void setMarkPix(const QPixmap &value);
 
 signals:
-    
+
 public slots:
 
 protected:
@@ -52,7 +52,10 @@ private:
     {
         QRect rect;
         bool marked;
-        markUnit(){marked=false;}
+        markUnit()
+        {
+            marked=false;
+        }
     };
 
     QVector<markUnit> vecMark;

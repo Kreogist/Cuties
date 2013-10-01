@@ -26,10 +26,10 @@ kciTextSearcher::kciTextSearcher()
     needQuit=false;
 }
 
-void kciTextSearcher::search(const QTextBlock& begin,
+void kciTextSearcher::search(const QTextBlock &begin,
                              int lineCount,
-                             const unsigned long long int& searchCode,
-                             const bool& forward)
+                             const unsigned long long int &searchCode,
+                             const bool &forward)
 {
     setCaseSensitive(isCaseSensitive);
 
@@ -69,7 +69,7 @@ void kciTextSearcher::search(const QTextBlock& begin,
         quitLock.unlock();
         //------------
 
-        currBlockData=(kciTextBlockData*)i.userData();
+        currBlockData=(kciTextBlockData *)i.userData();
         lineCount-=(lineCount==SEARCH_UNTIL_END_MARK)?0:i.lineCount();
         if(Q_UNLIKELY(currBlockData==NULL))
         {
@@ -84,7 +84,9 @@ void kciTextSearcher::search(const QTextBlock& begin,
         currBlockData->setSearchCode(searchCode);
         currBlockData->resetForSearch();
         if(!resetMark)
+        {
             match(i.text());
+        }
         currBlockData->endUsingSearchDatas();
     }
 }
@@ -97,7 +99,9 @@ void kciTextSearcher::setPatternString(const QString &pattern)
         resetMark=false;
     }
     else
+    {
         resetMark=true;
+    }
 }
 
 void kciTextSearcher::setIsCaseSensitive(bool value)
@@ -127,9 +131,13 @@ void kciTextSearcherRegexp::setCaseSensitive(bool value)
 {
     QRegularExpression::PatternOptions po=regexp.patternOptions();
     if(!value)
+    {
         po|=QRegularExpression::CaseInsensitiveOption;
+    }
     else
+    {
         po&=~QRegularExpression::CaseInsensitiveOption;
+    }
 
     regexp.setPatternOptions(po);
 }

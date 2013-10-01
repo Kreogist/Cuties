@@ -8,11 +8,11 @@ class kciDebuggerConfigure : public kciConfigure
 public:
     void readConfigure();
     void writeConfigure();
-    static kciDebuggerConfigure* getInstance();
+    static kciDebuggerConfigure *getInstance();
 
 private:
     kciDebuggerConfigure();
-    static kciDebuggerConfigure* instance;
+    static kciDebuggerConfigure *instance;
 };
 
 #endif // KCIDEBUGGERCONFIGURE_H

@@ -22,7 +22,7 @@
 KCILanguageMode::KCILanguageMode(QWidget *parent) :
     QObject(parent)
 {
-    m_parent=qobject_cast<KCICodeEditor*>(parent);
+    m_parent=qobject_cast<KCICodeEditor *>(parent);
     compilerReceiver=NULL;
     dbgReceiver=NULL;
     gdbInstance=NULL;
@@ -54,7 +54,9 @@ void KCILanguageMode::compile()
     }
 
     if(checkIfIsCompiling())
+    {
         return ;
+    }
 
     setCompileState(compiling);
 
@@ -65,7 +67,7 @@ void KCILanguageMode::compile()
     compiler->startCompile(m_parent->filePath);
 }
 
-void KCILanguageMode::setFileSuffix(const QString& suffix)
+void KCILanguageMode::setFileSuffix(const QString &suffix)
 {
     QRegularExpression _regexp_cpp("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)",
                                    QRegularExpression::CaseInsensitiveOption);
@@ -75,7 +77,9 @@ void KCILanguageMode::setFileSuffix(const QString& suffix)
     if(suffix.contains(_regexp_cpp))
     {
         if(m_type==Cpp) //file type doesn't change,so return.
+        {
             return ;
+        }
 
         m_type=Cpp;
         compiler.reset(new gcc(this));
@@ -109,28 +113,32 @@ void KCILanguageMode::setFileSuffix(const QString& suffix)
     m_highlighter->setDocument(m_parent->document());
 }
 
-compileOutputReceiver* KCILanguageMode::getCompilerReceiver() const
+compileOutputReceiver *KCILanguageMode::getCompilerReceiver() const
 {
     return compilerReceiver;
 }
 
-dbgOutputReceiver* KCILanguageMode::getDbgReceiver() const
+dbgOutputReceiver *KCILanguageMode::getDbgReceiver() const
 {
     return dbgReceiver;
 }
 
-gdb* KCILanguageMode::getGdbInstance() const
+gdb *KCILanguageMode::getGdbInstance() const
 {
     return gdbInstance;
 }
 
-gdb* KCILanguageMode::startDebug()
+gdb *KCILanguageMode::startDebug()
 {
     if(gdbInstance == NULL)
+    {
         gdbInstance=new gdb(this);
+    }
 
     if(dbgReceiver == NULL)
+    {
         dbgReceiver=new dbgOutputReceiver(this);
+    }
 
     connectGDBAndDbgReceiver();
     gdbInstance->runGDB(m_parent->execFileName);
@@ -141,7 +149,9 @@ gdb* KCILanguageMode::startDebug()
 void KCILanguageMode::onCompileFinished(bool hasError)
 {
     if((bool)compilerFinishedConnection)
+    {
         disconnect(compilerFinishedConnection);
+    }
 
     setCompileState(compiled);
 
@@ -156,18 +166,18 @@ void KCILanguageMode::connectCompilerAndOutputReceiver()
     compilerConnectionHandles.disConnectAll();
 
     compilerReceiver->setCompilerVersionString(compiler->compilerName()+
-                                               " "+
-                                               compiler->version());
+            " "+
+            compiler->version());
 
     //Output Compile Message:
     compilerConnectionHandles+=connect(compiler.data(),&compilerBase::compileCmd,
-                               compilerReceiver,&compileOutputReceiver::addText);
+                                       compilerReceiver,&compileOutputReceiver::addText);
     compilerConnectionHandles+=connect(compiler.data(),&compilerBase::output,
-                               compilerReceiver,&compileOutputReceiver::addText);
+                                       compilerReceiver,&compileOutputReceiver::addText);
     compilerConnectionHandles+=connect(compiler.data(),&compilerBase::compileError,
-                               compilerReceiver,&compileOutputReceiver::onCompileMsgReceived);
+                                       compilerReceiver,&compileOutputReceiver::onCompileMsgReceived);
     compilerConnectionHandles+=connect(compiler.data(),&compilerBase::compileFinished,
-                               compilerReceiver,&compileOutputReceiver::onCompileFinished);
+                                       compilerReceiver,&compileOutputReceiver::onCompileFinished);
 }
 
 void KCILanguageMode::connectGDBAndDbgReceiver()
@@ -175,15 +185,15 @@ void KCILanguageMode::connectGDBAndDbgReceiver()
     gdbConnectionHandles.disConnectAll();
 
     gdbConnectionHandles+=connect(gdbInstance,&gdb::errorOccured,
-                               dbgReceiver,&dbgOutputReceiver::receiveError);
+                                  dbgReceiver,&dbgOutputReceiver::receiveError);
     gdbConnectionHandles+=connect(gdbInstance,&gdb::consoleOutputStream,
-                               dbgReceiver,&dbgOutputReceiver::receiveconsoleOutput);
+                                  dbgReceiver,&dbgOutputReceiver::receiveconsoleOutput);
     gdbConnectionHandles+=connect(gdbInstance,&gdb::targetOutputStream,
-                               dbgReceiver,&dbgOutputReceiver::receivetargetOutput);
+                                  dbgReceiver,&dbgOutputReceiver::receivetargetOutput);
     gdbConnectionHandles+=connect(gdbInstance,&gdb::logOutputStream,
-                               dbgReceiver,&dbgOutputReceiver::receivelogOutput);
+                                  dbgReceiver,&dbgOutputReceiver::receivelogOutput);
     gdbConnectionHandles+=connect(gdbInstance,&gdb::locals,
-                               dbgReceiver,&dbgOutputReceiver::receiveLocals);
+                                  dbgReceiver,&dbgOutputReceiver::receiveLocals);
 }
 
 bool KCILanguageMode::checkIfIsCompiling()
@@ -192,7 +202,9 @@ bool KCILanguageMode::checkIfIsCompiling()
 
     stateLock.lockForRead();
     if(state==compiling)
+    {
         ret=true;
+    }
     stateLock.unlock();
 
     return ret;

@@ -31,7 +31,7 @@ void kciHighlighter::highlightBlock(const QString &text)
     /* This function is used to associate kciTextBlockData with QTextBlock.
      * And then call kciHighlightBlock() which highlight the source code.
      */
-    kciTextBlockData* data=(kciTextBlockData*)currentBlockUserData();
+    kciTextBlockData *data=(kciTextBlockData *)currentBlockUserData();
     if(data==NULL)
     {
         data=new kciTextBlockData;
@@ -54,8 +54,8 @@ void kciHighlighter::highlightBlock(const QString &text)
 }
 
 void kciHighlighter::parseParenthesesInfo(const QString &text,
-                                          kciTextBlockData *data,
-                                          char character)
+        kciTextBlockData *data,
+        char character)
 {
     int index=text.indexOf(character);
     while(index!=-1)

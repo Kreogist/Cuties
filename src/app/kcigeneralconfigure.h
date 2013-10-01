@@ -10,7 +10,7 @@ class kciGeneralConfigure : public kciConfigure
 public:
     void readConfigure();
     void writeConfigure();
-    static kciGeneralConfigure* getInstance();
+    static kciGeneralConfigure *getInstance();
 
     int getDefaultLanguageMode() const;
     QString getDefaultLanguageModeString();
@@ -55,7 +55,7 @@ private:
     bool rememberUnclosedFile;
     bool useDefaultLanguageWhenOpen;
     bool useDefaultLanguageWhenSave;
-    static kciGeneralConfigure* instance;
+    static kciGeneralConfigure *instance;
 
     QString strFileFilter;
     QString asfFilter, ptfFilter, hfFilter, cfFilter, cppfFilter, pasfFilter, afFilter;

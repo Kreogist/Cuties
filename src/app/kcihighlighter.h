@@ -32,10 +32,13 @@ public:
 
 protected:
     void highlightBlock(const QString &text);
-    void parseParenthesesInfo(const QString& text,
-                              kciTextBlockData* data,
+    void parseParenthesesInfo(const QString &text,
+                              kciTextBlockData *data,
                               char character);
-    virtual void kciHighlightBlock(const QString &text) {Q_UNUSED(text);}
+    virtual void kciHighlightBlock(const QString &text)
+    {
+        Q_UNUSED(text);
+    }
 };
 
 #endif // KCIHIGHLIGHTER_H

@@ -41,9 +41,9 @@ public:
     explicit compilerBase(QObject *parent = 0);
 
     QString version();
-    void startCompile(const QString& filePath);
+    void startCompile(const QString &filePath);
     virtual QString path()=0;
-    virtual bool checkCompilerPath(const QString& path);
+    virtual bool checkCompilerPath(const QString &path);
     virtual QString compilerName() = 0;
 
 signals:
@@ -56,15 +56,18 @@ public slots:
     void onOutputReady();
 
 protected:
-    void emitCompileCmd(const QString& compilerPath,
-                         const QStringList &arg);
+    void emitCompileCmd(const QString &compilerPath,
+                        const QStringList &arg);
     virtual QStringList getVersionArg() = 0;
-    virtual QStringList getCompileArg(const QString& filePath) = 0;
+    virtual QStringList getCompileArg(const QString &filePath) = 0;
     virtual QStringList getcompileEnv() = 0;
 
-    virtual bool checkHasErrorByExitNum(const int& exitNum){return exitNum > 0;}
+    virtual bool checkHasErrorByExitNum(const int &exitNum)
+    {
+        return exitNum > 0;
+    }
 
-    virtual void parseLine(const QString& text) = 0;
+    virtual void parseLine(const QString &text) = 0;
 
 private slots:
     void onFinished(int exitNum);

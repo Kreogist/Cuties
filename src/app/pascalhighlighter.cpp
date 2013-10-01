@@ -34,7 +34,7 @@ pascalHighlighter::pascalHighlighter(QObject *parent) :
     hlrDataType.type_name="datatype";
     hlrDataType.regexp.setPattern("\\b(boolean|byte|char|integer|maxint|real)\\b");
     hlrDataType.regexp.setPatternOptions(
-                QRegularExpression::CaseInsensitiveOption);
+        QRegularExpression::CaseInsensitiveOption);
     rules<<hlrDataType;
 
     //Set Key Words:
@@ -46,14 +46,14 @@ pascalHighlighter::pascalHighlighter(QObject *parent) :
             <<"put|procedure|read|readln|record|repeat|reset|rewrite|set|"
             <<"text|then|to|true|type|unpack|until|var|while|with|writeln|write";
     strKeyWords="\\b(";
-    for(int i=0;i<_keyword.size();i++)
+    for(int i=0; i<_keyword.size(); i++)
     {
         strKeyWords+=_keyword[i];
     }
     strKeyWords+=QString(")\\b");
     hlrKeyWords.regexp.setPattern(strKeyWords);
     hlrKeyWords.regexp.setPatternOptions(
-                QRegularExpression::CaseInsensitiveOption);
+        QRegularExpression::CaseInsensitiveOption);
     rules<<hlrKeyWords;
 
     //Set Other Special Types:
@@ -75,11 +75,12 @@ pascalHighlighter::pascalHighlighter(QObject *parent) :
 void pascalHighlighter::kciHighlightBlock(const QString &text)
 {
     //!TODO: unsupport multiline comment
-    for(int i=0;i<rules.size();i++)
+    for(int i=0; i<rules.size(); i++)
     {
         QRegularExpressionMatchIterator matchIterator=rules[i].regexp.globalMatch(
                     text);
-        while (matchIterator.hasNext()) {
+        while(matchIterator.hasNext())
+        {
             QRegularExpressionMatch match=matchIterator.next();
             setFormat(match.capturedStart(),
                       match.capturedLength(),
@@ -87,7 +88,7 @@ void pascalHighlighter::kciHighlightBlock(const QString &text)
         }
     }
 
-    kciTextBlockData *data=(kciTextBlockData*)currentBlockUserData();
+    kciTextBlockData *data=(kciTextBlockData *)currentBlockUserData();
 
     Q_ASSERT(data!=NULL);
 
@@ -96,14 +97,18 @@ void pascalHighlighter::kciHighlightBlock(const QString &text)
     int baseLevel=0;
     if(prevBlock.isValid())
     {
-        kciTextBlockData *prevData=(kciTextBlockData*)prevBlock.userData();
+        kciTextBlockData *prevData=(kciTextBlockData *)prevBlock.userData();
         Q_ASSERT(prevData!=NULL);
         baseLevel=prevData->getCodeLevel();
 
         if(prevBlock.text().contains(QRegularExpression("\\b(begin)\\b")))
+        {
             baseLevel++;
+        }
         else if(prevBlock.text().contains(QRegularExpression("\\b(end)\\b")))
+        {
             baseLevel--;
+        }
     }
     data->setCodeLevel(baseLevel);
 

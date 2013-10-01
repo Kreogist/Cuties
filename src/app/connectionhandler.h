@@ -31,11 +31,11 @@ public:
 
     void disConnectAll();
     void addConnectionHandle(const QMetaObject::Connection connection);
-    connectionHandler& operator += (const QMetaObject::Connection connection);
+    connectionHandler &operator += (const QMetaObject::Connection connection);
 
 private:
     QVector<QMetaObject::Connection> connections;
-    
+
 };
 
 #endif // CONNECTIONHANDLER_H

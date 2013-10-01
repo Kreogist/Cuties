@@ -39,9 +39,13 @@ QStringList gcc::getCompileArg(const QString &filePath)
     QStringList arg;
 
     if(fileInfo.suffix() == "c")
+    {
         isCompileCpp=false;
+    }
     else
+    {
         isCompileCpp=true;
+    }
 
     arg<<filePath<<"-lm"<<"-ggdb"<<"-Wall";
 
@@ -51,12 +55,12 @@ QStringList gcc::getCompileArg(const QString &filePath)
     if(fileInfo.absolutePath().right(1)=="/")
     {
         programName=fileInfo.absolutePath()
-                +fileInfo.completeBaseName();
+                    +fileInfo.completeBaseName();
     }
     else
     {
         programName=fileInfo.absolutePath() + "/"
-                +fileInfo.completeBaseName();
+                    +fileInfo.completeBaseName();
     }
 
 #ifdef Q_OS_WIN32
@@ -90,7 +94,7 @@ void gcc::parseLine(const QString &text)
         error.nLineNum=-1;
         error.strErrDescription=text;
         error.strErrDescription=error.strErrDescription.remove(
-                    error.strErrDescription.length()-1,1);
+                                    error.strErrDescription.length()-1,1);
         error.strFilePath="";
 
         emit compileError(error);

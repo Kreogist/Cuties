@@ -1,8 +1,8 @@
 #include "kcigeneralconfigure.h"
 
-kciGeneralConfigure* kciGeneralConfigure::instance=nullptr;
+kciGeneralConfigure *kciGeneralConfigure::instance=nullptr;
 
-kciGeneralConfigure* kciGeneralConfigure::getInstance()
+kciGeneralConfigure *kciGeneralConfigure::getInstance()
 {
     return instance==nullptr?instance=new kciGeneralConfigure:instance;
 }
@@ -15,7 +15,7 @@ kciGeneralConfigure::kciGeneralConfigure()
     useDefaultLanguageWhenSave=true;
 
     asfFilter = tr("All Support Files")+
-            "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas)";
+                "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas)";
     ptfFilter = tr("Plain Text Files")+"(*.txt)";
     hfFilter = tr("Hearder Files")+"(*.h *.hpp *.rh *.hh)";
     cfFilter = tr("C Source Files")+"(*.c)";
@@ -37,7 +37,7 @@ void kciGeneralConfigure::readConfigure()
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("General");
     QString strDefaultLanguageMode=settings.value("DefaultLanguageMode",
-                                                  "cpp").toString();
+                                   "cpp").toString();
     if(strDefaultLanguageMode=="c")
     {
         defaultLanguageMode=1;
@@ -57,9 +57,9 @@ void kciGeneralConfigure::readConfigure()
     rememberUnclosedFile=settings.value("RememberUnclosed",
                                         rememberUnclosedFile).toBool();
     useDefaultLanguageWhenOpen=settings.value("UseDefaultLanguageModeWhenOpen",
-                                              useDefaultLanguageWhenOpen).toBool();
+                               useDefaultLanguageWhenOpen).toBool();
     useDefaultLanguageWhenSave=settings.value("UseDefaultLanguageModeWhenSave",
-                                              useDefaultLanguageWhenSave).toBool();
+                               useDefaultLanguageWhenSave).toBool();
     settings.endGroup();
 }
 

@@ -33,11 +33,11 @@ class kciEditorConfigure : public kciConfigure
 public:
     void readConfigure();
     void writeConfigure();
-    static kciEditorConfigure* getInstance();
+    static kciEditorConfigure *getInstance();
     bool usingBlankInsteadTab() const;
     void setUsingBlankInsteadTab(bool enabled);
     int getTabWidth() const;
-    void setTabWidth(const int& width);
+    void setTabWidth(const int &width);
     QTextOption::WrapMode getWrapMode() const;
     void setWrapMode(QTextOption::WrapMode value);
     int getCursorWidth() const;
@@ -58,7 +58,7 @@ signals:
 
 private:
     kciEditorConfigure();
-    static kciEditorConfigure* instance;
+    static kciEditorConfigure *instance;
 
     //Values:
     QTextOption::WrapMode wrapMode;

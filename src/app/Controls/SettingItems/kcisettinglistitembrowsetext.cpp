@@ -113,8 +113,8 @@ void kciSettingListItemBrowseText::getFolderPath()
     if(folderMode)
     {
         newPath=QFileDialog::getExistingDirectory(this,
-                                                  tr("Browse"),
-                                                  ".");
+                tr("Browse"),
+                ".");
     }
     else
     {

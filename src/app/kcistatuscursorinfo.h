@@ -34,7 +34,7 @@ public:
     void ShowGotoBox(int currentValue, int MaxValue);
     void HideGotoBox();
     bool getGotoShowed();
-    
+
 signals:
     void ToLineNum(int LineNum);
 

@@ -32,15 +32,15 @@ class textCharFormatMap : public QObject
 public:
     explicit textCharFormatMap(QObject *parent = 0);
 
-    static textCharFormatMap* getInstance();
-    const QTextCharFormat& getTextCharFormat(const QString& typeName);
+    static textCharFormatMap *getInstance();
+    const QTextCharFormat &getTextCharFormat(const QString &typeName);
 
 private:
-    static textCharFormatMap* instance;
+    static textCharFormatMap *instance;
     QMap<QString, QTextCharFormat> map;
 
     bool parseStyleFileLine(char *str_line);
-    
+
 };
 
 #endif // TEXTCHARFORMATMAP_H

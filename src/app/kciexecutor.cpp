@@ -52,8 +52,8 @@ Terminal kciRunner::getDefaultTerminal()
     QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
     settings.beginGroup("DefaultTerminal");
     Terminal ret(
-                settings.value("name", knownTerminals[0].terminal_name).toByteArray().constData(),
-            settings.value("arg",knownTerminals[0].arg).toByteArray().constData());
+        settings.value("name", knownTerminals[0].terminal_name).toByteArray().constData(),
+        settings.value("arg",knownTerminals[0].arg).toByteArray().constData());
     settings.endGroup();
 
     return ret;
@@ -62,12 +62,14 @@ Terminal kciRunner::getDefaultTerminal()
 QStringList kciExecutor::getSupportTerminalList()
 {
     QStringList ret;
-    for(int i=0;i<terminalCount;i++)
+    for(int i=0; i<terminalCount; i++)
+    {
         ret<<knownTerminals[i].terminal_name;
+    }
     return ret;
 }
 
-void kciExecutor::setDefaultTerminal(const int& num)
+void kciExecutor::setDefaultTerminal(const int &num)
 {
     if(Q_LIKELY(num<terminalCount))
     {
@@ -88,7 +90,9 @@ kciRunner::kciRunner(QObject *parent):
 kciRunner::~kciRunner()
 {
     if(process==NULL)
+    {
         return ;
+    }
 
     if(process->state() != QProcess::NotRunning)
     {
@@ -99,44 +103,47 @@ kciRunner::~kciRunner()
 
 void kciRunner::run()
 {
-        process=new QProcess;
-        process->setReadChannelMode(QProcess::MergedChannels);
-        if(enabledBackExec)
-        {
-            connect(process,SIGNAL(readyRead()),
-                    this,SLOT(onReadyRead()));
-            process->start(path);
-        }
-        else
-        {
-            QStringList arg;
-            QFileInfo info(path);
+    process=new QProcess;
+    process->setReadChannelMode(QProcess::MergedChannels);
+    if(enabledBackExec)
+    {
+        connect(process,SIGNAL(readyRead()),
+                this,SLOT(onReadyRead()));
+        process->start(path);
+    }
+    else
+    {
+        QStringList arg;
+        QFileInfo info(path);
 
-            process->setWorkingDirectory(info.absoluteDir().absolutePath());
+        process->setWorkingDirectory(info.absoluteDir().absolutePath());
+
 #ifdef Q_OS_MACX
-            arg
+        arg
 #else
-            Terminal terminal=getDefaultTerminal();
-            arg<<terminal.arg
+        Terminal terminal=getDefaultTerminal();
+        arg<<terminal.arg
 #endif
 #ifdef Q_OS_WIN32
-               <<"start"
+        <<"start"
 #endif
-               <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
+        <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
 
-            connect(process,SIGNAL(finished(int)),
-                    this,SLOT(quit()));
-            connect(this,SIGNAL(finished()),
-                    this,SLOT(deleteLater()));
+        connect(process,SIGNAL(finished(int)),
+                this,SLOT(quit()));
+        connect(this,SIGNAL(finished()),
+                this,SLOT(deleteLater()));
 #ifdef Q_OS_MACX
-            process->start(qApp->applicationDirPath() + "/openTerminal.command",arg);
+        process->start(qApp->applicationDirPath() + "/openTerminal.command",arg);
 #else
-            process->start(QLatin1String(terminal.terminal_name),arg);
+        process->start(QLatin1String(terminal.terminal_name),arg);
 #endif
-        }
+    }
 
-        if(enabledAutoInput)
-            process->write(m_input);
+    if(enabledAutoInput)
+    {
+        process->write(m_input);
+    }
 
     exec();
 }
@@ -198,7 +205,7 @@ void kciRunner::setPath(const QString &value)
     path = value;
 }
 
-kciExecutor* kciExecutor::instance=NULL;
+kciExecutor *kciExecutor::instance=NULL;
 
 kciExecutor::kciExecutor(QObject *parent) :
     QObject(parent)
@@ -217,7 +224,7 @@ kciExecutor::~kciExecutor()
 
 void kciExecutor::exec(const QString &programPath)
 {
-    kciRunner* runner=new kciRunner;
+    kciRunner *runner=new kciRunner;
 #ifdef Q_OS_WIN32
     QString winPath;
     winPath=programPath;
@@ -231,7 +238,7 @@ void kciExecutor::exec(const QString &programPath)
     runner->start();
 }
 
-kciExecutor* kciExecutor::getInstance()
+kciExecutor *kciExecutor::getInstance()
 {
     if(instance==NULL)
     {

@@ -46,7 +46,7 @@ public:
     void setCompileFilePath(QString FilePath);
     QString CompileFilePath();
 
-    void setReceiver(const compileOutputReceiver* currReceiver);
+    void setReceiver(const compileOutputReceiver *currReceiver);
 
 private:
     QWidget *objCombine;
@@ -62,7 +62,7 @@ signals:
     void requireOpenErrFile(QString filePath);
     void requireGotoLine(int nLineNum, int nColNum);
     void requireSetFocus();
-    
+
 public slots:
     //Show & Hide Error Animation.
     void animeShowError();

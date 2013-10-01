@@ -1,8 +1,8 @@
 #include "kcidebuggerconfigure.h"
 
-kciDebuggerConfigure* kciDebuggerConfigure::instance=nullptr;
+kciDebuggerConfigure *kciDebuggerConfigure::instance=nullptr;
 
-kciDebuggerConfigure* kciDebuggerConfigure::getInstance()
+kciDebuggerConfigure *kciDebuggerConfigure::getInstance()
 {
     return instance==nullptr?instance=new kciDebuggerConfigure:instance;
 }

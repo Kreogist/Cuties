@@ -19,7 +19,7 @@
 
 #include "kciclipboard.h"
 
-kciClipboard* kciClipboard::instance=nullptr;
+kciClipboard *kciClipboard::instance=nullptr;
 
 kciClipboard::kciClipboard()
 {
@@ -33,18 +33,18 @@ kciClipboard::kciClipboard()
             this,&kciClipboard::onSystemClipboardChanged);
 }
 
-kciClipboard* kciClipboard::getInstance()
+kciClipboard *kciClipboard::getInstance()
 {
     return instance==nullptr?
-                (instance=new kciClipboard):
-                instance;
+           (instance=new kciClipboard):
+           instance;
 }
 
 void kciClipboard::onSystemClipboardChanged()
 {
     if(!ignoreSignal)
     {
-        QClipboard* _clipboard=qApp->clipboard();
+        QClipboard *_clipboard=qApp->clipboard();
         QString _text=_clipboard->text();
         QString _caption;
         int firstNextLineChar=_text.indexOf("\n");

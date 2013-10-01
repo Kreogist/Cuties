@@ -20,7 +20,7 @@
 #include "kcidragproxy.h"
 
 kciDragProxy::kciDragProxy(QWidget *parent)
-    : QObject((QObject*)parent)
+    : QObject((QObject *)parent)
 {
     m_proxyWidget = parent;
     m_top = m_right = m_bottom = m_left = 0;
@@ -55,7 +55,7 @@ void kciDragProxy::updateGeometry(int x, int y, int w, int h)
     maxWidth = m_proxyWidget->maximumWidth();
     maxHeight = m_proxyWidget->maximumHeight();
 
-    if (w < minWidth || w > maxWidth || h < minHeight || h > maxHeight)
+    if(w < minWidth || w > maxWidth || h < minHeight || h > maxHeight)
     {
         return;
     }
@@ -63,20 +63,20 @@ void kciDragProxy::updateGeometry(int x, int y, int w, int h)
     m_proxyWidget->setGeometry(x, y, w, h);
 }
 
-bool kciDragProxy::eventFilter(QObject* obj, QEvent* event)
+bool kciDragProxy::eventFilter(QObject *obj, QEvent *event)
 {
     QEvent::Type eventType = event->type();
-    if (eventType==QEvent::HoverMove)
+    if(eventType==QEvent::HoverMove)
     {
-        QMouseEvent* mouseEvent = (QMouseEvent*)event;
+        QMouseEvent *mouseEvent = (QMouseEvent *)event;
         QPoint curPosLocal = mouseEvent->pos();
         kciDragProxy::WidgetRegion regionType = HitTest(curPosLocal);
 
         QPoint curPosGlobal = m_proxyWidget->mapToGlobal(curPosLocal);
 
-        if (!m_mousePressed)
+        if(!m_mousePressed)
         {
-            switch (regionType)
+            switch(regionType)
             {
             case Bottom:
                 m_proxyWidget->setCursor(Qt::SizeVerCursor);
@@ -100,37 +100,37 @@ bool kciDragProxy::eventFilter(QObject* obj, QEvent* event)
         }
         else
         {
-            if (m_regionPressed == Right)
+            if(m_regionPressed == Right)
             {
                 dX = curPosGlobal.x() - m_originPosGlobal.x();
                 updateGeometry(m_originGeo.x(), m_originGeo.y(), m_originGeo.width() + dX, m_originGeo.height());
             }
-            else if (m_regionPressed == RightBottom)
+            else if(m_regionPressed == RightBottom)
             {
                 dXY = curPosGlobal - m_originPosGlobal;
                 updateGeometry(m_originGeo.x(), m_originGeo.y(), m_originGeo.width() + dXY.x(), m_originGeo.height() + dXY.y());
             }
-            else if (m_regionPressed == Bottom)
+            else if(m_regionPressed == Bottom)
             {
                 dY = curPosGlobal.y() - m_originPosGlobal.y();
                 updateGeometry(m_originGeo.x(), m_originGeo.y(), m_originGeo.width(), m_originGeo.height() + dY);
             }
-            else if (m_regionPressed == LeftBottom)
+            else if(m_regionPressed == LeftBottom)
             {
                 dXY = curPosGlobal - m_originPosGlobal;
                 updateGeometry(m_originGeo.x() + dXY.x(), m_originGeo.y(), m_originGeo.width() - dXY.x(), m_originGeo.height() + dXY.y());
             }
-            else if (m_regionPressed == Left)
+            else if(m_regionPressed == Left)
             {
                 dX = curPosGlobal.x() - m_originPosGlobal.x();
                 updateGeometry(m_originGeo.x() + dX, m_originGeo.y(), m_originGeo.width() - dX, m_originGeo.height());
             }
         }
     }
-    else if (eventType == QEvent::MouseButtonPress)
+    else if(eventType == QEvent::MouseButtonPress)
     {
-        QMouseEvent* mouseEvent = (QMouseEvent*)event;
-        if (mouseEvent->button() == Qt::LeftButton)
+        QMouseEvent *mouseEvent = (QMouseEvent *)event;
+        if(mouseEvent->button() == Qt::LeftButton)
         {
             m_mousePressed = true;
 
@@ -143,28 +143,28 @@ bool kciDragProxy::eventFilter(QObject* obj, QEvent* event)
             stopCursorTimer();
         }
     }
-    else if (eventType == QEvent::MouseButtonRelease)
+    else if(eventType == QEvent::MouseButtonRelease)
     {
         m_mousePressed = false;
         m_regionPressed = Unknown;
 
         m_proxyWidget->setCursor(Qt::ArrowCursor);
     }
-    else if (eventType == QEvent::Resize)
+    else if(eventType == QEvent::Resize)
     {
         MakeRegions();
     }
-    else if (eventType == QEvent::Leave)
+    else if(eventType == QEvent::Leave)
     {
         m_proxyWidget->setCursor(Qt::ArrowCursor);
         stopCursorTimer();
     }
-    else if (eventType == QEvent::Timer)
+    else if(eventType == QEvent::Timer)
     {
-        QTimerEvent* timerEvent = (QTimerEvent*)event;
-        if (timerEvent->timerId() == m_cursorTimerId)
+        QTimerEvent *timerEvent = (QTimerEvent *)event;
+        if(timerEvent->timerId() == m_cursorTimerId)
         {
-            if (m_regions[Inner].contains(m_proxyWidget->mapFromGlobal(QCursor::pos())))
+            if(m_regions[Inner].contains(m_proxyWidget->mapFromGlobal(QCursor::pos())))
             {
                 m_proxyWidget->setCursor(Qt::ArrowCursor);
                 stopCursorTimer();
@@ -183,7 +183,7 @@ void kciDragProxy::startCursorTimer()
 
 void kciDragProxy::stopCursorTimer()
 {
-    if (m_cursorTimerId != 0)
+    if(m_cursorTimerId != 0)
     {
         m_proxyWidget->killTimer(m_cursorTimerId);
         m_cursorTimerId = 0;
@@ -203,12 +203,12 @@ void kciDragProxy::MakeRegions()
     m_regions[Inner]        = QRect(m_left, m_top, regWidth - m_left - m_right, regHeight - m_top - m_bottom);
 }
 
-kciDragProxy::WidgetRegion kciDragProxy::HitTest(const QPoint& pos)
+kciDragProxy::WidgetRegion kciDragProxy::HitTest(const QPoint &pos)
 {
-    for (int i = Right; i < Unknown; i++)
+    for(int i = Right; i < Unknown; i++)
     {
         const QRect rect = m_regions[i];
-        if (rect.contains(pos))
+        if(rect.contains(pos))
         {
             return kciDragProxy::WidgetRegion(i);
         }

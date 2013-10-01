@@ -20,7 +20,7 @@ KCIReplaceDock::KCIReplaceDock(QWidget *parent) :
 
     mapper=new QSignalMapper(this);
 
-    mainLayout=(QGridLayout*)layout();
+    mainLayout=(QGridLayout *)layout();
     mainLayout->setVerticalSpacing(3);
 
     replaceText=new QLineEdit(this);
@@ -47,7 +47,7 @@ KCIReplaceDock::KCIReplaceDock(QWidget *parent) :
     replaceButtons[replaceAll]->setFixedHeight(replaceWidgetsHeight);
     mainLayout->addWidget(replaceButtons[replaceAll],1,KCISearchWidget::searchTextPartWidth+4,1,2);
 
-    for(int i=0;i<typeCount;i++)
+    for(int i=0; i<typeCount; i++)
     {
         mapper->setMapping(replaceButtons[i],i);
         connect(replaceButtons[i],SIGNAL(clicked()),mapper,SLOT(map()));

@@ -12,7 +12,7 @@ class kciCompilerConfigure : public kciConfigure
 public:
     void readConfigure();
     void writeConfigure();
-    static kciCompilerConfigure* getInstance();
+    static kciCompilerConfigure *getInstance();
 
     QString getGccPath() const;
     void setGccPath(const QString &value);
@@ -23,7 +23,7 @@ public:
 
 private:
     kciCompilerConfigure();
-    static kciCompilerConfigure* instance;
+    static kciCompilerConfigure *instance;
 
     QString gccPath, gppPath, fpcPath;
 };

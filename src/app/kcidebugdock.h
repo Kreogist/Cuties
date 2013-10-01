@@ -69,11 +69,11 @@ class KCIDebugDock : public QDockWidget
 public:
     explicit KCIDebugDock(QWidget *parent = 0);
     void setDbgReceiver(dbgOutputReceiver *receiver);
-    void setGdbInstance(gdb* instance);
+    void setGdbInstance(gdb *instance);
 
 signals:
     void requireStartDebug();
-    
+
 public slots:
 
 

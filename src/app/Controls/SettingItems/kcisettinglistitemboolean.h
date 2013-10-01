@@ -31,16 +31,16 @@ class kciSettingListItemBoolean : public kciSettingListItemBase
     Q_OBJECT
 public:
     explicit kciSettingListItemBoolean(QWidget *parent = 0);
-    void setEnabledText(const QString& Text);
+    void setEnabledText(const QString &Text);
     QString getEnabledText();
-    void setDisabledText(const QString& Text);
+    void setDisabledText(const QString &Text);
     QString getDisabledText();
     void setValue(bool NewValue);
     void setTheValue(bool NewValue);
     bool getValue();
 
 signals:
-    
+
 public slots:
 
 private slots:

@@ -26,7 +26,7 @@ KCIDebugDock::KCIDebugDock(QWidget *parent) :
 kciDebugWidget::kciDebugWidget(QWidget *parent) :
     QWidget(parent)
 {   
-    m_parent=qobject_cast<KCIDebugDock*>(parent);
+    m_parent=qobject_cast<KCIDebugDock *>(parent);
     setContentsMargins(0,0,0,0);
 
     //Main Layout.

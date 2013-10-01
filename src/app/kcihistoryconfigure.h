@@ -36,7 +36,7 @@ class kciHistoryConfigure : public kciConfigure
     Q_OBJECT
 
 public:
-    static kciHistoryConfigure* getInstance();
+    static kciHistoryConfigure *getInstance();
 
     void readConfigure();
     void writeConfigure();
@@ -48,17 +48,17 @@ public:
     void setTrackUserHistoryEnabled(bool enabled);
     bool isTrackUserHistoryEnabled() const;
 
-    void setHistoryDir(const QString& dirPath);
+    void setHistoryDir(const QString &dirPath);
     QString getHistoryDir() const;
 
     void clearAllUnClosedFilePaths();
     QStringList getAllUnClosedFilePaths() const;
-    void addUnClosedFilePath(const QString& path, const int &HValue, const int &VValue);
+    void addUnClosedFilePath(const QString &path, const int &HValue, const int &VValue);
 
     int getMaxRecentFilesSize() const;
     void setMaxRecentFilesSize(int value);
     void clearAllRecentFilesRecord();
-    void addRecentFileRecord(const QString& path);
+    void addRecentFileRecord(const QString &path);
     QStringList getAllRecentOpenedFilesRecord() const;
 
     QList<int> getAllUnClosedFileVs() const;
@@ -86,7 +86,7 @@ private:
     bool trackUserHistory;
     bool cleanMark;
     QStringList unClosedFilePaths;
-    static kciHistoryConfigure* instance;
+    static kciHistoryConfigure *instance;
 
     QList<int> unClosedFileV;
     QList<int> unClosedFileH;

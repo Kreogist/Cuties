@@ -15,7 +15,7 @@ public:
 
 signals:
     void buttonPressed();
-    
+
 protected:
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);

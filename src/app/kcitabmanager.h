@@ -48,7 +48,7 @@ public:
     int getCurrentLineNum() const;
     void openHistoryFiles();
 
-    KCICodeEditor* getCurrentEditor() const;
+    KCICodeEditor *getCurrentEditor() const;
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -58,8 +58,8 @@ signals:
     void tabClear();
 
 public slots:
-    void openAndJumpTo(const QString& filePath);
-    int open(const QString& filePath);
+    void openAndJumpTo(const QString &filePath);
+    int open(const QString &filePath);
     void open();
     void new_file();
     void save();

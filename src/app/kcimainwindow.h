@@ -43,11 +43,11 @@ public:
     void setTitleBar(KCITitleBar *titleBar);
 #ifndef Q_OS_MACX
     void setMenu(QMenu *menu);
-    void setMainButtonIcon(const QString& mainIcon);
+    void setMainButtonIcon(const QString &mainIcon);
 #endif
 
 signals:
-    
+
 public slots:
 
 private:

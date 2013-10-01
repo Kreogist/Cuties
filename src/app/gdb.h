@@ -53,13 +53,13 @@ class gdb : public QProcess
 public:
     explicit gdb(QObject *parent = 0);
 
-    static void setGDBPath(const QString& path);
+    static void setGDBPath(const QString &path);
     static bool checkGDB();
     static void isGDBPathRight();
 
-    bool runGDB(const QString& filePath);
+    bool runGDB(const QString &filePath);
     void quitGDB();
-    
+
     const QVector<bkpt_struct>* getBkptVec() const;
 
 signals:
@@ -86,20 +86,20 @@ signals:
     void locals(GdbMiValue locals);
 
     void exprValue(QString value);
-    
+
 public slots:
     void readGdbStandardError();
     void readGdbStandardOutput();
 
     //breakpoint
-    void setBreakPoint(const QString& fileName,
+    void setBreakPoint(const QString &fileName,
                        const int &lineNum,
                        const int &count);
-    void setBreakPoint(const QString& functionName);
-    void setBreakCondition(const int &number, const QString& expr);
+    void setBreakPoint(const QString &functionName);
+    void setBreakCondition(const int &number, const QString &expr);
 
     //watchpoint
-    void setWatchPoint(const QString& var);
+    void setWatchPoint(const QString &var);
 
     //Program Control
     void execRun();
@@ -109,18 +109,18 @@ public slots:
     void execNext();
     void execReturn();
     void execStepi();
-    void execUntil(const QString& location);
+    void execUntil(const QString &location);
 
     //Stack Manipulation
     void stackListLocals();
 
     //Data Evaluate
-    void evaluate(const QString& expr);
+    void evaluate(const QString &expr);
 
 private:
-    void parseBkpt(const GdbMiValue& gmvBkpt);
-    QString parseOutputStream(const QChar* begin,const QChar* end);
-    void parseLine(const QString& _msg);
+    void parseBkpt(const GdbMiValue &gmvBkpt);
+    QString parseOutputStream(const QChar *begin,const QChar *end);
+    void parseLine(const QString &_msg);
 
     static QString gdbPath;
     static bool checkResult;

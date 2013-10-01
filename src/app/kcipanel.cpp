@@ -43,7 +43,9 @@ void kciPanel::setAutoAdaptWidth(bool newValue)
 void kciPanel::setKciTextEditor(KCITextEditor *editor)
 {
     if(editor==NULL)
+    {
         return ;
+    }
 
     if(e!=NULL)
     {
@@ -61,10 +63,10 @@ void kciPanel::setKciTextEditor(KCITextEditor *editor)
                                    SLOT(update()));
 }
 
-int kciPanel::getRealLineCount(const QTextBlock &block, const int& offset)
+int kciPanel::getRealLineCount(const QTextBlock &block, const int &offset)
 {
     return block.blockNumber() == first ?
-                offset:block.lineCount();
+           offset:block.lineCount();
 }
 
 void kciPanel::paintEvent(QPaintEvent *event)
@@ -113,17 +115,19 @@ void kciPanel::paintEvent(QPaintEvent *event)
 
     //find first visiable block
     int line_count;
-    for(line_count=0;block.isValid();
+    for(line_count=0; block.isValid();
         block=block.next())
     {
         line_count+=block.lineCount();
         if(line_count>top)
+        {
             break;
+        }
     }
 
     first=block.blockNumber();
 
-    for(;bottom>=0 && block.isValid();
+    for(; bottom>=0 && block.isValid();
         block=block.next())
     {
         /*If block is the first block, the real line count is (line_count-top).

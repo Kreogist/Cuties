@@ -38,7 +38,7 @@ KCISearchWindow::KCISearchWindow(QWidget *parent) :
     wndShadow->setOffset(0);
     setGraphicsEffect(wndShadow);
 
-    QGridLayout* searchLayout=(QGridLayout*)layout();
+    QGridLayout *searchLayout=(QGridLayout *)layout();
 
     //Set Close Button
     closeButton=new QToolButton(this);

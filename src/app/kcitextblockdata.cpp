@@ -51,15 +51,17 @@ void kciTextBlockData::setSearchCode(const unsigned long long &searchCode)
     this->searchCode=searchCode;
 }
 
-void kciTextBlockData::insertMatchedTextPositions(const int& pos,
-                                                  const int &matchedLen)
+void kciTextBlockData::insertMatchedTextPositions(const int &pos,
+        const int &matchedLen)
 {
     auto i=matchedTextPositions.begin(),
          l=matchedTextPositions.end();
     while(i<l)
     {
         if(i->pos<=pos && pos <= (i+1)->pos)
+        {
             break;
+        }
 
         i++;
     }
@@ -101,14 +103,16 @@ void kciTextBlockData::resetParentheseInfos()
 }
 
 void kciTextBlockData::insertParenthesesInfo(const int &pos,
-                                             const char &character)
+        const char &character)
 {
     auto i=parenthesesInfos.begin(),
          l=parenthesesInfos.end();
     while(i<l)
     {
         if(i->pos > pos)
+        {
             break;
+        }
         i++;
     }
 

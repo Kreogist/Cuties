@@ -129,7 +129,7 @@ void KCIJudgeEditWidget::importTestData()
 
 void KCIJudgeEditWidget::documentChanged()
 {
-    kciJudgeFileEdit* Editor=qobject_cast<kciJudgeFileEdit*>(sender());
+    kciJudgeFileEdit *Editor=qobject_cast<kciJudgeFileEdit *>(sender());
     if(Editor!=NULL)
     {
         int nFilesIndex=tabJudgeFiles->indexOf(Editor);
@@ -164,7 +164,7 @@ void KCIJudgeEditWidget::removeTabIndex(int TabIndex)
     strOutputFiles.removeAt(TabIndex);
     //Reset Tab Num.
     int tabMax=tabJudgeFiles->count();
-    for(int i=TabIndex;i<tabMax;i++)
+    for(int i=TabIndex; i<tabMax; i++)
     {
         tabJudgeFiles->setTabText(i,QString::number(i+1));
     }

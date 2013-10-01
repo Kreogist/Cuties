@@ -32,14 +32,14 @@ class dbgOutputReceiver : public QObject
     Q_OBJECT
 public:
     explicit dbgOutputReceiver(QObject *parent = 0);
-    
+
     QStandardItemModel *getStackInfoModel() const;
     QStandardItemModel *getLocalVarModel() const;
     QStandardItemModel *getWatchModel() const;
     QTextDocument *getTextStreamOutput() const;
 
 signals:
-    
+
 public slots:
     void receiveconsoleOutput(QString text);
     void receivetargetOutput(QString text);
@@ -47,10 +47,10 @@ public slots:
     void receiveError(QString text);
     void receiveLocals(GdbMiValue localVars);
     void receiveExprValue(QString value);
-    void addText(const QString& text);
+    void addText(const QString &text);
 
 private:
-    void insertText(const QString& text,const QTextCharFormat &charFormat);
+    void insertText(const QString &text,const QTextCharFormat &charFormat);
 
     QStandardItemModel *stackInfoModel;
     QStandardItemModel *localVarModel;

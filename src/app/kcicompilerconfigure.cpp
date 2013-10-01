@@ -1,14 +1,14 @@
 #include "kcicompilerconfigure.h"
 
-kciCompilerConfigure* kciCompilerConfigure::instance=nullptr;
+kciCompilerConfigure *kciCompilerConfigure::instance=nullptr;
 
-kciCompilerConfigure* kciCompilerConfigure::getInstance()
+kciCompilerConfigure *kciCompilerConfigure::getInstance()
 {
     return instance==nullptr?instance=new kciCompilerConfigure:instance;
 }
 
 kciCompilerConfigure::kciCompilerConfigure()
-{   
+{
 #ifdef Q_OS_UNIX
     gccPath="/usr/bin/gcc";
     gppPath="/usr/bin/g++";

@@ -89,7 +89,7 @@ public:
     explicit KCIJudgeDock(QWidget *parent = 0);
     
 signals:
-    
+
 public slots:
 
 private:

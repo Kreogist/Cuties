@@ -213,7 +213,7 @@ public:
 
 private:
     QVBoxLayout *MainLayout;
-    QList<kciSettingListItemLanguageItem*> languageItem;
+    QList<kciSettingListItemLanguageItem *> languageItem;
 };
 
 //-------------------Container--------------------
@@ -241,8 +241,8 @@ class kciControlCenterContents : public QWidget
     Q_OBJECT
 public:
     explicit kciControlCenterContents(QWidget *parent = 0);
-    QWidget *getCCTab(const int& index);
-    kciAbstractCCTabContent* getContentWidgets(const int& index);
+    QWidget *getCCTab(const int &index);
+    kciAbstractCCTabContent *getContentWidgets(const int &index);
 
 public slots:
     void animeToIndex(QWidget *Index);
@@ -263,9 +263,9 @@ class kciControlCenter : public QDialog
     Q_OBJECT
 public:
     explicit kciControlCenter(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
     void onApply();
     void onYes();

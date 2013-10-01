@@ -62,9 +62,9 @@ class MainWindow : public KCIMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
     void show();
     void aboutQt();

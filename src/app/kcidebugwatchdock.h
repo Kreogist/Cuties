@@ -33,7 +33,7 @@ public:
     explicit KCIDebugWatchDock(QWidget *parent = 0);
     
 signals:
-    
+
 public slots:
 
 private:

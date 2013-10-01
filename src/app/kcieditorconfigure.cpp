@@ -19,7 +19,7 @@
 
 #include "kcieditorconfigure.h"
 
-kciEditorConfigure* kciEditorConfigure::instance=nullptr;
+kciEditorConfigure *kciEditorConfigure::instance=nullptr;
 
 kciEditorConfigure::kciEditorConfigure()
 {
@@ -32,7 +32,7 @@ kciEditorConfigure::kciEditorConfigure()
     tabCloseable=true;
 }
 
-kciEditorConfigure* kciEditorConfigure::getInstance()
+kciEditorConfigure *kciEditorConfigure::getInstance()
 {
     return instance==nullptr?instance=new kciEditorConfigure:instance;
 }
