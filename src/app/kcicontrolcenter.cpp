@@ -101,7 +101,7 @@ kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
     lstSelect=cclstGerneral;
 
     lstMapper=new QSignalMapper(this);
-    for(int i=cclstGerneral;i<cclist_count;i++)
+    for(int i=cclstGerneral; i<cclist_count; i++)
     {
         lsbLeftButtons[i]=new kciListButton(this);
         lsbLeftButtons[i]->setLabelText(strLabelTexts[i]);
@@ -125,7 +125,7 @@ kciControlCenterLeftBar::kciControlCenterLeftBar(QWidget *parent) :
     WholeAnimeGroup=new QSequentialAnimationGroup(this);
 }
 
-void kciControlCenterLeftBar::connectLeftAndRight(const int& lstButtonID, QWidget *userInterface)
+void kciControlCenterLeftBar::connectLeftAndRight(const int &lstButtonID, QWidget *userInterface)
 {
     lsbLeftButtons[lstButtonID]->setUserInterfaceWidget(userInterface);
 }
@@ -402,7 +402,7 @@ kciCCTabEditorContent::kciCCTabEditorContent(QWidget *parent) :
 
 void kciCCTabEditorContent::apply()
 {
-    kciEditorConfigure* instance=kciEditorConfigure::getInstance();
+    kciEditorConfigure *instance=kciEditorConfigure::getInstance();
     instance->setTabWidth(tabSpaceNum->getValue());
     instance->setCursorWidth(cursorWidth->getValue());
     switch(wrapMode->getValue())
@@ -453,7 +453,7 @@ kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
     MainLayout->addSpacing(5);
     MainLayout->addWidget(tblCompilerPath);
 
-    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+    kciCompilerConfigure *instance=kciCompilerConfigure::getInstance();
 
     txeGppCompilerPath=new kciSettingListItemBrowseText(this);
     txeGppCompilerPath->Caption->setText(tr("G++ Compiler Path:"));
@@ -473,7 +473,7 @@ kciCCTabCompilerContent::kciCCTabCompilerContent(QWidget *parent) :
 
 void kciCCTabCompilerContent::apply()
 {
-    kciCompilerConfigure* instance=kciCompilerConfigure::getInstance();
+    kciCompilerConfigure *instance=kciCompilerConfigure::getInstance();
     instance->setGccPath(txeGccCompilerPath->getValue());
     instance->setGppPath(txeGppCompilerPath->getValue());
     instance->setFpcPath(txeFpcCompilerPath->getValue());
@@ -537,11 +537,11 @@ kciCCTabLanguageContent::kciCCTabLanguageContent(QWidget *parent) :
     MainLayout->setSpacing(0);
     setLayout(MainLayout);
 
-    kciLanguageConfigure* instance=kciLanguageConfigure::getInstance();
+    kciLanguageConfigure *instance=kciLanguageConfigure::getInstance();
     int languageNum=instance->getLanguageList().count(),i;
-    for(i=0;i<languageNum;i++)
+    for(i=0; i<languageNum; i++)
     {
-        kciSettingListItemLanguageItem* lanItem=new kciSettingListItemLanguageItem(this);
+        kciSettingListItemLanguageItem *lanItem=new kciSettingListItemLanguageItem(this);
         lanItem->setLanguageName(instance->getLanguageNameList().at(i));
         languageItem.append(lanItem);
         MainLayout->addWidget(languageItem.at(i));
@@ -609,12 +609,12 @@ kciControlCenterContents::kciControlCenterContents(QWidget *parent) :
     contentIndex=ccTab[cclstGerneral];
 }
 
-QWidget *kciControlCenterContents::getCCTab(const int& index)
+QWidget *kciControlCenterContents::getCCTab(const int &index)
 {
     return ccTab[index];
 }
 
-kciAbstractCCTabContent* kciControlCenterContents::getContentWidgets(const int& index)
+kciAbstractCCTabContent *kciControlCenterContents::getContentWidgets(const int &index)
 {
     return contentWidgets[index];
 }
@@ -671,10 +671,10 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
     //This widget ONLY use to get size, no use.
     CCMainContents=new kciControlCenterContents(this);
     ContentLayout->addWidget(CCMainContents);
-    connect(ccLeftBar,SIGNAL(NowSelectChanged(QWidget*)),
-            CCMainContents,SLOT(animeToIndex(QWidget*)));
+    connect(ccLeftBar,SIGNAL(NowSelectChanged(QWidget *)),
+            CCMainContents,SLOT(animeToIndex(QWidget *)));
 
-    for(int i=cclstGerneral; i<cclist_count;i++)
+    for(int i=cclstGerneral; i<cclist_count; i++)
     {
         ccLeftBar->connectLeftAndRight(i, CCMainContents->getCCTab(i));
     }
@@ -723,7 +723,7 @@ kciControlCenter::kciControlCenter(QWidget *parent) :
 
 void kciControlCenter::onApply()
 {
-    for(int i=cclstGerneral; i<cclist_count;i++)
+    for(int i=cclstGerneral; i<cclist_count; i++)
     {
         CCMainContents->getContentWidgets(i)->apply();
     }

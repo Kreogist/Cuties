@@ -31,12 +31,12 @@ class kciMarkPanel : public kciPanel
     Q_OBJECT
 public:
     explicit kciMarkPanel(QWidget *parent = 0);
-    
+
     QPixmap getMarkPix() const;
     void setMarkPix(const QPixmap &value);
 
 signals:
-    
+
 public slots:
 
 protected:
@@ -52,7 +52,10 @@ private:
     {
         QRect rect;
         bool marked;
-        markUnit(){marked=false;}
+        markUnit()
+        {
+            marked=false;
+        }
     };
 
     QVector<markUnit> vecMark;

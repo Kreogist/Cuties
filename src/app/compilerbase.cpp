@@ -25,7 +25,7 @@ compilerBase::compilerBase(QObject *parent) :
 }
 
 void compilerBase::emitCompileCmd(const QString &compilerPath,
-                                   const QStringList &arg)
+                                  const QStringList &arg)
 {
     QString CompileCmdLine;
     CompileCmdLine=compilerPath;
@@ -75,12 +75,14 @@ void compilerBase::startCompile(const QString &filePath)
 
     QStringList env=getcompileEnv();
     if(!env.isEmpty())
+    {
         compiler->setEnvironment(env);
+    }
 
     compiler->start(compilerPath,arg);
 }
 
-bool compilerBase::checkCompilerPath(const QString& path)
+bool compilerBase::checkCompilerPath(const QString &path)
 {
     QFileInfo _fileInfo(path);
 

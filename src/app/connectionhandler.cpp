@@ -25,13 +25,13 @@ connectionHandler::connectionHandler(QObject *parent) :
 }
 
 void connectionHandler::addConnectionHandle(
-        const QMetaObject::Connection connection)
+    const QMetaObject::Connection connection)
 {
     connections.append(connection);
 }
 
-connectionHandler& connectionHandler::operator += (
-        const QMetaObject::Connection connection)
+connectionHandler &connectionHandler::operator += (
+    const QMetaObject::Connection connection)
 {
     addConnectionHandle(connection);
 

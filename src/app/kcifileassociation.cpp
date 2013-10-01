@@ -1,8 +1,8 @@
 #include "kcifileassociation.h"
 
-kciFileAssociationConfigure* kciFileAssociationConfigure::instance=nullptr;
+kciFileAssociationConfigure *kciFileAssociationConfigure::instance=nullptr;
 
-kciFileAssociationConfigure* kciFileAssociationConfigure::getInstance()
+kciFileAssociationConfigure *kciFileAssociationConfigure::getInstance()
 {
     return instance==nullptr?instance=new kciFileAssociationConfigure:instance;
 }

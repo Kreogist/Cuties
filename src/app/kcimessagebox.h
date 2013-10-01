@@ -47,7 +47,7 @@ class kciMessageBox : public QDialog
 public:
     explicit kciMessageBox(QWidget *parent = 0);
     void startAnime();
-    
+
 signals:
 
 public slots:

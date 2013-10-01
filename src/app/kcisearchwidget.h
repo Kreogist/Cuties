@@ -34,7 +34,7 @@ class kciSearchWidget : public QWidget
 public:
     explicit kciSearchWidget(QWidget *parent);
     void setTextFocus();
-    void setText(const QString& text);
+    void setText(const QString &text);
     QString text() const;
     static const int searchTextPartWidth;
 
@@ -43,9 +43,9 @@ signals:
     void requireShowPreviousResult();
     void requireShowNextResult();
     void requireSearch(QString text,
-                             bool regularExpression,
-                             bool caseSensitively,
-                             bool wholeWorld);
+                       bool regularExpression,
+                       bool caseSensitively,
+                       bool wholeWorld);
 
 public slots:
     void onTextChanged(const QString &text);

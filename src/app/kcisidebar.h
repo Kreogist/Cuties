@@ -149,7 +149,7 @@ public:
     explicit kciSideBar(QWidget *parent = 0);
     void forceClearButtonState();
     void forceShowButtonState();
-    
+
     bool getExpandState() const;
     void setExpandState(bool value);
 

@@ -103,7 +103,7 @@ QString kciCodeEditor::getExecFileName()
     return execFileName;
 }
 
-QTextDocument* kciCodeEditor::document()
+QTextDocument *kciCodeEditor::document()
 {
     return editor->document();
 }
@@ -112,9 +112,9 @@ void kciCodeEditor::computeExecFileName()
 {
     QFileInfo _fileInfo(filePath);
     execFileName=_fileInfo.absolutePath()+QString("/")+_fileInfo.completeBaseName();
-    #ifdef Q_OS_WIN32
-            execFileName+=".exe";
-    #endif
+#ifdef Q_OS_WIN32
+    execFileName+=".exe";
+#endif
 }
 
 void kciCodeEditor::connectSearchWidgetWithEditor(kciSearchWidget *widget)
@@ -372,7 +372,7 @@ void kciCodeEditor::closeEvent(QCloseEvent *e)
 
         int ret=msgbox.exec();
 
-        switch (ret)
+        switch(ret)
         {
         case QMessageBox::Save:
             // Save was clicked
@@ -410,7 +410,7 @@ void kciCodeEditor::closeEvent(QCloseEvent *e)
     return ;
 }
 
-void kciCodeEditor::setDocumentTitle(const QString& title)
+void kciCodeEditor::setDocumentTitle(const QString &title)
 {
     editor->setDocumentTitle(title);
     emit filenameChanged(title);
@@ -496,7 +496,7 @@ int kciCodeEditor::getTextLines()
 
 void kciCodeEditor::setDocumentCursor(int nLine, int linePos)
 {
-     editor->setDocumentCursor(nLine,linePos);
+    editor->setDocumentCursor(nLine,linePos);
 }
 
 void kciCodeEditor::resizeEvent(QResizeEvent *e)

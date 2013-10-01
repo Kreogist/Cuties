@@ -24,7 +24,7 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
 {
     textStreamOutput=new QTextDocument(this);
     textStreamOutput->setDocumentLayout(
-                new QPlainTextDocumentLayout(textStreamOutput));
+        new QPlainTextDocumentLayout(textStreamOutput));
 
     stackInfoModel=new QStandardItemModel(this);
 
@@ -76,9 +76,9 @@ void dbgOutputReceiver::receiveLocals(GdbMiValue localVars)
         QString name=i->at(0).getValue();  //name
         QString value=i->at(1).getValue(); //value
 
-        QStandardItem* varName=new QStandardItem(name);
-        QStandardItem* varValue=new QStandardItem(value);
-        QList<QStandardItem*> localVar;
+        QStandardItem *varName=new QStandardItem(name);
+        QStandardItem *varValue=new QStandardItem(value);
+        QList<QStandardItem *> localVar;
         localVar<<varName<<varValue;
         localVarModel->appendRow(localVar);
     }
@@ -89,13 +89,13 @@ void dbgOutputReceiver::receiveExprValue(QString value)
 
 }
 
-void dbgOutputReceiver::addText(const QString& text)
+void dbgOutputReceiver::addText(const QString &text)
 {
     insertText(text,normalFormat);
 }
 
 void dbgOutputReceiver::insertText(const QString &text,
-                                   const QTextCharFormat& charFormat)
+                                   const QTextCharFormat &charFormat)
 {
     QTextCursor text_cursor=QTextCursor(textStreamOutput);
     text_cursor.movePosition(QTextCursor::End);

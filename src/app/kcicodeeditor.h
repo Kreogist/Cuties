@@ -61,7 +61,7 @@ public:
     ~kciCodeEditor();
 
     QFileDevice::FileError error();
-    void setDocumentTitle(const QString& title);
+    void setDocumentTitle(const QString &title);
     QString getDocumentTitle();
     void setDocumentCursor(int nLine, int linePos);
     void setTextFocus();
@@ -71,7 +71,7 @@ public:
 
     int getTextLines();
     bool isModified();
-    QTextDocument* document();
+    QTextDocument *document();
     kciLanguageMode *langMode() const;
     bool getOverwriteMode();
 
@@ -81,12 +81,12 @@ signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
     void rewriteStateChanged(bool nowValue);
-    
+
 public slots:
-    bool open(const QString& fileName);
+    bool open(const QString &fileName);
     bool save();
     bool saveAs();
-    bool saveAs(const QString& fileName);
+    bool saveAs(const QString &fileName);
     void redo();
     void undo();
     void copy();
@@ -109,8 +109,8 @@ protected:
 
 private:
     void computeExecFileName();
-    void fileInfoChanged(const QFile& file);
-    bool dosaveas(const QString& Caption);
+    void fileInfoChanged(const QFile &file);
+    bool dosaveas(const QString &Caption);
     void connectSearchWidgetWithEditor(kciSearchWidget *widget);
 
     QGraphicsOpacityEffect *initEffect;

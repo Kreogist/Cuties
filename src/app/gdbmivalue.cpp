@@ -21,8 +21,10 @@
 
 static void skipCommas(const QChar *&begin, const QChar *end)
 {
-    while (*begin == ',' && begin != end)
+    while(*begin == ',' && begin != end)
+    {
         ++begin;
+    }
 }
 
 GdbMiValue GdbMiValue::at(const int &i) const
@@ -30,17 +32,19 @@ GdbMiValue GdbMiValue::at(const int &i) const
     return children[i];
 }
 
-GdbMiValue GdbMiValue::operator [] (const char *_str_name) const
+GdbMiValue GdbMiValue::operator [](const char *_str_name) const
 {
     int i=children.size();
     while(i--)
-        if (children[i].name == _str_name)
+        if(children[i].name == _str_name)
+        {
             return children[i];
+        }
 
     return GdbMiValue();
 }
 
-GdbMiValue& GdbMiValue::operator += (const GdbMiValue& child)
+GdbMiValue &GdbMiValue::operator += (const GdbMiValue &child)
 {
     children.append(child);
 
@@ -66,19 +70,23 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
         parseTuple(begin,end);
         break;
     default:
-        for(;begin!=end;begin++)
+        for(; begin!=end; begin++)
         {
             if(*begin!='=')
+            {
                 name+=*begin;
+            }
             else
+            {
                 break;
+            }
         }
 
         if(begin == end || *begin!='=')
         {
             //is a c-string
             begin=name.begin();
-            const QChar* tmpEnd=name.end();
+            const QChar *tmpEnd=name.end();
             parseConst(begin,tmpEnd);
             return ;
         }
@@ -96,8 +104,10 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
             parseTuple(begin,end);
             break;
         default:
-            for(;begin<end;begin++)
-            qDebug()<<*begin;
+            for(; begin<end; begin++)
+            {
+                qDebug()<<*begin;
+            }
             qDebug()<<"error! GdbMiValue:unknow";
         }
     }
@@ -113,15 +123,19 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
     int chars;
     uchar prod;
 
-    for(begin++;begin<end;begin++)
+    for(begin++; begin<end; begin++)
     {
         if(!isEscape && *begin=='\"')
+        {
             break;
+        }
 
         if(!isEscape)
         {
             if(*begin != '\\')
+            {
                 _tmp+=*begin;
+            }
             else
             {
                 isEscape=true;
@@ -174,7 +188,7 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
             default:
             {
 
-                if (c < '0' || c > '7')
+                if(c < '0' || c > '7')
                 {
                     isEscape=false;
                     _tmp += prod;
@@ -182,7 +196,7 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
                     break;
                 }
                 prod = prod * 8 + c - '0';
-                if (++chars == 3 || begin == end)
+                if(++chars == 3 || begin == end)
                 {
                     _tmp += prod;
                     isEscape=false;
@@ -196,7 +210,9 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
     value=QString::fromUtf8(_tmp);
 
     if(begin+1 <end)
+    {
         begin++;    //skip "
+    }
 }
 
 void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
@@ -213,7 +229,9 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
     }
 
     if(begin+1 < end)
+    {
         begin++;    //skip ]
+    }
 }
 
 void GdbMiValue::parseTuple(const QChar* &begin, const QChar* &end)
@@ -232,7 +250,9 @@ void GdbMiValue::parseTuple(const QChar* &begin, const QChar* &end)
     }
 
     if(begin+1 < end)
-        begin++;    //skip }
+    {
+        begin++;
+    }    //skip }
 }
 
 QString GdbMiValue::getValue() const

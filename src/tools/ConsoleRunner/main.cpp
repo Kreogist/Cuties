@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     int l=strlen(argv[1])+2;
 
-    char* program_name=new char[l];
+    char *program_name=new char[l];
     memset(program_name,0,sizeof(char)*l);
     program_name[0]='\"';
     strcat(program_name,argv[1]);
@@ -68,12 +68,12 @@ int main(int argc, char *argv[])
 
     printf("\nPress "
 
-    #ifdef _OS_WIN32_
-            "any key"
-    #else
-            "ENTER"
-    #endif
-            " to continue.\n");
+#ifdef _OS_WIN32_
+           "any key"
+#else
+           "ENTER"
+#endif
+           " to continue.\n");
 
     wait_key();
 

@@ -19,7 +19,7 @@
 
 #include "kcihistoryconfigure.h"
 
-kciHistoryConfigure* kciHistoryConfigure::instance = nullptr;
+kciHistoryConfigure *kciHistoryConfigure::instance = nullptr;
 QString kciHistoryConfigure::historyFileName;
 
 kciHistoryConfigure::kciHistoryConfigure()
@@ -40,11 +40,11 @@ kciHistoryConfigure::kciHistoryConfigure()
     pasFileIcon=QIcon(":/Sidebar/image/Sidebar/source_pas.png");
 }
 
-kciHistoryConfigure* kciHistoryConfigure::getInstance()
+kciHistoryConfigure *kciHistoryConfigure::getInstance()
 {
     return instance==nullptr?
-                instance=new kciHistoryConfigure:
-                instance;
+           instance=new kciHistoryConfigure:
+    instance;
 }
 
 QIcon kciHistoryConfigure::getFileIcon(QString fileExtName)
@@ -78,7 +78,7 @@ void kciHistoryConfigure::readConfigure()
     unClosedCurrent=settings.value("CurrIndex", -1).toInt();
     int unClosedFilePathsSize=settings.beginReadArray("unClosedFilePaths");
 
-    for(int i=0;i<unClosedFilePathsSize;i++)
+    for(int i=0; i<unClosedFilePathsSize; i++)
     {
         settings.setArrayIndex(i);
         unClosedFilePaths.append(settings.value("filePath").toString());
@@ -94,7 +94,7 @@ void kciHistoryConfigure::readConfigure()
     {
         recentOpenedFilesSize=maxRecentFilesSize;
     }
-    for(int i=0;i<recentOpenedFilesSize;i++)
+    for(int i=0; i<recentOpenedFilesSize; i++)
     {
         settings.setArrayIndex(i);
         filePath=settings.value("filePath").toString();
@@ -121,7 +121,9 @@ void kciHistoryConfigure::writeConfigure()
 
     settings.beginGroup("History");
     if(Q_UNLIKELY(cleanMark || !trackUserHistory))
+    {
         settings.remove("");
+    }
     else
     {
         settings.setValue("historyDir",historyDirPath);
@@ -130,13 +132,13 @@ void kciHistoryConfigure::writeConfigure()
 
         int unCloseCount=unClosedFilePaths.size()-1;
         int itemCount;
-        for(int i=0;i<=unCloseCount;i++)
+        for(int i=0; i<=unCloseCount; i++)
         {
-           itemCount=unCloseCount - i;
-           settings.setArrayIndex(i);
-           settings.setValue("filePath",unClosedFilePaths.at(itemCount));
-           settings.setValue("hPosition", unClosedFileH.at(itemCount));
-           settings.setValue("vPosition", unClosedFileV.at(itemCount));
+            itemCount=unCloseCount - i;
+            settings.setArrayIndex(i);
+            settings.setValue("filePath",unClosedFilePaths.at(itemCount));
+            settings.setValue("hPosition", unClosedFileH.at(itemCount));
+            settings.setValue("vPosition", unClosedFileV.at(itemCount));
         }
         settings.endArray();
 
@@ -144,7 +146,7 @@ void kciHistoryConfigure::writeConfigure()
         settings.beginWriteArray("recentOpenedFiles");
 
         int recentOpenedCounts=recentOpenedFileModel->rowCount()-1;
-        for(int i=0; i<=recentOpenedCounts;i++)
+        for(int i=0; i<=recentOpenedCounts; i++)
         {
             settings.setArrayIndex(recentOpenedCounts-i);
             settings.setValue("filePath",recentOpenedFileModel->item(i)->toolTip());

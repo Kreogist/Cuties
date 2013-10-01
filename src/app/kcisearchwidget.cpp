@@ -64,7 +64,7 @@ kciSearchWidget::kciSearchWidget(QWidget *parent) :
     menuAction[menuMatchCase]=menu->addAction(tr("Match Case"));
     menuAction[menuWholeWord]=menu->addAction(tr("Match whole word"));
 
-    for(int i=0;i<menuItemCount;i++)
+    for(int i=0; i<menuItemCount; i++)
     {
         menuAction[i]->setCheckable(true);
         connect(menuAction[i],SIGNAL(triggered()),
@@ -143,7 +143,8 @@ void kciSearchWidget::resizeEvent(QResizeEvent *event)
 
 void kciSearchWidget::keyPressEvent(QKeyEvent *event)
 {
-    switch(event->key()){
+    switch(event->key())
+    {
     case Qt::Key_Escape:
         emit requireHide();
     default:

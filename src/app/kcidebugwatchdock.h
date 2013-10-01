@@ -31,9 +31,9 @@ class kciDebugWatchDock : public QDockWidget
     Q_OBJECT
 public:
     explicit kciDebugWatchDock(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
 
 private:

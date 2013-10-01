@@ -39,25 +39,25 @@ cppHighlighter::cppHighlighter(QObject *parent) :
     hlrKeyWords.type_name="keyword";
     QStringList _keyword;
     _keyword<<"__asm|__cdecl|__declspec|__export|__far16|"
-    <<"__fastcall|__fortran|__import|"
-    <<"__pascal|__rtti|__stdcall|_asm|_cdecl|"
-    <<"__except|_export|_far16|_fastcall|"
-    <<"__finally|_fortran|_import|_stdcall|__thread|__try|asm|auto|"
-    <<"break|case|catch|cdecl|const|continue|default|"
-    <<"do|else|enum|extern|for|goto|"
-    <<"if|register|return|sizeof|static|"
-    <<"struct|switch|"
-    <<"typedef|union|"
-    <<"volatile|while|"
-    <<"class|const_cast|delete|"
-    <<"dynamic_cast|explicit|false|friend|"
-    <<"inline|mutable|namespace|new|operator|private|protected|"
-    <<"public|reinterpret_cast|static_cast|"
-    <<"template|this|throw|true|"
-    <<"try|typeid|typename|"
-    <<"using|virtual";
+            <<"__fastcall|__fortran|__import|"
+            <<"__pascal|__rtti|__stdcall|_asm|_cdecl|"
+            <<"__except|_export|_far16|_fastcall|"
+            <<"__finally|_fortran|_import|_stdcall|__thread|__try|asm|auto|"
+            <<"break|case|catch|cdecl|const|continue|default|"
+            <<"do|else|enum|extern|for|goto|"
+            <<"if|register|return|sizeof|static|"
+            <<"struct|switch|"
+            <<"typedef|union|"
+            <<"volatile|while|"
+            <<"class|const_cast|delete|"
+            <<"dynamic_cast|explicit|false|friend|"
+            <<"inline|mutable|namespace|new|operator|private|protected|"
+            <<"public|reinterpret_cast|static_cast|"
+            <<"template|this|throw|true|"
+            <<"try|typeid|typename|"
+            <<"using|virtual";
     strKeyWords="\\b(";
-    for(i=0;i<_keyword.size();i++)
+    for(i=0; i<_keyword.size(); i++)
     {
         strKeyWords+=_keyword[i];
     }
@@ -101,13 +101,17 @@ void cppHighlighter::conmmentHighlightBlock(const QString &text)
         startIndex = text.indexOf(startExpression);
     }
 
-    while(startIndex >= 0) {
+    while(startIndex >= 0)
+    {
         int endIndex = text.indexOf(endExpression , startIndex);
         int conmmentLength;
-        if(endIndex == -1) {
+        if(endIndex == -1)
+        {
             setCurrentBlockState(1);
             conmmentLength = text.length() - startIndex;
-        } else {
+        }
+        else
+        {
             conmmentLength = endIndex - startIndex +endExpression.matchedLength();
         }
         setFormat(startIndex,conmmentLength,instance->getTextCharFormat("comment"));
@@ -117,11 +121,12 @@ void cppHighlighter::conmmentHighlightBlock(const QString &text)
 
 void cppHighlighter::kciHighlightBlock(const QString &text)
 {
-    for(int i=0;i<rules.size();i++)
+    for(int i=0; i<rules.size(); i++)
     {
         QRegularExpressionMatchIterator matchIterator=rules[i].regexp.globalMatch(
                     text);
-        while (matchIterator.hasNext()) {
+        while(matchIterator.hasNext())
+        {
             QRegularExpressionMatch match=matchIterator.next();
             setFormat(match.capturedStart(),
                       match.capturedLength(),
@@ -129,7 +134,7 @@ void cppHighlighter::kciHighlightBlock(const QString &text)
         }
     }
 
-    kciTextBlockData *data=(kciTextBlockData*)currentBlockUserData();
+    kciTextBlockData *data=(kciTextBlockData *)currentBlockUserData();
 
     Q_ASSERT(data!=NULL);
 
@@ -138,7 +143,7 @@ void cppHighlighter::kciHighlightBlock(const QString &text)
     int baseLevel=0;
     if(prevBlock.isValid())
     {
-        kciTextBlockData *prevData=(kciTextBlockData*)prevBlock.userData();
+        kciTextBlockData *prevData=(kciTextBlockData *)prevBlock.userData();
         Q_ASSERT(prevData!=NULL);
         baseLevel=prevData->getCodeLevel();
 
@@ -148,9 +153,13 @@ void cppHighlighter::kciHighlightBlock(const QString &text)
             i++)
         {
             if(i->character == '{')
+            {
                 baseLevel++;
+            }
             else if(i->character == '}')
+            {
                 baseLevel--;
+            }
         }
     }
     data->setCodeLevel(baseLevel);

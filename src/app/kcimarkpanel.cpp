@@ -39,15 +39,17 @@ void kciMarkPanel::setMarkPix(const QPixmap &value)
 }
 
 void kciMarkPanel::draw(QPainter *painter, QTextBlock *block,
-          int x, int y, int w, int h,
-          bool isCurrentLine)
+                        int x, int y, int w, int h,
+                        bool isCurrentLine)
 {
     Q_UNUSED(isCurrentLine);
 
     int blockNum=block->blockNumber();
 
     if(blockNum>=vecMark.size())
+    {
         vecMark.resize(blockNum+1);
+    }
 
     QPoint _global(x,y);
     vecMark[blockNum].rect.setTopLeft(mapToGlobal(_global));
@@ -84,7 +86,7 @@ void kciMarkPanel::mouseReleaseEvent(QMouseEvent *e)
         // l==-1 means that the document is reach at the end.
         // So l should be vecMark.size().
 
-        for(;i<l;i++)
+        for(; i<l; i++)
         {
             if(vecMark[i].rect.contains(pressedPos,true))
             {

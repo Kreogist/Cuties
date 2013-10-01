@@ -47,7 +47,11 @@ struct Terminal
 {
     char terminal_name[50];
     char arg[10];
-    Terminal(){terminal_name[0]=0; arg[0]=0;}
+    Terminal()
+    {
+        terminal_name[0]=0;
+        arg[0]=0;
+    }
     Terminal(const char *str_ter, const char *str_arg)
     {
         strcpy(terminal_name,str_ter);
@@ -65,7 +69,7 @@ public:
     ~kciRunner();
 
     static Terminal getDefaultTerminal();
-    void setTestCase(const QByteArray& input,const QByteArray& output);
+    void setTestCase(const QByteArray &input,const QByteArray &output);
     void setBackgroundExec(bool enabled);
     bool isBackgroundExec() const;
     bool isEnabledAutoInput() const;
@@ -92,7 +96,7 @@ private:
 
     QString path;
 
-    QProcess* process;
+    QProcess *process;
     bool enabledBackExec;
     bool enabledAutoInput;
 };
@@ -106,16 +110,16 @@ public:
 
     static void setDefaultTerminal(const int &num);
     static QStringList getSupportTerminalList();
-    static kciExecutor* getInstance();
+    static kciExecutor *getInstance();
 
 public slots:
-    void exec(const QString& programPath);
+    void exec(const QString &programPath);
 
 private:
     QReadWriteLock lock;
-    QList<kciRunner*> runnerList;
+    QList<kciRunner *> runnerList;
 
-    static kciExecutor* instance;
+    static kciExecutor *instance;
 };
 
 #endif // KCIEXECUTOR_H

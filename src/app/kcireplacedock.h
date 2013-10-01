@@ -23,7 +23,7 @@ public:
     explicit kciReplaceDock(QWidget *parent = 0);
 
 signals:
-    void requireReplace(const QString& oldText,const QString& newText);
+    void requireReplace(const QString &oldText,const QString &newText);
     void requireReplaceAndFind(const QString &oldText, const QString &newText);
     void requireReplaceAll(const QString &oldText, const QString &newText);
 
@@ -49,7 +49,7 @@ private:
     QToolButton *replaceButtons[typeCount];
     QToolButton *closeButton;
 
-    QSignalMapper* mapper;
+    QSignalMapper *mapper;
 };
 
 #endif // KCIREPLACEDOCK_H

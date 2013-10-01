@@ -12,7 +12,7 @@ class kciSettingListItemBrowseText : public kciSettingListItemBase
     Q_OBJECT
 public:
     explicit kciSettingListItemBrowseText(QWidget *parent = 0);
-    void setValue(const QString& NewTextValue);
+    void setValue(const QString &NewTextValue);
     QString getValue();
     bool getFolderMode() const;
     void setFolderMode(bool value);

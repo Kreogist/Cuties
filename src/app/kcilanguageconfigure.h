@@ -17,7 +17,7 @@ class kciLanguageConfigure : public kciConfigure
 public:
     void readConfigure();
     void writeConfigure();
-    static kciLanguageConfigure* getInstance();
+    static kciLanguageConfigure *getInstance();
 
     void setLanguage(QString newLanguageName);
     QStringList getLanguageList() const;
@@ -27,7 +27,7 @@ private:
     QString languageFileDir, currLanguageName;
 
     kciLanguageConfigure();
-    static kciLanguageConfigure* instance;
+    static kciLanguageConfigure *instance;
 
     QStringList languageFileList, languageName, languageImage;
     void loadLanguageList();

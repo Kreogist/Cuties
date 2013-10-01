@@ -88,9 +88,9 @@ void kciTextEditor::paintEvent(QPaintEvent *e)
 }
 
 void kciTextEditor::checkWhetherBlockSearchedAndDealWith(
-        const QTextBlock& block)
+    const QTextBlock &block)
 {
-    kciTextBlockData *data=(kciTextBlockData*)block.userData();
+    kciTextBlockData *data=(kciTextBlockData *)block.userData();
     //check whether the block has been searched
     data->beginUsingSearchDatas();
     bool hasSearched=data->isSearched(searchCode);
@@ -125,7 +125,9 @@ bool kciTextEditor::findString(bool forward)
     bool hasMatch=false;
     _textCursor=textCursor();
     if(!forward)
+    {
         _textCursor.setPosition(_textCursor.selectionStart());
+    }
 
     for(QTextBlock i=_textCursor.block();
         i.isValid() && !hasMatch;
@@ -146,7 +148,7 @@ bool kciTextEditor::findString(bool forward)
                     j++)
                 {
                     if(j->pos >= ((i.blockNumber() == _textCursor.blockNumber())?
-                            _textCursor.positionInBlock():0))
+                                  _textCursor.positionInBlock():0))
                     {
                         hasMatch=true;
                         _textCursor.setPosition(i.position()+j->pos);
@@ -166,7 +168,7 @@ bool kciTextEditor::findString(bool forward)
                 {
                     if((i.blockNumber() == _textCursor.blockNumber() &&
                         j->pos < _textCursor.positionInBlock()) ||
-                        i.blockNumber() != _textCursor.blockNumber())
+                       i.blockNumber() != _textCursor.blockNumber())
                     {
                         hasMatch=true;
                         _textCursor.setPosition(i.position()+j->pos);
@@ -185,8 +187,8 @@ bool kciTextEditor::findString(bool forward)
     {
         int endBlockNumber=_textCursor.blockNumber();
         for(QTextBlock i= (forward==true)?
-            document()->firstBlock():
-            document()->lastBlock().previous();
+                          document()->firstBlock():
+                          document()->lastBlock().previous();
 
             i.isValid() &&
             (forward==true?
@@ -210,7 +212,7 @@ bool kciTextEditor::findString(bool forward)
                         j++)
                     {
                         if(j->pos >= (i.blockNumber() == _textCursor.blockNumber())?
-                                _textCursor.positionInBlock():0)
+                           _textCursor.positionInBlock():0)
                         {
                             hasMatch=true;
                             _textCursor.setPosition(i.position()+j->pos);
@@ -230,7 +232,7 @@ bool kciTextEditor::findString(bool forward)
                     {
                         if((i.blockNumber() == _textCursor.blockNumber() &&
                             j->pos < _textCursor.positionInBlock()) ||
-                            i.blockNumber() != _textCursor.blockNumber())
+                           i.blockNumber() != _textCursor.blockNumber())
                         {
                             hasMatch=true;
                             _textCursor.setPosition(i.position()+j->pos);
@@ -259,7 +261,7 @@ void kciTextEditor::searchString(QString text,
                                  bool regularExpression,
                                  bool caseSensitively,
                                  bool wholeWord)
-{   
+{
     this->text=text;
     this->regularExpression=regularExpression;
     this->caseSensitively=caseSensitively;
@@ -269,7 +271,9 @@ void kciTextEditor::searchString(QString text,
     if(wholeWord)
     {
         if(!regularExpression)
+        {
             this->text=QRegularExpression::escape(text);
+        }
 
         this->text.prepend(QString("\\b("));
         this->text.append(QString(")\\b"));
@@ -378,7 +382,10 @@ bool kciTextEditor::replaceAndFind(const QString &oldText,
 bool kciTextEditor::replaceAll(const QString &oldText, const QString &newText)
 {
     bool ret=replaceAndFind(oldText,newText);
-    while(replaceAndFind(oldText,newText));
+    while(replaceAndFind(oldText,newText))
+    {
+        ;
+    }
     return ret;
 }
 
@@ -402,8 +409,8 @@ void kciTextEditor::autoIndent()
     _textCursor.removeSelectedText();
     _textCursor.insertText(tabs);
 
-    kciTextBlockData* prevData=(kciTextBlockData*)prevBlock.userData();
-    kciTextBlockData* currData=(kciTextBlockData*)currBlock.userData();
+    kciTextBlockData *prevData=(kciTextBlockData *)prevBlock.userData();
+    kciTextBlockData *currData=(kciTextBlockData *)currBlock.userData();
     int baseLevel=prevData->getCodeLevel();
     int currLevel=currData->getCodeLevel();
 
@@ -424,8 +431,10 @@ void kciTextEditor::insertTab(QTextCursor cursor, int count)
     {
         if(configureInstance->usingBlankInsteadTab())
         {
-            for(int i=0;i<configureInstance->getTabWidth();i++)
+            for(int i=0; i<configureInstance->getTabWidth(); i++)
+            {
                 cursor.insertText(" ");
+            }
 
         }
         else
@@ -465,12 +474,12 @@ int kciTextEditor::findFirstCharacter(const QTextBlock &block)
 
 void kciTextEditor::setDocumentCursor(int nLine, int linePos)
 {
-     QTextCursor cursor = textCursor();
-     cursor.setPosition(document()->findBlockByNumber(nLine).position());
-     cursor.movePosition(QTextCursor::NextCharacter,
-                          QTextCursor::MoveAnchor,
-                          linePos);
-     setTextCursor(cursor);
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(document()->findBlockByNumber(nLine).position());
+    cursor.movePosition(QTextCursor::NextCharacter,
+                        QTextCursor::MoveAnchor,
+                        linePos);
+    setTextCursor(cursor);
 }
 
 void kciTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
@@ -482,7 +491,7 @@ void kciTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selec
     char all[]="{[()]}";
     int len=strlen(all);
 
-    kciTextBlockData* blockData=(kciTextBlockData*)cursor.block().userData();
+    kciTextBlockData *blockData=(kciTextBlockData *)cursor.block().userData();
     if(blockData!=NULL)
     {
         int matchedParentheses=-2;
@@ -494,38 +503,40 @@ void kciTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selec
         {
             if(i->pos == pos-1)
             {
-                for(int j=0;j<(len>>1);j++)
+                for(int j=0; j<(len>>1); j++)
                     if(i->character == all[j])
                     {
                         cursor.movePosition(QTextCursor::Left,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                    all[j],
-                                    all[len-j-1],
-                                    i,
-                                    cursor.block(),
-                                    true);
+                                               all[j],
+                                               all[len-j-1],
+                                               i,
+                                               cursor.block(),
+                                               true);
                         break;
                     }
             }
             else if(i->pos == pos)
             {
-                for(int j=(len>>1);j<len;j++)
+                for(int j=(len>>1); j<len; j++)
                     if(i->character == all[j])
                     {
                         cursor.movePosition(QTextCursor::Right,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                    all[j],
-                                    all[len-j-1],
-                                    i,
-                                    cursor.block(),
-                                    false);
+                                               all[j],
+                                               all[len-j-1],
+                                               i,
+                                               cursor.block(),
+                                               false);
                         break;
                     }
             }
             else
+            {
                 continue;
+            }
 
             switch(matchedParentheses)
             {
@@ -567,21 +578,21 @@ void kciTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selec
     }
 }
 
-int kciTextEditor::matchParentheses(const char& parenthesesA,
-                                     const char& parenthesesB,
-                                     QList<parenthesesInfo>::iterator startPos,
-                                     QTextBlock block,
-                                     bool forward)
+int kciTextEditor::matchParentheses(const char &parenthesesA,
+                                    const char &parenthesesB,
+                                    QList<parenthesesInfo>::iterator startPos,
+                                    QTextBlock block,
+                                    bool forward)
 {
     int count=0;
 
-    kciTextBlockData* blockData=(kciTextBlockData*)block.userData();
+    kciTextBlockData *blockData=(kciTextBlockData *)block.userData();
     if(blockData!=NULL)
     {
         auto i=startPos,
              l= forward?
-                    blockData->getEndParenthesesInfo() :
-                    blockData->getFirstParenthesesInfo() - 1;
+                blockData->getEndParenthesesInfo() :
+                blockData->getFirstParenthesesInfo() - 1;
         while(block.isValid())
         {
             for(;
@@ -604,9 +615,11 @@ int kciTextEditor::matchParentheses(const char& parenthesesA,
             }
 
             block= forward? block.next() : block.previous();
-            blockData=(kciTextBlockData*)block.userData();
+            blockData=(kciTextBlockData *)block.userData();
             if(blockData == NULL)
+            {
                 break;
+            }
             if(forward)
             {
                 i= blockData->getFirstParenthesesInfo();
@@ -636,7 +649,7 @@ void kciTextEditor::updateHighlights()
 
 void kciTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections)
 {
-    if (!isReadOnly())
+    if(!isReadOnly())
     {
         QTextEdit::ExtraSelection selection;
 
@@ -655,12 +668,14 @@ void kciTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& sele
     QTextBlock block=firstVisibleBlock();
     int bottom=height()/fontMetrics().lineSpacing()+block.lineCount();
 
-    for(;block.isValid() && bottom>0;block=block.next())
+    for(; block.isValid() && bottom>0; block=block.next())
     {
         bottom-=block.lineCount();
-        kciTextBlockData* currBlockData=(kciTextBlockData*)block.userData();
+        kciTextBlockData *currBlockData=(kciTextBlockData *)block.userData();
         if(currBlockData==NULL)
+        {
             continue;
+        }
         checkWhetherBlockSearchedAndDealWith(block);
         currBlockData->beginUsingSearchDatas();
         if(currBlockData->hasMatched())
@@ -736,57 +751,58 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
 
-    switch (e->key()) {
-    /*case Qt::Key_ParenLeft:
+    switch(e->key())
     {
-        if(!(e->modifiers()&Qt::ShiftModifier))
+        /*case Qt::Key_ParenLeft:
         {
-            QPlainTextEdit::keyPressEvent(e);
-            autoCompleteParentheses(e,_textCursor,')');
-        }
-        break;
-    }
-    case Qt::Key_Apostrophe:
-    {
-        if(!(e->modifiers()&Qt::ShiftModifier))
-        {
-            QPlainTextEdit::keyPressEvent(e);
-            autoCompleteParentheses(e,_textCursor,'\'');
-        }
-        else
-        {
-            QString text=_textCursor.selectedText();
-            if(text.isEmpty())
+            if(!(e->modifiers()&Qt::ShiftModifier))
             {
                 QPlainTextEdit::keyPressEvent(e);
-                autoCompleteParentheses(e,_textCursor,'\"');
+                autoCompleteParentheses(e,_textCursor,')');
+            }
+            break;
+        }
+        case Qt::Key_Apostrophe:
+        {
+            if(!(e->modifiers()&Qt::ShiftModifier))
+            {
+                QPlainTextEdit::keyPressEvent(e);
+                autoCompleteParentheses(e,_textCursor,'\'');
             }
             else
             {
-                int start=_textCursor.selectionStart(),
-                        end=_textCursor.selectionEnd();
-                _textCursor.beginEditBlock();
-                _textCursor.clearSelection();
-                _textCursor.setPosition(start);
-                _textCursor.insertText("\"");
-                _textCursor.setPosition(end+1);
-                _textCursor.insertText("\"");
-                _textCursor.endEditBlock();
-                setTextCursor(_textCursor);
+                QString text=_textCursor.selectedText();
+                if(text.isEmpty())
+                {
+                    QPlainTextEdit::keyPressEvent(e);
+                    autoCompleteParentheses(e,_textCursor,'\"');
+                }
+                else
+                {
+                    int start=_textCursor.selectionStart(),
+                            end=_textCursor.selectionEnd();
+                    _textCursor.beginEditBlock();
+                    _textCursor.clearSelection();
+                    _textCursor.setPosition(start);
+                    _textCursor.insertText("\"");
+                    _textCursor.setPosition(end+1);
+                    _textCursor.insertText("\"");
+                    _textCursor.endEditBlock();
+                    setTextCursor(_textCursor);
+                }
             }
+            break;
         }
-        break;
-    }
-    case Qt::Key_BracketLeft:
-    {
-        QPlainTextEdit::keyPressEvent(e);
-        if(!(e->modifiers()&Qt::ShiftModifier))
+        case Qt::Key_BracketLeft:
         {
-            autoCompleteParentheses(e,_textCursor,']');
-        }
+            QPlainTextEdit::keyPressEvent(e);
+            if(!(e->modifiers()&Qt::ShiftModifier))
+            {
+                autoCompleteParentheses(e,_textCursor,']');
+            }
 
-        break;
-    }*/
+            break;
+        }*/
     case Qt::Key_Tab:
     {
         insertTab(_textCursor);
@@ -801,7 +817,9 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
             {
                 _textCursor.beginEditBlock();
                 while(pos--)
+                {
                     _textCursor.deletePreviousChar();
+                }
                 _textCursor.endEditBlock();
             }
             else
@@ -810,7 +828,9 @@ void kciTextEditor::keyPressEvent(QKeyEvent *e)
             }
         }
         else
+        {
             QPlainTextEdit::keyPressEvent(e);
+        }
         break;
     }
     case Qt::Key_Return:

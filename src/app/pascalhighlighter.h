@@ -29,14 +29,14 @@ class pascalHighlighter : public kciHighlighter
     Q_OBJECT
 public:
     explicit pascalHighlighter(QObject *parent = 0);
-    
+
 signals:
-    
+
 public slots:
 
 protected:
     void kciHighlightBlock(const QString &text);
-    
+
 private:
     QList<highlight_rule> rules;
 

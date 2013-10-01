@@ -55,17 +55,19 @@ int main(int argc, char *argv[])
 
     int fontID(-1);
     bool fontWarningShown(false);
-    for (QList<QFileInfo>::iterator i=list->begin();
-         i!=list->end();
-         ++i)
+    for(QList<QFileInfo>::iterator i=list->begin();
+        i!=list->end();
+        ++i)
     {
         if(i->fileName().length() < 4)
         {
             continue;
         }
         QFile res(i->filePath());
-        if (res.open(QIODevice::ReadOnly) == false) {
-            if (fontWarningShown == false) {
+        if(res.open(QIODevice::ReadOnly) == false)
+        {
+            if(fontWarningShown == false)
+            {
                 QMessageBox::warning(0,
                                      QApplication::applicationName(),
                                      QString(QApplication::tr("Error occur when load font file.")) +
@@ -74,9 +76,12 @@ int main(int argc, char *argv[])
                                      res.errorString());
                 fontWarningShown = true;
             }
-        } else {
+        }
+        else
+        {
             fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
-            if (fontID == -1 && fontWarningShown == false) {
+            if(fontID == -1 && fontWarningShown == false)
+            {
                 QMessageBox::warning(0,
                                      QApplication::applicationName(),
                                      QString(QApplication::tr("Error occur when load font file.")) +

@@ -23,14 +23,18 @@ void kciPlainTextBrowser::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
     if(autoScrollEnabled)
+    {
         scrollToEnd();
+    }
 }
 
 void kciPlainTextBrowser::onScrollValueChanged(int value)
 {
     bool shouldAutoScrollEnabled=(value==verticalScrollBar()->maximum());
     if(autoScrollEnabled==shouldAutoScrollEnabled)
+    {
         return ;
+    }
 
     autoScrollEnabled=shouldAutoScrollEnabled;
     if(autoScrollEnabled)

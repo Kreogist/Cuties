@@ -8,11 +8,11 @@ class kciFileAssociationConfigure : public kciConfigure
 public:
     void readConfigure();
     void writeConfigure();
-    static kciFileAssociationConfigure* getInstance();
+    static kciFileAssociationConfigure *getInstance();
 
 private:
     kciFileAssociationConfigure();
-    static kciFileAssociationConfigure* instance;
+    static kciFileAssociationConfigure *instance;
 };
 
 #endif // KCIFILEASSOCIATION_H

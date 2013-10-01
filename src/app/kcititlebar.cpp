@@ -70,7 +70,7 @@ kciTitleBar::kciTitleBar(QWidget *parent) :
 
     connect(closeButton,SIGNAL(clicked()),this->parent(),SLOT(close()));
     connect(minimizeButton,SIGNAL(clicked()),
-                            this->parent(),SLOT(showMinimized()));
+            this->parent(),SLOT(showMinimized()));
     connect(maximizeButton,SIGNAL(clicked()),
             this,SLOT(_exchange_button_state()));
     mainButton=new QToolButton(this);
@@ -284,7 +284,9 @@ void kciTitleBar::mouseReleaseEvent(QMouseEvent *event)
         event->accept();
     }
     else
+    {
         event->ignore();
+    }
 }
 
 void kciTitleBar::spacingDblClick()

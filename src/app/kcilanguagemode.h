@@ -63,17 +63,17 @@ public:
     explicit kciLanguageMode(QWidget *parent = 0);
 
     void compile();
-    gdb* startDebug();
-    void setMode(const modeType& type);
-    void setFileSuffix(const QString& suffix);
-    
-    compileOutputReceiver* getCompilerReceiver() const;
-    dbgOutputReceiver* getDbgReceiver() const;
-    gdb* getGdbInstance() const;
+    gdb *startDebug();
+    void setMode(const modeType &type);
+    void setFileSuffix(const QString &suffix);
+
+    compileOutputReceiver *getCompilerReceiver() const;
+    dbgOutputReceiver *getDbgReceiver() const;
+    gdb *getGdbInstance() const;
 
 signals:
     void compileSuccessfully(QString execFileName);
-    
+
 public slots:
     void onCompileFinished(bool hasError);
 
@@ -82,7 +82,7 @@ private:
     void connectCompilerAndOutputReceiver();
     void connectGDBAndDbgReceiver();
     bool checkIfIsCompiling();
-    void setCompileState(const compileState& state);
+    void setCompileState(const compileState &state);
 
     modeType m_type;
     kciCodeEditor *m_parent;

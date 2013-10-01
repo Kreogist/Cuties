@@ -12,7 +12,7 @@ class kciSettingListItemNumInput : public kciSettingListItemBase
     Q_OBJECT
 public:
     explicit kciSettingListItemNumInput(QWidget *parent = 0);
-    
+
     int getValue() const;
     int getMaxValue() const;
     void setMaxValue(int NewValue);
@@ -26,7 +26,7 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *e);
-    
+
 private:
     QHBoxLayout *MainLayout;
     QLabel *ValueDisplayer;

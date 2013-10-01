@@ -11,7 +11,7 @@ class kciSettingListItemLineText : public kciSettingListItemBase
     Q_OBJECT
 public:
     explicit kciSettingListItemLineText(QWidget *parent = 0);
-    void setValue(const QString& NewTextValue);
+    void setValue(const QString &NewTextValue);
     QString getValue();
 
 protected:

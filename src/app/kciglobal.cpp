@@ -19,7 +19,7 @@
 
 #include "kciglobal.h"
 
-kciGlobal* kciGlobal::instance=nullptr;
+kciGlobal *kciGlobal::instance=nullptr;
 
 kciGlobal::kciGlobal()
 {
@@ -51,7 +51,7 @@ void kciGlobal::writeSettings()
     }
 }
 
-void kciGlobal::setSettingsFileName(const QString& filePath)
+void kciGlobal::setSettingsFileName(const QString &filePath)
 {
     settingsFileName=filePath;
 }
@@ -61,7 +61,7 @@ QString kciGlobal::getSettingsFileName() const
     return settingsFileName;
 }
 
-kciGlobal* kciGlobal::getInstance()
+kciGlobal *kciGlobal::getInstance()
 {
     return instance==nullptr?instance=new kciGlobal:instance;
 }

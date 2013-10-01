@@ -33,10 +33,16 @@ class gcc : public compilerBase
     Q_OBJECT
 public:
     explicit gcc(QObject *parent = 0);
-    QString path(){return isCompileCpp?
-                    instance->getGppPath():instance->getGccPath();}
-    void setCompilerPath(const QString& path);
-    QString compilerName(){return "g++";}
+    QString path()
+    {
+        return isCompileCpp?
+               instance->getGppPath():instance->getGccPath();
+    }
+    void setCompilerPath(const QString &path);
+    QString compilerName()
+    {
+        return "g++";
+    }
 
 protected:
     QStringList getVersionArg();
@@ -47,7 +53,7 @@ protected:
 
 private:
     bool isCompileCpp;
-    kciCompilerConfigure* instance;
+    kciCompilerConfigure *instance;
 };
 
 #endif // GCC_H

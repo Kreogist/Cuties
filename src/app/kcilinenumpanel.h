@@ -33,9 +33,9 @@ class kciLinenumPanel : public kciPanel
     Q_OBJECT
 public:
     explicit kciLinenumPanel(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
 
 protected:
@@ -45,7 +45,7 @@ protected:
 
 private:
     QColor textColor;
-    
+
 };
 
 #endif // KCILINENUMPANEL_H

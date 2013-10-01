@@ -46,20 +46,20 @@ public:
     void endUsingSearchDatas();
 
     void resetForSearch();
-    void setSearchCode(const unsigned long long int& searchCode);
+    void setSearchCode(const unsigned long long int &searchCode);
     QList<matchedInfo>::iterator getFirstMatchedTextPosition();
     QList<matchedInfo>::iterator getEndMatchedTextPosition();
-    void insertMatchedTextPositions(const int& pos, const int& matchedLen);
-    bool isSearched(const unsigned long long int& searchCodeNow);
+    void insertMatchedTextPositions(const int &pos, const int &matchedLen);
+    bool isSearched(const unsigned long long int &searchCodeNow);
     bool hasMatched();
     void onBlockChanged();
 
-    void insertParenthesesInfo(const int& pos, const char& character);
+    void insertParenthesesInfo(const int &pos, const char &character);
     void resetParentheseInfos();
     QList<parenthesesInfo>::iterator getFirstParenthesesInfo();
     QList<parenthesesInfo>::iterator getEndParenthesesInfo();
 
-    void setCodeLevel(const int& level);
+    void setCodeLevel(const int &level);
     int getCodeLevel() const;
 
 private:

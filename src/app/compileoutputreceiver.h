@@ -32,33 +32,33 @@ class compileOutputReceiver : public QObject
 public:
     explicit compileOutputReceiver(QObject *parent = 0);
     //Tree View Controls:
-    void addRootItem(const ErrInfo& error);
+    void addRootItem(const ErrInfo &error);
     void clearAllItem();
 
     //Text Controls:
     void clearText();
-    void addText(const QString& NewText);
+    void addText(const QString &NewText);
     void addForwardText();
 
     void reset();
 
     QStandardItemModel *getCompilerOutputModel() const;
-    const QString& getCompilerOutputText() const;
+    const QString &getCompilerOutputText() const;
     const QVector<ErrInfo> *getErifList() const;
 
     bool hasCompileError();
 
     QString getCompilerVersionString() const;
-    void setCompilerVersionString(const QString& strVersion);
+    void setCompilerVersionString(const QString &strVersion);
 
 signals:
     void requireShowError();
     void compilerOutputTextChanged(QString text);
-    
+
 public slots:
     void onCompileMsgReceived(ErrInfo error);
     void onCompileFinished(bool hasError);
-    
+
 private:
     bool hasOutput;
     QStandardItemModel *compilerOutputModel;

@@ -44,7 +44,7 @@ class kciTextEditor : public QPlainTextEdit
 public:
     explicit kciTextEditor(QWidget *parent = 0);
     void setDocumentCursor(int nLine, int linePos);
-    
+
 signals:
     void updated();
     void searchStringChangedByShortCut(QString text);
@@ -59,7 +59,7 @@ public slots:
                       bool regularExpression,
                       bool caseSensitively,
                       bool wholeWord);
-    bool replace(const QString& oldText,const QString& newText);
+    bool replace(const QString &oldText,const QString &newText);
     bool replaceAndFind(const QString &oldText, const QString &newText);
     bool replaceAll(const QString &oldText, const QString &newText);
     void autoIndent();
@@ -72,7 +72,7 @@ private slots:
 
 protected:
     void paintEvent(QPaintEvent *e);
-    void contextMenuEvent (QContextMenuEvent * event);
+    void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
 
 private:
@@ -83,8 +83,8 @@ private:
                                  QTextCursor &currTextCursor,
                                  const QChar &rightParentheses);*/
     bool findString(bool forward);
-    void generalSearch(const QTextBlock& block,
-                       const int& lines,
+    void generalSearch(const QTextBlock &block,
+                       const int &lines,
                        const bool forward);
     void searchOnOtherThread(QScopedPointer<kciTextSearcher> &searcher,
                              QFuture<void> &thread,
@@ -92,17 +92,17 @@ private:
                              const bool forward);
     void initTextSearcher(QScopedPointer<kciTextSearcher> &searcher);
     void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block);
-    int matchParentheses(const char& parenthesesA,
-                         const char& parenthesesB,
+    int matchParentheses(const char &parenthesesA,
+                         const char &parenthesesB,
                          QList<parenthesesInfo>::iterator startPos,
                          QTextBlock block,
                          bool forward);
-    int findFirstCharacter(const QTextBlock& block);
+    int findFirstCharacter(const QTextBlock &block);
     void insertTab(QTextCursor cursor, int count = 1);
     void removeTab(QTextCursor cursor, int count = 1);
 
-    kciEditorConfigure* configureInstance;
-    kciClipboard* clipboard;
+    kciEditorConfigure *configureInstance;
+    kciClipboard *clipboard;
     QColor lineColor,searchResultColor;
     QColor noMatchedParenthesesColor,matchedParenthesesColor;
     QPoint contextMenuPos;

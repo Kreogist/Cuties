@@ -35,7 +35,7 @@ public:
 
 signals:
     void click();
-    
+
 protected:
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);

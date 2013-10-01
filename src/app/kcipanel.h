@@ -39,9 +39,9 @@ public:
     void setKciTextEditor(kciTextEditor *editor);
     void setAutoAdaptWidth(bool newValue);
     bool autoAdaptWidth();
-    
+
 signals:
-    
+
 public slots:
 
 protected:
@@ -51,9 +51,9 @@ protected:
     virtual void draw(QPainter *painter, QTextBlock *block ,
                       int x, int y, int w, int h,
                       bool isCurrentLine) = 0;
-    
+
 private:
-    int getRealLineCount(const QTextBlock& block, const int &offset);
+    int getRealLineCount(const QTextBlock &block, const int &offset);
     kciTextEditor *e;
 
     int first,last;

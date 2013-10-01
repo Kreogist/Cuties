@@ -52,17 +52,17 @@ public:
     void setBorderWidth(int top, int right, int bottom, int left);
 
 protected:
-    virtual bool eventFilter(QObject* obj, QEvent* event);
+    virtual bool eventFilter(QObject *obj, QEvent *event);
 
     void MakeRegions();
-    WidgetRegion HitTest(const QPoint& pos);
+    WidgetRegion HitTest(const QPoint &pos);
     void updateGeometry(int x, int y, int w, int h);
 
     void startCursorTimer();
     void stopCursorTimer();
 
 private:
-    QWidget* m_proxyWidget;
+    QWidget *m_proxyWidget;
     int m_top, m_right, m_bottom, m_left;
     QRect m_regions[9];
 

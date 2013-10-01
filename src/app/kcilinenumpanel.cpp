@@ -43,13 +43,13 @@ void kciLinenumPanel::draw(QPainter *painter, QTextBlock *block,
         textColor.setRgb(curr_line_color,curr_line_color,curr_line_color);
     }
 
-    QPen pen(painter->pen ());
+    QPen pen(painter->pen());
     pen.setColor(textColor);
     painter->setPen(pen);
 
     painter->drawText(x - 3, y, w, h,
-            Qt::AlignRight |  Qt::AlignTop,
-            QString::number(block->blockNumber()+1));
+                      Qt::AlignRight |  Qt::AlignTop,
+                      QString::number(block->blockNumber()+1));
 
     if(isCurrentLine)
     {

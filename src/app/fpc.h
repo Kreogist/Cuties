@@ -32,9 +32,15 @@ class fpc : public compilerBase
 public:
     explicit fpc(QObject *parent = 0);
     void startCompile(const QString &filePath);
-    QString path(){return instance->getFpcPath();}
-    virtual QString compilerName() { return "fpc";}
-    
+    QString path()
+    {
+        return instance->getFpcPath();
+    }
+    virtual QString compilerName()
+    {
+        return "fpc";
+    }
+
 protected:
     QStringList getVersionArg();
     QStringList getCompileArg(const QString &filePath);
@@ -43,7 +49,7 @@ protected:
     void parseLine(const QString &text);
 
 private:
-    kciCompilerConfigure* instance;
+    kciCompilerConfigure *instance;
 };
 
 #endif // FPC_H

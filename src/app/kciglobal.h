@@ -41,8 +41,8 @@ public:
     void readSettings();
     void writeSettings();
     QString getSettingsFileName() const;
-    void setSettingsFileName(const QString& filePath);
-    static kciGlobal* getInstance();
+    void setSettingsFileName(const QString &filePath);
+    static kciGlobal *getInstance();
 
 private:
     kciGlobal();
@@ -51,8 +51,8 @@ private:
     QString settingsFileName;
 
     //QSettings *kciMainConfig;
-    static kciGlobal* instance;
-    QList<kciConfigure*> cfgConfiger;
+    static kciGlobal *instance;
+    QList<kciConfigure *> cfgConfiger;
 };
 
 #endif // KCIGLOBAL_H
