@@ -22,11 +22,13 @@
 KCCompiledock::KCCompiledock(QWidget *parent):
     QDockWidget(parent)
 {
-    //Set Object Name.
+    //Set compile dock properties
     setObjectName(QString("Compile Dock"));
-
-    //Set Dock Style.
+    setWindowTitle(QString(tr("Compiler")));
     setContentsMargins(0,0,0,0);
+    setAllowedAreas(Qt::BottomDockWidgetArea);
+
+    //Set compile dock palette
     QPalette pal=this->palette();
     pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
@@ -34,59 +36,55 @@ KCCompiledock::KCCompiledock(QWidget *parent):
     pal.setColor(QPalette::Text,QColor(255,255,255));
     pal.setColor(QPalette::ButtonText,QColor(255,255,255));
     this->setPalette(pal);
-    setWindowTitle(QString(tr("Compiler")));
-    setAllowedAreas(Qt::BottomDockWidgetArea);
 
-    //Set Time Lines:
-    animeShowTimeLine=new QTimeLine(400,this);
-    animeShowTimeLine->setEasingCurve(QEasingCurve::OutCubic);
-    connect(animeShowTimeLine, SIGNAL(frameChanged(int)),
-            this, SLOT(changeDockCompileWidth(int)));
-
-    animeHideTimeLine=new QTimeLine(400,this);
-    animeHideTimeLine->setEasingCurve(QEasingCurve::OutCubic);
-    connect(animeHideTimeLine, SIGNAL(frameChanged(int)),
-            this, SLOT(changeDockCompileWidth(int)));
-
-    //Set Dock Widget and Layout.
-    splCombine=new QSplitter(Qt::Horizontal, this);
-    splCombine->setContentsMargins(0,0,0,0);
-
-    //Set Text Output.
-    compileOutput=new KCPlainTextBrowser(this);
-    compileOutput->setContentsMargins(0,0,0,0);
-    compileOutput->setWordWrapMode(QTextOption::NoWrap);
-    compileOutput->setMinimumWidth(1);
-    splCombine->addWidget(compileOutput);
-
-    //Set TreeView Controls.
-    trevwCompileInfo=new QTreeView(this);
-    trevwCompileInfo->setRootIsDecorated(false);
-    trevwCompileInfo->setContentsMargins(0,0,0,0);
-    pal=trevwCompileInfo->palette();
+    //Set compile info splitter widget
+    compileOutputInfoSplitter=new QSplitter(Qt::Horizontal, this);
+    compileOutputInfoSplitter->setContentsMargins(0,0,0,0);
+    //Set text output widget
+    compileOutputTextInfo=new KCPlainTextBrowser(this);
+    compileOutputTextInfo->setContentsMargins(0,0,0,0);
+    compileOutputTextInfo->setMinimumWidth(0);
+    compileOutputTextInfo->setWordWrapMode(QTextOption::NoWrap);
+    compileOutputInfoSplitter->addWidget(compileOutputTextInfo);
+    //Set treeview output widget
+    compileOutputErrorInfoTree=new QTreeView(this);
+    compileOutputErrorInfoTree->setContentsMargins(0,0,0,0);
+    compileOutputErrorInfoTree->setMinimumWidth(0);
+    compileOutputErrorInfoTree->setRootIsDecorated(false);
+    compileOutputErrorInfoTree->setHeaderHidden(true);
+    compileOutputErrorInfoTree->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    pal=compileOutputErrorInfoTree->palette();
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
-    trevwCompileInfo->setPalette(pal);
-    trevwCompileInfo->setHeaderHidden(true);
-    trevwCompileInfo->setGeometry(0,0,0,0);
-    trevwCompileInfo->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    trevwCompileInfo->setMinimumWidth(1);
-    splCombine->addWidget(trevwCompileInfo);
-    QList<int> l_sizes;
-    l_sizes << width() << 0;
-    splCombine->setSizes(l_sizes);
+    compileOutputErrorInfoTree->setPalette(pal);
+    compileOutputInfoSplitter->addWidget(compileOutputErrorInfoTree);
+    //Set splitter width
+    QList<int> splitterWidgetSize;
+    splitterWidgetSize << width() << 0;
+    compileOutputInfoSplitter->setSizes(splitterWidgetSize);
+    //Set splitter widget
+    setWidget(compileOutputInfoSplitter);
 
-    //Set Default Value
-    setWidget(splCombine);
+    //Set error info treeview widget show/hide animation timeline
+    animeShowErrorInfoTree=new QTimeLine(400,this);
+    animeShowErrorInfoTree->setEasingCurve(QEasingCurve::OutCubic);
+    connect(animeShowErrorInfoTree, SIGNAL(frameChanged(int)),
+            this, SLOT(changeCompileSplitterWidthValue(int)));
+    animeHideErrorInfoTree=new QTimeLine(400,this);
+    animeHideErrorInfoTree->setEasingCurve(QEasingCurve::OutCubic);
+    connect(animeHideErrorInfoTree, SIGNAL(frameChanged(int)),
+            this, SLOT(changeCompileSplitterWidthValue(int)));
 
-    connect(trevwCompileInfo,SIGNAL(clicked(QModelIndex)),
+    //Connect signals and slots.
+    connect(compileOutputErrorInfoTree,SIGNAL(clicked(QModelIndex)),
             this,SLOT(selectAnError(QModelIndex)));
-    connect(trevwCompileInfo,SIGNAL(activated(QModelIndex)),
+    connect(compileOutputErrorInfoTree,SIGNAL(activated(QModelIndex)),
             this,SLOT(selectAnError(QModelIndex)));
-    connect(trevwCompileInfo,SIGNAL(doubleClicked(QModelIndex)),
+    connect(compileOutputErrorInfoTree,SIGNAL(doubleClicked(QModelIndex)),
             this,SLOT(jumpToError(QModelIndex)));
 
 }
 
+//Get the root item of model.
 static inline QModelIndex getRootItem(QModelIndex item)
 {
     while(item.parent().isValid())
@@ -96,19 +94,22 @@ static inline QModelIndex getRootItem(QModelIndex item)
     return item;
 }
 
+//When user select an error, this slot function will get the info of the
+//error. If the file has been closed, we will emit a signal to open the file.
+//Then jump to line where the error occur.
 void KCCompiledock::jumpToError(QModelIndex ItemID)
 {
     ItemID=getRootItem(ItemID);
 
     int ErrID=ItemID.row();
 
-    if(erifList->at(ErrID).nColumnNum>-1)
+    if(compileErrorInfoList->at(ErrID).nColumnNum>-1)
     {
         //Open the file;
-        emit requireOpenErrFile(erifList->at(ErrID).strFilePath);
+        emit requireOpenErrFile(compileErrorInfoList->at(ErrID).strFilePath);
         //Jump to the line;
-        emit requireGotoLine(erifList->at(ErrID).nLineNum - 1,
-                             erifList->at(ErrID).nColumnNum);
+        emit requireGotoLine(compileErrorInfoList->at(ErrID).nLineNum - 1,
+                             compileErrorInfoList->at(ErrID).nColumnNum);
         //Set Focus;
         emit requireSetFocus();
     }
@@ -120,52 +121,58 @@ void KCCompiledock::selectAnError(QModelIndex ItemIndex)
 
     if(ItemIndex!=lastSelIndex)
     {
-        trevwCompileInfo->collapse(lastSelIndex);
-        trevwCompileInfo->expand(ItemIndex);
+        compileOutputErrorInfoTree->collapse(lastSelIndex);
+        compileOutputErrorInfoTree->expand(ItemIndex);
     }
 
     lastSelIndex=ItemIndex;
 }
 
-void KCCompiledock::animeShowError()
+//Animation of showing compile error info tree
+void KCCompiledock::animeShowCompileError()
 {
-    animeHideTimeLine->stop();
-    if(animeShowTimeLine->state()!=QTimeLine::Running)
+    animeHideErrorInfoTree->stop();
+    if(animeShowErrorInfoTree->state()!=QTimeLine::Running)
     {
-        compileOutput->setFocus();
-        animeShowTimeLine->setFrameRange(compileOutput->width(), int(width()/5));
-        animeShowTimeLine->start();
+        compileOutputTextInfo->setFocus();
+        animeShowErrorInfoTree->setFrameRange(compileOutputErrorInfoTree->width(), (width()/5)*4);
+        animeShowErrorInfoTree->start();
     }
 }
 
-void KCCompiledock::animeHideError()
+//Animation of hiding compile error info tree
+void KCCompiledock::animeHideCompileError()
 {
-    animeShowTimeLine->stop();
-    if(animeHideTimeLine->state()!=QTimeLine::Running)
+    animeShowErrorInfoTree->stop();
+    if(animeHideErrorInfoTree->state()!=QTimeLine::Running)
     {
-        animeHideTimeLine->setFrameRange(compileOutput->width(), width());
-        animeHideTimeLine->start();
+        animeHideErrorInfoTree->setFrameRange(compileOutputErrorInfoTree->width(), 0);
+        animeHideErrorInfoTree->start();
     }
 }
 
-void KCCompiledock::changeDockCompileWidth(int dockCompileWidth)
+//This slot is used to change the value of splitter,
+//QPropertyAnimation can't do this for me, so I use QTimeLine to show up the QTreeView.
+//Calculate the width for each required, save the value into a QList, and set it to the QSplitter.
+void KCCompiledock::changeCompileSplitterWidthValue(int newCompileTreeWidth)
 {
-    QList<int> l_sizes_finish;
-    l_sizes_finish << dockCompileWidth << width() - dockCompileWidth;
-    splCombine->setSizes(l_sizes_finish);
+    QList<int> splitterWidgetSize;
+    splitterWidgetSize << width() - newCompileTreeWidth << newCompileTreeWidth;
+    compileOutputInfoSplitter->setSizes(splitterWidgetSize);
 }
 
-void KCCompiledock::setReceiver(const KCCompileOutputReceiver *currReceiver)
+//Set receiver.
+void KCCompiledock::setCompileOutputReceiver(const KCCompileOutputReceiver *currReceiver)
 {
     Q_ASSERT(currReceiver!=NULL);
 
     receiverConnectionHandles.disConnectAll();
 
-    erifList=currReceiver->getErifList();
-    compileOutput->setPlainText(currReceiver->getCompilerOutputText());
-    trevwCompileInfo->setModel(currReceiver->getCompilerOutputModel());
+    compileErrorInfoList=currReceiver->getCompileErrorInfoList();
+    compileOutputTextInfo->setPlainText(currReceiver->getCompilerOutputText());
+    compileOutputErrorInfoTree->setModel(currReceiver->getCompilerOutputModel());
     receiverConnectionHandles+=connect(currReceiver, SIGNAL(requireShowError()),
-                                       this, SLOT(animeShowError()));
+                                       this, SLOT(animeShowCompileError()));
     receiverConnectionHandles+=connect(currReceiver,SIGNAL(compilerOutputTextChanged(QString)),
-                                       compileOutput,SLOT(setPlainText(QString)));
+                                       compileOutputTextInfo,SLOT(setPlainText(QString)));
 }

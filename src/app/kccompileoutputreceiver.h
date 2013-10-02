@@ -44,7 +44,7 @@ public:
 
     QStandardItemModel *getCompilerOutputModel() const;
     const QString &getCompilerOutputText() const;
-    const QVector<ErrInfo> *getErifList() const;
+    const QVector<ErrInfo> *getCompileErrorInfoList() const;
 
     bool hasCompileError();
 
@@ -63,8 +63,8 @@ private:
     bool hasOutput;
     QStandardItemModel *compilerOutputModel;
     QString compilerOutputText;
-    QModelIndex lastSelIndex;
-    QVector<ErrInfo> erifList;
+    QModelIndex lastSelectedIndex;
+    QVector<ErrInfo> compileErrorInfoList;
     QString compilerVersion;
 };
 

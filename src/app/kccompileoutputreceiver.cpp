@@ -100,7 +100,7 @@ void KCCompileOutputReceiver::reset()
 {
     clearAllItem();
     clearText();
-    erifList.clear();
+    compileErrorInfoList.clear();
     hasOutput=false;
 }
 
@@ -109,7 +109,6 @@ void KCCompileOutputReceiver::onCompileMsgReceived(ErrInfo error)
     if(!hasOutput)
     {
         emit requireShowError();
-
         addText(QTime::currentTime().toString("hh:mm:ss") +
                 " " +
                 tr("Compile Output:") +
@@ -117,14 +116,13 @@ void KCCompileOutputReceiver::onCompileMsgReceived(ErrInfo error)
         hasOutput=true;
     }
 
-    erifList.append(error);
-
+    compileErrorInfoList.append(error);
     addRootItem(error);
 }
 
-const QVector<ErrInfo> *KCCompileOutputReceiver::getErifList() const
+const QVector<ErrInfo> *KCCompileOutputReceiver::getCompileErrorInfoList() const
 {
-    return &erifList;
+    return &compileErrorInfoList;
 }
 
 void KCCompileOutputReceiver::onCompileFinished(bool hasError)

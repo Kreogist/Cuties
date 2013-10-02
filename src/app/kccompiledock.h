@@ -41,22 +41,7 @@ class KCCompiledock : public QDockWidget
     Q_OBJECT
 public:
     explicit KCCompiledock(QWidget *parent = 0);
-
-    //Compile File Path
-    void setCompileFilePath(QString FilePath);
-    QString CompileFilePath();
-
-    void setReceiver(const KCCompileOutputReceiver *currReceiver);
-
-private:
-    QWidget *objCombine;
-    QSplitter *splCombine;
-    QTreeView *trevwCompileInfo;
-    KCPlainTextBrowser *compileOutput;
-    QModelIndex lastSelIndex;
-    QTimeLine *animeShowTimeLine, *animeHideTimeLine;
-    const QVector<ErrInfo> *erifList;
-    KCConnectionHandler receiverConnectionHandles;
+    void setCompileOutputReceiver(const KCCompileOutputReceiver *currReceiver);
 
 signals:
     void requireOpenErrFile(QString filePath);
@@ -65,13 +50,31 @@ signals:
 
 public slots:
     //Show & Hide Error Animation.
-    void animeShowError();
-    void animeHideError();
+    void animeShowCompileError();
+    void animeHideCompileError();
 
 private slots:
-    void changeDockCompileWidth(int dockCompileWidth);
+    void changeCompileSplitterWidthValue(int newCompileTreeWidth);
     void selectAnError(QModelIndex ItemIndex);
     void jumpToError(QModelIndex ItemID);
+
+private:
+    //Define the widget splitter.
+    QSplitter *compileOutputInfoSplitter;
+
+    //Define the info display widget.
+    QTreeView *compileOutputErrorInfoTree;
+    KCPlainTextBrowser *compileOutputTextInfo;
+
+    //Define error display variables.
+    QModelIndex lastSelIndex;
+    const QVector<ErrInfo> *compileErrorInfoList;
+    KCConnectionHandler receiverConnectionHandles;
+
+    //Define the animation variables.
+    QTimeLine *animeShowErrorInfoTree;
+    QTimeLine *animeHideErrorInfoTree;
+
 };
 
 #endif // KCCOMPILEDOCK_H

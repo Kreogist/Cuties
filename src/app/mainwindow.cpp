@@ -935,7 +935,7 @@ void MainWindow::compileCurrentFile()
         //Active Compile Dock.
         compileDock->setVisible(true);
         //Set To Compile Mode.
-        compileDock->animeHideError();
+        compileDock->animeHideCompileError();
 
         //if the file has been compiled,
         //then we clean the text of last compiling.
@@ -951,7 +951,7 @@ void MainWindow::compileCurrentFile()
         //So we getReceiver() again to avoid this.
         receiver=currentEditor->langMode()->getCompilerReceiver();
 
-        compileDock->setReceiver(receiver);
+        compileDock->setCompileOutputReceiver(receiver);
     }
 }
 
@@ -1070,7 +1070,7 @@ void MainWindow::onCurrentTabChanged()
     KCCompileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
     if(compilerReceiver!=NULL)
     {
-        compileDock->setReceiver(compilerReceiver);
+        compileDock->setCompileOutputReceiver(compilerReceiver);
     }
 
     connectDebugDockWithCurrEditor();
