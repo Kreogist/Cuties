@@ -50,15 +50,15 @@
 #include "kcreplacedock.h"
 #include "kcconnectionhandler.h"
 
-class KCISearchWindow;
-class KCILanguageMode;
+class KCSearchWindow;
+class KCLanguageMode;
 
-class KCICodeEditor : public QWidget
+class KCCodeEditor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KCICodeEditor(QWidget *parent = 0);
-    ~KCICodeEditor();
+    explicit KCCodeEditor(QWidget *parent = 0);
+    ~KCCodeEditor();
 
     QFileDevice::FileError error();
     void setDocumentTitle(const QString &title);
@@ -72,7 +72,7 @@ public:
     int getTextLines();
     bool isModified();
     QTextDocument* document();
-    KCILanguageMode *langMode() const;
+    KCLanguageMode *langMode() const;
     bool getOverwriteMode();
 
     void insertTextAtCursor(QString insertText);
@@ -111,29 +111,29 @@ private:
     void computeExecFileName();
     void fileInfoChanged(const QFile &file);
     bool dosaveas(const QString &Caption);
-    void connectSearchWidgetWithEditor(KCISearchWidget *widget);
+    void connectSearchWidgetWithEditor(KCSearchWidget *widget);
 
     QGraphicsOpacityEffect *initEffect;
 
-    KCILanguageMode *m_langMode;
+    KCLanguageMode *m_langMode;
 
     QVBoxLayout *replaceLayout;
     QHBoxLayout *mainLayout;
-    KCITextEditor *editor;
-    KCILinenumPanel *linePanel;
-    KCIMarkPanel *markPanel;
+    KCTextEditor *editor;
+    KCLinenumPanel *linePanel;
+    KCMarkPanel *markPanel;
 
     QString filePath,strFileFilter;
     QString execFileName;
     QFileDevice::FileError fileError;
     QTextCursor fileTextCursor;
 
-    KCISearchWindow *searchBar;
-    KCIReplaceDock *replaceBar;
+    KCSearchWindow *searchBar;
+    KCReplaceDock *replaceBar;
 
     KCConnectionHandler searcherConnections;
 
-    friend class KCILanguageMode;
+    friend class KCLanguageMode;
 };
 
 #endif // TEXTEDITOR_H

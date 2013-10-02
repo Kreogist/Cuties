@@ -36,11 +36,11 @@
 #include "kccompileoutputreceiver.h"
 #include "kcconnectionhandler.h"
 
-class KCICompiledock : public QDockWidget
+class KCCompiledock : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit KCICompiledock(QWidget *parent = 0);
+    explicit KCCompiledock(QWidget *parent = 0);
 
     //Compile File Path
     void setCompileFilePath(QString FilePath);

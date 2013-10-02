@@ -38,11 +38,11 @@
 #include "kcclipboard.h"
 #include "kceditorconfigure.h"
 
-class KCITextEditor : public QPlainTextEdit
+class KCTextEditor : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    explicit KCITextEditor(QWidget *parent = 0);
+    explicit KCTextEditor(QWidget *parent = 0);
     void setDocumentCursor(int nLine, int linePos);
 
 signals:

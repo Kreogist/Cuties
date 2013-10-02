@@ -51,7 +51,7 @@ QString KCJudgeFileEdit::outputFile()
     return OutputFileEdit->toPlainText();
 }
 
-KCIJudgeEditWidget::KCIJudgeEditWidget(QWidget *parent) :
+KCJudgeEditWidget::KCJudgeEditWidget(QWidget *parent) :
     QWidget(parent)
 {
     MainLayout=new QVBoxLayout(this);
@@ -117,17 +117,17 @@ KCIJudgeEditWidget::KCIJudgeEditWidget(QWidget *parent) :
     resetJudgetEditWidget();
 }
 
-void KCIJudgeEditWidget::backupTestData()
+void KCJudgeEditWidget::backupTestData()
 {
 
 }
 
-void KCIJudgeEditWidget::importTestData()
+void KCJudgeEditWidget::importTestData()
 {
 
 }
 
-void KCIJudgeEditWidget::documentChanged()
+void KCJudgeEditWidget::documentChanged()
 {
     KCJudgeFileEdit *Editor=qobject_cast<KCJudgeFileEdit *>(sender());
     if(Editor!=NULL)
@@ -138,7 +138,7 @@ void KCIJudgeEditWidget::documentChanged()
     }
 }
 
-void KCIJudgeEditWidget::resetJudgetEditWidget()
+void KCJudgeEditWidget::resetJudgetEditWidget()
 {
     //Remove all tabs.
     int i=tabJudgeFiles->count();
@@ -151,7 +151,7 @@ void KCIJudgeEditWidget::resetJudgetEditWidget()
     strOutputFiles.clear();
 }
 
-void KCIJudgeEditWidget::removeTabIndex(int TabIndex)
+void KCJudgeEditWidget::removeTabIndex(int TabIndex)
 {
     //Remove Tab.
     KCJudgeFileEdit *JudgeEditor=qobject_cast<KCJudgeFileEdit *>(tabJudgeFiles->widget(TabIndex));
@@ -170,12 +170,12 @@ void KCIJudgeEditWidget::removeTabIndex(int TabIndex)
     }
 }
 
-void KCIJudgeEditWidget::removeCurrentTab()
+void KCJudgeEditWidget::removeCurrentTab()
 {
     removeTabIndex(tabJudgeFiles->currentIndex());
 }
 
-void KCIJudgeEditWidget::addNewTab()
+void KCJudgeEditWidget::addNewTab()
 {
     //Set New Tab Content.
     KCJudgeFileEdit *newJudgeEdit = new KCJudgeFileEdit(this);
@@ -187,7 +187,7 @@ void KCIJudgeEditWidget::addNewTab()
 
 }
 
-KCIJudgeDock::KCIJudgeDock(QWidget *parent) :
+KCJudgeDock::KCJudgeDock(QWidget *parent) :
     QDockWidget(parent)
 {
     //Set Object Name.
@@ -211,7 +211,7 @@ KCIJudgeDock::KCIJudgeDock(QWidget *parent) :
     splCombine->setContentsMargins(0,0,0,0);
 
     //Set Judge Edit Widget
-    kjwEditWidget=new KCIJudgeEditWidget(this);
+    kjwEditWidget=new KCJudgeEditWidget(this);
     splCombine->addWidget(kjwEditWidget);
 
     //Set Judge List

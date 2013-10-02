@@ -39,9 +39,9 @@
 #include "kcpascalhighlighter.h"
 #include "kcgeneralconfigure.h"
 
-class KCICodeEditor;
+class KCCodeEditor;
 
-class KCILanguageMode : public QObject
+class KCLanguageMode : public QObject
 {
     Q_OBJECT
 public:
@@ -60,7 +60,7 @@ public:
         compiled
     };
 
-    explicit KCILanguageMode(QWidget *parent = 0);
+    explicit KCLanguageMode(QWidget *parent = 0);
 
     void compile();
     gdb *startDebug();
@@ -85,7 +85,7 @@ private:
     void setCompileState(const compileState &state);
 
     modeType m_type;
-    KCICodeEditor *m_parent;
+    KCCodeEditor *m_parent;
     QScopedPointer<KCHighlighter> m_highlighter;
 
     QScopedPointer<KCCompilerBase> compiler;

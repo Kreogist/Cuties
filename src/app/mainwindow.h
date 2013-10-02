@@ -55,9 +55,7 @@
 #include "kreogistcutestyle.h"
 #include "kcmessagebox.h"
 
-#include "kcmessagebox.h"
-
-class MainWindow : public KCIMainWindow
+class MainWindow : public KCMainWindow
 {
     Q_OBJECT
 public:
@@ -171,34 +169,34 @@ private:
     QString stringActionIconPath[actionMainWindowCount];
 
     //Enumerate Toolbar button items
-    enum buttonMainToolbar
+    enum mainToolbarButton
     {
-        tlbNewFile,
-        tlbOpenFile,
-        tlbSaveFile,
-        tlbCut,
-        tlbCopy,
-        tlbPaste,
-        tlbUndo,
-        tlbRedo,
-        tlbSearch,
-        tlbCompileAndRun,
-        buttonMainToolbarCount // The number of toolbar buttons
+        toolButtonNewFile,
+        toolButtonOpenFile,
+        toolButtonSaveFile,
+        toolButtonCut,
+        toolButtonCopy,
+        toolButtonPaste,
+        toolButtonUndo,
+        toolButtonRedo,
+        toolButtonSearch,
+        toolButtonCompileAndRun,
+        mainToolbarButtonCount // The number of toolbar buttons
     };
     //Define MainWindow Toolbar buttons.
-    QToolButton *buttonMainToolbarItem[buttonMainToolbarCount];
+    QToolButton *buttonMainToolbarItem[mainToolbarButtonCount];
 
     int sgoX, sgoY, sgoH, sgoW;
 
     //KCTextEditor *editor;
-    KCITabManager *tabManager;
-    KCISideBar *sidebarDock;
-    KCICompiledock *compileDock;
-    KCIDebugDock *debugDock;
-    KCIDebugWatchDock *debugWatchDock;
-    KCIJudgeDock *judgeDock;
-    KCITitleBar *titlebar;
-    KCIStatusBar *myStatusBar;
+    KCTabManager *tabManager;
+    KCSideBar *sidebarDock;
+    KCCompiledock *compileDock;
+    KCDebugDock *debugDock;
+    KCDebugWatchDock *debugWatchDock;
+    KCJudgeDock *judgeDock;
+    KCTitleBar *titlebar;
+    KCStatusBar *myStatusBar;
     QMetaObject::Connection compileFinishedConnection;
 
     void saveSettings();

@@ -26,11 +26,11 @@
 
 #include "kcpanel.h"
 
-class KCIMarkPanel : public KCPanel
+class KCMarkPanel : public KCPanel
 {
     Q_OBJECT
 public:
-    explicit KCIMarkPanel(QWidget *parent = 0);
+    explicit KCMarkPanel(QWidget *parent = 0);
     
     QPixmap getMarkPix() const;
     void setMarkPix(const QPixmap &value);

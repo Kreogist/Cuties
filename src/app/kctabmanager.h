@@ -39,16 +39,16 @@
 #include "kcsearchwindow.h"
 #include "kccodeeditor.h"
 
-class KCITabManager : public QTabWidget
+class KCTabManager : public QTabWidget
 {
     Q_OBJECT
 public:
-    explicit KCITabManager(QWidget *parent = 0);
+    explicit KCTabManager(QWidget *parent = 0);
     int getCurrentLineCount() const;
     int getCurrentLineNum() const;
     void openHistoryFiles();
 
-    KCICodeEditor *getCurrentEditor() const;
+    KCCodeEditor *getCurrentEditor() const;
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -61,21 +61,21 @@ public slots:
     void openAndJumpTo(const QString &filePath);
     int open(const QString &filePath);
     void open();
-    void new_file();
+    void newFile();
     void save();
-    void save_as();
-    void save_all();
+    void saveAs();
+    void saveAll();
     void redo();
     void undo();
     void copy();
     void cut();
     void paste();
-    void select_all();
-    void on_tab_close_requested(int index);
-    void on_current_tab_change(int index);
-    void close_current_tab();
-    void close_all_tab();
-    void close_all_other_tab();
+    void selectAll();
+    void onTabCloseRequested(int index);
+    void onCurrentTabChange(int index);
+    void closeCurrentTab();
+    void closeAllTab();
+    void closeAllOtherTab();
     void switchNextTab();
     void switchPrevTab();
     void renameTabTitle(QString title);
@@ -96,14 +96,11 @@ private slots:
     void setTabCloseable(bool newValue);
 
 private:
-    int tab_count;
-    int new_file_count;
+    int newFileCount;
     QTextCursor currentTextCursor;
-    KCICodeEditor *currentEditor;
+    KCCodeEditor *currentEditor;
     KCEditorConfigure* editorConfigureInstance;
     QTabBar *tabBarControl;
-
-    bool save_all_file();
 };
 
 #endif // KCTABMANAGER_H

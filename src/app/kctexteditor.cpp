@@ -21,7 +21,7 @@
 
 //static int elideWidth=500;
 
-KCITextEditor::KCITextEditor(QWidget *parent) :
+KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
     setContentsMargins(0,0,0,0);
@@ -64,8 +64,8 @@ KCITextEditor::KCITextEditor(QWidget *parent) :
     //Solve the default line's bug.
     updateHighlights();
 
-    connect(this,&KCITextEditor::cursorPositionChanged,
-            this,&KCITextEditor::updateHighlights);
+    connect(this,&KCTextEditor::cursorPositionChanged,
+            this,&KCTextEditor::updateHighlights);
     connect(this,SIGNAL(textChanged()),
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
@@ -81,13 +81,13 @@ KCITextEditor::KCITextEditor(QWidget *parent) :
             this,SLOT(setTheCursorWidth(int)));
 }
 
-void KCITextEditor::paintEvent(QPaintEvent *e)
+void KCTextEditor::paintEvent(QPaintEvent *e)
 {
     QPlainTextEdit::paintEvent(e);
     emit updated();
 }
 
-void KCITextEditor::checkWhetherBlockSearchedAndDealWith(
+void KCTextEditor::checkWhetherBlockSearchedAndDealWith(
         const QTextBlock& block)
 {
     KCTextBlockData *data=(KCTextBlockData *)block.userData();
@@ -103,22 +103,22 @@ void KCITextEditor::checkWhetherBlockSearchedAndDealWith(
     data->endUsingSearchDatas();
 }
 
-bool KCITextEditor::showPreviousSearchResult()
+bool KCTextEditor::showPreviousSearchResult()
 {
     return findString(false);
 }
 
-bool KCITextEditor::showNextSearchResult()
+bool KCTextEditor::showNextSearchResult()
 {
     return findString(true);
 }
 
-void KCITextEditor::setTabWidth(int width)
+void KCTextEditor::setTabWidth(int width)
 {
     setTabStopWidth(fontMetrics().width(' ')*width);
 }
 
-bool KCITextEditor::findString(bool forward)
+bool KCTextEditor::findString(bool forward)
 {
     QTextCursor _textCursor;
 
@@ -257,7 +257,7 @@ bool KCITextEditor::findString(bool forward)
     return false;
 }
 
-void KCITextEditor::searchString(QString text,
+void KCTextEditor::searchString(QString text,
                                  bool regularExpression,
                                  bool caseSensitively,
                                  bool wholeWord)
@@ -296,7 +296,7 @@ void KCITextEditor::searchString(QString text,
     }
 }
 
-void KCITextEditor::updateSearchResults()
+void KCTextEditor::updateSearchResults()
 {
     generalSearch(firstVisibleBlock(),
                   height()/fontMetrics().lineSpacing()+2,
@@ -305,7 +305,7 @@ void KCITextEditor::updateSearchResults()
     updateHighlights();
 }
 
-void KCITextEditor::generalSearch(const QTextBlock &block,
+void KCTextEditor::generalSearch(const QTextBlock &block,
                                   const int &lines,
                                   const bool forward)
 {
@@ -319,7 +319,7 @@ void KCITextEditor::generalSearch(const QTextBlock &block,
                      forward);
 }
 
-void KCITextEditor::searchOnOtherThread(QScopedPointer<KCTextSearcher> &searcher,
+void KCTextEditor::searchOnOtherThread(QScopedPointer<KCTextSearcher> &searcher,
                                         QFuture<void> &thread,
                                         const QTextBlock &block,
                                         const bool forward)
@@ -340,7 +340,7 @@ void KCITextEditor::searchOnOtherThread(QScopedPointer<KCTextSearcher> &searcher
                              forward);
 }
 
-void KCITextEditor::initTextSearcher(QScopedPointer<KCTextSearcher> &searcher)
+void KCTextEditor::initTextSearcher(QScopedPointer<KCTextSearcher> &searcher)
 {
     if(regularExpression || wholeWord)
     {
@@ -355,7 +355,7 @@ void KCITextEditor::initTextSearcher(QScopedPointer<KCTextSearcher> &searcher)
     searcher->setIsCaseSensitive(caseSensitively);
 }
 
-bool KCITextEditor::replace(const QString &oldText, const QString &newText)
+bool KCTextEditor::replace(const QString &oldText, const QString &newText)
 {
     QTextCursor _cursor=textCursor();
 
@@ -372,14 +372,14 @@ bool KCITextEditor::replace(const QString &oldText, const QString &newText)
     return false;
 }
 
-bool KCITextEditor::replaceAndFind(const QString &oldText,
+bool KCTextEditor::replaceAndFind(const QString &oldText,
                                    const QString &newText)
 {
     bool ret=replace(oldText,newText);
     return ret|showNextSearchResult();
 }
 
-bool KCITextEditor::replaceAll(const QString &oldText, const QString &newText)
+bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
 {
     bool ret=replaceAndFind(oldText,newText);
     while(replaceAndFind(oldText,newText))
@@ -389,7 +389,7 @@ bool KCITextEditor::replaceAll(const QString &oldText, const QString &newText)
     return ret;
 }
 
-void KCITextEditor::autoIndent()
+void KCTextEditor::autoIndent()
 {
     QTextCursor _textCursor=textCursor();
     QTextBlock currBlock=_textCursor.block();
@@ -424,7 +424,7 @@ void KCITextEditor::autoIndent()
     }
 }
 
-void KCITextEditor::insertTab(QTextCursor cursor, int count)
+void KCTextEditor::insertTab(QTextCursor cursor, int count)
 {
     cursor.clearSelection();
     while(count--)
@@ -444,7 +444,7 @@ void KCITextEditor::insertTab(QTextCursor cursor, int count)
     }
 }
 
-void KCITextEditor::removeTab(QTextCursor cursor, int count)
+void KCTextEditor::removeTab(QTextCursor cursor, int count)
 {
     cursor.clearSelection();
     while(count-- && !cursor.atBlockStart())
@@ -465,14 +465,14 @@ void KCITextEditor::removeTab(QTextCursor cursor, int count)
     cursor.removeSelectedText();
 }
 
-int KCITextEditor::findFirstCharacter(const QTextBlock &block)
+int KCTextEditor::findFirstCharacter(const QTextBlock &block)
 {
     QString text=block.text();
     int ret=text.indexOf(QRegularExpression("\\S"));
     return ret==-1?block.text().length():ret;
 }
 
-void KCITextEditor::setDocumentCursor(int nLine, int linePos)
+void KCTextEditor::setDocumentCursor(int nLine, int linePos)
 {
     QTextCursor cursor = textCursor();
     cursor.setPosition(document()->findBlockByNumber(nLine).position());
@@ -482,7 +482,7 @@ void KCITextEditor::setDocumentCursor(int nLine, int linePos)
     setTextCursor(cursor);
 }
 
-void KCITextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
+void KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
 {
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
@@ -578,7 +578,7 @@ void KCITextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selec
     }
 }
 
-int KCITextEditor::matchParentheses(const char &parenthesesA,
+int KCTextEditor::matchParentheses(const char &parenthesesA,
                                     const char &parenthesesB,
                                     QList<parenthesesInfo>::iterator startPos,
                                     QTextBlock block,
@@ -636,7 +636,7 @@ int KCITextEditor::matchParentheses(const char &parenthesesA,
     return -1;
 }
 
-void KCITextEditor::updateHighlights()
+void KCTextEditor::updateHighlights()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
 
@@ -647,7 +647,7 @@ void KCITextEditor::updateHighlights()
     setExtraSelections(extraSelections);
 }
 
-void KCITextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections)
+void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections)
 {
     if(!isReadOnly())
     {
@@ -661,7 +661,7 @@ void KCITextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selec
     }
 }
 
-void KCITextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections)
+void KCTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections)
 {
     QTextCursor _cursor(document());
 
@@ -726,7 +726,7 @@ void KCITextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& sele
     delete menu;
 }*/
 
-void KCITextEditor::contextMenuEvent(QContextMenuEvent *event)
+void KCTextEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     /*contextMenuPos=event->globalPos();
 
@@ -747,7 +747,7 @@ void KCITextEditor::contextMenuEvent(QContextMenuEvent *event)
     setTextCursor(currTextCursor);
 }*/
 
-void KCITextEditor::keyPressEvent(QKeyEvent *e)
+void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
 
@@ -852,12 +852,12 @@ void KCITextEditor::keyPressEvent(QKeyEvent *e)
     }
 }
 
-void KCITextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
+void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
 {
     setWordWrapMode(wrapMode);
 }
 
-void KCITextEditor::setTheCursorWidth(int width)
+void KCTextEditor::setTheCursorWidth(int width)
 {
     setCursorWidth(width);
 }

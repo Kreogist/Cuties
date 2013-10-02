@@ -1,6 +1,6 @@
 #include "kcdebugdock.h"
 
-KCIDebugDock::KCIDebugDock(QWidget *parent) :
+KCDebugDock::KCDebugDock(QWidget *parent) :
     QDockWidget(parent)
 {
     //Set ObjectName
@@ -26,7 +26,7 @@ KCIDebugDock::KCIDebugDock(QWidget *parent) :
 KCDebugWidget::KCDebugWidget(QWidget *parent) :
     QWidget(parent)
 {   
-    m_parent=qobject_cast<KCIDebugDock *>(parent);
+    m_parent=qobject_cast<KCDebugDock *>(parent);
     setContentsMargins(0,0,0,0);
 
     //Main Layout.
@@ -211,13 +211,13 @@ void KCDebugWidget::onStartDebugButtonClicked()
     gdbInstance->execRun();
 }
 
-void KCIDebugDock::setDbgReceiver(dbgOutputReceiver *receiver)
+void KCDebugDock::setDbgReceiver(dbgOutputReceiver *receiver)
 {
     Q_ASSERT(receiver!=NULL);
     CentralWidget->setDbgReceiver(receiver);
 }
 
-void KCIDebugDock::setGdbInstance(gdb *instance)
+void KCDebugDock::setGdbInstance(gdb *instance)
 {
     Q_ASSERT(instance!=NULL);
     CentralWidget->connectGDB(instance);

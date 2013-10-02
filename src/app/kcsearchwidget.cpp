@@ -19,9 +19,9 @@
 
 #include "kcsearchwidget.h"
 
-const int KCISearchWidget::searchTextPartWidth=3;
+const int KCSearchWidget::searchTextPartWidth=3;
 
-KCISearchWidget::KCISearchWidget(QWidget *parent) :
+KCSearchWidget::KCSearchWidget(QWidget *parent) :
     QWidget(parent)
 {
     setContentsMargins(0,0,0,0);
@@ -107,12 +107,12 @@ KCISearchWidget::KCISearchWidget(QWidget *parent) :
     connect(downButton,SIGNAL(clicked()),this,SIGNAL(requireShowNextResult()));
 }
 
-QString KCISearchWidget::text() const
+QString KCSearchWidget::text() const
 {
     return SearchTexts->text();
 }
 
-void KCISearchWidget::onTextChanged(const QString &text)
+void KCSearchWidget::onTextChanged(const QString &text)
 {
     bool Regexp=menuAction[menuRegularExpress]->isChecked();
     bool MatchCase=menuAction[menuMatchCase]->isChecked();
@@ -121,27 +121,27 @@ void KCISearchWidget::onTextChanged(const QString &text)
     emit requireSearch(text,Regexp,MatchCase,WholeWord);
 }
 
-void KCISearchWidget::onMenuClicked()
+void KCSearchWidget::onMenuClicked()
 {
     onTextChanged(SearchTexts->text());
 }
 
-void KCISearchWidget::setText(const QString &text)
+void KCSearchWidget::setText(const QString &text)
 {
     SearchTexts->setText(text);
 }
 
-void KCISearchWidget::setTextFocus()
+void KCSearchWidget::setTextFocus()
 {
     SearchTexts->setFocus();
 }
 
-void KCISearchWidget::resizeEvent(QResizeEvent *event)
+void KCSearchWidget::resizeEvent(QResizeEvent *event)
 {
     SearchTexts->setFixedWidth(event->size().width());
 }
 
-void KCISearchWidget::keyPressEvent(QKeyEvent *event)
+void KCSearchWidget::keyPressEvent(QKeyEvent *event)
 {
     switch(event->key())
     {

@@ -1,6 +1,6 @@
 #include "kcsidebar.h"
 
-KCIClipboardHistoryStack::KCIClipboardHistoryStack(QWidget *parent) :
+KCClipboardHistoryStack::KCClipboardHistoryStack(QWidget *parent) :
     QListView(parent)
 {
     QPalette pal=this->palette();
@@ -8,16 +8,16 @@ KCIClipboardHistoryStack::KCIClipboardHistoryStack(QWidget *parent) :
     setPalette(pal);
 
     setModel(KCClipboard::getInstance()->getClipboardTextsModel());
-    connect(this, &KCIClipboardHistoryStack::activated,
-            this, &KCIClipboardHistoryStack::dblClickClipboardItems);
+    connect(this, &KCClipboardHistoryStack::activated,
+            this, &KCClipboardHistoryStack::dblClickClipboardItems);
 }
 
-void KCIClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
+void KCClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
 {
     emit requiredInsertText(KCClipboard::getInstance()->getHistoryClipboardText(ItemID.row()));
 }
 
-KCIHistoryStack::KCIHistoryStack(QWidget *parent) :
+KCHistoryStack::KCHistoryStack(QWidget *parent) :
     QListView(parent)
 {
     QPalette pal=this->palette();
@@ -25,16 +25,16 @@ KCIHistoryStack::KCIHistoryStack(QWidget *parent) :
     setPalette(pal);
 
     setModel(KCHistoryConfigure::getInstance()->getRecentOpenedFileModel());
-    connect(this, &KCIHistoryStack::activated,
-            this, &KCIHistoryStack::dblClickHistoryItems);
+    connect(this, &KCHistoryStack::activated,
+            this, &KCHistoryStack::dblClickHistoryItems);
 }
 
-void KCIHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
+void KCHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
 {
     emit requiredOpenFiles(KCHistoryConfigure::getInstance()->getRecentOpenedFileModel()->item(ItemID.row())->toolTip());
 }
 
-KCISidebarButton::KCISidebarButton(QWidget *parent) :
+KCSidebarButton::KCSidebarButton(QWidget *parent) :
     QWidget(parent)
 {
     //Set Properties.
@@ -62,12 +62,12 @@ KCISidebarButton::KCISidebarButton(QWidget *parent) :
     buttonLocked=false;
 }
 
-void KCISidebarButton::setIcon(QString IconPath)
+void KCSidebarButton::setIcon(QString IconPath)
 {
     iconDisplayer->setPixmap(QPixmap(IconPath));
 }
 
-void KCISidebarButton::setPressed(bool newValue, bool force)
+void KCSidebarButton::setPressed(bool newValue, bool force)
 {
     buttonPressed=newValue;
     if(buttonPressed)
@@ -82,13 +82,13 @@ void KCISidebarButton::setPressed(bool newValue, bool force)
     }
 }
 
-void KCISidebarButton::setBackgroundColor()
+void KCSidebarButton::setBackgroundColor()
 {
     pal.setColor(QPalette::Window, buttonBackcolor);
     setPalette(pal);
 }
 
-void KCISidebarButton::enterEvent(QEvent *e)
+void KCSidebarButton::enterEvent(QEvent *e)
 {
     if(!buttonPressed)
     {
@@ -99,7 +99,7 @@ void KCISidebarButton::enterEvent(QEvent *e)
     QWidget::enterEvent(e);
 }
 
-void KCISidebarButton::leaveEvent(QEvent *e)
+void KCSidebarButton::leaveEvent(QEvent *e)
 {
     if(!buttonPressed)
     {
@@ -110,14 +110,14 @@ void KCISidebarButton::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 }
 
-void KCISidebarButton::mousePressEvent(QMouseEvent *e)
+void KCSidebarButton::mousePressEvent(QMouseEvent *e)
 {
     setPressed(!buttonPressed, false);
     QWidget::mousePressEvent(e);
     emit mousePressed();
 }
 
-KCISideBarContent::KCISideBarContent(QWidget *parent) :
+KCSideBarContent::KCSideBarContent(QWidget *parent) :
     QWidget(parent)
 {
     //Set Properties.
@@ -139,11 +139,11 @@ KCISideBarContent::KCISideBarContent(QWidget *parent) :
     sidebarButtonMapper=new QSignalMapper(this);
 
     //Set Sidebar Buttons.
-    sidebarButton[sideButtonHistory]=new KCISidebarButton(this);
+    sidebarButton[sideButtonHistory]=new KCSidebarButton(this);
     sidebarButton[sideButtonHistory]->setIcon(":/Sidebar/image/Sidebar/History.png");
     sidebarButton[sideButtonHistory]->setToolTip(tr("History"));
 
-    sidebarButton[sideButtonClipboard]=new KCISidebarButton(this);
+    sidebarButton[sideButtonClipboard]=new KCSidebarButton(this);
     sidebarButton[sideButtonClipboard]->setToolTip(tr("Clipboard"));
     sidebarButton[sideButtonClipboard]->setIcon(":/Sidebar/image/Sidebar/Clipboard.png");
 
@@ -177,28 +177,28 @@ KCISideBarContent::KCISideBarContent(QWidget *parent) :
     mainLayout->addStretch();
 
     //Add Widgets
-    historyStack=new KCIHistoryStack(this);
+    historyStack=new KCHistoryStack(this);
     contents->addWidget(historyStack);
     connect(historyStack, SIGNAL(requiredOpenFiles(QString)),
             this, SIGNAL(historyRequiredOpenFiles(QString)));
 
-    clipboardStack=new KCIClipboardHistoryStack(this);
+    clipboardStack=new KCClipboardHistoryStack(this);
     contents->addWidget(clipboardStack);
     connect(clipboardStack, SIGNAL(requiredInsertText(QString)),
             this, SIGNAL(clipRequiredInsertText(QString)));
 }
 
-KCISideBarContent::~KCISideBarContent()
+KCSideBarContent::~KCSideBarContent()
 {
     buttonGroupLayout->deleteLater();
 }
 
-void KCISideBarContent::setContentFixedWidth(int newContentWidth)
+void KCSideBarContent::setContentFixedWidth(int newContentWidth)
 {
     contents->setFixedWidth(newContentWidth);
 }
 
-void KCISideBarContent::forceClearButtonState()
+void KCSideBarContent::forceClearButtonState()
 {
     if(sidebarButtonIndex!=-1)
     {
@@ -207,7 +207,7 @@ void KCISideBarContent::forceClearButtonState()
     }
 }
 
-void KCISideBarContent::forceShowButtonState()
+void KCSideBarContent::forceShowButtonState()
 {
     if(sidebarButtonIndex!=-1)
     {
@@ -217,17 +217,17 @@ void KCISideBarContent::forceShowButtonState()
     sidebarButton[sidebarButtonIndex]->setPressed(true, true);
 }
 
-void KCISideBarContent::showContent()
+void KCSideBarContent::showContent()
 {
     contents->show();
 }
 
-void KCISideBarContent::hideContent()
+void KCSideBarContent::hideContent()
 {
     contents->hide();
 }
 
-void KCISideBarContent::listButtonClicked(int Index)
+void KCSideBarContent::listButtonClicked(int Index)
 {
     if(sidebarButtonIndex==Index)
     {
@@ -249,7 +249,7 @@ void KCISideBarContent::listButtonClicked(int Index)
     }
 }
 
-KCISideBar::KCISideBar(QWidget *parent) :
+KCSideBar::KCSideBar(QWidget *parent) :
     QDockWidget(parent)
 {
     //Set ObjectName
@@ -275,7 +275,7 @@ KCISideBar::KCISideBar(QWidget *parent) :
     setWindowTitle(" " + tr("Sidebar") + " ");
 
     //New Central Widget
-    CentralWidget=new KCISideBarContent(this);
+    CentralWidget=new KCSideBarContent(this);
     CentralWidget->setMinimumWidth(0);
     setWidget(CentralWidget);
 
@@ -303,17 +303,17 @@ KCISideBar::KCISideBar(QWidget *parent) :
     expandState=false;
 }
 
-void KCISideBar::forceClearButtonState()
+void KCSideBar::forceClearButtonState()
 {
     CentralWidget->forceClearButtonState();
 }
 
-void KCISideBar::forceShowButtonState()
+void KCSideBar::forceShowButtonState()
 {
     CentralWidget->forceShowButtonState();
 }
 
-void KCISideBar::showAnime()
+void KCSideBar::showAnime()
 {
     if(showAnimation->state()!=QTimeLine::Running)
     {
@@ -327,13 +327,13 @@ void KCISideBar::showAnime()
     }
 }
 
-void KCISideBar::resizeDock(int newWidth)
+void KCSideBar::resizeDock(int newWidth)
 {
     CentralWidget->setContentFixedWidth(newWidth - 30);
     setFixedWidth(newWidth);
 }
 
-void KCISideBar::hideAnime()
+void KCSideBar::hideAnime()
 {
     if(hideAnimation->state()!=QTimeLine::Running)
     {
@@ -345,12 +345,12 @@ void KCISideBar::hideAnime()
     }
 }
 
-bool KCISideBar::getExpandState() const
+bool KCSideBar::getExpandState() const
 {
     return expandState;
 }
 
-void KCISideBar::setExpandState(bool value)
+void KCSideBar::setExpandState(bool value)
 {
     expandState = value;
 }

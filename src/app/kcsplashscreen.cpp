@@ -2,7 +2,7 @@
 
 KCSplashScreen::KCSplashScreen()
 {
-    minimumMillisecondPerMessage=1000;
+    minimumMillisecondPerMessage=200;
 }
 
 void KCSplashScreen::showMessage(const QString &message,

@@ -19,7 +19,7 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    KCIMainWindow(parent)
+    KCMainWindow(parent)
 {
     //Set MainWindow properties.
     //Set MainWindow title.
@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setPalette(QPpal);
 
     //Set Central Widget.
-    tabManager=new KCITabManager(this);
+    tabManager=new KCTabManager(this);
     connect(tabManager,SIGNAL(currentChanged(int)),
             this,SLOT(onCurrentTabChanged()));
     setCentralWidget(tabManager);
@@ -57,7 +57,7 @@ void MainWindow::createActions()
     actionMainWindowItem[actionFileNewFile]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
     stringActionIconPath[actionFileNewFile]=QString(":/menuicon/image/MenuIcons/mnuFileNew.png");
     stringActionStatusTips[actionFileNewFile]=QString(tr("Create a new document."));
-    connect(actionMainWindowItem[actionFileNewFile],SIGNAL(triggered()),tabManager,SLOT(new_file()));
+    connect(actionMainWindowItem[actionFileNewFile],SIGNAL(triggered()),tabManager,SLOT(newFile()));
 
     //File -> Open
     actionMainWindowItem[actionFileOpen]=new QAction(tr("&Open..."),this);
@@ -78,32 +78,32 @@ void MainWindow::createActions()
     actionMainWindowItem[actionFileSaveAs]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_S));
     stringActionIconPath[actionFileSaveAs]=QString(":/menuicon/image/MenuIcons/mnuFileSaveAs.png");
     stringActionStatusTips[actionFileSaveAs]=QString(tr("Save as different file name."));
-    connect(actionMainWindowItem[actionFileSaveAs],SIGNAL(triggered()),tabManager,SLOT(save_as()));
+    connect(actionMainWindowItem[actionFileSaveAs],SIGNAL(triggered()),tabManager,SLOT(saveAs()));
 
     //File -> Save All
     actionMainWindowItem[actionFileSaveAll]=new QAction(tr("Sa&ve All"),this);
     actionMainWindowItem[actionFileSaveAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
     stringActionStatusTips[actionFileSaveAll]=QString(tr("Save all modified documents."));
-    connect(actionMainWindowItem[actionFileSaveAll],SIGNAL(triggered()),tabManager,SLOT(save_all()));
+    connect(actionMainWindowItem[actionFileSaveAll],SIGNAL(triggered()),tabManager,SLOT(saveAll()));
 
     //File -> Close
     actionMainWindowItem[actionFileClose]=new QAction(tr("&Close"),this);
     actionMainWindowItem[actionFileClose]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F4));
     stringActionIconPath[actionFileClose]=QString(":/menuicon/image/MenuIcons/mnuFileClose.png");
     stringActionStatusTips[actionFileClose]=QString(tr("Close the active document."));
-    connect(actionMainWindowItem[actionFileClose],SIGNAL(triggered()),tabManager,SLOT(close_current_tab()));
+    connect(actionMainWindowItem[actionFileClose],SIGNAL(triggered()),tabManager,SLOT(closeCurrentTab()));
 
     //File -> Close All
     actionMainWindowItem[actionFileCloseAll]=new QAction(tr("C&lose All"),this);
     actionMainWindowItem[actionFileCloseAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F4));
     stringActionStatusTips[actionFileCloseAll]=QString(tr("Close all documents."));
-    connect(actionMainWindowItem[actionFileCloseAll],SIGNAL(triggered()),tabManager,SLOT(close_all_tab()));
+    connect(actionMainWindowItem[actionFileCloseAll],SIGNAL(triggered()),tabManager,SLOT(closeAllTab()));
 
     //File -> Close All Except This
     actionMainWindowItem[actionFileCloseAllExceptThis]=new QAction(tr("Clos&e All Other File"),this);
     actionMainWindowItem[actionFileCloseAllExceptThis]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F4));
     stringActionStatusTips[actionFileCloseAllExceptThis]=QString(tr("Close all documents except the active document."));
-    connect(actionMainWindowItem[actionFileCloseAllExceptThis],SIGNAL(triggered()),tabManager,SLOT(close_all_other_tab()));
+    connect(actionMainWindowItem[actionFileCloseAllExceptThis],SIGNAL(triggered()),tabManager,SLOT(closeAllOtherTab()));
 
     //File -> Exit
     actionMainWindowItem[actionFileExit]=new QAction(tr("E&xit"),this);
@@ -153,7 +153,7 @@ void MainWindow::createActions()
     actionMainWindowItem[actionEditSelectAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_A));
     stringActionIconPath[actionEditSelectAll]=QString(":/menuicon/image/MenuIcons/mnuEditSelectAll.png");
     stringActionStatusTips[actionEditSelectAll]=QString(tr("Select the entire document."));
-    connect(actionMainWindowItem[actionEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(select_all()));
+    connect(actionMainWindowItem[actionEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(selectAll()));
 
     //Edit -> Preferences
     actionMainWindowItem[actionEditPreferences]=new QAction(tr("Preferences"),this);
@@ -380,51 +380,51 @@ void MainWindow::createTitlebar()
 void MainWindow::createToolBar()
 {
     //Set Icons.
-    QString strIconPath[buttonMainToolbarCount];
-    strIconPath[tlbNewFile]=":/ToolBar/image/ToolBar/new.png";
-    strIconPath[tlbOpenFile]=":/ToolBar/image/ToolBar/open.png";
-    strIconPath[tlbSaveFile]=":/ToolBar/image/ToolBar/save.png";
-    strIconPath[tlbCut]=":/ToolBar/image/ToolBar/cut.png";
-    strIconPath[tlbCopy]=":/ToolBar/image/ToolBar/copy.png";
-    strIconPath[tlbPaste]=":/ToolBar/image/ToolBar/paste.png";
-    strIconPath[tlbUndo]=":/ToolBar/image/ToolBar/undo.png";
-    strIconPath[tlbRedo]=":/ToolBar/image/ToolBar/redo.png";
-    strIconPath[tlbSearch]=":/ToolBar/image/ToolBar/search.png";
-    strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compileandrun.png";
+    QString strIconPath[mainToolbarButtonCount];
+    strIconPath[toolButtonNewFile]=":/ToolBar/image/ToolBar/new.png";
+    strIconPath[toolButtonOpenFile]=":/ToolBar/image/ToolBar/open.png";
+    strIconPath[toolButtonSaveFile]=":/ToolBar/image/ToolBar/save.png";
+    strIconPath[toolButtonCut]=":/ToolBar/image/ToolBar/cut.png";
+    strIconPath[toolButtonCopy]=":/ToolBar/image/ToolBar/copy.png";
+    strIconPath[toolButtonPaste]=":/ToolBar/image/ToolBar/paste.png";
+    strIconPath[toolButtonUndo]=":/ToolBar/image/ToolBar/undo.png";
+    strIconPath[toolButtonRedo]=":/ToolBar/image/ToolBar/redo.png";
+    strIconPath[toolButtonSearch]=":/ToolBar/image/ToolBar/search.png";
+    strIconPath[toolButtonCompileAndRun]=":/ToolBar/image/ToolBar/compileandrun.png";
 
     //Set Other Buttons.
-    for(int i=tlbNewFile; i<buttonMainToolbarCount; i++)
+    for(int i=toolButtonNewFile; i<mainToolbarButtonCount; i++)
     {
         buttonMainToolbarItem[i]=new QToolButton(titlebar);
         //tblMainButton[i]->setPalette(pal);
         buttonMainToolbarItem[i]->setFixedSize(25,25);
         buttonMainToolbarItem[i]->setIcon(QIcon(strIconPath[i]));
         titlebar->addToolButton(buttonMainToolbarItem[i]);
-        if(i==tlbSaveFile || i==tlbPaste || i==tlbRedo || i==tlbSearch)
+        if(i==toolButtonSaveFile || i==toolButtonPaste || i==toolButtonRedo || i==toolButtonSearch)
         {
             titlebar->addToolSeparator();
         }
     }
 
-    connect(buttonMainToolbarItem[tlbNewFile],SIGNAL(clicked()),
-            tabManager,SLOT(new_file()));
-    connect(buttonMainToolbarItem[tlbOpenFile],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonNewFile],SIGNAL(clicked()),
+            tabManager,SLOT(newFile()));
+    connect(buttonMainToolbarItem[toolButtonOpenFile],SIGNAL(clicked()),
             tabManager,SLOT(open()));
-    connect(buttonMainToolbarItem[tlbSaveFile],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonSaveFile],SIGNAL(clicked()),
             tabManager,SLOT(save()));
-    connect(buttonMainToolbarItem[tlbCut],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonCut],SIGNAL(clicked()),
             tabManager,SLOT(cut()));
-    connect(buttonMainToolbarItem[tlbCopy],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonCopy],SIGNAL(clicked()),
             tabManager,SLOT(copy()));
-    connect(buttonMainToolbarItem[tlbPaste],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonPaste],SIGNAL(clicked()),
             tabManager,SLOT(paste()));
-    connect(buttonMainToolbarItem[tlbUndo],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonUndo],SIGNAL(clicked()),
             tabManager,SLOT(undo()));
-    connect(buttonMainToolbarItem[tlbRedo],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonRedo],SIGNAL(clicked()),
             tabManager,SLOT(redo()));
-    connect(buttonMainToolbarItem[tlbSearch],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonSearch],SIGNAL(clicked()),
             tabManager,SLOT(showSearchBar()));
-    connect(buttonMainToolbarItem[tlbCompileAndRun],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonCompileAndRun],SIGNAL(clicked()),
             this,SLOT(compileAndRun()));
 
 }
@@ -439,7 +439,7 @@ void MainWindow::createDocks()
     */
 
     //Compile Dock
-    compileDock=new KCICompiledock(this);
+    compileDock=new KCCompiledock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
             tabManager,SLOT(openAndJumpTo(QString)));
     connect(compileDock,SIGNAL(requireGotoLine(int,int)),
@@ -451,19 +451,19 @@ void MainWindow::createDocks()
     compileDock->hide();
 
     //Debug Dock
-    debugDock=new KCIDebugDock(this);
+    debugDock=new KCDebugDock(this);
     addDockWidget(Qt::BottomDockWidgetArea,debugDock);
     connect(debugDock,SIGNAL(requireStartDebug()),
             this,SLOT(startDebug()));
     debugDock->hide();
 
     //Debug Watch Dock
-    debugWatchDock=new KCIDebugWatchDock(this);
+    debugWatchDock=new KCDebugWatchDock(this);
     addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
     debugWatchDock->hide();
 
     //Sidebar Dock
-    sidebarDock=new KCISideBar(this);
+    sidebarDock=new KCSideBar(this);
     addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
     connect(sidebarDock, SIGNAL(historyRequiredOpenFiles(QString)),
             tabManager, SLOT(openAndJumpTo(QString)));
@@ -698,7 +698,7 @@ void MainWindow::createMenu()
 
 void MainWindow::createStatusbar()
 {
-    myStatusBar=new KCIStatusBar(this);
+    myStatusBar=new KCStatusBar(this);
     setStatusBar(myStatusBar);
 
     QPalette pal=myStatusBar->palette();
@@ -835,7 +835,7 @@ void MainWindow::restoreSettings()
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
-    KCIMainWindow::resizeEvent(e);
+    KCMainWindow::resizeEvent(e);
     if(this->isMaximized())
     {
         sgoH=e->oldSize().height();
@@ -909,7 +909,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::show()
 {
-    KCIMainWindow::show();
+    KCMainWindow::show();
     if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile())
     {
         tabManager->openHistoryFiles();
@@ -918,7 +918,7 @@ void MainWindow::show()
 
 void MainWindow::compileCurrentFile()
 {
-    KCICodeEditor *currentEditor=tabManager->getCurrentEditor();
+    KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
 
     //Check Tab Status.
     if(currentEditor!=NULL)
@@ -957,7 +957,7 @@ void MainWindow::compileCurrentFile()
 
 void MainWindow::run()
 {
-    KCICodeEditor *currentEditor=tabManager->getCurrentEditor();
+    KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
     {
         //execute file name
@@ -967,7 +967,7 @@ void MainWindow::run()
 
 void MainWindow::compileAndRun()
 {
-    KCICodeEditor *currentEditor=tabManager->getCurrentEditor();
+    KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
 
     //Check Tab Status.
     if(currentEditor!=NULL)
@@ -1060,13 +1060,13 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::onCurrentTabChanged()
 {
-    KCICodeEditor* currEditor=tabManager->getCurrentEditor();
+    KCCodeEditor* currEditor=tabManager->getCurrentEditor();
     if(currEditor==NULL)
     {
         return ;
     }
 
-    KCILanguageMode *currLangMode=currEditor->langMode();
+    KCLanguageMode *currLangMode=currEditor->langMode();
     KCCompileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
     if(compilerReceiver!=NULL)
     {
@@ -1078,8 +1078,8 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    KCICodeEditor *currEditor=tabManager->getCurrentEditor();
-    KCILanguageMode *currLangMode=currEditor->langMode();
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    KCLanguageMode *currLangMode=currEditor->langMode();
     currLangMode->startDebug();
 
     connectDebugDockWithCurrEditor();
@@ -1088,7 +1088,7 @@ void MainWindow::startDebug()
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
-    KCILanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
+    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
 
     dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
     if(dbgReceiver!=NULL)

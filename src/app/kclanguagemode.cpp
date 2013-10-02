@@ -19,10 +19,10 @@
 
 #include "kclanguagemode.h"
 
-KCILanguageMode::KCILanguageMode(QWidget *parent) :
+KCLanguageMode::KCLanguageMode(QWidget *parent) :
     QObject(parent)
 {
-    m_parent=qobject_cast<KCICodeEditor *>(parent);
+    m_parent=qobject_cast<KCCodeEditor *>(parent);
     compilerReceiver=NULL;
     dbgReceiver=NULL;
     gdbInstance=NULL;
@@ -34,12 +34,12 @@ KCILanguageMode::KCILanguageMode(QWidget *parent) :
     Q_ASSERT(m_parent!=NULL);
 }
 
-void KCILanguageMode::setMode(const modeType &type)
+void KCLanguageMode::setMode(const modeType &type)
 {
     m_type=type;
 }
 
-void KCILanguageMode::compile()
+void KCLanguageMode::compile()
 {
     if(compiler.isNull())
     {
@@ -63,11 +63,11 @@ void KCILanguageMode::compile()
     compilerReceiver->addForwardText();
 
     compilerFinishedConnection=connect(compiler.data(),&KCCompilerBase::compileFinished,
-                                       this,&KCILanguageMode::onCompileFinished);
+                                       this,&KCLanguageMode::onCompileFinished);
     compiler->startCompile(m_parent->filePath);
 }
 
-void KCILanguageMode::setFileSuffix(const QString &suffix)
+void KCLanguageMode::setFileSuffix(const QString &suffix)
 {
     QRegularExpression _regexp_cpp("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)",
                                    QRegularExpression::CaseInsensitiveOption);
@@ -113,22 +113,22 @@ void KCILanguageMode::setFileSuffix(const QString &suffix)
     m_highlighter->setDocument(m_parent->document());
 }
 
-KCCompileOutputReceiver *KCILanguageMode::getCompilerReceiver() const
+KCCompileOutputReceiver *KCLanguageMode::getCompilerReceiver() const
 {
     return compilerReceiver;
 }
 
-dbgOutputReceiver *KCILanguageMode::getDbgReceiver() const
+dbgOutputReceiver *KCLanguageMode::getDbgReceiver() const
 {
     return dbgReceiver;
 }
 
-gdb *KCILanguageMode::getGdbInstance() const
+gdb *KCLanguageMode::getGdbInstance() const
 {
     return gdbInstance;
 }
 
-gdb *KCILanguageMode::startDebug()
+gdb *KCLanguageMode::startDebug()
 {
     if(gdbInstance == NULL)
     {
@@ -146,7 +146,7 @@ gdb *KCILanguageMode::startDebug()
     return gdbInstance;
 }
 
-void KCILanguageMode::onCompileFinished(bool hasError)
+void KCLanguageMode::onCompileFinished(bool hasError)
 {
     if((bool)compilerFinishedConnection)
     {
@@ -161,7 +161,7 @@ void KCILanguageMode::onCompileFinished(bool hasError)
     }
 }
 
-void KCILanguageMode::connectCompilerAndOutputReceiver()
+void KCLanguageMode::connectCompilerAndOutputReceiver()
 {
     compilerConnectionHandles.disConnectAll();
 
@@ -180,7 +180,7 @@ void KCILanguageMode::connectCompilerAndOutputReceiver()
                                        compilerReceiver,&KCCompileOutputReceiver::onCompileFinished);
 }
 
-void KCILanguageMode::connectGDBAndDbgReceiver()
+void KCLanguageMode::connectGDBAndDbgReceiver()
 {
     gdbConnectionHandles.disConnectAll();
 
@@ -196,7 +196,7 @@ void KCILanguageMode::connectGDBAndDbgReceiver()
                                   dbgReceiver,&dbgOutputReceiver::receiveLocals);
 }
 
-bool KCILanguageMode::checkIfIsCompiling()
+bool KCLanguageMode::checkIfIsCompiling()
 {
     bool ret=false;
 
@@ -210,7 +210,7 @@ bool KCILanguageMode::checkIfIsCompiling()
     return ret;
 }
 
-void KCILanguageMode::setCompileState(const compileState &state)
+void KCLanguageMode::setCompileState(const compileState &state)
 {
     stateLock.lockForWrite();
     this->state=state;

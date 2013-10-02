@@ -28,11 +28,11 @@
 
 #include "kcpanel.h"
 
-class KCILinenumPanel : public KCPanel
+class KCLinenumPanel : public KCPanel
 {
     Q_OBJECT
 public:
-    explicit KCILinenumPanel(QWidget *parent = 0);
+    explicit KCLinenumPanel(QWidget *parent = 0);
     
 signals:
 

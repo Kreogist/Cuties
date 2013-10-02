@@ -41,7 +41,7 @@ void KCPanel::setAutoAdaptWidth(bool newValue)
     autoWidth=newValue;
 }
 
-void KCPanel::setKciTextEditor(KCITextEditor *editor)
+void KCPanel::setKciTextEditor(KCTextEditor *editor)
 {
     if(editor==NULL)
     {

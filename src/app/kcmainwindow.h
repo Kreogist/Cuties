@@ -33,14 +33,14 @@
 #include "kreogistcutestyle.h"
 #include "kcdragproxy.h"
 
-class KCIMainWindow : public QMainWindow
+class KCMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit KCIMainWindow(QWidget *parent = 0);
+    explicit KCMainWindow(QWidget *parent = 0);
     
-    KCITitleBar *titleBar() const;
-    void setTitleBar(KCITitleBar *titleBar);
+    KCTitleBar *titleBar() const;
+    void setTitleBar(KCTitleBar *titleBar);
 #ifndef Q_OS_MACX
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString &mainIcon);
@@ -52,7 +52,7 @@ public slots:
 
 private:
 
-    KCITitleBar *m_titleBar;
+    KCTitleBar *m_titleBar;
     QPoint startPos;
 };
 

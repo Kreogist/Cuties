@@ -23,14 +23,14 @@
 static const int normal_color=120;
 static const int curr_line_color=255;
 
-KCILinenumPanel::KCILinenumPanel(QWidget *parent) :
+KCLinenumPanel::KCLinenumPanel(QWidget *parent) :
     KCPanel(parent)
 {
     setAutoAdaptWidth(true);
     textColor.setRgb(normal_color,normal_color,normal_color);
 }
 
-void KCILinenumPanel::draw(QPainter *painter, QTextBlock *block,
+void KCLinenumPanel::draw(QPainter *painter, QTextBlock *block,
                            int x, int y, int w, int h,
                            bool isCurrentLine)
 {

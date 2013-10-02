@@ -2,8 +2,8 @@
 
 static int replaceWidgetsHeight=25;
 
-KCIReplaceDock::KCIReplaceDock(QWidget *parent) :
-    KCISearchWidget(parent)
+KCReplaceDock::KCReplaceDock(QWidget *parent) :
+    KCSearchWidget(parent)
 {
     setContentsMargins(0,0,0,0);
     setMinimumHeight(0);
@@ -27,25 +27,25 @@ KCIReplaceDock::KCIReplaceDock(QWidget *parent) :
     replaceText->setPlaceholderText(tr("Replace with"));
     replaceText->setFrame(false);
     replaceText->setFixedHeight(replaceWidgetsHeight);
-    mainLayout->addWidget(replaceText,1,0,1,KCISearchWidget::searchTextPartWidth);
+    mainLayout->addWidget(replaceText,1,0,1,KCSearchWidget::searchTextPartWidth);
 
     replaceButtons[replace]=new QToolButton(this);
     replaceButtons[replace]->setText(tr("Replace"));
     replaceButtons[replace]->setAutoRaise(true);
     replaceButtons[replace]->setFixedHeight(replaceWidgetsHeight);
-    mainLayout->addWidget(replaceButtons[replace],1,KCISearchWidget::searchTextPartWidth,1,2);
+    mainLayout->addWidget(replaceButtons[replace],1,KCSearchWidget::searchTextPartWidth,1,2);
 
     replaceButtons[findAndReplace]=new QToolButton(this);
     replaceButtons[findAndReplace]->setText(tr("Find And Replace"));
     replaceButtons[findAndReplace]->setAutoRaise(true);
     replaceButtons[findAndReplace]->setFixedHeight(replaceWidgetsHeight);
-    mainLayout->addWidget(replaceButtons[findAndReplace],1,KCISearchWidget::searchTextPartWidth+2,1,2);
+    mainLayout->addWidget(replaceButtons[findAndReplace],1,KCSearchWidget::searchTextPartWidth+2,1,2);
 
     replaceButtons[replaceAll]=new QToolButton(this);
     replaceButtons[replaceAll]->setText(tr("Replace All"));
     replaceButtons[replaceAll]->setAutoRaise(true);
     replaceButtons[replaceAll]->setFixedHeight(replaceWidgetsHeight);
-    mainLayout->addWidget(replaceButtons[replaceAll],1,KCISearchWidget::searchTextPartWidth+4,1,2);
+    mainLayout->addWidget(replaceButtons[replaceAll],1,KCSearchWidget::searchTextPartWidth+4,1,2);
 
     for(int i=0; i<typeCount; i++)
     {
@@ -74,7 +74,7 @@ KCIReplaceDock::KCIReplaceDock(QWidget *parent) :
     setFixedHeight(0);
 }
 
-void KCIReplaceDock::showAnime()
+void KCReplaceDock::showAnime()
 {
     QTimeLine *showAnimation=new QTimeLine(250, this);
     showAnimation->setEasingCurve(QEasingCurve::OutCubic);
@@ -86,12 +86,12 @@ void KCIReplaceDock::showAnime()
     showAnimation->start();
 }
 
-void KCIReplaceDock::resizeDock(int newHeight)
+void KCReplaceDock::resizeDock(int newHeight)
 {
     setFixedHeight(newHeight);
 }
 
-void KCIReplaceDock::hideAnime()
+void KCReplaceDock::hideAnime()
 {
     QTimeLine *hideAnimation=new QTimeLine(250, this);
     hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
@@ -104,7 +104,7 @@ void KCIReplaceDock::hideAnime()
     hideAnimation->start();
 }
 
-void KCIReplaceDock::onOneOfReplaceButtonsClicked(int type)
+void KCReplaceDock::onOneOfReplaceButtonsClicked(int type)
 {
     QString newText=replaceText->text(),
             oldText=text();

@@ -50,7 +50,7 @@ KCDebugWatchContent::KCDebugWatchContent(QWidget *parent) :
     WatchLayout->addWidget(watchView);
 }
 
-KCIDebugWatchDock::KCIDebugWatchDock(QWidget *parent) :
+KCDebugWatchDock::KCDebugWatchDock(QWidget *parent) :
     QDockWidget(parent)
 {
     //Set ObjectName

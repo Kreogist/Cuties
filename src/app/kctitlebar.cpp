@@ -21,12 +21,12 @@
 #include "kctitlebar.h"
 
 #ifndef Q_OS_MACX
-KCITitleBarAutoFill::KCITitleBarAutoFill(QWidget *parent) :
+KCTitleBarAutoFill::KCTitleBarAutoFill(QWidget *parent) :
     QWidget(parent)
 {
 }
 
-void KCITitleBarAutoFill::mouseDoubleClickEvent(QMouseEvent *e)
+void KCTitleBarAutoFill::mouseDoubleClickEvent(QMouseEvent *e)
 {
     e->accept();
     if(e->button() == Qt::LeftButton)
@@ -36,7 +36,7 @@ void KCITitleBarAutoFill::mouseDoubleClickEvent(QMouseEvent *e)
 }
 #endif
 
-KCITitleBar::KCITitleBar(QWidget *parent) :
+KCTitleBar::KCTitleBar(QWidget *parent) :
     QWidget(parent),
     mainWindow(parent)
 {
@@ -98,7 +98,7 @@ KCITitleBar::KCITitleBar(QWidget *parent) :
                              mainToolBar->width(),
                              mainToolBar->height());
 
-    autoFill=new KCITitleBarAutoFill(this);
+    autoFill=new KCTitleBarAutoFill(this);
     connect(autoFill, SIGNAL(dblClickEmit()),
             this, SLOT(spacingDblClick()));
 #endif
@@ -151,7 +151,7 @@ KCITitleBar::KCITitleBar(QWidget *parent) :
 #endif
 }
 
-void KCITitleBar::showToolBar()
+void KCTitleBar::showToolBar()
 {
     if(!toolbarShown)
     {
@@ -178,7 +178,7 @@ void KCITitleBar::showToolBar()
     }
 }
 
-void KCITitleBar::hideToolBar()
+void KCTitleBar::hideToolBar()
 {
     if(toolbarShown)
     {
@@ -195,19 +195,19 @@ void KCITitleBar::hideToolBar()
     }
 }
 
-void KCITitleBar::addToolSeparator()
+void KCTitleBar::addToolSeparator()
 {
     mainToolBar->addSeparator();
     mainToolBar->setFixedWidth(mainToolBar->width()+3);
 }
 
-void KCITitleBar::addToolButton(QToolButton *tblMainButton)
+void KCTitleBar::addToolButton(QToolButton *tblMainButton)
 {
     mainToolBar->addWidget(tblMainButton);
     mainToolBar->setFixedWidth(mainToolBar->width()+25);
 }
 
-void KCITitleBar::_exchange_button_state()
+void KCTitleBar::_exchange_button_state()
 {
     if(isShowingNormalButton)
     {
@@ -219,19 +219,19 @@ void KCITitleBar::_exchange_button_state()
     }
 }
 
-void KCITitleBar::setWindowMin()
+void KCTitleBar::setWindowMin()
 {
     mainWindow->showMinimized();
 }
 
-void KCITitleBar::setWindowNormal()
+void KCTitleBar::setWindowNormal()
 {
     mainWindow->showNormal();
     maximizeButton->setIcon(maximizeButtonIcon);
     isShowingNormalButton=false;
 }
 
-void KCITitleBar::setWindowMax()
+void KCTitleBar::setWindowMax()
 {
     mainWindow->showMaximized();
     maximizeButton->setIcon(normalButtonIcon);
@@ -239,18 +239,18 @@ void KCITitleBar::setWindowMax()
 }
 
 #ifndef Q_OS_MACX
-void KCITitleBar::setMenu(QMenu *menu)
+void KCTitleBar::setMenu(QMenu *menu)
 {
     mainButton->setMenu(menu);
 }
 
-void KCITitleBar::setMainButtonIcon(const QString &mainIcon)
+void KCTitleBar::setMainButtonIcon(const QString &mainIcon)
 {
     mainButtonIcon.addFile(mainIcon);
     mainButton->setIcon(mainButtonIcon);
 }
 
-void KCITitleBar::mousePressEvent(QMouseEvent *event)
+void KCTitleBar::mousePressEvent(QMouseEvent *event)
 {
     if(event->buttons() == Qt::LeftButton &&
        event->pos().x()>=this->pos().x() &&
@@ -268,7 +268,7 @@ void KCITitleBar::mousePressEvent(QMouseEvent *event)
     }
 }
 
-void KCITitleBar::mouseMoveEvent(QMouseEvent *event)
+void KCTitleBar::mouseMoveEvent(QMouseEvent *event)
 {
     if(!isShowingNormalButton && hasPressed && event->buttons() == Qt::LeftButton)
     {
@@ -276,7 +276,7 @@ void KCITitleBar::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-void KCITitleBar::mouseReleaseEvent(QMouseEvent *event)
+void KCTitleBar::mouseReleaseEvent(QMouseEvent *event)
 {
     if(hasPressed)
     {
@@ -289,7 +289,7 @@ void KCITitleBar::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void KCITitleBar::spacingDblClick()
+void KCTitleBar::spacingDblClick()
 {
     _exchange_button_state();
 }

@@ -29,11 +29,11 @@
 #include "kcstatuscursorinfo.h"
 #include "kcstatusrewriteinfo.h"
 
-class KCIStatusBar : public QStatusBar
+class KCStatusBar : public QStatusBar
 {
     Q_OBJECT
 public:
-    KCIStatusBar(QWidget *parent);
+    KCStatusBar(QWidget *parent);
     void showGotoBar(int currentValue, int MaxValue);
 
 signals:
