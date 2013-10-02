@@ -198,10 +198,10 @@ void MainWindow::createActions()
 #endif
 
     //Search -> Search
-    actionMainWindowItem[mnuSearchFind]=new QAction(tr("&Find"),this);
-    actionMainWindowItem[mnuSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
-    stringActionStatusTips[mnuSearchFind]=QString(tr("Search for text in the active document."));
-    connect(actionMainWindowItem[mnuSearchFind],SIGNAL(triggered()),tabManager,SLOT(showSearchBar()));
+    actionMainWindowItem[actionSearchFind]=new QAction(tr("&Find"),this);
+    actionMainWindowItem[actionSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
+    stringActionStatusTips[actionSearchFind]=QString(tr("Search for text in the active document."));
+    connect(actionMainWindowItem[actionSearchFind],SIGNAL(triggered()),tabManager,SLOT(showSearchBar()));
     /*
         //Search -> Find In Files
         act[mnuSearchFindInFiles]=new QAction(tr("Fin&d In Files"),this);
@@ -209,10 +209,10 @@ void MainWindow::createActions()
         actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
     */
     //Search -> Replace
-    actionMainWindowItem[mnuSearchReplace]=new QAction(tr("&Replace"),this);
-    actionMainWindowItem[mnuSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
-    stringActionStatusTips[mnuSearchReplace]=QString(tr("Replace occurrences of search string."));
-    connect(actionMainWindowItem[mnuSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
+    actionMainWindowItem[actionSearchReplace]=new QAction(tr("&Replace"),this);
+    actionMainWindowItem[actionSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
+    stringActionStatusTips[actionSearchReplace]=QString(tr("Replace occurrences of search string."));
+    connect(actionMainWindowItem[actionSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
     /*
         //Search -> Replace In Files
         act[mnuSearchReplaceInFiles]=new QAction(tr("R&eplace In Files"),this);
@@ -220,36 +220,36 @@ void MainWindow::createActions()
         actStatusTips[mnuSearchReplaceInFiles]=QString(tr("Replace occurrences of a text partten in multiple files."));
     */
     //Search -> Search Online
-    actionMainWindowItem[mnuSearchSearchOnline]=new QAction(tr("&Search Online"),this);
-    actionMainWindowItem[mnuSearchSearchOnline]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
-    stringActionStatusTips[mnuSearchSearchOnline]=QString(tr("Search the text via online search engine."));
-    connect(actionMainWindowItem[mnuSearchSearchOnline],SIGNAL(triggered()),this,SLOT(searchOnline()));
+    actionMainWindowItem[actionSearchSearchOnline]=new QAction(tr("&Search Online"),this);
+    actionMainWindowItem[actionSearchSearchOnline]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
+    stringActionStatusTips[actionSearchSearchOnline]=QString(tr("Search the text via online search engine."));
+    connect(actionMainWindowItem[actionSearchSearchOnline],SIGNAL(triggered()),this,SLOT(searchOnline()));
 
     //Search -> Go To Line
-    actionMainWindowItem[mnuSearchGoto]=new QAction(tr("&Goto Line"),this);
-    actionMainWindowItem[mnuSearchGoto]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_G));
-    stringActionStatusTips[mnuSearchGoto]=QString(tr("Go to specified line."));
-    connect(actionMainWindowItem[mnuSearchGoto],SIGNAL(triggered()),
+    actionMainWindowItem[actionSearchGoto]=new QAction(tr("&Goto Line"),this);
+    actionMainWindowItem[actionSearchGoto]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_G));
+    stringActionStatusTips[actionSearchGoto]=QString(tr("Go to specified line."));
+    connect(actionMainWindowItem[actionSearchGoto],SIGNAL(triggered()),
             this,SLOT(statusShowGoto()));
 
     //Execute -> Comile And Run
-    actionMainWindowItem[mnuExecuteCompileAndRun]=new QAction(tr("C&ompile and Run"),this);
-    actionMainWindowItem[mnuExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
-    stringActionStatusTips[mnuExecuteCompileAndRun]=QString(tr("Compile the active file and run."));
-    connect(actionMainWindowItem[mnuExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(compileAndRun()));
+    actionMainWindowItem[actionExecuteCompileAndRun]=new QAction(tr("C&ompile and Run"),this);
+    actionMainWindowItem[actionExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
+    stringActionStatusTips[actionExecuteCompileAndRun]=QString(tr("Compile the active file and run."));
+    connect(actionMainWindowItem[actionExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(compileAndRun()));
 
     //Execute -> Compile
-    actionMainWindowItem[mnuExecuteCompile]=new QAction(tr("&Compile"),this);
-    actionMainWindowItem[mnuExecuteCompile]->setShortcut(QKeySequence(Qt::Key_F9));
-    stringActionStatusTips[mnuExecuteCompile]=QString(tr("Compile the active file."));
-    connect(actionMainWindowItem[mnuExecuteCompile],SIGNAL(triggered()),
+    actionMainWindowItem[actionExecuteCompile]=new QAction(tr("&Compile"),this);
+    actionMainWindowItem[actionExecuteCompile]->setShortcut(QKeySequence(Qt::Key_F9));
+    stringActionStatusTips[actionExecuteCompile]=QString(tr("Compile the active file."));
+    connect(actionMainWindowItem[actionExecuteCompile],SIGNAL(triggered()),
             this,SLOT(compileCurrentFile()));
 
     //Execute -> Run
-    actionMainWindowItem[mnuExecuteRun]=new QAction(tr("&Run"),this);
-    actionMainWindowItem[mnuExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
-    stringActionStatusTips[mnuExecuteRun]=QString(tr("Run the compiled execution."));
-    connect(actionMainWindowItem[mnuExecuteRun],SIGNAL(triggered()),this,SLOT(run()));
+    actionMainWindowItem[actionExecuteRun]=new QAction(tr("&Run"),this);
+    actionMainWindowItem[actionExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
+    stringActionStatusTips[actionExecuteRun]=QString(tr("Run the compiled execution."));
+    connect(actionMainWindowItem[actionExecuteRun],SIGNAL(triggered()),this,SLOT(run()));
     /*
         //Execute -> Parameters
         act[mnuExecuteParameters]=new QAction(tr("P&arameters"),this);
@@ -333,30 +333,30 @@ void MainWindow::createActions()
     actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));*/
 
     //Window -> Next
-    actionMainWindowItem[mnuWindowNext]=new QAction(tr("&Next"),this);
-    actionMainWindowItem[mnuWindowNext]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Tab));
-    stringActionStatusTips[mnuWindowNext]=QString(tr("Switch to the next tab."));
-    connect(actionMainWindowItem[mnuWindowNext],SIGNAL(triggered()),tabManager,SLOT(switchNextTab()));
+    actionMainWindowItem[actionWindowNext]=new QAction(tr("&Next"),this);
+    actionMainWindowItem[actionWindowNext]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Tab));
+    stringActionStatusTips[actionWindowNext]=QString(tr("Switch to the next tab."));
+    connect(actionMainWindowItem[actionWindowNext],SIGNAL(triggered()),tabManager,SLOT(switchNextTab()));
 
     //Window -> Previous
-    actionMainWindowItem[mnuWindowPrev]=new QAction(tr("&Previous"), this);
-    actionMainWindowItem[mnuWindowPrev]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Tab));
-    stringActionStatusTips[mnuWindowPrev]=QString(tr("Switch to the previous tab."));
-    connect(actionMainWindowItem[mnuWindowPrev],SIGNAL(triggered()),tabManager,SLOT(switchPrevTab()));
+    actionMainWindowItem[actionWindowPrev]=new QAction(tr("&Previous"), this);
+    actionMainWindowItem[actionWindowPrev]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Tab));
+    stringActionStatusTips[actionWindowPrev]=QString(tr("Switch to the previous tab."));
+    connect(actionMainWindowItem[actionWindowPrev],SIGNAL(triggered()),tabManager,SLOT(switchPrevTab()));
 
     //Help -> About
-    actionMainWindowItem[mnuHelpAbout]=new QAction(tr("&About..."),this);
-    actionMainWindowItem[mnuHelpAbout]->setMenuRole(QAction::AboutRole);
-    stringActionStatusTips[mnuHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
-    connect(actionMainWindowItem[mnuHelpAbout],SIGNAL(triggered()),this,SLOT(aboutKCI()));
+    actionMainWindowItem[actionHelpAbout]=new QAction(tr("&About..."),this);
+    actionMainWindowItem[actionHelpAbout]->setMenuRole(QAction::AboutRole);
+    stringActionStatusTips[actionHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
+    connect(actionMainWindowItem[actionHelpAbout],SIGNAL(triggered()),this,SLOT(aboutCuties()));
 
     //Help -> About Qt
-    actionMainWindowItem[mnuHelpAboutQt]=new QAction(tr("A&bout Qt..."),this);
-    stringActionStatusTips[mnuHelpAboutQt]=QString(tr("Display the Qt information, version number and copyright."));
-    connect(actionMainWindowItem[mnuHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutQt()));
+    actionMainWindowItem[actionHelpAboutQt]=new QAction(tr("A&bout Qt..."),this);
+    stringActionStatusTips[actionHelpAboutQt]=QString(tr("Display the Qt information, version number and copyright."));
+    connect(actionMainWindowItem[actionHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutQt()));
 }
 
-void MainWindow::aboutKCI()
+void MainWindow::aboutCuties()
 {
     QMessageBox::about(this,tr("About Cuties"),
                        tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
@@ -546,7 +546,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menuMainWindowItem[menuView]->setIcon(*MenuIconAddor);
 #endif
-    for(i=actionViewSidebar; i<mnuViewEnd; i++)
+    for(i=actionViewSidebar; i<actionViewEnd; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -569,7 +569,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
     menuMainWindowItem[menuSearch]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuSearchFind; i<=mnuSearchGoto; i++)
+    for(i=actionSearchFind; i<=actionSearchGoto; i++)
     {
         actionMainWindowItem[i]->setStatusTip(stringActionStatusTips[i]);
 #ifndef Q_OS_MACX
@@ -595,7 +595,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
     menuMainWindowItem[menuExecute]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuExecuteCompileAndRun; i<=mnuExecuteRun/*mnuExecuteSetInputRunShowOutput*/; i++)
+    for(i=actionExecuteCompileAndRun; i<=actionExecuteRun/*mnuExecuteSetInputRunShowOutput*/; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -652,7 +652,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
     menuMainWindowItem[menuWindow]->setIcon(*MenuIconAddor);
 #endif
-    for(i=mnuWindowPrev; i<=mnuWindowNext; i++)
+    for(i=actionWindowPrev; i<=actionWindowNext; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -668,7 +668,7 @@ void MainWindow::createMenu()
     menuMainWindowItem[menuHelp]->setIcon(*MenuIconAddor);
 #endif
     //from about to about_qt add into help menu
-    for(i=mnuHelpAbout; i<=mnuHelpAboutQt; i++)
+    for(i=actionHelpAbout; i<=actionHelpAboutQt; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -747,7 +747,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     actionMainWindowItem[mnuViewCompileDock]->setVisible(state);
 
     //Search Menu
-    for(i=mnuSearchFind; i<=mnuSearchGoto; i++)
+    for(i=actionSearchFind; i<=actionSearchGoto; i++)
     {
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
@@ -756,7 +756,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     menuMainWindowItem[menuSearch]->menuAction()->setVisible(state);
 
     //Execute Menu
-    for(i=mnuExecuteCompileAndRun; i<=mnuExecuteRun/*mnuExecuteSetInputRunShowOutput*/; i++)
+    for(i=actionExecuteCompileAndRun; i<=actionExecuteRun/*mnuExecuteSetInputRunShowOutput*/; i++)
     {
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
@@ -774,7 +774,7 @@ void MainWindow::setDocOpenMenuState(bool state)
         menu[mnuDebug]->menuAction()->setVisible(state);
     */
     //Window Menu
-    for(i=mnuWindowNext; i<=mnuWindowNext; i++)
+    for(i=actionWindowNext; i<=actionWindowNext; i++)
     {
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
