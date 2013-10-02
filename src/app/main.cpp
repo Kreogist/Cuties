@@ -36,26 +36,18 @@
 #include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 
-int main(int argc, char *argv[])
+static void initApplicationInfo()
 {
-    //Load QApplication Object.
-    QApplication app(argc,argv);
-
-    //Load Splash Screen
-    KCSplashScreen *splash=new KCSplashScreen;
-    splash->setPixmap(QPixmap(":/img/image/Splash.png"));
-    splash->show();
-
-    //Initialize Application Infomation.
     QApplication::setApplicationName(QString("Cuties"));
     QApplication::setApplicationVersion(QString("0.0.1.0"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
-    //Initialize Application Icon.
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.ico"));
+}
 
-    //Initialize Application Fonts.
+static void initApplicationFonts()
+{
     QStringList filter;
     QDir *dir=new QDir(QString(qApp->applicationDirPath() + "/Fonts/"));
     QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
@@ -99,12 +91,40 @@ int main(int argc, char *argv[])
             }
         }
     }
+}
 
-    //Initialize Application Settings.
+static void initApplicationSettings()
+{
     KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
     KCGlobalInstance->readSettings();
+}
 
-    //Initialize Application Language.
+int main(int argc, char *argv[])
+{
+    //Load QApplication Object.
+    QApplication app(argc,argv);
+
+    //Load Splash Screen
+    KCSplashScreen *splash=new KCSplashScreen;
+    splash->setPixmap(QPixmap(":/img/image/Splash.png"));
+    splash->show();
+    app.processEvents();
+
+    static int splashAlign=Qt::AlignBottom|Qt::AlignRight;
+    splash->showMessage(QApplication::tr("Initialize Application"),
+                        splashAlign);
+    initApplicationInfo();
+    app.processEvents();
+
+    splash->showMessage(QApplication::tr("Initialize Application Fonts"),
+                        splashAlign);
+    initApplicationFonts();
+    app.processEvents();
+
+    splash->showMessage(QApplication::tr("Initialize Application Settings"),
+                        splashAlign);
+    initApplicationSettings();
+    app.processEvents();
 
     //Initalize Application Palette.
     QPalette pal=app.palette();
