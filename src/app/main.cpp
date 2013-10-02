@@ -28,11 +28,12 @@
 #include <QFileInfo>
 #include <QStringList>
 #include <QStyleFactory>
-#include <QSplashScreen>
 #include <QDebug>
 
 #include "mainwindow.h"
-#include "kciglobal.h"
+#include "kcglobal.h"
+#include "kcsplashscreen.h"
+#include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 
 int main(int argc, char *argv[])
@@ -41,7 +42,7 @@ int main(int argc, char *argv[])
     QApplication app(argc,argv);
 
     //Load Splash Screen
-    QSplashScreen *splash=new QSplashScreen;
+    KCSplashScreen *splash=new KCSplashScreen;
     splash->setPixmap(QPixmap(":/img/image/Splash.png"));
     splash->show();
 
@@ -100,8 +101,8 @@ int main(int argc, char *argv[])
     }
 
     //Initialize Application Settings.
-    kciGlobal *kciGlobalInstance = kciGlobal::getInstance();
-    kciGlobalInstance->readSettings();
+    KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
+    KCGlobalInstance->readSettings();
 
     //Initialize Application Language.
 

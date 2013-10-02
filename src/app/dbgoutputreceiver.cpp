@@ -71,7 +71,7 @@ void dbgOutputReceiver::receiveLocals(GdbMiValue localVars)
 
     for(QList<GdbMiValue>::iterator i=localVars.begin(),e=localVars.end();
         i<e;
-        i++)
+        ++i)
     {
         QString name=i->at(0).getValue();  //name
         QString value=i->at(1).getValue(); //value

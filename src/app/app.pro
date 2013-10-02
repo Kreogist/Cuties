@@ -28,132 +28,134 @@ QT  += core\
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    kcicodeeditor.cpp \
-    kcitexteditor.cpp \
-    kcipanel.cpp \
-    kcilinenumpanel.cpp \
-    cpphighlighter.cpp \
+    kccodeeditor.cpp \
+    kctexteditor.cpp \
+    kcpanel.cpp \
+    kclinenumpanel.cpp \
     kreogistcutestyle.cpp \
-    kcititlebar.cpp \
-    kciglobal.cpp \
-    pascalhighlighter.cpp \
+    kctitlebar.cpp \
+    kcglobal.cpp \
     textcharformatmap.cpp \
-    compilerbase.cpp \
     gcc.cpp \
-    kcitabmanager.cpp \
-    kcicompiledock.cpp \
+    kctabmanager.cpp \
+    kccompiledock.cpp \
     gdb.cpp \
-    kcimainwindow.cpp \
+    kcmainwindow.cpp \
     gdbmivalue.cpp \
-    kcimarkpanel.cpp \
-    kcistatusbar.cpp \
-    kcitextsearcher.cpp \
-    kcisearchwindow.cpp \
-    kcistatuscursorinfo.cpp \
-    kcicontrolcenter.cpp \
-    kciexecutor.cpp \
-    kcijudgedock.cpp \
-    kcilanguagemode.cpp \
-    kcidebugdock.cpp \
+    kcmarkpanel.cpp \
+    kcstatusbar.cpp \
+    kctextsearcher.cpp \
+    kcsearchwindow.cpp \
+    kcstatuscursorinfo.cpp \
+    kccontrolcenter.cpp \
+    kcexecutor.cpp \
+    kcjudgedock.cpp \
+    kclanguagemode.cpp \
+    kcdebugdock.cpp \
     fpc.cpp \
-    kcilistbutton.cpp \
-    Controls/SettingItems/kcisettinglistitemboolean.cpp \
-    Controls/SettingItems/kcisettinglistitembase.cpp \
-    Controls/SettingItems/kcisettinglistitemcombo.cpp \
-    compileoutputreceiver.cpp \
-    Controls/SettingItems/kcisettinglistitemlinetext.cpp \
+    kclistbutton.cpp \
+    Controls/SettingItems/kcsettinglistitemboolean.cpp \
+    Controls/SettingItems/kcsettinglistitembase.cpp \
+    Controls/SettingItems/kcsettinglistitemcombo.cpp \
+    Controls/SettingItems/kcsettinglistitemlinetext.cpp \
     dbgoutputreceiver.cpp \
-    connectionhandler.cpp \
-    kciplaintextbrowser.cpp \
-    kcidragproxy.cpp \
-    kciclipboard.cpp \
-    kcidebugwatchdock.cpp \
-    kcitextblockdata.cpp \
-    kcihighlighter.cpp \
-    kcisidebar.cpp \
-    Controls/SettingItems/kcisettinglistitembrowsetext.cpp \
-    Controls/SettingItems/kcisettinglistitemlanguageitem.cpp \
-    kcigeneralconfigure.cpp \
-    kcieditorconfigure.cpp \
-    kcicompilerconfigure.cpp \
-    kcidebuggerconfigure.cpp \
-    kcilanguageconfigure.cpp \
-    kcifileassociation.cpp \
-    kciconfigure.cpp \
-    Controls/SettingItems/kcisettinglistitemnuminput.cpp \
-    kcifiletype.cpp \
-    kcihistoryconfigure.cpp \
-    kcimessagebox.cpp \
-    kcireplacedock.cpp \
-    kcisearchlinetext.cpp \
-    kcisearchwidget.cpp \
-    kcistatusrewriteinfo.cpp \
-    Controls/SettingItems/kcisettinglistitembutton.cpp
+    kcplaintextbrowser.cpp \
+    kcdragproxy.cpp \
+    kcdebugwatchdock.cpp \
+    kctextblockdata.cpp \
+    kchighlighter.cpp \
+    kcsidebar.cpp \
+    Controls/SettingItems/kcsettinglistitembrowsetext.cpp \
+    Controls/SettingItems/kcsettinglistitemlanguageitem.cpp \
+    kcgeneralconfigure.cpp \
+    kceditorconfigure.cpp \
+    kccompilerconfigure.cpp \
+    kcdebuggerconfigure.cpp \
+    kclanguageconfigure.cpp \
+    kcfileassociation.cpp \
+    kcconfigure.cpp \
+    Controls/SettingItems/kcsettinglistitemnuminput.cpp \
+    kcfiletype.cpp \
+    kchistoryconfigure.cpp \
+    kcmessagebox.cpp \
+    kcreplacedock.cpp \
+    kcsearchlinetext.cpp \
+    kcsearchwidget.cpp \
+    kcstatusrewriteinfo.cpp \
+    Controls/SettingItems/kcsettinglistitembutton.cpp \
+    kcsplashscreen.cpp \
+    kcclipboard.cpp \
+    kccompilerbase.cpp \
+    kccompileoutputreceiver.cpp \
+    kcconnectionhandler.cpp \
+    kccpphighlighter.cpp \
+    kcpascalhighlighter.cpp
 
 HEADERS += \
     mainwindow.h \
-    kcicodeeditor.h \
-    kcitexteditor.h \
-    kcipanel.h \
-    kcilinenumpanel.h \
-    cpphighlighter.h \
+    kccodeeditor.h \
+    kctexteditor.h \
+    kcpanel.h \
+    kclinenumpanel.h \
     kreogistcutestyle.h \
-    kcititlebar.h \
-    kciglobal.h \
-    pascalhighlighter.h \
+    kctitlebar.h \
+    kcglobal.h \
     textcharformatmap.h \
     highlighterGlobal.h \
-    compilerbase.h \
     gcc.h \
-    kcitabmanager.h \
-    kcicompiledock.h \
+    kctabmanager.h \
+    kccompiledock.h \
     gdb.h \
-    kcimainwindow.h \
+    kcmainwindow.h \
     gdbmivalue.h \
-    kcimarkpanel.h \
-    kcistatusbar.h \
-    kcitextsearcher.h \
-    kcisearchwindow.h \
-    kcistatuscursorinfo.h \
-    kcicontrolcenter.h \
-    kciexecutor.h \
-    kcijudgedock.h \
-    kcilanguagemode.h \
-    kcisearchlinetext.h \
-    kcidebugdock.h \
+    kcmarkpanel.h \
+    kcstatusbar.h \
+    kctextsearcher.h \
+    kcsearchwindow.h \
+    kcstatuscursorinfo.h \
+    kccontrolcenter.h \
+    kcexecutor.h \
+    kcjudgedock.h \
+    kclanguagemode.h \
+    kcsearchlinetext.h \
+    kcdebugdock.h \
     fpc.h \
-    kcilistbutton.h \
-    Controls/SettingItems/kcisettinglistitemboolean.h \
-    Controls/SettingItems/kcisettinglistitembase.h \
-    Controls/SettingItems/kcisettinglistitemcombo.h \
-    compileoutputreceiver.h \
-    Controls/SettingItems/kcisettinglistitemlinetext.h \
+    kclistbutton.h \
+    Controls/SettingItems/kcsettinglistitemboolean.h \
+    Controls/SettingItems/kcsettinglistitembase.h \
+    Controls/SettingItems/kcsettinglistitemcombo.h \
+    Controls/SettingItems/kcsettinglistitemlinetext.h \
     dbgoutputreceiver.h \
-    connectionhandler.h \
-    kciplaintextbrowser.h \
-    kcidragproxy.h \
-    kciclipboard.h \
-    kcidebugwatchdock.h \
-    kcitextblockdata.h \
-    kcihighlighter.h \
-    kcisidebar.h \
-    Controls/SettingItems/kcisettinglistitembrowsetext.h \
-    Controls/SettingItems/kcisettinglistitemlanguageitem.h \
-    kciconfigure.h \
-    kcigeneralconfigure.h \
-    kcieditorconfigure.h \
-    kcicompilerconfigure.h \
-    kcidebuggerconfigure.h \
-    kcilanguageconfigure.h \
-    kcifileassociation.h \
-    Controls/SettingItems/kcisettinglistitemnuminput.h \
-    kcifiletype.h \
-    kcihistoryconfigure.h \
-    kcimessagebox.h \
-    kcireplacedock.h \
-    kcisearchwidget.h \
-    kcistatusrewriteinfo.h \
-    Controls/SettingItems/kcisettinglistitembutton.h
+    kcplaintextbrowser.h \
+    kcdragproxy.h \
+    kcdebugwatchdock.h \
+    kctextblockdata.h \
+    kchighlighter.h \
+    kcsidebar.h \
+    Controls/SettingItems/kcsettinglistitembrowsetext.h \
+    Controls/SettingItems/kcsettinglistitemlanguageitem.h \
+    kcconfigure.h \
+    kcgeneralconfigure.h \
+    kceditorconfigure.h \
+    kccompilerconfigure.h \
+    kcdebuggerconfigure.h \
+    kclanguageconfigure.h \
+    kcfileassociation.h \
+    Controls/SettingItems/kcsettinglistitemnuminput.h \
+    kcfiletype.h \
+    kchistoryconfigure.h \
+    kcmessagebox.h \
+    kcreplacedock.h \
+    kcsearchwidget.h \
+    kcstatusrewriteinfo.h \
+    Controls/SettingItems/kcsettinglistitembutton.h \
+    kcsplashscreen.h \
+    kcclipboard.h \
+    kccompileoutputreceiver.h \
+    kccompilerbase.h \
+    kcconnectionhandler.h \
+    kccpphighlighter.h \
+    kcpascalhighlighter.h
 
 # Enable C++11
 CONFIG += c++11

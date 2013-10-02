@@ -23,10 +23,10 @@
 #include <QRegularExpression>
 #include <QDebug>
 
-#include "compilerbase.h"
-#include "kcicompilerconfigure.h"
+#include "kccompilerbase.h"
+#include "kccompilerconfigure.h"
 
-class fpc : public compilerBase
+class fpc : public KCCompilerBase
 {
     Q_OBJECT
 public:
@@ -49,7 +49,7 @@ protected:
     void parseLine(const QString &text);
 
 private:
-    kciCompilerConfigure *instance;
+    KCCompilerConfigure *instance;
 };
 
 #endif // FPC_H

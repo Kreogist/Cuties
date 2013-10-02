@@ -25,10 +25,10 @@
 #include <QDebug>
 #include <QMessageBox>
 
-#include "compilerbase.h"
-#include "kcicompilerconfigure.h"
+#include "kccompilerbase.h"
+#include "kccompilerconfigure.h"
 
-class gcc : public compilerBase
+class gcc : public KCCompilerBase
 {
     Q_OBJECT
 public:
@@ -53,7 +53,7 @@ protected:
 
 private:
     bool isCompileCpp;
-    kciCompilerConfigure *instance;
+    KCCompilerConfigure *instance;
 };
 
 #endif // GCC_H

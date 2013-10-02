@@ -40,7 +40,7 @@ public:
 
     void build(const QChar* &begin, const QChar* &end);
     QString getName() const;
-    inline ValueType getType()
+    inline ValueType getType() const
     {
         return type;
     }

@@ -39,23 +39,23 @@
 #include <QMenuBar>
 #endif
 
-#include "kciglobal.h"
-#include "kcisidebar.h"
-#include "kcicompiledock.h"
-#include "kcijudgedock.h"
-#include "kcidebugdock.h"
-#include "kcidebugwatchdock.h"
-#include "kcititlebar.h"
-#include "kcistatusbar.h"
-#include "kcitabmanager.h"
-#include "kcitexteditor.h"
-#include "kcimainwindow.h"
-#include "kcicontrolcenter.h"
-#include "kciexecutor.h"
+#include "kcglobal.h"
+#include "kcsidebar.h"
+#include "kccompiledock.h"
+#include "kcjudgedock.h"
+#include "kcdebugdock.h"
+#include "kcdebugwatchdock.h"
+#include "kctitlebar.h"
+#include "kcstatusbar.h"
+#include "kctabmanager.h"
+#include "kctexteditor.h"
+#include "kcmainwindow.h"
+#include "kccontrolcenter.h"
+#include "kcexecutor.h"
 #include "kreogistcutestyle.h"
-#include "kcimessagebox.h"
+#include "kcmessagebox.h"
 
-#include "kcimessagebox.h"
+#include "kcmessagebox.h"
 
 class MainWindow : public KCIMainWindow
 {
@@ -192,7 +192,7 @@ private:
 
     int sgoX, sgoY, sgoH, sgoW;
 
-    //kciTextEditor *editor;
+    //KCTextEditor *editor;
     KCITabManager *tabManager;
     QAction *act[act_count];
     QMenu *menu[menu_count];

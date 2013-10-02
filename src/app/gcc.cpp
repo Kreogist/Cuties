@@ -20,10 +20,10 @@
 #include "gcc.h"
 
 gcc::gcc(QObject *parent) :
-    compilerBase(parent)
+    KCCompilerBase(parent)
 {
     isCompileCpp=true;
-    instance=kciCompilerConfigure::getInstance();
+    instance=KCCompilerConfigure::getInstance();
 }
 
 QStringList gcc::getVersionArg()

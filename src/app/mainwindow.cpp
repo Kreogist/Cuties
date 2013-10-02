@@ -433,7 +433,7 @@ void MainWindow::createDocks()
 
     /*
     //Judge Dock
-    judgeDock=new kciJudgeDock(this);
+    judgeDock=new KCJudgeDock(this);
     addDockWidget(Qt::RightDockWidgetArea, judgeDock);
     */
 
@@ -794,7 +794,7 @@ void MainWindow::setDocOpenMenuEnabled()
 
 void MainWindow::restoreSettings()
 {
-    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
+    QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
 
@@ -851,7 +851,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::saveSettings()
 {
-    QSettings settings(kciGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
+    QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     if(!(this->isMaximized() || this->isFullScreen()))
     {
@@ -909,7 +909,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::show()
 {
     KCIMainWindow::show();
-    if(kciGeneralConfigure::getInstance()->getRememberUnclosedFile())
+    if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile())
     {
         tabManager->openHistoryFiles();
     }
@@ -938,7 +938,7 @@ void MainWindow::compileCurrentFile()
 
         //if the file has been compiled,
         //then we clean the text of last compiling.
-        compileOutputReceiver *receiver=currentEditor->langMode()->getCompilerReceiver();
+        KCCompileOutputReceiver *receiver=currentEditor->langMode()->getCompilerReceiver();
         if(receiver!=NULL)
         {
             receiver->reset();
@@ -960,7 +960,7 @@ void MainWindow::run()
     if(currentEditor!=NULL)
     {
         //execute file name
-        kciExecutor::getInstance()->exec(currentEditor->getExecFileName());
+        KCExecutor::getInstance()->exec(currentEditor->getExecFileName());
     }
 }
 
@@ -978,7 +978,7 @@ void MainWindow::compileAndRun()
         }
 
         compileFinishedConnection=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
-                                          kciExecutor::getInstance(),SLOT(exec(QString)));
+                                          KCExecutor::getInstance(),SLOT(exec(QString)));
 
         compileCurrentFile();
     }
@@ -1028,7 +1028,7 @@ void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
 
 void MainWindow::showPreference()
 {
-    kciControlCenter *newControlCenter=new kciControlCenter(this);
+    KCControlCenter *newControlCenter=new KCControlCenter(this);
     newControlCenter->exec();
 }
 
@@ -1066,7 +1066,7 @@ void MainWindow::onCurrentTabChanged()
     }
 
     KCILanguageMode *currLangMode=currEditor->langMode();
-    compileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
+    KCCompileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
     if(compilerReceiver!=NULL)
     {
         compileDock->setReceiver(compilerReceiver);

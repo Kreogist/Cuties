@@ -20,9 +20,9 @@
 #include "fpc.h"
 
 fpc::fpc(QObject *parent) :
-    compilerBase(parent)
+    KCCompilerBase(parent)
 {
-    instance=kciCompilerConfigure::getInstance();
+    instance=KCCompilerConfigure::getInstance();
 }
 
 QStringList fpc::getVersionArg()
