@@ -108,7 +108,6 @@ private:
         menuView,
         menuSearch,
         menuExecute,
-        //mnuDebug,
         menuTools,
         menuWindow,
         menuHelp,
@@ -159,19 +158,6 @@ private:
         mnuExecuteShowOutputFile,
         mnuExecuteRunAndShowOutputFile,
         mnuExecuteSetInputRunShowOutput,*/
-        /*mnuDebugStart,
-        mnuDebugStopExecute,
-        mnuDebugSetBreakPoint,
-        mnuDebugNextLine,
-        mnuDebugIntoLine,
-        mnuDebugNextInstruction,
-        mnuDebugIntoInstruction,
-        mnuDebugContinue,
-        mnuDebugSkipFunction,
-        mnuDebugAddWatch,
-        mnuDebugModifyWatch,
-        mnuDebugRemoveWatch,*/
-        //mnuWindowSplit,
         actionWindowPrev,
         actionWindowNext,
         actionHelpAbout,
@@ -184,7 +170,8 @@ private:
     QString stringActionStatusTips[actionMainWindowCount];
     QString stringActionIconPath[actionMainWindowCount];
 
-    enum MainToolBarButton
+    //Enumerate Toolbar button items
+    enum buttonMainToolbar
     {
         tlbNewFile,
         tlbOpenFile,
@@ -196,14 +183,15 @@ private:
         tlbRedo,
         tlbSearch,
         tlbCompileAndRun,
-        tlbbutton_count // the number of toolbar buttons
+        buttonMainToolbarCount // The number of toolbar buttons
     };
+    //Define MainWindow Toolbar buttons.
+    QToolButton *buttonMainToolbarItem[buttonMainToolbarCount];
 
     int sgoX, sgoY, sgoH, sgoW;
 
     //KCTextEditor *editor;
     KCITabManager *tabManager;
-    QToolButton *tblMainButton[tlbbutton_count];
     KCISideBar *sidebarDock;
     KCICompiledock *compileDock;
     KCIDebugDock *debugDock;

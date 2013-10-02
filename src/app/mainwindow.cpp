@@ -169,9 +169,9 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
 
     //View -> Compile Dock
-    actionMainWindowItem[mnuViewCompileDock]=new QAction(tr("Compiler Dock"),this);
-    stringActionStatusTips[mnuViewCompileDock]=QString(tr("Show or hide the Compile Dock."));
-    connect(actionMainWindowItem[mnuViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
+    actionMainWindowItem[actionViewCompileDock]=new QAction(tr("Compiler Dock"),this);
+    stringActionStatusTips[actionViewCompileDock]=QString(tr("Show or hide the Compile Dock."));
+    connect(actionMainWindowItem[actionViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
 
     //View -> Debug Dock
     /*act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
@@ -380,7 +380,7 @@ void MainWindow::createTitlebar()
 void MainWindow::createToolBar()
 {
     //Set Icons.
-    QString strIconPath[tlbbutton_count];
+    QString strIconPath[buttonMainToolbarCount];
     strIconPath[tlbNewFile]=":/ToolBar/image/ToolBar/new.png";
     strIconPath[tlbOpenFile]=":/ToolBar/image/ToolBar/open.png";
     strIconPath[tlbSaveFile]=":/ToolBar/image/ToolBar/save.png";
@@ -393,38 +393,38 @@ void MainWindow::createToolBar()
     strIconPath[tlbCompileAndRun]=":/ToolBar/image/ToolBar/compileandrun.png";
 
     //Set Other Buttons.
-    for(int i=tlbNewFile; i<tlbbutton_count; i++)
+    for(int i=tlbNewFile; i<buttonMainToolbarCount; i++)
     {
-        tblMainButton[i]=new QToolButton(titlebar);
+        buttonMainToolbarItem[i]=new QToolButton(titlebar);
         //tblMainButton[i]->setPalette(pal);
-        tblMainButton[i]->setFixedSize(25,25);
-        tblMainButton[i]->setIcon(QIcon(strIconPath[i]));
-        titlebar->addToolButton(tblMainButton[i]);
+        buttonMainToolbarItem[i]->setFixedSize(25,25);
+        buttonMainToolbarItem[i]->setIcon(QIcon(strIconPath[i]));
+        titlebar->addToolButton(buttonMainToolbarItem[i]);
         if(i==tlbSaveFile || i==tlbPaste || i==tlbRedo || i==tlbSearch)
         {
             titlebar->addToolSeparator();
         }
     }
 
-    connect(tblMainButton[tlbNewFile],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbNewFile],SIGNAL(clicked()),
             tabManager,SLOT(new_file()));
-    connect(tblMainButton[tlbOpenFile],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbOpenFile],SIGNAL(clicked()),
             tabManager,SLOT(open()));
-    connect(tblMainButton[tlbSaveFile],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbSaveFile],SIGNAL(clicked()),
             tabManager,SLOT(save()));
-    connect(tblMainButton[tlbCut],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbCut],SIGNAL(clicked()),
             tabManager,SLOT(cut()));
-    connect(tblMainButton[tlbCopy],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbCopy],SIGNAL(clicked()),
             tabManager,SLOT(copy()));
-    connect(tblMainButton[tlbPaste],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbPaste],SIGNAL(clicked()),
             tabManager,SLOT(paste()));
-    connect(tblMainButton[tlbUndo],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbUndo],SIGNAL(clicked()),
             tabManager,SLOT(undo()));
-    connect(tblMainButton[tlbRedo],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbRedo],SIGNAL(clicked()),
             tabManager,SLOT(redo()));
-    connect(tblMainButton[tlbSearch],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbSearch],SIGNAL(clicked()),
             tabManager,SLOT(showSearchBar()));
-    connect(tblMainButton[tlbCompileAndRun],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[tlbCompileAndRun],SIGNAL(clicked()),
             this,SLOT(compileAndRun()));
 
 }
@@ -487,7 +487,7 @@ void MainWindow::createMenu()
     menuMainWindowItem[menuView]   = _mainMenu->addMenu(tr("&View"));
     menuMainWindowItem[menuSearch] = _mainMenu->addMenu(tr("&Search"));
     menuMainWindowItem[menuExecute]= _mainMenu->addMenu(tr("E&xecute"));
-    //menu[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
+    //menuMainWindowItem[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
     menuMainWindowItem[menuTools]  = _mainMenu->addMenu(tr("&Tools"));
     menuMainWindowItem[menuWindow] = _mainMenu->addMenu(tr("&Window"));
     menuMainWindowItem[menuHelp]   = _mainMenu->addMenu(tr("&Help"));
@@ -511,7 +511,7 @@ void MainWindow::createMenu()
         case mnuFileOpen:
         case mnuFileSaveAll:
         case mnuFileCloseAllExceptThis:
-            menu[mnuFile]->addSeparator();
+            menuMainWindowItem[mnuFile]->addSeparator();
             break;
         }
 #endif
@@ -535,7 +535,7 @@ void MainWindow::createMenu()
         {
         case mnuEditRedo:
         case mnuEditPaste:
-            menu[mnuEdit]->addSeparator();
+            menuMainWindowItem[menuEdit]->addSeparator();
             break;
         }
 #endif
@@ -558,7 +558,7 @@ void MainWindow::createMenu()
         switch(i)
         {
         case mnuViewCompileDock:
-            menu[mnuView]->addSeparator();
+            menuMainWindowItem[mnuView]->addSeparator();
         }
 
 #endif
@@ -583,7 +583,7 @@ void MainWindow::createMenu()
         case mnuSearchFind:
             //case mnuSearchReplaceInFiles:
         case mnuSearchSearchOnline:
-            menu[mnuSearch]->addSeparator();
+            menuMainWindowItem[mnuSearch]->addSeparator();
             break;
         }
 
@@ -608,7 +608,7 @@ void MainWindow::createMenu()
         {
         case mnuExecuteRun:
             //case mnuExecuteParameters:
-            menu[mnuExecute]->addSeparator();
+            menuMainWindowItem[mnuExecute]->addSeparator();
             break;
         }
 #endif
@@ -618,7 +618,7 @@ void MainWindow::createMenu()
     /*
     #ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
-    menu[mnuDebug]->setIcon(*MenuIconAddor);
+    menuMainWindowItem[mnuDebug]->setIcon(*MenuIconAddor);
     #endif
     for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
     {
@@ -627,14 +627,14 @@ void MainWindow::createMenu()
         act[i]->setIcon(*MenuIconAddor);
     #endif
         act[i]->setStatusTip(actStatusTips[i]);
-        menu[mnuDebug]->addAction(act[i]);
+        menuMainWindowItem[mnuDebug]->addAction(act[i]);
     #ifdef Q_OS_MACX
         switch(i)
         {
         case mnuDebugStopExecute:
         case mnuDebugSetBreakPoint:
         case mnuDebugSkipFunction:
-            menu[mnuDebug]->addSeparator();
+            menuMainWindowItem[mnuDebug]->addSeparator();
             break;
         }
 
@@ -733,8 +733,8 @@ void MainWindow::setDocOpenMenuState(bool state)
         actionMainWindowItem[i]->setVisible(state);
     }
 #ifdef Q_OS_MACX
-    menu[mnuEdit]->menuAction()->setEnabled(state);
-    menu[mnuEdit]->menuAction()->setVisible(state);
+    menuMainWindowItem[menuEdit]->menuAction()->setEnabled(state);
+    menuMainWindowItem[menuEdit]->menuAction()->setVisible(state);
 #endif
 
     //View Menu
@@ -743,8 +743,8 @@ void MainWindow::setDocOpenMenuState(bool state)
         act[i]->setEnabled(state);
         act[i]->setVisible(state);
     }*/
-    actionMainWindowItem[mnuViewCompileDock]->setEnabled(state);
-    actionMainWindowItem[mnuViewCompileDock]->setVisible(state);
+    actionMainWindowItem[actionViewCompileDock]->setEnabled(state);
+    actionMainWindowItem[actionViewCompileDock]->setVisible(state);
 
     //Search Menu
     for(i=actionSearchFind; i<=actionSearchGoto; i++)
@@ -770,8 +770,8 @@ void MainWindow::setDocOpenMenuState(bool state)
             act[i]->setEnabled(state);
             act[i]->setVisible(state);
         }
-        menu[mnuDebug]->menuAction()->setEnabled(state);
-        menu[mnuDebug]->menuAction()->setVisible(state);
+        menuMainWindowItem[mnuDebug]->menuAction()->setEnabled(state);
+        menuMainWindowItem[mnuDebug]->menuAction()->setVisible(state);
     */
     //Window Menu
     for(i=actionWindowNext; i<=actionWindowNext; i++)
