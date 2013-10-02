@@ -32,6 +32,7 @@ Whitespace
 Parentheses
 ===========
 + Use parentheses to group expressions:
+
         // Wrong
         if (a && b || c)
            
@@ -49,44 +50,45 @@ Switch statements
 + The case labels are in the same column as the switch
 + Every case must have a break (or return) statement at the end or a comment to indicate that there’s intentionally no break, unless another case follows immediately.
 
-            switch (myEnum)
-            {
-            case Value1:
-                doSomething();
-                break;
-            case Value2:
-            case Value3:
-                doSomethingElse();
-                // fall through
-            default:
-                defaultHandling();
-                break;
-            }
+        switch (myEnum)
+        {
+        case Value1:
+            doSomething();
+            break;
+        case Value2:
+        case Value3:
+            doSomethingElse();
+            // fall through
+        default:
+            defaultHandling();
+            break;
+        }
 
 Jump statements (break, continue, return, and goto)
 ===================================================
 + Do not put ‘else’ after jump statements:
 
-            // Wrong
-            if (thisOrThat)
-                return;
-            else
-                somethingElse();
-     
-            // Correct
-            if (thisOrThat)
-                return;
+        // Wrong
+        if (thisOrThat)
+            return;
+        else
             somethingElse();
+     
+        // Correct
+        if (thisOrThat)
+            return;
+        somethingElse();
 
 Line breaks
 ===========
 + Keep lines shorter than 100 characters; wrap if necessary
 + Operators go at the end of wrapped lines.
-            if (longExpression +
-                otherLongExpression +
-                otherOtherLongExpression)
-            {
+
+        if (longExpression +
+            otherLongExpression +
+            otherOtherLongExpression)
+        {
             
-            }
+        }
 
 
