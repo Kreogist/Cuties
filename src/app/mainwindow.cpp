@@ -166,12 +166,12 @@ void MainWindow::createActions()
     //View -> Sidebar
     actionMainWindowItem[actionViewSidebar]=new QAction(tr("Sidebar"), this);
     stringActionStatusTips[actionViewSidebar]=QString(tr("Show or hide the Sidebar."));
-    connect(actionMainWindowItem[actionViewSidebar],SIGNAL(triggered()),this,SLOT(diffVisibleSidebar()));
+    connect(actionMainWindowItem[actionViewSidebar],SIGNAL(triggered()),this,SLOT(changeSidebarVisibleState()));
 
     //View -> Compile Dock
     actionMainWindowItem[actionViewCompileDock]=new QAction(tr("Compiler Dock"),this);
     stringActionStatusTips[actionViewCompileDock]=QString(tr("Show or hide the Compile Dock."));
-    connect(actionMainWindowItem[actionViewCompileDock],SIGNAL(triggered()),this,SLOT(diffVisibleCompileDock()));
+    connect(actionMainWindowItem[actionViewCompileDock],SIGNAL(triggered()),this,SLOT(changeCompileDockVisibleState()));
 
     //View -> Debug Dock
     /*act[mnuViewDebugDock]=new QAction(tr("Debug Dock"),this);
@@ -223,7 +223,7 @@ void MainWindow::createActions()
     actionMainWindowItem[actionSearchSearchOnline]=new QAction(tr("&Search Online"),this);
     actionMainWindowItem[actionSearchSearchOnline]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
     stringActionStatusTips[actionSearchSearchOnline]=QString(tr("Search the text via online search engine."));
-    connect(actionMainWindowItem[actionSearchSearchOnline],SIGNAL(triggered()),this,SLOT(searchOnline()));
+    connect(actionMainWindowItem[actionSearchSearchOnline],SIGNAL(triggered()),this,SLOT(onActionSearchOnline()));
 
     //Search -> Go To Line
     actionMainWindowItem[actionSearchGoto]=new QAction(tr("&Goto Line"),this);
@@ -236,20 +236,20 @@ void MainWindow::createActions()
     actionMainWindowItem[actionExecuteCompileAndRun]=new QAction(tr("C&ompile and Run"),this);
     actionMainWindowItem[actionExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
     stringActionStatusTips[actionExecuteCompileAndRun]=QString(tr("Compile the active file and run."));
-    connect(actionMainWindowItem[actionExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(compileAndRun()));
+    connect(actionMainWindowItem[actionExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(onActionCompileAndRun()));
 
     //Execute -> Compile
     actionMainWindowItem[actionExecuteCompile]=new QAction(tr("&Compile"),this);
     actionMainWindowItem[actionExecuteCompile]->setShortcut(QKeySequence(Qt::Key_F9));
     stringActionStatusTips[actionExecuteCompile]=QString(tr("Compile the active file."));
     connect(actionMainWindowItem[actionExecuteCompile],SIGNAL(triggered()),
-            this,SLOT(compileCurrentFile()));
+            this,SLOT(onActionCompile()));
 
     //Execute -> Run
     actionMainWindowItem[actionExecuteRun]=new QAction(tr("&Run"),this);
     actionMainWindowItem[actionExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
     stringActionStatusTips[actionExecuteRun]=QString(tr("Run the compiled execution."));
-    connect(actionMainWindowItem[actionExecuteRun],SIGNAL(triggered()),this,SLOT(run()));
+    connect(actionMainWindowItem[actionExecuteRun],SIGNAL(triggered()),this,SLOT(onActionRun()));
     /*
         //Execute -> Parameters
         act[mnuExecuteParameters]=new QAction(tr("P&arameters"),this);
@@ -369,7 +369,7 @@ void MainWindow::aboutQt()
 
 void MainWindow::createTitlebar()
 {
-    titlebar=titleBar();
+    titlebar=getTitleBar();
 
 #ifndef Q_OS_MACX
     setMainButtonIcon(":/img/image/MainMenuButton.png");
@@ -425,7 +425,7 @@ void MainWindow::createToolBar()
     connect(buttonMainToolbarItem[toolButtonSearch],SIGNAL(clicked()),
             tabManager,SLOT(showSearchBar()));
     connect(buttonMainToolbarItem[toolButtonCompileAndRun],SIGNAL(clicked()),
-            this,SLOT(compileAndRun()));
+            this,SLOT(onActionCompileAndRun()));
 
 }
 
@@ -463,11 +463,11 @@ void MainWindow::createDocks()
     debugWatchDock->hide();
 
     //Sidebar Dock
-    sidebarDock=new KCSideBar(this);
-    addDockWidget(Qt::LeftDockWidgetArea,sidebarDock);
-    connect(sidebarDock, SIGNAL(historyRequiredOpenFiles(QString)),
+    sideBar=new KCSideBar(this);
+    addDockWidget(Qt::LeftDockWidgetArea,sideBar);
+    connect(sideBar, SIGNAL(historyRequiredOpenFiles(QString)),
             tabManager, SLOT(openAndJumpTo(QString)));
-    connect(sidebarDock, SIGNAL(clipboardRequiredInsertText(QString)),
+    connect(sideBar, SIGNAL(clipboardRequiredInsertText(QString)),
             tabManager, SLOT(insertToCurrentEditor(QString)));
 }
 
@@ -698,21 +698,21 @@ void MainWindow::createMenu()
 
 void MainWindow::createStatusbar()
 {
-    myStatusBar=new KCStatusBar(this);
-    setStatusBar(myStatusBar);
+    statusBar=new KCStatusBar(this);
+    setStatusBar(statusBar);
 
-    QPalette pal=myStatusBar->palette();
+    QPalette pal=statusBar->palette();
     pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
     pal.setColor(QPalette::Foreground,QColor(255,255,255));
-    myStatusBar->setPalette(pal);
+    statusBar->setPalette(pal);
 
     connect(tabManager,SIGNAL(rewriteDataChanged(bool)),
-            myStatusBar,SLOT(updateRewriteMode(bool)));
+            statusBar,SLOT(updateRewriteMode(bool)));
     connect(tabManager, SIGNAL(rewriteDisVisible()),
-            myStatusBar,SLOT(hideRewriteDisplay()));
+            statusBar,SLOT(hideRewriteDisplay()));
     connect(tabManager,SIGNAL(cursorDataChanged(int,int)),
-            myStatusBar,SLOT(updateCursorPosition(int,int)));
-    connect(myStatusBar,SIGNAL(ToNewPosition(int)),
+            statusBar,SLOT(updateCursorPosition(int,int)));
+    connect(statusBar,SIGNAL(ToNewPosition(int)),
             this,SLOT(setCurrentTextCursorLine(int)));
 }
 
@@ -838,15 +838,15 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     KCMainWindow::resizeEvent(e);
     if(this->isMaximized())
     {
-        sgoH=e->oldSize().height();
-        sgoW=e->oldSize().width();
+        lastPositionHeight=e->oldSize().height();
+        lastPostionWidth=e->oldSize().width();
     }
     else
     {
-        sgoX=this->x();
-        sgoY=this->y();
-        sgoH=this->height();
-        sgoW=this->width();
+        lastPositionX=x();
+        lastPostionY=y();
+        lastPositionHeight=height();
+        lastPostionWidth=width();
     }
 }
 
@@ -854,15 +854,15 @@ void MainWindow::saveSettings()
 {
     QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
-    if(!(this->isMaximized() || this->isFullScreen()))
+    if(!(isMaximized() || isFullScreen()))
     {
-        sgoX=this->x();
-        sgoY=this->y();
-        sgoH=this->height();
-        sgoW=this->width();
+        lastPositionX=x();
+        lastPostionY=y();
+        lastPositionHeight=height();
+        lastPostionWidth=width();
     }
 #ifndef Q_OS_MACX
-    int n_WindowState;
+    int lastPositionWindowState;
 #endif
 
     //Save ALL settings.
@@ -870,25 +870,25 @@ void MainWindow::saveSettings()
           deskHeight=float(QApplication::desktop()->height());
 
     settings.beginGroup("MainWindow");
-    settings.setValue("width",float(sgoW)/deskWidth);
-    settings.setValue("height",float(sgoH)/deskHeight);
-    settings.setValue("x",float(sgoX)/deskWidth);
-    settings.setValue("y",float(sgoY)/deskHeight);
+    settings.setValue("x",float(lastPositionX)/deskWidth);
+    settings.setValue("y",float(lastPostionY)/deskHeight);
+    settings.setValue("width",float(lastPostionWidth)/deskWidth);
+    settings.setValue("height",float(lastPositionHeight)/deskHeight);
 
 #ifndef Q_OS_MACX
     switch(windowState())
     {
     case Qt::WindowMinimized:
-        n_WindowState=1;
+        lastPositionWindowState=1;
         break;
     case Qt::WindowMaximized:
-        n_WindowState=2;
+        lastPositionWindowState=2;
         break;
     default:
-        n_WindowState=0;
+        lastPositionWindowState=0;
         break;
     }
-    settings.setValue("state",n_WindowState);
+    settings.setValue("state",lastPositionWindowState);
 #endif
     settings.endGroup();
 }
@@ -916,7 +916,7 @@ void MainWindow::show()
     }
 }
 
-void MainWindow::compileCurrentFile()
+void MainWindow::onActionCompile()
 {
     KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
 
@@ -955,7 +955,7 @@ void MainWindow::compileCurrentFile()
     }
 }
 
-void MainWindow::run()
+void MainWindow::onActionRun()
 {
     KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
     if(currentEditor!=NULL)
@@ -965,7 +965,7 @@ void MainWindow::run()
     }
 }
 
-void MainWindow::compileAndRun()
+void MainWindow::onActionCompileAndRun()
 {
     KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
 
@@ -981,44 +981,44 @@ void MainWindow::compileAndRun()
         compileFinishedConnection=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
                                           KCExecutor::getInstance(),SLOT(exec(QString)));
 
-        compileCurrentFile();
+        onActionCompile();
     }
 }
 
-void MainWindow::searchOnline()
+void MainWindow::onActionSearchOnline()
 {
     QString strURL="http://www.baidu.com/s?wd="+tabManager->textNowSelect();
     QDesktopServices::openUrl(QUrl(strURL));
 }
 
-void MainWindow::diffVisibleSidebar()
+void MainWindow::changeSidebarVisibleState()
 {
-    sidebarDock->setVisible(!sidebarDock->isVisible());
+    sideBar->setVisible(!sideBar->isVisible());
 }
 
-void MainWindow::diffVisibleCompileDock()
+void MainWindow::changeCompileDockVisibleState()
 {
     compileDock->setVisible(!compileDock->isVisible());
 }
 
-void MainWindow::diffVisibleDebugDock()
+void MainWindow::changeDebugDockVisibleState()
 {
     debugDock->setVisible(!debugDock->isVisible());
 }
 
-void MainWindow::diffVisibleDebugWatchDock()
+void MainWindow::changeDebugWatchVisibleState()
 {
     debugWatchDock->setVisible(!debugWatchDock->isVisible());
 }
 
-void MainWindow::diffVisibleJudgeDock()
+void MainWindow::changeJudgeDockVisibleState()
 {
     judgeDock->setVisible(!judgeDock->isVisible());
 }
 
 void MainWindow::statusShowGoto()
 {
-    myStatusBar->showGotoBar(tabManager->getCurrentLineNum(),
+    statusBar->showGotoBar(tabManager->getCurrentLineNum(),
                              tabManager->getCurrentLineCount());
 }
 

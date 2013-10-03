@@ -1,11 +1,11 @@
-#include "kcreplacedock.h"
+#include "kcreplacewindow.h"
 
 static int replaceWidgetsHeight=25;
 
-KCReplaceDock::KCReplaceDock(QWidget *parent) :
+KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
     KCSearchWidget(parent)
 {
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(3,2,3,1);
     setMinimumHeight(0);
     setAutoFillBackground(true);
 
@@ -21,7 +21,7 @@ KCReplaceDock::KCReplaceDock(QWidget *parent) :
     mapper=new QSignalMapper(this);
 
     mainLayout=(QGridLayout *)layout();
-    mainLayout->setVerticalSpacing(3);
+    mainLayout->setVerticalSpacing(2);
 
     replaceText=new QLineEdit(this);
     replaceText->setPlaceholderText(tr("Replace with"));
@@ -74,7 +74,7 @@ KCReplaceDock::KCReplaceDock(QWidget *parent) :
     setFixedHeight(0);
 }
 
-void KCReplaceDock::showAnime()
+void KCReplaceWindow::showAnime()
 {
     QTimeLine *showAnimation=new QTimeLine(250, this);
     showAnimation->setEasingCurve(QEasingCurve::OutCubic);
@@ -86,12 +86,12 @@ void KCReplaceDock::showAnime()
     showAnimation->start();
 }
 
-void KCReplaceDock::resizeDock(int newHeight)
+void KCReplaceWindow::resizeDock(int newHeight)
 {
     setFixedHeight(newHeight);
 }
 
-void KCReplaceDock::hideAnime()
+void KCReplaceWindow::hideAnime()
 {
     QTimeLine *hideAnimation=new QTimeLine(250, this);
     hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
@@ -104,7 +104,7 @@ void KCReplaceDock::hideAnime()
     hideAnimation->start();
 }
 
-void KCReplaceDock::onOneOfReplaceButtonsClicked(int type)
+void KCReplaceWindow::onOneOfReplaceButtonsClicked(int type)
 {
     QString newText=replaceText->text(),
             oldText=text();

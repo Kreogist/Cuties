@@ -78,7 +78,6 @@ SOURCES += \
     kcfiletype.cpp \
     kchistoryconfigure.cpp \
     kcmessagebox.cpp \
-    kcreplacedock.cpp \
     kcsearchlinetext.cpp \
     kcsearchwidget.cpp \
     kcstatusrewriteinfo.cpp \
@@ -89,7 +88,8 @@ SOURCES += \
     kccompileoutputreceiver.cpp \
     kcconnectionhandler.cpp \
     kccpphighlighter.cpp \
-    kcpascalhighlighter.cpp
+    kcpascalhighlighter.cpp \
+    kcreplacewindow.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -145,7 +145,6 @@ HEADERS += \
     kcfiletype.h \
     kchistoryconfigure.h \
     kcmessagebox.h \
-    kcreplacedock.h \
     kcsearchwidget.h \
     kcstatusrewriteinfo.h \
     Controls/SettingItems/kcsettinglistitembutton.h \
@@ -155,7 +154,8 @@ HEADERS += \
     kccompilerbase.h \
     kcconnectionhandler.h \
     kccpphighlighter.h \
-    kcpascalhighlighter.h
+    kcpascalhighlighter.h \
+    kcreplacewindow.h
 
 # Enable C++11
 CONFIG += c++11

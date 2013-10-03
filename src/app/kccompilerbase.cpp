@@ -24,8 +24,9 @@ KCCompilerBase::KCCompilerBase(QObject *parent) :
 {
 }
 
-void KCCompilerBase::emitCompileCmd(const QString &compilerPath,
-                                    const QStringList &arg)
+//Emit the compile command signal
+void KCCompilerBase::emitCompileCommand(const QString &compilerPath,
+                                        const QStringList &arg)
 {
     QString compilerCommandLine;
     compilerCommandLine=compilerPath;
@@ -34,7 +35,6 @@ void KCCompilerBase::emitCompileCmd(const QString &compilerPath,
         compilerCommandLine += QString(" ") + arg.at(i);
     }
     compilerCommandLine+="\n";
-
     emit compileCommandLine(compilerCommandLine);
 }
 
@@ -59,25 +59,23 @@ void KCCompilerBase::startCompile(const QString &filePath)
      * example, gcc class use gcc(program name) to compile c files and use
      * g++ to compile cpp files.
      */
-
-    //emitCompileCmd(compilerPath,getCompileArg(filePath));
-    emitCompileCmd(compilerPath,arg);
+    emitCompileCommand(compilerPath, arg);
 
     compiler.reset(new QProcess(this));
     compiler->setReadChannelMode(QProcess::MergedChannels);
 
-    connectionHandles+=connect(compiler.data(),SIGNAL(readyRead()),
-                               this,SLOT(onOutputReady()));
-    connectionHandles+=connect(compiler.data(),SIGNAL(finished(int)),
-                               this,SLOT(onFinished(int)));
+    connectionHandles+=connect(compiler.data(), &QProcess::readyRead,
+                               this, &KCCompilerBase::readyForOutput);
+    connectionHandles+=connect(compiler.data(), SIGNAL(finished(int)),
+                               this, SLOT(onFinished(int)));
 
-    QStringList env=getcompileEnv();
-    if(!env.isEmpty())
+    QStringList compilerEnvironment=getCompileEnv();
+    if(!compilerEnvironment.isEmpty())
     {
-        compiler->setEnvironment(env);
+        compiler->setEnvironment(compilerEnvironment);
     }
 
-    compiler->start(compilerPath,arg);
+    compiler->start(compilerPath, arg);
 }
 
 bool KCCompilerBase::checkCompilerPath(const QString &compilerPath)
@@ -97,13 +95,13 @@ void KCCompilerBase::onFinished(int exitNum)
     emit compileFinished(checkHasErrorByExitNum(exitNum));
 }
 
-void KCCompilerBase::onOutputReady()
+void KCCompilerBase::readyForOutput()
 {
-    char str_msg[1024];
-    while(compiler->readLine(str_msg,1024))
+    char outputLineMessage[1024];
+    while(compiler->readLine(outputLineMessage,1024))
     {
-        QString msg=QString::fromUtf8(str_msg);
-        emit output(msg);
-        parseLine(msg);
+        QString stringOutputLineMessage=QString::fromUtf8(outputLineMessage);
+        emit compileMessage(stringOutputLineMessage);
+        parseLine(stringOutputLineMessage);
     }
 }

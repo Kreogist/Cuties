@@ -23,8 +23,8 @@
 KCMainWindow::KCMainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    m_titleBar=new KCTitleBar(this);
-    setMenuWidget(m_titleBar);
+    titleBar=new KCTitleBar(this);
+    setMenuWidget(titleBar);
     setAcceptDrops(true);
 
 #ifdef Q_OS_MACX
@@ -37,30 +37,30 @@ KCMainWindow::KCMainWindow(QWidget *parent) :
 #endif
 }
 
-KCTitleBar *KCMainWindow::titleBar() const
+KCTitleBar *KCMainWindow::getTitleBar() const
 {
-    return m_titleBar;
+    return titleBar;
 }
 
 void KCMainWindow::setTitleBar(KCTitleBar *titleBar)
 {
-    m_titleBar = titleBar;
+    titleBar = titleBar;
 }
 
 #ifndef Q_OS_MACX
 void KCMainWindow::setMainButtonIcon(const QString &mainIcon)
 {
-    if(m_titleBar)
+    if(titleBar)
     {
-        m_titleBar->setMainButtonIcon(mainIcon);
+        titleBar->setMainButtonIcon(mainIcon);
     }
 }
 
 void KCMainWindow::setMenu(QMenu *menu)
 {
-    if(m_titleBar)
+    if(titleBar)
     {
-        m_titleBar->setMenu(menu);
+        titleBar->setMenu(menu);
     }
 }
 #endif

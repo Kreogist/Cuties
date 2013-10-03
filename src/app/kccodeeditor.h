@@ -47,7 +47,7 @@
 #include "kcmarkpanel.h"
 #include "kcsearchwindow.h"
 #include "kclanguagemode.h"
-#include "kcreplacedock.h"
+#include "kcreplacewindow.h"
 #include "kcconnectionhandler.h"
 
 class KCSearchWindow;
@@ -129,7 +129,7 @@ private:
     QTextCursor fileTextCursor;
 
     KCSearchWindow *searchBar;
-    KCReplaceDock *replaceBar;
+    KCReplaceWindow *replaceBar;
 
     KCConnectionHandler searcherConnections;
 

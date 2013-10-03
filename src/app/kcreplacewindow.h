@@ -1,5 +1,5 @@
-#ifndef KCREPLACEDOCK_H
-#define KCREPLACEDOCK_H
+#ifndef KCREPLACEWINDOW_H
+#define KCREPLACEWINDOW_H
 
 #include <QWidget>
 #include <QLabel>
@@ -16,11 +16,11 @@
 
 #include "kcsearchwidget.h"
 
-class KCReplaceDock : public KCSearchWidget
+class KCReplaceWindow : public KCSearchWidget
 {
     Q_OBJECT
 public:
-    explicit KCReplaceDock(QWidget *parent = 0);
+    explicit KCReplaceWindow(QWidget *parent = 0);
 
 signals:
     void requireReplace(const QString &oldText,const QString &newText);
@@ -52,4 +52,4 @@ private:
     QSignalMapper *mapper;
 };
 
-#endif // KCREPLACEDOCK_H
+#endif // KCREPLACEWINDOW_H

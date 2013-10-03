@@ -39,8 +39,8 @@ class KCMainWindow : public QMainWindow
 public:
     explicit KCMainWindow(QWidget *parent = 0);
     
-    KCTitleBar *titleBar() const;
-    void setTitleBar(KCTitleBar *titleBar);
+    KCTitleBar *getTitleBar() const;
+    void setTitleBar(KCTitleBar *getTitleBar);
 #ifndef Q_OS_MACX
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString &mainIcon);
@@ -51,9 +51,7 @@ signals:
 public slots:
 
 private:
-
-    KCTitleBar *m_titleBar;
-    QPoint startPos;
+    KCTitleBar *titleBar;
 };
 
 #endif // KCMAINWINDOW_H

@@ -42,26 +42,31 @@ public:
     explicit KCCompilerBase(QObject *parent = 0);
     //Get compiler version.
     QString compilerVersion();
+    //Use the current configure start compile process.
     void startCompile(const QString &filePath);
+    /*
+     * Some virtual functions.
+     * These functions must be provided by the inherit class.
+     */
     virtual QString compilerPath()=0;
     virtual bool checkCompilerPath(const QString &compilerPath);
-    virtual QString compilerName() = 0;
+    virtual QString compilerName()=0;
 
 signals:
-    void compileCommandLine(QString cmd);
-    void compileError(compileErrorInfo errInfo);
-    void output(QString msg);
-    void compileFinished(int exitNum);
+    void compileCommandLine(QString compileCommand);
+    void compileError(compileErrorInfo compileErrorInfo);
+    void compileMessage(QString compileMessage);
+    void compileFinished(int exitNumber);
 
 public slots:
-    void onOutputReady();
+    void readyForOutput();
 
 protected:
-    void emitCompileCmd(const QString &compilerPath,
-                        const QStringList &arg);
+    void emitCompileCommand(const QString &compilerPath,
+                            const QStringList &arg);
     virtual QStringList getVersionArg() = 0;
     virtual QStringList getCompileArg(const QString &filePath) = 0;
-    virtual QStringList getcompileEnv() = 0;
+    virtual QStringList getCompileEnv() = 0;
 
     virtual bool checkHasErrorByExitNum(const int &exitNum)
     {

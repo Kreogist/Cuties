@@ -54,7 +54,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     replaceLayout->addLayout(mainLayout);
 
-    replaceBar=new KCReplaceDock(this);
+    replaceBar=new KCReplaceWindow(this);
     replaceBar->hide();
     replaceLayout->addWidget(replaceBar);
 
@@ -196,11 +196,11 @@ void KCCodeEditor::showReplaceBar()
 
         connectSearchWidgetWithEditor(replaceBar);
 
-        searcherConnections+=connect(replaceBar,&KCReplaceDock::requireReplace,
+        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
                                      editor,&KCTextEditor::replace);
-        searcherConnections+=connect(replaceBar,&KCReplaceDock::requireReplaceAndFind,
+        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
                                      editor,&KCTextEditor::replaceAndFind);
-        searcherConnections+=connect(replaceBar,&KCReplaceDock::requireReplaceAll,
+        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAll,
                                      editor,&KCTextEditor::replaceAll);
     }
 

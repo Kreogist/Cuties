@@ -65,27 +65,25 @@ signals:
 
 public slots:
     void show();
-    void aboutQt();
-    void compileCurrentFile();
     void startDebug();
-    void run();
-    void compileAndRun();
-    void searchOnline();
+    void onActionCompileAndRun();
+    void onActionRun();
+    void onActionCompile();
+    void onActionSearchOnline();
     void statusShowGoto();
-
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
-
     void onCurrentTabChanged();
 
 private slots:
+    void aboutQt();
     void aboutCuties();
-    void diffVisibleSidebar();
-    void diffVisibleCompileDock();
-    void diffVisibleDebugDock();
-    void diffVisibleJudgeDock();
-    void diffVisibleDebugWatchDock();
+    void changeSidebarVisibleState();
+    void changeCompileDockVisibleState();
+    void changeDebugDockVisibleState();
+    void changeJudgeDockVisibleState();
+    void changeDebugWatchVisibleState();
     void showPreference();
 #ifdef Q_OS_MACX
     void setFullScreen();
@@ -186,17 +184,17 @@ private:
     //Define MainWindow Toolbar buttons.
     QToolButton *buttonMainToolbarItem[mainToolbarButtonCount];
 
-    int sgoX, sgoY, sgoH, sgoW;
+    //Define MainWindow last time opened position.
+    int lastPositionX, lastPostionY, lastPositionHeight, lastPostionWidth;
 
-    //KCTextEditor *editor;
     KCTabManager *tabManager;
-    KCSideBar *sidebarDock;
+    KCSideBar *sideBar;
     KCCompileDock *compileDock;
     KCDebugDock *debugDock;
     KCDebugWatchDock *debugWatchDock;
     KCJudgeDock *judgeDock;
     KCTitleBar *titlebar;
-    KCStatusBar *myStatusBar;
+    KCStatusBar *statusBar;
     QMetaObject::Connection compileFinishedConnection;
 
     void saveSettings();

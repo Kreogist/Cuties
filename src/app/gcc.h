@@ -47,7 +47,7 @@ public:
 protected:
     QStringList getVersionArg();
     QStringList getCompileArg(const QString &filePath);
-    QStringList getcompileEnv();
+    QStringList getCompileEnv();
 
     void parseLine(const QString &text);
 

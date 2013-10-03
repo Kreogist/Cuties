@@ -73,7 +73,7 @@ QStringList gcc::getCompileArg(const QString &filePath)
     return arg;
 }
 
-QStringList gcc::getcompileEnv()
+QStringList gcc::getCompileEnv()
 {
     QStringList env;
 
