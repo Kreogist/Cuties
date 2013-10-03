@@ -89,7 +89,8 @@ SOURCES += \
     kcconnectionhandler.cpp \
     kccpphighlighter.cpp \
     kcpascalhighlighter.cpp \
-    kcreplacewindow.cpp
+    kcreplacewindow.cpp \
+    kccolorconfigure.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -155,7 +156,8 @@ HEADERS += \
     kcconnectionhandler.h \
     kccpphighlighter.h \
     kcpascalhighlighter.h \
-    kcreplacewindow.h
+    kcreplacewindow.h \
+    kccolorconfigure.h
 
 # Enable C++11
 CONFIG += c++11

@@ -66,8 +66,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 
     connect(this,&KCTextEditor::cursorPositionChanged,
             this,&KCTextEditor::updateHighlights);
-    connect(this,SIGNAL(textChanged()),
-            this,SLOT(updateSearchResults()));
+    connect(this,&KCTextEditor::textChanged,
+            this,&KCTextEditor::updateHighlights);
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
@@ -409,8 +409,8 @@ void KCTextEditor::autoIndent()
     _textCursor.removeSelectedText();
     _textCursor.insertText(tabs);
 
-    KCTextBlockData *prevData=(KCTextBlockData *)prevBlock.userData();
-    KCTextBlockData *currData=(KCTextBlockData *)currBlock.userData();
+    KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
+    KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
     int baseLevel=prevData->getCodeLevel();
     int currLevel=currData->getCodeLevel();
 
@@ -491,7 +491,7 @@ void KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &select
     char all[]="{[()]}";
     int len=strlen(all);
 
-    KCTextBlockData *blockData=(KCTextBlockData *)cursor.block().userData();
+    KCTextBlockData *blockData=static_cast<KCTextBlockData *>(cursor.block().userData());
     if(blockData!=NULL)
     {
         int matchedParentheses=-2;
@@ -586,7 +586,7 @@ int KCTextEditor::matchParentheses(const char &parenthesesA,
 {
     int count=0;
 
-    KCTextBlockData *blockData=(KCTextBlockData *)block.userData();
+    KCTextBlockData *blockData=static_cast<KCTextBlockData *>(block.userData());
     if(blockData!=NULL)
     {
         auto i=startPos,
@@ -615,7 +615,7 @@ int KCTextEditor::matchParentheses(const char &parenthesesA,
             }
 
             block= forward? block.next() : block.previous();
-            blockData=(KCTextBlockData *)block.userData();
+            blockData=static_cast<KCTextBlockData *>(block.userData());
             if(blockData == NULL)
             {
                 break;
@@ -671,7 +671,7 @@ void KCTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& selec
     for(; block.isValid() && bottom>0; block=block.next())
     {
         bottom-=block.lineCount();
-        KCTextBlockData *currBlockData=(KCTextBlockData *)block.userData();
+        KCTextBlockData *currBlockData=static_cast<KCTextBlockData *>(block.userData());
         if(currBlockData==NULL)
         {
             continue;
