@@ -439,7 +439,7 @@ void MainWindow::createDocks()
     */
 
     //Compile Dock
-    compileDock=new KCCompiledock(this);
+    compileDock=new KCCompileDock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
             tabManager,SLOT(openAndJumpTo(QString)));
     connect(compileDock,SIGNAL(requireGotoLine(int,int)),
@@ -942,7 +942,7 @@ void MainWindow::compileCurrentFile()
         KCCompileOutputReceiver *receiver=currentEditor->langMode()->getCompilerReceiver();
         if(receiver!=NULL)
         {
-            receiver->reset();
+            receiver->resetCompilerOutputReceiver();
         }
 
         currentEditor->langMode()->compile();

@@ -19,7 +19,7 @@
 
 #include "kccompiledock.h"
 
-KCCompiledock::KCCompiledock(QWidget *parent):
+KCCompileDock::KCCompileDock(QWidget *parent):
     QDockWidget(parent)
 {
     //Set compile dock properties
@@ -35,7 +35,7 @@ KCCompiledock::KCCompiledock(QWidget *parent):
     pal.setColor(QPalette::Button,QColor(83,83,83));
     pal.setColor(QPalette::Text,QColor(255,255,255));
     pal.setColor(QPalette::ButtonText,QColor(255,255,255));
-    this->setPalette(pal);
+    setPalette(pal);
 
     //Set compile info splitter widget
     compileOutputInfoSplitter=new QSplitter(Qt::Horizontal, this);
@@ -75,61 +75,56 @@ KCCompiledock::KCCompiledock(QWidget *parent):
             this, SLOT(changeCompileSplitterWidthValue(int)));
 
     //Connect signals and slots.
-    connect(compileOutputErrorInfoTree,SIGNAL(clicked(QModelIndex)),
-            this,SLOT(selectAnError(QModelIndex)));
-    connect(compileOutputErrorInfoTree,SIGNAL(activated(QModelIndex)),
-            this,SLOT(selectAnError(QModelIndex)));
-    connect(compileOutputErrorInfoTree,SIGNAL(doubleClicked(QModelIndex)),
-            this,SLOT(jumpToError(QModelIndex)));
-
-}
-
-//Get the root item of model.
-static inline QModelIndex getRootItem(QModelIndex item)
-{
-    while(item.parent().isValid())
-    {
-        item=item.parent();
-    }
-    return item;
+    connect(compileOutputErrorInfoTree, &QTreeView::clicked,
+            this, &KCCompileDock::displayErrorDetails);
+    connect(compileOutputErrorInfoTree, &QTreeView::activated,
+            this, &KCCompileDock::jumpToError);
 }
 
 //When user select an error, this slot function will get the info of the
 //error. If the file has been closed, we will emit a signal to open the file.
 //Then jump to line where the error occur.
-void KCCompiledock::jumpToError(QModelIndex ItemID)
+void KCCompileDock::jumpToError(QModelIndex currentErrorItemIndex)
 {
-    ItemID=getRootItem(ItemID);
-
-    int ErrID=ItemID.row();
-
-    if(compileErrorInfoList->at(ErrID).nColumnNum>-1)
+    int indexCurrentError=currentErrorItemIndex.row();
+    if(compileErrorInfoList->at(indexCurrentError).errorLine>-1)
     {
         //Open the file;
-        emit requireOpenErrFile(compileErrorInfoList->at(ErrID).strFilePath);
+        emit requireOpenErrFile(compileErrorInfoList->at(indexCurrentError).errorFilePath);
         //Jump to the line;
-        emit requireGotoLine(compileErrorInfoList->at(ErrID).nLineNum - 1,
-                             compileErrorInfoList->at(ErrID).nColumnNum);
-        //Set Focus;
+        if(compileErrorInfoList->at(indexCurrentError).errorColumn > -1)
+        {
+            emit requireGotoLine(compileErrorInfoList->at(indexCurrentError).errorLine - 1,
+                                 compileErrorInfoList->at(indexCurrentError).errorColumn);
+        }
+        else
+        {
+            emit requireGotoLine(compileErrorInfoList->at(indexCurrentError).errorLine - 1,
+                                 0);
+        }
+        //Set focus to the current documents;
         emit requireSetFocus();
     }
 }
 
-void KCCompiledock::selectAnError(QModelIndex ItemIndex)
+//When user select an error, the treeview widget will display the details
+//of the compiler error from the model.
+void KCCompileDock::displayErrorDetails(QModelIndex errorItemIndex)
 {
-    ItemIndex=getRootItem(ItemIndex);
-
-    if(ItemIndex!=lastSelIndex)
+    //If there is an item has been expanded, just fold it.
+    //Please notice to check whether the last selection is valid. (not -1)
+    if(lastSelectionIndex != -1 && errorItemIndex.row()!=lastSelectionIndex)
     {
-        compileOutputErrorInfoTree->collapse(lastSelIndex);
-        compileOutputErrorInfoTree->expand(ItemIndex);
+        currentReceiver->foldItem(currentReceiver->getCompilerOutputModel()->item(lastSelectionIndex));
     }
-
-    lastSelIndex=ItemIndex;
+    //Set the last selection index to the current selection.
+    lastSelectionIndex=errorItemIndex.row();
+    //Expand the current selection
+    currentReceiver->expandItem(currentReceiver->getCompilerOutputModel()->item(lastSelectionIndex));
 }
 
 //Animation of showing compile error info tree
-void KCCompiledock::animeShowCompileError()
+void KCCompileDock::animeShowCompileError()
 {
     animeHideErrorInfoTree->stop();
     if(animeShowErrorInfoTree->state()!=QTimeLine::Running)
@@ -141,7 +136,7 @@ void KCCompiledock::animeShowCompileError()
 }
 
 //Animation of hiding compile error info tree
-void KCCompiledock::animeHideCompileError()
+void KCCompileDock::animeHideCompileError()
 {
     animeShowErrorInfoTree->stop();
     if(animeHideErrorInfoTree->state()!=QTimeLine::Running)
@@ -154,7 +149,7 @@ void KCCompiledock::animeHideCompileError()
 //This slot is used to change the value of splitter,
 //QPropertyAnimation can't do this for me, so I use QTimeLine to show up the QTreeView.
 //Calculate the width for each required, save the value into a QList, and set it to the QSplitter.
-void KCCompiledock::changeCompileSplitterWidthValue(int newCompileTreeWidth)
+void KCCompileDock::changeCompileSplitterWidthValue(int newCompileTreeWidth)
 {
     QList<int> splitterWidgetSize;
     splitterWidgetSize << width() - newCompileTreeWidth << newCompileTreeWidth;
@@ -162,17 +157,24 @@ void KCCompiledock::changeCompileSplitterWidthValue(int newCompileTreeWidth)
 }
 
 //Set receiver.
-void KCCompiledock::setCompileOutputReceiver(const KCCompileOutputReceiver *currReceiver)
+void KCCompileDock::setCompileOutputReceiver(KCCompileOutputReceiver *newReceiver)
 {
-    Q_ASSERT(currReceiver!=NULL);
+    Q_ASSERT(newReceiver!=NULL);
 
+    //Disconnect the old connections.
     receiverConnectionHandles.disConnectAll();
 
-    compileErrorInfoList=currReceiver->getCompileErrorInfoList();
-    compileOutputTextInfo->setPlainText(currReceiver->getCompilerOutputText());
-    compileOutputErrorInfoTree->setModel(currReceiver->getCompilerOutputModel());
-    receiverConnectionHandles+=connect(currReceiver, SIGNAL(requireShowError()),
-                                       this, SLOT(animeShowCompileError()));
-    receiverConnectionHandles+=connect(currReceiver,SIGNAL(compilerOutputTextChanged(QString)),
-                                       compileOutputTextInfo,SLOT(setPlainText(QString)));
+    //Set the receiver pointer to the new receiver.
+    currentReceiver=newReceiver;
+    //Reset
+    lastSelectionIndex=-1;
+    //Set models.
+    compileErrorInfoList=currentReceiver->getCompileErrorInfoList();
+    compileOutputTextInfo->setPlainText(currentReceiver->getCompilerOutputText());
+    compileOutputErrorInfoTree->setModel(currentReceiver->getCompilerOutputModel());
+    //Connet signals and slots
+    receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::requireShowError,
+                                       this, &KCCompileDock::animeShowCompileError);
+    receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::compilerOutputTextChanged,
+                                       compileOutputTextInfo, &KCPlainTextBrowser::setPlainText);
 }

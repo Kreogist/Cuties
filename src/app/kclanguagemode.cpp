@@ -60,7 +60,7 @@ void KCLanguageMode::compile()
 
     setCompileState(compiling);
 
-    compilerReceiver->addForwardText();
+    compilerReceiver->addBeginCompileText();
 
     compilerFinishedConnection=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        this,&KCLanguageMode::onCompileFinished);
@@ -167,15 +167,15 @@ void KCLanguageMode::connectCompilerAndOutputReceiver()
 
     compilerReceiver->setCompilerVersionString(compiler->compilerName()+
             " "+
-            compiler->version());
+            compiler->compilerVersion());
 
     //Output Compile Message:
-    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileCmd,
-                                       compilerReceiver,&KCCompileOutputReceiver::addText);
+    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileCommandLine,
+                                       compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::output,
-                                       compilerReceiver,&KCCompileOutputReceiver::addText);
+                                       compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileError,
-                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMsgReceived);
+                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        compilerReceiver,&KCCompileOutputReceiver::onCompileFinished);
 }

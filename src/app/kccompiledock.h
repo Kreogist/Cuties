@@ -22,26 +22,29 @@
 
 #include <QTreeView>
 #include <QPalette>
-#include <QWidget>
 #include <QSplitter>
 #include <QList>
-#include <QVector>
-#include <QPropertyAnimation>
 #include <QDockWidget>
 #include <QModelIndex>
-#include <QDebug>
 #include <QTimeLine>
+
+#include <QDebug>
 
 #include "kcplaintextbrowser.h"
 #include "kccompileoutputreceiver.h"
 #include "kcconnectionhandler.h"
 
-class KCCompiledock : public QDockWidget
+/*
+ * KCCompileDock is used to display the compiler information.
+ */
+
+class KCCompileDock : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit KCCompiledock(QWidget *parent = 0);
-    void setCompileOutputReceiver(const KCCompileOutputReceiver *currReceiver);
+    explicit KCCompileDock(QWidget *parent = 0);
+    //Set output info receiver.
+    void setCompileOutputReceiver(KCCompileOutputReceiver *newReceiver);
 
 signals:
     void requireOpenErrFile(QString filePath);
@@ -54,9 +57,12 @@ public slots:
     void animeHideCompileError();
 
 private slots:
+    //Change the splitter value to show/hide the treeview widget
     void changeCompileSplitterWidthValue(int newCompileTreeWidth);
-    void selectAnError(QModelIndex ItemIndex);
-    void jumpToError(QModelIndex ItemID);
+    //Send request to show details
+    void displayErrorDetails(QModelIndex errorItemIndex);
+    //Send request to jump to position of error occur
+    void jumpToError(QModelIndex currentErrorItemIndex);
 
 private:
     //Define the widget splitter.
@@ -67,14 +73,16 @@ private:
     KCPlainTextBrowser *compileOutputTextInfo;
 
     //Define error display variables.
-    QModelIndex lastSelIndex;
-    const QVector<ErrInfo> *compileErrorInfoList;
+    int lastSelectionIndex;
+    const QList<compileErrorInfo> *compileErrorInfoList;
     KCConnectionHandler receiverConnectionHandles;
 
     //Define the animation variables.
     QTimeLine *animeShowErrorInfoTree;
     QTimeLine *animeHideErrorInfoTree;
 
+    //Define the current KCCompileOutputReceiver variable.
+    KCCompileOutputReceiver *currentReceiver;
 };
 
 #endif // KCCOMPILEDOCK_H

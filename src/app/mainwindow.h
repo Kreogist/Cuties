@@ -191,7 +191,7 @@ private:
     //KCTextEditor *editor;
     KCTabManager *tabManager;
     KCSideBar *sidebarDock;
-    KCCompiledock *compileDock;
+    KCCompileDock *compileDock;
     KCDebugDock *debugDock;
     KCDebugWatchDock *debugWatchDock;
     KCJudgeDock *judgeDock;
