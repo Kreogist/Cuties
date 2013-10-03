@@ -89,7 +89,8 @@ SOURCES += \
     kccompileoutputreceiver.cpp \
     kcconnectionhandler.cpp \
     kccpphighlighter.cpp \
-    kcpascalhighlighter.cpp
+    kcpascalhighlighter.cpp \
+    kccolorconfigure.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -155,7 +156,8 @@ HEADERS += \
     kccompilerbase.h \
     kcconnectionhandler.h \
     kccpphighlighter.h \
-    kcpascalhighlighter.h
+    kcpascalhighlighter.h \
+    kccolorconfigure.h
 
 # Enable C++11
 CONFIG += c++11

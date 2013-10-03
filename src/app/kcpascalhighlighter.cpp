@@ -88,7 +88,7 @@ void KCPascalHighlighter::KCHighlightBlock(const QString &text)
         }
     }
 
-    KCTextBlockData *data=(KCTextBlockData *)currentBlockUserData();
+    KCTextBlockData *data=static_cast<KCTextBlockData *>(currentBlockUserData());
 
     Q_ASSERT(data!=NULL);
 
@@ -97,7 +97,7 @@ void KCPascalHighlighter::KCHighlightBlock(const QString &text)
     int baseLevel=0;
     if(prevBlock.isValid())
     {
-        KCTextBlockData *prevData=(KCTextBlockData *)prevBlock.userData();
+        KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
         Q_ASSERT(prevData!=NULL);
         baseLevel=prevData->getCodeLevel();
 
