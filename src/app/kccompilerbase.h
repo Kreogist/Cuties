@@ -26,12 +26,13 @@
 
 #include "kcconnectionhandler.h"
 
-struct ErrInfo
+//A structure to record compiler error
+struct compileErrorInfo
 {
-    int nLineNum;
-    int nColumnNum;
-    QString strFilePath;
-    QString strErrDescription;
+    int errorLine;
+    int errorColumn;
+    QString errorFilePath;
+    QString errorDescription;
 };
 
 class KCCompilerBase : public QObject
@@ -39,16 +40,16 @@ class KCCompilerBase : public QObject
     Q_OBJECT
 public:
     explicit KCCompilerBase(QObject *parent = 0);
-
-    QString version();
+    //Get compiler version.
+    QString compilerVersion();
     void startCompile(const QString &filePath);
-    virtual QString path()=0;
-    virtual bool checkCompilerPath(const QString &path);
+    virtual QString compilerPath()=0;
+    virtual bool checkCompilerPath(const QString &compilerPath);
     virtual QString compilerName() = 0;
 
 signals:
-    void compileCmd(QString cmd);
-    void compileError(ErrInfo errInfo);
+    void compileCommandLine(QString cmd);
+    void compileError(compileErrorInfo errInfo);
     void output(QString msg);
     void compileFinished(int exitNum);
 

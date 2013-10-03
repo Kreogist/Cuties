@@ -26,45 +26,57 @@
 
 #include "kccompilerbase.h"
 
+/*
+ * KCCompilerOutputReceiver is used to process the
+ * information sent from compiler.
+ */
+
 class KCCompileOutputReceiver : public QObject
 {
     Q_OBJECT
 public:
     explicit KCCompileOutputReceiver(QObject *parent = 0);
-    //Tree View Controls:
-    void addRootItem(const ErrInfo &error);
-    void clearAllItem();
-
-    //Text Controls:
-    void clearText();
-    void addText(const QString &NewText);
-    void addForwardText();
-
-    void reset();
-
+    //Model Controllers
+    void addErrorInfoItem(const compileErrorInfo &newError);
+    void clearErrorInfoItem();
+    //Text Controllers
+    void addBeginCompileText();
+    void addCompilerOutputText(QString newOutputText);
+    void clearCompilerOutputText();
+    //Receiver Controllers
     QStandardItemModel *getCompilerOutputModel() const;
     const QString &getCompilerOutputText() const;
-    const QVector<ErrInfo> *getCompileErrorInfoList() const;
+    const QList<compileErrorInfo> *getCompileErrorInfoList() const;
+    void resetCompilerOutputReceiver();
+    //Return whether there is an error occured.
+    bool isCompileErrorOccur();
 
-    bool hasCompileError();
+    //Save compiler version to a QString
+    void setCompilerVersionString(const QString &compilerVersionString);
 
-    QString getCompilerVersionString() const;
-    void setCompilerVersionString(const QString &strVersion);
+    //Show/Hide one model item details
+    void foldItem(QStandardItem *itemModelIndex);
+    void expandItem(QStandardItem *itemModelIndex);
 
 signals:
+    //Show error signal
     void requireShowError();
+    //Output text changed
     void compilerOutputTextChanged(QString text);
 
 public slots:
-    void onCompileMsgReceived(ErrInfo error);
-    void onCompileFinished(bool hasError);
+    void onCompileMessageReceived(compileErrorInfo error);
+    void onCompileFinished(bool errorOccured);
 
 private:
-    bool hasOutput;
+    //Define an output mark.
+    bool hasOutputHeader;
+    //Define compiler error info model and text output.
     QStandardItemModel *compilerOutputModel;
     QString compilerOutputText;
-    QModelIndex lastSelectedIndex;
-    QVector<ErrInfo> compileErrorInfoList;
+    //Define error list.
+    QList<compileErrorInfo> compileErrorInfoList;
+    //Define compiler info
     QString compilerVersion;
 };
 

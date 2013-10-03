@@ -22,41 +22,46 @@
 KCCompileOutputReceiver::KCCompileOutputReceiver(QObject *parent) :
     QObject(parent)
 {
+    //Build the compiler model and reset variables.
     compilerOutputModel=new QStandardItemModel(this);
-
-    reset();
+    resetCompilerOutputReceiver();
 }
 
-const QString &KCCompileOutputReceiver::getCompilerOutputText() const
-{
-    return compilerOutputText;
-}
-
+//Return the error list model
 QStandardItemModel *KCCompileOutputReceiver::getCompilerOutputModel() const
 {
     return compilerOutputModel;
 }
 
-void KCCompileOutputReceiver::clearText()
+//Return the compile output text
+const QString &KCCompileOutputReceiver::getCompilerOutputText() const
+{
+    return compilerOutputText;
+}
+
+//Clear the compile output text
+void KCCompileOutputReceiver::clearCompilerOutputText()
 {
     compilerOutputText.clear();
 }
 
-void KCCompileOutputReceiver::addText(const QString &NewText)
+//Add new text to the output text, and emit a change signal
+void KCCompileOutputReceiver::addCompilerOutputText(QString newOutputText)
 {
-    compilerOutputText.append(NewText);
+    compilerOutputText.append(newOutputText);
     emit compilerOutputTextChanged(compilerOutputText);
 }
 
-void KCCompileOutputReceiver::addForwardText()
+//Add the compiler info text, and the begin caption
+void KCCompileOutputReceiver::addBeginCompileText()
 {
     //Prepare Compiler
-    addText(QTime::currentTime().toString("hh:mm:ss") +
+    addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
             " " +
             tr("Preparing Compiler.")+
             "\n");
     //Get Compiler Info.
-    addText(QTime::currentTime().toString("hh:mm:ss") +
+    addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
             " " +
             tr("Current Compiler Details:\n") +
             compilerVersion
@@ -64,86 +69,134 @@ void KCCompileOutputReceiver::addForwardText()
             "\n");
 
     //Output Compile Info:
-    addText(QTime::currentTime().toString("hh:mm:ss") +
+    addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
             " " +
             tr("Compile Command:") +
             "\n");
-    //compile command will be output when compiler emit signal compileinfo
+    //Compile command will be output when compiler emit signal compileinfo
+    //so we will not emit it here.
 }
 
-void KCCompileOutputReceiver::addRootItem(const ErrInfo &error)
+//When there is an error occur, use this procedure to add it to error list
+void KCCompileOutputReceiver::addErrorInfoItem(const compileErrorInfo &newError)
 {
-    QStandardItem *itemAdd=new QStandardItem(error.strErrDescription);
-
-    if(error.nLineNum>-1)
-    {
-        QList<QStandardItem *> column;
-        column<<new QStandardItem(tr("Line ") +
-                                  QString::number(error.nLineNum) +
-                                  tr(", ") + tr("Column ") +
-                                  QString::number(error.nColumnNum)
-                                  + tr(". "))
-              <<new QStandardItem(tr("At file: ") + error.strFilePath);
-
-        itemAdd->appendColumn(column);
-    }
-
+    QStandardItem *itemAdd=new QStandardItem(newError.errorDescription);
     compilerOutputModel->appendRow(itemAdd);
 }
 
-void KCCompileOutputReceiver::clearAllItem()
+//Clean the error list
+void KCCompileOutputReceiver::clearErrorInfoItem()
 {
     compilerOutputModel->clear();
 }
 
-void KCCompileOutputReceiver::reset()
+//Reset the compiler output receiver.
+void KCCompileOutputReceiver::resetCompilerOutputReceiver()
 {
-    clearAllItem();
-    clearText();
+    //Reset the output mark
+    hasOutputHeader=false;
+    //Reset the model/text/list
+    clearErrorInfoItem();
+    clearCompilerOutputText();
     compileErrorInfoList.clear();
-    hasOutput=false;
 }
 
-void KCCompileOutputReceiver::onCompileMsgReceived(ErrInfo error)
+//When there's something compiler output to command-line, this slot will
+//capture the text and display it on the text panel.
+void KCCompileOutputReceiver::onCompileMessageReceived(compileErrorInfo error)
 {
-    if(!hasOutput)
+    //Check if has output the header.
+    if(!hasOutputHeader)
     {
         emit requireShowError();
-        addText(QTime::currentTime().toString("hh:mm:ss") +
+        addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
                 " " +
                 tr("Compile Output:") +
                 "\n");
-        hasOutput=true;
+        hasOutputHeader=true;
     }
-
+    //Add the new error to the list
     compileErrorInfoList.append(error);
-    addRootItem(error);
+    //Expand the model
+    addErrorInfoItem(error);
 }
 
-const QVector<ErrInfo> *KCCompileOutputReceiver::getCompileErrorInfoList() const
+//Return the compile error info list
+const QList<compileErrorInfo> *KCCompileOutputReceiver::getCompileErrorInfoList() const
 {
     return &compileErrorInfoList;
 }
 
-void KCCompileOutputReceiver::onCompileFinished(bool hasError)
+//When compile finishes, check if there is any error occured.
+//Output the compile state
+void KCCompileOutputReceiver::onCompileFinished(bool errorOccured)
 {
-    if(hasError)
+    if(errorOccured)
     {
-        //Output Error Count
-        addText(QTime::currentTime().toString("hh:mm:ss") +
+        //Output the count of errors
+        addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
                 " " + QString::number(compilerOutputModel->rowCount()) +
                 tr(" Errors Occur."));
     }
     else
     {
-        //Output Compile Success.
-        addText(QTime::currentTime().toString("hh:mm:ss") +
+        //Output compile success info
+        addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
                 " " + tr("Compile Successful."));
     }
 
 }
 
-void KCCompileOutputReceiver::setCompilerVersionString(const QString &strVersion)
+//Fold the expanded error item, actually we just rewrite the contents of
+//the item to the description of the error.
+void KCCompileOutputReceiver::foldItem(QStandardItem *itemModelIndex)
 {
-    compilerVersion=strVersion;
+    itemModelIndex->setText(compileErrorInfoList[itemModelIndex->row()].errorDescription);
+}
+
+/* Expand a fold error item, like folding an item, we just rewrite the contents.
+ * There are three lines of an expaned item:
+ *   Error description.
+ *   Line number. If possible, column number will be displayed as well.
+ *   File location.
+ */
+void KCCompileOutputReceiver::expandItem(QStandardItem *itemModelIndex)
+{
+    //Get the index of the error
+    int itemErrorIndex=itemModelIndex->row();
+    QString expandItemInfo;
+    expandItemInfo=compileErrorInfoList[itemErrorIndex].errorDescription;
+    //If line number is avaliable, display it.
+    if(compileErrorInfoList[itemErrorIndex].errorLine > -1)
+    {
+        //If column number is abaliable, display it.
+        if(compileErrorInfoList[itemErrorIndex].errorColumn > -1)
+        {
+            expandItemInfo+= "\n" +
+                             tr("Line ") + QString::number(compileErrorInfoList[itemErrorIndex].errorLine) +
+                             tr(", ") +
+                             tr("Column ") + QString::number(compileErrorInfoList[itemErrorIndex].errorColumn) +
+                             tr(".");
+        }
+        else
+        {
+            expandItemInfo+= "\n" +
+                             tr("Line ") + QString::number(compileErrorInfoList[itemErrorIndex].errorLine) +
+                             tr(".");
+        }
+
+    }
+    //If the file path is avalibable, display it! :)
+    if(!compileErrorInfoList[itemErrorIndex].errorFilePath.isEmpty())
+    {
+        expandItemInfo+= + "\n" + tr("At file: ") + compileErrorInfoList[itemErrorIndex].errorFilePath;
+    }
+    //Set the new info text
+    itemModelIndex->setText(expandItemInfo);
+}
+
+//Return the version info of the compiler.
+void KCCompileOutputReceiver::setCompilerVersionString(const QString &compilerVersionString)
+{
+    compilerVersion=compilerVersionString;
 }

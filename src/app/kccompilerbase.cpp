@@ -25,38 +25,36 @@ KCCompilerBase::KCCompilerBase(QObject *parent) :
 }
 
 void KCCompilerBase::emitCompileCmd(const QString &compilerPath,
-                                  const QStringList &arg)
+                                    const QStringList &arg)
 {
-    QString CompileCmdLine;
-    CompileCmdLine=compilerPath;
+    QString compilerCommandLine;
+    compilerCommandLine=compilerPath;
     for(int i=0; i<arg.count(); i++)
     {
-        CompileCmdLine += QString(" ") + arg.at(i);
+        compilerCommandLine += QString(" ") + arg.at(i);
     }
-    CompileCmdLine+="\n";
+    compilerCommandLine+="\n";
 
-    emit compileCmd(CompileCmdLine);
+    emit compileCommandLine(compilerCommandLine);
 }
 
-QString KCCompilerBase::version()
+//Display the version of the compiler
+QString KCCompilerBase::compilerVersion()
 {
-    //Initalize Values:
-    QString strReturnValue;
-
+    //Launch compiler to get version info
     compiler.reset(new QProcess(this));
-    compiler->start(path(),getVersionArg());
+    compiler->start(compilerPath(),getVersionArg());
     compiler->waitForFinished();
-
-    //Save Second Part Of Compiler:
-    strReturnValue=QString::fromUtf8(compiler->readAllStandardOutput().constData());
-    return strReturnValue;
+    //Return the version
+    return QString::fromUtf8(compiler->readAllStandardOutput().constData());
 }
 
 void KCCompilerBase::startCompile(const QString &filePath)
 {
     QStringList arg=getCompileArg(filePath);
-    QString compilerPath=path();
-    /* Note: path() shouldn't be called before getCompileArg(), because
+    QString compilerPath=this->compilerPath();
+    /*
+     * Note: path() shouldn't be called before getCompileArg(), because
      * some subclass may need filePath to select the right compiler. For
      * example, gcc class use gcc(program name) to compile c files and use
      * g++ to compile cpp files.
@@ -82,24 +80,21 @@ void KCCompilerBase::startCompile(const QString &filePath)
     compiler->start(compilerPath,arg);
 }
 
-bool KCCompilerBase::checkCompilerPath(const QString &path)
+bool KCCompilerBase::checkCompilerPath(const QString &compilerPath)
 {
-    QFileInfo _fileInfo(path);
+    QFileInfo _fileInfo(compilerPath);
 
     if(_fileInfo.exists() && _fileInfo.isExecutable())
     {
         return true;
     }
-
     return false;
 }
 
 void KCCompilerBase::onFinished(int exitNum)
 {
     connectionHandles.disConnectAll();
-
-    bool hasErr=checkHasErrorByExitNum(exitNum);
-    emit compileFinished(hasErr);
+    emit compileFinished(checkHasErrorByExitNum(exitNum));
 }
 
 void KCCompilerBase::onOutputReady()

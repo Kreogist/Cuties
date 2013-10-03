@@ -33,12 +33,12 @@ class gcc : public KCCompilerBase
     Q_OBJECT
 public:
     explicit gcc(QObject *parent = 0);
-    QString path()
+    QString compilerPath()
     {
         return isCompileCpp?
                instance->getGppPath():instance->getGccPath();
     }
-    void setCompilerPath(const QString &path);
+    void setCompilerPath(const QString &compilerPath);
     QString compilerName()
     {
         return "g++";

@@ -53,11 +53,11 @@ void fpc::parseLine(const QString &text)
 
     if(match.hasMatch())
     {
-        ErrInfo error;
-        error.strFilePath=match.captured(1);
-        error.nLineNum=match.captured(2).toInt();
-        error.nColumnNum=match.captured(3).toInt();
-        error.strErrDescription=text.mid(match.capturedLength());
+        compileErrorInfo error;
+        error.errorFilePath=match.captured(1);
+        error.errorLine=match.captured(2).toInt();
+        error.errorColumn=match.captured(3).toInt();
+        error.errorDescription=text.mid(match.capturedLength());
 
         emit compileError(error);
     }
@@ -68,11 +68,11 @@ void fpc::parseLine(const QString &text)
 
         if(match.hasMatch())
         {
-            ErrInfo error;
-            error.strFilePath.clear();
-            error.nLineNum=-1;
-            error.nColumnNum=-1;
-            error.strErrDescription=text;
+            compileErrorInfo error;
+            error.errorFilePath.clear();
+            error.errorLine=-1;
+            error.errorColumn=-1;
+            error.errorDescription=text;
         }
     }
 

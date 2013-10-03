@@ -32,7 +32,7 @@ class fpc : public KCCompilerBase
 public:
     explicit fpc(QObject *parent = 0);
     void startCompile(const QString &filePath);
-    QString path()
+    QString compilerPath()
     {
         return instance->getFpcPath();
     }
