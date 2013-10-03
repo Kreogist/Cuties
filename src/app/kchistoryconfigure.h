@@ -77,10 +77,9 @@ private:
     static QString historyFileName;
     QString historyDirPath;
 
-    QIcon getFileIcon(QString fileExtName);
+    QIcon getFileIcon(const QString &fileExtName) const;
 
     QStandardItemModel *recentOpenedFileModel;
-    QStandardItem *recentRootItem;
 
     int maxRecentFilesSize;
     bool trackUserHistory;

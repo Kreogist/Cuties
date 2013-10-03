@@ -31,7 +31,6 @@ KCHistoryConfigure::KCHistoryConfigure()
     trackUserHistory=true;
     maxRecentFilesSize=10;
     recentOpenedFileModel=new QStandardItemModel(this);
-    recentRootItem=recentOpenedFileModel->invisibleRootItem();
 
     //Load File Icon.
     cFileIcon=QIcon(":/Sidebar/image/Sidebar/source_c.png");
@@ -47,7 +46,7 @@ KCHistoryConfigure *KCHistoryConfigure::getInstance()
     instance;
 }
 
-QIcon KCHistoryConfigure::getFileIcon(QString fileExtName)
+QIcon KCHistoryConfigure::getFileIcon(const QString &fileExtName) const
 {
     if(fileExtName==QString("c"))
     {
@@ -81,9 +80,14 @@ void KCHistoryConfigure::readConfigure()
     for(int i=0; i<unClosedFilePathsSize; i++)
     {
         settings.setArrayIndex(i);
-        unClosedFilePaths.append(settings.value("filePath").toString());
-        unClosedFileH.append(settings.value("hPosition").toInt());
-        unClosedFileV.append(settings.value("vPosition").toInt());
+
+        QFileInfo _fileInfo(settings.value("filePath").toString());
+        if(_fileInfo.exists())
+        {
+            unClosedFilePaths.append(_fileInfo.absoluteFilePath());
+            unClosedFileH.append(settings.value("hPosition").toInt());
+            unClosedFileV.append(settings.value("vPosition").toInt());
+        }
     }
     settings.endArray();
 
@@ -98,6 +102,8 @@ void KCHistoryConfigure::readConfigure()
     {
         settings.setArrayIndex(i);
         filePath=settings.value("filePath").toString();
+
+        //check whether the file is exist first
         QFile *historyFileItem=new QFile(filePath);
         if(historyFileItem->exists())
         {
@@ -106,7 +112,7 @@ void KCHistoryConfigure::readConfigure()
             item->setToolTip(filePath);
             item->setEditable(false);
             item->setIcon(getFileIcon(historyFileInfo.suffix().toLower()));
-            recentRootItem->insertRow(0,item);
+            recentOpenedFileModel->insertRow(0,item);
         }
     }
     settings.endArray();
@@ -193,7 +199,9 @@ QStringList KCHistoryConfigure::getAllUnClosedFilePaths() const
     return unClosedFilePaths;
 }
 
-void KCHistoryConfigure::addUnClosedFilePath(const QString &path, const int &HValue, const int &VValue)
+void KCHistoryConfigure::addUnClosedFilePath(const QString &path,
+                                             const int &HValue,
+                                             const int &VValue)
 {
     unClosedFilePaths.append(path);
     unClosedFileH.append(HValue);
@@ -238,15 +246,26 @@ void KCHistoryConfigure::clearAllRecentFilesRecord()
 void KCHistoryConfigure::addRecentFileRecord(const QString &path)
 {
     QFileInfo historyFileInfo(path);
-    QStandardItem *item=new QStandardItem(historyFileInfo.fileName());
+
+    QList<QStandardItem *> results=recentOpenedFileModel->findItems(historyFileInfo.fileName());
+    QStandardItem *item=nullptr;
+    item=new QStandardItem(historyFileInfo.fileName());
     item->setToolTip(path);
     item->setEditable(false);
     item->setIcon(getFileIcon(historyFileInfo.suffix().toLower()));
-    if(recentRootItem->rowCount() >= maxRecentFilesSize)
+    if(!results.isEmpty())
     {
-        recentRootItem->removeRow(recentRootItem->rowCount() - 1);
+        for(auto i=results.begin(); i!=results.end(); i++)
+        {
+            recentOpenedFileModel->removeRow((*i)->row());
+        }
     }
-    recentRootItem->insertRow(0, item);
+    recentOpenedFileModel->insertRow(0,item);
+
+    if(recentOpenedFileModel->rowCount() >= maxRecentFilesSize)
+    {
+        recentOpenedFileModel->removeRow(recentOpenedFileModel->rowCount() - 1);
+    }
 }
 
 QStandardItemModel *KCHistoryConfigure::getRecentOpenedFileModel() const
