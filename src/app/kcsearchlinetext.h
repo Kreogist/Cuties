@@ -7,6 +7,8 @@
 #include <QPixmap>
 #include <QHBoxLayout>
 
+#include "kccolorconfigure.h"
+
 class KCSearchLineText : public QWidget
 {
     Q_OBJECT

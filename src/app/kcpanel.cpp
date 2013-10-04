@@ -81,6 +81,7 @@ void KCPanel::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
 
+    //TODO: ugly designed
     QBrush brush=painter.background();
     brush.setColor(QColor(0x53,0x53,0x53));
     painter.setBackground(brush);

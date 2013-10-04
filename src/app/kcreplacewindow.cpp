@@ -5,17 +5,13 @@ static int replaceWidgetsHeight=25;
 KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
     KCSearchWidget(parent)
 {
+    setObjectName("KCReplaceWindow");
     setContentsMargins(3,2,3,1);
     setMinimumHeight(0);
     setAutoFillBackground(true);
 
     QPalette pal=palette();
-    pal.setColor(QPalette::Window,QColor(128,128,128));
-    pal.setColor(QPalette::Base,QColor(255,255,255));
-    pal.setColor(QPalette::WindowText,QColor(0,0,0));
-    pal.setColor(QPalette::Button,QColor(83,83,83));
-    pal.setColor(QPalette::Text,QColor(0,0,0));
-    pal.setColor(QPalette::ButtonText,QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     mapper=new QSignalMapper(this);
@@ -64,7 +60,8 @@ KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
 
     //Set Button Palette
     pal=closeButton->palette();
-    pal.setColor(QPalette::Button, QColor(190,0,0));
+    closeButton->setObjectName("KCReplaceWindowCloseButton");
+    KCColorConfigure::getInstance()->getPalette(pal,closeButton->objectName());
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton, SIGNAL(clicked()),

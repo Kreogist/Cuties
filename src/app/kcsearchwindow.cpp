@@ -25,12 +25,13 @@ static const int nFixedWidth=290;
 KCSearchWindow::KCSearchWindow(QWidget *parent) :
     KCSearchWidget(parent)
 {
+    setObjectName("KCSearchWindow");
     //Set Search Details.
     setFixedSize(nFixedWidth,38);
 
-    QPalette kswPal=palette();
-    kswPal.setColor(QPalette::Window,QColor(0,0,0));
-    setPalette(kswPal);
+    QPalette pal=palette();
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
+    setPalette(pal);
 
     QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
     wndShadow->setBlurRadius(15.0);
@@ -42,18 +43,17 @@ KCSearchWindow::KCSearchWindow(QWidget *parent) :
 
     //Set Close Button
     closeButton=new QToolButton(this);
+    closeButton->setObjectName("KCSearchWindowCloseButton");
     closeButton->setIcon(QIcon(":/toolbutton/image/Close.png"));
     closeButton->setAutoRaise(true);
     closeButton->setFixedSize(16,26);
     searchLayout->addWidget(closeButton,0,searchLayout->columnCount());
 
     //Set Button Palette
-    QPalette pal=closeButton->palette();
-    pal.setColor(QPalette::Button, QColor(190,0,0));
+    pal=closeButton->palette();
+    KCColorConfigure::getInstance()->getPalette(pal,closeButton->objectName());
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton, SIGNAL(clicked()),
             this, SIGNAL(requireHide()));
-
-    qApp->installEventFilter(this);
 }

@@ -39,13 +39,14 @@ void KCScrollArea::resizeEvent(QResizeEvent *event)
 KCControlCenterBanner::KCControlCenterBanner(QWidget *parent):
     QWidget(parent)
 {
+    setObjectName("KCControlCenterBanner");
     setFixedHeight(44);
     setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
 
     //Set Palette
     QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(83,83,83));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     //Set Title Layout
@@ -61,8 +62,9 @@ KCControlCenterBanner::KCControlCenterBanner(QWidget *parent):
     TitleFont.setPointSize(11);
     TitleFont.setBold(true);
     lblBannerTitle->setFont(TitleFont);
+    lblBannerTitle->setObjectName("lblBannerTitle");
     pal=lblBannerTitle->palette();
-    pal.setColor(QPalette::WindowText, QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     lblBannerTitle->setPalette(pal);
     TitleLayout->addWidget(lblBannerTitle);
     //Set Stretch
@@ -190,18 +192,19 @@ void KCControlCenterLeftBar::lstClick(int Index)
 KCAbstractCCTabContent::KCAbstractCCTabContent(QWidget *parent):
     QWidget(parent)
 {
-
+    setObjectName("KCAbstractCCTabContent");
+    QPalette pal=palette();
+    KCColorConfigure::getInstance()->registerColorInfo(QPalette::Window, QColor(255,255,255),objectName());
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
+    setPalette(pal);
 }
 //---------------Gerneral------------------------
 KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     KCAbstractCCTabContent(parent)
 {
+    setObjectName("KCCCTabGerneralContent");
     setAutoFillBackground(true);
     setContentsMargins(0, 0, 0, 0);
-
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
 
     QFont TitleFont=this->font();
     TitleFont.setPixelSize(20);
@@ -298,10 +301,6 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
-
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
 
     QFont TitleFont=this->font();
     TitleFont.setPixelSize(20);
@@ -432,10 +431,6 @@ KCCCTabCompilerContent::KCCCTabCompilerContent(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
 
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
-
     QFont TitleFont=this->font();
     TitleFont.setPixelSize(20);
 
@@ -486,10 +481,6 @@ KCCCTabDebuggerContent::KCCCTabDebuggerContent(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
 
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
-
     QFont TitleFont=this->font();
     TitleFont.setPixelSize(20);
 
@@ -527,10 +518,6 @@ KCCCTabLanguageContent::KCCCTabLanguageContent(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
 
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
-
     //Set Layout.
     MainLayout=new QVBoxLayout(this);
     MainLayout->setContentsMargins(0,0,0,0);
@@ -554,10 +541,6 @@ KCControlCenterTab::KCControlCenterTab(QWidget *contentWidget, QWidget *parent) 
 {
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
-
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    setPalette(pal);
 
     //Set FakeLayout.
     FakeLayout=new QVBoxLayout(this);

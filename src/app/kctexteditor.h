@@ -37,6 +37,7 @@
 #include "kctextblockdata.h"
 #include "kcclipboard.h"
 #include "kceditorconfigure.h"
+#include "kccolorconfigure.h"
 
 class KCTextEditor : public QPlainTextEdit
 {

@@ -28,6 +28,8 @@
 #include <QResizeEvent>
 #include <QMenu>
 
+#include "kccolorconfigure.h"
+
 class KCSearchWidget : public QWidget
 {
     Q_OBJECT

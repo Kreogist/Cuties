@@ -42,6 +42,8 @@
 
 #include "kchistoryconfigure.h"
 #include "kcgeneralconfigure.h"
+#include "kccolorconfigure.h"
+
 #include "kctexteditor.h"
 #include "kclinenumpanel.h"
 #include "kcmarkpanel.h"

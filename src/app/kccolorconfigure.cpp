@@ -29,6 +29,7 @@ void KCColorConfigure::readConfigure()
             _info.r=settings.value("r").toInt();
             _info.g=settings.value("g").toInt();
             _info.b=settings.value("b").toInt();
+            _info.colorRole=QPalette::ColorRole(settings.value("ColorRole").toInt());
             colorInfos<<_info;
         }
         settings.endArray();
@@ -63,6 +64,7 @@ void KCColorConfigure::writeConfigure()
             settings.setValue("r",_colorInfo.r);
             settings.setValue("g",_colorInfo.g);
             settings.setValue("b",_colorInfo.b);
+            settings.setValue("ColorRole",_colorInfo.colorRole);
         }
         settings.endArray();
     }

@@ -36,6 +36,8 @@
 #include <QPalette>
 #include <QDebug>
 
+#include "kccolorconfigure.h"
+
 #ifndef Q_OS_MACX
 class KCTitleBarAutoFill : public QWidget
 {

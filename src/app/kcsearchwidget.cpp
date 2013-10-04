@@ -24,6 +24,7 @@ const int KCSearchWidget::searchTextPartWidth=3;
 KCSearchWidget::KCSearchWidget(QWidget *parent) :
     QWidget(parent)
 {
+    setObjectName("KCSearchWidget");
     setContentsMargins(0,0,0,0);
 
     searchText=new QWidget(this);
@@ -32,10 +33,7 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
 
     //Palette Set.
     QPalette pal=searchText->palette();
-    pal.setColor(QPalette::Window,QColor(255,255,255));
-    pal.setColor(QPalette::Base,QColor(255,255,255));
-    pal.setColor(QPalette::Text,QColor(0,0,0));
-    pal.setColor(QPalette::WindowText,QColor(50,50,50));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     searchText->setPalette(pal);
 
     //Set New Layout
@@ -89,8 +87,9 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
 
     //Set Up Button
     upButton=new QToolButton(this);
+    upButton->setObjectName("KCSearchWidgetUpButton");
     pal=upButton->palette();
-    pal.setColor(QPalette::Button,QColor(0,0,190));
+    KCColorConfigure::getInstance()->getPalette(pal,upButton->objectName());
     upButton->setPalette(pal);
     upButton->setIcon(QIcon(":/img/image/leftSearchButton.png"));
     upButton->setAutoRaise(true);
@@ -99,9 +98,11 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     connect(upButton,SIGNAL(clicked()),this,SIGNAL(requireShowPreviousResult()));
     //Set Down Button
     downButton=new QToolButton(this);
+    downButton->setObjectName("KCSearchWidgetDownButton");
     downButton->setIcon(QIcon(":/img/image/rightSearchButton.png"));
     downButton->setAutoRaise(true);
     downButton->setFixedSize(26,26);
+    KCColorConfigure::getInstance()->getPalette(pal,downButton->objectName());
     downButton->setPalette(pal);
     searchLayout->addWidget(downButton,0,4);
     connect(downButton,SIGNAL(clicked()),this,SIGNAL(requireShowNextResult()));

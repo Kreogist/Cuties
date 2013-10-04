@@ -3,16 +3,14 @@
 KCSearchLineText::KCSearchLineText(QWidget *parent) :
     QWidget(parent)
 {
+    setObjectName("KCSearchLineText");
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
     setFixedHeight(26);
 
     //Palette Set.
     QPalette pal=this->palette();
-    pal.setColor(QPalette::Window,QColor(255,255,255));
-    pal.setColor(QPalette::Base,QColor(255,255,255));
-    pal.setColor(QPalette::Text,QColor(0,0,0));
-    pal.setColor(QPalette::WindowText,QColor(50,50,50));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     //Set Main Layout.

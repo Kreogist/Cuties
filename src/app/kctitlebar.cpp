@@ -51,9 +51,10 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
 #ifndef Q_OS_MACX
     closeButton = new QToolButton(this);
     closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));
+    closeButton->setObjectName("Close Button");
 
     QPalette bpal=closeButton->palette();
-    bpal.setColor(QPalette::Button, QColor(83,83,83));
+    KCColorConfigure::getInstance()->getPalette(bpal,"window control button");
     closeButton->setPalette(bpal);
 
     minimizeButton = new QToolButton(this);
@@ -82,8 +83,9 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
 #endif
 
     mainToolBar=new QToolBar(this);
+    mainToolBar->setObjectName("mainToolBar");
     QPalette pal=mainToolBar->palette();
-    pal.setColor(QPalette::Button, QColor(83,83,83));
+    KCColorConfigure::getInstance()->getPalette(pal,mainToolBar->objectName());
     mainToolBar->setPalette(pal);
     mainToolBar->setContentsMargins(0,0,0,0);
     mainToolBar->setMovable(true);
