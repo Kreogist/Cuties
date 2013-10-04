@@ -18,7 +18,7 @@ KCCompilerConfigure::KCCompilerConfigure()
 #ifdef Q_OS_WIN32
     gccPath="/Compiler/MinGW/bin/gcc.exe";
     gppPath="/Compiler/MinGW/bin/g++.exe";
-    fpcPath="/Compiler/fpc/fpc.exe";
+    fpcPath="/Compiler/FPC/bin/fpc.exe";
 #endif
 }
 
