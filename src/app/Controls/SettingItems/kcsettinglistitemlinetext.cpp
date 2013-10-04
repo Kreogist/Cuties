@@ -4,48 +4,48 @@ KCSettingListItemLineText::KCSettingListItemLineText(QWidget *parent) :
     KCSettingListItemBase(parent)
 {
     //New Layout Sets.
-    MainLayout=new QHBoxLayout(this);
-    MainLayout->setContentsMargins(0,0,0,0);
-    MainLayout->setSpacing(0);
-    setLayout(MainLayout);
+    mainLayout=new QHBoxLayout(this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 
     //Clear Item Value;
-    ItemValue="";
+    itemValue="";
 
     //Set Caption.
-    MainLayout->addSpacing(5);
-    MainLayout->addWidget(Caption);
-    MainLayout->addSpacing(3);
+    mainLayout->addSpacing(5);
+    mainLayout->addWidget(Caption);
+    mainLayout->addSpacing(3);
 
     //Set Value Displayer.
-    ValueDisplayer=new QLabel(this);
-    MainLayout->addWidget(ValueDisplayer);
+    valueDisplayer=new QLabel(this);
+    mainLayout->addWidget(valueDisplayer);
 
     //Set Text Editor.
-    ValueEditor=new QLineEdit(this);
-    ValueEditor->setEnabled(false);
-    ValueEditor->hide();
-    MainLayout->addWidget(ValueEditor,1);
-    MainLayout->addSpacing(5);
-    MainLayout->addStretch();
+    valueEditor=new KCSettingControlLineEdit(this);
+    valueEditor->setEnabled(false);
+    valueEditor->hide();
+    mainLayout->addWidget(valueEditor,1);
+    mainLayout->addSpacing(5);
+    mainLayout->addStretch();
 }
 
 void KCSettingListItemLineText::setValue(const QString &NewTextValue)
 {
-    ItemValue=NewTextValue;
-    ValueEditor->setText(ItemValue);
-    ValueDisplayer->setText(ItemValue);
+    itemValue=NewTextValue;
+    valueEditor->setText(itemValue);
+    valueDisplayer->setText(itemValue);
 }
 
 QString KCSettingListItemLineText::getValue()
 {
-    return ItemValue;
+    return itemValue;
 }
 
 void KCSettingListItemLineText::mousePressEvent(QMouseEvent *e)
 {
-    ValueDisplayer->hide();
-    ValueEditor->setEnabled(true);
-    ValueEditor->show();
+    valueDisplayer->hide();
+    valueEditor->setEnabled(true);
+    valueEditor->show();
     e->accept();
 }

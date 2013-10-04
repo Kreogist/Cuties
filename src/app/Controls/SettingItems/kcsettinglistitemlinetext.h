@@ -1,9 +1,9 @@
 #ifndef KCSETTINGLISTITEMLINETEXT_H
 #define KCSETTINGLISTITEMLINETEXT_H
 
-#include <QLineEdit>
 #include <QHBoxLayout>
 
+#include "kcsettingcontrollineedit.h"
 #include "kcsettinglistitembase.h"
 
 class KCSettingListItemLineText : public KCSettingListItemBase
@@ -18,10 +18,10 @@ protected:
     void mousePressEvent(QMouseEvent *e);
 
 private:
-    QHBoxLayout *MainLayout;
-    QLabel *ValueDisplayer;
-    QLineEdit *ValueEditor;
-    QString ItemValue;
+    QHBoxLayout *mainLayout;
+    QLabel *valueDisplayer;
+    KCSettingControlLineEdit *valueEditor;
+    QString itemValue;
 };
 
 #endif // KCSETTINGLISTITEMLINETEXT_H
