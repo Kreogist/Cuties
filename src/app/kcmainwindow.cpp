@@ -31,7 +31,7 @@ KCMainWindow::KCMainWindow(QWidget *parent) :
     QMainWindow::setUnifiedTitleAndToolBarOnMac(false);
 #else
     setContentsMargins(2,2,2,2);
-    setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
     KCDragProxy *dragProxy=new KCDragProxy(this);
     dragProxy->setBorderWidth(8,8,8,8);
 #endif

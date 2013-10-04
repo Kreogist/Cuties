@@ -29,6 +29,7 @@
 #include <QStringList>
 #include <QStyleFactory>
 #include <QDebug>
+#include <QTimer>
 
 #include "mainwindow.h"
 #include "kcglobal.h"
@@ -108,21 +109,22 @@ int main(int argc, char *argv[])
     KCSplashScreen *splash=new KCSplashScreen;
     splash->setPixmap(QPixmap(":/img/image/Splash.png"));
     splash->show();
+    splash->raise();
     app.processEvents();
 
-    static int splashAlign=Qt::AlignBottom|Qt::AlignRight;
+    /*static int splashAlign=Qt::AlignBottom|Qt::AlignRight;
     splash->showMessage(QApplication::tr("Initialize Application"),
-                        splashAlign);
+                        splashAlign);*/
     initApplicationInfo();
     app.processEvents();
 
-    splash->showMessage(QApplication::tr("Initialize Application Fonts"),
-                        splashAlign);
+    /*splash->showMessage(QApplication::tr("Initialize Application Fonts"),
+                        splashAlign);*/
     initApplicationFonts();
     app.processEvents();
 
-    splash->showMessage(QApplication::tr("Initialize Application Settings"),
-                        splashAlign);
+    /*splash->showMessage(QApplication::tr("Initialize Application Settings"),
+                        splashAlign);*/
     initApplicationSettings();
     app.processEvents();
 
@@ -137,11 +139,14 @@ int main(int argc, char *argv[])
     KreogistCuteStyle *cuteStyle=new KreogistCuteStyle;
     app.setStyle(cuteStyle);
 
+
     //Initalize and show Application MainWindow.
-    MainWindow mainwindow;
-    mainwindow.show();
-    splash->finish(&mainwindow);
-    delete splash;
+    MainWindow mainWindow;
+    /*
+    splash->finish(&mainwindow);*/
+    //delete splash;
+    QTimer::singleShot(3000, splash, SLOT(close()));
+    mainWindow.show();
 
     return app.exec();
 }
