@@ -14,7 +14,13 @@ public:
     void readConfigure();
     void writeConfigure();
 
-    void getPalette(QPalette& pal,const QString& text) const;
+    void getPalette(QPalette &pal, const QString &objectName) const;
+    void registerColorInfo(QPalette::ColorRole role,
+                           const QColor& color,
+                           const QString &objectName);
+
+    static QString getColorConfigFilePath();
+    static void setColorConfigFilePath(const QString &filePath);
 
 signals:
 
@@ -30,6 +36,7 @@ private:
     KCColorConfigure();
 
     static KCColorConfigure *instance;
+    static QString colorConfigFilePath;
     QMap<QString,QVector<ColorInfo>> color;
 };
 
