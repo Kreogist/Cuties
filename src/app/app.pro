@@ -90,12 +90,8 @@ SOURCES += \
     kccpphighlighter.cpp \
     kcpascalhighlighter.cpp \
     kcreplacewindow.cpp \
-<<<<<<< HEAD
-    kccolorconfigure.cpp
-=======
     kccolorconfigure.cpp \
     Controls/SettingItems/kcsettingcontrollineedit.cpp
->>>>>>> Major: 0.0.2.0
 
 HEADERS += \
     mainwindow.h \
@@ -162,12 +158,8 @@ HEADERS += \
     kccpphighlighter.h \
     kcpascalhighlighter.h \
     kcreplacewindow.h \
-<<<<<<< HEAD
-    kccolorconfigure.h
-=======
     kccolorconfigure.h \
     Controls/SettingItems/kcsettingcontrollineedit.h
->>>>>>> Major: 0.0.2.0
 
 # Enable C++11
 CONFIG += c++11
