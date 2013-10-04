@@ -33,6 +33,7 @@
 #include "kcplaintextbrowser.h"
 #include "kccompileoutputreceiver.h"
 #include "kcconnectionhandler.h"
+#include "kccolorconfigure.h"
 
 /*
  * KCCompileDock is used to display the compiler information.

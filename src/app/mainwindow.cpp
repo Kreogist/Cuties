@@ -22,15 +22,16 @@ MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
 {
     //Set MainWindow properties.
+    setObjectName("MainWindow");
     //Set MainWindow title.
     setWindowTitle(tr("Kreogist Cuties"));
     //Minimum Window Size.
     setMinimumSize(500,450);
 
     //Set Palette.
-    QPalette QPpal = palette();
-    QPpal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
-    setPalette(QPpal);
+    QPalette pal = palette();
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
+    setPalette(pal);
 
     //Set Central Widget.
     tabManager=new KCTabManager(this);
@@ -891,6 +892,8 @@ void MainWindow::saveSettings()
     settings.setValue("state",lastPositionWindowState);
 #endif
     settings.endGroup();
+
+    KCColorConfigure::getInstance()->writeConfigure();
 }
 
 
@@ -905,6 +908,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
     {
         e->ignore();
     }
+
 }
 
 void MainWindow::show()

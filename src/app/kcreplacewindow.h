@@ -15,6 +15,7 @@
 #include <QDebug>
 
 #include "kcsearchwidget.h"
+#include "kccolorconfigure.h"
 
 class KCReplaceWindow : public KCSearchWidget
 {

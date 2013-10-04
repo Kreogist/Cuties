@@ -33,6 +33,7 @@ KCGlobal::KCGlobal()
     cfgConfiger.append(KCFileAssociationConfigure::getInstance());
     cfgConfiger.append(KCLanguageConfigure::getInstance());
     cfgConfiger.append(KCHistoryConfigure::getInstance());
+    cfgConfiger.append(KCColorConfigure::getInstance());
 }
 
 void KCGlobal::readSettings()

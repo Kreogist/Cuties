@@ -24,6 +24,7 @@ static const int SearchBarOffset = 20;
 KCCodeEditor::KCCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
+    setObjectName("KCCodeEditor");
     setFont(QString("Monaco"));
 
     replaceLayout=new QVBoxLayout(this);
@@ -71,8 +72,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     m_langMode=new KCLanguageMode(this);
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Base,QColor(0x53,0x53,0x53));
-    pal.setColor(QPalette::Text,QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     filePath.clear();

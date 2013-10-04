@@ -36,6 +36,7 @@
 #include "kcgeneralconfigure.h"
 #include "kceditorconfigure.h"
 #include "kchistoryconfigure.h"
+#include "kccolorconfigure.h"
 #include "kcsearchwindow.h"
 #include "kccodeeditor.h"
 

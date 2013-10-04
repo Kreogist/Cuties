@@ -25,6 +25,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
     setContentsMargins(0,0,0,0);
+    setObjectName("KCTextEditor");
 
     setFrameStyle(QFrame::NoFrame);
     setFont(QString("Monaco"));
@@ -48,9 +49,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setOverwriteMode(configureInstance->getOverwriteMode());
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Base,QColor(0x38,0x38,0x38));
-    pal.setColor(QPalette::Text,QColor(255,255,255));
-    pal.setColor(QPalette::Button,QColor(83,83,83));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
     setFrameStyle(0);
 

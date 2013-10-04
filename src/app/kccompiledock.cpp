@@ -30,11 +30,7 @@ KCCompileDock::KCCompileDock(QWidget *parent):
 
     //Set compile dock palette
     QPalette pal=this->palette();
-    pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));
-    pal.setColor(QPalette::WindowText,QColor(255,255,255));
-    pal.setColor(QPalette::Button,QColor(83,83,83));
-    pal.setColor(QPalette::Text,QColor(255,255,255));
-    pal.setColor(QPalette::ButtonText,QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     //Set compile info splitter widget
@@ -48,13 +44,15 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     compileOutputInfoSplitter->addWidget(compileOutputTextInfo);
     //Set treeview output widget
     compileOutputErrorInfoTree=new QTreeView(this);
+    compileOutputErrorInfoTree->setObjectName("compileOutputErrorInfoTree");
     compileOutputErrorInfoTree->setContentsMargins(0,0,0,0);
     compileOutputErrorInfoTree->setMinimumWidth(0);
     compileOutputErrorInfoTree->setRootIsDecorated(false);
     compileOutputErrorInfoTree->setHeaderHidden(true);
     compileOutputErrorInfoTree->setEditTriggers(QAbstractItemView::NoEditTriggers);
     pal=compileOutputErrorInfoTree->palette();
-    pal.setColor(QPalette::WindowText,QColor(255,255,255));
+    KCColorConfigure::getInstance()->registerColorInfo(QPalette::WindowText,QColor(255,255,255),compileOutputErrorInfoTree->objectName());
+    KCColorConfigure::getInstance()->getPalette(pal,compileOutputErrorInfoTree->objectName());
     compileOutputErrorInfoTree->setPalette(pal);
     compileOutputInfoSplitter->addWidget(compileOutputErrorInfoTree);
     //Set splitter width

@@ -24,6 +24,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QApplication>
 
+#include "kccolorconfigure.h"
 #include "kcsearchwidget.h"
 
 class KCSearchWindow : public KCSearchWidget

@@ -22,15 +22,14 @@
 KCTabManager::KCTabManager(QWidget *parent) :
     QTabWidget(parent)
 {
+    setObjectName("KCTabManager");
     clear();
 
     editorConfigureInstance=KCEditorConfigure::getInstance();
 
     tabBarControl = this->tabBar();
     QPalette pal=tabBarControl->palette();
-    pal.setColor(QPalette::WindowText,QColor(200,200,200));
-    pal.setColor(QPalette::HighlightedText,QColor(255,255,255));
-    pal.setColor(QPalette::Button,QColor(83,83,83));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     tabBarControl->setPalette(pal);
     tabBarControl->setMinimumHeight(0);
     tabBarControl->setContentsMargins(0,0,0,0);

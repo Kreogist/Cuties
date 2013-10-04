@@ -33,6 +33,7 @@
 #include "kcfileassociation.h"
 #include "kclanguageconfigure.h"
 #include "kchistoryconfigure.h"
+#include "kccolorconfigure.h"
 
 //Global Variables
 class KCGlobal
