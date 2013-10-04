@@ -34,6 +34,11 @@ KCLanguageMode::KCLanguageMode(QWidget *parent) :
     Q_ASSERT(m_parent!=NULL);
 }
 
+bool KCLanguageMode::compilerIsNull()
+{
+    return compiler.isNull();
+}
+
 void KCLanguageMode::setMode(const modeType &type)
 {
     m_type=type;

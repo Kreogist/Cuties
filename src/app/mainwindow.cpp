@@ -931,12 +931,6 @@ void MainWindow::onActionCompile()
             error.exec();
             return;
         }
-
-        //Active Compile Dock.
-        compileDock->setVisible(true);
-        //Set To Compile Mode.
-        compileDock->animeHideCompileError();
-
         //if the file has been compiled,
         //then we clean the text of last compiling.
         KCCompileOutputReceiver *receiver=currentEditor->langMode()->getCompilerReceiver();
@@ -944,14 +938,24 @@ void MainWindow::onActionCompile()
         {
             receiver->resetCompilerOutputReceiver();
         }
-
-        currentEditor->langMode()->compile();
-        //The receiver is NULL if we didn't compile the file before.
-        //And if receiver is NULL, setReceiver() will cause the program crash.
-        //So we getReceiver() again to avoid this.
-        receiver=currentEditor->langMode()->getCompilerReceiver();
-
-        compileDock->setCompileOutputReceiver(receiver);
+        if(!currentEditor->langMode()->compilerIsNull())
+        {
+            //Active Compile Dock.
+            compileDock->setVisible(true);
+            //Set To Compile Mode.
+            compileDock->animeHideCompileError();
+            currentEditor->langMode()->compile();
+            //The receiver is NULL if we didn't compile the file before.
+            //And if receiver is NULL, setReceiver() will cause the program crash.
+            //So we getReceiver() again to avoid this.
+            receiver=currentEditor->langMode()->getCompilerReceiver();
+            compileDock->setCompileOutputReceiver(receiver);
+        }
+        else
+        {
+            //Invisible compile dock
+            compileDock->setVisible(false);
+        }
     }
 }
 

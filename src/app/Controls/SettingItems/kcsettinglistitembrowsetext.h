@@ -1,10 +1,10 @@
 #ifndef KCSETTINGLISTITEMFOLDERTEXT_H
 #define KCSETTINGLISTITEMFOLDERTEXT_H
 
-#include <QLineEdit>
 #include <QToolButton>
 #include <QFileDialog>
 
+#include "kcsettingcontrollineedit.h"
 #include "kcsettinglistitembase.h"
 
 class KCSettingListItemBrowseText : public KCSettingListItemBase
@@ -27,10 +27,10 @@ private slots:
     void setEditModeEnabled();
 
 private:
-    QLineEdit *ValueEditor;
-    QHBoxLayout *MainLayout;
-    QLabel *ValueDisplayer;
-    QString ItemValue;
+    KCSettingControlLineEdit *valueEditor;
+    QHBoxLayout *mainLayout;
+    QLabel *valueDisplayer;
+    QString itemValue;
     QToolButton *browseFolder;
     bool folderMode, blnEditMode;
 };

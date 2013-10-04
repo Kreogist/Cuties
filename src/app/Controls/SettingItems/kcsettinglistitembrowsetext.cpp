@@ -4,45 +4,45 @@ KCSettingListItemBrowseText::KCSettingListItemBrowseText(QWidget *parent) :
     KCSettingListItemBase(parent)
 {
     //New Layout Sets.
-    MainLayout=new QHBoxLayout(this);
-    MainLayout->setContentsMargins(0,0,0,0);
-    MainLayout->setSpacing(0);
-    setLayout(MainLayout);
+    mainLayout=new QHBoxLayout(this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 
     //Clear Item Value;
-    ItemValue="";
+    itemValue="";
 
     //Set Caption.
-    MainLayout->addSpacing(5);
-    MainLayout->addWidget(Caption);
-    MainLayout->addSpacing(3);
+    mainLayout->addSpacing(5);
+    mainLayout->addWidget(Caption);
+    mainLayout->addSpacing(3);
 
     //Set Value Displayer.
-    ValueDisplayer=new QLabel(this);
-    MainLayout->addWidget(ValueDisplayer);
+    valueDisplayer=new QLabel(this);
+    mainLayout->addWidget(valueDisplayer);
 
     //Set Text Editor.
-    ValueEditor=new QLineEdit(this);
-    ValueEditor->setEnabled(false);
-    ValueEditor->hide();
-    MainLayout->addWidget(ValueEditor,1);
-    MainLayout->addSpacing(2);
+    valueEditor=new KCSettingControlLineEdit(this);
+    valueEditor->setEnabled(false);
+    valueEditor->hide();
+    mainLayout->addWidget(valueEditor,1);
+    mainLayout->addSpacing(2);
 
     //Set Browse Folder.
     browseFolder=new QToolButton(this);
     browseFolder->setText(tr("Browse"));
     browseFolder->setEnabled(false);
     browseFolder->hide();
-    MainLayout->addWidget(browseFolder);
-    MainLayout->addSpacing(3);
-    MainLayout->addStretch();
+    mainLayout->addWidget(browseFolder);
+    mainLayout->addSpacing(3);
+    mainLayout->addStretch();
 
     folderMode=false;
     blnEditMode=false;
 
     connect(browseFolder,SIGNAL(clicked()),
             this, SLOT(setEditModeEnabled()));
-    connect(ValueEditor,SIGNAL(textChanged(QString)),
+    connect(valueEditor,SIGNAL(clicked()),
             this, SLOT(setEditModeEnabled()));
     connect(browseFolder,SIGNAL(clicked()),
             this,SLOT(getFolderPath()));
@@ -60,23 +60,23 @@ void KCSettingListItemBrowseText::setFolderMode(bool value)
 
 void KCSettingListItemBrowseText::setValue(const QString &NewTextValue)
 {
-    ItemValue=NewTextValue;
-    ValueEditor->setText(ItemValue);
-    ValueDisplayer->setText(ItemValue);
+    itemValue=NewTextValue;
+    valueEditor->setText(itemValue);
+    valueDisplayer->setText(itemValue);
 }
 
 QString KCSettingListItemBrowseText::getValue()
 {
-    return ItemValue;
+    return itemValue;
 }
 
 void KCSettingListItemBrowseText::enterEvent(QEvent *e)
 {
     if(!blnEditMode)
     {
-        ValueDisplayer->hide();
-        ValueEditor->setEnabled(true);
-        ValueEditor->show();
+        valueDisplayer->hide();
+        valueEditor->setEnabled(true);
+        valueEditor->show();
         browseFolder->setEnabled(true);
         browseFolder->show();
     }
@@ -87,11 +87,11 @@ void KCSettingListItemBrowseText::leaveEvent(QEvent *e)
 {
     if(!blnEditMode)
     {
-        ValueEditor->setEnabled(false);
-        ValueEditor->hide();
+        valueEditor->setEnabled(false);
+        valueEditor->hide();
         browseFolder->setEnabled(false);
         browseFolder->hide();
-        ValueDisplayer->show();
+        valueDisplayer->show();
     }
     KCSettingListItemBase::leaveEvent(e);
 }

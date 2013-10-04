@@ -61,7 +61,7 @@ public:
     };
 
     explicit KCLanguageMode(QWidget *parent = 0);
-
+    bool compilerIsNull();
     void compile();
     gdb *startDebug();
     void setMode(const modeType &type);

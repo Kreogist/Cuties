@@ -1,3 +1,11 @@
+0.0.2.0
+Updates:
+1. Enhanced control center widgets.
+2. A more steady Compile Dock.
+
+Bug Fixed:
+1. Fixed the bug when compile a plain text file caused a crash.
+
 0.0.1.0
 New Features:
 1. Auto selected to the default language suffix when opening and saving files.
