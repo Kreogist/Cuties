@@ -75,7 +75,6 @@ SOURCES += \
     kcfileassociation.cpp \
     kcconfigure.cpp \
     Controls/SettingItems/kcsettinglistitemnuminput.cpp \
-    kcfiletype.cpp \
     kchistoryconfigure.cpp \
     kcmessagebox.cpp \
     kcsearchlinetext.cpp \
@@ -90,12 +89,8 @@ SOURCES += \
     kccpphighlighter.cpp \
     kcpascalhighlighter.cpp \
     kcreplacewindow.cpp \
-<<<<<<< HEAD
-    kccolorconfigure.cpp
-=======
     kccolorconfigure.cpp \
     Controls/SettingItems/kcsettingcontrollineedit.cpp
->>>>>>> Major: 0.0.2.0
 
 HEADERS += \
     mainwindow.h \
@@ -148,7 +143,6 @@ HEADERS += \
     kclanguageconfigure.h \
     kcfileassociation.h \
     Controls/SettingItems/kcsettinglistitemnuminput.h \
-    kcfiletype.h \
     kchistoryconfigure.h \
     kcmessagebox.h \
     kcsearchwidget.h \
@@ -162,12 +156,8 @@ HEADERS += \
     kccpphighlighter.h \
     kcpascalhighlighter.h \
     kcreplacewindow.h \
-<<<<<<< HEAD
-    kccolorconfigure.h
-=======
     kccolorconfigure.h \
     Controls/SettingItems/kcsettingcontrollineedit.h
->>>>>>> Major: 0.0.2.0
 
 # Enable C++11
 CONFIG += c++11

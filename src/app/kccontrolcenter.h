@@ -212,7 +212,7 @@ public:
     explicit KCCCTabLanguageContent(QWidget *parent = 0);
 
 private:
-    QVBoxLayout *MainLayout;
+    QVBoxLayout *mainLayout;
     QList<KCSettingListItemLanguageItem *> languageItem;
 };
 

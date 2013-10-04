@@ -489,7 +489,7 @@ void MainWindow::createMenu()
     menuMainWindowItem[menuExecute]= _mainMenu->addMenu(tr("E&xecute"));
     //menuMainWindowItem[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
     menuMainWindowItem[menuTools]  = _mainMenu->addMenu(tr("&Tools"));
-    menuMainWindowItem[menuWindow] = _mainMenu->addMenu(tr("&Window"));
+    menuMainWindowItem[menuWindow] = _mainMenu->addMenu(tr("&Tab"));
     menuMainWindowItem[menuHelp]   = _mainMenu->addMenu(tr("&Help"));
 
     //Create File Menu

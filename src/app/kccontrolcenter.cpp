@@ -268,7 +268,7 @@ KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(slnHistoryMax);
 
     sbtClearHistory=new KCSettingListItemButton(this);
-    sbtClearHistory->setButtonText(tr("Clear History Record."));
+    sbtClearHistory->setButtonText(tr("Clear History Record"));
     connect(sbtClearHistory, &KCSettingListItemButton::buttonPressed,
             this, &KCCCTabGerneralContent::clearHistoryFilesRecord);
     MainLayout->addWidget(sbtClearHistory);
@@ -532,10 +532,10 @@ KCCCTabLanguageContent::KCCCTabLanguageContent(QWidget *parent) :
     setPalette(pal);
 
     //Set Layout.
-    MainLayout=new QVBoxLayout(this);
-    MainLayout->setContentsMargins(0,0,0,0);
-    MainLayout->setSpacing(0);
-    setLayout(MainLayout);
+    mainLayout=new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 
     KCLanguageConfigure *instance=KCLanguageConfigure::getInstance();
     int languageNum=instance->getLanguageList().count(),i;
@@ -544,7 +544,7 @@ KCCCTabLanguageContent::KCCCTabLanguageContent(QWidget *parent) :
         KCSettingListItemLanguageItem *lanItem=new KCSettingListItemLanguageItem(this);
         lanItem->setLanguageName(instance->getLanguageNameList().at(i));
         languageItem.append(lanItem);
-        MainLayout->addWidget(languageItem.at(i));
+        mainLayout->addWidget(languageItem.at(i));
     }
 }
 
