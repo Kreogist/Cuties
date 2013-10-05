@@ -3,7 +3,6 @@
 
 #include <QSplashScreen>
 #include <QTimer>
-#include <QApplication>
 
 class KCSplashScreen : public QSplashScreen
 {

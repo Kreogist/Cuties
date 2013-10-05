@@ -103,8 +103,8 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,downButton->objectName());
     downButton->setPalette(pal);
     searchLayout->addWidget(downButton,0,4);
-    connect(downButton,SIGNAL(clicked()),
-            this,SIGNAL(requireShowNextResult()));
+    connect(downButton, &QToolButton::clicked,
+            this, &KCSearchWidget::requireShowNextResult);
 }
 
 QString KCSearchWidget::text() const
