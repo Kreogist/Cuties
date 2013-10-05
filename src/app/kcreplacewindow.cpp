@@ -64,8 +64,10 @@ KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,closeButton->objectName());
     closeButton->setPalette(pal);
     //Set Button Action
-    connect(closeButton, SIGNAL(clicked()),
-            this, SLOT(hideAnime()));
+    connect(closeButton, &QToolButton::clicked,
+            this, &KCReplaceWindow::hideAnime);
+    connect(this, &KCReplaceWindow::requireHide,
+            this, &KCReplaceWindow::hideAnime);
 
     //Set Original Height.
     setFixedHeight(0);
@@ -96,8 +98,8 @@ void KCReplaceWindow::hideAnime()
     hideAnimation->setEndFrame(0);
     connect(hideAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
-    connect(hideAnimation, SIGNAL(finished()),
-            this, SLOT(hide()));
+    connect(hideAnimation, &QTimeLine::finished,
+            this, &KCReplaceWindow::hide);
     hideAnimation->start();
 }
 

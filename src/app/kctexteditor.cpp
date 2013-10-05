@@ -54,7 +54,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setFrameStyle(0);
 
     lineColor = QColor(0x64,0x64,0x64);
-    searchResultColor = QColor(0xf7,0xcf,0x3d);
+    searchResultColor = QColor(98,147,221);
+    searchResultColor = QColor(0x5A,0x86,0xCA);
     noMatchedParenthesesColor = QColor(0xc8,0x0,0x0);
     matchedParenthesesColor = QColor(0xfd,0x95,0x00);
 
@@ -63,21 +64,21 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     //Solve the default line's bug.
     updateHighlights();
 
-    connect(this,&KCTextEditor::cursorPositionChanged,
-            this,&KCTextEditor::updateHighlights);
-    connect(this,&KCTextEditor::textChanged,
-            this,&KCTextEditor::updateHighlights);
+    connect(this, &KCTextEditor::cursorPositionChanged,
+            this, &KCTextEditor::updateHighlights);
+    connect(this, &KCTextEditor::textChanged,
+            this, &KCTextEditor::updateHighlights);
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
 
-    connect(configureInstance,SIGNAL(tabWidthChanged(int)),
-            this,SLOT(setTabWidth(int)));
-    connect(configureInstance,SIGNAL(wrapModeChanged(QTextOption::WrapMode)),
-            this,SLOT(setWordWrap(QTextOption::WrapMode)));
-    connect(configureInstance,SIGNAL(cursorWidthChanged(int)),
-            this,SLOT(setTheCursorWidth(int)));
+    connect(configureInstance, &KCEditorConfigure::tabWidthChanged,
+            this, &KCTextEditor::setTabWidth);
+    connect(configureInstance, &KCEditorConfigure::wrapModeChanged,
+            this, &KCTextEditor::setWordWrap);
+    connect(configureInstance, &KCEditorConfigure::cursorWidthChanged,
+            this, &KCTextEditor::setTheCursorWidth);
 }
 
 void KCTextEditor::paintEvent(QPaintEvent *e)
@@ -252,45 +253,41 @@ bool KCTextEditor::findString(bool forward)
         setTextCursor(_textCursor);
         return true;
     }
-
     return false;
 }
 
-void KCTextEditor::searchString(QString text,
-                                 bool regularExpression,
-                                 bool caseSensitively,
-                                 bool wholeWord)
+void KCTextEditor::searchString(QString searchTextSets,
+                                bool regularExpressionSets,
+                                bool caseSensitivelySets,
+                                bool wholeWordSets)
 {
-    this->text=text;
-    this->regularExpression=regularExpression;
-    this->caseSensitively=caseSensitively;
-    this->wholeWord=wholeWord;
+    searchText=searchTextSets;
+    searchRegularExpression=regularExpressionSets;
+    searchCaseSensitively=caseSensitivelySets;
+    searchWholeWord=wholeWordSets;
     searchCode++;
 
-    if(wholeWord)
+    if(searchText.isEmpty())
     {
-        if(!regularExpression)
-        {
-            this->text=QRegularExpression::escape(text);
-        }
-
-        this->text.prepend(QString("\\b("));
-        this->text.append(QString(")\\b"));
-    }
-
-    updateSearchResults();
-
-    searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
-    searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
-
-    if(text.isEmpty())
-    {
+        updateSearchResults();
         QTextCursor clearCursor=textCursor();
         clearCursor.clearSelection();
         setTextCursor(clearCursor);
     }
     else
     {
+        if(wholeWordSets)
+        {
+            if(!searchRegularExpression)
+            {
+                searchText=QRegularExpression::escape(searchTextSets);
+            }
+            searchText.prepend(QString("\\b("));
+            searchText.append(QString(")\\b"));
+        }
+        updateSearchResults();
+        searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
+        searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
         findString(true);
     }
 }
@@ -300,7 +297,6 @@ void KCTextEditor::updateSearchResults()
     generalSearch(firstVisibleBlock(),
                   height()/fontMetrics().lineSpacing()+2,
                   true);
-
     updateHighlights();
 }
 
@@ -309,9 +305,7 @@ void KCTextEditor::generalSearch(const QTextBlock &block,
                                   const bool forward)
 {
     QScopedPointer<KCTextSearcher> searcher;
-
     initTextSearcher(searcher);
-
     searcher->search(block,
                      lines,
                      searchCode,
@@ -341,7 +335,7 @@ void KCTextEditor::searchOnOtherThread(QScopedPointer<KCTextSearcher> &searcher,
 
 void KCTextEditor::initTextSearcher(QScopedPointer<KCTextSearcher> &searcher)
 {
-    if(regularExpression || wholeWord)
+    if(searchRegularExpression || searchWholeWord)
     {
         searcher.reset(new KCTextSearcherRegexp);
     }
@@ -350,8 +344,8 @@ void KCTextEditor::initTextSearcher(QScopedPointer<KCTextSearcher> &searcher)
         searcher.reset(new KCTextSearcherStringMatcher);
     }
 
-    searcher->setPatternString(text);
-    searcher->setIsCaseSensitive(caseSensitively);
+    searcher->setPatternString(searchText);
+    searcher->setIsCaseSensitive(searchCaseSensitively);
 }
 
 bool KCTextEditor::replace(const QString &oldText, const QString &newText)
@@ -430,11 +424,8 @@ void KCTextEditor::insertTab(QTextCursor cursor, int count)
     {
         if(configureInstance->usingBlankInsteadTab())
         {
-            for(int i=0; i<configureInstance->getTabWidth(); i++)
-            {
-                cursor.insertText(" ");
-            }
-
+            QString space=" ";
+            cursor.insertText(space.repeated(configureInstance->getTabWidth()));
         }
         else
         {
@@ -810,21 +801,9 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Backspace:
     {
         int pos=findFirstCharacter(_textCursor.block());
-        if(_textCursor.positionInBlock()<=pos && pos!=0)
+        if(_textCursor.positionInBlock()<=pos && pos!=0 && (!pos<configureInstance->getTabWidth()))
         {
-            if(pos<configureInstance->getTabWidth())
-            {
-                _textCursor.beginEditBlock();
-                while(pos--)
-                {
-                    _textCursor.deletePreviousChar();
-                }
-                _textCursor.endEditBlock();
-            }
-            else
-            {
-                removeTab(_textCursor);
-            }
+            removeTab(_textCursor);
         }
         else
         {

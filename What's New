@@ -1,3 +1,14 @@
+0.0.2.1
+Updates:
+1. Re-factor the save process.
+2. New search result colour.
+3. Enhance the search speed and user experience.
+
+Bug Fixed:
+1. Fixed the file saved failed dialogue pop up bug when user cancel the save process.
+2. Fixed the backspace invalidated bug when user select a section.
+3. Reset the default pascal compiler path.
+
 0.0.2.0
 Updates:
 1. Enhanced control center widgets.

@@ -39,6 +39,7 @@ public:
     void setText(const QString &text);
     QString text() const;
     static const int searchTextPartWidth;
+    void restoreLastSearchText();
 
 signals:
     void requireHide();
@@ -70,15 +71,13 @@ private:
 
     QGridLayout *searchLayout;
     QToolButton *upButton, *downButton;
-
-    //TextBox
     QWidget *searchText;
-    QLineEdit *SearchTexts;
-    QHBoxLayout *Layout;
-    QPushButton *SearchIcon;
-
+    QLineEdit *searchTexts;
+    QHBoxLayout *mainLayout;
+    QPushButton *searchIcon;
     QMenu *menu;
     QAction *menuAction[menuItemCount];
+    QString lastSearchText;
 };
 
 #endif // KCSEARCHWIDGET_H

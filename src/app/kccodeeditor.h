@@ -20,24 +20,22 @@
 #ifndef TEXTEDITOR_H
 #define TEXTEDITOR_H
 
-#include <QHBoxLayout>
-#include <QPalette>
-#include <QFile>
-#include <QPlainTextEdit>
-#include <QFileInfo>
-#include <QFileDialog>
-#include <QTextStream>
-#include <QString>
-#include <QMessageBox>
-#include <QTextCursor>
 #include <QErrorMessage>
-#include <QSettings>
+#include <QFile>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QHBoxLayout>
 #include <QIcon>
-#include <QPropertyAnimation>
+#include <QMessageBox>
+#include <QPalette>
+#include <QPlainTextEdit>
+#include <QScrollBar>
+#include <QSettings>
+#include <QString>
 #include <QTimeLine>
-#include <QScrollBar>
-#include <QGraphicsOpacityEffect>
-#include <QScrollBar>
+#include <QTextCursor>
+#include <QTextStream>
+
 #include <QDebug>
 
 #include "kchistoryconfigure.h"
@@ -110,14 +108,13 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
+    bool processSaveAsAction(const QString &dialogCaption);
+    bool requireSaveAs(const QString &Caption);
     void computeExecFileName();
     void fileInfoChanged(const QFile &file);
-    bool dosaveas(const QString &Caption);
     void connectSearchWidgetWithEditor(KCSearchWidget *widget);
 
-    QGraphicsOpacityEffect *initEffect;
-
-    KCLanguageMode *m_langMode;
+    KCLanguageMode *languageMode;
 
     QVBoxLayout *replaceLayout;
     QHBoxLayout *mainLayout;
@@ -125,7 +122,7 @@ private:
     KCLinenumPanel *linePanel;
     KCMarkPanel *markPanel;
 
-    QString filePath,strFileFilter;
+    QString filePath;
     QString execFileName;
     QFileDevice::FileError fileError;
     QTextCursor fileTextCursor;

@@ -40,7 +40,7 @@
 static void initApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.0.2.0"));
+    QApplication::setApplicationVersion(QString("0.0.2.1"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
@@ -139,13 +139,8 @@ int main(int argc, char *argv[])
     KreogistCuteStyle *cuteStyle=new KreogistCuteStyle;
     app.setStyle(cuteStyle);
 
-
     //Initalize and show Application MainWindow.
     MainWindow mainWindow;
-    /*
-    splash->finish(&mainwindow);*/
-    //delete splash;
-    QTimer::singleShot(3000, splash, SLOT(close()));
     mainWindow.show();
 
     return app.exec();

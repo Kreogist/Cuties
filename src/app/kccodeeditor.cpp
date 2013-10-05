@@ -26,18 +26,15 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 {
     setObjectName("KCCodeEditor");
     setFont(QString("Monaco"));
+    setContentsMargins(0,0,0,0);
 
     replaceLayout=new QVBoxLayout(this);
     replaceLayout->setContentsMargins(0,0,0,0);
-    replaceLayout->setMargin(0);
     replaceLayout->setSpacing(0);
     setLayout(replaceLayout);
 
-    //setWindowFlags(Qt::AnchorPoint);
     mainLayout=new QHBoxLayout();
-    mainLayout->setSpacing(0);
-    setContentsMargins(0,0,0,0);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
 
     markPanel=new KCMarkPanel(this);
@@ -52,24 +49,25 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     linePanel->setKciTextEditor(editor);
     markPanel->setKciTextEditor(editor);
     mainLayout->addWidget(editor);
-
     replaceLayout->addLayout(mainLayout);
 
+    searchBar=new KCSearchWindow(editor);
+    searchBar->hide();
     replaceBar=new KCReplaceWindow(this);
     replaceBar->hide();
     replaceLayout->addWidget(replaceBar);
 
-    connect(editor->document(),SIGNAL(modificationChanged(bool)),
-            this,SLOT(onModificationChanged(bool)));
-    connect(editor,SIGNAL(cursorPositionChanged()),
-            this,SLOT(cursorChanged()));
-    connect(editor,SIGNAL(overwriteModeChanged(bool)),
-            this, SIGNAL(rewriteStateChanged(bool)));
+    connect(editor->document(), &QTextDocument::modificationChanged,
+            this, &KCCodeEditor::onModificationChanged);
+    connect(editor, &KCTextEditor::cursorPositionChanged,
+            this, &KCCodeEditor::cursorChanged);
+    connect(editor, &KCTextEditor::overwriteModeChanged,
+            this, &KCCodeEditor::rewriteStateChanged);
 
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
 
-    m_langMode=new KCLanguageMode(this);
+    languageMode=new KCLanguageMode(this);
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -77,9 +75,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     filePath.clear();
     fileError=QFileDevice::NoError;
-
-    searchBar=new KCSearchWindow(editor);
-    searchBar->hide();
 }
 
 KCCodeEditor::~KCCodeEditor()
@@ -119,14 +114,12 @@ void KCCodeEditor::computeExecFileName()
 
 void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
 {
-    searcherConnections+=connect(widget, &KCSearchWidget::requireHide,
-                                 this, &KCCodeEditor::hideSearchBar);
-    searcherConnections+=connect(widget,&KCSearchWidget::requireSearch,
-                                 editor,&KCTextEditor::searchString);
-    searcherConnections+=connect(widget,&KCSearchWidget::requireShowNextResult,
-                                 editor,&KCTextEditor::showNextSearchResult);
-    searcherConnections+=connect(widget,&KCSearchWidget::requireShowPreviousResult,
-                                 editor,&KCTextEditor::showPreviousSearchResult);
+    searcherConnections+=connect(widget, &KCSearchWidget::requireSearch,
+                                 editor, &KCTextEditor::searchString);
+    searcherConnections+=connect(widget, &KCSearchWidget::requireShowNextResult,
+                                 editor, &KCTextEditor::showNextSearchResult);
+    searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
+                                 editor, &KCTextEditor::showPreviousSearchResult);
 }
 
 void KCCodeEditor::showSearchBar()
@@ -149,8 +142,11 @@ void KCCodeEditor::showSearchBar()
         searchAnime->setEndValue(animeEndPos);
         searchAnime->setEasingCurve(QEasingCurve::OutCubic);
         searchBar->show();
+        searchBar->restoreLastSearchText();
         searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
 
+        searcherConnections+=connect(searchBar, &KCSearchWidget::requireHide,
+                                     this, &KCCodeEditor::hideSearchBar);
         connectSearchWidgetWithEditor(searchBar);
     }
 
@@ -247,26 +243,18 @@ bool KCCodeEditor::save()
     }
     else
     {
-        if(!dosaveas(tr("Save")))
-        {
-            if(fileError!=QFileDevice::AbortError)
-            {
-                QErrorMessage error(this);
-                error.showMessage(tr("Saving file failed!"));
-                error.exec();
-            }
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return processSaveAsAction(tr("Save"));
     }
 }
 
 bool KCCodeEditor::saveAs()
 {
-    if(!dosaveas(tr("Save As")))
+    return processSaveAsAction(tr("Save As"));
+}
+
+bool KCCodeEditor::processSaveAsAction(const QString &dialogCaption)
+{
+    if(!requireSaveAs(dialogCaption))
     {
         if(fileError!=QFileDevice::AbortError)
         {
@@ -282,7 +270,7 @@ bool KCCodeEditor::saveAs()
     }
 }
 
-bool KCCodeEditor::dosaveas(const QString &Caption)
+bool KCCodeEditor::requireSaveAs(const QString &Caption)
 {
     if(KCGeneralConfigure::getInstance()->getUseDefaultLanguageWhenSave())
     {
@@ -515,7 +503,7 @@ void KCCodeEditor::fileInfoChanged(const QFile &file)
     editor->setDocumentTitle(_fileInfo.fileName());
     emit filenameChanged(_fileInfo.fileName());
 
-    m_langMode->setFileSuffix(_fileInfo.suffix());
+    languageMode->setFileSuffix(_fileInfo.suffix());
 
     filePath=file.fileName();
     fileError=QFileDevice::NoError;
@@ -527,7 +515,7 @@ void KCCodeEditor::fileInfoChanged(const QFile &file)
 
 KCLanguageMode *KCCodeEditor::langMode() const
 {
-    return m_langMode;
+    return languageMode;
 }
 
 bool KCCodeEditor::isModified()

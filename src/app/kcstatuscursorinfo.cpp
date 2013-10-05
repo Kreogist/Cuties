@@ -35,6 +35,7 @@ KCStatusCursorInfo::KCStatusCursorInfo(QWidget *parent) :
 
     spbLineNum=new QSpinBox(this);
     spbLineNum->setContentsMargins(0,0,0,0);
+    spbLineNum->setMinimumHeight(0);
     spbLineNum->setMinimum(1);
     spbLineNum->hide();
     connect(spbLineNum,SIGNAL(valueChanged(int)),

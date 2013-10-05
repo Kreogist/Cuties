@@ -1,9 +1,8 @@
 #ifndef KCSPLASHSCREEN_H
 #define KCSPLASHSCREEN_H
 
-#include <QPainter>
 #include <QSplashScreen>
-#include <QTime>
+#include <QTimer>
 #include <QApplication>
 
 class KCSplashScreen : public QSplashScreen

@@ -930,9 +930,6 @@ void MainWindow::onActionCompile()
         //File Not Save.
         if(Q_UNLIKELY(!currentEditor->save()))
         {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
             return;
         }
         //if the file has been compiled,

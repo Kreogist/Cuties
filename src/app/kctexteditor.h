@@ -48,7 +48,7 @@ public:
 
 signals:
     void updated();
-    void searchStringChangedByShortCut(QString text);
+    void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);
 
 public slots:
@@ -56,10 +56,10 @@ public slots:
     //void pasteFromeHistory();
     bool showPreviousSearchResult();
     bool showNextSearchResult();
-    void searchString(QString text,
-                      bool regularExpression,
-                      bool caseSensitively,
-                      bool wholeWord);
+    void searchString(QString searchTextSets,
+                      bool regularExpressionSets,
+                      bool caseSensitivelySets,
+                      bool wholeWordSets);
     bool replace(const QString &oldText,const QString &newText);
     bool replaceAndFind(const QString &oldText, const QString &newText);
     bool replaceAll(const QString &oldText, const QString &newText);
@@ -104,14 +104,16 @@ private:
 
     KCEditorConfigure *configureInstance;
     KCClipboard *clipboard;
-    QColor lineColor,searchResultColor;
-    QColor noMatchedParenthesesColor,matchedParenthesesColor;
+    QColor lineColor;
+    QColor searchResultColor;
+    QColor noMatchedParenthesesColor;
+    QColor matchedParenthesesColor;
     QPoint contextMenuPos;
 
-    QString text;
-    bool regularExpression;
-    bool caseSensitively;
-    bool wholeWord;
+    QString searchText;
+    bool searchRegularExpression;
+    bool searchCaseSensitively;
+    bool searchWholeWord;
     unsigned long long int searchCode;
     QScopedPointer<KCTextSearcher> searcherForPrev,searcherForNext;
     QFuture<void> threadPrev,threadNext;

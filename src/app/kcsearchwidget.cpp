@@ -25,7 +25,9 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     QWidget(parent)
 {
     setObjectName("KCSearchWidget");
-    setContentsMargins(0,0,0,0);
+    setAutoFillBackground(true);
+    setContentsMargins(7,7,7,7);
+    lastSearchText="";
 
     searchText=new QWidget(this);
     //Set Background Fill.
@@ -37,24 +39,24 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     searchText->setPalette(pal);
 
     //Set New Layout
-    Layout=new QHBoxLayout(searchText);
-    Layout->setContentsMargins(0,0,0,0);
-    Layout->setSpacing(0);
-    searchText->setLayout(Layout);
+    mainLayout=new QHBoxLayout(searchText);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    searchText->setLayout(mainLayout);
 
     //Set Icon PushButton
-    SearchIcon=new QPushButton(searchText);
-    SearchIcon->setIcon(QIcon(QString(":/img/image/SearchIcon.png")));
-    SearchIcon->setFixedSize(24,24);
-    SearchIcon->setContentsMargins(0,0,0,0);
-    SearchIcon->setFlat(true);
-    Layout->addWidget(SearchIcon);
+    searchIcon=new QPushButton(searchText);
+    searchIcon->setIcon(QIcon(QString(":/img/image/SearchIcon.png")));
+    searchIcon->setFixedSize(24,24);
+    searchIcon->setContentsMargins(0,0,0,0);
+    searchIcon->setFlat(true);
+    mainLayout->addWidget(searchIcon);
 
-    SearchTexts=new QLineEdit(searchText);
-    SearchTexts->setFrame(false);
-    SearchTexts->setPlaceholderText(QString(tr("Search")));
-    connect(SearchTexts,SIGNAL(textChanged(QString)),
-            this,SLOT(onTextChanged(QString)));
+    searchTexts=new QLineEdit(searchText);
+    searchTexts->setFrame(false);
+    searchTexts->setPlaceholderText(QString(tr("Search")));
+    connect(searchTexts, &QLineEdit::textChanged,
+            this, &KCSearchWidget::onTextChanged);
 
     //Init menu
     menu=new QMenu(searchText);
@@ -68,13 +70,9 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
         connect(menuAction[i],SIGNAL(triggered()),
                 this,SLOT(onMenuClicked()));
     }
+    searchIcon->setMenu(menu);
 
-    SearchIcon->setMenu(menu);
-
-    Layout->addWidget(SearchTexts);
-
-    setAutoFillBackground(true);
-    setContentsMargins(7,7,7,7);
+    mainLayout->addWidget(searchTexts);
 
     //Set New Layout
     searchLayout=new QGridLayout(this);
@@ -105,41 +103,46 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,downButton->objectName());
     downButton->setPalette(pal);
     searchLayout->addWidget(downButton,0,4);
-    connect(downButton,SIGNAL(clicked()),this,SIGNAL(requireShowNextResult()));
+    connect(downButton,SIGNAL(clicked()),
+            this,SIGNAL(requireShowNextResult()));
 }
 
 QString KCSearchWidget::text() const
 {
-    return SearchTexts->text();
+    return searchTexts->text();
+}
+
+void KCSearchWidget::restoreLastSearchText()
+{
+    searchTexts->setText(lastSearchText);
 }
 
 void KCSearchWidget::onTextChanged(const QString &text)
 {
-    bool Regexp=menuAction[menuRegularExpress]->isChecked();
-    bool MatchCase=menuAction[menuMatchCase]->isChecked();
-    bool WholeWord=menuAction[menuWholeWord]->isChecked();
-
-    emit requireSearch(text,Regexp,MatchCase,WholeWord);
+    emit requireSearch(text,
+                       menuAction[menuRegularExpress]->isChecked(),
+                       menuAction[menuMatchCase]->isChecked(),
+                       menuAction[menuWholeWord]->isChecked());
 }
 
 void KCSearchWidget::onMenuClicked()
 {
-    onTextChanged(SearchTexts->text());
+    onTextChanged(searchTexts->text());
 }
 
 void KCSearchWidget::setText(const QString &text)
 {
-    SearchTexts->setText(text);
+    searchTexts->setText(text);
 }
 
 void KCSearchWidget::setTextFocus()
 {
-    SearchTexts->setFocus();
+    searchTexts->setFocus();
 }
 
 void KCSearchWidget::resizeEvent(QResizeEvent *event)
 {
-    SearchTexts->setFixedWidth(event->size().width());
+    searchTexts->setFixedWidth(event->size().width());
 }
 
 void KCSearchWidget::keyPressEvent(QKeyEvent *event)
@@ -147,9 +150,10 @@ void KCSearchWidget::keyPressEvent(QKeyEvent *event)
     switch(event->key())
     {
     case Qt::Key_Escape:
+        lastSearchText=searchTexts->text();
+        searchTexts->setText("");
         emit requireHide();
     default:
         QWidget::keyPressEvent(event);
     }
 }
-
