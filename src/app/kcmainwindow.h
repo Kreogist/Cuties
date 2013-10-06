@@ -40,7 +40,7 @@ public:
     explicit KCMainWindow(QWidget *parent = 0);
     
     KCTitleBar *getTitleBar() const;
-    void setTitleBar(KCTitleBar *getTitleBar);
+    void setTitleBar(KCTitleBar *newTitleBar);
 #ifndef Q_OS_MACX
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString &mainIcon);
