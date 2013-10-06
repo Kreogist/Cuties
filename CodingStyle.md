@@ -21,6 +21,7 @@ Whitespace
 + For pointers or references, always use a single space between the type and ‘*’ or ‘&’, but no space between the ‘*’ or ‘&’ and the variable name.
 + No space after a cast
 + Avoid C-style casts when possible
+
         // Wrong
         char* blockOfMemory = (char* ) malloc(data.size());
            
@@ -32,6 +33,7 @@ Whitespace
 Parentheses
 ===========
 + Use parentheses to group expressions:
+
         // Wrong
         if (a && b || c)
            
@@ -82,6 +84,7 @@ Line breaks
 ===========
 + Keep lines shorter than 100 characters; wrap if necessary
 + Operators go at the end of wrapped lines.
+
             if (longExpression +
                 otherLongExpression +
                 otherOtherLongExpression)
