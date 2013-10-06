@@ -42,9 +42,9 @@ KCTitleBar *KCMainWindow::getTitleBar() const
     return titleBar;
 }
 
-void KCMainWindow::setTitleBar(KCTitleBar *titleBar)
+void KCMainWindow::setTitleBar(KCTitleBar *newTitleBar)
 {
-    titleBar = titleBar;
+    titleBar = newTitleBar;
 }
 
 #ifndef Q_OS_MACX

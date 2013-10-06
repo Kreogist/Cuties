@@ -191,10 +191,10 @@ void MainWindow::createActions()
 
 #ifdef Q_OS_MACX
     //View -> Fullscreen
-    act[mnuViewFullscreen]=new QAction(tr("Enter Full Screen"), this);
-    act[mnuViewFullscreen]->setShortcut(Qt::CTRL+Qt::META+Qt::Key_F);
-    actStatusTips[mnuViewFullscreen]=QString(tr("Show or hide fullscreen mode of Cuties."));
-    connect(act[mnuViewFullscreen], SIGNAL(triggered()),
+    actionMainWindowItem[actionViewFullscreen]=new QAction(tr("Enter Full Screen"), this);
+    actionMainWindowItem[actionViewFullscreen]->setShortcut(Qt::CTRL+Qt::META+Qt::Key_F);
+    stringActionStatusTips[actionViewFullscreen]=QString(tr("Show or hide fullscreen mode of Cuties."));
+    connect(actionMainWindowItem[actionViewFullscreen], SIGNAL(triggered()),
             this, SLOT(setFullScreen()));
 #endif
 
@@ -509,10 +509,10 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuFileOpen:
-        case mnuFileSaveAll:
-        case mnuFileCloseAllExceptThis:
-            menuMainWindowItem[mnuFile]->addSeparator();
+        case actionFileOpen:
+        case actionFileSaveAll:
+        case actionFileCloseAllExceptThis:
+            menuMainWindowItem[menuFile]->addSeparator();
             break;
         }
 #endif
@@ -534,8 +534,8 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuEditRedo:
-        case mnuEditPaste:
+        case actionEditRedo:
+        case actionEditPaste:
             menuMainWindowItem[menuEdit]->addSeparator();
             break;
         }
@@ -558,8 +558,8 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuViewCompileDock:
-            menuMainWindowItem[mnuView]->addSeparator();
+        case actionViewCompileDock:
+            menuMainWindowItem[menuView]->addSeparator();
         }
 
 #endif
@@ -581,10 +581,10 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuSearchFind:
+        case actionSearchFind:
             //case mnuSearchReplaceInFiles:
-        case mnuSearchSearchOnline:
-            menuMainWindowItem[mnuSearch]->addSeparator();
+        case actionSearchSearchOnline:
+            menuMainWindowItem[menuSearch]->addSeparator();
             break;
         }
 
@@ -607,9 +607,9 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case mnuExecuteRun:
+        case actionExecuteRun:
             //case mnuExecuteParameters:
-            menuMainWindowItem[mnuExecute]->addSeparator();
+            menuMainWindowItem[menuExecute]->addSeparator();
             break;
         }
 #endif
@@ -1114,12 +1114,12 @@ void MainWindow::setFullScreen()
     if(this->isFullScreen())
     {
         //TODO: The title of the menu can be replaced by a QString.
-        act[mnuViewFullscreen]->setText(tr("Enter Full Screen"));
+        actionMainWindowItem[actionViewFullscreen]->setText(tr("Enter Full Screen"));
         this->showNormal();
     }
     else
     {
-        act[mnuViewFullscreen]->setText(tr("Exit Full Screen"));
+        actionMainWindowItem[actionViewFullscreen]->setText(tr("Exit Full Screen"));
         this->showFullScreen();
     }
 }

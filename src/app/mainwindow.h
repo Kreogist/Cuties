@@ -137,7 +137,7 @@ private:
         //mnuViewDebugWatchDock,
         //mnuViewJudgeDock,
 #ifdef Q_OS_MACX
-        mnuViewFullscreen,
+        actionViewFullscreen,
 #endif
         actionViewEnd,
         actionSearchFind,
