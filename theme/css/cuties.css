@@ -46,7 +46,7 @@ a:active {
     box-shadow: 0 0 10px rgba(255,255,255,1);
     transition:box-shadow 0.4s;}
 #forkme_banner>a{text-decoration:none;color:#fff}
-
+#forkme_banner>a:hover{margin-left:0;}
 #banner-box{
     }
 #banner-summary{
@@ -99,7 +99,8 @@ a:active {
     font-size:1.5em;
     line-height:3em;
     }
-.content-box,.index-content{
+#left-box a:hover{color:inherit;margin-left:0;}
+.content-box{
     display:block;
     margin-top:0em;
     margin-left:13em;
@@ -111,7 +112,7 @@ a:active {
     text-shadow:1px 1px 0px black;
     background:rgba(0,0,0,0.2);
     box-shadow:1px 1px 5px black;}
-.content-box:hover,.index-content:hover{
+.content-box:hover{
     box-shadow:0 0 2px #cceeff;
     transition:box-shadow 0.6s}
 .articletitle{
