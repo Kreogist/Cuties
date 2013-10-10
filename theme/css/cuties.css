@@ -1,0 +1,183 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Code+Pro|Amarante|Anaheim|Rationale);
+body{
+  font-size:16px;
+  background:url("http://kreogist.github.io/Cuties/theme/img/pattern.png");
+  font-family:Anaheim;
+  }
+a:link {
+    color:#B6E6F7;
+    text-decoration:none;
+    transition:margin-left 0.2s;
+}
+a:visited {
+    color:#B6E6F7;
+    text-decoration:none;
+}
+    
+a:hover {
+    color:#47C9F7;
+    text-decoration:none;
+    margin-left:0.5em;
+    }
+    
+a:active {
+    color:#42C7F7;
+    text-decoration:none;
+}
+
+#forkme_banner {
+  display: block;
+  position: absolute;
+  top:0;
+  right: 10px;
+  z-index: 10;
+  padding: 10px 50px 10px 10px;
+  color: #fff;
+  background:url('http://kreogist.github.io/Cuties/theme/img/blacktocat.png') #0090ff no-repeat 95% 50%;
+  background-color:#282828;
+  background-size:20px 20px;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+#forkme_banner:hover{
+    color:#eee;
+    box-shadow: 0 0 10px rgba(255,255,255,1);
+    transition:box-shadow 0.4s;}
+#forkme_banner>a{text-decoration:none;color:#fff}
+#forkme_banner>a:hover{margin-left:0;}
+#banner-box{
+    }
+#banner-summary{
+    width:100%;
+    padding:10px;
+    color:white;
+    }
+#project-title{
+    margin:0;
+    padding:0;
+    width:2em;
+    font-size:6em;
+    font-family:Amarante;
+    color:rgba(255,255,255,1);
+    text-shadow:1px 1px 0px black,2px 2px 0px black,3px 3px 1px white;}
+#project-title>span{
+    font-family:Amarante;
+    font-size:0.2em;
+    vertical-align:top;
+    line-height:2em;
+}#project-tagline{
+    margin:0;
+    padding-left:0.5em;
+    font-size:1em;
+    font-family:Rationale;}
+#main-content-box{}
+#left-box{
+    font-family:Rationale;
+    position:absolute;
+    min-height:25em;
+    width:12em;
+    font-size:1em;
+    }
+#left-box:hover{box-shadow:0 0 2px #cceeff;
+    transition:box-shadow 0.6s;}
+#left-box ul{
+    margin-left:-1.8em;
+    list-style:none;
+    text-align:left;
+    }
+
+#left-box li:hover{
+    color:#cceeff;text-shadow:1px 1px 1px black;padding-left:1.5em;text-decoration:underline;
+    transition:color,text-shadow,font-size,padding-left 0.2s;
+    }
+#left-box li{
+    color:white;
+    display:block;
+    padding-left:1em;
+    font-size:1.5em;
+    line-height:3em;
+    }
+#left-box a:hover{color:inherit;margin-left:0;}
+.content-box{
+    display:block;
+    margin-top:0em;
+    margin-left:13em;
+    margin-right:1em;
+    width:auto;
+    min-height:24em;
+    padding:0.4em 1em 0.8em 1em;
+    color:#cfcfcf;
+    text-shadow:1px 1px 0px black;
+    background:rgba(0,0,0,0.2);
+    box-shadow:1px 1px 5px black;}
+.content-box:hover{
+    box-shadow:0 0 2px #cceeff;
+    transition:box-shadow 0.6s}
+.articletitle{
+    display:block;
+    padding:2px 10px;
+    font-size:3em;
+    font-family:Rationale;
+    }
+.articletitle:hover{
+    color:#47C9F7;
+    margin-left:0;}
+h1 a:hover,h2 a:hover,h3 a:hover,h4 a:hover,h5 a:hover,h6 a:hover{
+    margin-left:0;
+    color:inherit;
+    }
+.metaline{
+    font-family:Rationale;
+    text-align:right;
+    }
+.metaday,.metamon,.metayear{
+    padding-left:1em;}
+.metaday{
+    font-size:2em;
+    float:right;
+    }
+.metamon{
+    font-size:1.5em;
+    float:right;
+    }
+.metayear{
+    font-size:1em;
+    float:right;
+    }
+pre,blockquote{
+color:#eee;
+padding:5px;
+background-color:rgba(20,20,20,0.6);
+box-shadow:0px 0px 1px #222;
+padding-left:10px;
+border-left:2px solid rgba(47,160,255,0.6);
+overflow:auto;
+}
+blockquote{
+margin-left:0;
+margin-right:0;
+padding-top:1px;
+padding-bottom:1px;
+border-left:2px solid rgba(0,110,0,0.6);
+color:inherit;
+font-size:12px;
+line-height:18px;
+background-color:transparent;
+}
+code{
+font-family: 'Source Code Pro', sans-serif;
+font-weight:bold;
+padding-left:2px;
+padding-right:2px;
+margin-left:1px;
+margin-right:1px;
+border-radius:1px 1px 1px 1px;
+text-shadow:1px 1px 1px #000,1px 1px 2px #2FA2FF;
+}
+.paginator{
+    font-size:0.8em;
+    text-align:right;
+    padding-right:10em;}
+#footer_box{display:block;bottom:0%;width:100%;text-align:center;color:white;}
