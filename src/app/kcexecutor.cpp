@@ -126,8 +126,9 @@ void KCRunner::run()
         Terminal terminal=getDefaultTerminal();
         arg<<terminal.arg
 #endif
+
 #ifdef Q_OS_WIN32
-        <<"start"
+          <<"start"<<"cmd"<<"/c";
 #endif
         <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
 
