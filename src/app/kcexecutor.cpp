@@ -138,6 +138,7 @@ void KCRunner::run()
         Terminal terminal=getDefaultTerminal();
         executorArgv<<terminal.arg
 #endif
+
 #ifdef Q_OS_WIN32
                     //For Windows, we have to launch terminal by:
                     // cmd /c start cmd /c kciExecutor.exe C:\cppName.exe
