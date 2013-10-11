@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
 #ifdef _OS_MAC_X_
     system("clear");
 #endif
+#ifdef _OS_WIN32_
+    printf("Please wait...");
+#endif
 
     int l=strlen(argv[1])+2;
 
@@ -56,6 +59,10 @@ int main(int argc, char *argv[])
     //get start time
 
     double exec_time= gettime();
+#ifdef _OS_WIN32_
+    system("title Cuties Executor - " + program_name);
+    system("cls");
+#endif
 
     //run program
     system(program_name);
