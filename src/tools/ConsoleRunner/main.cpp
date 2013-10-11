@@ -44,11 +44,17 @@ int main(int argc, char *argv[])
 #ifdef _OS_MAC_X_
     system("clear");
 #endif
-#ifdef _OS_WIN32_
-    printf("Please wait...");
-#endif
 
     int l=strlen(argv[1])+2;
+
+#ifdef _OS_WIN32_
+    char *title=new char[l+100];
+    title[0]='\0';
+    strcat(title, "title Cuites Executor - ");
+    strcat(title, argv[1]);
+    system(title);
+    printf("Please wait...");
+#endif
 
     char *program_name=new char[l];
     memset(program_name,0,sizeof(char)*l);
@@ -57,10 +63,9 @@ int main(int argc, char *argv[])
     strcat(program_name,"\"");
 
     //get start time
-
     double exec_time= gettime();
+
 #ifdef _OS_WIN32_
-    system("title Cuties Executor - " + program_name);
     system("cls");
 #endif
 

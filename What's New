@@ -1,9 +1,7 @@
 0.0.2.2
 New Features:
 1. Multi-choices online search engine.
-
-Updates:
-1. Now can wait execute file running on Windows OS before launching.
+2. New Cuties Runner in Windows for waiting. Mac and Linux don't need to wait.
 
 Bug Fixed:
 1. Fixed the compiler environment variables setting error when compile file. 
