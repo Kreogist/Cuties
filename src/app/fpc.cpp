@@ -39,9 +39,9 @@ QStringList fpc::getCompileArg(const QString &filePath)
     return arg;
 }
 
-QStringList fpc::getCompileEnv()
+QString fpc::getCompileEnv()
 {
-    QStringList env;
+    QString env;
     return env;
 }
 

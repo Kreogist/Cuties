@@ -22,8 +22,10 @@
 
 #include <QFileInfo>
 #include <QRegularExpression>
-#include <QDebug>
 #include <QMessageBox>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
 
 #include "kccompilerbase.h"
 #include "kccompilerconfigure.h"
@@ -47,7 +49,7 @@ public:
 protected:
     QStringList getVersionArg();
     QStringList getCompileArg(const QString &filePath);
-    QStringList getCompileEnv();
+    QString getCompileEnv();
 
     void parseLine(const QString &text);
 

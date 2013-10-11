@@ -873,12 +873,12 @@
         <location filename="mainwindow.cpp" line="193"/>
         <location filename="mainwindow.cpp" line="1116"/>
         <source>Enter Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>进入全屏幕</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="195"/>
         <source>Show or hide fullscreen mode of Cuties.</source>
-        <translation type="unfinished"></translation>
+        <translation>显示或者退出全屏幕。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="201"/>
@@ -1053,7 +1053,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1121"/>
         <source>Exit Full Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>退出全屏幕</translation>
     </message>
 </context>
 <context>
@@ -1097,6 +1097,37 @@
         <location filename="dbgoutputreceiver.cpp" line="32"/>
         <source>value</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MAC_APPLICATION_MENU</name>
+    <message>
+        <source>Services</source>
+        <translation>服务</translation>
+    </message>
+    <message>
+        <source>Hide %1</source>
+        <translation>隐藏 %1</translation>
+    </message>
+    <message>
+        <source>Hide Others</source>
+        <translation>隐藏其他</translation>
+    </message>
+    <message>
+        <source>Show All</source>
+        <translation>全部显示</translation>
+    </message>
+    <message>
+        <source>Preferences...</source>
+        <translation>偏好设置</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>退出 %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>关于 %1</translation>
     </message>
 </context>
 </TS>

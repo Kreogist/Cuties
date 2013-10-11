@@ -177,4 +177,6 @@ OTHER_FILES += \
     default.style \
     COPYING.txt \
     Cuties.icns \
-    winico.rc
+    winico.rc \
+    translations/zh_CN.ts \
+    translations/en_US.ts

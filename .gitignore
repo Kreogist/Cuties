@@ -30,4 +30,4 @@ Makefile
 .DS_Store
 
 #astyle temp files
-*.*.orig
+Thumbs.db

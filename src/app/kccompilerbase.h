@@ -22,6 +22,7 @@
 
 #include <QScopedPointer>
 #include <QProcess>
+#include <QDebug>
 #include <QFileInfo>
 
 #include "kcconnectionhandler.h"
@@ -66,7 +67,7 @@ protected:
                             const QStringList &arg);
     virtual QStringList getVersionArg() = 0;
     virtual QStringList getCompileArg(const QString &filePath) = 0;
-    virtual QStringList getCompileEnv() = 0;
+    virtual QString getCompileEnv() = 0;
 
     virtual bool checkHasErrorByExitNum(const int &exitNum)
     {

@@ -94,9 +94,9 @@ private:
     QReadWriteLock output_lock;
     QByteArray user_output;
 
-    QString path;
+    QString executeFilePath;
 
-    QProcess *process;
+    QProcess *executeProcess;
     bool enabledBackExec;
     bool enabledAutoInput;
 };

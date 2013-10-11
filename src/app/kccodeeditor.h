@@ -22,8 +22,8 @@
 
 #include <QErrorMessage>
 #include <QFile>
-#include <QFileDialog>
 #include <QFileInfo>
+#include <QFileDialog>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QMessageBox>

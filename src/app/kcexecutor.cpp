@@ -21,9 +21,9 @@
 #include "kcexecutor.h"
 
 #ifdef Q_OS_WIN32
-const QString console_runner_path("KciConsoleRunner.exe");
+const QString consoleRunnerPath("KciConsoleRunner.exe");
 #else
-const QString console_runner_path("KciConsoleRunner");
+const QString consoleRunnerPath("KciConsoleRunner");
 #endif
 
 #ifdef Q_OS_UNIX
@@ -86,65 +86,79 @@ KCRunner::KCRunner(QObject *parent):
 {
     enabledAutoInput=false;
     enabledBackExec=true;
-    process=NULL;
+    executeProcess=NULL;
 }
 
 KCRunner::~KCRunner()
 {
-    if(process==NULL)
+    if(executeProcess==NULL)
     {
         return ;
     }
 
-    if(process->state() != QProcess::NotRunning)
+    if(executeProcess->state() != QProcess::NotRunning)
     {
-        process->kill();
-        process->waitForFinished();
+        executeProcess->kill();
+        executeProcess->waitForFinished();
     }
 }
 
 void KCRunner::run()
 {
-    process=new QProcess;
-    process->setReadChannelMode(QProcess::MergedChannels);
+    executeProcess=new QProcess;
+    executeProcess->setReadChannelMode(QProcess::MergedChannels);
     if(enabledBackExec)
     {
-        connect(process,SIGNAL(readyRead()),
+        connect(executeProcess,SIGNAL(readyRead()),
                 this,SLOT(onReadyRead()));
-        process->start(path);
+        executeProcess->start(executeFilePath);
     }
     else
     {
-        QStringList arg;
-        QFileInfo info(path);
+        QStringList executorArgv;
+        QFileInfo info(executeFilePath);
 
-        process->setWorkingDirectory(info.absoluteDir().absolutePath());
+        executeProcess->setWorkingDirectory(info.absoluteDir().absolutePath());
+        /*
+         * Here we have to launch terminal program.
+         *
+         * For Windows: launch cmd.exe
+         * For Mac OS X: we have a .command file to launch terminal.
+         * For Linux: launch Different Terminal program and send them args.
+         */
+        QString argExecuteFilePath=executeFilePath;
 
+        /*
+         * For Mac OS X, no terminal to execute. For others, use terminal to
+         * launch terminal and solve the Qt Background Running problem.
+         */
 #ifdef Q_OS_MACX
-        arg
+        executorArgv
 #else
         Terminal terminal=getDefaultTerminal();
-        arg<<terminal.arg
+        executorArgv<<terminal.arg
 #endif
 #ifdef Q_OS_WIN32
-        <<"start"
+                    //For Windows, we have to launch terminal by:
+                    // cmd /c start cmd /c kciExecutor.exe C:\cppName.exe
+                    <<"start"<<terminal.terminal_name<<terminal.arg
 #endif
-        <<qApp->applicationDirPath()+'/'+console_runner_path<<path;
+                    <<qApp->applicationDirPath()+'/'+consoleRunnerPath<<argExecuteFilePath;
 
-        connect(process,SIGNAL(finished(int)),
+        connect(executeProcess,SIGNAL(finished(int)),
                 this,SLOT(quit()));
         connect(this,SIGNAL(finished()),
                 this,SLOT(deleteLater()));
 #ifdef Q_OS_MACX
-        process->start(qApp->applicationDirPath() + "/openTerminal.command",arg);
+        executeProcess->start(qApp->applicationDirPath() + "/openTerminal.command",executorArgv);
 #else
-        process->start(QLatin1String(terminal.terminal_name),arg);
+        executeProcess->start(QLatin1String(terminal.terminal_name),executorArgv);
 #endif
     }
 
     if(enabledAutoInput)
     {
-        process->write(m_input);
+        executeProcess->write(m_input);
     }
 
     exec();
@@ -154,7 +168,7 @@ void KCRunner::onReadyRead()
 {
     output_lock.lockForWrite();
 
-    user_output+=process->readAll();
+    user_output+=executeProcess->readAll();
 
     output_lock.unlock();
 }
@@ -199,12 +213,12 @@ QByteArray KCRunner::getUserOutput()
 
 QString KCRunner::getPath() const
 {
-    return path;
+    return executeFilePath;
 }
 
 void KCRunner::setPath(const QString &value)
 {
-    path = value;
+    executeFilePath = value;
 }
 
 KCExecutor *KCExecutor::instance=NULL;

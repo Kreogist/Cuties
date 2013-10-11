@@ -35,15 +35,15 @@ inline double gettime()
 
 int main(int argc, char *argv[])
 {
-#ifdef _OS_MAC_X_
-    system("clear");
-#endif
-
     if(argc<2)
     {
         printf("Usage: KciConsoleRunner <console program path>\n");
         return 0;
     }
+
+#ifdef _OS_MAC_X_
+    system("clear");
+#endif
 
     int l=strlen(argv[1])+2;
 
