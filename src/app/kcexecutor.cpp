@@ -261,6 +261,5 @@ KCExecutor *KCExecutor::getInstance()
     {
         return instance=new KCExecutor;
     }
-
     return instance;
 }

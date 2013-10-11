@@ -270,12 +270,12 @@ void KCTextEditor::searchString(QString searchTextSets,
     if(searchText.isEmpty())
     {
         updateSearchResults();
-        QTextCursor clearCursor=textCursor();
-        clearCursor.clearSelection();
-        setTextCursor(clearCursor);
+        searchBackupCursor.clearSelection();
+        setTextCursor(searchBackupCursor);
     }
     else
     {
+        setTextCursor(searchBackupCursor);
         if(wholeWordSets)
         {
             if(!searchRegularExpression)
@@ -447,6 +447,14 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
     removeTabCursor.removeSelectedText();
 }
 
+void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
+{
+    if(tabPressCursor.selectedText().isEmpty())
+    {
+        insertTab(tabPressCursor);
+    }
+}
+
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
 {
     QString text=block.text();
@@ -462,6 +470,11 @@ void KCTextEditor::setDocumentCursor(int nLine, int linePos)
                         QTextCursor::MoveAnchor,
                         linePos);
     setTextCursor(cursor);
+}
+
+void KCTextEditor::backupSearchTextCursor()
+{
+    searchBackupCursor=textCursor();
 }
 
 void KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
@@ -787,8 +800,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }*/
     case Qt::Key_Tab:
     {
-
-        insertTab(_textCursor);
+        tabPressEvent(_textCursor);
         break;
     }
     case Qt::Key_Backspace:

@@ -45,6 +45,7 @@ class KCTextEditor : public QPlainTextEdit
 public:
     explicit KCTextEditor(QWidget *parent = 0);
     void setDocumentCursor(int nLine, int linePos);
+    void backupSearchTextCursor();
 
 signals:
     void updated();
@@ -101,6 +102,7 @@ private:
     int findFirstCharacter(const QTextBlock &block);
     void insertTab(QTextCursor insertTabCursor, int tabCount = 1);
     void removeTab(QTextCursor removeTabCursor, int tabCount = 1);
+    void tabPressEvent(QTextCursor tabPressCursor);
 
     KCEditorConfigure *configureInstance;
     KCClipboard *clipboard;
@@ -117,6 +119,7 @@ private:
     unsigned long long int searchCode;
     QScopedPointer<KCTextSearcher> searcherForPrev,searcherForNext;
     QFuture<void> threadPrev,threadNext;
+    QTextCursor searchBackupCursor;
 };
 
 #endif // CODEEDITOR_H

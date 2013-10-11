@@ -1,6 +1,6 @@
 0.0.2.2
 New Features:
-1. Custom online search engine.
+1. Multi-choices online search engine.
 
 Updates:
 1. Now can wait execute file running on Windows OS before launching.
@@ -9,6 +9,7 @@ Bug Fixed:
 1. Fixed the compiler environment variables setting error when compile file. 
 2. Fixed the executor launch bug on Windows OS.
 3. Fixed the backspace pressed but the selected text didn't clear bug.
+4. Fixed the search cursor jump bug.
 
 0.0.2.1
 Updates:

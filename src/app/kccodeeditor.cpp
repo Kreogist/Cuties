@@ -141,6 +141,7 @@ void KCCodeEditor::showSearchBar()
         searchAnime->setDuration(300);
         searchAnime->setEndValue(animeEndPos);
         searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+        editor->backupSearchTextCursor();
         searchBar->show();
         searchBar->restoreLastSearchText();
         searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
