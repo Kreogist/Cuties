@@ -801,6 +801,11 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Backspace:
     {
         int pos=findFirstCharacter(_textCursor.block());
+        if(_textCursor.selectedText().length()>0)
+        {
+            QPlainTextEdit::keyPressEvent(e);
+            break;
+        }
         if(_textCursor.positionInBlock()<=pos && pos!=0 && (!pos<configureInstance->getTabWidth()))
         {
             removeTab(_textCursor);
