@@ -417,42 +417,34 @@ void KCTextEditor::autoIndent()
     }
 }
 
-void KCTextEditor::insertTab(QTextCursor cursor, int count)
+void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
 {
-    cursor.clearSelection();
-    while(count--)
-    {
-        if(configureInstance->usingBlankInsteadTab())
-        {
-            QString space=" ";
-            cursor.insertText(space.repeated(configureInstance->getTabWidth()));
-        }
-        else
-        {
-            cursor.insertText("\t");
-        }
-    }
+    insertTabCursor.clearSelection();
+    QString spaceChar=configureInstance->usingBlankInsteadTab()?
+                      QString(" ").repeated(configureInstance->getTabWidth()):
+                      "\t";
+    insertTabCursor.insertText(spaceChar.repeated(tabCount));
 }
 
-void KCTextEditor::removeTab(QTextCursor cursor, int count)
+void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
 {
-    cursor.clearSelection();
-    while(count-- && !cursor.atBlockStart())
+    removeTabCursor.clearSelection();
+    while(tabCount-- && !removeTabCursor.atBlockStart())
     {
         if(configureInstance->usingBlankInsteadTab())
         {
-            cursor.movePosition(QTextCursor::Left,
-                                QTextCursor::KeepAnchor,
-                                configureInstance->getTabWidth());
+            removeTabCursor.movePosition(QTextCursor::Left,
+                                         QTextCursor::KeepAnchor,
+                                         configureInstance->getTabWidth());
         }
         else
         {
-            cursor.movePosition(QTextCursor::Left,
-                                QTextCursor::KeepAnchor);
+            removeTabCursor.movePosition(QTextCursor::Left,
+                                         QTextCursor::KeepAnchor);
         }
     }
 
-    cursor.removeSelectedText();
+    removeTabCursor.removeSelectedText();
 }
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
@@ -795,6 +787,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }*/
     case Qt::Key_Tab:
     {
+
         insertTab(_textCursor);
         break;
     }

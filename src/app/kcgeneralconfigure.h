@@ -2,8 +2,15 @@
 #define KCGENERALCONFIGURE_H
 
 #include <QString>
+#include <QList>
 
 #include "kcconfigure.h"
+
+struct searchEngine
+{
+    QString name;
+    QString engineURL;
+};
 
 class KCGeneralConfigure : public KCConfigure
 {
@@ -49,6 +56,12 @@ public:
     QString getAfFilter() const;
     void setAfFilter(const QString &value);
 
+    int getSearchEngineIndex() const;
+    void setSearchEngineIndex(int value);
+
+    QList<searchEngine> getSearchEngineList() const;
+    void setSearchEngineList(const QList<searchEngine> &value);
+
 private:
     KCGeneralConfigure();
     int defaultLanguageMode;
@@ -56,6 +69,8 @@ private:
     bool useDefaultLanguageWhenOpen;
     bool useDefaultLanguageWhenSave;
     static KCGeneralConfigure *instance;
+    int searchEngineIndex;
+    QList<searchEngine> searchEngineList;
 
     QString strFileFilter;
     QString asfFilter, ptfFilter, hfFilter, cfFilter, cppfFilter, pasfFilter, afFilter;

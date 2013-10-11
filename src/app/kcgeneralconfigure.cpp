@@ -9,11 +9,6 @@ KCGeneralConfigure *KCGeneralConfigure::getInstance()
 
 KCGeneralConfigure::KCGeneralConfigure()
 {
-    defaultLanguageMode=1;
-    rememberUnclosedFile=true;
-    useDefaultLanguageWhenOpen=false;
-    useDefaultLanguageWhenSave=true;
-
     asfFilter = tr("All Support Files")+
                 "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas)";
     ptfFilter = tr("Plain Text Files")+"(*.txt)";
@@ -30,6 +25,21 @@ KCGeneralConfigure::KCGeneralConfigure()
                     cppfFilter + ";;" +
                     pasfFilter + ";;" +
                     afFilter;
+
+    defaultLanguageMode=1;
+    rememberUnclosedFile=true;
+    useDefaultLanguageWhenOpen=false;
+    useDefaultLanguageWhenSave=true;
+
+    searchEngine defaultEngineGoogleAddor;
+    defaultEngineGoogleAddor.name=tr("Google");
+    defaultEngineGoogleAddor.engineURL="https://www.google.com.hk/#newwindow=1&safe=strict&q=";
+    searchEngineList.append(defaultEngineGoogleAddor);
+    searchEngine defaultEngineBaiduAddor;
+    defaultEngineBaiduAddor.name=tr("Baidu");
+    defaultEngineBaiduAddor.engineURL="http://www.baidu.com/s?wd=";
+    searchEngineList.append(defaultEngineBaiduAddor);
+    searchEngineIndex=0;
 }
 
 void KCGeneralConfigure::readConfigure()
@@ -60,6 +70,8 @@ void KCGeneralConfigure::readConfigure()
                                useDefaultLanguageWhenOpen).toBool();
     useDefaultLanguageWhenSave=settings.value("UseDefaultLanguageModeWhenSave",
                                useDefaultLanguageWhenSave).toBool();
+    searchEngineIndex=settings.value("SearchEngineIndex",
+                                     searchEngineIndex).toInt();
     settings.endGroup();
 }
 
@@ -71,6 +83,7 @@ void KCGeneralConfigure::writeConfigure()
     settings.setValue("RememberUnclosed", rememberUnclosedFile);
     settings.setValue("UseDefaultLanguageModeWhenOpen", useDefaultLanguageWhenOpen);
     settings.setValue("UseDefaultLanguageModeWhenSave", useDefaultLanguageWhenSave);
+    settings.setValue("SearchEngineIndex", searchEngineIndex);
     settings.endGroup();
 }
 
@@ -207,4 +220,24 @@ QString KCGeneralConfigure::getAsfFilter() const
 void KCGeneralConfigure::setAsfFilter(const QString &value)
 {
     asfFilter = value;
+}
+
+int KCGeneralConfigure::getSearchEngineIndex() const
+{
+    return searchEngineIndex;
+}
+
+void KCGeneralConfigure::setSearchEngineIndex(int value)
+{
+    searchEngineIndex = value;
+}
+
+QList<searchEngine> KCGeneralConfigure::getSearchEngineList() const
+{
+    return searchEngineList;
+}
+
+void KCGeneralConfigure::setSearchEngineList(const QList<searchEngine> &value)
+{
+    searchEngineList = value;
 }

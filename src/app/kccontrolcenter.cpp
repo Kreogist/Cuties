@@ -275,6 +275,23 @@ KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     connect(sbtClearHistory, &KCSettingListItemButton::buttonPressed,
             this, &KCCCTabGerneralContent::clearHistoryFilesRecord);
     MainLayout->addWidget(sbtClearHistory);
+
+    QLabel *tblSearch=new QLabel(this);
+    tblSearch->setText(" " + tr("Online Search Engine"));
+    tblSearch->setFont(TitleFont);
+    tblSearch->setFixedHeight(30);
+    MainLayout->addSpacing(5);
+    MainLayout->addWidget(tblSearch);
+
+    sboSearchEngine=new KCSettingListItemCombo(this);
+    sboSearchEngine->Caption->setText(tr("Online History Engine:"));
+    QList<searchEngine> searchEngines=KCGeneralConfigure::getInstance()->getSearchEngineList();
+    for(int i=0;i<searchEngines.count();i++)
+    {
+        sboSearchEngine->addListItem(searchEngines[i].name);
+    }
+    sboSearchEngine->setValue(KCGeneralConfigure::getInstance()->getSearchEngineIndex());
+    MainLayout->addWidget(sboSearchEngine);
 }
 
 void KCCCTabGerneralContent::apply()
@@ -288,6 +305,8 @@ void KCCCTabGerneralContent::apply()
     KCGeneralConfigure::getInstance()->setUseDefaultLanguageWhenSave(sboUseDefaultLanguageOnSave->getValue());
     //History Settings.
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(slnHistoryMax->getValue());
+    //Search
+    KCGeneralConfigure::getInstance()->setSearchEngineIndex(sboSearchEngine->getValue());
 }
 
 void KCCCTabGerneralContent::clearHistoryFilesRecord()

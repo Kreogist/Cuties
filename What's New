@@ -1,4 +1,7 @@
 0.0.2.2
+New Features:
+1. Custom online search engine.
+
 Updates:
 1. Now can wait execute file running on Windows OS before launching.
 

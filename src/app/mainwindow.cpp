@@ -992,8 +992,9 @@ void MainWindow::onActionCompileAndRun()
 
 void MainWindow::onActionSearchOnline()
 {
-    QString strURL="http://www.baidu.com/s?wd="+tabManager->textNowSelect();
-    QDesktopServices::openUrl(QUrl(strURL));
+    KCGeneralConfigure *instance=KCGeneralConfigure::getInstance();
+    QDesktopServices::openUrl(QUrl(instance->getSearchEngineList().at(instance->getSearchEngineIndex()).engineURL +
+                                   tabManager->textNowSelect()));
 }
 
 void MainWindow::changeSidebarVisibleState()

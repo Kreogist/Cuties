@@ -152,6 +152,7 @@ private:
     KCSettingListItemBoolean *sboUseDefaultLanguageOnOpen, *sboUseDefaultLanguageOnSave;
     KCSettingListItemNumInput *slnHistoryMax;
     KCSettingListItemButton *sbtClearHistory;
+    KCSettingListItemCombo *sboSearchEngine;
 };
 //------------------Editor---------------
 class KCCCTabEditorContent : public KCAbstractCCTabContent
