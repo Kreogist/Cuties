@@ -20,7 +20,7 @@
 
 #include "textcharformatmap.h"
 
-textCharFormatMap* textCharFormatMap::instance=nullptr;
+textCharFormatMap *textCharFormatMap::instance=nullptr;
 
 textCharFormatMap::textCharFormatMap(QObject *parent) :
     QObject(parent)
@@ -42,12 +42,13 @@ textCharFormatMap::textCharFormatMap(QObject *parent) :
         }
 
     }
-    else{
+    else
+    {
         qDebug()<<"textCharFormatMap: Can't not open default.style";
     }
 }
 
-textCharFormatMap* textCharFormatMap::getInstance()
+textCharFormatMap *textCharFormatMap::getInstance()
 {
     //FIXME: This isn't thread-safe
     if(instance == nullptr)
@@ -59,8 +60,8 @@ textCharFormatMap* textCharFormatMap::getInstance()
 }
 
 
-const QTextCharFormat& textCharFormatMap::getTextCharFormat(
-        const QString &typeName)
+const QTextCharFormat &textCharFormatMap::getTextCharFormat(
+    const QString &typeName)
 {
     return map[typeName];
 }
@@ -75,21 +76,27 @@ bool textCharFormatMap::parseStyleFileLine(char *str_line)
 {
     //ignore the comment line
     if(str_line[0]=='#' || (str_line[0]=='/' && str_line[1]=='/'))
+    {
         return true;
+    }
 
     QStringList tmp=QString(str_line).split("=");
 
     if(tmp.size()>2)
+    {
         return false;
+    }
 
     QString elem1 = tmp[0].simplified();
 
     if(elem1.isEmpty())
+    {
         return true;    //skip the empty line1
+    }
 
     tmp[1]=tmp[1].split("//").at(0).simplified();
 
-    if (tmp[1].at(0)!='$')
+    if(tmp[1].at(0)!='$')
     {
         //It's a defination of the elem1's text format.
         //First, split the comment part
@@ -108,7 +115,9 @@ bool textCharFormatMap::parseStyleFileLine(char *str_line)
                 textFormat.setFont(font);
             }
             else if(define[i] == "italic")
+            {
                 textFormat.setFontItalic(true);
+            }
             else if(define[i].at(0)=='#')
             {
                 Q_ASSERT(define[i].size()==7);
@@ -120,7 +129,9 @@ bool textCharFormatMap::parseStyleFileLine(char *str_line)
                 textFormat.setForeground(QBrush(QColor(r,g,b)));
             }
             else
+            {
                 qDebug()<<"highlighterbase:Unknow attitute";
+            }
         }
 
         map[elem1]=textFormat;
@@ -131,9 +142,13 @@ bool textCharFormatMap::parseStyleFileLine(char *str_line)
         QString elem2=tmp[1].mid(1).simplified();
         auto e2_iterator = map.find(elem2);
         if(e2_iterator != map.end())
+        {
             map[elem1]=e2_iterator.value();
+        }
         else
+        {
             qDebug()<<"highlighterbase:"<<elem2<<" hasn't been defined";
+        }
     }
 
     return true;

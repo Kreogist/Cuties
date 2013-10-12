@@ -23,7 +23,7 @@
 //all file that should be included by highlighter define here
 #include <QList>
 #include <QRegularExpression>
-#include "kcihighlighter.h"
+#include "kchighlighter.h"
 
 struct highlight_rule
 {

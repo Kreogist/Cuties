@@ -55,9 +55,9 @@ public:
                             const QWidget *w) const;
 
     QSize sizeFromContents(ContentsType ct,
-                          const QStyleOption *opt,
-                          const QSize &contentsSize,
-                          const QWidget *widget) const;
+                           const QStyleOption *opt,
+                           const QSize &contentsSize,
+                           const QWidget *widget) const;
 
     virtual int pixelMetric(PixelMetric metric, const QStyleOption *option = 0, const QWidget *widget = 0) const;
     QRect subElementRect(SubElement r, const QStyleOption *opt, const QWidget *widget = 0) const;

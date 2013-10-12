@@ -40,7 +40,7 @@ void KreogistCuteStyle::drawControl(ControlElement element,
     case CE_MenuItem:
     {
         const QStyleOptionMenuItem *_opt_menu_item=
-                qstyleoption_cast<const QStyleOptionMenuItem *>(opt);
+            qstyleoption_cast<const QStyleOptionMenuItem *>(opt);
         if(_opt_menu_item != nullptr)
         {
             drawMenuItem(_opt_menu_item,p,w);
@@ -50,7 +50,7 @@ void KreogistCuteStyle::drawControl(ControlElement element,
     case CE_TabBarTab:
     {
         const QStyleOptionTab *_opt_tab_item=
-                qstyleoption_cast<const QStyleOptionTab *>(opt);
+            qstyleoption_cast<const QStyleOptionTab *>(opt);
         if(_opt_tab_item != nullptr)
         {
             drawTabItem(_opt_tab_item,p,w);
@@ -74,7 +74,7 @@ void KreogistCuteStyle::drawTabItem(const QStyleOptionTab *opt,
         tmp.text=QString(opt->text.length(),QChar(' '));
         style->drawControl(CE_TabBarTab,&tmp,p,w);
         int alignment = Qt::AlignCenter | Qt::TextShowMnemonic;
-        if (!proxy()->styleHint(SH_UnderlineShortcut, opt, w))
+        if(!proxy()->styleHint(SH_UnderlineShortcut, opt, w))
         {
             alignment |= Qt::TextHideMnemonic;
         }
@@ -142,25 +142,28 @@ void KreogistCuteStyle::drawPrimitive(PrimitiveElement pe,
 {
     switch(pe)
     {
-    case PE_IndicatorTabClose: {
+    case PE_IndicatorTabClose:
+    {
         QIcon tabBarcloseButtonIcon;
         tabBarcloseButtonIcon.addPixmap(QPixmap(
-                    QLatin1String(":/toolbutton/image/TabCloseNormal.png")),
-                    QIcon::Normal, QIcon::Off);
+                                            QLatin1String(":/toolbutton/image/TabCloseNormal.png")),
+                                        QIcon::Normal, QIcon::Off);
         tabBarcloseButtonIcon.addPixmap(QPixmap(
-                    QLatin1String(":/toolbutton/image/TabCloseDown.png")),
-                    QIcon::Normal, QIcon::On);
+                                            QLatin1String(":/toolbutton/image/TabCloseDown.png")),
+                                        QIcon::Normal, QIcon::On);
         tabBarcloseButtonIcon.addPixmap(QPixmap(
-                    QLatin1String(":/toolbutton/image/TabCloseHover.png")),
-                    QIcon::Active, QIcon::Off);
+                                            QLatin1String(":/toolbutton/image/TabCloseHover.png")),
+                                        QIcon::Active, QIcon::Off);
         int size = proxy()->pixelMetric(QStyle::PM_SmallIconSize);
         QIcon::Mode mode = opt->state & State_Enabled ?
-                            (opt->state & State_Raised ? QIcon::Active : QIcon::Normal)
-                            : QIcon::Disabled;
-        if (!(opt->state & State_Raised)
-            && !(opt->state & State_Sunken)
-            && !(opt->state & QStyle::State_Selected))
+                           (opt->state & State_Raised ? QIcon::Active : QIcon::Normal)
+                               : QIcon::Disabled;
+        if(!(opt->state & State_Raised)
+           && !(opt->state & State_Sunken)
+           && !(opt->state & QStyle::State_Selected))
+        {
             mode = QIcon::Disabled;
+        }
 
         QIcon::State state = opt->state & State_Sunken ? QIcon::On : QIcon::Off;
         QPixmap pixmap = tabBarcloseButtonIcon.pixmap(size, mode, state);
@@ -173,9 +176,9 @@ void KreogistCuteStyle::drawPrimitive(PrimitiveElement pe,
 }
 
 void KreogistCuteStyle::drawComplexControl(ComplexControl cc,
-                                           const QStyleOptionComplex *opt,
-                                           QPainter *p,
-                                           const QWidget *w) const
+        const QStyleOptionComplex *opt,
+        QPainter *p,
+        const QWidget *w) const
 {
     style->drawComplexControl(cc,opt,p,w);
 }
@@ -193,37 +196,38 @@ void KreogistCuteStyle::drawItemText(QPainter *painter,
 }
 
 QSize KreogistCuteStyle::sizeFromContents(ContentsType ct,
-                                         const QStyleOption *opt,
-                                         const QSize &contentsSize,
-                                         const QWidget *widget) const
+        const QStyleOption *opt,
+        const QSize &contentsSize,
+        const QWidget *widget) const
 {
 
     switch(ct)
     {
-        case CT_MenuItem:
+    case CT_MenuItem:
+    {
+        const QStyleOptionMenuItem *_opt_menu_item=qstyleoption_cast<const QStyleOptionMenuItem *>(opt);
+        QSize ret=style->sizeFromContents(ct,opt,contentsSize,widget);
+        if(_opt_menu_item->menuItemType != QStyleOptionMenuItem::Separator)
         {
-            const QStyleOptionMenuItem* _opt_menu_item=qstyleoption_cast<const QStyleOptionMenuItem*>(opt);
-            QSize ret=style->sizeFromContents(ct,opt,contentsSize,widget);
-            if(_opt_menu_item->menuItemType != QStyleOptionMenuItem::Separator)
-            {
-                ret.setHeight(42);
-            }
-            return ret;
-            break;
+            ret.setHeight(42);
         }
-        default:
-        {
-            return style->sizeFromContents(ct,opt,contentsSize,widget);
-        }
+        return ret;
+        break;
+    }
+    default:
+    {
+        return style->sizeFromContents(ct,opt,contentsSize,widget);
+    }
     }
 }
 
 int KreogistCuteStyle::pixelMetric(PixelMetric metric,
-                                     const QStyleOption *option,
+                                   const QStyleOption *option,
                                    const QWidget *widget) const
 {
     int pIntValue = style->pixelMetric(metric,option,widget);
-    switch (metric) {
+    switch(metric)
+    {
     case QStyle::PM_SmallIconSize:
         pIntValue=40;
         break;
@@ -247,9 +251,9 @@ QRect KreogistCuteStyle::subElementRect(SubElement r,
     return style->subElementRect(r,opt,widget);
 }
 QStyle::SubControl KreogistCuteStyle::hitTestComplexControl(ComplexControl cc,
-                                                    const QStyleOptionComplex *opt,
-                                                    const QPoint &pt,
-                                                    const QWidget *w) const
+        const QStyleOptionComplex *opt,
+        const QPoint &pt,
+        const QWidget *w) const
 {
     return style->hitTestComplexControl(cc,opt,pt,w);
 }
@@ -261,8 +265,8 @@ QRect KreogistCuteStyle::subControlRect(ComplexControl cc,
     return style->subControlRect(cc,opt,sc,widget);
 }
 QPixmap KreogistCuteStyle::generatedIconPixmap(QIcon::Mode iconMode,
-                                               const QPixmap &pixmap,
-                                               const QStyleOption *opt) const
+        const QPixmap &pixmap,
+        const QStyleOption *opt) const
 {
     return style->generatedIconPixmap(iconMode,pixmap,opt);
 }
@@ -296,8 +300,8 @@ QIcon KreogistCuteStyle::standardIcon(StandardPixmap standardIcon,
     }
 }
 QPixmap KreogistCuteStyle::standardPixmap(StandardPixmap standardPixmap,
-                                          const QStyleOption *opt,
-                                          const QWidget *widget) const
+        const QStyleOption *opt,
+        const QWidget *widget) const
 {
     switch(standardPixmap)
     {
@@ -307,7 +311,7 @@ QPixmap KreogistCuteStyle::standardPixmap(StandardPixmap standardPixmap,
     }
 }
 void KreogistCuteStyle::drawItemPixmap(QPainter *painter, const QRect &rect,
-                    int alignment, const QPixmap &pixmap) const
+                                       int alignment, const QPixmap &pixmap) const
 {
     return style->drawItemPixmap(painter,rect,alignment,pixmap);
 }

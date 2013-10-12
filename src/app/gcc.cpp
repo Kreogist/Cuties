@@ -20,10 +20,10 @@
 #include "gcc.h"
 
 gcc::gcc(QObject *parent) :
-    compilerBase(parent)
+    KCCompilerBase(parent)
 {
     isCompileCpp=true;
-    instance=kciCompilerConfigure::getInstance();
+    instance=KCCompilerConfigure::getInstance();
 }
 
 QStringList gcc::getVersionArg()
@@ -39,9 +39,13 @@ QStringList gcc::getCompileArg(const QString &filePath)
     QStringList arg;
 
     if(fileInfo.suffix() == "c")
+    {
         isCompileCpp=false;
+    }
     else
+    {
         isCompileCpp=true;
+    }
 
     arg<<filePath<<"-lm"<<"-ggdb"<<"-Wall";
 
@@ -51,12 +55,12 @@ QStringList gcc::getCompileArg(const QString &filePath)
     if(fileInfo.absolutePath().right(1)=="/")
     {
         programName=fileInfo.absolutePath()
-                +fileInfo.completeBaseName();
+                    +fileInfo.completeBaseName();
     }
     else
     {
         programName=fileInfo.absolutePath() + "/"
-                +fileInfo.completeBaseName();
+                    +fileInfo.completeBaseName();
     }
 
 #ifdef Q_OS_WIN32
@@ -69,15 +73,17 @@ QStringList gcc::getCompileArg(const QString &filePath)
     return arg;
 }
 
-QStringList gcc::getcompileEnv()
+QString gcc::getCompileEnv()
 {
-    QStringList env;
-
+    QString envPath;
 #ifdef Q_OS_WIN
-    env<<this->path();
+    QDir envDir(this->compilerPath());
+    envDir.setPath(envDir.absolutePath().left(envDir.absolutePath().length()-envDir.dirName().length()));
+    envDir.setPath(envDir.absolutePath().left(envDir.absolutePath().length()-envDir.dirName().length()-1));
+    envPath=envDir.absolutePath();
+    envPath.replace("/","\\");
 #endif
-
-    return env;
+    return envPath + "\\Bin;" + envPath + "\\lib";
 }
 
 void gcc::parseLine(const QString &text)
@@ -85,54 +91,64 @@ void gcc::parseLine(const QString &text)
     QString strJudgedStr=text.left(2).toLower();
     if(strJudgedStr=="in" || strJudgedStr=="  ")
     {
-        ErrInfo error;
-        error.nColumnNum=-1;
-        error.nLineNum=-1;
-        error.strErrDescription=text;
-        error.strErrDescription=error.strErrDescription.remove(
-                    error.strErrDescription.length()-1,1);
-        error.strFilePath="";
+        compileErrorInfo newCompilerErrorInfo;
+        newCompilerErrorInfo.errorColumn=-1;
+        newCompilerErrorInfo.errorLine=-1;
+        newCompilerErrorInfo.errorDescription=text;
+        newCompilerErrorInfo.errorDescription=newCompilerErrorInfo.errorDescription.remove(
+                                    newCompilerErrorInfo.errorDescription.length()-1,1);
+        newCompilerErrorInfo.errorFilePath="";
 
-        emit compileError(error);
+        emit compileError(newCompilerErrorInfo);
     }
     else
     {
-        QRegularExpression expressMsg("(<command[ -]line>|([A-Za-z]:)?[^:]+):");
-        QRegularExpressionMatch match=expressMsg.match(text);
-        if(match.hasMatch())
+        QRegularExpression errorMessageExpression("(<command[ -]line>|([A-Za-z]:)?[^:]+):");
+        QRegularExpressionMatch errorMatcher=errorMessageExpression.match(text);
+        if(errorMatcher.hasMatch())
         {
-            QString FileName=match.captured();
-            int NewHead=FileName.length();
-            FileName.chop(1);
+            QString errorFileName=errorMatcher.captured();
+            int NewHead=errorFileName.length();
+            errorFileName.chop(1);
             //remove :
             //for example ,match.captured() is "/home/user/desktop/test.cpp:"
             //and the FileName should be "/home/user/desktop/test.cpp"
 
-            QString ErrorDetailInfo=text.mid(NewHead);
-            ErrorDetailInfo.chop(1);    //remove :
+            QString errorDetailInfo=text.mid(NewHead);
+            errorDetailInfo.chop(1);    //remove :
 
+            errorMessageExpression.setPattern("(\\d+):(\\d+)");
+            errorMatcher=errorMessageExpression.match(errorDetailInfo);
 
-            expressMsg.setPattern("(\\d+):(\\d+)");
-            match=expressMsg.match(ErrorDetailInfo);
+            compileErrorInfo newCompilerErrorInfo;
+            newCompilerErrorInfo.errorFilePath=errorFileName;
+            newCompilerErrorInfo.errorDescription=errorDetailInfo;
 
-            ErrInfo error;
-            error.strFilePath=FileName;
-            error.strErrDescription=ErrorDetailInfo;
-
-            if(match.hasMatch())
+            if(errorMatcher.hasMatch())
             {
-                error.nLineNum=match.captured(1).toInt();
-                error.nColumnNum=match.captured(2).toInt();
+                newCompilerErrorInfo.errorLine=errorMatcher.captured(1).toInt();
+                newCompilerErrorInfo.errorColumn=errorMatcher.captured(2).toInt();
             }
             else
             {
-                //some message may not contian line/column number
-                //for example: the message may be " in function ‘int main()’ "
-                error.nLineNum=-1;
-                error.nColumnNum=-1;
+                errorMessageExpression.setPattern("(\\d+): ");
+                errorMatcher=errorMessageExpression.match(errorDetailInfo);
+
+                if(errorMatcher.hasMatch())
+                {
+                    newCompilerErrorInfo.errorLine=errorMatcher.captured(1).toInt();
+                    newCompilerErrorInfo.errorColumn=-1;
+                }
+                else
+                {
+                    //some message may not contain line/column number
+                    //for example: the message may be " in function ‘int main()’ "
+                    newCompilerErrorInfo.errorLine=-1;
+                    newCompilerErrorInfo.errorColumn=-1;
+                }
             }
 
-            emit compileError(error);
+            emit compileError(newCompilerErrorInfo);
         }
     }
 }

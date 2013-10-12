@@ -28,3 +28,6 @@ Makefile
 #Mac Spotlight Search
 
 .DS_Store
+
+#astyle temp files
+Thumbs.db

@@ -1,4 +1,4 @@
-Indentation
+﻿Indentation
 ===========
 4 spaces are used for indentation
 Using **spaces** instead of using tabs
@@ -21,6 +21,7 @@ Whitespace
 + For pointers or references, always use a single space between the type and ‘*’ or ‘&’, but no space between the ‘*’ or ‘&’ and the variable name.
 + No space after a cast
 + Avoid C-style casts when possible
+
         // Wrong
         char* blockOfMemory = (char* ) malloc(data.size());
            
@@ -83,12 +84,10 @@ Line breaks
 ===========
 + Keep lines shorter than 100 characters; wrap if necessary
 + Operators go at the end of wrapped lines.
-
-        if (longExpression +
-            otherLongExpression +
-            otherOtherLongExpression)
-        {
-            
-        }
+            if (longExpression +
+                otherLongExpression +
+                otherOtherLongExpression)
+            {
+            }
 
 

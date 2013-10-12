@@ -39,55 +39,47 @@
 #include <QMenuBar>
 #endif
 
-#include "kciglobal.h"
-#include "kcisidebar.h"
-#include "kcicompiledock.h"
-#include "kcijudgedock.h"
-#include "kcidebugdock.h"
-#include "kcidebugwatchdock.h"
-#include "kcititlebar.h"
-#include "kcistatusbar.h"
-#include "kcitabmanager.h"
-#include "kcitexteditor.h"
-#include "kcimainwindow.h"
-#include "kcicontrolcenter.h"
-#include "kciexecutor.h"
+#include "kcglobal.h"
+#include "kcsidebar.h"
+#include "kccompiledock.h"
+#include "kcjudgedock.h"
+#include "kctitlebar.h"
+#include "kcstatusbar.h"
+#include "kctabmanager.h"
+#include "kctexteditor.h"
+#include "kcmainwindow.h"
+#include "kccontrolcenter.h"
+#include "kcexecutor.h"
 #include "kreogistcutestyle.h"
-#include "kcimessagebox.h"
+#include "kcmessagebox.h"
 
-#include "kcimessagebox.h"
-
-class MainWindow : public kciMainWindow
+class MainWindow : public KCMainWindow
 {
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
-    
+
 signals:
-    
+
 public slots:
     void show();
-    void aboutQt();
-    void aboutKCI();
-    void compileCurrentFile();
     void startDebug();
-    void run();
-    void compileAndRun();
-    void searchOnline();
-    void diffVisibleSidebar();
-    void diffVisibleCompileDock();
-    void diffVisibleDebugDock();
-    void diffVisibleJudgeDock();
-    void diffVisibleDebugWatchDock();
+    void onActionCompileAndRun();
+    void onActionRun();
+    void onActionCompile();
+    void onActionSearchOnline();
     void statusShowGoto();
-
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
-
     void onCurrentTabChanged();
 
 private slots:
+    void aboutQt();
+    void aboutCuties();
+    void changeSidebarVisibleState();
+    void changeCompileDockVisibleState();
+    void changeJudgeDockVisibleState();
     void showPreference();
 #ifdef Q_OS_MACX
     void setFullScreen();
@@ -100,111 +92,101 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private:
-    enum MainWindowActions
+    //Enumerate MainWindow menu items
+    enum menuMainWindow
     {
-        mnuFileNewFile,
-        mnuFileOpen,
-        mnuFileSave,
-        mnuFileSaveAs,
-        mnuFileSaveAll,
-        mnuFileClose,
-        mnuFileCloseAll,
-        mnuFileCloseAllExceptThis,
-        mnuFileExit,
-        mnuEditUndo,
-        mnuEditRedo,
-        mnuEditCut,
-        mnuEditCopy,
-        mnuEditPaste,
-        mnuEditSelectAll,
-        mnuEditPreferences,
-        mnuViewSidebar,
-        mnuViewCompileDock,
-        //mnuViewDebugDock,
-        //mnuViewDebugWatchDock,
+        menuFile,
+        menuEdit,
+        menuView,
+        menuSearch,
+        menuExecute,
+        menuTools,
+        menuWindow,
+        menuHelp,
+        menuMainItemsCount  //the number of menus
+    };
+    //Define MainWindow menu items
+    QMenu *menuMainWindowItem[menuMainItemsCount];
+
+    //Enumerate MainWindow menu action items
+    enum actionMainWindow
+    {
+        actionFileNewFile,
+        actionFileOpen,
+        actionFileSave,
+        actionFileSaveAs,
+        actionFileSaveAll,
+        actionFileClose,
+        actionFileCloseAll,
+        actionFileCloseAllExceptThis,
+        actionFileExit,
+        actionEditUndo,
+        actionEditRedo,
+        actionEditCut,
+        actionEditCopy,
+        actionEditPaste,
+        actionEditSelectAll,
+        actionEditPreferences,
+        actionViewSidebar,
+        actionViewCompileDock,
         //mnuViewJudgeDock,
 #ifdef Q_OS_MACX
-        mnuViewFullscreen,
+        actionViewFullscreen,
 #endif
-        mnuViewEnd,
-        mnuSearchFind,
+        actionViewEnd,
+        actionSearchFind,
         //mnuSearchFindInFiles,
-        mnuSearchReplace,
+        actionSearchReplace,
         //mnuSearchReplaceInFiles,
-        mnuSearchSearchOnline,
-        mnuSearchGoto,
-        mnuExecuteCompileAndRun,
-        mnuExecuteCompile,
-        mnuExecuteRun,
+        actionSearchSearchOnline,
+        actionSearchGoto,
+        actionExecuteCompileAndRun,
+        actionExecuteCompile,
+        actionExecuteRun,
         /*mnuExecuteParameters,
         mnuExecuteSetInputFile,
         mnuExecuteShowOutputFile,
         mnuExecuteRunAndShowOutputFile,
         mnuExecuteSetInputRunShowOutput,*/
-        /*mnuDebugStart,
-        mnuDebugStopExecute,
-        mnuDebugSetBreakPoint,
-        mnuDebugNextLine,
-        mnuDebugIntoLine,
-        mnuDebugNextInstruction,
-        mnuDebugIntoInstruction,
-        mnuDebugContinue,
-        mnuDebugSkipFunction,
-        mnuDebugAddWatch,
-        mnuDebugModifyWatch,
-        mnuDebugRemoveWatch,*/
-        //mnuWindowSplit,
-        mnuWindowPrev,
-        mnuWindowNext,
-        mnuHelpAbout,
-        mnuHelpAboutQt,
-        act_count   //the number of actions.
+        actionWindowPrev,
+        actionWindowNext,
+        actionHelpAbout,
+        actionHelpAboutQt,
+        actionMainWindowCount   //The number of Main Menu Actions.
     };
+    //Define MainWindow menu actions
+    QAction *actionMainWindowItem[actionMainWindowCount];
+    //Define the status tips and icon path of the actions.
+    QString stringActionStatusTips[actionMainWindowCount];
+    QString stringActionIconPath[actionMainWindowCount];
 
-    enum MainWindowMenu
+    //Enumerate Toolbar button items
+    enum mainToolbarButton
     {
-        mnuFile,
-        mnuEdit,
-        mnuView,
-        mnuSearch,
-        mnuExecute,
-        //mnuDebug,
-        mnuTools,
-        mnuWindow,
-        mnuHelp,
-        menu_count  //the number of menus
+        toolButtonNewFile,
+        toolButtonOpenFile,
+        toolButtonSaveFile,
+        toolButtonCut,
+        toolButtonCopy,
+        toolButtonPaste,
+        toolButtonUndo,
+        toolButtonRedo,
+        toolButtonSearch,
+        toolButtonCompileAndRun,
+        mainToolbarButtonCount // The number of toolbar buttons
     };
+    //Define MainWindow Toolbar buttons.
+    QToolButton *buttonMainToolbarItem[mainToolbarButtonCount];
 
-    enum MainToolBarButton
-    {
-        tlbNewFile,
-        tlbOpenFile,
-        tlbSaveFile,
-        tlbCut,
-        tlbCopy,
-        tlbPaste,
-        tlbUndo,
-        tlbRedo,
-        tlbSearch,
-        tlbCompileAndRun,
-        tlbbutton_count // the number of toolbar buttons
-    };
+    //Define MainWindow last time opened position.
+    int lastPositionX, lastPostionY, lastPositionHeight, lastPostionWidth;
 
-    int sgoX, sgoY, sgoH, sgoW;
-
-    //kciTextEditor *editor;
-    kciTabManager *tabManager;
-    QAction *act[act_count];
-    QMenu *menu[menu_count];
-    QString actStatusTips[act_count], actMenuIconPath[act_count];
-    QToolButton *tblMainButton[tlbbutton_count];
-    kciSideBar *sidebarDock;
-    kcicompiledock *compileDock;
-    kciDebugDock *debugDock;
-    kciDebugWatchDock *debugWatchDock;
-    kciJudgeDock *judgeDock;
-    kciTitleBar *titlebar;
-    kciStatusBar *myStatusBar;
+    KCTabManager *tabManager;
+    KCSideBar *sideBar;
+    KCCompileDock *compileDock;
+    KCJudgeDock *judgeDock;
+    KCTitleBar *titlebar;
+    KCStatusBar *statusBar;
     QMetaObject::Connection compileFinishedConnection;
 
     void saveSettings();

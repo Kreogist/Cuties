@@ -23,27 +23,33 @@
 #include <QRegularExpression>
 #include <QDebug>
 
-#include "compilerbase.h"
-#include "kcicompilerconfigure.h"
+#include "kccompilerbase.h"
+#include "kccompilerconfigure.h"
 
-class fpc : public compilerBase
+class fpc : public KCCompilerBase
 {
     Q_OBJECT
 public:
     explicit fpc(QObject *parent = 0);
     void startCompile(const QString &filePath);
-    QString path(){return instance->getFpcPath();}
-    virtual QString compilerName() { return "fpc";}
-    
+    QString compilerPath()
+    {
+        return instance->getFpcPath();
+    }
+    virtual QString compilerName()
+    {
+        return "fpc";
+    }
+
 protected:
     QStringList getVersionArg();
     QStringList getCompileArg(const QString &filePath);
-    QStringList getcompileEnv();
+    QString getCompileEnv();
 
     void parseLine(const QString &text);
 
 private:
-    kciCompilerConfigure* instance;
+    KCCompilerConfigure *instance;
 };
 
 #endif // FPC_H

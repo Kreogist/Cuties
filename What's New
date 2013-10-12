@@ -1,3 +1,37 @@
+0.1.0.0
+Updates:
+1. Clear some commit.
+
+0.0.2.2
+New Features:
+1. Multi-choices online search engine.
+2. New Cuties Runner in Windows for waiting. Mac and Linux don't need to wait.
+
+Bug Fixed:
+1. Fixed the compiler environment variables setting error when compile file. 
+2. Fixed the executor launch bug on Windows OS.
+3. Fixed the backspace pressed but the selected text didn't clear bug.
+4. Fixed the search cursor jump bug.
+
+0.0.2.1
+Updates:
+1. Re-factor the save process.
+2. New search result colour.
+3. Enhance the search speed and user experience.
+
+Bug Fixed:
+1. Fixed the file saved failed dialogue pop up bug when user cancel the save process.
+2. Fixed the backspace invalidated bug when user select a section.
+3. Reset the default pascal compiler path.
+
+0.0.2.0
+Updates:
+1. Enhanced control center widgets.
+2. A more steady Compile Dock.
+
+Bug Fixed:
+1. Fixed the bug when compile a plain text file caused a crash.
+
 0.0.1.0
 New Features:
 1. Auto selected to the default language suffix when opening and saving files.

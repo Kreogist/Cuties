@@ -29,44 +29,45 @@
 #include <QStringList>
 #include <QStyleFactory>
 #include <QDebug>
+#include <QTimer>
 
 #include "mainwindow.h"
-#include "kciglobal.h"
+#include "kcglobal.h"
+#include "kcsplashscreen.h"
+#include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 
-int main(int argc, char *argv[])
+static void initApplicationInfo()
 {
-    //Load QApplication Object.
-    QApplication app(argc,argv);
-
-    //Initialize Application Infomation.
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.0.1.0"));
+    QApplication::setApplicationVersion(QString("0.1.0.0"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
-
-    //Initialize Application Icon.
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.ico"));
+}
 
-    //Initialize Application Fonts.
+static void initApplicationFonts()
+{
     QStringList filter;
     QDir *dir=new QDir(QString(qApp->applicationDirPath() + "/Fonts/"));
     QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
 
     int fontID(-1);
     bool fontWarningShown(false);
-    for (QList<QFileInfo>::iterator i=list->begin();
-         i!=list->end();
-         ++i)
+    for(QList<QFileInfo>::iterator i=list->begin();
+        i!=list->end();
+        ++i)
     {
         if(i->fileName().length() < 4)
         {
             continue;
         }
         QFile res(i->filePath());
-        if (res.open(QIODevice::ReadOnly) == false) {
-            if (fontWarningShown == false) {
+        if(res.open(QIODevice::ReadOnly) == false)
+        {
+            if(fontWarningShown == false)
+            {
                 QMessageBox::warning(0,
                                      QApplication::applicationName(),
                                      QString(QApplication::tr("Error occur when load font file.")) +
@@ -75,9 +76,12 @@ int main(int argc, char *argv[])
                                      res.errorString());
                 fontWarningShown = true;
             }
-        } else {
+        }
+        else
+        {
             fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
-            if (fontID == -1 && fontWarningShown == false) {
+            if(fontID == -1 && fontWarningShown == false)
+            {
                 QMessageBox::warning(0,
                                      QApplication::applicationName(),
                                      QString(QApplication::tr("Error occur when load font file.")) +
@@ -88,12 +92,41 @@ int main(int argc, char *argv[])
             }
         }
     }
+}
 
-    //Initialize Application Settings.
-    kciGlobal* kciGlobalInstance = kciGlobal::getInstance();
-    kciGlobalInstance->readSettings();
+static void initApplicationSettings()
+{
+    KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
+    KCGlobalInstance->readSettings();
+}
 
-    //Initialize Application Language.
+int main(int argc, char *argv[])
+{
+    //Load QApplication Object.
+    QApplication app(argc,argv);
+
+    //Load Splash Screen
+    KCSplashScreen *splash=new KCSplashScreen;
+    splash->setPixmap(QPixmap(":/img/image/Splash.png"));
+    splash->show();
+    splash->raise();
+    app.processEvents();
+
+    /*static int splashAlign=Qt::AlignBottom|Qt::AlignRight;
+    splash->showMessage(QApplication::tr("Initialize Application"),
+                        splashAlign);*/
+    initApplicationInfo();
+    app.processEvents();
+
+    /*splash->showMessage(QApplication::tr("Initialize Application Fonts"),
+                        splashAlign);*/
+    initApplicationFonts();
+    app.processEvents();
+
+    /*splash->showMessage(QApplication::tr("Initialize Application Settings"),
+                        splashAlign);*/
+    initApplicationSettings();
+    app.processEvents();
 
     //Initalize Application Palette.
     QPalette pal=app.palette();
@@ -107,8 +140,8 @@ int main(int argc, char *argv[])
     app.setStyle(cuteStyle);
 
     //Initalize and show Application MainWindow.
-    MainWindow mainwindow;
-    mainwindow.show();
+    MainWindow mainWindow;
+    mainWindow.show();
 
     return app.exec();
 }

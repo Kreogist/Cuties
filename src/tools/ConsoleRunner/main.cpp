@@ -35,27 +35,39 @@ inline double gettime()
 
 int main(int argc, char *argv[])
 {
-#ifdef _OS_MAC_X_
-    system("clear");
-#endif
-
     if(argc<2)
     {
         printf("Usage: KciConsoleRunner <console program path>\n");
         return 0;
     }
 
+#ifdef _OS_MAC_X_
+    system("clear");
+#endif
+
     int l=strlen(argv[1])+2;
 
-    char* program_name=new char[l];
+#ifdef _OS_WIN32_
+    char *title=new char[l+100];
+    title[0]='\0';
+    strcat(title, "title Cuites Executor - ");
+    strcat(title, argv[1]);
+    system(title);
+    printf("Please wait...");
+#endif
+
+    char *program_name=new char[l];
     memset(program_name,0,sizeof(char)*l);
     program_name[0]='\"';
     strcat(program_name,argv[1]);
     strcat(program_name,"\"");
 
     //get start time
-
     double exec_time= gettime();
+
+#ifdef _OS_WIN32_
+    system("cls");
+#endif
 
     //run program
     system(program_name);
@@ -68,12 +80,12 @@ int main(int argc, char *argv[])
 
     printf("\nPress "
 
-    #ifdef _OS_WIN32_
-            "any key"
-    #else
-            "ENTER"
-    #endif
-            " to continue.\n");
+#ifdef _OS_WIN32_
+           "any key"
+#else
+           "ENTER"
+#endif
+           " to continue.\n");
 
     wait_key();
 

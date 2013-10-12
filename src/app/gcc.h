@@ -22,32 +22,40 @@
 
 #include <QFileInfo>
 #include <QRegularExpression>
-#include <QDebug>
 #include <QMessageBox>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
 
-#include "compilerbase.h"
-#include "kcicompilerconfigure.h"
+#include "kccompilerbase.h"
+#include "kccompilerconfigure.h"
 
-class gcc : public compilerBase
+class gcc : public KCCompilerBase
 {
     Q_OBJECT
 public:
     explicit gcc(QObject *parent = 0);
-    QString path(){return isCompileCpp?
-                    instance->getGppPath():instance->getGccPath();}
-    void setCompilerPath(const QString& path);
-    QString compilerName(){return "g++";}
+    QString compilerPath()
+    {
+        return isCompileCpp?
+               instance->getGppPath():instance->getGccPath();
+    }
+    void setCompilerPath(const QString &compilerPath);
+    QString compilerName()
+    {
+        return "g++";
+    }
 
 protected:
     QStringList getVersionArg();
     QStringList getCompileArg(const QString &filePath);
-    QStringList getcompileEnv();
+    QString getCompileEnv();
 
     void parseLine(const QString &text);
 
 private:
     bool isCompileCpp;
-    kciCompilerConfigure* instance;
+    KCCompilerConfigure *instance;
 };
 
 #endif // GCC_H

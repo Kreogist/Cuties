@@ -29,7 +29,7 @@ QString gdb::gdbPath="c:\\MinGW\\bin\\gdb";
 
 bool gdb::checkResult=false;
 
-static bool isAnsycChar(const char& c)
+static bool isAnsycChar(const char &c)
 {
     return (c >= 'a' && c <= 'z') || c == '-';
 }
@@ -63,11 +63,13 @@ void gdb::readGdbStandardOutput()
 void gdb::parseLine(const QString &_msg)
 {
     if(_msg.isEmpty() || _msg.contains("(gdb)"))
+    {
         return ;
+    }
 
     char _firstChar=_msg.begin()->toLatin1();
-    const QChar* begin=_msg.begin();
-    const QChar* end=_msg.end();
+    const QChar *begin=_msg.begin();
+    const QChar *end=_msg.end();
 
     switch(_firstChar)
     {
@@ -76,19 +78,25 @@ void gdb::parseLine(const QString &_msg)
         begin++;
 
         QString _str_async;
-        for(;begin<end;begin++)
+        for(; begin<end; begin++)
         {
             if(isAnsycChar(begin->toLatin1()))
+            {
                 _str_async+=*begin;
+            }
             else
+            {
                 break;
+            }
         }
 
         if(_str_async == "done")
         {
             begin++;
             if(begin>=end)
+            {
                 return ;
+            }
 
             GdbMiValue result;
 
@@ -118,7 +126,9 @@ void gdb::parseLine(const QString &_msg)
         {
             begin++;
             if(begin>=end)
+            {
                 return ;
+            }
 
             GdbMiValue result;
 
@@ -139,19 +149,23 @@ void gdb::parseLine(const QString &_msg)
         begin++;
 
         QString _str_async;
-        for(;begin<end;begin++)
+        for(; begin<end; begin++)
         {
             if(isAnsycChar(begin->toLatin1()))
+            {
                 _str_async+=*begin;
+            }
             else
+            {
                 break;
+            }
         }
 
         begin++;    //skip ,
 
         GdbMiValue result;
 
-        for(;begin<end;begin++)
+        for(; begin<end; begin++)
         {
             GdbMiValue child;
             child.build(begin,end);
@@ -271,7 +285,9 @@ bool gdb::runGDB(const QString &filePath)
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 void gdb::quitGDB()

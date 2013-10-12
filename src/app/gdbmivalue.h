@@ -36,19 +36,31 @@ public:
         List
     };
 
-    GdbMiValue():type(Invalid){}
+    GdbMiValue():type(Invalid) {}
 
     void build(const QChar* &begin, const QChar* &end);
     QString getName() const;
-    inline ValueType getType(){return type;}
+    inline ValueType getType() const
+    {
+        return type;
+    }
     QString getValue() const;
-    inline QList<GdbMiValue>::iterator begin(){return children.begin();}
-    inline QList<GdbMiValue>::iterator end(){return children.end();}
-    inline int size(){return children.size();}
+    inline QList<GdbMiValue>::iterator begin()
+    {
+        return children.begin();
+    }
+    inline QList<GdbMiValue>::iterator end()
+    {
+        return children.end();
+    }
+    inline int size()
+    {
+        return children.size();
+    }
 
-    GdbMiValue at(const int& i) const;
+    GdbMiValue at(const int &i) const;
     GdbMiValue operator [](const char *_str_name) const;
-    GdbMiValue& operator += (const GdbMiValue& child);
+    GdbMiValue &operator += (const GdbMiValue &child);
 
 private:
     void parseConst(const QChar* &begin, const QChar* &end);
