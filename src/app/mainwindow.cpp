@@ -274,61 +274,7 @@ void MainWindow::createActions()
         actStatusTips[mnuExecuteSetInputRunShowOutput]=
                 QString(tr("Set the input file, compile and run the document, and show output file."));
     */
-    /*
-        //Debug -> Debug Start
-        act[mnuDebugStart]=new QAction(tr("Start &Debug"),this);
-        act[mnuDebugStart]->setShortcut(QKeySequence(Qt::Key_F5));
-        actStatusTips[mnuDebugStart]=QString(tr("Start debugging the active file."));
-        connect(act[mnuDebugStart],SIGNAL(triggered()),
-                this,SLOT(startDebug()));
 
-        //Debug -> Stop Execute
-        act[mnuDebugStopExecute]=new QAction(tr("&Stop Execute"),this);
-        act[mnuDebugStopExecute]->setShortcut(QKeySequence(Qt::Key_F6));
-        actStatusTips[mnuDebugStopExecute]=QString(tr("Stop the active debugging."));
-
-        //Debug -> Set Break Point
-        act[mnuDebugSetBreakPoint]=new QAction(tr("Set Breakpoint"),this);
-        actStatusTips[mnuDebugSetBreakPoint]=QString(tr("Set a break point at the current line."));
-
-        //Debug -> Next Line
-        act[mnuDebugNextLine]=new QAction(tr("&Next Line"),this);
-        act[mnuDebugNextLine]->setShortcut(QKeySequence(Qt::Key_F7));
-        actStatusTips[mnuDebugNextLine]=QString(tr("Get into and run the next line."));
-
-        //Debug -> Into line
-        act[mnuDebugIntoLine]=new QAction(tr("&Into Line"),this);
-        act[mnuDebugIntoLine]->setShortcut(QKeySequence(Qt::Key_F8));
-        actStatusTips[mnuDebugIntoLine]=QString(tr("Get into and run the next step."));
-
-        //Debug -> Next Instruction
-        act[mnuDebugNextInstruction]=new QAction(tr("N&ext Instruction"),this);
-        actStatusTips[mnuDebugNextInstruction]=QString(tr("???????????? Next Instruction"));
-
-        //Debug -> Into Instruction
-        act[mnuDebugIntoInstruction]=new QAction(tr("In&to Instruction"),this);
-        actStatusTips[mnuDebugIntoInstruction]=QString(tr("???????????? mnuDebugIntoInstruction"));
-
-        //Debug -> Continue
-        act[mnuDebugContinue]=new QAction(tr("&Continue"),this);
-        actStatusTips[mnuDebugContinue]=QString(tr("????????????? Continue"));
-
-        //Debug -> Skip Function
-        act[mnuDebugSkipFunction]=new QAction(tr("S&kip Function"),this);
-        actStatusTips[mnuDebugSkipFunction]=QString(tr("Skip the current function."));
-
-        //Debug -> Add Watch
-        act[mnuDebugAddWatch]=new QAction(tr("&Add Watch"),this);
-        actStatusTips[mnuDebugAddWatch]=QString(tr("Add a new variable to debug watch."));
-
-        //Debug -> Modify Watch
-        act[mnuDebugModifyWatch]=new QAction(tr("&Modify Watch"),this);
-        actStatusTips[mnuDebugModifyWatch]=QString(tr("Modify a variable in debug watch list."));
-
-        //Debug -> Remove Watch
-        act[mnuDebugRemoveWatch]=new QAction(tr("&Remove Watch"),this);
-        actStatusTips[mnuDebugRemoveWatch]=QString(tr("Remove a variable in debug watch list."));
-    */
     //Window -> Window Split
     /*act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
     actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));*/
@@ -451,18 +397,6 @@ void MainWindow::createDocks()
     //TODO: Configure Hide.
     compileDock->hide();
 
-    //Debug Dock
-    debugDock=new KCDebugDock(this);
-    addDockWidget(Qt::BottomDockWidgetArea,debugDock);
-    connect(debugDock,SIGNAL(requireStartDebug()),
-            this,SLOT(startDebug()));
-    debugDock->hide();
-
-    //Debug Watch Dock
-    debugWatchDock=new KCDebugWatchDock(this);
-    addDockWidget(Qt::RightDockWidgetArea,debugWatchDock);
-    debugWatchDock->hide();
-
     //Sidebar Dock
     sideBar=new KCSideBar(this);
     addDockWidget(Qt::LeftDockWidgetArea,sideBar);
@@ -488,7 +422,6 @@ void MainWindow::createMenu()
     menuMainWindowItem[menuView]   = _mainMenu->addMenu(tr("&View"));
     menuMainWindowItem[menuSearch] = _mainMenu->addMenu(tr("&Search"));
     menuMainWindowItem[menuExecute]= _mainMenu->addMenu(tr("E&xecute"));
-    //menuMainWindowItem[mnuDebug]  = _mainMenu->addMenu(tr("&Debug"));
     menuMainWindowItem[menuTools]  = _mainMenu->addMenu(tr("&Tools"));
     menuMainWindowItem[menuWindow] = _mainMenu->addMenu(tr("&Tab"));
     menuMainWindowItem[menuHelp]   = _mainMenu->addMenu(tr("&Help"));
@@ -578,11 +511,12 @@ void MainWindow::createMenu()
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
 #endif
         menuMainWindowItem[menuSearch]->addAction(actionMainWindowItem[i]);
+
 #ifdef Q_OS_MACX
         switch(i)
         {
         case actionSearchFind:
-            //case mnuSearchReplaceInFiles:
+        case actionSearchReplace:
         case actionSearchSearchOnline:
             menuMainWindowItem[menuSearch]->addSeparator();
             break;
@@ -614,33 +548,6 @@ void MainWindow::createMenu()
         }
 #endif
     }
-
-    //Create Debug Menu
-    /*
-    #ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
-    menuMainWindowItem[mnuDebug]->setIcon(*MenuIconAddor);
-    #endif
-    for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
-    {
-    #ifndef Q_OS_MACX
-        MenuIconAddor->addFile(actMenuIconPath[i]);
-        act[i]->setIcon(*MenuIconAddor);
-    #endif
-        act[i]->setStatusTip(actStatusTips[i]);
-        menuMainWindowItem[mnuDebug]->addAction(act[i]);
-    #ifdef Q_OS_MACX
-        switch(i)
-        {
-        case mnuDebugStopExecute:
-        case mnuDebugSetBreakPoint:
-        case mnuDebugSkipFunction:
-            menuMainWindowItem[mnuDebug]->addSeparator();
-            break;
-        }
-
-    #endif
-    }*/
 
     //Create Tool Menu
 #ifndef Q_OS_MACX
@@ -1007,16 +914,6 @@ void MainWindow::changeCompileDockVisibleState()
     compileDock->setVisible(!compileDock->isVisible());
 }
 
-void MainWindow::changeDebugDockVisibleState()
-{
-    debugDock->setVisible(!debugDock->isVisible());
-}
-
-void MainWindow::changeDebugWatchVisibleState()
-{
-    debugWatchDock->setVisible(!debugWatchDock->isVisible());
-}
-
 void MainWindow::changeJudgeDockVisibleState()
 {
     judgeDock->setVisible(!judgeDock->isVisible());
@@ -1084,17 +981,17 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+/*    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
     KCLanguageMode *currLangMode=currEditor->langMode();
     currLangMode->startDebug();
 
     connectDebugDockWithCurrEditor();
-    debugDock->show();
+    debugDock->show();*/
 }
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
-    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
+/*    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
 
     dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
     if(dbgReceiver!=NULL)
@@ -1106,7 +1003,7 @@ void MainWindow::connectDebugDockWithCurrEditor()
     if(gdbInstance!=NULL)
     {
         debugDock->setGdbInstance(gdbInstance);
-    }
+    }*/
 }
 
 #ifdef Q_OS_MACX

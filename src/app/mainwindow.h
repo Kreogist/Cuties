@@ -43,8 +43,6 @@
 #include "kcsidebar.h"
 #include "kccompiledock.h"
 #include "kcjudgedock.h"
-#include "kcdebugdock.h"
-#include "kcdebugwatchdock.h"
 #include "kctitlebar.h"
 #include "kcstatusbar.h"
 #include "kctabmanager.h"
@@ -81,9 +79,7 @@ private slots:
     void aboutCuties();
     void changeSidebarVisibleState();
     void changeCompileDockVisibleState();
-    void changeDebugDockVisibleState();
     void changeJudgeDockVisibleState();
-    void changeDebugWatchVisibleState();
     void showPreference();
 #ifdef Q_OS_MACX
     void setFullScreen();
@@ -133,8 +129,6 @@ private:
         actionEditPreferences,
         actionViewSidebar,
         actionViewCompileDock,
-        //mnuViewDebugDock,
-        //mnuViewDebugWatchDock,
         //mnuViewJudgeDock,
 #ifdef Q_OS_MACX
         actionViewFullscreen,
@@ -190,8 +184,6 @@ private:
     KCTabManager *tabManager;
     KCSideBar *sideBar;
     KCCompileDock *compileDock;
-    KCDebugDock *debugDock;
-    KCDebugWatchDock *debugWatchDock;
     KCJudgeDock *judgeDock;
     KCTitleBar *titlebar;
     KCStatusBar *statusBar;

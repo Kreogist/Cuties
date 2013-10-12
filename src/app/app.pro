@@ -51,7 +51,6 @@ SOURCES += \
     kcexecutor.cpp \
     kcjudgedock.cpp \
     kclanguagemode.cpp \
-    kcdebugdock.cpp \
     fpc.cpp \
     kclistbutton.cpp \
     Controls/SettingItems/kcsettinglistitemboolean.cpp \
@@ -61,7 +60,6 @@ SOURCES += \
     dbgoutputreceiver.cpp \
     kcplaintextbrowser.cpp \
     kcdragproxy.cpp \
-    kcdebugwatchdock.cpp \
     kctextblockdata.cpp \
     kchighlighter.cpp \
     kcsidebar.cpp \
@@ -119,7 +117,6 @@ HEADERS += \
     kcjudgedock.h \
     kclanguagemode.h \
     kcsearchlinetext.h \
-    kcdebugdock.h \
     fpc.h \
     kclistbutton.h \
     Controls/SettingItems/kcsettinglistitemboolean.h \
@@ -129,7 +126,6 @@ HEADERS += \
     dbgoutputreceiver.h \
     kcplaintextbrowser.h \
     kcdragproxy.h \
-    kcdebugwatchdock.h \
     kctextblockdata.h \
     kchighlighter.h \
     kcsidebar.h \
