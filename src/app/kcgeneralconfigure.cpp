@@ -35,6 +35,14 @@ KCGeneralConfigure::KCGeneralConfigure()
     defaultEngineGoogleAddor.name=tr("Google");
     defaultEngineGoogleAddor.engineURL="https://www.google.com.hk/#newwindow=1&safe=strict&q=";
     searchEngineList.append(defaultEngineGoogleAddor);
+    searchEngine defaultEngineYahooAddor;
+    defaultEngineYahooAddor.name=tr("Yahoo!");
+    defaultEngineYahooAddor.engineURL="http://search.yahoo.com/search?toggle=1&cop=mss&ei=UTF-8&fr=yfp-t-900&p=";
+    searchEngineList.append(defaultEngineYahooAddor);
+    searchEngine defaultEngineBingAddor;
+    defaultEngineBingAddor.name=tr("Bing");
+    defaultEngineBingAddor.engineURL="http://cn.bing.com/search?form=MXBTDF&pc=MXBR&q=";
+    searchEngineList.append(defaultEngineBingAddor);
     searchEngine defaultEngineBaiduAddor;
     defaultEngineBaiduAddor.name=tr("Baidu");
     defaultEngineBaiduAddor.engineURL="http://www.baidu.com/s?wd=";

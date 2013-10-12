@@ -748,6 +748,12 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
 
     switch(e->key())
     {
+    case Qt::Key_BracketLeft:
+    {
+        QPlainTextEdit::keyPressEvent(e);
+        qDebug()<<"BracketLeft";
+        break;
+    }
         /*case Qt::Key_ParenLeft:
         {
             if(!(e->modifiers()&Qt::ShiftModifier))

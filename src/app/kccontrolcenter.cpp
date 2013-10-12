@@ -338,6 +338,18 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
     MainLayout->addSpacing(5);
     MainLayout->addWidget(tblViewOption);
 
+    tabSpaceEnabled=new KCSettingListItemBoolean(this);
+    tabSpaceEnabled->setEnabledText("Use space instead of tab.");
+    tabSpaceEnabled->setDisabledText("Enable tab.");
+    tabSpaceEnabled->setTheValue(KCEditorConfigure::getInstance()->usingBlankInsteadTab());
+    MainLayout->addWidget(tabSpaceEnabled);
+
+    lineNumberVisible=new KCSettingListItemBoolean(this);
+    lineNumberVisible->setEnabledText("Show line number panel.");
+    lineNumberVisible->setDisabledText("Hide line number panel.");
+    lineNumberVisible->setTheValue(KCEditorConfigure::getInstance()->getLineNumVisible());
+    MainLayout->addWidget(lineNumberVisible);
+
     tabSpaceNum=new KCSettingListItemNumInput(this);
     tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
     tabSpaceNum->setValue(KCEditorConfigure::getInstance()->getTabWidth());
@@ -440,6 +452,8 @@ void KCCCTabEditorContent::apply()
     }
     instance->setTabMoveable(slnTabMoveable->getValue());
     instance->setTabCloseable(slnTabCloseable->getValue());
+    instance->setLineNumVisible(lineNumberVisible->getValue());
+    instance->setUsingBlankInsteadTab(tabSpaceEnabled->getValue());
     KCClipboard::getInstance()->setMaxDataCount(clipboardMax->getValue());
 }
 

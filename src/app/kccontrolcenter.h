@@ -165,6 +165,8 @@ public:
 private:
     QVBoxLayout *MainLayout;
     KCSettingListItemBoolean *slnTabMoveable, *slnTabCloseable;
+    KCSettingListItemBoolean *tabSpaceEnabled;
+    KCSettingListItemBoolean *lineNumberVisible;
     KCSettingListItemNumInput *tabSpaceNum;
     KCSettingListItemCombo *wrapMode;
     KCSettingListItemNumInput *cursorWidth;

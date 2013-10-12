@@ -25,6 +25,7 @@ KCEditorConfigure::KCEditorConfigure()
 {
     wrapMode=QTextOption::NoWrap;
     isUsingBlankInsteadTab=true;
+    lineNumVisible=true;
     tabWidth=4;
     cursorWidth=1;
     overwriteMode=false;
@@ -37,6 +38,16 @@ KCEditorConfigure *KCEditorConfigure::getInstance()
     return instance==nullptr?instance=new KCEditorConfigure:instance;
 }
 
+bool KCEditorConfigure::getLineNumVisible() const
+{
+    return lineNumVisible;
+}
+
+void KCEditorConfigure::setLineNumVisible(bool value)
+{
+    lineNumVisible = value;
+}
+
 void KCEditorConfigure::readConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
@@ -44,6 +55,7 @@ void KCEditorConfigure::readConfigure()
     tabWidth=settings.value("TabWidth",tabWidth).toInt();
     isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
                                           isUsingBlankInsteadTab).toBool();
+    lineNumVisible=settings.value("LineNumVisible", lineNumVisible).toInt();
     int wMode=settings.value("WordWrap", wrapMode).toInt();
     switch(wMode)
     {
@@ -81,6 +93,7 @@ void KCEditorConfigure::writeConfigure()
     settings.setValue("TabWidth",tabWidth);
     settings.setValue("CursorWidth", cursorWidth);
     settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
+    settings.setValue("LineNumVisible", lineNumVisible);
     settings.setValue("OverwriteMode", overwriteMode);
     settings.setValue("TabMoveable", tabMoveable);
     settings.setValue("TabCloseable", tabCloseable);

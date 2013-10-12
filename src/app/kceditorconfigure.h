@@ -48,6 +48,8 @@ public:
     void setTabMoveable(bool value);
     bool getTabCloseable() const;
     void setTabCloseable(bool value);
+    bool getLineNumVisible() const;
+    void setLineNumVisible(bool value);
 
 signals:
     void tabWidthChanged(int newValue);
@@ -63,6 +65,7 @@ private:
     //Values:
     QTextOption::WrapMode wrapMode;
     bool isUsingBlankInsteadTab, overwriteMode;
+    bool lineNumVisible;
     int tabWidth, cursorWidth;
     bool tabMoveable, tabCloseable;
 };
