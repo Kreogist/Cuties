@@ -114,6 +114,8 @@ private:
     void fileInfoChanged(const QFile &file);
     void connectSearchWidgetWithEditor(KCSearchWidget *widget);
 
+    KCEditorConfigure *configureInstance;
+
     KCLanguageMode *languageMode;
 
     QVBoxLayout *replaceLayout;

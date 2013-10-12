@@ -277,14 +277,14 @@ KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(sbtClearHistory);
 
     QLabel *tblSearch=new QLabel(this);
-    tblSearch->setText(" " + tr("Online Search Engine"));
+    tblSearch->setText(" " + tr("Search Options"));
     tblSearch->setFont(TitleFont);
     tblSearch->setFixedHeight(30);
     MainLayout->addSpacing(5);
     MainLayout->addWidget(tblSearch);
 
     sboSearchEngine=new KCSettingListItemCombo(this);
-    sboSearchEngine->Caption->setText(tr("Online History Engine:"));
+    sboSearchEngine->Caption->setText(tr("Online Search Engine:"));
     QList<searchEngine> searchEngines=KCGeneralConfigure::getInstance()->getSearchEngineList();
     for(int i=0;i<searchEngines.count();i++)
     {
@@ -339,14 +339,14 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(tblViewOption);
 
     tabSpaceEnabled=new KCSettingListItemBoolean(this);
-    tabSpaceEnabled->setEnabledText("Use space instead of tab.");
-    tabSpaceEnabled->setDisabledText("Enable tab.");
+    tabSpaceEnabled->setEnabledText(tr("Use space instead of tab."));
+    tabSpaceEnabled->setDisabledText(tr("Enable tab."));
     tabSpaceEnabled->setTheValue(KCEditorConfigure::getInstance()->usingBlankInsteadTab());
     MainLayout->addWidget(tabSpaceEnabled);
 
     lineNumberVisible=new KCSettingListItemBoolean(this);
-    lineNumberVisible->setEnabledText("Show line number panel.");
-    lineNumberVisible->setDisabledText("Hide line number panel.");
+    lineNumberVisible->setEnabledText(tr("Show line number panel."));
+    lineNumberVisible->setDisabledText(tr("Hide line number panel."));
     lineNumberVisible->setTheValue(KCEditorConfigure::getInstance()->getLineNumVisible());
     MainLayout->addWidget(lineNumberVisible);
 

@@ -46,6 +46,7 @@ bool KCEditorConfigure::getLineNumVisible() const
 void KCEditorConfigure::setLineNumVisible(bool value)
 {
     lineNumVisible = value;
+    emit lineNumPanelVisibleChanged(value);
 }
 
 void KCEditorConfigure::readConfigure()
@@ -55,7 +56,7 @@ void KCEditorConfigure::readConfigure()
     tabWidth=settings.value("TabWidth",tabWidth).toInt();
     isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
                                           isUsingBlankInsteadTab).toBool();
-    lineNumVisible=settings.value("LineNumVisible", lineNumVisible).toInt();
+    lineNumVisible=settings.value("LineNumVisible", lineNumVisible).toBool();
     int wMode=settings.value("WordWrap", wrapMode).toInt();
     switch(wMode)
     {
@@ -108,6 +109,7 @@ bool KCEditorConfigure::usingBlankInsteadTab() const
 void KCEditorConfigure::setUsingBlankInsteadTab(bool enabled)
 {
     isUsingBlankInsteadTab=enabled;
+    emit spaceInsteadOfTab(enabled);
 }
 
 int KCEditorConfigure::getTabWidth() const

@@ -57,6 +57,8 @@ signals:
     void cursorWidthChanged(int newValue);
     void tabMoveableChanged(bool newValue);
     void tabCloseableChanged(bool newValue);
+    void spaceInsteadOfTab(bool newValue);
+    void lineNumPanelVisibleChanged(bool newValue);
 
 private:
     KCEditorConfigure();

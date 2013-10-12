@@ -28,6 +28,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setContentsMargins(0,0,0,0);
 
+    configureInstance=KCEditorConfigure::getInstance();
+
     replaceLayout=new QVBoxLayout(this);
     replaceLayout->setContentsMargins(0,0,0,0);
     replaceLayout->setSpacing(0);
@@ -43,9 +45,10 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(markPanel);
 
     linePanel=new KCLinenumPanel(this);
+    linePanel->setVisible(configureInstance->getLineNumVisible());
     mainLayout->addWidget(linePanel);
 
-    editor=new KCTextEditor(this);
+    editor=new KCTextEditor(this);    
     linePanel->setKciTextEditor(editor);
     markPanel->setKciTextEditor(editor);
     mainLayout->addWidget(editor);
@@ -63,6 +66,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             this, &KCCodeEditor::cursorChanged);
     connect(editor, &KCTextEditor::overwriteModeChanged,
             this, &KCCodeEditor::rewriteStateChanged);
+    connect(configureInstance, &KCEditorConfigure::lineNumPanelVisibleChanged,
+            linePanel, &KCLinenumPanel::setVisible);
 
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
