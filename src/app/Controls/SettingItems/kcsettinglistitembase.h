@@ -15,17 +15,18 @@ class KCSettingListItemBase : public QWidget
     Q_OBJECT
 public:
     explicit KCSettingListItemBase(QWidget *parent = 0);
-    QLabel *Caption;
+    QLabel *captionText;
+    bool getEditMode();
+    bool getItemSelectedStatus();
 
 signals:
-    void ValueChanged();
-    void ItemGetFocus();
-    void ItemLostFocus();
+    void valueChanged();
+    void itemGetFocus();
+    void itemLostFocus();
 
 public slots:
-    void enableEditMode();
-    void disableEditMode();
-
+    void setEditMode(bool value);
+    void setItemSelected(bool value);
 private slots:
     void changeBackgroundAlpha(int alpha);
 
@@ -36,9 +37,9 @@ protected:
 
 private:
     QPalette pal;
-    QTimeLine *animeFadeOut;
+    QTimeLine *animationBackgroundFadeOut;
     bool itemSelected;
-    bool blnEditMode;
+    bool editMode;
 };
 
 #endif // KCSETTINGLISTITEMBASE_H

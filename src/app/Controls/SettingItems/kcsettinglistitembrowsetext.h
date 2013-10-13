@@ -32,7 +32,7 @@ private:
     QLabel *valueDisplayer;
     QString itemValue;
     QToolButton *browseFolder;
-    bool folderMode, blnEditMode;
+    bool folderMode, editMode;
 };
 
 #endif // KCSETTINGLISTITEMFOLDERTEXT_H

@@ -14,7 +14,7 @@ KCSettingListItemNumInput::KCSettingListItemNumInput(QWidget *parent) :
 
     //Set Caption.
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(Caption);
+    MainLayout->addWidget(captionText);
     MainLayout->addSpacing(3);
 
     //Set Value Displayer.

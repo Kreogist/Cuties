@@ -5,22 +5,33 @@ KCSettingListItemBase::KCSettingListItemBase(QWidget *parent) :
 {
     //Set Auto Fill Background.
     setAutoFillBackground(true);
+    //Set Default Height.
+    setFixedHeight(27);
     //Set Palette.
     pal=this->palette();
     pal.setColor(QPalette::Window, QColor(0xf7,0xcf,0x3d,0));
     setPalette(pal);
     //Set Label.
-    Caption=new QLabel(this);
-    //Set Default Height.
-    setFixedHeight(27);
+    captionText=new QLabel(this);
 
     //Set Selected Status.
     itemSelected=false;
+    editMode=false;
 
     //Set Fade Out Anime.
-    animeFadeOut=new QTimeLine(200,this);
-    connect(animeFadeOut,SIGNAL(frameChanged(int)),
+    animationBackgroundFadeOut=new QTimeLine(200,this);
+    connect(animationBackgroundFadeOut,SIGNAL(frameChanged(int)),
             this,SLOT(changeBackgroundAlpha(int)));
+}
+
+bool KCSettingListItemBase::getEditMode()
+{
+    return editMode;
+}
+
+bool KCSettingListItemBase::getItemSelectedStatus()
+{
+    return itemSelected;
 }
 
 void KCSettingListItemBase::enterEvent(QEvent *e)
@@ -28,12 +39,12 @@ void KCSettingListItemBase::enterEvent(QEvent *e)
     if(!itemSelected)
     {
         //Stop Anime AnyWay.
-        animeFadeOut->stop();
+        animationBackgroundFadeOut->stop();
         //Set New Background.
         pal.setColor(QPalette::Window,QColor(0xf7,0xcf,0x3d,200));
         setPalette(pal);
     }
-    e->accept();
+    QWidget::enterEvent(e);
 }
 
 void KCSettingListItemBase::leaveEvent(QEvent *e)
@@ -41,11 +52,11 @@ void KCSettingListItemBase::leaveEvent(QEvent *e)
     if(!itemSelected)
     {
         int nowAlpha=pal.color(QPalette::Window).alpha();
-        animeFadeOut->stop();
-        animeFadeOut->setFrameRange(nowAlpha,0);
-        animeFadeOut->start();
+        animationBackgroundFadeOut->stop();
+        animationBackgroundFadeOut->setFrameRange(nowAlpha,0);
+        animationBackgroundFadeOut->start();
     }
-    e->accept();
+    QWidget::leaveEvent(e);
 }
 
 void KCSettingListItemBase::changeBackgroundAlpha(int alpha)
@@ -57,16 +68,16 @@ void KCSettingListItemBase::changeBackgroundAlpha(int alpha)
 void KCSettingListItemBase::mousePressEvent(QMouseEvent *e)
 {
     changeBackgroundAlpha(255);
-    e->accept();
-    emit ItemGetFocus();
+    QWidget::mousePressEvent(e);
+    emit itemGetFocus();
 }
 
-void KCSettingListItemBase::enableEditMode()
+void KCSettingListItemBase::setEditMode(bool value)
 {
-    blnEditMode=true;
+    editMode=value;
 }
 
-void KCSettingListItemBase::disableEditMode()
+void KCSettingListItemBase::setItemSelected(bool value)
 {
-    blnEditMode=false;
+    itemSelected=value;
 }

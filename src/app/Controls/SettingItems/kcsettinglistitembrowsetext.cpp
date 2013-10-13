@@ -14,7 +14,7 @@ KCSettingListItemBrowseText::KCSettingListItemBrowseText(QWidget *parent) :
 
     //Set Caption.
     mainLayout->addSpacing(5);
-    mainLayout->addWidget(Caption);
+    mainLayout->addWidget(captionText);
     mainLayout->addSpacing(3);
 
     //Set Value Displayer.
@@ -38,7 +38,7 @@ KCSettingListItemBrowseText::KCSettingListItemBrowseText(QWidget *parent) :
     mainLayout->addStretch();
 
     folderMode=false;
-    blnEditMode=false;
+    editMode=false;
 
     connect(browseFolder,SIGNAL(clicked()),
             this, SLOT(setEditModeEnabled()));
@@ -72,7 +72,7 @@ QString KCSettingListItemBrowseText::getValue()
 
 void KCSettingListItemBrowseText::enterEvent(QEvent *e)
 {
-    if(!blnEditMode)
+    if(!editMode)
     {
         valueDisplayer->hide();
         valueEditor->setEnabled(true);
@@ -85,7 +85,7 @@ void KCSettingListItemBrowseText::enterEvent(QEvent *e)
 
 void KCSettingListItemBrowseText::leaveEvent(QEvent *e)
 {
-    if(!blnEditMode)
+    if(!editMode)
     {
         valueEditor->setEnabled(false);
         valueEditor->hide();
@@ -98,7 +98,7 @@ void KCSettingListItemBrowseText::leaveEvent(QEvent *e)
 
 void KCSettingListItemBrowseText::setEditModeEnabled()
 {
-    blnEditMode=true;
+    editMode=true;
 }
 
 void KCSettingListItemBrowseText::mousePressEvent(QMouseEvent *e)

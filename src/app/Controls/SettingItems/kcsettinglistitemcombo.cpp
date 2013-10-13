@@ -13,7 +13,7 @@ KCSettingListItemCombo::KCSettingListItemCombo(QWidget *parent) :
     cboList->hide();
     lblComboText=new QLabel(this);
     MainLayout->addSpacing(5);
-    MainLayout->addWidget(Caption);
+    MainLayout->addWidget(captionText);
     MainLayout->addSpacing(2);
     MainLayout->addWidget(cboList,1);
     MainLayout->addWidget(lblComboText,1);
@@ -23,14 +23,14 @@ KCSettingListItemCombo::KCSettingListItemCombo(QWidget *parent) :
     connect(cboList,SIGNAL(currentIndexChanged(int)),
             this,SLOT(valueChangedEvent(int)));
 
-    connect(this,SIGNAL(ItemGetFocus()),this,SLOT(focusGetEvent()));
-    connect(this,SIGNAL(ItemLostFocus()),this,SLOT(focusLostEvent()));
+    connect(this,SIGNAL(itemGetFocus()),this,SLOT(focusGetEvent()));
+    connect(this,SIGNAL(itemLostFocus()),this,SLOT(focusLostEvent()));
 }
 
 void KCSettingListItemCombo::valueChangedEvent(int newValue)
 {
     lblComboText->setText(cboList->itemText(newValue));
-    emit ValueChanged();
+    emit valueChanged();
 }
 
 void KCSettingListItemCombo::addListItem(const QString &ItemText)

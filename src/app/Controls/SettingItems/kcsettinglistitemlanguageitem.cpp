@@ -11,7 +11,7 @@ KCSettingListItemLanguageItem::KCSettingListItemLanguageItem(QWidget *parent) :
     lblLanguageIcon=new QLabel(this);
     MainLayout->addWidget(lblLanguageIcon);
 
-    MainLayout->addWidget(Caption);
+    MainLayout->addWidget(captionText);
     MainLayout->addStretch();
 
     blnSel=false;
@@ -24,5 +24,5 @@ void KCSettingListItemLanguageItem::setLanguageImage(QString imgFilePath)
 
 void KCSettingListItemLanguageItem::setLanguageName(QString strLanName)
 {
-    Caption->setText(strLanName);
+    captionText->setText(strLanName);
 }

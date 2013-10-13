@@ -107,11 +107,11 @@ void KCCompileOutputReceiver::onCompileMessageReceived(compileErrorInfo error)
     //Check if has output the header.
     if(!hasOutputHeader)
     {
-        emit requireShowError();
         addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
                 " " +
                 tr("Compile Output:") +
                 "\n");
+        emit requireShowError();
         hasOutputHeader=true;
     }
     //Add the new error to the list

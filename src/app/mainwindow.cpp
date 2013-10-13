@@ -327,27 +327,40 @@ void MainWindow::createTitlebar()
 void MainWindow::createToolBar()
 {
     //Set Icons.
-    QString strIconPath[mainToolbarButtonCount];
-    strIconPath[toolButtonNewFile]=":/ToolBar/image/ToolBar/new.png";
-    strIconPath[toolButtonOpenFile]=":/ToolBar/image/ToolBar/open.png";
-    strIconPath[toolButtonSaveFile]=":/ToolBar/image/ToolBar/save.png";
-    strIconPath[toolButtonCut]=":/ToolBar/image/ToolBar/cut.png";
-    strIconPath[toolButtonCopy]=":/ToolBar/image/ToolBar/copy.png";
-    strIconPath[toolButtonPaste]=":/ToolBar/image/ToolBar/paste.png";
-    strIconPath[toolButtonUndo]=":/ToolBar/image/ToolBar/undo.png";
-    strIconPath[toolButtonRedo]=":/ToolBar/image/ToolBar/redo.png";
-    strIconPath[toolButtonSearch]=":/ToolBar/image/ToolBar/search.png";
-    strIconPath[toolButtonCompileAndRun]=":/ToolBar/image/ToolBar/compileandrun.png";
+    QString toolButtonIcon[mainToolbarButtonCount],
+            toolButtonTips[mainToolbarButtonCount];
+    toolButtonIcon[toolButtonNewFile]=":/ToolBar/image/ToolBar/new.png";
+    toolButtonIcon[toolButtonOpenFile]=":/ToolBar/image/ToolBar/open.png";
+    toolButtonIcon[toolButtonSave]=":/ToolBar/image/ToolBar/save.png";
+    toolButtonIcon[toolButtonCut]=":/ToolBar/image/ToolBar/cut.png";
+    toolButtonIcon[toolButtonCopy]=":/ToolBar/image/ToolBar/copy.png";
+    toolButtonIcon[toolButtonPaste]=":/ToolBar/image/ToolBar/paste.png";
+    toolButtonIcon[toolButtonUndo]=":/ToolBar/image/ToolBar/undo.png";
+    toolButtonIcon[toolButtonRedo]=":/ToolBar/image/ToolBar/redo.png";
+    toolButtonIcon[toolButtonSearch]=":/ToolBar/image/ToolBar/search.png";
+    toolButtonIcon[toolButtonCompileAndRun]=":/ToolBar/image/ToolBar/compileandrun.png";
 
+    toolButtonTips[toolButtonNewFile]= tr("New Source File") + "\n" + stringActionStatusTips[actionFileNewFile];
+    toolButtonTips[toolButtonOpenFile]=tr("Open") + "\n" + stringActionStatusTips[actionFileOpen];
+    toolButtonTips[toolButtonSave]=tr("Save") + "\n" + stringActionStatusTips[actionFileSave];
+    toolButtonTips[toolButtonCut]=tr("Cut") + "\n" + stringActionStatusTips[actionEditCut];
+    toolButtonTips[toolButtonCopy]=tr("Copy") + "\n" + stringActionStatusTips[actionEditCopy];
+    toolButtonTips[toolButtonPaste]=tr("Paste") + "\n" + stringActionStatusTips[actionEditPaste];
+    toolButtonTips[toolButtonUndo]=tr("Undo") + "\n" + stringActionStatusTips[actionEditUndo];
+    toolButtonTips[toolButtonRedo]=tr("Redo") + "\n" + stringActionStatusTips[actionEditRedo];
+    toolButtonTips[toolButtonSearch]=tr("Search") + "\n" + stringActionStatusTips[actionSearchFind];
+    toolButtonTips[toolButtonCompileAndRun]=tr("Compile and Run") + "\n" + stringActionStatusTips[actionExecuteCompileAndRun];
+
+    titlebar->addToolSeparator();
     //Set Other Buttons.
     for(int i=toolButtonNewFile; i<mainToolbarButtonCount; i++)
     {
         buttonMainToolbarItem[i]=new QToolButton(titlebar);
-        //tblMainButton[i]->setPalette(pal);
         buttonMainToolbarItem[i]->setFixedSize(25,25);
-        buttonMainToolbarItem[i]->setIcon(QIcon(strIconPath[i]));
+        buttonMainToolbarItem[i]->setIcon(QIcon(toolButtonIcon[i]));
+        buttonMainToolbarItem[i]->setToolTip(toolButtonTips[i]);
         titlebar->addToolButton(buttonMainToolbarItem[i]);
-        if(i==toolButtonSaveFile || i==toolButtonPaste || i==toolButtonRedo || i==toolButtonSearch)
+        if(i==toolButtonSave || i==toolButtonPaste || i==toolButtonRedo || i==toolButtonSearch)
         {
             titlebar->addToolSeparator();
         }
@@ -357,7 +370,7 @@ void MainWindow::createToolBar()
             tabManager,SLOT(newFile()));
     connect(buttonMainToolbarItem[toolButtonOpenFile],SIGNAL(clicked()),
             tabManager,SLOT(open()));
-    connect(buttonMainToolbarItem[toolButtonSaveFile],SIGNAL(clicked()),
+    connect(buttonMainToolbarItem[toolButtonSave],SIGNAL(clicked()),
             tabManager,SLOT(save()));
     connect(buttonMainToolbarItem[toolButtonCut],SIGNAL(clicked()),
             tabManager,SLOT(cut()));
@@ -884,15 +897,12 @@ void MainWindow::onActionCompileAndRun()
     //Check Tab Status.
     if(currentEditor!=NULL)
     {
-        //when compile successfully, executor will run the program.
-        if((bool)compileFinishedConnection)
-        {
-            disconnect(compileFinishedConnection);
-        }
-
-        compileFinishedConnection=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
-                                          KCExecutor::getInstance(),SLOT(exec(QString)));
-
+        //when compile successfully, executor will run the program, and hide compile dock.
+        compileFinishedConnection.disConnectAll();
+        compileFinishedConnection+=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
+                                           KCExecutor::getInstance(),SLOT(exec(QString)));
+        compileFinishedConnection+=connect(currentEditor->langMode(), SIGNAL(compileSuccessfully(QString)),
+                                           compileDock, SLOT(hideCompileDock()));
         onActionCompile();
     }
 }
