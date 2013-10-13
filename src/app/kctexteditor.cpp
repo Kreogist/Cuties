@@ -409,6 +409,7 @@ void KCTextEditor::autoIndent()
 
     if(currLevel>=baseLevel)
     {
+        qDebug()<<currLevel-baseLevel;
         insertTab(_textCursor,currLevel-baseLevel);
     }
     else
@@ -419,11 +420,14 @@ void KCTextEditor::autoIndent()
 
 void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
 {
-    insertTabCursor.clearSelection();
-    QString spaceChar=configureInstance->usingBlankInsteadTab()?
-                      QString(" ").repeated(configureInstance->getTabWidth()):
-                      "\t";
-    insertTabCursor.insertText(spaceChar.repeated(tabCount));
+    if(tabCount>0)
+    {
+        insertTabCursor.clearSelection();
+        QString spaceChar=configureInstance->usingBlankInsteadTab()?
+                    QString(" ").repeated(configureInstance->getTabWidth()):
+                    "\t";
+        insertTabCursor.insertText(spaceChar.repeated(tabCount));
+    }
 }
 
 void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
@@ -574,10 +578,10 @@ void KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &select
 }
 
 int KCTextEditor::matchParentheses(const char &parenthesesA,
-                                    const char &parenthesesB,
-                                    QList<parenthesesInfo>::iterator startPos,
-                                    QTextBlock block,
-                                    bool forward)
+                                   const char &parenthesesB,
+                                   QList<parenthesesInfo>::iterator startPos,
+                                   QTextBlock block,
+                                   bool forward)
 {
     int count=0;
 
@@ -733,77 +737,63 @@ void KCTextEditor::contextMenuEvent(QContextMenuEvent *event)
     QPlainTextEdit::contextMenuEvent(event);
 }
 
-/*void KCTextEditor::autoCompleteParentheses(QKeyEvent *e,
-                                            QTextCursor& currTextCursor,
-                                            const QChar& rightParentheses)
+QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
 {
-    insertPlainText(QString(rightParentheses));
-    currTextCursor.movePosition(QTextCursor::Left);
-    setTextCursor(currTextCursor);
-}*/
+    if(parenthesesChar=="(")
+    {
+        return QString(")");
+    }
+    if(parenthesesChar=="\"")
+    {
+        return QString("\"");
+    }
+    if(parenthesesChar=="'")
+    {
+        return QString("'");
+    }
+    if(parenthesesChar=="[")
+    {
+        return QString("]");
+    }
+    if(parenthesesChar=="{")
+    {
+        return QString("}");
+    }
+    return QString("");
+}
 
 void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
     QTextCursor _textCursor=textCursor();
+    QString pairParethesesChar;
+    pairParethesesChar=parenthesesPair(e->text());
+    if(!pairParethesesChar.isEmpty())
+    {
+        if(_textCursor.selectedText().isEmpty())
+        {
+            QPlainTextEdit::keyPressEvent(e);
+            insertPlainText(pairParethesesChar);
+            _textCursor.movePosition(QTextCursor::Left);
+            setTextCursor(_textCursor);
+        }
+        else
+        {
+            int start=_textCursor.selectionStart(),
+                end=_textCursor.selectionEnd();
+            _textCursor.beginEditBlock();
+            _textCursor.clearSelection();
+            _textCursor.setPosition(start);
+            _textCursor.insertText(e->text());
+            _textCursor.setPosition(end+1);
+            _textCursor.insertText(pairParethesesChar);
+            _textCursor.endEditBlock();
+            setTextCursor(_textCursor);
+        }
+        return;
+    }
 
     switch(e->key())
     {
-    case Qt::Key_BracketLeft:
-    {
-        QPlainTextEdit::keyPressEvent(e);
-        qDebug()<<"BracketLeft";
-        break;
-    }
-        /*case Qt::Key_ParenLeft:
-        {
-            if(!(e->modifiers()&Qt::ShiftModifier))
-            {
-                QPlainTextEdit::keyPressEvent(e);
-                autoCompleteParentheses(e,_textCursor,')');
-            }
-            break;
-        }
-        case Qt::Key_Apostrophe:
-        {
-            if(!(e->modifiers()&Qt::ShiftModifier))
-            {
-                QPlainTextEdit::keyPressEvent(e);
-                autoCompleteParentheses(e,_textCursor,'\'');
-            }
-            else
-            {
-                QString text=_textCursor.selectedText();
-                if(text.isEmpty())
-                {
-                    QPlainTextEdit::keyPressEvent(e);
-                    autoCompleteParentheses(e,_textCursor,'\"');
-                }
-                else
-                {
-                    int start=_textCursor.selectionStart(),
-                            end=_textCursor.selectionEnd();
-                    _textCursor.beginEditBlock();
-                    _textCursor.clearSelection();
-                    _textCursor.setPosition(start);
-                    _textCursor.insertText("\"");
-                    _textCursor.setPosition(end+1);
-                    _textCursor.insertText("\"");
-                    _textCursor.endEditBlock();
-                    setTextCursor(_textCursor);
-                }
-            }
-            break;
-        }
-        case Qt::Key_BracketLeft:
-        {
-            QPlainTextEdit::keyPressEvent(e);
-            if(!(e->modifiers()&Qt::ShiftModifier))
-            {
-                autoCompleteParentheses(e,_textCursor,']');
-            }
-
-            break;
-        }*/
     case Qt::Key_Tab:
     {
         tabPressEvent(_textCursor);
@@ -823,6 +813,11 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }
         else
         {
+            if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
+               _textCursor.document()->characterAt(_textCursor.position()))
+            {
+                _textCursor.deleteChar();
+            }
             QPlainTextEdit::keyPressEvent(e);
         }
         break;
@@ -830,8 +825,22 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Return:
     case Qt::Key_Enter:
     {
-        QPlainTextEdit::keyPressEvent(e);
-        autoIndent();
+        /*bool parneCheck=(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
+                         _textCursor.document()->characterAt(_textCursor.position()) == '}');
+        if(parneCheck)
+        {
+            QPlainTextEdit::keyPressEvent(e);
+            autoIndent();
+            _textCursor.insertText("\n");
+            _textCursor.movePosition(QTextCursor::NextBlock);
+            setTextCursor(_textCursor);
+            autoIndent();
+        }
+        else
+        {*/
+            QPlainTextEdit::keyPressEvent(e);
+            autoIndent();
+        //}
         break;
     }
     case Qt::Key_Insert:
@@ -841,8 +850,10 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         break;
     }
     default:
+    {
         QPlainTextEdit::keyPressEvent(e);
         break;
+    }
     }
 }
 

@@ -14,7 +14,7 @@ KCSettingListItemLineText::KCSettingListItemLineText(QWidget *parent) :
 
     //Set Caption.
     mainLayout->addSpacing(5);
-    mainLayout->addWidget(Caption);
+    mainLayout->addWidget(captionText);
     mainLayout->addSpacing(3);
 
     //Set Value Displayer.

@@ -56,6 +56,7 @@ public slots:
     //Show & Hide Error Animation.
     void animeShowCompileError();
     void animeHideCompileError();
+    void hideCompileDock();
 
 private slots:
     //Change the splitter value to show/hide the treeview widget

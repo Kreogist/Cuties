@@ -1,3 +1,12 @@
+0.1.0.1
+New Featues:
+1. Parentheses autocomplete support. (Thanks fzyz999)
+2. Toolbar tooltips support.
+
+Updates:
+1. Compile dock will automatically hide when compile finishes if there's no error.
+2. Update Control Center Items Base.
+
 0.1.0.0
 Updates:
 1. Clear some commit for release.

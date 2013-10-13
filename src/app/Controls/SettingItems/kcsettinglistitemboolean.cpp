@@ -4,16 +4,16 @@ KCSettingListItemBooleanSwitcher::KCSettingListItemBooleanSwitcher(QWidget *pare
     QLabel(parent)
 {
     //Cache Image Control.
-    pxpTrue=new QPixmap(":/Controls/image/Controls/BooleanTrue.png");
-    pxpFalse=new QPixmap(":/Controls/image/Controls/BooleanFalse.png");
+    switcherPixmapTrue=new QPixmap(":/Controls/image/Controls/BooleanTrue.png");
+    switcherPixmapFalse=new QPixmap(":/Controls/image/Controls/BooleanFalse.png");
     //Set Default Value.
     setValue(false);
 }
 
 void KCSettingListItemBooleanSwitcher::setTheValue(bool NewValue)
 {
-    Value=NewValue;
-    setImage(Value);
+    switcherValue=NewValue;
+    setImage(switcherValue);
 }
 
 void KCSettingListItemBooleanSwitcher::setValue(bool NewValue)
@@ -26,17 +26,17 @@ void KCSettingListItemBooleanSwitcher::setImage(bool NewValue)
 {
     if(NewValue)
     {
-        setPixmap(*pxpTrue);
+        setPixmap(*switcherPixmapTrue);
     }
     else
     {
-        setPixmap(*pxpFalse);
+        setPixmap(*switcherPixmapFalse);
     }
 }
 
 bool KCSettingListItemBooleanSwitcher::getValue()
 {
-    return Value;
+    return switcherValue;
 }
 
 KCSettingListItemBoolean::KCSettingListItemBoolean(QWidget *parent) :
@@ -46,13 +46,13 @@ KCSettingListItemBoolean::KCSettingListItemBoolean(QWidget *parent) :
     animeChangedBugFixed=false;
 
     //Set Layout.
-    MainLayout=new QHBoxLayout(this);
-    MainLayout->setContentsMargins(0,0,0,0);
-    MainLayout->setSpacing(0);
-    setLayout(MainLayout);
+    mainLayout=new QHBoxLayout(this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 
     //Set Layout.
-    MainLayout->addSpacing(3);
+    mainLayout->addSpacing(3);
     //Set Anime.
     ChangedAnime=new QTimeLine(500);
     connect(ChangedAnime,SIGNAL(frameChanged(int)),
@@ -61,18 +61,18 @@ KCSettingListItemBoolean::KCSettingListItemBoolean(QWidget *parent) :
     pal=this->palette();
 
     //Set Value Setter.
-    ValueSetter=new KCSettingListItemBooleanSwitcher(this);
-    ValueSetter->setEnabled(false);
-    ValueSetter->hide();
-    MainLayout->addWidget(ValueSetter);
-    connect(ValueSetter,SIGNAL(valueChanged()),this,SLOT(valueChangedAnimeEvent()));
-    MainLayout->addSpacing(2);
+    valueSetter=new KCSettingListItemBooleanSwitcher(this);
+    valueSetter->setEnabled(false);
+    valueSetter->hide();
+    mainLayout->addWidget(valueSetter);
+    connect(valueSetter,SIGNAL(valueChanged()),this,SLOT(valueChangedAnimeEvent()));
+    mainLayout->addSpacing(2);
     //Set Widget.
-    MainLayout->addWidget(Caption);
+    mainLayout->addWidget(captionText);
 
-    MainLayout->addStretch();
+    mainLayout->addStretch();
 
-    blnEditMode=false;
+    setEditMode(false);
     animeMouseLeaveFadeOut=new QTimeLine(200, this);
     connect(animeMouseLeaveFadeOut, SIGNAL(frameChanged(int)),
             this, SLOT(setValueChangedAlpha(int)));
@@ -85,48 +85,48 @@ void KCSettingListItemBoolean::valueChangedEvent()
 
 void KCSettingListItemBoolean::refreshCaption()
 {
-    if(ValueSetter->getValue())
+    if(valueSetter->getValue())
     {
-        Caption->setText(strEnabledInfo);
+        captionText->setText(enabledText);
     }
     else
     {
-        Caption->setText(strDisabledInfo);
+        captionText->setText(disabledText);
     }
 }
 
 void KCSettingListItemBoolean::setEnabledText(const QString &Text)
 {
-    strEnabledInfo=Text;
+    enabledText=Text;
     refreshCaption();
 }
 
 QString KCSettingListItemBoolean::getEnabledText()
 {
-    return strEnabledInfo;
+    return enabledText;
 }
 
 void KCSettingListItemBoolean::setDisabledText(const QString &Text)
 {
-    strDisabledInfo=Text;
+    disabledText=Text;
     refreshCaption();
 }
 
 QString KCSettingListItemBoolean::getDisabledText()
 {
-    return strDisabledInfo;
+    return disabledText;
 }
 
 bool KCSettingListItemBoolean::getValue()
 {
-    return ValueSetter->getValue();
+    return valueSetter->getValue();
 }
 
 void KCSettingListItemBoolean::valueChangedAnimeEvent()
 {
     ChangedAnime->stop();
     refreshCaption();
-    if(ValueSetter->getValue())
+    if(valueSetter->getValue())
     {
         pal.setColor(QPalette::Window, QColor(123,170,43,255));
         setPalette(pal);
@@ -151,25 +151,24 @@ void KCSettingListItemBoolean::setValueChangedAlpha(int alpha)
 
 void KCSettingListItemBoolean::mousePressEvent(QMouseEvent *e)
 {
-    if(!blnEditMode)
+    if(!getEditMode())
     {
         KCSettingListItemBase::mousePressEvent(e);
         //Set Edit Mode Switcher.
-        blnEditMode=true;
+        setEditMode(true);
     }
     setValue(!getValue());
-    e->accept();
     QWidget::mousePressEvent(e);
 }
 
 void KCSettingListItemBoolean::enterEvent(QEvent *e)
 {
-    if(!blnEditMode)
+    if(!getEditMode())
     {
-        ValueSetter->setEnabled(true);
-        ValueSetter->show();
+        valueSetter->setEnabled(true);
+        valueSetter->show();
     }
-    if(ValueSetter->getValue())
+    if(valueSetter->getValue())
     {
         if(animeMouseLeaveFadeOut->state()==QTimeLine::NotRunning)
         {
@@ -191,11 +190,11 @@ void KCSettingListItemBoolean::enterEvent(QEvent *e)
 void KCSettingListItemBoolean::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
-    if(!blnEditMode)
+    if(!getEditMode())
     {
         //Set Value Setter
-        ValueSetter->setEnabled(false);
-        ValueSetter->hide();
+        valueSetter->setEnabled(false);
+        valueSetter->hide();
     }
     if(ChangedAnime->state()==QTimeLine::NotRunning)
     {
@@ -218,11 +217,11 @@ void KCSettingListItemBoolean::leaveEvent(QEvent *e)
 
 void KCSettingListItemBoolean::setValue(bool NewValue)
 {
-    ValueSetter->setValue(NewValue);
+    valueSetter->setValue(NewValue);
 }
 
 void KCSettingListItemBoolean::setTheValue(bool NewValue)
 {
-    ValueSetter->setTheValue(NewValue);
+    valueSetter->setTheValue(NewValue);
     refreshCaption();
 }

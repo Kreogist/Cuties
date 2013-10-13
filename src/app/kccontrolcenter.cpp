@@ -223,7 +223,7 @@ KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(tblEnvironment);
 
     sboDefaultLanguage=new KCSettingListItemCombo(this);
-    sboDefaultLanguage->Caption->setText(tr("Default Programming Language:"));
+    sboDefaultLanguage->captionText->setText(tr("Default Programming Language:"));
     sboDefaultLanguage->addListItem(tr("Plain Text"));
     sboDefaultLanguage->addListItem(tr("C"));
     sboDefaultLanguage->addListItem(tr("C++"));
@@ -264,7 +264,7 @@ KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(tblHistoryLabel);
 
     slnHistoryMax=new KCSettingListItemNumInput(this);
-    slnHistoryMax->Caption->setText(tr("Maximum History Tracking Items:"));
+    slnHistoryMax->captionText->setText(tr("Maximum History Tracking Items:"));
     slnHistoryMax->setMinValue(4);
     slnHistoryMax->setMaxValue(100);
     slnHistoryMax->setValue(KCHistoryConfigure::getInstance()->getMaxRecentFilesSize());
@@ -284,7 +284,7 @@ KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     MainLayout->addWidget(tblSearch);
 
     sboSearchEngine=new KCSettingListItemCombo(this);
-    sboSearchEngine->Caption->setText(tr("Online Search Engine:"));
+    sboSearchEngine->captionText->setText(tr("Online Search Engine:"));
     QList<searchEngine> searchEngines=KCGeneralConfigure::getInstance()->getSearchEngineList();
     for(int i=0;i<searchEngines.count();i++)
     {
@@ -351,12 +351,12 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(lineNumberVisible);
 
     tabSpaceNum=new KCSettingListItemNumInput(this);
-    tabSpaceNum->Caption->setText(tr("Tab Spacing:"));
+    tabSpaceNum->captionText->setText(tr("Tab Spacing:"));
     tabSpaceNum->setValue(KCEditorConfigure::getInstance()->getTabWidth());
     MainLayout->addWidget(tabSpaceNum);
 
     wrapMode=new KCSettingListItemCombo(this);
-    wrapMode->Caption->setText(tr("Word Wrap Mode:"));
+    wrapMode->captionText->setText(tr("Word Wrap Mode:"));
     wrapMode->addListItem(tr("No word wrapped"));
     wrapMode->addListItem(tr("Wrapped at word boundaries"));
     wrapMode->addListItem(tr("Wrapped at any point"));
@@ -385,7 +385,7 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
     MainLayout->addWidget(wrapMode);
 
     cursorWidth=new KCSettingListItemNumInput(this);
-    cursorWidth->Caption->setText(tr("Cursor Width:"));
+    cursorWidth->captionText->setText(tr("Cursor Width:"));
     cursorWidth->setMinValue(1);
     cursorWidth->setMaxValue(10);
     cursorWidth->setValue(KCEditorConfigure::getInstance()->getCursorWidth());
@@ -423,7 +423,7 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
 
     //Clipboard Max
     clipboardMax=new KCSettingListItemNumInput(this);
-    clipboardMax->Caption->setText(tr("Maximum Clipboard Tracking Items: "));
+    clipboardMax->captionText->setText(tr("Maximum Clipboard Tracking Items: "));
     clipboardMax->setMinValue(5);
     clipboardMax->setMaxValue(100);
     clipboardMax->setValue(KCClipboard::getInstance()->getMaxDataCount());
@@ -484,17 +484,17 @@ KCCCTabCompilerContent::KCCCTabCompilerContent(QWidget *parent) :
     KCCompilerConfigure *instance=KCCompilerConfigure::getInstance();
 
     txeGppCompilerPath=new KCSettingListItemBrowseText(this);
-    txeGppCompilerPath->Caption->setText(tr("G++ Compiler Path:"));
+    txeGppCompilerPath->captionText->setText(tr("G++ Compiler Path:"));
     txeGppCompilerPath->setValue(instance->getGppPath());
     MainLayout->addWidget(txeGppCompilerPath);
 
     txeGccCompilerPath=new KCSettingListItemBrowseText(this);
-    txeGccCompilerPath->Caption->setText(tr("GCC Compiler Path:"));
+    txeGccCompilerPath->captionText->setText(tr("GCC Compiler Path:"));
     txeGccCompilerPath->setValue(instance->getGccPath());
     MainLayout->addWidget(txeGccCompilerPath);
 
     txeFpcCompilerPath=new KCSettingListItemBrowseText(this);
-    txeFpcCompilerPath->Caption->setText(tr("FPC Compiler Path:"));
+    txeFpcCompilerPath->captionText->setText(tr("FPC Compiler Path:"));
     txeFpcCompilerPath->setValue(instance->getFpcPath());
     MainLayout->addWidget(txeFpcCompilerPath);
 }
@@ -532,7 +532,7 @@ KCCCTabDebuggerContent::KCCCTabDebuggerContent(QWidget *parent) :
     MainLayout->addWidget(tblGDBSettings);
 
     txeGDBDebuggerPath=new KCSettingListItemBrowseText(this);
-    txeGDBDebuggerPath->Caption->setText(tr("GDB Path:"));
+    txeGDBDebuggerPath->captionText->setText(tr("GDB Path:"));
     MainLayout->addWidget(txeGDBDebuggerPath);
 
 }

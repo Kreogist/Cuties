@@ -52,6 +52,7 @@
 #include "kcexecutor.h"
 #include "kreogistcutestyle.h"
 #include "kcmessagebox.h"
+#include "kcconnectionhandler.h"
 
 class MainWindow : public KCMainWindow
 {
@@ -165,7 +166,7 @@ private:
     {
         toolButtonNewFile,
         toolButtonOpenFile,
-        toolButtonSaveFile,
+        toolButtonSave,
         toolButtonCut,
         toolButtonCopy,
         toolButtonPaste,
@@ -187,7 +188,7 @@ private:
     KCJudgeDock *judgeDock;
     KCTitleBar *titlebar;
     KCStatusBar *statusBar;
-    QMetaObject::Connection compileFinishedConnection;
+    KCConnectionHandler compileFinishedConnection;
 
     void saveSettings();
     void restoreSettings();

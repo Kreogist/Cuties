@@ -144,6 +144,11 @@ void KCCompileDock::animeHideCompileError()
     }
 }
 
+void KCCompileDock::hideCompileDock()
+{
+    setVisible(false);
+}
+
 //This slot is used to change the value of splitter,
 //QPropertyAnimation can't do this for me, so I use QTimeLine to show up the QTreeView.
 //Calculate the width for each required, save the value into a QList, and set it to the QSplitter.

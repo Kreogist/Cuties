@@ -21,9 +21,10 @@ signals:
     void valueChanged();
 
 private:
-    bool Value;
+    bool switcherValue;
     void setImage(bool NewValue);
-    QPixmap *pxpTrue, *pxpFalse;
+    QPixmap *switcherPixmapTrue;
+    QPixmap *switcherPixmapFalse;
 };
 
 class KCSettingListItemBoolean : public KCSettingListItemBase
@@ -54,10 +55,10 @@ protected:
     void enterEvent(QEvent *e);
 
 private:
-    QHBoxLayout *MainLayout;
-    QString strEnabledInfo, strDisabledInfo;
-    KCSettingListItemBooleanSwitcher *ValueSetter;
-    bool ItemValue, blnEditMode;
+    QHBoxLayout *mainLayout;
+    QString enabledText, disabledText;
+    KCSettingListItemBooleanSwitcher *valueSetter;
+    bool itemValue;
     QTimeLine *ChangedAnime;
     QTimeLine *animeMouseLeaveFadeOut;
     QPalette pal;
