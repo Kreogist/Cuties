@@ -37,7 +37,7 @@
 #include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 
-static void initApplicationInfo()
+static inline void initApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
     QApplication::setApplicationVersion(QString("0.1.0.0"));
@@ -94,14 +94,72 @@ static void initApplicationFonts()
     }
 }
 
-static void initApplicationSettings()
+static inline void initApplicationSettings()
 {
     KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
     KCGlobalInstance->readSettings();
 }
 
+void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+
+    QFile file(QApplication::applicationDirPath()+"/log.txt");
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QTextStream out(&file);
+        out<<(QTime::currentTime().toString().toUtf8()+" ");
+        switch (type)
+        {
+        case QtDebugMsg:
+            out<<QString("").sprintf("Debug: (%s:%u, %s)\n",
+                                     context.file,
+                                     context.line,
+                                     context.function);
+            break;
+        case QtWarningMsg:
+            out<<QString("").sprintf("Warning: (%s:%u, %s)\n",
+                                     context.file,
+                                     context.line,
+                                     context.function);
+            break;
+        case QtCriticalMsg:
+            out<<QString("").sprintf("Critical: (%s:%u, %s)\n",
+                                     context.file,
+                                     context.line,
+                                     context.function);
+            break;
+        case QtFatalMsg:
+            out<<QString("").sprintf("Fatal: (%s:%u, %s)\n",
+                                     context.file,
+                                     context.line,
+                                     context.function);
+            out<<msg<<"\n";
+            abort();
+        }
+        out<<msg<<"\n";
+    }
+
+    QByteArray localMsg = msg.toUtf8();
+    switch (type)
+    {
+    case QtDebugMsg:
+        fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtWarningMsg:
+        fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        abort();
+    }
+}
+
 int main(int argc, char *argv[])
 {
+    qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
 
