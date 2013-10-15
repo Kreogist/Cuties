@@ -31,7 +31,7 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
 #include <QDebug>
-#include <QCommonStyle>
+#include <QStyleFactory>
 
 #include "kctextsearcher.h"
 #include "kctextblockdata.h"
@@ -82,6 +82,7 @@ private:
     void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
     void highlightParenthesis(QList<QTextEdit::ExtraSelection>& selections);
     QString parenthesesPair(const QString &parenthesesChar);
+    QString parenthesesPrePair(const QString &parenthesesChar);
     bool findString(bool forward);
     void generalSearch(const QTextBlock &block,
                        const int &lines,
@@ -108,7 +109,6 @@ private:
     QColor searchResultColor;
     QColor noMatchedParenthesesColor;
     QColor matchedParenthesesColor;
-    QPoint contextMenuPos;
 
     QString searchText;
     bool searchRegularExpression;

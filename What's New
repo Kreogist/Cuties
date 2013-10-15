@@ -1,7 +1,8 @@
 0.1.0.1
 New Featues:
-1. Parentheses autocomplete support. (Thanks fzyz999)
-2. Toolbar tooltips support.
+1. Parentheses autocomplete support.
+2. Parentheses autocomplete deleted by pairs.
+3. Toolbar tooltips support.
 
 Updates:
 1. Compile dock will automatically hide when compile finishes if there's no error.

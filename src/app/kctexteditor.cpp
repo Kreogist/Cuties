@@ -727,14 +727,11 @@ void KCTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection> &selec
 
 void KCTextEditor::contextMenuEvent(QContextMenuEvent *event)
 {
-    /*contextMenuPos=event->globalPos();
-
     QMenu *menu=createStandardContextMenu();
-    menu->addAction(tr("paste from clipboard history"),
-                    this,SLOT(pasteFromeHistory()));
+    menu->setStyle(QStyleFactory::create("fusion"));
     menu->exec(event->globalPos());
-    delete menu;*/
-    QPlainTextEdit::contextMenuEvent(event);
+    delete menu;
+    //QPlainTextEdit::contextMenuEvent(event);
 }
 
 QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
@@ -761,6 +758,24 @@ QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
     }
     return QString("");
 }
+
+QString KCTextEditor::parenthesesPrePair(const QString &parenthesesChar)
+{
+    if(parenthesesChar == ")")
+    {
+        return QString("(");
+    }
+    if(parenthesesChar == "[")
+    {
+        return QString("]");
+    }
+    if(parenthesesChar=="{")
+    {
+        return QString("}");
+    }
+    return QString("");
+}
+
 
 void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
@@ -791,7 +806,26 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }
         return;
     }
+    if(e->text()==")" || e->text()=="]")
+    {
+        //TODO: Fixed Code Here!
+        /*KCTextBlockData *blockData=static_cast<KCTextBlockData *>(cursor.block().userData());
 
+        if(matchParentheses(e->text()==")"?"(":"[",
+                            e->text(),
+                            ,
+                            ,
+                            ))
+        {
+                _textCursor.movePosition(QTextCursor::Right);
+                setTextCursor(_textCursor);
+        }
+        else
+        {*/
+                QPlainTextEdit::keyPressEvent(e);
+        /*}
+        return;*/
+    }
     switch(e->key())
     {
     case Qt::Key_Tab:
