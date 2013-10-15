@@ -81,7 +81,7 @@ void KCMarkPanel::mouseReleaseEvent(QMouseEvent *e)
         QTextBlock block=getFirstVisiableBlock();
         int lastBlockNumber=getLastVisiableBlockNumber();
 
-        for(; block.blockNumber() <= lastBlockNumber; block=block.next())
+        for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
         {
             KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
             if(data !=NULL)
