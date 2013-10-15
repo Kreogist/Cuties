@@ -71,6 +71,9 @@ void KCCompilerBase::startCompile(const QString &filePath)
 
     QStringList compilerEnvironment=QProcess::systemEnvironment();
     compilerEnvironment.replaceInStrings(QRegExp("^PATH=(.*)", Qt::CaseInsensitive), QString("PATH=\\1;"+getCompileEnv()));
+    qDebug()<<"compilerEnvironment"<<compilerEnvironment;
+    qDebug()<<"compilerPath"<<compilerPath;
+    qDebug()<<"compilerArg"<<arg;
     compiler->setEnvironment(compilerEnvironment);
     compiler->start(compilerPath, arg);
 }
