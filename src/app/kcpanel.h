@@ -45,6 +45,8 @@ signals:
 public slots:
 
 protected:
+    QTextBlock getFirstVisiableBlock();
+    QTextBlock getLastVisiableBlock();
     int getFirstVisiableBlockNumber();
     int getLastVisiableBlockNumber();
     void paintEvent(QPaintEvent *event);

@@ -24,6 +24,7 @@
 #include <QRect>
 #include <QPoint>
 
+#include "kctextblockdata.h"
 #include "kcpanel.h"
 
 class KCMarkPanel : public KCPanel
@@ -34,8 +35,6 @@ public:
     
     QPixmap getMarkPix() const;
     void setMarkPix(const QPixmap &value);
-
-signals:
 
 public slots:
 
@@ -48,17 +47,6 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e);
 
 private:
-    struct markUnit
-    {
-        QRect rect;
-        bool marked;
-        markUnit()
-        {
-            marked=false;
-        }
-    };
-
-    QVector<markUnit> vecMark;
     QPixmap markPix;
     QPoint pressedPos;
     bool isPressed;

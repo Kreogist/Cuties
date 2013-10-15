@@ -40,8 +40,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->setSpacing(0);
 
     markPanel=new KCMarkPanel(this);
-    markPanel->setVisible(false);
-    markPanel->setEnabled(false);
+    //markPanel->setVisible(false);
+    //markPanel->setEnabled(false);
     mainLayout->addWidget(markPanel);
 
     linePanel=new KCLinenumPanel(this);

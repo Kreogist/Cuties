@@ -163,3 +163,14 @@ int KCPanel::getLastVisiableBlockNumber()
 {
     return last;
 }
+
+QTextBlock KCPanel::getFirstVisiableBlock()
+{
+    return e->document()->findBlockByNumber(first);
+}
+
+QTextBlock KCPanel::getLastVisiableBlock()
+{
+    Q_ASSERT(last != -1);
+    return e->document()->findBlockByNumber(last);
+}

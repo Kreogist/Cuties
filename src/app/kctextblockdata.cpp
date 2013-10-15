@@ -141,3 +141,13 @@ int KCTextBlockData::getCodeLevel() const
 {
     return codeLevel;
 }
+
+markUnit KCTextBlockData::getMarkInfo() const
+{
+    return markInfo;
+}
+
+void KCTextBlockData::setMarkInfo(const markUnit &value)
+{
+    markInfo = value;
+}

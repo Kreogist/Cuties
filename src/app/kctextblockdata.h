@@ -38,6 +38,16 @@ struct parenthesesInfo
     int pos;
 };
 
+struct markUnit
+{
+    QRect rect;
+    bool marked;
+    markUnit()
+    {
+        marked=false;
+    }
+};
+
 class KCTextBlockData : public QTextBlockUserData
 {
 public:
@@ -62,6 +72,9 @@ public:
     void setCodeLevel(const int &level);
     int getCodeLevel() const;
 
+    markUnit getMarkInfo() const;
+    void setMarkInfo(const markUnit &value);
+
 private:
     unsigned long long int searchCode;
     bool needSearchAgain;
@@ -69,6 +82,7 @@ private:
     QList<matchedInfo> matchedTextPositions;
     QList<parenthesesInfo> parenthesesInfos;
     int codeLevel;
+    markUnit markInfo;
 };
 
 #endif // KCTEXTBLOCKDATA_H

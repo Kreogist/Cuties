@@ -88,7 +88,7 @@ void KCTextEditor::paintEvent(QPaintEvent *e)
 }
 
 void KCTextEditor::checkWhetherBlockSearchedAndDealWith(
-        const QTextBlock& block)
+    const QTextBlock &block)
 {
     KCTextBlockData *data=(KCTextBlockData *)block.userData();
     //check whether the block has been searched
@@ -301,8 +301,8 @@ void KCTextEditor::updateSearchResults()
 }
 
 void KCTextEditor::generalSearch(const QTextBlock &block,
-                                  const int &lines,
-                                  const bool forward)
+                                 const int &lines,
+                                 const bool forward)
 {
     QScopedPointer<KCTextSearcher> searcher;
     initTextSearcher(searcher);
@@ -313,9 +313,9 @@ void KCTextEditor::generalSearch(const QTextBlock &block,
 }
 
 void KCTextEditor::searchOnOtherThread(QScopedPointer<KCTextSearcher> &searcher,
-                                        QFuture<void> &thread,
-                                        const QTextBlock &block,
-                                        const bool forward)
+                                       QFuture<void> &thread,
+                                       const QTextBlock &block,
+                                       const bool forward)
 {
     if(!searcher.isNull())
     {
@@ -366,7 +366,7 @@ bool KCTextEditor::replace(const QString &oldText, const QString &newText)
 }
 
 bool KCTextEditor::replaceAndFind(const QString &oldText,
-                                   const QString &newText)
+                                  const QString &newText)
 {
     bool ret=replace(oldText,newText);
     return ret|showNextSearchResult();
@@ -424,8 +424,8 @@ void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
     {
         insertTabCursor.clearSelection();
         QString spaceChar=configureInstance->usingBlankInsteadTab()?
-                    QString(" ").repeated(configureInstance->getTabWidth()):
-                    "\t";
+                          QString(" ").repeated(configureInstance->getTabWidth()):
+                          "\t";
         insertTabCursor.insertText(spaceChar.repeated(tabCount));
     }
 }
@@ -646,7 +646,7 @@ void KCTextEditor::updateHighlights()
     setExtraSelections(extraSelections);
 }
 
-void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections)
+void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections)
 {
     if(!isReadOnly())
     {
@@ -660,7 +660,7 @@ void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection>& select
     }
 }
 
-void KCTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections)
+void KCTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection> &selections)
 {
     QTextCursor _cursor(document());
 
@@ -838,8 +838,8 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }
         else
         {*/
-            QPlainTextEdit::keyPressEvent(e);
-            autoIndent();
+        QPlainTextEdit::keyPressEvent(e);
+        autoIndent();
         //}
         break;
     }

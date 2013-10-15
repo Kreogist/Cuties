@@ -39,30 +39,29 @@ void KCMarkPanel::setMarkPix(const QPixmap &value)
 }
 
 void KCMarkPanel::draw(QPainter *painter, QTextBlock *block,
-                        int x, int y, int w, int h,
-                        bool isCurrentLine)
+                       int x, int y, int w, int h,
+                       bool isCurrentLine)
 {
     Q_UNUSED(isCurrentLine);
 
-    int blockNum=block->blockNumber();
-
-    if(blockNum>=vecMark.size())
+    KCTextBlockData *data=static_cast<KCTextBlockData *>(block->userData());
+    if(data!=NULL)
     {
-        vecMark.resize(blockNum+1);
-    }
+        markUnit markInfo=data->getMarkInfo();
+        QPoint _global(x,y);
+        markInfo.rect.setTopLeft(mapToGlobal(_global));
+        markInfo.rect.setWidth(w);
+        markInfo.rect.setHeight(h);
+        data->setMarkInfo(markInfo);
 
-    QPoint _global(x,y);
-    vecMark[blockNum].rect.setTopLeft(mapToGlobal(_global));
-    vecMark[blockNum].rect.setWidth(w);
-    vecMark[blockNum].rect.setHeight(h);
-
-    if(vecMark[blockNum].marked)
-    {
-        painter->drawPixmap(x,
-                            y - 3,
-                            markPix.width(),
-                            markPix.height(),
-                            markPix);
+        if(markInfo.marked)
+        {
+            painter->drawPixmap(x,
+                                y - 3,
+                                markPix.width(),
+                                markPix.height(),
+                                markPix);
+        }
     }
 }
 
@@ -79,24 +78,26 @@ void KCMarkPanel::mouseReleaseEvent(QMouseEvent *e)
 {
     if(isPressed)
     {
-        int i=getFirstVisiableBlockNumber(),
-            l=getLastVisiableBlockNumber();
+        QTextBlock block=getFirstVisiableBlock();
+        int lastBlockNumber=getLastVisiableBlockNumber();
 
-        l=(l==-1)?vecMark.size():l;
-        // l==-1 means that the document is reach at the end.
-        // So l should be vecMark.size().
-
-        for(; i<l; i++)
+        for(; block.blockNumber() <= lastBlockNumber; block=block.next())
         {
-            if(vecMark[i].rect.contains(pressedPos,true))
+            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
+            if(data !=NULL)
             {
-                if(vecMark[i].rect.contains(e->globalPos(),true))
+                markUnit _markInfo=data->getMarkInfo();
+                if(_markInfo.rect.contains(pressedPos,true))
                 {
-                    vecMark[i].marked^=1;   //exchange the state
-                    update();
-                }
+                    if(_markInfo.rect.contains(e->globalPos(),true))
+                    {
+                        _markInfo.marked^=1;   //exchange the state
+                        data->setMarkInfo(_markInfo);
+                        update();
+                    }
 
-                break;  //mouse press in a rect and release in another rect
+                    break;  //mouse press in a rect and release in another rect
+                }
             }
         }
         isPressed=false;
