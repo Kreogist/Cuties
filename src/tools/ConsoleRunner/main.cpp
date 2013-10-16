@@ -45,7 +45,11 @@ int main(int argc, char *argv[])
     system("clear");
 #endif
 
-    int l=strlen(argv[1])+2;
+    int l=1;
+    for(int i=1; i<argc; i++)
+    {
+        l+=strlen(argv[i]);
+    }
 
 #ifdef _OS_WIN32_
     char *title=new char[l+100];
@@ -60,6 +64,11 @@ int main(int argc, char *argv[])
     memset(program_name,0,sizeof(char)*l);
     program_name[0]='\"';
     strcat(program_name,argv[1]);
+    for(int i=2; i<argc; i++)
+    {
+        strcat(program_name," ");
+        strcat(program_name,argv[i]);
+    }
     strcat(program_name,"\"");
 
     //get start time
