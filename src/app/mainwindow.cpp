@@ -398,6 +398,7 @@ void MainWindow::createDocks()
     addDockWidget(Qt::RightDockWidgetArea, judgeDock);
     */
 
+    setDockNestingEnabled(true);
     //Compile Dock
     compileDock=new KCCompileDock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
