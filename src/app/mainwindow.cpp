@@ -89,20 +89,20 @@ void MainWindow::createActions()
 
     //File -> Close
     actionMainWindowItem[actionFileClose]=new QAction(tr("&Close"),this);
-    actionMainWindowItem[actionFileClose]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F4));
+    actionMainWindowItem[actionFileClose]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
     stringActionIconPath[actionFileClose]=QString(":/menuicon/image/MenuIcons/mnuFileClose.png");
     stringActionStatusTips[actionFileClose]=QString(tr("Close the active document."));
     connect(actionMainWindowItem[actionFileClose],SIGNAL(triggered()),tabManager,SLOT(closeCurrentTab()));
 
     //File -> Close All
     actionMainWindowItem[actionFileCloseAll]=new QAction(tr("C&lose All"),this);
-    actionMainWindowItem[actionFileCloseAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F4));
+    actionMainWindowItem[actionFileCloseAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
     stringActionStatusTips[actionFileCloseAll]=QString(tr("Close all documents."));
     connect(actionMainWindowItem[actionFileCloseAll],SIGNAL(triggered()),tabManager,SLOT(closeAllTab()));
 
     //File -> Close All Except This
     actionMainWindowItem[actionFileCloseAllExceptThis]=new QAction(tr("Clos&e All Other File"),this);
-    actionMainWindowItem[actionFileCloseAllExceptThis]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F4));
+    actionMainWindowItem[actionFileCloseAllExceptThis]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_W));
     stringActionStatusTips[actionFileCloseAllExceptThis]=QString(tr("Close all documents except the active document."));
     connect(actionMainWindowItem[actionFileCloseAllExceptThis],SIGNAL(triggered()),tabManager,SLOT(closeAllOtherTab()));
 
@@ -417,6 +417,10 @@ void MainWindow::createDocks()
             tabManager, SLOT(openAndJumpTo(QString)));
     connect(sideBar, SIGNAL(clipboardRequiredInsertText(QString)),
             tabManager, SLOT(insertToCurrentEditor(QString)));
+
+    //Debug Dock
+    debugMainDock=new KCDebugMainDock(this);
+    addDockWidget(Qt::BottomDockWidgetArea, debugMainDock);
 }
 
 void MainWindow::createMenu()
@@ -842,6 +846,12 @@ void MainWindow::show()
 
 void MainWindow::onActionCompile()
 {
+    compileFinishedConnection.disConnectAll();
+    compileProgram();
+}
+
+void MainWindow::compileProgram()
+{
     KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
 
     //Check Tab Status.
@@ -903,7 +913,7 @@ void MainWindow::onActionCompileAndRun()
                                            KCExecutor::getInstance(),SLOT(exec(QString)));
         compileFinishedConnection+=connect(currentEditor->langMode(), SIGNAL(compileSuccessfully(QString)),
                                            compileDock, SLOT(hideCompileDock()));
-        onActionCompile();
+        compileProgram();
     }
 }
 

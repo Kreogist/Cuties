@@ -53,6 +53,7 @@
 #include "kreogistcutestyle.h"
 #include "kcmessagebox.h"
 #include "kcconnectionhandler.h"
+#include "kcdebugmaindock.h"
 
 class MainWindow : public KCMainWindow
 {
@@ -189,6 +190,10 @@ private:
     KCTitleBar *titlebar;
     KCStatusBar *statusBar;
     KCConnectionHandler compileFinishedConnection;
+
+    KCDebugMainDock *debugMainDock;
+
+    void compileProgram();
 
     void saveSettings();
     void restoreSettings();

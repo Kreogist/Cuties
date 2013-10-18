@@ -88,7 +88,10 @@ SOURCES += \
     kcpascalhighlighter.cpp \
     kcreplacewindow.cpp \
     kccolorconfigure.cpp \
-    Controls/SettingItems/kcsettingcontrollineedit.cpp
+    Controls/SettingItems/kcsettingcontrollineedit.cpp \
+    kcdebugmaindock.cpp \
+    kcdebugcontrolbuttons.cpp \
+    kcdebugcommandio.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -153,7 +156,10 @@ HEADERS += \
     kcpascalhighlighter.h \
     kcreplacewindow.h \
     kccolorconfigure.h \
-    Controls/SettingItems/kcsettingcontrollineedit.h
+    Controls/SettingItems/kcsettingcontrollineedit.h \
+    kcdebugmaindock.h \
+    kcdebugcontrolbuttons.h \
+    kcdebugcommandio.h
 
 # Enable C++11
 CONFIG += c++11

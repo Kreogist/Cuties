@@ -69,12 +69,12 @@ void KCCompilerBase::startCompile(const QString &filePath)
     connectionHandles+=connect(compiler.data(), SIGNAL(finished(int)),
                                this, SLOT(onFinished(int)));
 
-    QStringList compilerEnvironment=QProcess::systemEnvironment();
-    compilerEnvironment.replaceInStrings(QRegExp("^PATH=(.*)", Qt::CaseInsensitive), QString("PATH=\\1;"+getCompileEnv()));
-    qDebug()<<"compilerEnvironment"<<compilerEnvironment;
-    qDebug()<<"compilerPath"<<compilerPath;
-    qDebug()<<"compilerArg"<<arg;
-    compiler->setEnvironment(compilerEnvironment);
+    if(!getCompileEnv().isEmpty())
+    {
+        QStringList compilerEnvironment=QProcess::systemEnvironment();
+        compilerEnvironment.replaceInStrings(QRegExp("^PATH=(.*)", Qt::CaseInsensitive), QString("PATH=\\1;"+getCompileEnv()));
+        compiler->setEnvironment(compilerEnvironment);
+    }
     compiler->start(compilerPath, arg);
 }
 

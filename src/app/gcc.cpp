@@ -75,15 +75,18 @@ QStringList gcc::getCompileArg(const QString &filePath)
 
 QString gcc::getCompileEnv()
 {
-    QString envPath;
 #ifdef Q_OS_WIN
+    QString envPath;
     QDir envDir(this->compilerPath());
     envDir.setPath(envDir.absolutePath().left(envDir.absolutePath().length()-envDir.dirName().length()));
     envDir.setPath(envDir.absolutePath().left(envDir.absolutePath().length()-envDir.dirName().length()-1));
     envPath=envDir.absolutePath();
     envPath.replace("/","\\");
-#endif
     return envPath + "\\Bin;" + envPath + "\\lib";
+#else
+    return QString("");
+#endif
+
 }
 
 void gcc::parseLine(const QString &text)

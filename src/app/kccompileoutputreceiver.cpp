@@ -64,8 +64,7 @@ void KCCompileOutputReceiver::addBeginCompileText()
     addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
             " " +
             tr("Current Compiler Details:") + "\n" +
-            compilerVersion +
-            "\n");
+            compilerVersion);
 
     //Output Compile Info:
     addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
