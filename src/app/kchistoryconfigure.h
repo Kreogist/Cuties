@@ -28,8 +28,16 @@
 #include <QIcon>
 #include <QFileInfo>
 #include <QDebug>
+#include <QDateTime>
 
 #include "kcconfigure.h"
+
+struct recentFileInfo
+{
+    QString fileName;
+    QString filePlace;
+    QDateTime lastRead;
+};
 
 class KCHistoryConfigure : public KCConfigure
 {
@@ -77,7 +85,7 @@ private:
     static QString historyFileName;
     QString historyDirPath;
 
-    QIcon getFileIcon(const QString &fileExtName) const;
+    QStandardItem *createRecentFileInfo(const QString &path);
 
     QStandardItemModel *recentOpenedFileModel;
 

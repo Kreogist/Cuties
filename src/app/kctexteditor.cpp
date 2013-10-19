@@ -409,7 +409,6 @@ void KCTextEditor::autoIndent()
 
     if(currLevel>=baseLevel)
     {
-        qDebug()<<currLevel-baseLevel;
         insertTab(_textCursor,currLevel-baseLevel);
     }
     else
@@ -793,23 +792,33 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }
         else
         {
-            int start=_textCursor.selectionStart(),
-                end=_textCursor.selectionEnd();
-            _textCursor.beginEditBlock();
-            _textCursor.clearSelection();
-            _textCursor.setPosition(start);
-            _textCursor.insertText(e->text());
-            _textCursor.setPosition(end+1);
-            _textCursor.insertText(pairParethesesChar);
-            _textCursor.endEditBlock();
-            setTextCursor(_textCursor);
+            /*if(e->text()=='{')
+            {
+                QTextBlock currBlock=_textCursor.block();
+                QTextBlock prevBlock=currBlock.previous();
+                QTextBlock nextBlock=currBlock.next();
+
+            }
+            else
+            {*/
+                int start=_textCursor.selectionStart(),
+                        end=_textCursor.selectionEnd();
+                _textCursor.beginEditBlock();
+                _textCursor.clearSelection();
+                _textCursor.setPosition(start);
+                _textCursor.insertText(e->text());
+                _textCursor.setPosition(end+1);
+                _textCursor.insertText(pairParethesesChar);
+                _textCursor.endEditBlock();
+                setTextCursor(_textCursor);
+            //}
         }
         return;
     }
     if(e->text()==")" || e->text()=="]")
     {
-        //TODO: Fixed Code Here!
-        /*KCTextBlockData *blockData=static_cast<KCTextBlockData *>(cursor.block().userData());
+    /*    //TODO: Fixed Code Here!
+        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(cursor.block().userData());
 
         if(matchParentheses(e->text()==")"?"(":"[",
                             e->text(),
@@ -823,8 +832,8 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         else
         {*/
                 QPlainTextEdit::keyPressEvent(e);
-        /*}
-        return;*/
+        //}
+        return;
     }
     switch(e->key())
     {
@@ -859,22 +868,33 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Return:
     case Qt::Key_Enter:
     {
-        /*bool parneCheck=(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
+        bool parneCheck=(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
                          _textCursor.document()->characterAt(_textCursor.position()) == '}');
         if(parneCheck)
         {
             QPlainTextEdit::keyPressEvent(e);
-            autoIndent();
-            _textCursor.insertText("\n");
-            _textCursor.movePosition(QTextCursor::NextBlock);
+            _textCursor.insertBlock();
+
+            QTextBlock nextBlock=_textCursor.block();
+            QTextBlock currBlock=nextBlock.previous();
+            QTextBlock prevBlock=currBlock.previous();
+            KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
+            KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
+            KCTextBlockData *nextData=static_cast<KCTextBlockData *>(nextBlock.userData());
+            currData->setCodeLevel(prevData->getCodeLevel() + 1);
+            nextData->setCodeLevel(prevData->getCodeLevel());
+            _textCursor.setPosition(nextBlock.position());
             setTextCursor(_textCursor);
-            autoIndent();
+            insertTab(_textCursor, prevData->getCodeLevel());
+            _textCursor.movePosition(QTextCursor::PreviousBlock);
+            setTextCursor(_textCursor);
+            insertTab(_textCursor, prevData->getCodeLevel() + 1);
         }
         else
-        {*/
-        QPlainTextEdit::keyPressEvent(e);
-        autoIndent();
-        //}
+        {
+            QPlainTextEdit::keyPressEvent(e);
+            autoIndent();
+        }
         break;
     }
     case Qt::Key_Insert:

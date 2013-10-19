@@ -31,7 +31,7 @@ KCHistoryStack::KCHistoryStack(QWidget *parent) :
 
 void KCHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
 {
-    emit requiredOpenFiles(KCHistoryConfigure::getInstance()->getRecentOpenedFileModel()->item(ItemID.row())->toolTip());
+    emit requiredOpenFiles(KCHistoryConfigure::getInstance()->getRecentOpenedFileModel()->item(ItemID.row())->statusTip());
 }
 
 KCSidebarButton::KCSidebarButton(QWidget *parent) :

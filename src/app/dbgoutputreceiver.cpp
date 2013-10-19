@@ -27,7 +27,6 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
         new QPlainTextDocumentLayout(textStreamOutput));
 
     stackInfoModel=new QStandardItemModel(this);
-
     QStringList labels;
     labels<<tr("name")<<tr("value");
 

@@ -116,7 +116,6 @@ void MainWindow::createActions()
 
     //Edit -> Undo
     actionMainWindowItem[actionEditUndo]=new QAction(tr("&Undo"),this);
-    actionMainWindowItem[actionEditUndo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Z));
     stringActionIconPath[actionEditUndo]=QString(":/menuicon/image/MenuIcons/mnuEditUndo.png");
     stringActionStatusTips[actionEditUndo]=QString(tr("Undo the last action."));
     connect(actionMainWindowItem[actionEditUndo],SIGNAL(triggered()),tabManager,SLOT(undo()));
@@ -130,28 +129,24 @@ void MainWindow::createActions()
 
     //Edit -> Cut
     actionMainWindowItem[actionEditCut]=new QAction(tr("Cu&t"),this);
-    actionMainWindowItem[actionEditCut]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_X));
     stringActionIconPath[actionEditCut]=QString(":/menuicon/image/MenuIcons/mnuEditCut.png");
     stringActionStatusTips[actionEditCut]=QString(tr("Cut the selection to the Clipboard."));
     connect(actionMainWindowItem[actionEditCut],SIGNAL(triggered()),tabManager,SLOT(cut()));
 
     //Edit -> Copy
     actionMainWindowItem[actionEditCopy]=new QAction(tr("&Copy"),this);
-    actionMainWindowItem[actionEditCopy]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_C));
     stringActionIconPath[actionEditCopy]=QString(":/menuicon/image/MenuIcons/mnuEditCopy.png");
     stringActionStatusTips[actionEditCopy]=QString(tr("Copy the selection to the Clipboard."));
     connect(actionMainWindowItem[actionEditCopy],SIGNAL(triggered()),tabManager,SLOT(copy()));
 
     //Edit -> Paste
     actionMainWindowItem[actionEditPaste]=new QAction(tr("&Paste"),this);
-    actionMainWindowItem[actionEditPaste]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_V));
     stringActionIconPath[actionEditPaste]=QString(":/menuicon/image/MenuIcons/mnuEditPaste.png");
     stringActionStatusTips[actionEditPaste]=QString(tr("Insert Clipboard contents."));
     connect(actionMainWindowItem[actionEditPaste],SIGNAL(triggered()),tabManager,SLOT(paste()));
 
     //Edit -> Select All
     actionMainWindowItem[actionEditSelectAll]=new QAction(tr("&Select All"),this);
-    actionMainWindowItem[actionEditSelectAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_A));
     stringActionIconPath[actionEditSelectAll]=QString(":/menuicon/image/MenuIcons/mnuEditSelectAll.png");
     stringActionStatusTips[actionEditSelectAll]=QString(tr("Select the entire document."));
     connect(actionMainWindowItem[actionEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(selectAll()));
@@ -419,9 +414,12 @@ void MainWindow::createDocks()
     connect(sideBar, SIGNAL(clipboardRequiredInsertText(QString)),
             tabManager, SLOT(insertToCurrentEditor(QString)));
 
-    //Debug Dock
-    debugMainDock=new KCDebugMainDock(this);
-    addDockWidget(Qt::BottomDockWidgetArea, debugMainDock);
+    //Debug Panel
+    debugControl=new KCDebugControlPanel(this);
+    addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
+    //Debug Command IO
+    debugCommandIO=new KCDebugCommandIO(this);
+    addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
 }
 
 void MainWindow::createMenu()

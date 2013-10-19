@@ -28,6 +28,7 @@
     <qresource prefix="/mainicon">
         <file>image/Cuties.icns</file>
         <file>image/Cuties.ico</file>
+        <file>image/Cuties.png</file>
     </qresource>
     <qresource prefix="/menuicon">
         <file>image/MenuIcons/mnuEditPerformance.png</file>
@@ -65,14 +66,13 @@
         <file>image/Debug Docks/StopDebug.png</file>
         <file>image/Debug Docks/RunToCursor.png</file>
         <file>image/Debug Docks/NextLine.png</file>
-        <file>image/Debug Docks/GetOutOfFuntion.png</file>
-        <file>image/Debug Docks/GetIntoFuntion.png</file>
-        <file>image/Debug Docks/NextStep.png</file>
         <file>image/Debug Docks/Continue.png</file>
         <file>image/Debug Docks/AddWatch.png</file>
         <file>image/Debug Docks/RemoveWatch.png</file>
         <file>image/Debug Docks/ModifyWatch.png</file>
-        <file>image/Debug Docks/JumpFunction.png</file>
+        <file>image/Debug Docks/SkipFunction.png</file>
+        <file>image/Debug Docks/IntoInstruction.png</file>
+        <file>image/Debug Docks/NextInstruction.png</file>
     </qresource>
     <qresource prefix="/ToolBar">
         <file>image/ToolBar/new.png</file>

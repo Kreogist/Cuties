@@ -5,6 +5,7 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
 {
     //Set properties.
     setObjectName("DebugCommandIO");
+    setWindowTitle(tr("Debug Command Prompt"));
     setContentsMargins(0,0,0,0);
 
     //Set palette.
@@ -20,9 +21,9 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     setWidget(contentWidget);
 
     //Set Layout.
-    mainLayout=new QVBoxLayout(this);
+    mainLayout=new QVBoxLayout(contentWidget);
     mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(0);
+    mainLayout->setSpacing(2);
     contentWidget->setLayout(mainLayout);
 
     //Set command line input.

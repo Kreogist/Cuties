@@ -53,7 +53,8 @@
 #include "kreogistcutestyle.h"
 #include "kcmessagebox.h"
 #include "kcconnectionhandler.h"
-#include "kcdebugmaindock.h"
+#include "kcdebugcontrolpanel.h"
+#include "kcdebugcommandio.h"
 
 class MainWindow : public KCMainWindow
 {
@@ -191,7 +192,8 @@ private:
     KCStatusBar *statusBar;
     KCConnectionHandler compileFinishedConnection;
 
-    KCDebugMainDock *debugMainDock;
+    KCDebugControlPanel *debugControl;
+    KCDebugCommandIO *debugCommandIO;
 
     void compileProgram();
 

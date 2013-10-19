@@ -36,6 +36,14 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     //Set compile info splitter widget
     compileOutputInfoSplitter=new QSplitter(Qt::Horizontal, this);
     compileOutputInfoSplitter->setContentsMargins(0,0,0,0);
+    compileOutputInfoSplitter->setAutoFillBackground(true);
+    pal=compileOutputInfoSplitter->palette();
+    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
+    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
+    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
+    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    compileOutputInfoSplitter->setPalette(pal);
     //Set text output widget
     compileOutputTextInfo=new KCPlainTextBrowser(this);
     compileOutputTextInfo->setContentsMargins(0,0,0,0);

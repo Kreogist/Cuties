@@ -44,7 +44,7 @@ static inline void initApplicationInfo()
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
-    QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.ico"));
+    QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.png"));
 }
 
 static void initApplicationFonts()

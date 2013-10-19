@@ -46,26 +46,6 @@ KCHistoryConfigure *KCHistoryConfigure::getInstance()
     instance;
 }
 
-QIcon KCHistoryConfigure::getFileIcon(const QString &fileExtName) const
-{
-    if(fileExtName==QString("c"))
-    {
-        return cFileIcon;
-    }
-    else if(fileExtName==QString("cpp"))
-    {
-        return cppFileIcon;
-    }
-    else if(fileExtName==QString("pas"))
-    {
-        return pasFileIcon;
-    }
-    else
-    {
-        return otherFileIcon;
-    }
-}
-
 void KCHistoryConfigure::readConfigure()
 {
     QSettings settings(getHistoryFileName(),
@@ -107,12 +87,7 @@ void KCHistoryConfigure::readConfigure()
         QFile *historyFileItem=new QFile(filePath);
         if(historyFileItem->exists())
         {
-            QFileInfo historyFileInfo(filePath);
-            QStandardItem *item=new QStandardItem(historyFileInfo.fileName());
-            item->setToolTip(filePath);
-            item->setEditable(false);
-            item->setIcon(getFileIcon(historyFileInfo.suffix().toLower()));
-            recentOpenedFileModel->insertRow(0,item);
+            recentOpenedFileModel->insertRow(0, createRecentFileInfo(filePath));
         }
     }
     settings.endArray();
@@ -155,7 +130,7 @@ void KCHistoryConfigure::writeConfigure()
         for(int i=0; i<=recentOpenedCounts; i++)
         {
             settings.setArrayIndex(recentOpenedCounts-i);
-            settings.setValue("filePath",recentOpenedFileModel->item(i)->toolTip());
+            settings.setValue("filePath",recentOpenedFileModel->item(i)->statusTip());
         }
         settings.endArray();
     }
@@ -243,16 +218,48 @@ void KCHistoryConfigure::clearAllRecentFilesRecord()
     recentOpenedFileModel->clear();
 }
 
+QStandardItem *KCHistoryConfigure::createRecentFileInfo(const QString &path)
+{
+    QFileInfo historyFileInfo(path);
+
+    QStandardItem *recentFileItem=nullptr;
+    recentFileItem=new QStandardItem(historyFileInfo.fileName());
+    recentFileItem->setStatusTip(path);
+    recentFileItem->setEditable(false);
+    QString fileExtName=historyFileInfo.suffix().toLower();
+
+    QString toolTipDetailsInfo=historyFileInfo.fileName() + "\n";
+    if(fileExtName==QString("c"))
+    {
+        recentFileItem->setIcon(cFileIcon);
+        toolTipDetailsInfo+=tr("C Source File") + "\n";
+    }
+    else if(fileExtName==QString("cpp"))
+    {
+        recentFileItem->setIcon(cppFileIcon);
+        toolTipDetailsInfo+=tr("C++ Source File") + "\n";
+    }
+    else if(fileExtName==QString("pas"))
+    {
+        recentFileItem->setIcon(pasFileIcon);
+        toolTipDetailsInfo+=tr("Pascal Source File") + "\n";
+    }
+    else
+    {
+        recentFileItem->setIcon(otherFileIcon);
+        toolTipDetailsInfo+=tr("Plain Text File") + "\n";
+    }
+    toolTipDetailsInfo+=tr("File Path: ") + historyFileInfo.absolutePath() + "\n" +
+                        tr("Last Read: ") + historyFileInfo.lastRead().toString();
+    recentFileItem->setToolTip(toolTipDetailsInfo);
+    return recentFileItem;
+}
+
 void KCHistoryConfigure::addRecentFileRecord(const QString &path)
 {
     QFileInfo historyFileInfo(path);
 
     QList<QStandardItem *> results=recentOpenedFileModel->findItems(historyFileInfo.fileName());
-    QStandardItem *item=nullptr;
-    item=new QStandardItem(historyFileInfo.fileName());
-    item->setToolTip(path);
-    item->setEditable(false);
-    item->setIcon(getFileIcon(historyFileInfo.suffix().toLower()));
     if(!results.isEmpty())
     {
         for(auto i=results.begin(); i!=results.end(); i++)
@@ -260,7 +267,7 @@ void KCHistoryConfigure::addRecentFileRecord(const QString &path)
             recentOpenedFileModel->removeRow((*i)->row());
         }
     }
-    recentOpenedFileModel->insertRow(0,item);
+    recentOpenedFileModel->insertRow(0,createRecentFileInfo(path));
 
     if(recentOpenedFileModel->rowCount() >= maxRecentFilesSize)
     {
