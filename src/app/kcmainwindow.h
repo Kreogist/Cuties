@@ -52,6 +52,9 @@ public slots:
 
 private:
     KCTitleBar *titleBar;
+#ifndef Q_OS_MACX
+    KCDragProxy *dragProxy;
+#endif
 };
 
 #endif // KCMAINWINDOW_H

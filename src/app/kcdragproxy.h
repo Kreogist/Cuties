@@ -36,6 +36,8 @@ class KCDragProxy : public QObject
 public:
     KCDragProxy(QWidget *parent);
     ~KCDragProxy();
+    void setBorderWidth(int top, int right, int bottom, int left);
+
 protected:
     enum WidgetRegion
     {
@@ -48,9 +50,6 @@ protected:
         Unknown
     };
 
-public:
-    void setBorderWidth(int top, int right, int bottom, int left);
-
 protected:
     virtual bool eventFilter(QObject *obj, QEvent *event);
 
@@ -61,7 +60,13 @@ protected:
     void startCursorTimer();
     void stopCursorTimer();
 
+public slots:
+#ifndef Q_OS_MACX
+    void setEnabled(bool value);
+#endif
+
 private:
+    bool enabled;
     QWidget *m_proxyWidget;
     int m_top, m_right, m_bottom, m_left;
     QRect m_regions[9];

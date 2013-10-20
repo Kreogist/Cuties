@@ -32,8 +32,10 @@ KCMainWindow::KCMainWindow(QWidget *parent) :
 #else
     setContentsMargins(2,2,2,2);
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-    KCDragProxy *dragProxy=new KCDragProxy(this);
+    dragProxy=new KCDragProxy(this);
     dragProxy->setBorderWidth(8,8,8,8);
+    connect(titleBar, &KCTitleBar::dragProxyEnabled,
+            dragProxy,&KCDragProxy::setEnabled);
 #endif
 }
 

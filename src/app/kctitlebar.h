@@ -29,11 +29,13 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QRect>
+#include <QFont>
 #include <QIcon>
 #include <QString>
 #include <QToolBar>
 #include <QWidget>
 #include <QPalette>
+#include <QPushButton>
 #include <QDebug>
 
 #include "kccolorconfigure.h"
@@ -71,6 +73,9 @@ public:
 #endif
 
 signals:
+#ifndef Q_OS_MACX
+    void dragProxyEnabled(bool newValue);
+#endif
 
 public slots:
     void showToolBar();

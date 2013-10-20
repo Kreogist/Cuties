@@ -74,17 +74,25 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
             this->parent(),SLOT(showMinimized()));
     connect(maximizeButton,SIGNAL(clicked()),
             this,SLOT(_exchange_button_state()));
+
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
     mainButton->setFixedHeight(32);
+    QPalette pal=mainButton->palette();
+    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
+    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
+    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
+    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    mainButton->setPalette(pal);
     mainButton->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_1));
-    connect(mainButton,SIGNAL(clicked()),mainButton,SLOT(showMenu()));
-    mainButton->setPalette(bpal);
+    connect(mainButton, &QToolButton::pressed,
+            mainButton, &QToolButton::showMenu);
 #endif
 
     mainToolBar=new QToolBar(this);
     mainToolBar->setObjectName("mainToolBar");
-    QPalette pal=mainToolBar->palette();
+    pal=mainToolBar->palette();
     KCColorConfigure::getInstance()->getPalette(pal,mainToolBar->objectName());
     mainToolBar->setPalette(pal);
     mainToolBar->setContentsMargins(0,0,0,0);
@@ -231,6 +239,7 @@ void KCTitleBar::setWindowNormal()
     mainWindow->showNormal();
     maximizeButton->setIcon(maximizeButtonIcon);
     isShowingNormalButton=false;
+    emit dragProxyEnabled(!isShowingNormalButton);
 }
 
 void KCTitleBar::setWindowMax()
@@ -238,6 +247,7 @@ void KCTitleBar::setWindowMax()
     mainWindow->showMaximized();
     maximizeButton->setIcon(normalButtonIcon);
     isShowingNormalButton=true;
+    emit dragProxyEnabled(!isShowingNormalButton);
 }
 
 #ifndef Q_OS_MACX
@@ -248,9 +258,9 @@ void KCTitleBar::setMenu(QMenu *menu)
 
 void KCTitleBar::setMainButtonIcon(const QString &mainIcon)
 {
-    mainButtonIcon.addFile(mainIcon);
-    mainButton->setIcon(mainButtonIcon);
-    mainButton->setText("Cuties");
+    QPixmap mainButtonImage(mainIcon);
+    mainButton->setIcon(QIcon(mainIcon));
+    mainButton->setIconSize(QSize(mainButtonImage.width(),mainButtonImage.height()));
 }
 
 void KCTitleBar::mousePressEvent(QMouseEvent *event)

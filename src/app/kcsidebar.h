@@ -176,6 +176,7 @@ private:
     QTimeLine *showDockAnimation, *hideDockAnimation;
     KCSideBarContent *centralWidget;
     QMetaObject::Connection animationHide;
+    QPalette pal;
 };
 
 #endif // KCSIDEBAR_H

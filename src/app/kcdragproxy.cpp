@@ -32,10 +32,17 @@ KCDragProxy::KCDragProxy(QWidget *parent)
     m_regionPressed=Unknown;
 
     m_cursorTimerId = 0;
+
+    enabled=true;
 }
 
 KCDragProxy::~KCDragProxy()
 {
+}
+
+void KCDragProxy::setEnabled(bool value)
+{
+    enabled=value;
 }
 
 void KCDragProxy::setBorderWidth(int top, int right, int bottom, int left)
@@ -65,6 +72,10 @@ void KCDragProxy::updateGeometry(int x, int y, int w, int h)
 
 bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
 {
+    if(!enabled)
+    {
+        return false;
+    }
     QEvent::Type eventType = event->type();
     if(eventType==QEvent::HoverMove)
     {

@@ -265,8 +265,8 @@ KCSideBar::KCSideBar(QWidget *parent) :
     //Set Style
     setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
-    QPalette pal=this->palette();
-    pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
+    pal=palette();
+    pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
     pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
     pal.setColor(QPalette::Button,QColor(83,83,83));
@@ -370,17 +370,6 @@ void KCSideBar::setExpandState(bool value)
     expandState = value;
 }
 
-void KCSideBar::enterEvent(QEvent *e)
-{
-    QDockWidget::enterEvent(e);
-    if(!expandState &&
-            expandAnimation->state()!=QTimeLine::Running &&
-            foldAnimation->state()!=QTimeLine::Running)
-    {
-        showDock();
-    }
-}
-
 void KCSideBar::showDock()
 {
     hideDockAnimation->stop();
@@ -397,9 +386,24 @@ void KCSideBar::hideDock()
     hideDockAnimation->start();
 }
 
+void KCSideBar::enterEvent(QEvent *e)
+{
+    QDockWidget::enterEvent(e);
+    pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
+    setPalette(pal);
+    if(!expandState &&
+            expandAnimation->state()!=QTimeLine::Running &&
+            foldAnimation->state()!=QTimeLine::Running)
+    {
+        showDock();
+    }
+}
+
 void KCSideBar::leaveEvent(QEvent *e)
 {
     QDockWidget::leaveEvent(e);
+    pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
+    setPalette(pal);
     if(!expandState)
     {
         if(expandAnimation->state()==QTimeLine::Running ||
