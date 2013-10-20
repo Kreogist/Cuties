@@ -250,6 +250,7 @@ void KCTitleBar::setMainButtonIcon(const QString &mainIcon)
 {
     mainButtonIcon.addFile(mainIcon);
     mainButton->setIcon(mainButtonIcon);
+    mainButton->setText("Cuties");
 }
 
 void KCTitleBar::mousePressEvent(QMouseEvent *event)
