@@ -98,7 +98,6 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     debugCursorControlToolTips[debugIntoInstruction]=debugCursorControlCaption[debugIntoInstruction] + "\n" + tr("Go to next line.");
     debugCursorControlToolTips[debugSkipFunction]=debugCursorControlCaption[debugSkipFunction] + "\n" + tr("Go to next line.");
 
-    int maxWidth=0;
     for(i=debugNextLine; i<debugCursorControlButtonCount; i++)
     {
         debugCursorControlButton[i]=new QToolButton(this);
@@ -116,16 +115,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
         debugCursorControlButton[i]->setIcon(QIcon(debugCursorControlIconPath[i]));
         debugCursorControlButton[i]->setText(debugCursorControlCaption[i]);
         debugCursorControlButton[i]->setToolTip(debugCursorControlToolTips[i]);
-        if(debugCursorControlButton[i]->width()>maxWidth)
-        {
-            maxWidth=debugCursorControlButton[i]->width()+18;
-        }
         mainLayout->addWidget(debugCursorControlButton[i]);
     }
-    for(i=debugNextLine; i<debugCursorControlButtonCount; i++)
-    {
-        debugCursorControlButton[i]->setFixedWidth(maxWidth);
-    }
     mainLayout->addStretch();
-    setFixedWidth(maxWidth);
 }

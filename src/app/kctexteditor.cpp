@@ -868,9 +868,8 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Return:
     case Qt::Key_Enter:
     {
-        bool parneCheck=(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
-                         _textCursor.document()->characterAt(_textCursor.position()) == '}');
-        if(parneCheck)
+        if(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
+                _textCursor.document()->characterAt(_textCursor.position()) == '}')
         {
             QPlainTextEdit::keyPressEvent(e);
             _textCursor.insertBlock();

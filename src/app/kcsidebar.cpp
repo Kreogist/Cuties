@@ -261,11 +261,12 @@ KCSideBar::KCSideBar(QWidget *parent) :
     setFeatures(QDockWidget::NoDockWidgetFeatures);
     //Set Fixed Size.
     setMinimumWidth(0);
-    setFixedWidth(30);
+    setFixedWidth(5);
     //Set Style
     setContentsMargins(0,0,0,0);
+    setAutoFillBackground(true);
     QPalette pal=this->palette();
-    pal.setBrush(QPalette::Window, QBrush(QColor(83,83,83)));
+    pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
     pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));
     pal.setColor(QPalette::WindowText,QColor(255,255,255));
     pal.setColor(QPalette::Button,QColor(83,83,83));
@@ -275,73 +276,87 @@ KCSideBar::KCSideBar(QWidget *parent) :
     setWindowTitle(" " + tr("Sidebar") + " ");
 
     //New Central Widget
-    CentralWidget=new KCSideBarContent(this);
-    CentralWidget->setMinimumWidth(0);
-    setWidget(CentralWidget);
+    centralWidget=new KCSideBarContent(this);
+    centralWidget->setMinimumWidth(0);
+    setWidget(centralWidget);
 
-    connect(CentralWidget, SIGNAL(historyRequiredOpenFiles(QString)),
+    connect(centralWidget, SIGNAL(historyRequiredOpenFiles(QString)),
             this, SIGNAL(historyRequiredOpenFiles(QString)));
-    connect(CentralWidget, SIGNAL(clipRequiredInsertText(QString)),
+    connect(centralWidget, SIGNAL(clipRequiredInsertText(QString)),
             this, SIGNAL(clipboardRequiredInsertText(QString)));
-    connect(CentralWidget, SIGNAL(expandRequest()),
-            this, SLOT(showAnime()));
-    connect(CentralWidget, SIGNAL(foldRequest()),
-            this, SLOT(hideAnime()));
+    connect(centralWidget, SIGNAL(expandRequest()),
+            this, SLOT(expandAnime()));
+    connect(centralWidget, SIGNAL(foldRequest()),
+            this, SLOT(foldAnime()));
 
-    showAnimation=new QTimeLine(250, this);
-    showAnimation->setEasingCurve(QEasingCurve::OutCubic);
-    connect(showAnimation, SIGNAL(frameChanged(int)),
+    showDockAnimation=new QTimeLine(100, this);
+    showDockAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    showDockAnimation->setEndFrame(30);
+    connect(showDockAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
 
-    hideAnimation=new QTimeLine(250, this);
-    hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
-    connect(hideAnimation, SIGNAL(frameChanged(int)),
+    hideDockAnimation=new QTimeLine(100, this);
+    hideDockAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    hideDockAnimation->setEndFrame(6);
+    connect(hideDockAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
-    connect(hideAnimation, SIGNAL(finished()),
-            CentralWidget, SLOT(hideContent()));
+
+    expandAnimation=new QTimeLine(250, this);
+    expandAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    expandAnimation->setEndFrame(230);
+    connect(expandAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(resizeDock(int)));
+
+    foldAnimation=new QTimeLine(250, this);
+    foldAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    foldAnimation->setEndFrame(30);
+    connect(foldAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(resizeDock(int)));
+    connect(foldAnimation, SIGNAL(finished()),
+            centralWidget, SLOT(hideContent()));
 
     expandState=false;
 }
 
 void KCSideBar::forceClearButtonState()
 {
-    CentralWidget->forceClearButtonState();
+    centralWidget->forceClearButtonState();
 }
 
 void KCSideBar::forceShowButtonState()
 {
-    CentralWidget->forceShowButtonState();
+    centralWidget->forceShowButtonState();
 }
 
-void KCSideBar::showAnime()
+void KCSideBar::expandAnime()
 {
-    if(showAnimation->state()!=QTimeLine::Running)
+    if(expandAnimation->state()!=QTimeLine::Running)
     {
-        hideAnimation->stop();
-        showAnimation->setStartFrame(this->width());
-        showAnimation->setEndFrame(230);
+
+        foldAnimation->stop();
+        expandAnimation->setStartFrame(this->width());
         resizeDock(this->width());
         expandState=true;
-        CentralWidget->showContent();
-        showAnimation->start();
+        centralWidget->showContent();
+        expandAnimation->start();
     }
 }
 
 void KCSideBar::resizeDock(int newWidth)
 {
-    CentralWidget->setContentFixedWidth(newWidth - 30);
+    centralWidget->setContentFixedWidth(newWidth-30>0?newWidth-30:0);
     setFixedWidth(newWidth);
 }
 
-void KCSideBar::hideAnime()
+void KCSideBar::foldAnime()
 {
-    if(hideAnimation->state()!=QTimeLine::Running)
+    if(foldAnimation->state()!=QTimeLine::Running)
     {
-        showAnimation->stop();
-        hideAnimation->setStartFrame(this->width());
-        hideAnimation->setEndFrame(30);
+        disconnect(animationHide);
+        expandAnimation->stop();
+        foldAnimation->setStartFrame(this->width());
         expandState=false;
-        hideAnimation->start();
+        foldAnimation->start();
     }
 }
 
@@ -353,4 +368,49 @@ bool KCSideBar::getExpandState() const
 void KCSideBar::setExpandState(bool value)
 {
     expandState = value;
+}
+
+void KCSideBar::enterEvent(QEvent *e)
+{
+    QDockWidget::enterEvent(e);
+    if(!expandState &&
+            expandAnimation->state()!=QTimeLine::Running &&
+            foldAnimation->state()!=QTimeLine::Running)
+    {
+        showDock();
+    }
+}
+
+void KCSideBar::showDock()
+{
+    hideDockAnimation->stop();
+    showDockAnimation->stop();
+    showDockAnimation->setStartFrame(this->width());
+    showDockAnimation->start();
+}
+
+void KCSideBar::hideDock()
+{
+    showDockAnimation->stop();
+    hideDockAnimation->stop();
+    hideDockAnimation->setStartFrame(this->width());
+    hideDockAnimation->start();
+}
+
+void KCSideBar::leaveEvent(QEvent *e)
+{
+    QDockWidget::leaveEvent(e);
+    if(!expandState)
+    {
+        if(expandAnimation->state()==QTimeLine::Running ||
+           foldAnimation->state()==QTimeLine::Running)
+        {
+            animationHide=connect(foldAnimation, SIGNAL(finished()),
+                                  this, SLOT(hideDock()));
+        }
+        else
+        {
+            hideDock();
+        }
+    }
 }

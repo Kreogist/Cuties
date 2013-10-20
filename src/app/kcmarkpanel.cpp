@@ -24,6 +24,7 @@ KCMarkPanel::KCMarkPanel(QWidget *parent) :
 {
     markPix.load(":/img/image/BreakPoint.png");
     setAutoAdaptWidth(false);
+    setAutoFillBackground(true);
     setFixedWidth(25);
     isPressed=false;
 }

@@ -158,17 +158,24 @@ signals:
     void clipboardRequiredInsertText(QString insertText);
 
 public slots:
-    void showAnime();
-    void hideAnime();
+    void expandAnime();
+    void foldAnime();
 
+protected:
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
 
 private slots:
     void resizeDock(int newWidth);
+    void showDock();
+    void hideDock();
 
 private:
     bool expandState;
-    QTimeLine *showAnimation, *hideAnimation;
-    KCSideBarContent *CentralWidget;
+    QTimeLine *expandAnimation, *foldAnimation;
+    QTimeLine *showDockAnimation, *hideDockAnimation;
+    KCSideBarContent *centralWidget;
+    QMetaObject::Connection animationHide;
 };
 
 #endif // KCSIDEBAR_H
