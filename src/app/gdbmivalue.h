@@ -38,7 +38,7 @@ public:
 
     GdbMiValue():type(Invalid) {}
 
-    void build(const QChar* &begin, const QChar* &end);
+    void build(const QChar *&begin, const QChar *&end);
     QString getName() const;
     inline ValueType getType() const
     {
@@ -63,9 +63,9 @@ public:
     GdbMiValue &operator += (const GdbMiValue &child);
 
 private:
-    void parseConst(const QChar* &begin, const QChar* &end);
-    void parseList(const QChar* &begin, const QChar* &end);
-    void parseTuple(const QChar* &begin, const QChar* &end);
+    void parseConst(const QChar *&begin, const QChar *&end);
+    void parseList(const QChar *&begin, const QChar *&end);
+    void parseTuple(const QChar *&begin, const QChar *&end);
 
     ValueType type;
     QString name;

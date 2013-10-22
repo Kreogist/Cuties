@@ -17,6 +17,18 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QTreeView>
+#include <QPalette>
+#include <QSplitter>
+#include <QList>
+#include <QTimeLine>
+
+#include <QDebug>
+
+#include "kcplaintextbrowser.h"
+#include "kccompileoutputreceiver.h"
+#include "kccolorconfigure.h"
+
 #include "kccompiledock.h"
 
 KCCompileDock::KCCompileDock(QWidget *parent):

@@ -17,6 +17,12 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QScrollBar>
+#include <QFontMetrics>
+#include <QDebug>
+
+#include "kctexteditor.h"
+
 #include "kcpanel.h"
 
 KCPanel::KCPanel(QWidget *parent) :

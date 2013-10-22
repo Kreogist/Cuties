@@ -17,6 +17,15 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QProcessEnvironment>
+#include <QFileInfo>
+#include <QApplication>
+#include <QSettings>
+#include <QDir>
+#include <QFile>
+#include <QDebug>
+
+#include "kcglobal.h"
 
 #include "kcexecutor.h"
 
@@ -140,11 +149,11 @@ void KCRunner::run()
 #endif
 
 #ifdef Q_OS_WIN32
-                    //For Windows, we have to launch terminal by:
-                    // cmd /c start cmd /c kciExecutor.exe C:\cppName.exe
-                    <<"start"<<terminal.terminal_name<<terminal.arg
+        //For Windows, we have to launch terminal by:
+        // cmd /c start cmd /c kciExecutor.exe C:\cppName.exe
+                <<"start"<<terminal.terminal_name<<terminal.arg
 #endif
-                    <<qApp->applicationDirPath()+'/'+consoleRunnerPath<<argExecuteFilePath;
+                <<qApp->applicationDirPath()+'/'+consoleRunnerPath<<argExecuteFilePath;
 
         connect(executeProcess,SIGNAL(finished(int)),
                 this,SLOT(quit()));

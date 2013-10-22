@@ -17,6 +17,19 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QSettings>
+#include <QStyle>
+#include <QDebug>
+
+#include "kcgeneralconfigure.h"
+#include "kceditorconfigure.h"
+#include "kccompilerconfigure.h"
+#include "kcdebuggerconfigure.h"
+#include "kcfileassociation.h"
+#include "kclanguageconfigure.h"
+#include "kchistoryconfigure.h"
+#include "kccolorconfigure.h"
+
 #include "kcglobal.h"
 
 KCGlobal *KCGlobal::instance=nullptr;

@@ -20,16 +20,12 @@
 #ifndef PANEL_H
 #define PANEL_H
 
-#include <QMetaObject>
-#include <QPlainTextEdit>
+#include <QWidget>
 #include <QTextBlock>
 #include <QPainter>
-#include <QScrollBar>
-#include <QFontMetrics>
-#include <QDebug>
 
-#include "kctexteditor.h"
 #include "kcconnectionhandler.h"
+class KCTextEditor;
 
 class KCPanel : public QWidget
 {
@@ -55,7 +51,7 @@ protected:
                       bool isCurrentLine) = 0;
 
 private:
-    int getRealLineCount(const QTextBlock& block, const int &offset);
+    int getRealLineCount(const QTextBlock &block, const int &offset);
     KCTextEditor *e;
 
     int first,last;

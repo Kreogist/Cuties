@@ -57,20 +57,20 @@ void KCCompileOutputReceiver::addBeginCompileText()
 {
     //Prepare Compiler
     addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
-            " " +
-            tr("Preparing Compiler.")+
-            "\n");
+                          " " +
+                          tr("Preparing Compiler.")+
+                          "\n");
     //Get Compiler Info.
     addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
-            " " +
-            tr("Current Compiler Details:") + "\n" +
-            compilerVersion);
+                          " " +
+                          tr("Current Compiler Details:") + "\n" +
+                          compilerVersion);
 
     //Output Compile Info:
     addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
-            " " +
-            tr("Compile Command:") +
-            "\n");
+                          " " +
+                          tr("Compile Command:") +
+                          "\n");
     //Compile command will be output when compiler emit signal compileinfo
     //so we will not emit it here.
 }
@@ -107,9 +107,9 @@ void KCCompileOutputReceiver::onCompileMessageReceived(compileErrorInfo error)
     if(!hasOutputHeader)
     {
         addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
-                " " +
-                tr("Compile Output:") +
-                "\n");
+                              " " +
+                              tr("Compile Output:") +
+                              "\n");
         emit requireShowError();
         hasOutputHeader=true;
     }
@@ -133,14 +133,14 @@ void KCCompileOutputReceiver::onCompileFinished(bool errorOccured)
     {
         //Output the count of errors
         addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
-                " " + QString::number(compilerOutputModel->rowCount()) +
-                tr(" Errors Occur."));
+                              " " + QString::number(compilerOutputModel->rowCount()) +
+                              tr(" Errors Occur."));
     }
     else
     {
         //Output compile success info
         addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
-                " " + tr("Compile Successful."));
+                              " " + tr("Compile Successful."));
     }
 
 }

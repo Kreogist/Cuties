@@ -24,7 +24,6 @@
 #include <QList>
 #include <QString>
 #include <QMutex>
-#include <climits>
 
 struct matchedInfo
 {

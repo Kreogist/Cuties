@@ -175,8 +175,8 @@ QStringList KCHistoryConfigure::getAllUnClosedFilePaths() const
 }
 
 void KCHistoryConfigure::addUnClosedFilePath(const QString &path,
-                                             const int &HValue,
-                                             const int &VValue)
+        const int &HValue,
+        const int &VValue)
 {
     unClosedFilePaths.append(path);
     unClosedFileH.append(HValue);

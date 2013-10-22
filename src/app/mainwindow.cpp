@@ -941,7 +941,7 @@ void MainWindow::changeJudgeDockVisibleState()
 void MainWindow::statusShowGoto()
 {
     statusBar->showGotoBar(tabManager->getCurrentLineNum(),
-                             tabManager->getCurrentLineCount());
+                           tabManager->getCurrentLineCount());
 }
 
 void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
@@ -982,7 +982,7 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::onCurrentTabChanged()
 {
-    KCCodeEditor* currEditor=tabManager->getCurrentEditor();
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
     if(currEditor==NULL)
     {
         return ;
@@ -1000,29 +1000,29 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-/*    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
-    KCLanguageMode *currLangMode=currEditor->langMode();
-    currLangMode->startDebug();
+    /*    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+        KCLanguageMode *currLangMode=currEditor->langMode();
+        currLangMode->startDebug();
 
-    connectDebugDockWithCurrEditor();
-    debugDock->show();*/
+        connectDebugDockWithCurrEditor();
+        debugDock->show();*/
 }
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
-/*    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
+    /*    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
 
-    dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
-    if(dbgReceiver!=NULL)
-    {
-        debugDock->setDbgReceiver(dbgReceiver);
-    }
+        dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
+        if(dbgReceiver!=NULL)
+        {
+            debugDock->setDbgReceiver(dbgReceiver);
+        }
 
-    gdb *gdbInstance=currLangMode->getGdbInstance();
-    if(gdbInstance!=NULL)
-    {
-        debugDock->setGdbInstance(gdbInstance);
-    }*/
+        gdb *gdbInstance=currLangMode->getGdbInstance();
+        if(gdbInstance!=NULL)
+        {
+            debugDock->setGdbInstance(gdbInstance);
+        }*/
 }
 
 #ifdef Q_OS_MACX

@@ -60,7 +60,7 @@ public:
     bool runGDB(const QString &filePath);
     void quitGDB();
 
-    const QVector<bkpt_struct>* getBkptVec() const;
+    const QVector<bkpt_struct> *getBkptVec() const;
 
 signals:
     void errorOccured(QString errMsg);

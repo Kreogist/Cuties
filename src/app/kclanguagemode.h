@@ -25,19 +25,10 @@
 
 #include "kccodeeditor.h"
 
-#include "kccompilerbase.h"
+#include "kchighlighter.h"
 #include "kccompileoutputreceiver.h"
 #include "gdb.h"
 #include "dbgoutputreceiver.h"
-
-//cpp
-#include "gcc.h"
-#include "kccpphighlighter.h"
-
-//pascal
-#include "fpc.h"
-#include "kcpascalhighlighter.h"
-#include "kcgeneralconfigure.h"
 
 class KCCodeEditor;
 

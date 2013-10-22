@@ -27,9 +27,9 @@ KCTextSearcher::KCTextSearcher()
 }
 
 void KCTextSearcher::search(const QTextBlock &begin,
-                             int lineCount,
-                             const unsigned long long int &searchCode,
-                             const bool &forward)
+                            int lineCount,
+                            const unsigned long long int &searchCode,
+                            const bool &forward)
 {
     setCaseSensitive(isCaseSensitive);
 

@@ -17,28 +17,21 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef KCMAINWINDOW_H
 #define KCMAINWINDOW_H
 
-#include <QApplication>
 #include <QMainWindow>
-#include <QMouseEvent>
-#include <QCursor>
-#include <QPoint>
-#include <QDebug>
-#include <QGraphicsDropShadowEffect>
 
 #include "kctitlebar.h"
-#include "kreogistcutestyle.h"
-#include "kcdragproxy.h"
+
+class KCDragProxy;
 
 class KCMainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     explicit KCMainWindow(QWidget *parent = 0);
-    
+
     KCTitleBar *getTitleBar() const;
     void setTitleBar(KCTitleBar *newTitleBar);
 #ifndef Q_OS_MACX

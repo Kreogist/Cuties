@@ -22,7 +22,8 @@
 #define KCPASCALHIGHLIGHTER_H
 
 #include "highlighterGlobal.h"
-#include "textcharformatmap.h"
+
+class textCharFormatMap;
 
 class KCPascalHighlighter : public KCHighlighter
 {

@@ -20,38 +20,26 @@
 #ifndef TEXTEDITOR_H
 #define TEXTEDITOR_H
 
-#include <QErrorMessage>
 #include <QFile>
-#include <QFileInfo>
-#include <QFileDialog>
-#include <QHBoxLayout>
-#include <QIcon>
-#include <QMessageBox>
-#include <QPalette>
-#include <QPlainTextEdit>
-#include <QScrollBar>
-#include <QSettings>
-#include <QString>
-#include <QTimeLine>
 #include <QTextCursor>
-#include <QTextStream>
+#include <QString>
+#include <QWidget>
 
 #include <QDebug>
 
-#include "kchistoryconfigure.h"
-#include "kcgeneralconfigure.h"
-#include "kccolorconfigure.h"
-
-#include "kctexteditor.h"
-#include "kclinenumpanel.h"
-#include "kcmarkpanel.h"
-#include "kcsearchwindow.h"
 #include "kclanguagemode.h"
-#include "kcreplacewindow.h"
 #include "kcconnectionhandler.h"
 
+class QVBoxLayout;
+class QHBoxLayout;
+class KCEditorConfigure;
 class KCSearchWindow;
+class KCReplaceWindow;
 class KCLanguageMode;
+class KCTextEditor;
+class KCMarkPanel;
+class KCLinenumPanel;
+class KCSearchWidget;
 
 class KCCodeEditor : public QWidget
 {
@@ -71,7 +59,7 @@ public:
 
     int getTextLines();
     bool isModified();
-    QTextDocument* document();
+    QTextDocument *document();
     KCLanguageMode *langMode() const;
     bool getOverwriteMode();
 

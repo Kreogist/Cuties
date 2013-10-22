@@ -17,6 +17,24 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "kcsearchlinetext.h"
+#include "Controls/SettingItems/kcsettinglistitemcombo.h"
+#include "Controls/SettingItems/kcsettinglistitemboolean.h"
+#include "Controls/SettingItems/kcsettinglistitemlinetext.h"
+#include "Controls/SettingItems/kcsettinglistitembrowsetext.h"
+#include "Controls/SettingItems/kcsettinglistitemnuminput.h"
+#include "Controls/SettingItems/kcsettinglistitemlanguageitem.h"
+#include "Controls/SettingItems/kcsettinglistitembutton.h"
+#include "kclistbutton.h"
+
+#include "kcgeneralconfigure.h"
+#include "kceditorconfigure.h"
+#include "kccompilerconfigure.h"
+#include "kclanguageconfigure.h"
+#include "kcclipboard.h"
+#include "kchistoryconfigure.h"
+#include "kccolorconfigure.h"
+
 #include "kccontrolcenter.h"
 
 /**************************************/
@@ -286,7 +304,7 @@ KCCCTabGerneralContent::KCCCTabGerneralContent(QWidget *parent) :
     sboSearchEngine=new KCSettingListItemCombo(this);
     sboSearchEngine->captionText->setText(tr("Online Search Engine:"));
     QList<searchEngine> searchEngines=KCGeneralConfigure::getInstance()->getSearchEngineList();
-    for(int i=0;i<searchEngines.count();i++)
+    for(int i=0; i<searchEngines.count(); i++)
     {
         sboSearchEngine->addListItem(searchEngines[i].name);
     }

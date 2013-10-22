@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QGraphicsDropShadowEffect>
+#include "kccolorconfigure.h"
 
 #include "kcsearchwindow.h"
 

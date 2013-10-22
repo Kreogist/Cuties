@@ -20,26 +20,16 @@
 #ifndef GCC_H
 #define GCC_H
 
-#include <QFileInfo>
-#include <QRegularExpression>
-#include <QMessageBox>
-#include <QFileInfo>
-#include <QDir>
-#include <QDebug>
-
 #include "kccompilerbase.h"
-#include "kccompilerconfigure.h"
+
+class KCCompilerConfigure;
 
 class gcc : public KCCompilerBase
 {
     Q_OBJECT
 public:
     explicit gcc(QObject *parent = 0);
-    QString compilerPath()
-    {
-        return isCompileCpp?
-               instance->getGppPath():instance->getGccPath();
-    }
+    QString compilerPath();
     void setCompilerPath(const QString &compilerPath);
     QString compilerName()
     {

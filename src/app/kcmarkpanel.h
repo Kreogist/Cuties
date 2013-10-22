@@ -21,10 +21,8 @@
 #define KCMARKPANEL_H
 
 #include <QVector>
-#include <QRect>
 #include <QPoint>
 
-#include "kctextblockdata.h"
 #include "kcpanel.h"
 
 class KCMarkPanel : public KCPanel
@@ -32,7 +30,7 @@ class KCMarkPanel : public KCPanel
     Q_OBJECT
 public:
     explicit KCMarkPanel(QWidget *parent = 0);
-    
+
     QPixmap getMarkPix() const;
     void setMarkPix(const QPixmap &value);
 

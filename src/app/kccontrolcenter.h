@@ -44,23 +44,16 @@
 
 #include <QDialog>
 
-#include "kcsearchlinetext.h"
-#include "Controls/SettingItems/kcsettinglistitemcombo.h"
-#include "Controls/SettingItems/kcsettinglistitemboolean.h"
-#include "Controls/SettingItems/kcsettinglistitemlinetext.h"
-#include "Controls/SettingItems/kcsettinglistitembrowsetext.h"
-#include "Controls/SettingItems/kcsettinglistitemnuminput.h"
-#include "Controls/SettingItems/kcsettinglistitemlanguageitem.h"
-#include "Controls/SettingItems/kcsettinglistitembutton.h"
-#include "kclistbutton.h"
+class KCSearchLineText;
+class KCListButton;
+class KCSettingListItemCombo;
+class KCSettingListItemBoolean;
+class KCSettingListItemNumInput;
+class KCSettingListItemButton;
+class KCSettingListItemBrowseText;
+class KCSettingListItemLanguageItem;
 
 #include "kcglobal.h"
-#include "kcgeneralconfigure.h"
-#include "kceditorconfigure.h"
-#include "kccompilerconfigure.h"
-#include "kclanguageconfigure.h"
-#include "kcclipboard.h"
-#include "kchistoryconfigure.h"
 
 enum KCCCLists
 {

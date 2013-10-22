@@ -17,6 +17,15 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+//cpp
+#include "gcc.h"
+#include "kccpphighlighter.h"
+
+//pascal
+#include "fpc.h"
+#include "kcpascalhighlighter.h"
+#include "kcgeneralconfigure.h"
+
 #include "kclanguagemode.h"
 
 KCLanguageMode::KCLanguageMode(QWidget *parent) :

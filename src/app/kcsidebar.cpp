@@ -392,8 +392,8 @@ void KCSideBar::enterEvent(QEvent *e)
     pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
     setPalette(pal);
     if(!expandState &&
-            expandAnimation->state()!=QTimeLine::Running &&
-            foldAnimation->state()!=QTimeLine::Running)
+       expandAnimation->state()!=QTimeLine::Running &&
+       foldAnimation->state()!=QTimeLine::Running)
     {
         showDock();
     }

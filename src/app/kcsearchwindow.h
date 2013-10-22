@@ -17,14 +17,9 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef KCSEARCHWINDOW_H
 #define KCSEARCHWINDOW_H
 
-#include <QGraphicsDropShadowEffect>
-#include <QApplication>
-
-#include "kccolorconfigure.h"
 #include "kcsearchwidget.h"
 
 class KCSearchWindow : public KCSearchWidget

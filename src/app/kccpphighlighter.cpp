@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "textcharformatmap.h"
+
 #include "kccpphighlighter.h"
 
 KCCppHighlighter::KCCppHighlighter(QObject *parent) :
