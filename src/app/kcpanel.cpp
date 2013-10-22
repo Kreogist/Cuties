@@ -98,14 +98,9 @@ void KCPanel::paintEvent(QPaintEvent *event)
         current_line_num=e->textCursor().block().blockNumber(),
         top=e->verticalScrollBar()->value();
 
-#ifdef Q_OS_MACX
-    line_height++;
-    int block_top = (top==0)?e->geometry().y() + 5 : 0,
+    int block_top = (top==0)?e->geometry().y() + line_height / 3 : line_height / 6,
         bottom=e->height()/line_height;
-#else
-    int block_top = (top==0)?e->geometry().y() + 7 : 3,
-        bottom=e->height()/line_height;
-#endif
+
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();
@@ -141,7 +136,6 @@ void KCPanel::paintEvent(QPaintEvent *event)
                    0, block_top, width(), block_height,
                    current_line_num==block.blockNumber()?1:0);
         painter.restore();
-
         block_top += block_height;
         bottom-=getRealLineCount(block,line_count-top);
     }

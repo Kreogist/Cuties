@@ -48,6 +48,8 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
 
     hasPressed=false;
 
+    QPalette pal;
+
 #ifndef Q_OS_MACX
     closeButton = new QToolButton(this);
     closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));
@@ -78,7 +80,7 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
     mainButton->setFixedHeight(32);
-    QPalette pal=mainButton->palette();
+    pal=mainButton->palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
@@ -239,7 +241,9 @@ void KCTitleBar::setWindowNormal()
     mainWindow->showNormal();
     maximizeButton->setIcon(maximizeButtonIcon);
     isShowingNormalButton=false;
+#ifndef Q_OS_MACX
     emit dragProxyEnabled(!isShowingNormalButton);
+#endif
 }
 
 void KCTitleBar::setWindowMax()
@@ -247,7 +251,9 @@ void KCTitleBar::setWindowMax()
     mainWindow->showMaximized();
     maximizeButton->setIcon(normalButtonIcon);
     isShowingNormalButton=true;
+#ifndef Q_OS_MACX
     emit dragProxyEnabled(!isShowingNormalButton);
+#endif
 }
 
 #ifndef Q_OS_MACX

@@ -6,6 +6,7 @@
 #include <QToolButton>
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QSizePolicy>
 
 #include "kccolorconfigure.h"
 
@@ -30,12 +31,12 @@ private:
 
     enum debugCursorControlButtons
     {
-        debugNextLine,
+        debugNext,
         debugContinue,
-        debugIntoFunction,
-        debugNextInstruction,
-        debugIntoInstruction,
-        debugSkipFunction,
+        debugStep,
+        debugNexti,
+        debugStepi,
+        debugReturn,
         debugCursorControlButtonCount
     };
 

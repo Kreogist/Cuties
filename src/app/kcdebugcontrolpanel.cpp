@@ -10,6 +10,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     setObjectName("DebugPanel");
     setAllowedAreas(Qt::RightDockWidgetArea |
                     Qt::BottomDockWidgetArea);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     //Set compile dock palette
     QPalette pal=palette();
@@ -34,6 +35,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     QVBoxLayout *mainLayout=new QVBoxLayout(centralWidget);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
+    mainLayout->setSizeConstraint(QLayout::SetMaximumSize);
     centralWidget->setLayout(mainLayout);
 
     setWidget(centralWidget);
@@ -77,28 +79,42 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     QString debugCursorControlIconPath[debugCursorControlButtonCount],
             debugCursorControlToolTips[debugCursorControlButtonCount],
             debugCursorControlCaption[debugCursorControlButtonCount];
-    debugCursorControlIconPath[debugNextLine]=QString(":/DebugToolBar/image/Debug Docks/NextLine.png");
-    debugCursorControlIconPath[debugContinue]=QString(":/DebugToolBar/image/Debug Docks/Continue.png");
-    debugCursorControlIconPath[debugIntoFunction]=QString("");
-    debugCursorControlIconPath[debugNextInstruction]=QString(":/DebugToolBar/image/Debug Docks/NextInstruction.png");
-    debugCursorControlIconPath[debugIntoInstruction]=QString(":/DebugToolBar/image/Debug Docks/IntoInstruction.png");
-    debugCursorControlIconPath[debugSkipFunction]=QString(":/DebugToolBar/image/Debug Docks/SkipFunction.png");
+    QString debugCode=tr("GDB Command: ");
+    debugCursorControlIconPath[debugNext]=QString(":/DebugToolBar/image/Debug Docks/next.png");
+    debugCursorControlIconPath[debugContinue]=QString(":/DebugToolBar/image/Debug Docks/continue.png");
+    debugCursorControlIconPath[debugStep]=QString(":/DebugToolBar/image/Debug Docks/step.png");
+    debugCursorControlIconPath[debugNexti]=QString(":/DebugToolBar/image/Debug Docks/nexti.png");
+    debugCursorControlIconPath[debugStepi]=QString(":/DebugToolBar/image/Debug Docks/stepi.png");
+    debugCursorControlIconPath[debugReturn]=QString(":/DebugToolBar/image/Debug Docks/return.png");
 
-    debugCursorControlCaption[debugNextLine]=tr("Next Line");
+    debugCursorControlCaption[debugNext]=tr("Next Line");
     debugCursorControlCaption[debugContinue]=tr("Continue");
-    debugCursorControlCaption[debugIntoFunction]=tr("Into Function");
-    debugCursorControlCaption[debugNextInstruction]=tr("Next Instruction");
-    debugCursorControlCaption[debugIntoInstruction]=tr("Into Instruction");
-    debugCursorControlCaption[debugSkipFunction]=tr("Skip Function");
+    debugCursorControlCaption[debugStep]=tr("Step Into");
+    debugCursorControlCaption[debugNexti]=tr("Next Instruction");
+    debugCursorControlCaption[debugStepi]=tr("Into Instruction");
+    debugCursorControlCaption[debugReturn]=tr("Step Over");
 
-    debugCursorControlToolTips[debugNextLine]=debugCursorControlCaption[debugNextLine] + "\n" + tr("Go to next line.");
-    debugCursorControlToolTips[debugContinue]=debugCursorControlCaption[debugContinue] + "\n" + tr("Go to next line.");
-    debugCursorControlToolTips[debugIntoFunction]=debugCursorControlCaption[debugIntoFunction] + "\n" + tr("Go to next line.");
-    debugCursorControlToolTips[debugNextInstruction]=debugCursorControlCaption[debugNextInstruction]+ "\n" + tr("Go to next line.");
-    debugCursorControlToolTips[debugIntoInstruction]=debugCursorControlCaption[debugIntoInstruction] + "\n" + tr("Go to next line.");
-    debugCursorControlToolTips[debugSkipFunction]=debugCursorControlCaption[debugSkipFunction] + "\n" + tr("Go to next line.");
+    debugCursorControlToolTips[debugNext]=debugCursorControlCaption[debugNext] + "\n" +
+            debugCode + "next\n" +
+            tr("Continue to the next source line in the current (innermost) stack frame.") + "\n" +
+            tr("This is similar to Step Into, but function calls that appear within the line of code are executed without stopping.");
+    debugCursorControlToolTips[debugContinue]=debugCursorControlCaption[debugContinue] + "\n" +
+            debugCode + "continue\n" +
+            tr("Resume program execution, at the address where your program last stopped; any breakpoints set at that address are bypassed. ");
+    debugCursorControlToolTips[debugStep]=debugCursorControlCaption[debugStep] + "\n" +
+            debugCode + "step\n" +
+            tr("Continue running your program until control reaches a different source line, then stop it and return control to GDB.");
+    debugCursorControlToolTips[debugNexti]=debugCursorControlCaption[debugNexti]+ "\n" +
+            debugCode + "nexti\n" +
+            tr("Execute one machine instruction, but if it is a function call, proceed until the function returns.");
+    debugCursorControlToolTips[debugStepi]=debugCursorControlCaption[debugStepi] + "\n" +
+            debugCode + "stepi\n" +
+            tr("Execute one machine instruction, then stop and return to the debugger.");
+    debugCursorControlToolTips[debugReturn]=debugCursorControlCaption[debugReturn] + "\n" +
+            debugCode + "return\n" +
+            tr("Cancel execution of a function call.");
 
-    for(i=debugNextLine; i<debugCursorControlButtonCount; i++)
+    for(i=debugNext; i<debugCursorControlButtonCount; i++)
     {
         debugCursorControlButton[i]=new QToolButton(this);
         debugCursorControlButton[i]->setAutoFillBackground(true);
@@ -115,7 +131,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
         debugCursorControlButton[i]->setIcon(QIcon(debugCursorControlIconPath[i]));
         debugCursorControlButton[i]->setText(debugCursorControlCaption[i]);
         debugCursorControlButton[i]->setToolTip(debugCursorControlToolTips[i]);
+        debugCursorControlButton[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
         mainLayout->addWidget(debugCursorControlButton[i]);
     }
-    mainLayout->addStretch();
 }

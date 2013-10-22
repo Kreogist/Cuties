@@ -389,12 +389,12 @@ void KCSideBar::hideDock()
 void KCSideBar::enterEvent(QEvent *e)
 {
     QDockWidget::enterEvent(e);
-    pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
-    setPalette(pal);
     if(!expandState &&
             expandAnimation->state()!=QTimeLine::Running &&
             foldAnimation->state()!=QTimeLine::Running)
     {
+        pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
+        setPalette(pal);
         showDock();
     }
 }
@@ -402,10 +402,10 @@ void KCSideBar::enterEvent(QEvent *e)
 void KCSideBar::leaveEvent(QEvent *e)
 {
     QDockWidget::leaveEvent(e);
-    pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
-    setPalette(pal);
     if(!expandState)
     {
+        pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
+        setPalette(pal);
         if(expandAnimation->state()==QTimeLine::Running ||
            foldAnimation->state()==QTimeLine::Running)
         {

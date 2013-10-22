@@ -413,7 +413,7 @@ void KCTextEditor::autoIndent()
     }
     else
     {
-        removeTab(_textCursor,baseLevel-currLevel);
+        removeTab(_textCursor,baseLevel-currLevel-1);
     }
 }
 
@@ -455,6 +455,10 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
     if(tabPressCursor.selectedText().isEmpty())
     {
         insertTab(tabPressCursor);
+    }
+    else
+    {
+        qDebug()<<tabPressCursor.blockNumber();
     }
 }
 
@@ -792,6 +796,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }
         else
         {
+            //If pressed '{', we should do autoindent all lines.
             /*if(e->text()=='{')
             {
                 QTextBlock currBlock=_textCursor.block();
@@ -881,7 +886,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
             KCTextBlockData *nextData=static_cast<KCTextBlockData *>(nextBlock.userData());
             currData->setCodeLevel(prevData->getCodeLevel() + 1);
-            nextData->setCodeLevel(prevData->getCodeLevel());
+            nextData->setCodeLevel(prevData->getCodeLevel() + 1);
             _textCursor.setPosition(nextBlock.position());
             setTextCursor(_textCursor);
             insertTab(_textCursor, prevData->getCodeLevel());

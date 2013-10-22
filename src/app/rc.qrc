@@ -65,14 +65,15 @@
         <file>image/Debug Docks/StartDebug.png</file>
         <file>image/Debug Docks/StopDebug.png</file>
         <file>image/Debug Docks/RunToCursor.png</file>
-        <file>image/Debug Docks/NextLine.png</file>
-        <file>image/Debug Docks/Continue.png</file>
         <file>image/Debug Docks/AddWatch.png</file>
         <file>image/Debug Docks/RemoveWatch.png</file>
         <file>image/Debug Docks/ModifyWatch.png</file>
-        <file>image/Debug Docks/SkipFunction.png</file>
-        <file>image/Debug Docks/IntoInstruction.png</file>
-        <file>image/Debug Docks/NextInstruction.png</file>
+        <file>image/Debug Docks/next.png</file>
+        <file>image/Debug Docks/continue.png</file>
+        <file>image/Debug Docks/step.png</file>
+        <file>image/Debug Docks/nexti.png</file>
+        <file>image/Debug Docks/stepi.png</file>
+        <file>image/Debug Docks/return.png</file>
     </qresource>
     <qresource prefix="/ToolBar">
         <file>image/ToolBar/new.png</file>

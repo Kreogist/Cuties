@@ -197,6 +197,9 @@ int main(int argc, char *argv[])
     KreogistCuteStyle *cuteStyle=new KreogistCuteStyle;
     app.setStyle(cuteStyle);
 
+    //Initalize Default Font
+    //app.setFont(QFont("Droid Sans Fallback"));
+
     //Initalize and show Application MainWindow.
     MainWindow mainWindow;
     mainWindow.show();
