@@ -22,24 +22,12 @@
 #define KCEXECUTOR_H
 
 #include <QProcess>
-#include <QProcessEnvironment>
 #include <QThread>
 #include <QByteArray>
-#include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QReadWriteLock>
-#include <QFileInfo>
-#include <QApplication>
-#include <QSettings>
-#include <QDir>
-#include <QFile>
-#include <QDebug>
 
-#include <fstream>
-
-#include "kcglobal.h"
-#include "fpc.h"
 
 using namespace std;
 

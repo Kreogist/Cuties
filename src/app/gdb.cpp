@@ -255,7 +255,7 @@ void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
 
 }
 
-const QVector<bkpt_struct>* gdb::getBkptVec() const
+const QVector<bkpt_struct> *gdb::getBkptVec() const
 {
     return &bkptVec;
 }

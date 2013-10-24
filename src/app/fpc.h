@@ -24,7 +24,8 @@
 #include <QDebug>
 
 #include "kccompilerbase.h"
-#include "kccompilerconfigure.h"
+
+class KCCompilerConfigure;
 
 class fpc : public KCCompilerBase
 {
@@ -32,10 +33,7 @@ class fpc : public KCCompilerBase
 public:
     explicit fpc(QObject *parent = 0);
     void startCompile(const QString &filePath);
-    QString compilerPath()
-    {
-        return instance->getFpcPath();
-    }
+    QString compilerPath();
     virtual QString compilerName()
     {
         return "fpc";

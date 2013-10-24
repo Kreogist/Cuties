@@ -1,4 +1,5 @@
 /*
+ *
  *  Copyright 2013 Kreogist Dev Team
  *
  *  This file is part of Kreogist-Cuties.
@@ -16,6 +17,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <QClipboard>
+#include <QApplication>
+#include <QDebug>
 
 #include "kcclipboard.h"
 

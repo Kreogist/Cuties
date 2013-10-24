@@ -17,6 +17,11 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QMouseEvent>
+#include <QRect>
+
+#include "kctextblockdata.h"
+
 #include "kcmarkpanel.h"
 
 KCMarkPanel::KCMarkPanel(QWidget *parent) :

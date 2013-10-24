@@ -234,7 +234,7 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
     }
 }
 
-void GdbMiValue::parseTuple(const QChar* &begin, const QChar* &end)
+void GdbMiValue::parseTuple(const QChar *&begin, const QChar *&end)
 {
     begin++;    //skip {
 

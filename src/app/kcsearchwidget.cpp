@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "kccolorconfigure.h"
+
 #include "kcsearchwidget.h"
 
 const int KCSearchWidget::searchTextPartWidth=3;

@@ -22,18 +22,8 @@
 
 #include <QString>
 #include <QList>
-#include <QSettings>
-#include <QStyle>
-#include <QDebug>
 
-#include "kcgeneralconfigure.h"
-#include "kceditorconfigure.h"
-#include "kccompilerconfigure.h"
-#include "kcdebuggerconfigure.h"
-#include "kcfileassociation.h"
-#include "kclanguageconfigure.h"
-#include "kchistoryconfigure.h"
-#include "kccolorconfigure.h"
+class KCConfigure;
 
 //Global Variables
 class KCGlobal

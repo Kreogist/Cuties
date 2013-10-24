@@ -23,21 +23,15 @@
 #include <QPlainTextEdit>
 #include <QTextCursor>
 #include <QTextBlock>
-#include <QPalette>
-#include <QScrollBar>
 #include <QScopedPointer>
-#include <QMenu>
 #include <QSignalMapper>
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
-#include <QDebug>
-#include <QStyleFactory>
 
 #include "kctextsearcher.h"
-#include "kctextblockdata.h"
-#include "kcclipboard.h"
-#include "kceditorconfigure.h"
-#include "kccolorconfigure.h"
+
+class KCEditorConfigure;
+class KCClipboard;
 
 class KCTextEditor : public QPlainTextEdit
 {
@@ -78,9 +72,9 @@ protected:
     void keyPressEvent(QKeyEvent *e);
 
 private:
-    void highlightCurrentLine(QList<QTextEdit::ExtraSelection>& selections);
-    void highlightSearchResult(QList<QTextEdit::ExtraSelection>& selections);
-    void highlightParenthesis(QList<QTextEdit::ExtraSelection>& selections);
+    void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
+    void highlightSearchResult(QList<QTextEdit::ExtraSelection> &selections);
+    void highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections);
     QString parenthesesPair(const QString &parenthesesChar);
     QString parenthesesPrePair(const QString &parenthesesChar);
     bool findString(bool forward);

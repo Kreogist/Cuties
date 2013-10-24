@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <climits>
+
 #include "kctextblockdata.h"
 
 KCTextBlockData::KCTextBlockData()

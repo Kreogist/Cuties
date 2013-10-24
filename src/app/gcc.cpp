@@ -17,6 +17,15 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QFileInfo>
+#include <QRegularExpression>
+#include <QMessageBox>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
+
+#include "kccompilerconfigure.h"
+
 #include "gcc.h"
 
 gcc::gcc(QObject *parent) :
@@ -24,6 +33,13 @@ gcc::gcc(QObject *parent) :
 {
     isCompileCpp=true;
     instance=KCCompilerConfigure::getInstance();
+}
+
+QString gcc::compilerPath()
+
+{
+    return isCompileCpp?
+           instance->getGppPath():instance->getGccPath();
 }
 
 QStringList gcc::getVersionArg()
@@ -99,7 +115,7 @@ void gcc::parseLine(const QString &text)
         newCompilerErrorInfo.errorLine=-1;
         newCompilerErrorInfo.errorDescription=text;
         newCompilerErrorInfo.errorDescription=newCompilerErrorInfo.errorDescription.remove(
-                                    newCompilerErrorInfo.errorDescription.length()-1,1);
+                newCompilerErrorInfo.errorDescription.length()-1,1);
         newCompilerErrorInfo.errorFilePath="";
 
         emit compileError(newCompilerErrorInfo);

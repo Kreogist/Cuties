@@ -100,7 +100,7 @@ private:
     int newFileCount;
     QTextCursor currentTextCursor;
     KCCodeEditor *currentEditor;
-    KCEditorConfigure* editorConfigureInstance;
+    KCEditorConfigure *editorConfigureInstance;
     QTabBar *tabBarControl;
 };
 

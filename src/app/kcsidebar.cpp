@@ -390,8 +390,8 @@ void KCSideBar::enterEvent(QEvent *e)
 {
     QDockWidget::enterEvent(e);
     if(!expandState &&
-            expandAnimation->state()!=QTimeLine::Running &&
-            foldAnimation->state()!=QTimeLine::Running)
+       expandAnimation->state()!=QTimeLine::Running &&
+       foldAnimation->state()!=QTimeLine::Running)
     {
         pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
         setPalette(pal);

@@ -23,12 +23,10 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
-#include <QClipboard>
-#include <QApplication>
+
 #include <QStandardItemModel>
 #include <QStandardItem>
 
-#include <QDebug>
 
 class KCClipboard : public QObject
 {

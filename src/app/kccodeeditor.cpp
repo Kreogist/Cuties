@@ -1,4 +1,5 @@
 /*
+ *
  *  Copyright 2013 Kreogist Dev Team
  *
  *  This file is part of Kreogist-Cuties.
@@ -16,6 +17,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <QErrorMessage>
+#include <QTextStream>
+#include <QFileInfo>
+#include <QFileDialog>
+#include <QHBoxLayout>
+#include <QIcon>
+#include <QMessageBox>
+#include <QPalette>
+#include <QPlainTextEdit>
+#include <QScrollBar>
+#include <QSettings>
+#include <QTimeLine>
+
+#include "kchistoryconfigure.h"
+#include "kcgeneralconfigure.h"
+#include "kccolorconfigure.h"
+#include "kceditorconfigure.h"
+
+#include "kctexteditor.h"
+#include "kclinenumpanel.h"
+#include "kcmarkpanel.h"
+#include "kcsearchwindow.h"
+#include "kcreplacewindow.h"
 
 #include "kccodeeditor.h"
 
@@ -48,7 +73,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     linePanel->setVisible(configureInstance->getLineNumVisible());
     mainLayout->addWidget(linePanel);
 
-    editor=new KCTextEditor(this);    
+    editor=new KCTextEditor(this);
     linePanel->setKciTextEditor(editor);
     markPanel->setKciTextEditor(editor);
     mainLayout->addWidget(editor);

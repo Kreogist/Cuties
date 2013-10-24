@@ -17,6 +17,7 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
 
 #include "kclinenumpanel.h"
 
@@ -31,8 +32,8 @@ KCLinenumPanel::KCLinenumPanel(QWidget *parent) :
 }
 
 void KCLinenumPanel::draw(QPainter *painter, QTextBlock *block,
-                           int x, int y, int w, int h,
-                           bool isCurrentLine)
+                          int x, int y, int w, int h,
+                          bool isCurrentLine)
 {
     if(isCurrentLine)
     {

@@ -108,7 +108,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
     {
         QTextStream out(&file);
         out<<(QTime::currentTime().toString().toUtf8()+" ");
-        switch (type)
+        switch(type)
         {
         case QtDebugMsg:
             out<<QString("").sprintf("Debug: (%s:%u, %s)\n",
@@ -140,7 +140,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
     }
 
     QByteArray localMsg = msg.toUtf8();
-    switch (type)
+    switch(type)
     {
     case QtDebugMsg:
         fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);

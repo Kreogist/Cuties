@@ -17,6 +17,16 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QScrollBar>
+#include <QPalette>
+#include <QMenu>
+#include <QStyleFactory>
+#include <QDebug>
+
+#include "kctextblockdata.h"
+#include "kcclipboard.h"
+#include "kceditorconfigure.h"
+#include "kccolorconfigure.h"
 #include "kctexteditor.h"
 
 //static int elideWidth=500;
@@ -806,23 +816,22 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             }
             else
             {*/
-                int start=_textCursor.selectionStart(),
-                        end=_textCursor.selectionEnd();
-                _textCursor.beginEditBlock();
-                _textCursor.clearSelection();
-                _textCursor.setPosition(start);
-                _textCursor.insertText(e->text());
-                _textCursor.setPosition(end+1);
-                _textCursor.insertText(pairParethesesChar);
-                _textCursor.endEditBlock();
-                setTextCursor(_textCursor);
+            int start=_textCursor.selectionStart(),
+                end=_textCursor.selectionEnd();
+            _textCursor.beginEditBlock();
+            _textCursor.clearSelection();
+            _textCursor.setPosition(start);
+            _textCursor.insertText(e->text());
+            _textCursor.setPosition(end+1);
+            _textCursor.insertText(pairParethesesChar);
+            _textCursor.endEditBlock();
+            setTextCursor(_textCursor);
             //}
         }
         return;
     }
     if(e->text()==")" || e->text()=="]")
     {
-        //TODO: Fixed Code Here!
         KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
         for(auto i=blockData->getFirstParenthesesInfo(),
             l=blockData->getEndParenthesesInfo();
@@ -883,7 +892,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Enter:
     {
         if(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
-                _textCursor.document()->characterAt(_textCursor.position()) == '}')
+           _textCursor.document()->characterAt(_textCursor.position()) == '}')
         {
             QPlainTextEdit::keyPressEvent(e);
             _textCursor.insertBlock();

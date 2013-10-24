@@ -20,20 +20,17 @@
 #ifndef KCCOMPILEDOCK_H
 #define KCCOMPILEDOCK_H
 
-#include <QTreeView>
-#include <QPalette>
-#include <QSplitter>
-#include <QList>
 #include <QDockWidget>
 #include <QModelIndex>
-#include <QTimeLine>
 
-#include <QDebug>
-
-#include "kcplaintextbrowser.h"
-#include "kccompileoutputreceiver.h"
 #include "kcconnectionhandler.h"
-#include "kccolorconfigure.h"
+
+class QSplitter;
+class QTreeView;
+class QTimeLine;
+class KCPlainTextBrowser;
+class KCCompileOutputReceiver;
+struct compileErrorInfo;
 
 /*
  * KCCompileDock is used to display the compiler information.

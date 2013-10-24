@@ -21,8 +21,8 @@
 #define KCCPPHIGHLIGHTER_H
 
 #include "highlighterGlobal.h"
-#include "textcharformatmap.h"
 
+class textCharFormatMap;
 
 class KCCppHighlighter : public KCHighlighter
 {

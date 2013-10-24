@@ -24,8 +24,6 @@
 #include <QFont>
 #include <QColor>
 
-#include <QDebug>
-
 #include "kcpanel.h"
 
 class KCLinenumPanel : public KCPanel
@@ -33,7 +31,7 @@ class KCLinenumPanel : public KCPanel
     Q_OBJECT
 public:
     explicit KCLinenumPanel(QWidget *parent = 0);
-    
+
 signals:
 
 public slots:

@@ -17,12 +17,19 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "kccompilerconfigure.h"
+
 #include "fpc.h"
 
 fpc::fpc(QObject *parent) :
     KCCompilerBase(parent)
 {
     instance=KCCompilerConfigure::getInstance();
+}
+
+QString fpc::compilerPath()
+{
+    return instance->getFpcPath();
 }
 
 QStringList fpc::getVersionArg()
