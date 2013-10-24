@@ -812,7 +812,6 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 QTextBlock currBlock=_textCursor.block();
                 QTextBlock prevBlock=currBlock.previous();
                 QTextBlock nextBlock=currBlock.next();
-
             }
             else
             {*/

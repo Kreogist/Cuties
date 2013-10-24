@@ -104,7 +104,7 @@ void KCPanel::paintEvent(QPaintEvent *event)
         current_line_num=e->textCursor().block().blockNumber(),
         top=e->verticalScrollBar()->value();
 
-    int block_top = (top==0)?e->geometry().y() + line_height / 4 : line_height / 8,
+    int block_top = (top==0)?e->geometry().y() + line_height / 4 : 0,
         bottom=e->height()/line_height;
 
 
