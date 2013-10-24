@@ -27,6 +27,8 @@
 #include <QSignalMapper>
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
+#include <QFont>
+#include <QFontMetrics>
 
 #include "kctextsearcher.h"
 

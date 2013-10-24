@@ -111,6 +111,7 @@ bool textCharFormatMap::parseStyleFileLine(char *str_line)
             if(define[i] == "bold")
             {
                 QFont font=textFormat.font();
+                font.setFamily(KCEditorConfigure::getInstance()->getEditorFont());
                 font.setBold(true);
                 textFormat.setFont(font);
             }

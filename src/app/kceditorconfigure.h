@@ -50,6 +50,8 @@ public:
     void setTabCloseable(bool value);
     bool getLineNumVisible() const;
     void setLineNumVisible(bool value);
+    QString getEditorFont() const;
+    void setEditorFont(const QString &value);
 
 signals:
     void tabWidthChanged(int newValue);
@@ -65,6 +67,7 @@ private:
     static KCEditorConfigure *instance;
 
     //Values:
+    QString editorFont;
     QTextOption::WrapMode wrapMode;
     bool isUsingBlankInsteadTab, overwriteMode;
     bool lineNumVisible;

@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
     app.setStyle(cuteStyle);
 
     //Initalize Default Font
-    //app.setFont(QFont("Droid Sans Fallback"));
+    app.setFont(QFont("FZZhunYuan-M02"));
 
     //Initalize and show Application MainWindow.
     MainWindow mainWindow;

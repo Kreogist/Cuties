@@ -183,7 +183,6 @@ void KCCompileDock::changeCompileSplitterWidthValue(int newCompileTreeWidth)
 void KCCompileDock::setCompileOutputReceiver(KCCompileOutputReceiver *newReceiver)
 {
     Q_ASSERT(newReceiver!=NULL);
-
     //Disconnect the old connections.
     receiverConnectionHandles.disConnectAll();
 

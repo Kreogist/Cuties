@@ -38,8 +38,9 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setObjectName("KCTextEditor");
 
     setFrameStyle(QFrame::NoFrame);
-    setFont(QString("Monaco"));
     setAcceptDrops(false);
+
+    setFont(KCEditorConfigure::getInstance()->getEditorFont());
 
     configureInstance=KCEditorConfigure::getInstance();
 

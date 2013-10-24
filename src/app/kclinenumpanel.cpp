@@ -48,7 +48,7 @@ void KCLinenumPanel::draw(QPainter *painter, QTextBlock *block,
     pen.setColor(textColor);
     painter->setPen(pen);
 
-    painter->drawText(x - 3, y, w, h,
+    painter->drawText(x, y, w, h,
                       Qt::AlignRight |  Qt::AlignTop,
                       QString::number(block->blockNumber()+1));
 

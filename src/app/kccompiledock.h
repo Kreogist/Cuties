@@ -22,6 +22,8 @@
 
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QToolButton>
+#include <QLayout>
 
 #include "kcconnectionhandler.h"
 
