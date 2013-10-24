@@ -1,8 +1,9 @@
 0.1.0.1
-New Featues:
+New Features:
 1. Parentheses autocomplete support.
 2. Parentheses autocomplete deleted by pairs.
-3. Toolbar tooltips support.
+3. Cursor now can auto move right when there's a right parenthese on the right of cursor if user input the right parenthese char.
+4. Toolbar tooltips support.
 
 Updates:
 1. Compile dock will automatically hide when compile finishes if there's no error.
@@ -32,7 +33,7 @@ Bug Fixed:
 0.0.2.1
 Updates:
 1. Re-factor the save process.
-2. New search result colour.
+2. New search result color.
 3. Enhance the search speed and user experience.
 
 Bug Fixed:

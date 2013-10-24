@@ -822,22 +822,31 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     if(e->text()==")" || e->text()=="]")
     {
-    /*    //TODO: Fixed Code Here!
-        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(cursor.block().userData());
-
-        if(matchParentheses(e->text()==")"?"(":"[",
-                            e->text(),
-                            ,
-                            ,
-                            ))
+        //TODO: Fixed Code Here!
+        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+        for(auto i=blockData->getFirstParenthesesInfo(),
+            l=blockData->getEndParenthesesInfo();
+            i<l;
+            i++)
         {
-                _textCursor.movePosition(QTextCursor::Right);
-                setTextCursor(_textCursor);
+            if(i->pos == _textCursor.positionInBlock()-1)
+            {
+                if(matchParentheses(e->text()==")"?'(':'[',
+                                    e->text().at(0).toLatin1(),
+                                    i,
+                                    _textCursor.block(),
+                                    true)>0)
+                {
+                        _textCursor.movePosition(QTextCursor::Right);
+                        setTextCursor(_textCursor);
+                }
+                else
+                {
+                        QPlainTextEdit::keyPressEvent(e);
+                }
+                break;
+            }
         }
-        else
-        {*/
-                QPlainTextEdit::keyPressEvent(e);
-        //}
         return;
     }
     switch(e->key())

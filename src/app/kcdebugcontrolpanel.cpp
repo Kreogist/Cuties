@@ -114,6 +114,8 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
             debugCode + "return\n" +
             tr("Cancel execution of a function call.");
 
+    int maxButtonSizeHint=0;
+
     for(i=debugNext; i<debugCursorControlButtonCount; i++)
     {
         debugCursorControlButton[i]=new QToolButton(this);
@@ -131,7 +133,15 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
         debugCursorControlButton[i]->setIcon(QIcon(debugCursorControlIconPath[i]));
         debugCursorControlButton[i]->setText(debugCursorControlCaption[i]);
         debugCursorControlButton[i]->setToolTip(debugCursorControlToolTips[i]);
-        debugCursorControlButton[i]->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
+        if(debugCursorControlButton[i]->sizeHint().width() > maxButtonSizeHint)
+        {
+            maxButtonSizeHint=debugCursorControlButton[i]->sizeHint().width();
+        }
         mainLayout->addWidget(debugCursorControlButton[i]);
+    }
+
+    for(i=debugNext; i<debugCursorControlButtonCount; i++)
+    {
+        debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
 }
