@@ -171,6 +171,10 @@ void KCLanguageMode::onCompileFinished(bool hasError)
 
     if(!hasError)
     {
+        if(!compilerReceiver->getHasOutputHeader())
+        {
+            emit requireHideCompileDock();
+        }
         emit compileSuccessfully(m_parent->execFileName);
     }
 }

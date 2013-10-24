@@ -145,6 +145,13 @@ void KCCompileOutputReceiver::onCompileFinished(bool errorOccured)
 
 }
 
+//Use this function can check whether there's error output
+bool KCCompileOutputReceiver::getHasOutputHeader() const
+{
+    return hasOutputHeader;
+}
+
+
 //Fold the expanded error item, actually we just rewrite the contents of
 //the item to the description of the error.
 void KCCompileOutputReceiver::foldItem(QStandardItem *itemModelIndex)

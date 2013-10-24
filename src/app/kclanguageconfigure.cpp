@@ -38,12 +38,26 @@ void KCLanguageConfigure::writeConfigure()
 
 void KCLanguageConfigure::setLanguage(QString newLanguageName)
 {
-    int languageID=languageName.indexOf(newLanguageName + ".qm");
-    if(languageID != -1)
+    int languageIndex=languageName.indexOf(newLanguageName + ".qm");
+    if(languageIndex != -1)
     {
-        appTrans.load(languageFileList.at(languageID));
-        qApp->installTranslator(&appTrans);
+        currLanguageIndex=languageIndex;
+        applyLangaugeSet(currLanguageIndex);
     }
+}
+
+void KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)
+{
+    currLanguageIndex=newLanguageIndex;
+    currLanguageName=languageName.at(currLanguageIndex);
+    applyLangaugeSet(currLanguageIndex);
+}
+
+void KCLanguageConfigure::applyLangaugeSet(int languageIndex)
+{
+    qApp->removeTranslator(&appTrans);
+    appTrans.load(languageFileList.at(languageIndex));
+    qApp->installTranslator(&appTrans);
 }
 
 QStringList KCLanguageConfigure::getLanguageList() const
@@ -54,6 +68,11 @@ QStringList KCLanguageConfigure::getLanguageList() const
 QStringList KCLanguageConfigure::getLanguageNameList() const
 {
     return languageName;
+}
+
+int KCLanguageConfigure::getCurrLanguageIndex() const
+{
+    return currLanguageIndex;
 }
 
 void KCLanguageConfigure::loadLanguageList()

@@ -153,6 +153,9 @@ public:
     bool getExpandState() const;
     void setExpandState(bool value);
 
+    bool getUnlockState() const;
+    void setUnlockState(bool value);
+
 signals:
     void historyRequiredOpenFiles(QString filePath);
     void clipboardRequiredInsertText(QString insertText);
@@ -171,7 +174,7 @@ private slots:
     void hideDock();
 
 private:
-    bool expandState;
+    bool expandState, unlockState;
     QTimeLine *expandAnimation, *foldAnimation;
     QTimeLine *showDockAnimation, *hideDockAnimation;
     KCSideBarContent *centralWidget;

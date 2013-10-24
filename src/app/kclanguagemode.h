@@ -64,6 +64,7 @@ public:
 
 signals:
     void compileSuccessfully(QString execFileName);
+    void requireHideCompileDock();
 
 public slots:
     void onCompileFinished(bool hasError);

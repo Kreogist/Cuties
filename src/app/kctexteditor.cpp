@@ -744,7 +744,6 @@ void KCTextEditor::contextMenuEvent(QContextMenuEvent *event)
     menu->setStyle(QStyleFactory::create("fusion"));
     menu->exec(event->globalPos());
     delete menu;
-    //QPlainTextEdit::contextMenuEvent(event);
 }
 
 QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)

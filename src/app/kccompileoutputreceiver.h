@@ -58,6 +58,8 @@ public:
     void foldItem(QStandardItem *itemModelIndex);
     void expandItem(QStandardItem *itemModelIndex);
 
+    bool getHasOutputHeader() const;
+
 signals:
     //Show error signal
     void requireShowError();

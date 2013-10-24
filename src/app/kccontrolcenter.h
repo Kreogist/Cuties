@@ -207,7 +207,11 @@ class KCCCTabLanguageContent : public KCAbstractCCTabContent
 public:
     explicit KCCCTabLanguageContent(QWidget *parent = 0);
 
+private slots:
+    void applyLanguageSettings(int newLangaugeIndex);
+
 private:
+    QSignalMapper *languageSet;
     QVBoxLayout *mainLayout;
     QList<KCSettingListItemLanguageItem *> languageItem;
 };

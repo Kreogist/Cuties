@@ -17,7 +17,7 @@
 #
 #-------------------------------------------------
 
-TARGET = Kreogist-Cuties
+TARGET = Cuties
 
 TEMPLATE = app
 

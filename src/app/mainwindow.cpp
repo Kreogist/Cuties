@@ -420,9 +420,11 @@ void MainWindow::createDocks()
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
+    debugControl->hide();
     //Debug Command IO
     debugCommandIO=new KCDebugCommandIO(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
+    debugCommandIO->hide();
 }
 
 void MainWindow::createMenu()
@@ -510,7 +512,7 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case actionViewCompileDock:
+        case actionViewDebugCommandIO:
             menuMainWindowItem[menuView]->addSeparator();
         }
 
@@ -665,13 +667,11 @@ void MainWindow::setDocOpenMenuState(bool state)
 #endif
 
     //View Menu
-    /*for(i=mnuViewCompileDock;i<=mnuViewDebugWatchDock;i++)
+    for(i=actionViewCompileDock;i<=actionViewDebugCommandIO;i++)
     {
-        act[i]->setEnabled(state);
-        act[i]->setVisible(state);
-    }*/
-    actionMainWindowItem[actionViewCompileDock]->setEnabled(state);
-    actionMainWindowItem[actionViewCompileDock]->setVisible(state);
+        actionMainWindowItem[i]->setEnabled(state);
+        actionMainWindowItem[i]->setVisible(state);
+    }
 
     //Search Menu
     for(i=actionSearchFind; i<=actionSearchGoto; i++)
@@ -911,10 +911,10 @@ void MainWindow::onActionCompileAndRun()
     {
         //when compile successfully, executor will run the program, and hide compile dock.
         compileFinishedConnection.disConnectAll();
+        compileFinishedConnection+=connect(currentEditor->langMode(), SIGNAL(requireHideCompileDock()),
+                                           compileDock, SLOT(hideCompileDock()));
         compileFinishedConnection+=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
                                            KCExecutor::getInstance(),SLOT(exec(QString)));
-        compileFinishedConnection+=connect(currentEditor->langMode(), SIGNAL(compileSuccessfully(QString)),
-                                           compileDock, SLOT(hideCompileDock()));
         compileProgram();
     }
 }
@@ -928,7 +928,7 @@ void MainWindow::onActionSearchOnline()
 
 void MainWindow::changeSidebarVisibleState()
 {
-    sideBar->setVisible(!sideBar->isVisible());
+    sideBar->setUnlockState(!sideBar->getUnlockState());
 }
 
 void MainWindow::changeCompileDockVisibleState()

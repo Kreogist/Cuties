@@ -316,6 +316,7 @@ KCSideBar::KCSideBar(QWidget *parent) :
             centralWidget, SLOT(hideContent()));
 
     expandState=false;
+    unlockState=true;
 }
 
 void KCSideBar::forceClearButtonState()
@@ -386,28 +387,20 @@ void KCSideBar::hideDock()
     hideDockAnimation->start();
 }
 
-void KCSideBar::enterEvent(QEvent *e)
+bool KCSideBar::getUnlockState() const
 {
-    QDockWidget::enterEvent(e);
-    if(!expandState &&
-       expandAnimation->state()!=QTimeLine::Running &&
-       foldAnimation->state()!=QTimeLine::Running)
-    {
-        pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
-        setPalette(pal);
-        showDock();
-    }
+    return unlockState;
 }
 
-void KCSideBar::leaveEvent(QEvent *e)
+void KCSideBar::setUnlockState(bool value)
 {
-    QDockWidget::leaveEvent(e);
-    if(!expandState)
+    unlockState = value;
+    if(unlockState)
     {
         pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
         setPalette(pal);
         if(expandAnimation->state()==QTimeLine::Running ||
-           foldAnimation->state()==QTimeLine::Running)
+                foldAnimation->state()==QTimeLine::Running)
         {
             animationHide=connect(foldAnimation, SIGNAL(finished()),
                                   this, SLOT(hideDock()));
@@ -415,6 +408,52 @@ void KCSideBar::leaveEvent(QEvent *e)
         else
         {
             hideDock();
+        }
+    }
+    else
+    {
+        pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
+        setPalette(pal);
+        showDock();
+    }
+}
+
+
+void KCSideBar::enterEvent(QEvent *e)
+{
+    QDockWidget::enterEvent(e);
+    if(unlockState)
+    {
+        if(!expandState &&
+                expandAnimation->state()!=QTimeLine::Running &&
+                foldAnimation->state()!=QTimeLine::Running)
+        {
+            pal.setBrush(QPalette::Window, QBrush(QColor(150,150,150)));
+            setPalette(pal);
+            showDock();
+        }
+    }
+}
+
+void KCSideBar::leaveEvent(QEvent *e)
+{
+    QDockWidget::leaveEvent(e);
+    if(unlockState)
+    {
+        if(!expandState)
+        {
+            pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
+            setPalette(pal);
+            if(expandAnimation->state()==QTimeLine::Running ||
+                    foldAnimation->state()==QTimeLine::Running)
+            {
+                animationHide=connect(foldAnimation, SIGNAL(finished()),
+                                      this, SLOT(hideDock()));
+            }
+            else
+            {
+                hideDock();
+            }
         }
     }
 }
