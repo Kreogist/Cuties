@@ -9,9 +9,12 @@ Updates:
 1. Compile dock will automatically hide when compile finishes if there's no error.
 2. New Icon Photoshop file added.
 3. Update Control Center Items Base.
+4. New sidebar visible action.
 
 Bug Fixed:
 1. Fixed parentheses auto indent bug.
+2. Fixed Compile Dock hide when there’re warnings bug.
+3. Fixed the line number malposition bug.
 
 0.1.0.0
 Updates:
