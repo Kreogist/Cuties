@@ -91,7 +91,8 @@ SOURCES += \
     Controls/SettingItems/kcsettingcontrollineedit.cpp \
     kcdebugcommandio.cpp \
     kcdebugcontrolpanel.cpp \
-    kcfloattoolbar.cpp
+    kcfloattoolbar.cpp \
+    kcfontconfigure.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -159,7 +160,8 @@ HEADERS += \
     Controls/SettingItems/kcsettingcontrollineedit.h \
     kcdebugcommandio.h \
     kcdebugcontrolpanel.h \
-    kcfloattoolbar.h
+    kcfloattoolbar.h \
+    kcfontconfigure.h
 
 # Enable C++11
 CONFIG += c++11

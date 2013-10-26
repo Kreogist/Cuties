@@ -28,6 +28,7 @@
 #include "kctextblockdata.h"
 #include "kcclipboard.h"
 #include "kceditorconfigure.h"
+#include "kcfontconfigure.h"
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
 
@@ -40,7 +41,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(false);
 
-    setFont(KCEditorConfigure::getInstance()->getEditorFont());
+    setFont(KCFontConfigure::getInstance()->getCodeFont());
 
     configureInstance=KCEditorConfigure::getInstance();
 
@@ -403,6 +404,14 @@ void KCTextEditor::autoIndent()
     _textCursor.setPosition(currBlock.position());
     int basePos=findFirstCharacter(prevBlock);
     int pos=findFirstCharacter(currBlock);
+    if(basePos==-1)
+    {
+        basePos=prevBlock.text().length();
+    }
+    if(pos==-1)
+    {
+        pos=currBlock.text().length();
+    }
 
     QTextCursor _prevTextCursor(prevBlock);
     _prevTextCursor.movePosition(QTextCursor::Right,
@@ -479,7 +488,7 @@ int KCTextEditor::findFirstCharacter(const QTextBlock &block)
 {
     QString text=block.text();
     int ret=text.indexOf(QRegularExpression("\\S"));
-    return ret==-1?block.text().length():ret;
+    return ret;
 }
 
 void KCTextEditor::setDocumentCursor(int nLine, int linePos)
@@ -870,25 +879,27 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     case Qt::Key_Backspace:
     {
-        int pos=findFirstCharacter(_textCursor.block());
         if(_textCursor.selectedText().length()>0)
         {
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
+        int pos=findFirstCharacter(_textCursor.block());
         if(_textCursor.positionInBlock()<=pos && pos!=0 && (!pos<configureInstance->getTabWidth()))
         {
-            removeTab(_textCursor);
-        }
-        else
-        {
-            if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
-               _textCursor.document()->characterAt(_textCursor.position()))
+            if(_textCursor.positionInBlock()>0)
             {
-                _textCursor.deleteChar();
+                removeTab(_textCursor);
+                break;
             }
             QPlainTextEdit::keyPressEvent(e);
         }
+        if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
+           _textCursor.document()->characterAt(_textCursor.position()))
+        {
+            _textCursor.deleteChar();
+        }
+        QPlainTextEdit::keyPressEvent(e);
         break;
     }
     case Qt::Key_Return:
@@ -939,7 +950,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
 void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
     QPlainTextEdit::mouseReleaseEvent(e);
-    if(!textCursor().selectedText().isEmpty())
+    /*if(!textCursor().selectedText().isEmpty())
     {
         int newXPosition, newYPosition;
         newXPosition=e->globalX()+textFloatToolBar->width() > QApplication::desktop()->width()?
@@ -953,7 +964,7 @@ void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
                                       textFloatToolBar->width(),
                                       textFloatToolBar->height());
         textFloatToolBar->show();
-    }
+    }*/
 }
 
 void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)

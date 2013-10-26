@@ -67,7 +67,6 @@ private:
     static KCEditorConfigure *instance;
 
     //Values:
-    QString editorFont;
     QTextOption::WrapMode wrapMode;
     bool isUsingBlankInsteadTab, overwriteMode;
     bool lineNumVisible;

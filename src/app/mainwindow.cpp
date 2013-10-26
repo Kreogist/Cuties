@@ -17,6 +17,7 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "mainwindow.h"
+#include "kcfontconfigure.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
@@ -441,7 +442,7 @@ void MainWindow::createMenu()
     QMenu *_mainMenu=new QMenu(this);
     QIcon *MenuIconAddor=new QIcon;
 
-    QFont menuFont=QFont("sao", 13);
+    QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
     _mainMenu->setFont(menuFont);
 #endif
 

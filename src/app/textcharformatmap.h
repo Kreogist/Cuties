@@ -27,6 +27,7 @@
 #include <QDebug>
 
 #include "kceditorconfigure.h"
+#include "kcfontconfigure.h"
 
 class textCharFormatMap : public QObject
 {

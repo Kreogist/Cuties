@@ -31,19 +31,7 @@ KCEditorConfigure::KCEditorConfigure()
     overwriteMode=false;
     tabMoveable=true;
     tabCloseable=true;
-    editorFont="Monaco";
 }
-
-QString KCEditorConfigure::getEditorFont() const
-{
-    return editorFont;
-}
-
-void KCEditorConfigure::setEditorFont(const QString &value)
-{
-    editorFont = value;
-}
-
 
 KCEditorConfigure *KCEditorConfigure::getInstance()
 {

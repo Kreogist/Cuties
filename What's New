@@ -1,4 +1,4 @@
-0.1.0.1
+﻿0.1.0.1
 New Features:
 1. New Cuties Icon.
 2. New menu font on Windows and Linux. Full Sword Art Online style support.
@@ -18,6 +18,7 @@ Bug Fixed:
 1. Fixed parentheses auto indent bug.
 2. Fixed Compile Dock hide when there’re warnings bug.
 3. Fixed the line number malposition bug.
+4. Finally fixed Backspace bug.
 
 0.1.0.0
 Updates:

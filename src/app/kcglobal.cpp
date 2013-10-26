@@ -29,6 +29,7 @@
 #include "kclanguageconfigure.h"
 #include "kchistoryconfigure.h"
 #include "kccolorconfigure.h"
+#include "kcfontconfigure.h"
 
 #include "kcglobal.h"
 
@@ -47,6 +48,7 @@ KCGlobal::KCGlobal()
     cfgConfiger.append(KCLanguageConfigure::getInstance());
     cfgConfiger.append(KCHistoryConfigure::getInstance());
     cfgConfiger.append(KCColorConfigure::getInstance());
+    cfgConfiger.append(KCFontConfigure::getInstance());
 }
 
 void KCGlobal::readSettings()
