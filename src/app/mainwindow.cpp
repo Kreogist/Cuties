@@ -745,7 +745,6 @@ void MainWindow::restoreSettings()
 
     float deskWidth=float(QApplication::desktop()->width()),
           deskHeight=float(QApplication::desktop()->height());
-
     n_X     = settings.value("x", 0.1).toFloat();
     n_X     = (n_X>1 || n_X<0)?0.1*deskWidth:n_X*deskWidth;
     n_Y     = settings.value("y", 0.1).toFloat();

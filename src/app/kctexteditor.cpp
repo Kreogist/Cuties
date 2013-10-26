@@ -21,6 +21,8 @@
 #include <QPalette>
 #include <QMenu>
 #include <QStyleFactory>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QDebug>
 
 #include "kctextblockdata.h"
@@ -939,8 +941,15 @@ void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
     QPlainTextEdit::mouseReleaseEvent(e);
     if(!textCursor().selectedText().isEmpty())
     {
-        textFloatToolBar->setGeometry(e->globalX(),
-                                      e->globalY(),
+        int newXPosition, newYPosition;
+        newXPosition=e->globalX()+textFloatToolBar->width() > QApplication::desktop()->width()?
+             e->globalX()-textFloatToolBar->width():
+             e->globalX();
+        newYPosition=e->globalY()+textFloatToolBar->width() > QApplication::desktop()->height()?
+             e->globalY()-textFloatToolBar->height():
+             e->globalY();
+        textFloatToolBar->setGeometry(newXPosition,
+                                      newYPosition,
                                       textFloatToolBar->width(),
                                       textFloatToolBar->height());
         textFloatToolBar->show();
