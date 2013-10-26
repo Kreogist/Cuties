@@ -158,8 +158,8 @@ a:active{
 .left-btn:hover span:after{
 }
 #left-logo{
-    width:512px;
-    height:512px;
+    width: 256px;
+    height:256px;
     background-image:url("cuties.png");
 }
 .left-btn{
