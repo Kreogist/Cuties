@@ -32,7 +32,7 @@
 KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(0, 0, 0, 0);
     setObjectName("KCTextEditor");
 
     setFrameStyle(QFrame::NoFrame);
@@ -831,30 +831,32 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     if(e->text()==")" || e->text()=="]")
     {
-        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
-        for(auto i=blockData->getFirstParenthesesInfo(),
-            l=blockData->getEndParenthesesInfo();
-            i<l;
-            i++)
+        if(document()->characterAt(_textCursor.position()) == e->text())
         {
-            if(i->pos == _textCursor.positionInBlock()-1)
+            KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+            for(auto i=blockData->getFirstParenthesesInfo(),
+                l=blockData->getEndParenthesesInfo();
+                i<l;
+                i++)
             {
-                if(matchParentheses(e->text()==")"?'(':'[',
-                                    e->text().at(0).toLatin1(),
-                                    i,
-                                    _textCursor.block(),
-                                    true)>0)
+                if(i->pos == _textCursor.positionInBlock())
                 {
+                    if(matchParentheses(e->text()==")"?'(':'[',
+                                        e->text().at(0).toLatin1(),
+                                        i-1,
+                                        _textCursor.block(),
+                                        true)>0)
+                    {
                         _textCursor.movePosition(QTextCursor::Right);
                         setTextCursor(_textCursor);
+                        return;
+                    }
                 }
-                else
-                {
-                        QPlainTextEdit::keyPressEvent(e);
-                }
-                break;
             }
+            QPlainTextEdit::keyPressEvent(e);
+            return;
         }
+        QPlainTextEdit::keyPressEvent(e);
         return;
     }
     switch(e->key())

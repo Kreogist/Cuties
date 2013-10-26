@@ -28,6 +28,12 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     mainLayout->addWidget(newTitleWidget);
 
     //Start width expand animation
+    QRect startGeometry=rect();
+    QRect endGeometry=startGeometry;
+    endGeometry.setWidth(100);
     widthExpand=new QPropertyAnimation(this, "geometry");
-
+    widthExpand->setDuration(3000);
+    widthExpand->setStartValue(startGeometry);
+    widthExpand->setEndValue(endGeometry);
+    widthExpand->start();
 }

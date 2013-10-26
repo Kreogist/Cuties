@@ -291,22 +291,22 @@ void MainWindow::createActions()
 
     //Help -> About
     actionMainWindowItem[actionHelpAbout]=new QAction(tr("&About..."),this);
-    actionMainWindowItem[actionHelpAbout]->setMenuRole(QAction::AboutRole);
+    //actionMainWindowItem[actionHelpAbout]->setMenuRole(QAction::AboutRole);
     actionStatusTips[actionHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
     connect(actionMainWindowItem[actionHelpAbout],SIGNAL(triggered()),this,SLOT(aboutCuties()));
 
     //Help -> About Qt
     actionMainWindowItem[actionHelpAboutQt]=new QAction(tr("A&bout Qt..."),this);
     actionStatusTips[actionHelpAboutQt]=QString(tr("Display the Qt information, version number and copyright."));
-    connect(actionMainWindowItem[actionHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutQt()));
+    connect(actionMainWindowItem[actionHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutCuties()));
 }
 
 void MainWindow::aboutCuties()
 {
-    QMessageBox::about(this,tr("About Cuties"),
-                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
-    /*KCMessageBox *test=new KCMessageBox(this);
-    test->show();*/
+    /*QMessageBox::about(this,tr("About Cuties"),
+                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));*/
+    KCMessageBox *test=new KCMessageBox(this);
+    test->show();
 }
 
 void MainWindow::aboutQt()
