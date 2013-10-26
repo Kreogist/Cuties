@@ -1,15 +1,18 @@
 0.1.0.1
 New Features:
-1. Parentheses autocomplete support.
-2. Parentheses autocomplete deleted by pairs.
-3. Cursor now can auto move right when there's a right parenthese on the right of cursor if user input the right parenthese char.
+1. New Cuties Icon.
+2. New menu font on Windows and Linux. Full Sword Art Online style support.
+3. Parentheses autocomplete support.
 4. Toolbar tooltips support.
 
 Updates:
 1. Compile dock will automatically hide when compile finishes if there's no error.
-2. New Icon Photoshop file added.
+2. Update Manual Documentations.
 3. Update Control Center Items Base.
-4. New sidebar visible action.
+4. Update Titlebar toolbar width calculation.
+5. Update SAO Fonts.
+6. Update sidebar visible action.
+7. Clear some old icon file.
 
 Bug Fixed:
 1. Fixed parentheses auto indent bug.

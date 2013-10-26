@@ -216,7 +216,7 @@ void KCTitleBar::addToolSeparator()
 void KCTitleBar::addToolButton(QToolButton *tblMainButton)
 {
     mainToolBar->addWidget(tblMainButton);
-    mainToolBar->setFixedWidth(mainToolBar->width()+25);
+    mainToolBar->setFixedWidth(mainToolBar->sizeHint().width());
 }
 
 void KCTitleBar::_exchange_button_state()

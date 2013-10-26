@@ -305,6 +305,8 @@ void MainWindow::aboutCuties()
 {
     QMessageBox::about(this,tr("About Cuties"),
                        tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
+    /*KCMessageBox *test=new KCMessageBox(this);
+    test->show();*/
 }
 
 void MainWindow::aboutQt()
@@ -436,6 +438,9 @@ void MainWindow::createMenu()
 #else
     QMenu *_mainMenu=new QMenu(this);
     QIcon *MenuIconAddor=new QIcon;
+
+    QFont menuFont=QFont("sao", 13);
+    _mainMenu->setFont(menuFont);
 #endif
 
     menuMainWindowItem[menuFile]   = _mainMenu->addMenu(tr("&File"));
@@ -457,6 +462,7 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
 #endif
         actionMainWindowItem[i]->setStatusTip(actionStatusTips[i]);
         menuMainWindowItem[menuFile]->addAction(actionMainWindowItem[i]);
@@ -482,6 +488,7 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
 #endif
         actionMainWindowItem[i]->setStatusTip(actionStatusTips[i]);
         menuMainWindowItem[menuEdit]->addAction(actionMainWindowItem[i]);
@@ -506,6 +513,7 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
 #endif
         actionMainWindowItem[i]->setStatusTip(actionStatusTips[i]);
         menuMainWindowItem[menuView]->addAction(actionMainWindowItem[i]);
@@ -530,6 +538,7 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
 #endif
         menuMainWindowItem[menuSearch]->addAction(actionMainWindowItem[i]);
 
@@ -556,6 +565,7 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
 #endif
         actionMainWindowItem[i]->setStatusTip(actionStatusTips[i]);
         menuMainWindowItem[menuExecute]->addAction(actionMainWindowItem[i]);
@@ -586,6 +596,7 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
 #endif
         actionMainWindowItem[i]->setStatusTip(actionStatusTips[i]);
         menuMainWindowItem[menuWindow]->addAction(actionMainWindowItem[i]);
@@ -602,6 +613,7 @@ void MainWindow::createMenu()
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
 #endif
         actionMainWindowItem[i]->setStatusTip(actionStatusTips[i]);
         menuMainWindowItem[menuHelp]->addAction(actionMainWindowItem[i]);

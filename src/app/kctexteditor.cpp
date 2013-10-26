@@ -29,8 +29,6 @@
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
 
-//static int elideWidth=500;
-
 KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
