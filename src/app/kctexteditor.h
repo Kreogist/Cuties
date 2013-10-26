@@ -31,6 +31,7 @@
 #include <QFontMetrics>
 
 #include "kctextsearcher.h"
+#include "kcfloattoolbar.h"
 
 class KCEditorConfigure;
 class KCClipboard;
@@ -72,6 +73,7 @@ protected:
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
@@ -114,6 +116,7 @@ private:
     QScopedPointer<KCTextSearcher> searcherForPrev,searcherForNext;
     QFuture<void> threadPrev,threadNext;
     QTextCursor searchBackupCursor;
+    KCFloatToolBar *textFloatToolBar;
 };
 
 #endif // CODEEDITOR_H

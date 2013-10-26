@@ -47,6 +47,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
             this,SLOT(insertPlainText(QString)));*/
 
+    textFloatToolBar=new KCFloatToolBar(this);
+
     //Set Customize TextEditor Properties.
     //Set Tab Width.
     setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabWidth());
@@ -927,6 +929,19 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
+    }
+}
+
+void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
+{
+    QPlainTextEdit::mouseReleaseEvent(e);
+    if(!textCursor().selectedText().isEmpty())
+    {
+        textFloatToolBar->setGeometry(e->globalX(),
+                                      e->globalY(),
+                                      textFloatToolBar->width(),
+                                      textFloatToolBar->height());
+        textFloatToolBar->show();
     }
 }
 
