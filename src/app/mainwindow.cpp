@@ -306,6 +306,8 @@ void MainWindow::aboutCuties()
     /*QMessageBox::about(this,tr("About Cuties"),
                        tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));*/
     KCMessageBox *test=new KCMessageBox(this);
+    test->setTitle("About");
+    test->addText(tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
     test->show();
 }
 
