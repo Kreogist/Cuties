@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
+    languageInstance=KCLanguageConfigure::getInstance();
+
     //Set Central Widget.
     tabManager=new KCTabManager(this);
     connect(tabManager,SIGNAL(currentChanged(int)),
@@ -50,65 +52,68 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Restore the last time running states
     restoreSettings();
+
+    connect(languageInstance, SIGNAL(newLanguageSet()),
+            this, SLOT(retranslate()));
 }
 
 void MainWindow::createActions()
 {
     //File -> New
-    actionMainWindowItem[actionFileNewFile]=new QAction(tr("&New Source File"),this);
+    actionMainWindowItem[actionFileNewFile]=new QAction(tr("New Source File"),this);
     actionMainWindowItem[actionFileNewFile]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
     stringActionIconPath[actionFileNewFile]=QString(":/menuicon/image/MenuIcons/mnuFileNew.png");
     actionStatusTips[actionFileNewFile]=QString(tr("Create a new document."));
     connect(actionMainWindowItem[actionFileNewFile],SIGNAL(triggered()),tabManager,SLOT(newFile()));
 
     //File -> Open
-    actionMainWindowItem[actionFileOpen]=new QAction(tr("&Open..."),this);
+    actionMainWindowItem[actionFileOpen]=new QAction(tr("Open"),this);
     actionMainWindowItem[actionFileOpen]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_O));
     stringActionIconPath[actionFileOpen]=QString(":/menuicon/image/MenuIcons/mnuFileOpen.png");
     actionStatusTips[actionFileOpen]=QString(tr("Open an exsisting document."));
     connect(actionMainWindowItem[actionFileOpen],SIGNAL(triggered()),tabManager,SLOT(open()));
 
     //File -> Save
-    actionMainWindowItem[actionFileSave]=new QAction(tr("&Save"),this);
+    actionMainWindowItem[actionFileSave]=new QAction(tr("Save"),this);
     actionMainWindowItem[actionFileSave]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_S));
     stringActionIconPath[actionFileSave]=QString(":/menuicon/image/MenuIcons/mnuFileSave.png");
     actionStatusTips[actionFileSave]=QString(tr("Save the active document with a new name."));
     connect(actionMainWindowItem[actionFileSave],SIGNAL(triggered()),tabManager,SLOT(save()));
 
     //File -> Save As
-    actionMainWindowItem[actionFileSaveAs]=new QAction(tr("Save &As..."),this);
+    actionMainWindowItem[actionFileSaveAs]=new QAction(tr("Save As"),this);
     actionMainWindowItem[actionFileSaveAs]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_S));
     stringActionIconPath[actionFileSaveAs]=QString(":/menuicon/image/MenuIcons/mnuFileSaveAs.png");
     actionStatusTips[actionFileSaveAs]=QString(tr("Save as different file name."));
     connect(actionMainWindowItem[actionFileSaveAs],SIGNAL(triggered()),tabManager,SLOT(saveAs()));
 
     //File -> Save All
-    actionMainWindowItem[actionFileSaveAll]=new QAction(tr("Sa&ve All"),this);
+    actionMainWindowItem[actionFileSaveAll]=new QAction(tr("Save All"),this);
     actionMainWindowItem[actionFileSaveAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_S));
     actionStatusTips[actionFileSaveAll]=QString(tr("Save all modified documents."));
     connect(actionMainWindowItem[actionFileSaveAll],SIGNAL(triggered()),tabManager,SLOT(saveAll()));
 
     //File -> Close
-    actionMainWindowItem[actionFileClose]=new QAction(tr("&Close"),this);
+    actionMainWindowItem[actionFileClose]=new QAction(tr("Close"),this);
     actionMainWindowItem[actionFileClose]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_W));
     stringActionIconPath[actionFileClose]=QString(":/menuicon/image/MenuIcons/mnuFileClose.png");
     actionStatusTips[actionFileClose]=QString(tr("Close the active document."));
     connect(actionMainWindowItem[actionFileClose],SIGNAL(triggered()),tabManager,SLOT(closeCurrentTab()));
 
     //File -> Close All
-    actionMainWindowItem[actionFileCloseAll]=new QAction(tr("C&lose All"),this);
+    actionMainWindowItem[actionFileCloseAll]=new QAction(tr("Close All"),this);
     actionMainWindowItem[actionFileCloseAll]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_W));
     actionStatusTips[actionFileCloseAll]=QString(tr("Close all documents."));
     connect(actionMainWindowItem[actionFileCloseAll],SIGNAL(triggered()),tabManager,SLOT(closeAllTab()));
 
     //File -> Close All Except This
-    actionMainWindowItem[actionFileCloseAllExceptThis]=new QAction(tr("Clos&e All Other File"),this);
+    actionMainWindowItem[actionFileCloseAllExceptThis]=new QAction(tr("Close All Other File"),this);
     actionMainWindowItem[actionFileCloseAllExceptThis]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_W));
     actionStatusTips[actionFileCloseAllExceptThis]=QString(tr("Close all documents except the active document."));
     connect(actionMainWindowItem[actionFileCloseAllExceptThis],SIGNAL(triggered()),tabManager,SLOT(closeAllOtherTab()));
 
     //File -> Exit
-    actionMainWindowItem[actionFileExit]=new QAction(tr("E&xit"),this);
+    actionMainWindowItem[actionFileExit]=new QAction(tr("Exit"),this);
     actionMainWindowItem[actionFileExit]->setShortcut(QKeySequence(Qt::ALT+Qt::Key_F4));
     actionMainWindowItem[actionFileExit]->setMenuRole(QAction::QuitRole);
     stringActionIconPath[actionFileExit]=QString(":/menuicon/image/MenuIcons/mnuFileExit.png");
@@ -116,38 +121,38 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionFileExit],SIGNAL(triggered()),this,SLOT(close()));
 
     //Edit -> Undo
-    actionMainWindowItem[actionEditUndo]=new QAction(tr("&Undo"),this);
+    actionMainWindowItem[actionEditUndo]=new QAction(tr("Undo"),this);
     stringActionIconPath[actionEditUndo]=QString(":/menuicon/image/MenuIcons/mnuEditUndo.png");
     actionStatusTips[actionEditUndo]=QString(tr("Undo the last action."));
     connect(actionMainWindowItem[actionEditUndo],SIGNAL(triggered()),tabManager,SLOT(undo()));
 
     //Edit -> Redo
-    actionMainWindowItem[actionEditRedo]=new QAction(tr("&Redo"),this);
+    actionMainWindowItem[actionEditRedo]=new QAction(tr("Redo"),this);
     actionMainWindowItem[actionEditRedo]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Y));
     stringActionIconPath[actionEditRedo]=QString(":/menuicon/image/MenuIcons/mnuEditRedo.png");
     actionStatusTips[actionEditRedo]=QString(tr("Redo the previously undone action."));
     connect(actionMainWindowItem[actionEditRedo],SIGNAL(triggered()),tabManager,SLOT(redo()));
 
     //Edit -> Cut
-    actionMainWindowItem[actionEditCut]=new QAction(tr("Cu&t"),this);
+    actionMainWindowItem[actionEditCut]=new QAction(tr("Cut"),this);
     stringActionIconPath[actionEditCut]=QString(":/menuicon/image/MenuIcons/mnuEditCut.png");
     actionStatusTips[actionEditCut]=QString(tr("Cut the selection to the Clipboard."));
     connect(actionMainWindowItem[actionEditCut],SIGNAL(triggered()),tabManager,SLOT(cut()));
 
     //Edit -> Copy
-    actionMainWindowItem[actionEditCopy]=new QAction(tr("&Copy"),this);
+    actionMainWindowItem[actionEditCopy]=new QAction(tr("Copy"),this);
     stringActionIconPath[actionEditCopy]=QString(":/menuicon/image/MenuIcons/mnuEditCopy.png");
     actionStatusTips[actionEditCopy]=QString(tr("Copy the selection to the Clipboard."));
     connect(actionMainWindowItem[actionEditCopy],SIGNAL(triggered()),tabManager,SLOT(copy()));
 
     //Edit -> Paste
-    actionMainWindowItem[actionEditPaste]=new QAction(tr("&Paste"),this);
+    actionMainWindowItem[actionEditPaste]=new QAction(tr("Paste"),this);
     stringActionIconPath[actionEditPaste]=QString(":/menuicon/image/MenuIcons/mnuEditPaste.png");
     actionStatusTips[actionEditPaste]=QString(tr("Insert Clipboard contents."));
     connect(actionMainWindowItem[actionEditPaste],SIGNAL(triggered()),tabManager,SLOT(paste()));
 
     //Edit -> Select All
-    actionMainWindowItem[actionEditSelectAll]=new QAction(tr("&Select All"),this);
+    actionMainWindowItem[actionEditSelectAll]=new QAction(tr("Select All"),this);
     stringActionIconPath[actionEditSelectAll]=QString(":/menuicon/image/MenuIcons/mnuEditSelectAll.png");
     actionStatusTips[actionEditSelectAll]=QString(tr("Select the entire document."));
     connect(actionMainWindowItem[actionEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(selectAll()));
@@ -198,106 +203,106 @@ void MainWindow::createActions()
 #endif
 
     //Search -> Search
-    actionMainWindowItem[actionSearchFind]=new QAction(tr("&Find"),this);
+    actionMainWindowItem[actionSearchFind]=new QAction(tr("Find"),this);
     actionMainWindowItem[actionSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
     actionStatusTips[actionSearchFind]=QString(tr("Search for text in the active document."));
     connect(actionMainWindowItem[actionSearchFind],SIGNAL(triggered()),tabManager,SLOT(showSearchBar()));
     /*
         //Search -> Find In Files
-        act[mnuSearchFindInFiles]=new QAction(tr("Fin&d In Files"),this);
+        act[mnuSearchFindInFiles]=new QAction(tr("Find In Files"),this);
         act[mnuSearchFindInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_F));
         actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
     */
     //Search -> Replace
-    actionMainWindowItem[actionSearchReplace]=new QAction(tr("&Replace"),this);
+    actionMainWindowItem[actionSearchReplace]=new QAction(tr("Replace"),this);
     actionMainWindowItem[actionSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
     actionStatusTips[actionSearchReplace]=QString(tr("Replace occurrences of search string."));
     connect(actionMainWindowItem[actionSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
     /*
         //Search -> Replace In Files
-        act[mnuSearchReplaceInFiles]=new QAction(tr("R&eplace In Files"),this);
+        act[mnuSearchReplaceInFiles]=new QAction(tr("Replace In Files"),this);
         act[mnuSearchReplaceInFiles]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_H));
         actStatusTips[mnuSearchReplaceInFiles]=QString(tr("Replace occurrences of a text partten in multiple files."));
     */
     //Search -> Search Online
-    actionMainWindowItem[actionSearchSearchOnline]=new QAction(tr("&Search Online"),this);
+    actionMainWindowItem[actionSearchSearchOnline]=new QAction(tr("Search Online"),this);
     actionMainWindowItem[actionSearchSearchOnline]->setShortcut(QKeySequence(Qt::CTRL+Qt::ALT+Qt::Key_F));
     actionStatusTips[actionSearchSearchOnline]=QString(tr("Search the text via online search engine."));
     connect(actionMainWindowItem[actionSearchSearchOnline],SIGNAL(triggered()),this,SLOT(onActionSearchOnline()));
 
     //Search -> Go To Line
-    actionMainWindowItem[actionSearchGoto]=new QAction(tr("&Goto Line"),this);
+    actionMainWindowItem[actionSearchGoto]=new QAction(tr("Goto Line"),this);
     actionMainWindowItem[actionSearchGoto]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_G));
     actionStatusTips[actionSearchGoto]=QString(tr("Go to specified line."));
     connect(actionMainWindowItem[actionSearchGoto],SIGNAL(triggered()),
             this,SLOT(statusShowGoto()));
 
     //Execute -> Comile And Run
-    actionMainWindowItem[actionExecuteCompileAndRun]=new QAction(tr("C&ompile and Run"),this);
+    actionMainWindowItem[actionExecuteCompileAndRun]=new QAction(tr("Compile and Run"),this);
     actionMainWindowItem[actionExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
     actionStatusTips[actionExecuteCompileAndRun]=QString(tr("Compile the active file and run."));
     connect(actionMainWindowItem[actionExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(onActionCompileAndRun()));
 
     //Execute -> Compile
-    actionMainWindowItem[actionExecuteCompile]=new QAction(tr("&Compile"),this);
+    actionMainWindowItem[actionExecuteCompile]=new QAction(tr("Compile"),this);
     actionMainWindowItem[actionExecuteCompile]->setShortcut(QKeySequence(Qt::Key_F9));
     actionStatusTips[actionExecuteCompile]=QString(tr("Compile the active file."));
     connect(actionMainWindowItem[actionExecuteCompile],SIGNAL(triggered()),
             this,SLOT(onActionCompile()));
 
     //Execute -> Run
-    actionMainWindowItem[actionExecuteRun]=new QAction(tr("&Run"),this);
+    actionMainWindowItem[actionExecuteRun]=new QAction(tr("Run"),this);
     actionMainWindowItem[actionExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
     actionStatusTips[actionExecuteRun]=QString(tr("Run the compiled execution."));
     connect(actionMainWindowItem[actionExecuteRun],SIGNAL(triggered()),this,SLOT(onActionRun()));
     /*
         //Execute -> Parameters
-        act[mnuExecuteParameters]=new QAction(tr("P&arameters"),this);
+        act[mnuExecuteParameters]=new QAction(tr("Parameters"),this);
         actStatusTips[mnuExecuteParameters]=QString(tr("Run the compiled execution with parameters."));
 
         //Execute -> Set Input File
-        act[mnuExecuteSetInputFile]=new QAction(tr("&Set Input File"),this);
+        act[mnuExecuteSetInputFile]=new QAction(tr("Set Input File"),this);
         actStatusTips[mnuExecuteSetInputFile]=QString(tr("Set the input file contents."));
 
         //Execute -> Show Output File
-        act[mnuExecuteShowOutputFile]=new QAction(tr("S&how Output file"),this);
+        act[mnuExecuteShowOutputFile]=new QAction(tr("Show Output file"),this);
         actStatusTips[mnuExecuteShowOutputFile]=QString(tr("Show the output file contents."));
 
         //Execute -> Run And Show Output File
-        act[mnuExecuteRunAndShowOutputFile]=new QAction(tr("R&un And Show Output File"),this);
+        act[mnuExecuteRunAndShowOutputFile]=new QAction(tr("Run And Show Output File"),this);
         actStatusTips[mnuExecuteRunAndShowOutputFile]=QString(tr("Run the execution and show output file."));
 
         //Execute -> Set Input, Run and Show Output
         act[mnuExecuteSetInputRunShowOutput]=new QAction(
-                    tr("Se&t Input, Run and show Output"), this);
+                    tr("Set Input, Run and show Output"), this);
         actStatusTips[mnuExecuteSetInputRunShowOutput]=
                 QString(tr("Set the input file, compile and run the document, and show output file."));
     */
 
     //Window -> Window Split
-    /*act[mnuWindowSplit]=new QAction(tr("&Split Window"),this);
+    /*act[mnuWindowSplit]=new QAction(tr("Split Window"),this);
     actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));*/
 
     //Window -> Next
-    actionMainWindowItem[actionWindowNext]=new QAction(tr("&Next"),this);
+    actionMainWindowItem[actionWindowNext]=new QAction(tr("Next"),this);
     actionMainWindowItem[actionWindowNext]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Tab));
     actionStatusTips[actionWindowNext]=QString(tr("Switch to the next tab."));
     connect(actionMainWindowItem[actionWindowNext],SIGNAL(triggered()),tabManager,SLOT(switchNextTab()));
 
     //Window -> Previous
-    actionMainWindowItem[actionWindowPrev]=new QAction(tr("&Previous"), this);
+    actionMainWindowItem[actionWindowPrev]=new QAction(tr("Previous"), this);
     actionMainWindowItem[actionWindowPrev]->setShortcut(QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_Tab));
     actionStatusTips[actionWindowPrev]=QString(tr("Switch to the previous tab."));
     connect(actionMainWindowItem[actionWindowPrev],SIGNAL(triggered()),tabManager,SLOT(switchPrevTab()));
 
     //Help -> About
-    actionMainWindowItem[actionHelpAbout]=new QAction(tr("&About..."),this);
+    actionMainWindowItem[actionHelpAbout]=new QAction(tr("About"),this);
     //actionMainWindowItem[actionHelpAbout]->setMenuRole(QAction::AboutRole);
     actionStatusTips[actionHelpAbout]=QString(tr("Display the Kreogist Cuties information."));
     connect(actionMainWindowItem[actionHelpAbout],SIGNAL(triggered()),this,SLOT(aboutCuties()));
 
     //Help -> About Qt
-    actionMainWindowItem[actionHelpAboutQt]=new QAction(tr("A&bout Qt..."),this);
+    actionMainWindowItem[actionHelpAboutQt]=new QAction(tr("About Qt"),this);
     actionStatusTips[actionHelpAboutQt]=QString(tr("Display the Qt information, version number and copyright."));
     connect(actionMainWindowItem[actionHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutCuties()));
 }
@@ -445,15 +450,14 @@ void MainWindow::createMenu()
     QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
     _mainMenu->setFont(menuFont);
 #endif
-
-    menuMainWindowItem[menuFile]   = _mainMenu->addMenu(tr("&File"));
-    menuMainWindowItem[menuEdit]   = _mainMenu->addMenu(tr("&Edit"));
-    menuMainWindowItem[menuView]   = _mainMenu->addMenu(tr("&View"));
-    menuMainWindowItem[menuSearch] = _mainMenu->addMenu(tr("&Search"));
-    menuMainWindowItem[menuExecute]= _mainMenu->addMenu(tr("E&xecute"));
-    menuMainWindowItem[menuTools]  = _mainMenu->addMenu(tr("&Tools"));
-    menuMainWindowItem[menuWindow] = _mainMenu->addMenu(tr("&Tab"));
-    menuMainWindowItem[menuHelp]   = _mainMenu->addMenu(tr("&Help"));
+    menuMainWindowItem[menuFile]   = _mainMenu->addMenu(tr("File"));
+    menuMainWindowItem[menuEdit]   = _mainMenu->addMenu(tr("Edit"));
+    menuMainWindowItem[menuView]   = _mainMenu->addMenu(tr("View"));
+    menuMainWindowItem[menuSearch] = _mainMenu->addMenu(tr("Search"));
+    menuMainWindowItem[menuExecute]= _mainMenu->addMenu(tr("Execute"));
+    menuMainWindowItem[menuTools]  = _mainMenu->addMenu(tr("Tools"));
+    menuMainWindowItem[menuWindow] = _mainMenu->addMenu(tr("Tab"));
+    menuMainWindowItem[menuHelp]   = _mainMenu->addMenu(tr("Help"));
 
     //Create File Menu
 #ifndef Q_OS_MACX
@@ -974,6 +978,23 @@ void MainWindow::statusShowGoto()
 void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
 {
     tabManager->switchCurrentToLine(NewLineNumber-1,0);
+}
+
+void MainWindow::retranslate()
+{
+    retranslateMenus();
+}
+
+void MainWindow::retranslateMenus()
+{
+    menuMainWindowItem[menuFile]->setTitle(tr("File"));
+    menuMainWindowItem[menuEdit]->setTitle(tr("Edit"));
+    menuMainWindowItem[menuView]->setTitle(tr("View"));
+    menuMainWindowItem[menuSearch]->setTitle(tr("Search"));
+    menuMainWindowItem[menuExecute]->setTitle(tr("Execute"));
+    menuMainWindowItem[menuTools]->setTitle(tr("Tools"));
+    menuMainWindowItem[menuWindow]->setTitle(tr("Tab"));
+    menuMainWindowItem[menuHelp]->setTitle(tr("Help"));
 }
 
 void MainWindow::showPreference()

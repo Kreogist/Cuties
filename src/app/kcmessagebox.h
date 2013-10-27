@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPropertyAnimation>
+#include <QTimerEvent>
 
 class KCMessageBoxTitle : public QWidget
 {
@@ -33,6 +34,7 @@ class KCMessageBoxContent : public QWidget
     Q_OBJECT
 public:
     explicit KCMessageBoxContent(QWidget *parent = 0);
+    ~KCMessageBoxContent();
     void addText(QString displayText);
 
 private:
@@ -63,9 +65,6 @@ private:
     KCMessageBoxTitle *titleWidget;
     KCMessageBoxPanel *panelWidget;
     KCMessageBoxContent *contentWidget;
-
-    //Basic function
-    int getWidthHint();
 };
 
 #endif // KCMESSAGEBOX_H

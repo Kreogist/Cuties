@@ -55,6 +55,7 @@
 #include "kcconnectionhandler.h"
 #include "kcdebugcontrolpanel.h"
 #include "kcdebugcommandio.h"
+#include "kclanguageconfigure.h"
 
 class MainWindow : public KCMainWindow
 {
@@ -71,11 +72,13 @@ public slots:
     void onActionRun();
     void onActionCompile();
     void onActionSearchOnline();
+    void onCurrentTabChanged();
     void statusShowGoto();
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
-    void onCurrentTabChanged();
+    void retranslate();
+    void retranslateMenus();
 
 private slots:
     void aboutQt();
@@ -198,6 +201,7 @@ private:
 
     KCDebugControlPanel *debugControl;
     KCDebugCommandIO *debugCommandIO;
+    KCLanguageConfigure *languageInstance;
 
     void compileProgram();
 
