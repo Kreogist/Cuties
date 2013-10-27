@@ -32,6 +32,8 @@ public:
     explicit KCDebugControlPanel(QWidget *parent = 0);
 
 signals:
+    void requireStartDebug();
+    void requireStopDebug();
 
 public slots:
 

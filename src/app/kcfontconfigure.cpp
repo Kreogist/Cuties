@@ -36,9 +36,14 @@ KCFontConfigure::KCFontConfigure()
     codeFontName="Monaco";
     codeFont=QFont(codeFontName);
     codeFont.setPixelSize(12);
-    menuFont=QFont("sao");
     menuFont.setPixelSize(16);
     menuFont.setStyleStrategy(QFont::PreferAntialias);
+#ifdef Q_OS_WIN32
+    menuFont=QFont("");
+#else
+#ifdef Q_OS_UNIX
+    menuFont=QFont("sao");
+#endif
 #endif
     applyConfigure();
 }

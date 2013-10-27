@@ -430,11 +430,20 @@ void MainWindow::createDocks()
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
+    connect(debugControl,SIGNAL(requireStartDebug()),
+            this,SLOT(startDebug()));
     debugControl->hide();
+
     //Debug Command IO
     debugCommandIO=new KCDebugCommandIO(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
     debugCommandIO->hide();
+}
+
+void MainWindow::showDebugDocks()
+{
+    debugControl->show();
+    debugCommandIO->show();
 }
 
 void MainWindow::createMenu()
@@ -812,7 +821,7 @@ void MainWindow::saveSettings()
 
     //Save ALL settings.
     float deskWidth=float(QApplication::desktop()->width()),
-          deskHeight=float(QApplication::desktop()->height());
+            deskHeight=float(QApplication::desktop()->height());
 
     settings.beginGroup("MainWindow");
     settings.setValue("x",float(lastPositionX)/deskWidth);
@@ -1048,29 +1057,29 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    /*    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
-        KCLanguageMode *currLangMode=currEditor->langMode();
-        currLangMode->startDebug();
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    KCLanguageMode *currLangMode=currEditor->langMode();
+    currLangMode->startDebug();
 
-        connectDebugDockWithCurrEditor();
-        debugDock->show();*/
+    connectDebugDockWithCurrEditor();
+    showDebugDocks();
 }
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
-    /*    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
+    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
 
-        dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
-        if(dbgReceiver!=NULL)
-        {
-            debugDock->setDbgReceiver(dbgReceiver);
-        }
+    dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
+    if(dbgReceiver!=NULL)
+    {
+        debugCommandIO->setDocument(dbgReceiver->getTextStreamOutput());
+    }
 
-        gdb *gdbInstance=currLangMode->getGdbInstance();
-        if(gdbInstance!=NULL)
-        {
-            debugDock->setGdbInstance(gdbInstance);
-        }*/
+    gdb *gdbInstance=currLangMode->getGdbInstance();
+    if(gdbInstance!=NULL)
+    {
+        debugCommandIO->setGdbInstance(gdbInstance);
+    }
 }
 
 #ifdef Q_OS_MACX

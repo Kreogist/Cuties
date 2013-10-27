@@ -103,6 +103,11 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     }
     mainLayout->addWidget(toolBar);
 
+    connect(debugControlButton[debugStart],SIGNAL(clicked()),
+            this,SIGNAL(requireStartDebug()));
+    connect(debugControlButton[debugStop],SIGNAL(clicked()),
+            this,SIGNAL(requireStopDebug()));
+
     QString debugCursorControlIconPath[debugCursorControlButtonCount],
             debugCursorControlToolTips[debugCursorControlButtonCount],
             debugCursorControlCaption[debugCursorControlButtonCount];

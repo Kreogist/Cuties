@@ -31,3 +31,6 @@ Makefile
 
 #astyle temp files
 Thumbs.db
+
+#doxygen
+doc/html

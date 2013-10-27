@@ -14,7 +14,13 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>. *  
+ */
+
+/*!
+ *  \copyright GNU Public License
+ *  \details
+ *    This file contains the main() of this program. Many initialization functions are defined here.
  */
 
 #include <QApplication>
@@ -52,6 +58,15 @@ static inline void initApplicationSettings()
     KCGlobalInstance->readSettings();
 }
 
+/*!
+ * \brief This is a custom message handler to deal with Qt's message(for example, qDebug).
+ *
+ *  KCMessageHandler outputs message which was sended by calling qDebug()(and so on) to both file
+ *  (named log.txt) and stderr. This function will be called by Qt.
+ * \param type describes the messages that be sent to a message handler
+ * \param context This provides additional information about a log message.
+ * \param msg message
+ */
 void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
 
@@ -95,20 +110,27 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
     switch(type)
     {
     case QtDebugMsg:
-        fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        fprintf(stderr, "Debug: (%s:%u, %s)\n", context.file, context.line, context.function);
         break;
     case QtWarningMsg:
-        fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        fprintf(stderr, "Warning: (%s:%u, %s)\n", context.file, context.line, context.function);
         break;
     case QtCriticalMsg:
-        fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        fprintf(stderr, "Critical: (%s:%u, %s)\n", context.file, context.line, context.function);
         break;
     case QtFatalMsg:
-        fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        fprintf(stderr, "Fatal: (%s:%u, %s)\n", context.file, context.line, context.function);
         abort();
     }
+    fprintf(stderr,"%s", localMsg.constData());
 }
 
+/*!
+ * \brief main() initial application's informations, language, fonts and set KCMessageHandler.
+ * \param argc
+ * \param argv
+ * \return
+ */
 int main(int argc, char *argv[])
 {
     //qInstallMessageHandler(KCMessageHandler);

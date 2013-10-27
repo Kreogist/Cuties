@@ -20,8 +20,10 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QStyleFactory>
+#include <QTextDocument>
 
 #include "kcplaintextbrowser.h"
+#include "gdb.h"
 
 #include "kcdebugcommandio.h"
 
@@ -61,5 +63,23 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     //Set output text browser.
     debugOutputTextBrowser=new KCPlainTextBrowser(this);
     mainLayout->addWidget(debugOutputTextBrowser,1);
+    connect(debugInput,SIGNAL(currentTextChanged(QString)),
+            this,SLOT(onCurrentTextChanged(QString)));
 
 }
+
+void KCDebugCommandIO::setDocument(QTextDocument *document)
+{
+    debugOutputTextBrowser->setDocument(document);
+}
+
+void KCDebugCommandIO::setGdbInstance(gdb *gdbInstance)
+{
+    instance=gdbInstance;
+}
+
+void KCDebugCommandIO::onCurrentTextChanged(QString command)
+{
+    instance->write(qPrintable(command+'\n'));
+}
+
