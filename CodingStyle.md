@@ -84,6 +84,7 @@ Line breaks
 ===========
 + Keep lines shorter than 100 characters; wrap if necessary
 + Operators go at the end of wrapped lines.
+
             if (longExpression +
                 otherLongExpression +
                 otherOtherLongExpression)

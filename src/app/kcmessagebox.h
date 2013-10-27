@@ -1,33 +1,21 @@
 #ifndef KCMESSAGEBOX_H
 #define KCMESSAGEBOX_H
 
-//Base Dialog
-#include <QDialog>
-#include <QPainter>
-#include <QPalette>
-
-//Display Graphic
+#include <QWidget>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QPixmap>
-
-//Sort Widget/Scale Image.
-#include <QVBoxLayout>
-
-//Animation Framework.
 #include <QPropertyAnimation>
-
-//Debug
-#include <QDebug>
 
 class KCMessageBoxTitle : public QWidget
 {
     Q_OBJECT
 public:
     explicit KCMessageBoxTitle(QWidget *parent = 0);
+    void setTitleText(QString newTitleText);
 
 private:
-    QVBoxLayout *mainLayout;
-    QLabel *backPixDisplay;
+    QLabel *titleCaption;
 };
 
 class KCMessageBoxPanel : public QWidget
@@ -37,28 +25,47 @@ public:
     explicit KCMessageBoxPanel(QWidget *parent = 0);
 
 private:
-    QVBoxLayout *mainLayout;
-    QLabel *backPixDisplay;
+
 };
 
-class KCMessageBox : public QDialog
+class KCMessageBoxContent : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCMessageBoxContent(QWidget *parent = 0);
+    void addText(QString displayText);
+
+private:
+    QVBoxLayout *mainLayout;
+    QVBoxLayout *contentLayout;
+};
+
+class KCMessageBox : public QWidget
 {
     Q_OBJECT
 public:
     explicit KCMessageBox(QWidget *parent = 0);
-    void startAnime();
+    void addText(QString displayText);
 
 signals:
 
 public slots:
+    void show();
+    void setTitle(QString messageBoxTitle);
 
 private slots:
-    void heightExpandAnime();
 
 private:
-    KCMessageBoxTitle *titleWidget;
     QVBoxLayout *mainLayout;
-    QRect parentGeometry;
+    QPropertyAnimation *widthExpand;
+
+    //Basic widgets
+    KCMessageBoxTitle *titleWidget;
+    KCMessageBoxPanel *panelWidget;
+    KCMessageBoxContent *contentWidget;
+
+    //Basic function
+    int getWidthHint();
 };
 
 #endif // KCMESSAGEBOX_H

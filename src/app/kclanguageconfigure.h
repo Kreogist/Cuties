@@ -20,11 +20,16 @@ public:
     static KCLanguageConfigure *getInstance();
 
     void setLanguage(QString newLanguageName);
+    void setLanguageIndex(int newLangaugeIndex);
     QStringList getLanguageList() const;
     QStringList getLanguageNameList() const;
+    int getCurrLanguageIndex() const;
 
 private:
+    void applyLangaugeSet(int languageIndex);
+
     QString languageFileDir, currLanguageName;
+    int currLanguageIndex;
 
     KCLanguageConfigure();
     static KCLanguageConfigure *instance;

@@ -29,7 +29,7 @@ KCCppHighlighter::KCCppHighlighter(QObject *parent) :
 
     //Declare values:
     int i;
-    highlight_rule hlrDataType, hlrKeyWords, hlrSpTypes,hlrSingleLineCComments;
+    highlight_rule hlrDataType, hlrKeyWords, hlrSpTypes;//, hlrSingleLineCComments;
     QString strKeyWords;
 
     //Set Data Types:
@@ -133,6 +133,7 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
             setFormat(match.capturedStart(),
                       match.capturedLength(),
                       instance->getTextCharFormat(rules[i].type_name));
+                      //QTextCharFormat());
         }
     }
 

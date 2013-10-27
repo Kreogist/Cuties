@@ -61,9 +61,7 @@ protected:
     void stopCursorTimer();
 
 public slots:
-#ifndef Q_OS_MACX
     void setEnabled(bool value);
-#endif
 
 private:
     bool enabled;

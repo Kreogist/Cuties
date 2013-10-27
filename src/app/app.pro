@@ -17,7 +17,7 @@
 #
 #-------------------------------------------------
 
-TARGET = Kreogist-Cuties
+TARGET = Cuties
 
 TEMPLATE = app
 
@@ -90,7 +90,9 @@ SOURCES += \
     kccolorconfigure.cpp \
     Controls/SettingItems/kcsettingcontrollineedit.cpp \
     kcdebugcommandio.cpp \
-    kcdebugcontrolpanel.cpp
+    kcdebugcontrolpanel.cpp \
+    kcfloattoolbar.cpp \
+    kcfontconfigure.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -157,7 +159,9 @@ HEADERS += \
     kccolorconfigure.h \
     Controls/SettingItems/kcsettingcontrollineedit.h \
     kcdebugcommandio.h \
-    kcdebugcontrolpanel.h
+    kcdebugcontrolpanel.h \
+    kcfloattoolbar.h \
+    kcfontconfigure.h
 
 # Enable C++11
 CONFIG += c++11

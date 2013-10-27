@@ -10,14 +10,24 @@ public:
     explicit KCSettingListItemLanguageItem(QWidget *parent = 0);
     void setLanguageImage(QString imgFilePath);
     void setLanguageName(QString strLanName);
+    void setCheck(bool value);
+
+signals:
+    void languageSelect();
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
 
 private slots:
 
 private:
-    bool blnSel;
-    QHBoxLayout *MainLayout;
-    QLabel *lblLanguageIcon;
-    QLabel *lblLanguageName;
+    bool languageSelected;
+    QHBoxLayout *mainLayout;
+    QLabel *languageIcon;
+    QLabel *languageName;
+    QPalette pal;
 };
 
 #endif // KCSETTINGLISTITEMLANGUAGEITEM_H

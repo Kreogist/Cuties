@@ -26,13 +26,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QStyle>
-#include <QFont>
-#include <QFile>
 #include <QString>
-#include <QDir>
-#include <QList>
-#include <QFileInfo>
-#include <QStringList>
 #include <QStyleFactory>
 #include <QDebug>
 #include <QTimer>
@@ -55,49 +49,7 @@ static inline void initApplicationInfo()
 
 static void initApplicationFonts()
 {
-    QStringList filter;
-    QDir *dir=new QDir(QString(qApp->applicationDirPath() + "/Fonts/"));
-    QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
 
-    int fontID(-1);
-    bool fontWarningShown(false);
-    for(QList<QFileInfo>::iterator i=list->begin();
-        i!=list->end();
-        ++i)
-    {
-        if(i->fileName().length() < 4)
-        {
-            continue;
-        }
-        QFile res(i->filePath());
-        if(res.open(QIODevice::ReadOnly) == false)
-        {
-            if(fontWarningShown == false)
-            {
-                QMessageBox::warning(0,
-                                     QApplication::applicationName(),
-                                     QString(QApplication::tr("Error occur when load font file.")) +
-                                     "\n" +
-                                     QString(QApplication::tr("Error: ")) +
-                                     res.errorString());
-                fontWarningShown = true;
-            }
-        }
-        else
-        {
-            fontID = QFontDatabase::addApplicationFontFromData(res.readAll());
-            if(fontID == -1 && fontWarningShown == false)
-            {
-                QMessageBox::warning(0,
-                                     QApplication::applicationName(),
-                                     QString(QApplication::tr("Error occur when load font file.")) +
-                                     "\n" +
-                                     QString(QApplication::tr("Error: ")) +
-                                     res.errorString());
-                fontWarningShown = true;
-            }
-        }
-    }
 }
 
 static inline void initApplicationSettings()
@@ -181,7 +133,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
  */
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(KCMessageHandler);
+    //qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
 

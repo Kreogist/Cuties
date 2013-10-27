@@ -91,6 +91,8 @@ private slots:
     void aboutCuties();
     void changeSidebarVisibleState();
     void changeCompileDockVisibleState();
+    void changeDebugControlVisibleState();
+    void changeDebugCommandIOVisibleState();
     void changeJudgeDockVisibleState();
     void showPreference();
 #ifdef Q_OS_MACX
@@ -141,6 +143,8 @@ private:
         actionEditPreferences,
         actionViewSidebar,
         actionViewCompileDock,
+        actionViewDebugControls,
+        actionViewDebugCommandIO,
         //mnuViewJudgeDock,
 #ifdef Q_OS_MACX
         actionViewFullscreen,
@@ -169,7 +173,7 @@ private:
     //Define MainWindow menu actions
     QAction *actionMainWindowItem[actionMainWindowCount];
     //Define the status tips and icon path of the actions.
-    QString stringActionStatusTips[actionMainWindowCount];
+    QString actionStatusTips[actionMainWindowCount];
     QString stringActionIconPath[actionMainWindowCount];
 
     //Enumerate Toolbar button items

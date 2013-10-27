@@ -22,6 +22,10 @@
 
 #include <QDockWidget>
 #include <QModelIndex>
+#include <QToolButton>
+#include <QHBoxLayout>
+#include <QProgressBar>
+#include <QLabel>
 
 #include "kcconnectionhandler.h"
 
@@ -56,6 +60,8 @@ public slots:
     void hideCompileDock();
 
 private slots:
+    //Maximum button float setting.
+    void setFloat();
     //Change the splitter value to show/hide the treeview widget
     void changeCompileSplitterWidthValue(int newCompileTreeWidth);
     //Send request to show details

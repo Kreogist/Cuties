@@ -1,16 +1,24 @@
-0.1.0.1
-New Featues:
-1. Parentheses autocomplete support.
-2. Parentheses autocomplete deleted by pairs.
-3. Toolbar tooltips support.
+﻿0.1.0.1
+New Features:
+1. New Cuties Icon.
+2. New menu font on Windows and Linux. Full Sword Art Online style support.
+3. Parentheses autocomplete support.
+4. Toolbar tooltips support.
 
 Updates:
 1. Compile dock will automatically hide when compile finishes if there's no error.
-2. New Icon Photoshop file added.
+2. Update Manual Documentations.
 3. Update Control Center Items Base.
+4. Update Titlebar toolbar width calculation.
+5. Update SAO Fonts.
+6. Update sidebar visible action.
+7. Clear some old icon file.
 
 Bug Fixed:
 1. Fixed parentheses auto indent bug.
+2. Fixed Compile Dock hide when there’re warnings bug.
+3. Fixed the line number malposition bug.
+4. Finally fixed Backspace bug.
 
 0.1.0.0
 Updates:
@@ -32,7 +40,7 @@ Bug Fixed:
 0.0.2.1
 Updates:
 1. Re-factor the save process.
-2. New search result colour.
+2. New search result color.
 3. Enhance the search speed and user experience.
 
 Bug Fixed:

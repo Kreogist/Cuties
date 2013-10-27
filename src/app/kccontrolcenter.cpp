@@ -575,15 +575,31 @@ KCCCTabLanguageContent::KCCCTabLanguageContent(QWidget *parent) :
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
+    //Set Signal Mapper;
+    languageSet=new QSignalMapper(this);
+
     KCLanguageConfigure *instance=KCLanguageConfigure::getInstance();
     int languageNum=instance->getLanguageList().count(),i;
     for(i=0; i<languageNum; i++)
     {
         KCSettingListItemLanguageItem *lanItem=new KCSettingListItemLanguageItem(this);
         lanItem->setLanguageName(instance->getLanguageNameList().at(i));
+        if(i==instance->getCurrLanguageIndex())
+        {
+            lanItem->setCheck(true);
+        }
+        connect(lanItem, SIGNAL(languageSelect()), languageSet, SLOT(map()));
+        languageSet->setMapping(lanItem, i);
         languageItem.append(lanItem);
         mainLayout->addWidget(languageItem.at(i));
     }
+    connect(languageSet, SIGNAL(mapped(int)), this, SLOT(applyLanguageSettings(int)));
+}
+
+void KCCCTabLanguageContent::applyLanguageSettings(int newLangaugeIndex)
+{
+    qDebug()<<newLangaugeIndex;
+    KCLanguageConfigure::getInstance()->setLanguageIndex(newLangaugeIndex);
 }
 
 //------------------Container----------------------

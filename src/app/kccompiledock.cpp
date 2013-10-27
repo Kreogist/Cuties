@@ -34,15 +34,18 @@
 KCCompileDock::KCCompileDock(QWidget *parent):
     QDockWidget(parent)
 {
+
     //Set compile dock properties
+    setAutoFillBackground(true);
     setObjectName(QString("Compile Dock"));
     setWindowTitle(QString(tr("Compiler")));
     setContentsMargins(0,0,0,0);
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
     //Set compile dock palette
-    QPalette pal=this->palette();
+    QPalette pal=palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
+    pal.setColor(QPalette::Window, QColor(0x53, 0x53, 0x53));
     setPalette(pal);
 
     //Set compile info splitter widget
@@ -169,6 +172,11 @@ void KCCompileDock::hideCompileDock()
     setVisible(false);
 }
 
+void KCCompileDock::setFloat()
+{
+    setFloating(true);
+}
+
 //This slot is used to change the value of splitter,
 //QPropertyAnimation can't do this for me, so I use QTimeLine to show up the QTreeView.
 //Calculate the width for each required, save the value into a QList, and set it to the QSplitter.
@@ -183,7 +191,6 @@ void KCCompileDock::changeCompileSplitterWidthValue(int newCompileTreeWidth)
 void KCCompileDock::setCompileOutputReceiver(KCCompileOutputReceiver *newReceiver)
 {
     Q_ASSERT(newReceiver!=NULL);
-
     //Disconnect the old connections.
     receiverConnectionHandles.disConnectAll();
 
