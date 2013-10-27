@@ -22,24 +22,32 @@
 
 #include <QDockWidget>
 
+#include "kcconnectionhandler.h"
+
 class QVBoxLayout;
 class QComboBox;
+class QTextDocument;
 class KCPlainTextBrowser;
+class gdb;
 
 class KCDebugCommandIO : public QDockWidget
 {
     Q_OBJECT
 public:
     explicit KCDebugCommandIO(QWidget *parent = 0);
-
-signals:
+    void setDocument(QTextDocument *document);
+    void setGdbInstance(gdb *gdbInstance);
 
 public slots:
+
+private slots:
+    void onCurrentTextChanged(QString command);
 
 private:
     QVBoxLayout *mainLayout;
     KCPlainTextBrowser *debugOutputTextBrowser;
     QComboBox *debugInput;
+    gdb *instance;
 };
 
 #endif // KCGDBCOMMANDIO_H

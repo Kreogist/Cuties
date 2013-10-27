@@ -417,9 +417,17 @@ void MainWindow::createDocks()
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
+    connect(debugControl,SIGNAL(requireStartDebug()),
+            this,SLOT(startDebug()));
     //Debug Command IO
     debugCommandIO=new KCDebugCommandIO(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
+}
+
+void MainWindow::showDebugDocks()
+{
+    debugControl->show();
+    debugCommandIO->show();
 }
 
 void MainWindow::createMenu()
@@ -729,7 +737,7 @@ void MainWindow::restoreSettings()
     float n_X, n_Y, n_width, n_height;
 
     float deskWidth=float(QApplication::desktop()->width()),
-          deskHeight=float(QApplication::desktop()->height());
+            deskHeight=float(QApplication::desktop()->height());
 
     n_X     = settings.value("x", 0.1).toFloat();
     n_X     = (n_X>1 || n_X<0)?0.1*deskWidth:n_X*deskWidth;
@@ -791,7 +799,7 @@ void MainWindow::saveSettings()
 
     //Save ALL settings.
     float deskWidth=float(QApplication::desktop()->width()),
-          deskHeight=float(QApplication::desktop()->height());
+            deskHeight=float(QApplication::desktop()->height());
 
     settings.beginGroup("MainWindow");
     settings.setValue("x",float(lastPositionX)/deskWidth);
@@ -1000,29 +1008,29 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    /*    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
-        KCLanguageMode *currLangMode=currEditor->langMode();
-        currLangMode->startDebug();
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    KCLanguageMode *currLangMode=currEditor->langMode();
+    currLangMode->startDebug();
 
-        connectDebugDockWithCurrEditor();
-        debugDock->show();*/
+    connectDebugDockWithCurrEditor();
+    showDebugDocks();
 }
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
-    /*    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
+    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
 
-        dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
-        if(dbgReceiver!=NULL)
-        {
-            debugDock->setDbgReceiver(dbgReceiver);
-        }
+    dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
+    if(dbgReceiver!=NULL)
+    {
+        debugCommandIO->setDocument(dbgReceiver->getTextStreamOutput());
+    }
 
-        gdb *gdbInstance=currLangMode->getGdbInstance();
-        if(gdbInstance!=NULL)
-        {
-            debugDock->setGdbInstance(gdbInstance);
-        }*/
+    gdb *gdbInstance=currLangMode->getGdbInstance();
+    if(gdbInstance!=NULL)
+    {
+        debugCommandIO->setGdbInstance(gdbInstance);
+    }
 }
 
 #ifdef Q_OS_MACX

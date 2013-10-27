@@ -17,7 +17,6 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -56,10 +55,20 @@
 #include "kcdebugcontrolpanel.h"
 #include "kcdebugcommandio.h"
 
+/*!
+ * \brief The MainWindow class is the mainwindow for program.
+ *
+ * MainWindow is the class which is responsible for creating actions, titlebar, docks, menus,
+ * status bar, tool bar. And connect lots of signals and slots between components of program.
+ */
 class MainWindow : public KCMainWindow
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief This is the constructor for MainWindow. It set palette,central widget and so on.
+     * \param parent  the parent of MainWindow.
+     */
     explicit MainWindow(QWidget *parent = 0);
 
 signals:
@@ -209,6 +218,7 @@ private:
 
     void setDocOpenMenuState(bool state);
 
+    void showDebugDocks();
     void connectDebugDockWithCurrEditor();
 };
 
