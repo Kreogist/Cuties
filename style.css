@@ -27,26 +27,36 @@ a:active{
     top:0px;
     left:0px;
     width:100%;
+    height:32px;
     padding:5px;
     font-size:1.4em;
     color:#eee;
     margin:0;
-    background-color:#555;
-    box-shadow:0 5px 10px #000;
-    background: rgb(69,72,77); /* Old browsers */
-    background: -moz-linear-gradient(top,  rgba(69,72,77,1) 0%, rgba(0,0,0,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(69,72,77,1)), color-stop(100%,rgba(0,0,0,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  rgba(69,72,77,1) 0%,rgba(0,0,0,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
-
+    background: rgba(0,0,0,0.8);
 }
-#head-banner-title{
-    width:8em;
-    display:inline-block;
+#banner-title{
+    display:block;
+    position:fixed;
+    font-size:2em;
+    top:0px;
+    left:0px;
+    width:110px;
+    height:66px;
+    padding-left:6px;
+    background: rgba(0,0,0,0.8);
 }
+#banner-title:after{
+    z-index:9990;
+    position:fixed;
+    display:block;
+    left:116px;
+    top:42px;
+    content:"";
+    width:0px;
+    height:0px;
+    border-width:12px;
+    border-style:solid;
+    border-color:rgba(0,0,0,0.8) transparent transparent rgba(0,0,0,0.8);}
 #head-banner-link{
     position:absolute;
     display:inline-block;
@@ -55,6 +65,27 @@ a:active{
     text-align:center;
     padding-right:1em;
 }
+#banner-subtitle{
+    position:fixed;
+    z-index:9998;
+    display:block;
+    top:42px;
+    left:0px;
+    height:30px;
+    line-height:30px;
+    padding:2px 15px;
+    font-size:0.8em;
+    background-color:rgba(0,0,0,0.8);
+    border-radius:0;
+    opacity:0;
+    }
+#banner-subtitle:after{
+    position:fixed;
+    display:block;
+    content:"";
+    width:0px;
+    height:0px;
+    border:30px solid red;}
 .a-effect a{
     color:#ddd;
     margin-right:0.2em;
@@ -87,16 +118,16 @@ a:active{
 }
 
 #content{
-    margin-top:80px;
+    margin-top:100px;
 }
 #left-box{
     z-index:4097;
-    display:flex;  
+    display:flex;
     flex-direction:column;
     justify-content: center;  
     align-items: center;
     position:absolute;
-    top:45px;
+    top:70px;
     left:15px;
     margin:0;
     padding:0;
@@ -155,12 +186,11 @@ a:active{
     border-color:transparent rgba(178,178,178,0.8) transparent transparent;
     border-style:solid;
     }
-.left-btn:hover span:after{
-}
+
 #left-logo{
-    width: 256px;
-    height:256px;
-    background-image:url("cuties.png");
+    width: 130px;
+    height:130px;
+    background-image:url("cuties-scaled.png");
 }
 .left-btn{
     display:flex;
@@ -181,7 +211,7 @@ a:active{
     left:50px;
     width:80%;
     margin-left:65px;
-    min-height:90%;
+    min-height:560px;
     position:absolute;
     box-shadow:0 0 10px rgba(0,0,0,0.8);
 }
