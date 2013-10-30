@@ -29,8 +29,8 @@ KCFontConfigure::KCFontConfigure()
     menuFont=QFont("Hiragino Sans GB W3");
     menuFont.setPixelSize(16);
     menuFont.setStyleStrategy(QFont::PreferAntialias);
-#elif Q_OS_UNIX
-
+#endif
+#ifdef Q_OS_UNIX
     applicationFont=QFont("Hiragino Sans GB W3");
     applicationFont.setPixelSize(13);
     codeFontName="Monaco";
@@ -38,6 +38,7 @@ KCFontConfigure::KCFontConfigure()
     codeFont.setPixelSize(12);
     menuFont.setPixelSize(16);
     menuFont.setStyleStrategy(QFont::PreferAntialias);
+#endif
 #ifdef Q_OS_WIN32
     menuFont=QFont("");
 #else

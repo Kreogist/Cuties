@@ -854,7 +854,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 {
                     if(matchParentheses(e->text()==")"?'(':'[',
                                         e->text().at(0).toLatin1(),
-                                        i-1,
+                                        i,
                                         _textCursor.block(),
                                         true)>0)
                     {
@@ -884,20 +884,35 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
+        if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
+           _textCursor.document()->characterAt(_textCursor.position()))
+        {
+            _textCursor.deleteChar();
+            QPlainTextEdit::keyPressEvent(e);
+            break;
+        }
         int pos=findFirstCharacter(_textCursor.block());
-        if(_textCursor.positionInBlock()<=pos && pos!=0 && (!pos<configureInstance->getTabWidth()))
+        if(pos < 0)
+        {
+            if((!pos<configureInstance->getTabWidth()))
+            {
+                if(_textCursor.positionInBlock()>0)
+                {
+                    removeTab(_textCursor);
+                    break;
+                }
+            }
+            QPlainTextEdit::keyPressEvent(e);
+            break;
+
+        }
+        if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->getTabWidth()))
         {
             if(_textCursor.positionInBlock()>0)
             {
                 removeTab(_textCursor);
                 break;
             }
-            QPlainTextEdit::keyPressEvent(e);
-        }
-        if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
-           _textCursor.document()->characterAt(_textCursor.position()))
-        {
-            _textCursor.deleteChar();
         }
         QPlainTextEdit::keyPressEvent(e);
         break;

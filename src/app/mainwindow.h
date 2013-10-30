@@ -87,7 +87,6 @@ public slots:
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
     void retranslate();
-    void retranslateMenus();
 
 private slots:
     void aboutQt();
@@ -124,6 +123,7 @@ private:
     };
     //Define MainWindow menu items
     QMenu *menuMainWindowItem[menuMainItemsCount];
+    QString menuMainWindowText[menuMainItemsCount];
 
     //Enumerate MainWindow menu action items
     enum actionMainWindow
@@ -176,6 +176,7 @@ private:
     //Define MainWindow menu actions
     QAction *actionMainWindowItem[actionMainWindowCount];
     //Define the status tips and icon path of the actions.
+    QString actionMainWindowText[actionMainWindowCount];
     QString actionStatusTips[actionMainWindowCount];
     QString stringActionIconPath[actionMainWindowCount];
 
@@ -196,9 +197,13 @@ private:
     };
     //Define MainWindow Toolbar buttons.
     QToolButton *buttonMainToolbarItem[mainToolbarButtonCount];
+    QString toolButtonTips[mainToolbarButtonCount];
 
     //Define MainWindow last time opened position.
     int lastPositionX, lastPostionY, lastPositionHeight, lastPostionWidth;
+
+    //All the names we need to translate.
+    QString trWindowTitle="Kreogist Cuties";
 
     KCTabManager *tabManager;
     KCSideBar *sideBar;
