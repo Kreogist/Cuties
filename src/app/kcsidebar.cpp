@@ -1,4 +1,5 @@
 #include "kcsidebar.h"
+#include "kclanguageconfigure.h"
 
 KCClipboardHistoryStack::KCClipboardHistoryStack(QWidget *parent) :
     QListView(parent)
@@ -29,9 +30,9 @@ KCHistoryStack::KCHistoryStack(QWidget *parent) :
             this, &KCHistoryStack::dblClickHistoryItems);
 }
 
-void KCHistoryStack::dblClickHistoryItems(QModelIndex ItemID)
+void KCHistoryStack::dblClickHistoryItems(QModelIndex itemIndex)
 {
-    emit requiredOpenFiles(KCHistoryConfigure::getInstance()->getRecentOpenedFileModel()->item(ItemID.row())->statusTip());
+    emit requiredOpenFiles(KCHistoryConfigure::getInstance()->getRecentFileList().at(itemIndex.row()).fileFullPath);
 }
 
 KCSidebarButton::KCSidebarButton(QWidget *parent) :
@@ -120,6 +121,9 @@ void KCSidebarButton::mousePressEvent(QMouseEvent *e)
 KCSideBarContent::KCSideBarContent(QWidget *parent) :
     QWidget(parent)
 {
+    //Set language
+    retranslate();
+
     //Set Properties.
     setMinimumWidth(0);
     sidebarButtonIndex=-1;
@@ -141,11 +145,11 @@ KCSideBarContent::KCSideBarContent(QWidget *parent) :
     //Set Sidebar Buttons.
     sidebarButton[sideButtonHistory]=new KCSidebarButton(this);
     sidebarButton[sideButtonHistory]->setIcon(":/Sidebar/image/Sidebar/History.png");
-    sidebarButton[sideButtonHistory]->setToolTip(tr("History"));
+    sidebarButton[sideButtonHistory]->setToolTip(historyButtonTips);
 
     sidebarButton[sideButtonClipboard]=new KCSidebarButton(this);
-    sidebarButton[sideButtonClipboard]->setToolTip(tr("Clipboard"));
     sidebarButton[sideButtonClipboard]->setIcon(":/Sidebar/image/Sidebar/Clipboard.png");
+    sidebarButton[sideButtonClipboard]->setToolTip(clipboardButtonTips);
 
     for(int i=sideButtonHistory; i<sidebarButtonCount; i++)
     {
@@ -158,13 +162,6 @@ KCSideBarContent::KCSideBarContent(QWidget *parent) :
             this, SLOT(listButtonClicked(int)));
 
     buttonGroupLayout->addStretch();
-
-    //Add Lock Button.
-    /*sidebarLock=new QToolButton(this);
-    sidebarLock->setAutoRaise(true);
-    sidebarLock->setCheckable(true);
-    sidebarLock->setFixedSize(30,30);
-    buttonGroupLayout->addWidget(sidebarLock);*/
 
     mainLayout->addLayout(buttonGroupLayout);
 
@@ -227,6 +224,19 @@ void KCSideBarContent::hideContent()
     contents->hide();
 }
 
+void KCSideBarContent::retranslate()
+{
+    historyButtonTips=tr("History");
+    clipboardButtonTips=tr("Clipboard");
+}
+
+void KCSideBarContent::retranslateAndSet()
+{
+    retranslate();
+    sidebarButton[sideButtonHistory]->setToolTip(historyButtonTips);
+    sidebarButton[sideButtonClipboard]->setToolTip(clipboardButtonTips);
+}
+
 void KCSideBarContent::listButtonClicked(int Index)
 {
     if(sidebarButtonIndex==Index)
@@ -252,6 +262,8 @@ void KCSideBarContent::listButtonClicked(int Index)
 KCSideBar::KCSideBar(QWidget *parent) :
     QDockWidget(parent)
 {
+    //Set translate langauge
+    retranslate();
     //Set ObjectName
     setObjectName("Sidebar");
     //Claer Title bar.
@@ -273,7 +285,7 @@ KCSideBar::KCSideBar(QWidget *parent) :
     pal.setColor(QPalette::Text,QColor(255,255,255));
     pal.setColor(QPalette::ButtonText,QColor(255,255,255));
     setPalette(pal);
-    setWindowTitle(" " + tr("Sidebar") + " ");
+    setWindowTitle(" " + windowTitleString + " ");
 
     //New Central Widget
     centralWidget=new KCSideBarContent(this);
@@ -317,6 +329,9 @@ KCSideBar::KCSideBar(QWidget *parent) :
 
     expandState=false;
     unlockState=true;
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCSideBar::forceClearButtonState()
@@ -418,6 +433,17 @@ void KCSideBar::setUnlockState(bool value)
     }
 }
 
+void KCSideBar::retranslate()
+{
+    windowTitleString=tr("Sidebar");
+}
+
+void KCSideBar::retranslateAndSet()
+{
+    retranslate();
+    setWindowTitle(windowTitleString);
+    centralWidget->retranslateAndSet();
+}
 
 void KCSideBar::enterEvent(QEvent *e)
 {

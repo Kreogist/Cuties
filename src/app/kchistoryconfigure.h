@@ -32,11 +32,22 @@
 
 #include "kcconfigure.h"
 
+enum fileTypes
+{
+    cSourceFile,
+    cppSourceFile,
+    pasSourceFile,
+    otherSourceFile,
+    sourceFileTypeCount
+};
+
 struct recentFileInfo
 {
     QString fileName;
-    QString filePlace;
-    QDateTime lastRead;
+    fileTypes fileType;
+    QString fileDir;
+    QString fileLastReadDate;
+    QString fileFullPath;
 };
 
 class KCHistoryConfigure : public KCConfigure
@@ -79,13 +90,23 @@ public:
 
     static QString getHistoryFileName();
     static void setHistoryFileName(const QString &value);
+    void refreshHistoryModel();
+
+    QList<recentFileInfo> getRecentFileList() const;
+
+public slots:
+    void retranslate();
+    void retranslateAndSet();
 
 private:
     KCHistoryConfigure();
     static QString historyFileName;
     QString historyDirPath;
 
-    QStandardItem *createRecentFileInfo(const QString &path);
+    QString fileTypes[sourceFileTypeCount];
+
+    void createRecentFileInfo(const QString &path);
+    QStandardItem *createRecentFileItem(const int &recentFileItemIndex);
 
     QStandardItemModel *recentOpenedFileModel;
 
@@ -97,9 +118,11 @@ private:
 
     QList<int> unClosedFileV;
     QList<int> unClosedFileH;
+    QList<recentFileInfo> recentFileList;
     int unClosedCurrent;
 
-    QIcon cFileIcon, cppFileIcon, pasFileIcon, otherFileIcon;
+    QIcon recentFileIcon[sourceFileTypeCount];
+    QString filePathCaption, lastReadCaption;
 };
 
 #endif // KCHISTORYCONFIGURE_H

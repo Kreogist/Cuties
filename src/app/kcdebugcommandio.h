@@ -39,11 +39,14 @@ public:
     void setGdbInstance(gdb *gdbInstance);
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
 
 private slots:
     void onCurrentTextChanged(QString command);
 
 private:
+    QString windowTitleString;
     QVBoxLayout *mainLayout;
     KCPlainTextBrowser *debugOutputTextBrowser;
     QComboBox *debugInput;

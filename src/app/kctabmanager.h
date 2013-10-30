@@ -47,7 +47,7 @@ public:
     explicit KCTabManager(QWidget *parent = 0);
     int getCurrentLineCount() const;
     int getCurrentLineNum() const;
-    void openHistoryFiles();
+    void restoreUnclosedFiles();
 
     KCCodeEditor *getCurrentEditor() const;
 

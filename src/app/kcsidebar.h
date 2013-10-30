@@ -65,7 +65,7 @@ signals:
     void requiredOpenFiles(QString filePath);
 
 private slots:
-    void dblClickHistoryItems(QModelIndex ItemID);
+    void dblClickHistoryItems(QModelIndex itemIndex);
 
 private:
 
@@ -117,6 +117,8 @@ signals:
     void foldRequest();
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
     void showContent();
     void hideContent();
     void listButtonClicked(int Index);
@@ -131,6 +133,8 @@ private:
         sidebarButtonCount
     };
 
+    QString historyButtonTips, clipboardButtonTips;
+
     KCSidebarButton *sidebarButton[sidebarButtonCount];
     QSignalMapper *sidebarButtonMapper;
 
@@ -139,7 +143,6 @@ private:
     KCClipboardHistoryStack *clipboardStack;
 
     int sidebarButtonIndex;
-    QToolButton *sidebarLock;
 };
 
 class KCSideBar : public QDockWidget
@@ -161,6 +164,8 @@ signals:
     void clipboardRequiredInsertText(QString insertText);
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
     void expandAnime();
     void foldAnime();
 
@@ -180,6 +185,7 @@ private:
     KCSideBarContent *centralWidget;
     QMetaObject::Connection animationHide;
     QPalette pal;
+    QString windowTitleString;
 };
 
 #endif // KCSIDEBAR_H

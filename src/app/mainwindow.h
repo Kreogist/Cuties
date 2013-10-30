@@ -54,7 +54,6 @@
 #include "kcconnectionhandler.h"
 #include "kcdebugcontrolpanel.h"
 #include "kcdebugcommandio.h"
-#include "kclanguageconfigure.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -86,7 +85,7 @@ public slots:
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
-    void retranslate();
+    void retranslateAndSet();
 
 private slots:
     void aboutQt();
@@ -215,7 +214,6 @@ private:
 
     KCDebugControlPanel *debugControl;
     KCDebugCommandIO *debugCommandIO;
-    KCLanguageConfigure *languageInstance;
 
     void compileProgram();
 

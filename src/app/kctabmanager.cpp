@@ -51,19 +51,20 @@ KCTabManager::KCTabManager(QWidget *parent) :
     currentEditor=NULL;
 }
 
-void KCTabManager::openHistoryFiles()
+void KCTabManager::restoreUnclosedFiles()
 {
     QList<QString> lastTimeUnClosedFiles=KCHistoryConfigure::getInstance()->getAllUnClosedFilePaths();
     QList<int> lastTimeUnClosedHs=KCHistoryConfigure::getInstance()->getAllUnClosedFileHs();
     QList<int> lastTimeUnClosedVs=KCHistoryConfigure::getInstance()->getAllUnClosedFileVs();
-
-    int hisItem;
+    int unClosedItem;
     for(int i=0; i<lastTimeUnClosedFiles.size(); i++)
     {
-        hisItem=open(lastTimeUnClosedFiles.at(i));
-        KCCodeEditor *editor = qobject_cast<KCCodeEditor *>(widget(hisItem));
-
-        editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
+        unClosedItem=open(lastTimeUnClosedFiles.at(i));
+        if(unClosedItem>0)
+        {
+            KCCodeEditor *editor = qobject_cast<KCCodeEditor *>(widget(unClosedItem));
+            editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
+        }
     }
     if(KCHistoryConfigure::getInstance()->getUnClosedCurrent()>-1)
     {
@@ -98,8 +99,7 @@ int KCTabManager::open(const QString &filePath)
         }
     }
     //File has not been opened, then open it and add tab.
-    KCCodeEditor *tmp;
-    tmp=new KCCodeEditor(this);
+    KCCodeEditor *tmp=new KCCodeEditor(this);
     if(tmp->open(filePath))
     {
         tmp->setDocumentTitle(name);
@@ -122,7 +122,7 @@ void KCTabManager::openAndJumpTo(const QString &filePath)
 
 void KCTabManager::open()
 {
-    QStringList file_name_list;
+    QStringList fileNameList;
     if(KCGeneralConfigure::getInstance()->getUseDefaultLanguageWhenOpen())
     {
         QString defaultSelectFilter;
@@ -140,7 +140,7 @@ void KCTabManager::open()
         default:
             defaultSelectFilter=KCGeneralConfigure::getInstance()->getAsfFilter();
         }
-        file_name_list=QFileDialog::getOpenFileNames(this,
+        fileNameList=QFileDialog::getOpenFileNames(this,
                        tr("Open File"),
                        KCHistoryConfigure::getInstance()->getHistoryDir(),
                        KCGeneralConfigure::getInstance()->getStrFileFilter(),
@@ -148,7 +148,7 @@ void KCTabManager::open()
     }
     else
     {
-        file_name_list=QFileDialog::getOpenFileNames(this,
+        fileNameList=QFileDialog::getOpenFileNames(this,
                        tr("Open File"),
                        KCHistoryConfigure::getInstance()->getHistoryDir(),
                        KCGeneralConfigure::getInstance()->getStrFileFilter());
@@ -156,21 +156,21 @@ void KCTabManager::open()
 
     QString name;
 
-    if(!file_name_list.isEmpty())
+    if(!fileNameList.isEmpty())
     {
-        QFileInfo _fileInfo(*file_name_list.begin());
+        QFileInfo _fileInfo(*fileNameList.begin());
         KCHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
     }
 
-    int _last_tab_index=currentIndex();
+    int lastTabIndex=currentIndex();
 
-    while(!file_name_list.isEmpty())
+    while(!fileNameList.isEmpty())
     {
-        name=*file_name_list.begin();
-        _last_tab_index=open(name);
-        file_name_list.pop_front();
+        name=*fileNameList.begin();
+        lastTabIndex=open(name);
+        fileNameList.pop_front();
     }
-    setCurrentIndex(_last_tab_index);
+    setCurrentIndex(lastTabIndex);
     currentTextCursorChanged();
 }
 

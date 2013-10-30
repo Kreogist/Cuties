@@ -24,20 +24,25 @@
 
 #include "kcplaintextbrowser.h"
 #include "gdb.h"
+#include "kclanguageconfigure.h"
 
 #include "kcdebugcommandio.h"
 
 KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     QDockWidget(parent)
 {
+    //Set translate.
+    retranslate();
+
     //Set properties.
     setObjectName("DebugCommandIO");
-    setWindowTitle(tr("Debug Command Prompt"));
+    setWindowTitle(windowTitleString);
     setContentsMargins(0,0,0,0);
 
     //Set palette.
     QPalette pal=this->palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Window, QColor(0x35, 0x35, 0x35));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
@@ -66,6 +71,8 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     connect(debugInput,SIGNAL(currentTextChanged(QString)),
             this,SLOT(onCurrentTextChanged(QString)));
 
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCDebugCommandIO::setDocument(QTextDocument *document)
@@ -76,6 +83,17 @@ void KCDebugCommandIO::setDocument(QTextDocument *document)
 void KCDebugCommandIO::setGdbInstance(gdb *gdbInstance)
 {
     instance=gdbInstance;
+}
+
+void KCDebugCommandIO::retranslate()
+{
+    windowTitleString=tr("Debug Command Prompt");
+}
+
+void KCDebugCommandIO::retranslateAndSet()
+{
+    retranslate();
+    setWindowTitle(windowTitleString);
 }
 
 void KCDebugCommandIO::onCurrentTextChanged(QString command)

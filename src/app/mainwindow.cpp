@@ -18,6 +18,7 @@
  */
 #include "mainwindow.h"
 #include "kcfontconfigure.h"
+#include "kclanguageconfigure.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
@@ -33,8 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
-
-    languageInstance=KCLanguageConfigure::getInstance();
 
     //Set Central Widget.
     tabManager=new KCTabManager(this);
@@ -52,9 +51,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Restore the last time running states
     restoreSettings();
-    retranslate();
-    connect(languageInstance, SIGNAL(newLanguageSet()),
-            this, SLOT(retranslate()));
+    retranslateAndSet();
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void MainWindow::createActions()
@@ -786,7 +785,7 @@ void MainWindow::show()
     KCMainWindow::show();
     if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile())
     {
-        tabManager->openHistoryFiles();
+        tabManager->restoreUnclosedFiles();
     }
 }
 
@@ -906,7 +905,7 @@ void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
     tabManager->switchCurrentToLine(NewLineNumber-1,0);
 }
 
-void MainWindow::retranslate()
+void MainWindow::retranslateAndSet()
 {
     menuMainWindowText[menuFile]=tr("File");
     menuMainWindowText[menuEdit]=tr("Edit");

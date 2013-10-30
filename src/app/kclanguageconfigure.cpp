@@ -21,10 +21,11 @@ KCLanguageConfigure::KCLanguageConfigure()
 
 void KCLanguageConfigure::readConfigure()
 {
+    QString configLanguageName;
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Language");
-    currLanguageName=settings.value("Language",
-                                    currLanguageName).toString();
+    configLanguageName=settings.value("Language",
+                                      currLanguageName).toString();
     settings.endGroup();
 }
 
@@ -36,7 +37,7 @@ void KCLanguageConfigure::writeConfigure()
     settings.endGroup();
 }
 
-void KCLanguageConfigure::setLanguage(QString newLanguageName)
+int KCLanguageConfigure::setLanguage(QString newLanguageName)
 {
     int languageIndex=languageName.indexOf(newLanguageName + ".qm");
     if(languageIndex != -1)
@@ -44,6 +45,7 @@ void KCLanguageConfigure::setLanguage(QString newLanguageName)
         currLanguageIndex=languageIndex;
         applyLangaugeSet(currLanguageIndex);
     }
+    return languageIndex;
 }
 
 void KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)

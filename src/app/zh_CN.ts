@@ -127,7 +127,7 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="436"/>
         <source>Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">剪切板</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="444"/>
@@ -205,7 +205,7 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="278"/>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">历史记录</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="285"/>
@@ -233,12 +233,12 @@
     <message>
         <location filename="kccodeeditor.cpp" line="277"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">保存</translation>
     </message>
     <message>
         <location filename="kccodeeditor.cpp" line="283"/>
         <source>Save As</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">另存为</translation>
     </message>
     <message>
         <location filename="kccodeeditor.cpp" line="293"/>
@@ -342,22 +342,22 @@
 <context>
     <name>KCControlCenter</name>
     <message>
-        <location filename="kccontrolcenter.cpp" line="698"/>
+        <location filename="kccontrolcenter.cpp" line="699"/>
         <source>Cuties Control Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccontrolcenter.cpp" line="739"/>
+        <location filename="kccontrolcenter.cpp" line="740"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccontrolcenter.cpp" line="740"/>
+        <location filename="kccontrolcenter.cpp" line="741"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccontrolcenter.cpp" line="743"/>
+        <location filename="kccontrolcenter.cpp" line="744"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
@@ -401,102 +401,114 @@
 <context>
     <name>KCDebugCommandIO</name>
     <message>
-        <location filename="kcdebugcommandio.cpp" line="35"/>
+        <location filename="kcdebugcommandio.cpp" line="90"/>
         <source>Debug Command Prompt</source>
-        <translation type="unfinished"></translation>
+        <translation>调试命令行</translation>
     </message>
 </context>
 <context>
     <name>KCDebugControlPanel</name>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="70"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="159"/>
         <source>Debug Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>调试控制器</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="87"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="161"/>
         <source>Start Debug</source>
-        <translation type="unfinished"></translation>
+        <translation>开始调试</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="88"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="162"/>
         <source>Stop Debug</source>
-        <translation type="unfinished"></translation>
+        <translation>停止调试</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="89"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="163"/>
         <source>Run to cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>运行到光标</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="114"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="156"/>
         <source>GDB Command: </source>
-        <translation type="unfinished"></translation>
+        <translation>GDB命令：</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="122"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="158"/>
+        <source>Debug Panel</source>
+        <translation>调试控制面板</translation>
+    </message>
+    <message>
+        <location filename="kcdebugcontrolpanel.cpp" line="165"/>
         <source>Next Line</source>
-        <translation type="unfinished"></translation>
+        <translation>下一步</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="123"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="166"/>
         <source>Continue</source>
-        <translation type="unfinished"></translation>
+        <translation>继续</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="124"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="167"/>
         <source>Step Into</source>
-        <translation type="unfinished"></translation>
+        <translation>单步进入</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="125"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="168"/>
         <source>Next Instruction</source>
-        <translation type="unfinished"></translation>
+        <translation>下一机器指令</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="126"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="169"/>
         <source>Into Instruction</source>
-        <translation type="unfinished"></translation>
+        <translation>进入机器指令</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="127"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="170"/>
         <source>Step Over</source>
-        <translation type="unfinished"></translation>
+        <translation>单步跳出</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="131"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="174"/>
         <source>Continue to the next source line in the current (innermost) stack frame.</source>
-        <translation type="unfinished"></translation>
+        <translation>继续执行语句，但是跳过子程序的调用。
+Continue to the next source line in the current (innermost) stack frame.</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="132"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="175"/>
         <source>This is similar to Step Into, but function calls that appear within the line of code are executed without stopping.</source>
-        <translation type="unfinished"></translation>
+        <translation>与单步进入类似，但是调用函数将不会停止，而是继续执行。
+This is similar to Step Into, but function calls that appear within the line of code are executed without stopping.</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="135"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="178"/>
         <source>Resume program execution, at the address where your program last stopped; any breakpoints set at that address are bypassed. </source>
-        <translation type="unfinished"></translation>
+        <translation>使程序在暂停在断点之后恢复运行，在那个位置的断点将被跳过。
+Resume program execution, at the address where your program last stopped; any breakpoints set at that address are bypassed.</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="138"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="181"/>
         <source>Continue running your program until control reaches a different source line, then stop it and return control to GDB.</source>
-        <translation type="unfinished"></translation>
+        <translation>继续运行你的程序直到到一个新的源代码行，然后停止下来并且返回到调试器。
+Continue running your program until control reaches a different source line, then stop it and return control to GDB.</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="141"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="184"/>
         <source>Execute one machine instruction, but if it is a function call, proceed until the function returns.</source>
-        <translation type="unfinished"></translation>
+        <translation>运行一行机器指令，但是如果这条机器指令是函数调用，会一直运行直到函数执行完毕。
+Execute one machine instruction, but if it is a function call, proceed until the function returns.</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="144"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="187"/>
         <source>Execute one machine instruction, then stop and return to the debugger.</source>
-        <translation type="unfinished"></translation>
+        <translation>运行一行机器指令，然后停止并返回到编译器。
+Execute one machine instruction, then stop and return to the debugger.</translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="147"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="190"/>
         <source>Cancel execution of a function call.</source>
-        <translation type="unfinished"></translation>
+        <translation>取消函数调用。
+Cancel execution of a function call.</translation>
     </message>
 </context>
 <context>
@@ -560,34 +572,34 @@
 <context>
     <name>KCHistoryConfigure</name>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="235"/>
+        <location filename="kchistoryconfigure.cpp" line="322"/>
         <source>C Source File</source>
-        <translation type="unfinished"></translation>
+        <translation>C 源代码文件</translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="240"/>
+        <location filename="kchistoryconfigure.cpp" line="323"/>
         <source>C++ Source File</source>
-        <translation type="unfinished"></translation>
+        <translation>C++ 源代码文件</translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="245"/>
+        <location filename="kchistoryconfigure.cpp" line="324"/>
         <source>Pascal Source File</source>
-        <translation type="unfinished"></translation>
+        <translation>Pascal 源代码文件</translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="250"/>
+        <location filename="kchistoryconfigure.cpp" line="325"/>
         <source>Plain Text File</source>
-        <translation type="unfinished"></translation>
+        <translation>纯文本文件</translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="252"/>
+        <location filename="kchistoryconfigure.cpp" line="326"/>
         <source>File Path: </source>
-        <translation type="unfinished"></translation>
+        <translation>文件路径：</translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="253"/>
+        <location filename="kchistoryconfigure.cpp" line="327"/>
         <source>Last Read: </source>
-        <translation type="unfinished"></translation>
+        <translation>最后一次访问：</translation>
     </message>
 </context>
 <context>
@@ -659,7 +671,7 @@
     <message>
         <location filename="kcreplacewindow.cpp" line="52"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">替换</translation>
     </message>
     <message>
         <location filename="kcreplacewindow.cpp" line="58"/>
@@ -716,22 +728,22 @@
 <context>
     <name>KCSideBar</name>
     <message>
-        <location filename="kcsidebar.cpp" line="276"/>
+        <location filename="kcsidebar.cpp" line="438"/>
         <source>Sidebar</source>
-        <translation type="unfinished"></translation>
+        <translation>侧边栏</translation>
     </message>
 </context>
 <context>
     <name>KCSideBarContent</name>
     <message>
-        <location filename="kcsidebar.cpp" line="144"/>
+        <location filename="kcsidebar.cpp" line="228"/>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>历史记录</translation>
     </message>
     <message>
-        <location filename="kcsidebar.cpp" line="147"/>
+        <location filename="kcsidebar.cpp" line="229"/>
         <source>Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>剪切板</translation>
     </message>
 </context>
 <context>
@@ -787,6 +799,37 @@
         <location filename="kctabmanager.cpp" line="196"/>
         <source>out of memmory!</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MAC_APPLICATION_MENU</name>
+    <message>
+        <source>Services</source>
+        <translation type="obsolete">服务</translation>
+    </message>
+    <message>
+        <source>Hide %1</source>
+        <translation type="obsolete">隐藏 %1</translation>
+    </message>
+    <message>
+        <source>Hide Others</source>
+        <translation type="obsolete">隐藏其他</translation>
+    </message>
+    <message>
+        <source>Show All</source>
+        <translation type="obsolete">全部显示</translation>
+    </message>
+    <message>
+        <source>Preferences...</source>
+        <translation type="obsolete">偏好设置</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation type="obsolete">退出 %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation type="obsolete">关于 %1</translation>
     </message>
 </context>
 <context>
@@ -1191,37 +1234,6 @@
         <location filename="dbgoutputreceiver.cpp" line="31"/>
         <source>value</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MAC_APPLICATION_MENU</name>
-    <message>
-        <source>Services</source>
-        <translation>服务</translation>
-    </message>
-    <message>
-        <source>Hide %1</source>
-        <translation>隐藏 %1</translation>
-    </message>
-    <message>
-        <source>Hide Others</source>
-        <translation>隐藏其他</translation>
-    </message>
-    <message>
-        <source>Show All</source>
-        <translation>全部显示</translation>
-    </message>
-    <message>
-        <source>Preferences...</source>
-        <translation>偏好设置</translation>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>退出 %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>关于 %1</translation>
     </message>
 </context>
 </TS>

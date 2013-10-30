@@ -36,6 +36,8 @@ signals:
     void requireStopDebug();
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
 
 private:
     enum debugContolButtons
@@ -60,6 +62,12 @@ private:
     QToolBar *toolBar;
     QToolButton *debugControlButton[debugControlButtonCount];
     QToolButton *debugCursorControlButton[debugCursorControlButtonCount];
+
+    QString windowTitleString,
+            toolbarTitle;
+    QString debugCursorControlCaption[debugCursorControlButtonCount],
+            debugCursorControlToolTips[debugCursorControlButtonCount];
+    QString debugControlToolTips[debugControlButtonCount];
 };
 
 #endif // KCDEBUGCONTROLBUTTONS_H

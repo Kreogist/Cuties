@@ -78,9 +78,11 @@ protected:
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection> &selections);
-    void highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections);
+    int highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections);
+    void highlightParenthesisPairs(QList<QTextEdit::ExtraSelection> &selections,
+                                   int matchedParentheses,
+                                   QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
-    QString parenthesesPrePair(const QString &parenthesesChar);
     bool findString(bool forward);
     void generalSearch(const QTextBlock &block,
                        const int &lines,
@@ -109,6 +111,8 @@ private:
     QColor matchedParenthesesColor;
 
     QString searchText;
+    QString leftParenthesesLists=QString("([{");
+    QString rightParenthesesLists=QString(")]}");
     bool searchRegularExpression;
     bool searchCaseSensitively;
     bool searchWholeWord;
