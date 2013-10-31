@@ -41,7 +41,7 @@ public:
 public slots:
 
 private slots:
-    void onCurrentTextChanged(QString command);
+    void onCurrentIndexChanged(QString command);
 
 private:
     QVBoxLayout *mainLayout;
