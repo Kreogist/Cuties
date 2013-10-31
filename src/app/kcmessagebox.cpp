@@ -1,4 +1,5 @@
 #include <QHBoxLayout>
+#include <QDebug>
 
 #include "kcmessagebox.h"
 
@@ -30,6 +31,7 @@ KCMessageBoxTitle::KCMessageBoxTitle(QWidget *parent) :
     //Add title caption
     titleCaption=new QLabel(this);
     titleCaption->setFont(titleFont);
+    titleCaption->setAlignment(Qt::AlignCenter);
     titleLayout->addWidget(titleCaption);
 }
 
@@ -76,7 +78,7 @@ KCMessageBoxContent::KCMessageBoxContent(QWidget *parent) :
     mainLayout->addWidget(upBoundImage);
 
     //Add content layout, all the widget will be add to this layout
-    contentLayout=new QVBoxLayout(this);
+    contentLayout=new QVBoxLayout();
     contentLayout->setContentsMargins(0,0,0,0);
     contentLayout->setSpacing(0);
     mainLayout->addLayout(contentLayout, 1);
@@ -85,6 +87,11 @@ KCMessageBoxContent::KCMessageBoxContent(QWidget *parent) :
     QLabel *downBoundImage=new QLabel(this);
     downBoundImage->setPixmap(QPixmap(":/MsgBox/image/MessageBox/DownBound.png"));
     mainLayout->addWidget(downBoundImage);
+}
+
+KCMessageBoxContent::~KCMessageBoxContent()
+{
+    contentLayout->deleteLater();
 }
 
 void KCMessageBoxContent::addText(QString displayText)
@@ -101,7 +108,8 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     //Set properties
     setWindowFlags(Qt::Window |
                    Qt::FramelessWindowHint);
-    setMinimumSize(0,0);
+    setMinimumWidth(0);
+    setMinimumHeight(0);
 
     //Set main layout
     mainLayout=new QVBoxLayout(this);
@@ -115,6 +123,7 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
 
     //Set content widget
     contentWidget=new KCMessageBoxContent(this);
+    contentWidget->setVisible(false);
     mainLayout->addWidget(contentWidget, 1);
 
     //Set panel widget
@@ -122,44 +131,31 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     mainLayout->addWidget(panelWidget);
 
     //Set animation variable
-    widthExpand=new QPropertyAnimation(this, "geometry");
+    widthExpand=new QPropertyAnimation(this, "geometry", this);
+    widthExpand->setDuration(300);
+}
+
+void KCMessageBox::show()
+{
+    //Start width expand animation
+    int originalX=parentWidget()->x()+parentWidget()->width()/2-width()/2;
+    QRect startRect=QRect(originalX,
+                          parentWidget()->y()+parentWidget()->height()/2-63,
+                          width(),
+                          127);
+    QRect endRect=startRect;
+    endRect.setX(originalX - 150);
+    endRect.setWidth(300);
+    widthExpand->setStartValue(startRect);
+    widthExpand->setEndValue(endRect);
+    QWidget::show();
+    widthExpand->start();
+    qDebug()<<endRect.left()<<startRect.left();
 }
 
 void KCMessageBox::addText(QString displayText)
 {
     contentWidget->addText(displayText);
-}
-
-int KCMessageBox::getWidthHint()
-{
-    int maxWidth=-1;
-    return maxWidth;
-}
-
-void KCMessageBox::show()
-{
-    //Fixed Me: Use setFixedWidth to do the animation
-
-    //Prepare the widget before the animation start
-    contentWidget->setGeometry(contentWidget->x(),
-                               contentWidget->y(),
-                               0,
-                               18);
-
-    //Start width expand animation
-    QRect startGeometry=parentWidget()->geometry();
-    startGeometry.setX(parentWidget()->x()+parentWidget()->width()/2);
-    startGeometry.setHeight(0);
-    startGeometry.setWidth(0);
-    QRect endGeometry=startGeometry;
-    endGeometry.setX(startGeometry.x()-50);
-    endGeometry.setWidth(100);
-    widthExpand->setDuration(100);
-    widthExpand->setStartValue(startGeometry);
-    widthExpand->setEndValue(endGeometry);
-    setGeometry(startGeometry);
-    QWidget::show();
-    widthExpand->start();
 }
 
 void KCMessageBox::setTitle(QString messageBoxTitle)

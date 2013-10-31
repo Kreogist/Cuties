@@ -14,6 +14,7 @@
 
 class KCLanguageConfigure : public KCConfigure
 {
+    Q_OBJECT
 public:
     void readConfigure();
     void writeConfigure();
@@ -24,6 +25,9 @@ public:
     QStringList getLanguageList() const;
     QStringList getLanguageNameList() const;
     int getCurrLanguageIndex() const;
+
+signals:
+    void newLanguageSet();
 
 private:
     void applyLangaugeSet(int languageIndex);

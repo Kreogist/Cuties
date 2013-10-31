@@ -58,6 +58,7 @@ void KCLanguageConfigure::applyLangaugeSet(int languageIndex)
     qApp->removeTranslator(&appTrans);
     appTrans.load(languageFileList.at(languageIndex));
     qApp->installTranslator(&appTrans);
+    emit newLanguageSet();
 }
 
 QStringList KCLanguageConfigure::getLanguageList() const

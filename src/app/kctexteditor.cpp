@@ -506,7 +506,7 @@ void KCTextEditor::backupSearchTextCursor()
     searchBackupCursor=textCursor();
 }
 
-void KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
+int KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
 {
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
@@ -528,79 +528,95 @@ void KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &select
             if(i->pos == pos-1)
             {
                 for(int j=0; j<(len>>1); j++)
+                {
                     if(i->character == all[j])
                     {
                         cursor.movePosition(QTextCursor::Left,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                               all[j],
-                                               all[len-j-1],
-                                               i,
-                                               cursor.block(),
-                                               true);
+                                    all[j],
+                                    all[len-j-1],
+                                i,
+                                cursor.block(),
+                                true);
                         break;
                     }
+                }
             }
             else if(i->pos == pos)
             {
                 for(int j=(len>>1); j<len; j++)
+                {
                     if(i->character == all[j])
                     {
                         cursor.movePosition(QTextCursor::Right,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                               all[j],
-                                               all[len-j-1],
-                                               i,
-                                               cursor.block(),
-                                               false);
+                                    all[j],
+                                    all[len-j-1],
+                                i,
+                                cursor.block(),
+                                false);
                         break;
                     }
+                }
             }
             else
             {
                 continue;
             }
 
-            switch(matchedParentheses)
-            {
-            case -2:
-                //no parenthesis in the block
-                break;
-            case -1:
-            {
-                QTextEdit::ExtraSelection selection;
-
-                selection.cursor = cursor;
-                selection.format.setBackground(noMatchedParenthesesColor);
-                selections.append(selection);
-
-                break;
-            }
-            default:
-            {
-                QTextEdit::ExtraSelection selection;
-
-                selection.cursor = cursor;
-                selection.format.setBackground(matchedParenthesesColor);
-                selections.append(selection);
-
-                cursor.setPosition(matchedParentheses);
-                cursor.movePosition(QTextCursor::Right,
-                                    QTextCursor::KeepAnchor);
-                selection.cursor = cursor;
-                selection.format.setBackground(matchedParenthesesColor);
-                selections.append(selection);
-
-                break;
-            }
-            }
+            highlightParenthesisPairs(selections,
+                                      matchedParentheses,
+                                      cursor);
 
             cursor=textCursor();
             cursor.clearSelection();
         }
+        return matchedParentheses;
+    }
+    return -2;
+}
+
+void KCTextEditor::highlightParenthesisPairs(QList<QTextEdit::ExtraSelection> &selections,
+                                             int matchedParentheses,
+                                             QTextCursor cursor)
+{
+    switch(matchedParentheses)
+    {
+    case -2:
+        //no parenthesis in the block
+        break;
+    case -1:
+    {
+        QTextEdit::ExtraSelection selection;
+
+        selection.cursor = cursor;
+        selection.format.setBackground(noMatchedParenthesesColor);
+        selections.append(selection);
+
+        break;
+    }
+    default:
+    {
+        QTextEdit::ExtraSelection selection;
+
+        selection.cursor = cursor;
+        selection.format.setBackground(matchedParenthesesColor);
+        selections.append(selection);
+
+        cursor.setPosition(matchedParentheses);
+        cursor.movePosition(QTextCursor::Right,
+                            QTextCursor::KeepAnchor);
+        selection.cursor = cursor;
+        selection.format.setBackground(matchedParenthesesColor);
+        selections.append(selection);
+
+        break;
+    }
     }
 }
+
 
 int KCTextEditor::matchParentheses(const char &parenthesesA,
                                    const char &parenthesesB,
@@ -760,46 +776,16 @@ void KCTextEditor::contextMenuEvent(QContextMenuEvent *event)
 
 QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
 {
-    if(parenthesesChar=="(")
+    if(!parenthesesChar.isEmpty())
     {
-        return QString(")");
-    }
-    if(parenthesesChar=="\"")
-    {
-        return QString("\"");
-    }
-    if(parenthesesChar=="'")
-    {
-        return QString("'");
-    }
-    if(parenthesesChar=="[")
-    {
-        return QString("]");
-    }
-    if(parenthesesChar=="{")
-    {
-        return QString("}");
+        int parenthesesIndex=leftParenthesesLists.indexOf(parenthesesChar);
+        if(parenthesesIndex>-1)
+        {
+            return QString(rightParenthesesLists.at(parenthesesIndex));
+        }
     }
     return QString("");
 }
-
-QString KCTextEditor::parenthesesPrePair(const QString &parenthesesChar)
-{
-    if(parenthesesChar == ")")
-    {
-        return QString("(");
-    }
-    if(parenthesesChar == "[")
-    {
-        return QString("]");
-    }
-    if(parenthesesChar=="{")
-    {
-        return QString("}");
-    }
-    return QString("");
-}
-
 
 void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
@@ -844,25 +830,12 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     {
         if(document()->characterAt(_textCursor.position()) == e->text())
         {
-            KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
-            for(auto i=blockData->getFirstParenthesesInfo(),
-                l=blockData->getEndParenthesesInfo();
-                i<l;
-                i++)
+            QList<QTextEdit::ExtraSelection> extraSelections;
+            if(highlightParenthesis(extraSelections)>0)
             {
-                if(i->pos == _textCursor.positionInBlock())
-                {
-                    if(matchParentheses(e->text()==")"?'(':'[',
-                                        e->text().at(0).toLatin1(),
-                                        i-1,
-                                        _textCursor.block(),
-                                        true)>0)
-                    {
-                        _textCursor.movePosition(QTextCursor::Right);
-                        setTextCursor(_textCursor);
-                        return;
-                    }
-                }
+                _textCursor.movePosition(QTextCursor::Right);
+                setTextCursor(_textCursor);
+                return;
             }
             QPlainTextEdit::keyPressEvent(e);
             return;
@@ -884,20 +857,35 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
+        if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
+           _textCursor.document()->characterAt(_textCursor.position()))
+        {
+            _textCursor.deleteChar();
+            QPlainTextEdit::keyPressEvent(e);
+            break;
+        }
         int pos=findFirstCharacter(_textCursor.block());
-        if(_textCursor.positionInBlock()<=pos && pos!=0 && (!pos<configureInstance->getTabWidth()))
+        if(pos < 0)
+        {
+            if((!pos<configureInstance->getTabWidth()))
+            {
+                if(_textCursor.positionInBlock()>0)
+                {
+                    removeTab(_textCursor);
+                    break;
+                }
+            }
+            QPlainTextEdit::keyPressEvent(e);
+            break;
+
+        }
+        if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->getTabWidth()))
         {
             if(_textCursor.positionInBlock()>0)
             {
                 removeTab(_textCursor);
                 break;
             }
-            QPlainTextEdit::keyPressEvent(e);
-        }
-        if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
-           _textCursor.document()->characterAt(_textCursor.position()))
-        {
-            _textCursor.deleteChar();
         }
         QPlainTextEdit::keyPressEvent(e);
         break;
