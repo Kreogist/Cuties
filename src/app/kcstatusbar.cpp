@@ -30,36 +30,36 @@ KCStatusBar::KCStatusBar(QWidget *parent):
     //kscFileTypeDisplay=new KCFileType(this);
 
     //Add Rewrite Mode Display Widget
-    lblRewriteMode=new KCStatusRewriteInfo(this);
-    lblRewriteMode->hide();
+    rewriteModeDisplay=new KCStatusRewriteInfo(this);
+    rewriteModeDisplay->hide();
 
     //Add Cursor Position Widget
-    kscCursorPosition=new KCStatusCursorInfo(this);
-    connect(kscCursorPosition,SIGNAL(ToLineNum(int)),
-            this, SIGNAL(ToNewPosition(int)));
+    cursorPositionDisplay=new KCStatusCursorInfo(this);
+    connect(cursorPositionDisplay,SIGNAL(toNewLineNum(int)),
+            this, SIGNAL(toNewLinePosition(int)));
 
     //addPermanentWidget(kscFileTypeDisplay);
-    addPermanentWidget(lblRewriteMode);
-    addPermanentWidget(kscCursorPosition);
+    addPermanentWidget(rewriteModeDisplay);
+    addPermanentWidget(cursorPositionDisplay);
 }
 
 void KCStatusBar::showGotoBar(int currentValue, int MaxValue)
 {
-    kscCursorPosition->ShowGotoBox(currentValue, MaxValue);
+    cursorPositionDisplay->showGotoBox(currentValue, MaxValue);
 }
 
 void KCStatusBar::updateCursorPosition(int LineNum, int ColNum)
 {
-    kscCursorPosition->updateCursorPosition(LineNum, ColNum);
+    cursorPositionDisplay->updateCursorPosition(LineNum, ColNum);
 }
 
 void KCStatusBar::updateRewriteMode(bool NewValue)
 {
-    lblRewriteMode->show();
-    lblRewriteMode->setTextMode(NewValue);
+    rewriteModeDisplay->show();
+    rewriteModeDisplay->setTextMode(NewValue);
 }
 
 void KCStatusBar::hideRewriteDisplay()
 {
-    lblRewriteMode->hide();
+    rewriteModeDisplay->hide();
 }

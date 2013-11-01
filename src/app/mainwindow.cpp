@@ -52,8 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //Restore the last time running states
     restoreSettings();
     retranslateAndSet();
-    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
-            this, SLOT(retranslateAndSet()));
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &MainWindow::retranslateAndSet);
 }
 
 void MainWindow::createActions()
@@ -585,7 +585,7 @@ void MainWindow::createStatusbar()
             statusBar,SLOT(hideRewriteDisplay()));
     connect(tabManager,SIGNAL(cursorDataChanged(int,int)),
             statusBar,SLOT(updateCursorPosition(int,int)));
-    connect(statusBar,SIGNAL(ToNewPosition(int)),
+    connect(statusBar,SIGNAL(toNewLinePosition(int)),
             this,SLOT(setCurrentTextCursorLine(int)));
 }
 

@@ -145,8 +145,8 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
 
-    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
-            this, SLOT(retranslateAndSet()));
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCDebugControlPanel::retranslateAndSet);
 }
 
 void KCDebugControlPanel::retranslate()

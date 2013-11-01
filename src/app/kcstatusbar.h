@@ -37,7 +37,7 @@ public:
     void showGotoBar(int currentValue, int MaxValue);
 
 signals:
-    void ToNewPosition(int NewLineNum);
+    void toNewLinePosition(int NewLineNum);
 
 public slots:
     void updateCursorPosition(int LineNum, int ColNum);
@@ -46,8 +46,8 @@ public slots:
 
 private:
     //KCFileType *kscFileTypeDisplay;
-    KCStatusCursorInfo *kscCursorPosition;
-    KCStatusRewriteInfo *lblRewriteMode;
+    KCStatusCursorInfo *cursorPositionDisplay;
+    KCStatusRewriteInfo *rewriteModeDisplay;
 };
 
 #endif // KCSTATUSBAR_H

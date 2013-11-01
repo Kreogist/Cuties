@@ -24,6 +24,7 @@
 #include <QTextCursor>
 #include <QString>
 #include <QWidget>
+#include <QProgressBar>
 
 #include <QDebug>
 
@@ -40,6 +41,21 @@ class KCTextEditor;
 class KCMarkPanel;
 class KCLinenumPanel;
 class KCSearchWidget;
+
+class KCCodeCompileProgress : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCCodeCompileProgress(QWidget *parent = 0);
+
+signals:
+
+public slots:
+
+private:
+    QProgressBar *compileProgress;
+
+};
 
 class KCCodeEditor : public QWidget
 {
@@ -105,6 +121,8 @@ private:
     KCEditorConfigure *configureInstance;
 
     KCLanguageMode *languageMode;
+
+    KCCodeCompileProgress *compileProgress;
 
     QVBoxLayout *replaceLayout;
     QHBoxLayout *mainLayout;

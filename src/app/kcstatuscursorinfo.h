@@ -31,30 +31,34 @@ class KCStatusCursorInfo : public QWidget
     Q_OBJECT
 public:
     explicit KCStatusCursorInfo(QWidget *parent = 0);
-    void ShowGotoBox(int currentValue, int MaxValue);
-    void HideGotoBox();
+    void showGotoBox(int currentValue, int maxValue);
+    void hideGotoBox();
     bool getGotoShowed();
 
 signals:
-    void ToLineNum(int LineNum);
+    void toNewLineNum(int newLineNumber);
 
 protected:
     void resizeEvent(QResizeEvent *e);
 
 public slots:
-    void updateCursorPosition(int LineNum, int ColNum);
-    void gotoLineNumber(int NewNum);
+    void retranslate();
+    void retranslateAndSet();
+    void updateCursorPosition(int newLineNum, int newColumnNum);
+    void gotoLineNumber(int newLineNum);
     void finishedHideGotoBox();
 
 private slots:
     void setHideGotoBox();
 
 private:
-    QSpinBox *spbLineNum;
-    QLabel *lblCursorPosition;
+    QSpinBox *gotoLineNum;
+    QLabel *cursorPosition;
     bool gotoBarShowed;
-
+    QString lineNumString, columnNumString;
     QPropertyAnimation *gotoHideAnime;
+
+    QString lineTextBegin, lineTextEnd, colTextBegin, colTextEnd;
 
 };
 

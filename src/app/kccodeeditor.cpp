@@ -44,6 +44,22 @@
 
 #include "kccodeeditor.h"
 
+
+KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
+    QWidget(parent)
+{
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    QVBoxLayout *compileProgressLayout=new QVBoxLayout(this);
+    compileProgressLayout->setContentsMargins(0,0,0,0);
+    compileProgressLayout->setSpacing(0);
+    setLayout(compileProgressLayout);
+
+    compileProgress=new QProgressBar(this);
+    compileProgressLayout->addWidget(compileProgress);
+}
+
 static const int SearchBarOffset = 20;
 
 KCCodeEditor::KCCodeEditor(QWidget *parent) :
@@ -65,8 +81,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->setSpacing(0);
 
     markPanel=new KCMarkPanel(this);
-    //markPanel->setVisible(false);
-    //markPanel->setEnabled(false);
     mainLayout->addWidget(markPanel);
 
     linePanel=new KCLinenumPanel(this);
@@ -105,6 +119,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     filePath.clear();
     fileError=QFileDevice::NoError;
+
+    compileProgress=new KCCodeCompileProgress(this);
 }
 
 KCCodeEditor::~KCCodeEditor()
@@ -558,4 +574,3 @@ void KCCodeEditor::insertTextAtCursor(QString insertText)
 {
     editor->insertPlainText(insertText);
 }
-

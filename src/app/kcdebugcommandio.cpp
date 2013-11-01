@@ -71,8 +71,8 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     connect(debugInput,SIGNAL(currentIndexChanged(QString)),
             this,SLOT(onCurrentIndexChanged(QString)));
 
-    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
-            this, SLOT(retranslateAndSet()));
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCDebugCommandIO::retranslateAndSet);
 }
 
 void KCDebugCommandIO::setDocument(QTextDocument *document)

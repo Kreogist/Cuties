@@ -40,8 +40,8 @@ KCHistoryConfigure::KCHistoryConfigure()
     recentFileIcon[pasSourceFile]=QIcon(":/Sidebar/image/Sidebar/source_pas.png");
     recentFileIcon[otherSourceFile]=QIcon(":/Sidebar/image/Sidebar/source_others.png");
 
-    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
-            this, SLOT(retranslateAndSet()));
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCHistoryConfigure::retranslateAndSet);
 }
 
 KCHistoryConfigure *KCHistoryConfigure::getInstance()

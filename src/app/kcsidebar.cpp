@@ -330,8 +330,8 @@ KCSideBar::KCSideBar(QWidget *parent) :
     expandState=false;
     unlockState=true;
 
-    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
-            this, SLOT(retranslateAndSet()));
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCSideBar::retranslateAndSet);
 }
 
 void KCSideBar::forceClearButtonState()

@@ -17,67 +17,94 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "kclanguageconfigure.h"
 #include "kcstatuscursorinfo.h"
 
 KCStatusCursorInfo::KCStatusCursorInfo(QWidget *parent) :
     QWidget(parent)
 {
+    retranslate();
     setContentsMargins(0,0,0,0);
 
-    QHBoxLayout *TextLayout=new QHBoxLayout(this);
-    TextLayout->setContentsMargins(0,0,0,0);
-    TextLayout->setSpacing(0);
-    setLayout(TextLayout);
+    QHBoxLayout *textLayout=new QHBoxLayout(this);
+    textLayout->setContentsMargins(0,0,0,0);
+    textLayout->setSpacing(0);
+    setLayout(textLayout);
 
-    lblCursorPosition=new QLabel(this);
-    lblCursorPosition->setContentsMargins(0,0,0,0);
-    TextLayout->addWidget(lblCursorPosition);
+    cursorPosition=new QLabel(this);
+    cursorPosition->setContentsMargins(0,0,0,0);
+    textLayout->addWidget(cursorPosition);
 
-    spbLineNum=new QSpinBox(this);
-    spbLineNum->setContentsMargins(0,0,0,0);
-    spbLineNum->setMinimumHeight(0);
-    spbLineNum->setMinimum(1);
-    spbLineNum->hide();
-    connect(spbLineNum,SIGNAL(valueChanged(int)),
+    gotoLineNum=new QSpinBox(this);
+    gotoLineNum->setContentsMargins(0,0,0,0);
+    gotoLineNum->setMinimumHeight(0);
+    gotoLineNum->setMinimum(1);
+    gotoLineNum->hide();
+    connect(gotoLineNum,SIGNAL(valueChanged(int)),
             this,SLOT(gotoLineNumber(int)));
-    connect(spbLineNum,SIGNAL(editingFinished()),
+    connect(gotoLineNum,SIGNAL(editingFinished()),
             this,SLOT(finishedHideGotoBox()));
     gotoBarShowed=false;
 
-    setFixedHeight(spbLineNum->height());
+    setFixedHeight(gotoLineNum->height());
 
-    gotoHideAnime=new QPropertyAnimation(spbLineNum,"geometry",this);
+    gotoHideAnime=new QPropertyAnimation(gotoLineNum,"geometry",this);
     connect(gotoHideAnime,SIGNAL(finished()),
             this,SLOT(setHideGotoBox()));
+
+    lineNumString=QString("0");
+    columnNumString=QString("0");
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCStatusCursorInfo::retranslateAndSet);
 }
 
 void KCStatusCursorInfo::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
-    spbLineNum->setFixedWidth(this->width());
+    gotoLineNum->setFixedWidth(this->width());
 }
 
-void KCStatusCursorInfo::ShowGotoBox(int currentValue, int MaxValue)
+void KCStatusCursorInfo::retranslate()
 {
-    spbLineNum->setValue(currentValue);
-    spbLineNum->setMaximum(MaxValue);
-    spbLineNum->selectAll();
-    spbLineNum->show();
+    lineTextBegin=tr("Line ");
+    lineTextEnd=tr(", ");
+    colTextBegin=tr("Column ");
+    colTextEnd=tr(".");
+}
+
+void KCStatusCursorInfo::retranslateAndSet()
+{
+    retranslate();
+    cursorPosition->setText(lineTextBegin+
+                            lineNumString+
+                            lineTextEnd+
+                            colTextBegin+
+                            columnNumString+
+                            colTextEnd);
+}
+
+void KCStatusCursorInfo::showGotoBox(int currentValue, int maxValue)
+{
+    gotoLineNum->setValue(currentValue);
+    gotoLineNum->setMaximum(maxValue);
+    gotoLineNum->selectAll();
+    gotoLineNum->show();
 
     if(!gotoBarShowed)
     {
-        QPropertyAnimation *gotoAnime=new QPropertyAnimation(spbLineNum,"geometry");
+        QPropertyAnimation *gotoAnime=new QPropertyAnimation(gotoLineNum,"geometry");
         QRect animeEndPos=QRect(0,0,this->width(),this->height());
         QRect animeStartPos=animeEndPos;
         animeStartPos.setTop(animeStartPos.height()+3);
         gotoAnime->setStartValue(animeStartPos);
         gotoAnime->setEndValue(animeEndPos);
         gotoAnime->setEasingCurve(QEasingCurve::OutCubic);
-        spbLineNum->show();
+        gotoLineNum->show();
         gotoAnime->start();
         gotoBarShowed=true;
     }
-    spbLineNum->setFocus();
+    gotoLineNum->setFocus();
 }
 
 bool KCStatusCursorInfo::getGotoShowed()
@@ -85,43 +112,45 @@ bool KCStatusCursorInfo::getGotoShowed()
     return gotoBarShowed;
 }
 
-void KCStatusCursorInfo::updateCursorPosition(int LineNum, int ColNum)
+void KCStatusCursorInfo::updateCursorPosition(int newLineNum, int newColumnNum)
 {
-    if(LineNum>0)
+    if(newLineNum>0)
     {
-        lblCursorPosition->setText(QString(tr("Line ")) +
-                                   QString::number(LineNum) +
-                                   QString(tr(", ")) +
-                                   QString(tr("Column ")) +
-                                   QString::number(ColNum) +
-                                   QString(tr(".")));
+        lineNumString=QString::number(newLineNum);
+        columnNumString=QString::number(newColumnNum);
+        cursorPosition->setText(lineTextBegin+
+                                lineNumString+
+                                lineTextEnd+
+                                colTextBegin+
+                                columnNumString+
+                                colTextEnd);
     }
     else
     {
-        lblCursorPosition->setText("");
-        HideGotoBox();
+        cursorPosition->setText("");
+        hideGotoBox();
     }
-    this->resize(lblCursorPosition->size());
+    this->resize(cursorPosition->size());
 }
 
 void KCStatusCursorInfo::finishedHideGotoBox()
 {
-    HideGotoBox();
+    hideGotoBox();
 }
 
-void KCStatusCursorInfo::gotoLineNumber(int NewNum)
+void KCStatusCursorInfo::gotoLineNumber(int newLineNum)
 {
-    emit ToLineNum(NewNum);
+    emit toNewLineNum(newLineNum);
 }
 
-void KCStatusCursorInfo::HideGotoBox()
+void KCStatusCursorInfo::hideGotoBox()
 {
     if(gotoBarShowed)
     {
         gotoBarShowed=false;
-        QRect animeStartPos=spbLineNum->rect();
+        QRect animeStartPos=gotoLineNum->rect();
         QRect animeEndPos=animeStartPos;
-        animeEndPos.setY(spbLineNum->height());
+        animeEndPos.setY(gotoLineNum->height());
         gotoHideAnime->setStartValue(animeStartPos);
         gotoHideAnime->setEndValue(animeEndPos);
         gotoHideAnime->setEasingCurve(QEasingCurve::OutCubic);
@@ -131,5 +160,5 @@ void KCStatusCursorInfo::HideGotoBox()
 
 void KCStatusCursorInfo::setHideGotoBox()
 {
-    spbLineNum->hide();
+    gotoLineNum->hide();
 }
