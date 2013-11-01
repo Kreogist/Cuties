@@ -68,8 +68,8 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     //Set output text browser.
     debugOutputTextBrowser=new KCPlainTextBrowser(this);
     mainLayout->addWidget(debugOutputTextBrowser,1);
-    connect(debugInput,SIGNAL(currentTextChanged(QString)),
-            this,SLOT(onCurrentTextChanged(QString)));
+    connect(debugInput,SIGNAL(currentIndexChanged(QString)),
+            this,SLOT(onCurrentIndexChanged(QString)));
 
     connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
             this, SLOT(retranslateAndSet()));
@@ -96,7 +96,7 @@ void KCDebugCommandIO::retranslateAndSet()
     setWindowTitle(windowTitleString);
 }
 
-void KCDebugCommandIO::onCurrentTextChanged(QString command)
+void KCDebugCommandIO::onCurrentIndexChanged(QString command)
 {
     instance->write(qPrintable(command+'\n'));
 }

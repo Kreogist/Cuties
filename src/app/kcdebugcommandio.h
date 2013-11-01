@@ -43,7 +43,7 @@ public slots:
     void retranslateAndSet();
 
 private slots:
-    void onCurrentTextChanged(QString command);
+    void onCurrentIndexChanged(QString command);
 
 private:
     QString windowTitleString;

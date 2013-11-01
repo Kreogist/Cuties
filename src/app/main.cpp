@@ -37,7 +37,7 @@
 #include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 
-static inline void initApplicationInfo()
+static inline void setApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
     QApplication::setApplicationVersion(QString("0.1.0.1"));
@@ -47,7 +47,7 @@ static inline void initApplicationInfo()
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.png"));
 }
 
-static void initApplicationFonts()
+static inline void initApplicationFonts()
 {
 
 }
@@ -56,6 +56,64 @@ static inline void initApplicationSettings()
 {
     KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
     KCGlobalInstance->readSettings();
+}
+
+static inline void printVersion()
+{
+    printf("%s\n",qApp->applicationName().toLocal8Bit().constData());
+    printf("Version: %s\n",qApp->applicationVersion().toLocal8Bit().constData());
+    printf("Copyright (C) 2013 %s\n",qApp->organizationName().toLocal8Bit().constData());
+    printf("Homepage: %s\n",qApp->organizationDomain().toLocal8Bit().constData());
+    printf("License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n");
+    printf("This is free software: you are free to change and redistribute it.\n");
+}
+
+static inline void printHelp()
+{
+    QByteArray appName=qApp->applicationName().toLocal8Bit();
+    printf("Usage:\n");
+    printf("  %s -h,--help              Print this message\n",
+           appName.constData());
+    printf("  %s -v,--version           Print %s version\n",
+           appName.constData(),
+           appName.constData());
+    printf("  %s [FILES]             Open [FILES] in %s\n",
+           appName.constData(),
+           appName.constData());
+    fflush(stdout);
+}
+
+static inline void processArg()
+{
+    QStringList argList=qApp->arguments();
+
+    //remove the application name
+    argList.removeFirst();
+
+    for(int i=0,l=argList.size();i<l;i++)
+    {
+        const QString &arg=argList.at(i);
+        if(arg == "--version" || arg == "-v")
+        {
+            printVersion();
+            //std::exit(0);
+        }
+        else if(arg == "--help" || arg == "-h")
+        {
+            printHelp();
+            //std::exit(0);
+        }
+        else if(QFileInfo(arg).exists())
+        {
+            /*
+             * We didn't have a normal way to open a file before the MainWindow be created.
+             * But MainWindow will open the files which didn't be closed when quit Cuties.
+             * So we add it as a unclosed file so that when the mainwindow show,it will be opened.
+             */
+            KCHistoryConfigure::getInstance()->addUnClosedFilePath(QFileInfo(arg).absoluteFilePath(),0,0);
+        }
+    }
+
 }
 
 /*!
@@ -136,6 +194,8 @@ int main(int argc, char *argv[])
     //qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
+    setApplicationInfo();
+    processArg();
 
     //Load Splash Screen
     KCSplashScreen *splash=new KCSplashScreen;
@@ -144,19 +204,8 @@ int main(int argc, char *argv[])
     splash->raise();
     app.processEvents();
 
-    /*static int splashAlign=Qt::AlignBottom|Qt::AlignRight;
-    splash->showMessage(QApplication::tr("Initialize Application"),
-                        splashAlign);*/
-    initApplicationInfo();
-    app.processEvents();
-
-    /*splash->showMessage(QApplication::tr("Initialize Application Fonts"),
-                        splashAlign);*/
     initApplicationFonts();
     app.processEvents();
-
-    /*splash->showMessage(QApplication::tr("Initialize Application Settings"),
-                        splashAlign);*/
     initApplicationSettings();
     app.processEvents();
 
@@ -173,6 +222,7 @@ int main(int argc, char *argv[])
 
     //Initalize and show Application MainWindow.
     MainWindow mainWindow;
+    splash->finish(&mainWindow);
     mainWindow.show();
 
     return app.exec();
