@@ -1,11 +1,25 @@
 Special Thanks
---------------
-Digia - For their incredible cross-platform application and UI framework : Qt.
-Adobe Inc. - For their gorgeous graphics editing program: Photoshop.
-GitHub, Inc. - Offer us the free-of-charge web-based hosting service of Git revision control system. 
-Kenjiro Hata - His manga 'Hayate no Gotoku!' which offer the current name of our IDE - Cuties!
-Blooshed Software - Their product 'Dev-C++' offers us many trains of though.
-Orwell (Johan Mes) - For developed the latest version of 'Dev-C++'.
-Amily Thomas - For real English support.
-Youraku - For art guidance.
-Sword Art Online - A great animation give us the main menu style.
+==============
+First of all, of course!
+GUIDE! The IDE which forced us to develop Cuties!
+
+Programming
+-----------
+Digia 					- For their incredible cross-platform application and UI framework : Qt.
+GitHub, Inc. 			- Offer us the free-of-charge web-based hosting service of Git revision control system. 
+Blooshed Software 		- Their product 'Dev-C++' offers us many trains of though.
+Orwell (Johan Mes) 		- For developed the latest version of 'Dev-C++'.
+
+Design
+------
+Adobe Inc. 				- For their gorgeous graphics editing program: Photoshop.
+Axialis Software		- For their great icon editing software: IconWorkshop.
+Youraku 				- For art guidance.
+
+Name, Documents & etc.
+----------------------
+Kenjiro Hata 			- His manga 'Hayate no Gotoku!' which offer the current name of our IDE - Cuties!
+Amily Thomas 			- For real English support.
+Kawahara Reki 			- His great animation 'Sword Art Online' gives us the main menu style.
+Jason Costello 			- For his Slate web page CSS which was used in Cuties Manual.
+The Document Foundation - For their great office suit: LibreOffice.
