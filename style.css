@@ -233,16 +233,17 @@ a:active{
     content:"";
     box-shadow:2px 2px 2px black;}
 .context{
-    column-count:3;
+    -webkit-column-count:3;
     -moz-column-count:3;
+    column-count:3;
     margin-left:40px;
     margin-right:40px;
     }
 .context-box{
     display:flex;
     flex-direction:column;
-    justify-content:center;  
-    align-items:center;
+    flex-align:center;
+    flex-pack:justify;
     margin-left:8px;
     margin-right:8px;
     }
