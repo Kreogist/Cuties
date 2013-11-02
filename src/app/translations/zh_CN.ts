@@ -385,7 +385,7 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="108"/>
         <source>Compiler</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编译器</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="109"/>
@@ -687,9 +687,9 @@ Cancel execution of a function call.</translation>
 <context>
     <name>KCSearchLineText</name>
     <message>
-        <location filename="kcsearchlinetext.cpp" line="50"/>
+        <location filename="kcsearchlinetext.cpp" line="61"/>
         <source>Search</source>
-        <translation type="unfinished">搜索</translation>
+        <translation>搜索</translation>
     </message>
 </context>
 <context>
@@ -840,10 +840,9 @@ Cancel execution of a function call.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="263"/>
         <location filename="mainwindow.cpp" line="989"/>
         <source>About Qt</source>
-        <translation>关于Qt</translation>
+        <translation>关于 Qt</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="912"/>

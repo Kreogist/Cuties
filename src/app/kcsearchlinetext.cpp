@@ -18,12 +18,14 @@
  */
 
 #include "kccolorconfigure.h"
+#include "kclanguageconfigure.h"
 
 #include "kcsearchlinetext.h"
 
 KCSearchLineText::KCSearchLineText(QWidget *parent) :
     QWidget(parent)
 {
+    retranslate();
     setObjectName("KCSearchLineText");
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
@@ -35,18 +37,32 @@ KCSearchLineText::KCSearchLineText(QWidget *parent) :
     setPalette(pal);
 
     //Set Main Layout.
-    MainLayout=new QHBoxLayout(this);
-    MainLayout->setContentsMargins(0,0,0,0);
-    MainLayout->setSpacing(0);
-    setLayout(MainLayout);
+    searchLayout=new QHBoxLayout(this);
+    searchLayout->setContentsMargins(0,0,0,0);
+    searchLayout->setSpacing(0);
+    setLayout(searchLayout);
     //Set Icon.
-    lblImage=new QLabel(this);
-    lblImage->setPixmap(QPixmap(":/img/image/SearchIcon.png"));
-    MainLayout->addSpacing(2);
-    MainLayout->addWidget(lblImage);
+    searchIconImage=new QLabel(this);
+    searchIconImage->setPixmap(QPixmap(":/img/image/SearchIcon.png"));
+    searchLayout->addSpacing(2);
+    searchLayout->addWidget(searchIconImage);
     //Set Line Edit.
     searchTextBox=new QLineEdit(this);
     searchTextBox->setFrame(false);
-    searchTextBox->setPlaceholderText(tr("Search"));
-    MainLayout->addWidget(searchTextBox);
+    searchTextBox->setPlaceholderText(placeHolderText);
+    searchLayout->addWidget(searchTextBox);
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCSearchLineText::retranslateAndSet);
+}
+
+void KCSearchLineText::retranslate()
+{
+    placeHolderText=tr("Search");
+}
+
+void KCSearchLineText::retranslateAndSet()
+{
+    retranslate();
+    searchTextBox->setPlaceholderText(placeHolderText);
 }

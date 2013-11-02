@@ -260,7 +260,7 @@ void MainWindow::aboutCuties()
 
 void MainWindow::aboutQt()
 {
-    QMessageBox::aboutQt(this,tr("About Qt"));
+    QMessageBox::aboutQt(this, actionMainWindowText[actionHelpAboutQt]);
 }
 
 void MainWindow::createTitlebar()

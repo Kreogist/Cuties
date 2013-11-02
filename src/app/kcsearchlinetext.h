@@ -36,11 +36,14 @@ public:
 signals:
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
 
 private:
     QLineEdit *searchTextBox;
-    QHBoxLayout *MainLayout;
-    QLabel *lblImage;
+    QHBoxLayout *searchLayout;
+    QLabel *searchIconImage;
+    QString placeHolderText;
 
 };
 

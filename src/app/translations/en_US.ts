@@ -231,42 +231,42 @@
 <context>
     <name>KCCodeEditor</name>
     <message>
-        <location filename="kccodeeditor.cpp" line="277"/>
+        <location filename="kccodeeditor.cpp" line="299"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccodeeditor.cpp" line="283"/>
+        <location filename="kccodeeditor.cpp" line="305"/>
         <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccodeeditor.cpp" line="293"/>
+        <location filename="kccodeeditor.cpp" line="315"/>
         <source>Saving file failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccodeeditor.cpp" line="382"/>
+        <location filename="kccodeeditor.cpp" line="404"/>
         <source>Will you save changes to the the following file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccodeeditor.cpp" line="384"/>
+        <location filename="kccodeeditor.cpp" line="406"/>
         <source>If you don&apos;t save the changes, all the changes will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccodeeditor.cpp" line="388"/>
+        <location filename="kccodeeditor.cpp" line="410"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccodeeditor.cpp" line="389"/>
+        <location filename="kccodeeditor.cpp" line="411"/>
         <source>&amp;Don&apos;t Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccodeeditor.cpp" line="390"/>
+        <location filename="kccodeeditor.cpp" line="412"/>
         <source>&amp;Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,7 +274,7 @@
 <context>
     <name>KCCompileDock</name>
     <message>
-        <location filename="kccompiledock.cpp" line="39"/>
+        <location filename="kccompiledock.cpp" line="218"/>
         <source>Compiler</source>
         <translation type="unfinished"></translation>
     </message>
@@ -312,29 +312,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccompileoutputreceiver.cpp" line="174"/>
-        <location filename="kccompileoutputreceiver.cpp" line="182"/>
+        <location filename="kccompileoutputreceiver.cpp" line="181"/>
+        <location filename="kccompileoutputreceiver.cpp" line="189"/>
         <source>Line </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccompileoutputreceiver.cpp" line="175"/>
+        <location filename="kccompileoutputreceiver.cpp" line="182"/>
         <source>, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccompileoutputreceiver.cpp" line="176"/>
+        <location filename="kccompileoutputreceiver.cpp" line="183"/>
         <source>Column </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccompileoutputreceiver.cpp" line="177"/>
-        <location filename="kccompileoutputreceiver.cpp" line="183"/>
+        <location filename="kccompileoutputreceiver.cpp" line="184"/>
+        <location filename="kccompileoutputreceiver.cpp" line="190"/>
         <source>.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccompileoutputreceiver.cpp" line="190"/>
+        <location filename="kccompileoutputreceiver.cpp" line="197"/>
         <source>At file: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -342,22 +342,22 @@
 <context>
     <name>KCControlCenter</name>
     <message>
-        <location filename="kccontrolcenter.cpp" line="698"/>
+        <location filename="kccontrolcenter.cpp" line="699"/>
         <source>Cuties Control Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccontrolcenter.cpp" line="739"/>
+        <location filename="kccontrolcenter.cpp" line="740"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccontrolcenter.cpp" line="740"/>
+        <location filename="kccontrolcenter.cpp" line="741"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kccontrolcenter.cpp" line="743"/>
+        <location filename="kccontrolcenter.cpp" line="744"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
@@ -401,7 +401,7 @@
 <context>
     <name>KCDebugCommandIO</name>
     <message>
-        <location filename="kcdebugcommandio.cpp" line="33"/>
+        <location filename="kcdebugcommandio.cpp" line="90"/>
         <source>Debug Command Prompt</source>
         <translation type="unfinished"></translation>
     </message>
@@ -409,92 +409,97 @@
 <context>
     <name>KCDebugControlPanel</name>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="70"/>
-        <source>Debug Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="87"/>
-        <source>Start Debug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="88"/>
-        <source>Stop Debug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="89"/>
-        <source>Run to cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="109"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="154"/>
         <source>GDB Command: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="117"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="156"/>
+        <source>Debug Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcdebugcontrolpanel.cpp" line="157"/>
+        <source>Debug Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcdebugcontrolpanel.cpp" line="159"/>
+        <source>Start Debug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcdebugcontrolpanel.cpp" line="160"/>
+        <source>Stop Debug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcdebugcontrolpanel.cpp" line="161"/>
+        <source>Run to cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="kcdebugcontrolpanel.cpp" line="163"/>
         <source>Next Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="118"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="164"/>
         <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="119"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="165"/>
         <source>Step Into</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="120"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="166"/>
         <source>Next Instruction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="121"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="167"/>
         <source>Into Instruction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="122"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="168"/>
         <source>Step Over</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="126"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="172"/>
         <source>Continue to the next source line in the current (innermost) stack frame.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="127"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="173"/>
         <source>This is similar to Step Into, but function calls that appear within the line of code are executed without stopping.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="130"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="176"/>
         <source>Resume program execution, at the address where your program last stopped; any breakpoints set at that address are bypassed. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="133"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="179"/>
         <source>Continue running your program until control reaches a different source line, then stop it and return control to GDB.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="136"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="182"/>
         <source>Execute one machine instruction, but if it is a function call, proceed until the function returns.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="139"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="185"/>
         <source>Execute one machine instruction, then stop and return to the debugger.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcdebugcontrolpanel.cpp" line="142"/>
+        <location filename="kcdebugcontrolpanel.cpp" line="188"/>
         <source>Cancel execution of a function call.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -560,32 +565,32 @@
 <context>
     <name>KCHistoryConfigure</name>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="235"/>
+        <location filename="kchistoryconfigure.cpp" line="326"/>
         <source>C Source File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="240"/>
+        <location filename="kchistoryconfigure.cpp" line="327"/>
         <source>C++ Source File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="245"/>
+        <location filename="kchistoryconfigure.cpp" line="328"/>
         <source>Pascal Source File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="250"/>
+        <location filename="kchistoryconfigure.cpp" line="329"/>
         <source>Plain Text File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="252"/>
+        <location filename="kchistoryconfigure.cpp" line="330"/>
         <source>File Path: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kchistoryconfigure.cpp" line="253"/>
+        <location filename="kchistoryconfigure.cpp" line="331"/>
         <source>Last Read: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -675,7 +680,7 @@
 <context>
     <name>KCSearchLineText</name>
     <message>
-        <location filename="kcsearchlinetext.cpp" line="50"/>
+        <location filename="kcsearchlinetext.cpp" line="61"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
@@ -716,7 +721,7 @@
 <context>
     <name>KCSideBar</name>
     <message>
-        <location filename="kcsidebar.cpp" line="276"/>
+        <location filename="kcsidebar.cpp" line="438"/>
         <source>Sidebar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -724,12 +729,12 @@
 <context>
     <name>KCSideBarContent</name>
     <message>
-        <location filename="kcsidebar.cpp" line="144"/>
+        <location filename="kcsidebar.cpp" line="229"/>
         <source>History</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcsidebar.cpp" line="147"/>
+        <location filename="kcsidebar.cpp" line="230"/>
         <source>Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -737,22 +742,22 @@
 <context>
     <name>KCStatusCursorInfo</name>
     <message>
-        <location filename="kcstatuscursorinfo.cpp" line="92"/>
+        <location filename="kcstatuscursorinfo.cpp" line="64"/>
         <source>Line </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcstatuscursorinfo.cpp" line="94"/>
+        <location filename="kcstatuscursorinfo.cpp" line="65"/>
         <source>, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcstatuscursorinfo.cpp" line="95"/>
+        <location filename="kcstatuscursorinfo.cpp" line="66"/>
         <source>Column </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcstatuscursorinfo.cpp" line="97"/>
+        <location filename="kcstatuscursorinfo.cpp" line="67"/>
         <source>.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -760,12 +765,12 @@
 <context>
     <name>KCStatusRewriteInfo</name>
     <message>
-        <location filename="kcstatusrewriteinfo.cpp" line="6"/>
+        <location filename="kcstatusrewriteinfo.cpp" line="52"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcstatusrewriteinfo.cpp" line="7"/>
+        <location filename="kcstatusrewriteinfo.cpp" line="53"/>
         <source>Insert</source>
         <translation type="unfinished"></translation>
     </message>
@@ -792,438 +797,373 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="27"/>
-        <source>Kreogist Cuties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="57"/>
-        <source>&amp;New Source File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="60"/>
-        <source>Create a new document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="64"/>
-        <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="67"/>
-        <source>Open an exsisting document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="71"/>
-        <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="74"/>
-        <source>Save the active document with a new name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="78"/>
-        <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="81"/>
-        <source>Save as different file name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="85"/>
-        <source>Sa&amp;ve All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="87"/>
-        <source>Save all modified documents.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="91"/>
-        <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="94"/>
-        <source>Close the active document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="98"/>
-        <source>C&amp;lose All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="100"/>
-        <source>Close all documents.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="104"/>
-        <source>Clos&amp;e All Other File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="106"/>
-        <source>Close all documents except the active document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="110"/>
-        <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="114"/>
-        <source>Quit applications; prompts to save documents.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="118"/>
-        <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="120"/>
-        <source>Undo the last action.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="124"/>
-        <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="127"/>
-        <source>Redo the previously undone action.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="131"/>
-        <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="133"/>
-        <source>Cut the selection to the Clipboard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="137"/>
-        <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="139"/>
-        <source>Copy the selection to the Clipboard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="143"/>
-        <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="145"/>
-        <source>Insert Clipboard contents.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="149"/>
-        <source>&amp;Select All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="151"/>
-        <source>Select the entire document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="155"/>
-        <source>Preferences</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="159"/>
-        <source>Customize your Cuties.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="163"/>
-        <source>Sidebar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="164"/>
-        <source>Show or hide the Sidebar.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="169"/>
-        <source>Compiler Dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="170"/>
-        <source>Show or hide the Compile Dock.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="174"/>
-        <source>Debug Controls</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="175"/>
-        <source>Show or hide the Debug Controls.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="180"/>
-        <source>Debug Command Dock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="181"/>
-        <source>Show or hide the Debug Command Input/Output Dock.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="192"/>
-        <location filename="mainwindow.cpp" line="1049"/>
-        <source>Enter Full Screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="194"/>
-        <source>Show or hide fullscreen mode of Cuties.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="200"/>
-        <source>&amp;Find</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="202"/>
-        <source>Search for text in the active document.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="211"/>
-        <source>&amp;Replace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="213"/>
-        <source>Replace occurrences of search string.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="222"/>
-        <source>&amp;Search Online</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="224"/>
-        <source>Search the text via online search engine.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="228"/>
-        <source>&amp;Goto Line</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="230"/>
-        <source>Go to specified line.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="235"/>
-        <source>C&amp;ompile and Run</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="237"/>
-        <source>Compile the active file and run.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="241"/>
-        <source>&amp;Compile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="243"/>
-        <source>Compile the active file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="248"/>
-        <source>&amp;Run</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="250"/>
-        <source>Run the compiled execution.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="281"/>
-        <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="283"/>
-        <source>Switch to the next tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="287"/>
-        <source>&amp;Previous</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="289"/>
-        <source>Switch to the previous tab.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="293"/>
-        <source>&amp;About...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="295"/>
-        <source>Display the Kreogist Cuties information.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="299"/>
-        <source>A&amp;bout Qt...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="300"/>
-        <source>Display the Qt information, version number and copyright.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="306"/>
-        <source>About Cuties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="307"/>
+        <location filename="mainwindow.cpp" line="257"/>
         <source>Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="312"/>
-        <source>About Qt</source>
+        <location filename="mainwindow.cpp" line="912"/>
+        <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="341"/>
-        <source>New Source File</source>
+        <location filename="mainwindow.cpp" line="913"/>
+        <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="342"/>
-        <source>Open</source>
+        <location filename="mainwindow.cpp" line="914"/>
+        <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="343"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="344"/>
-        <source>Cut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="345"/>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="346"/>
-        <source>Paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="347"/>
-        <source>Undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="348"/>
-        <source>Redo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="349"/>
+        <location filename="mainwindow.cpp" line="915"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="350"/>
+        <location filename="mainwindow.cpp" line="916"/>
+        <source>Execute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="917"/>
+        <source>Tools</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="918"/>
+        <source>Tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="919"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="921"/>
+        <source>Create a new document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="922"/>
+        <source>Open an exsisting document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="923"/>
+        <source>Save the active document with a new name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="924"/>
+        <source>Save as different file name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="925"/>
+        <source>Save all modified documents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="926"/>
+        <source>Close the active document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="927"/>
+        <source>Close all documents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="928"/>
+        <source>Close all documents except the active document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="929"/>
+        <source>Quit applications; prompts to save documents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="930"/>
+        <source>Undo the last action.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="931"/>
+        <source>Redo the previously undone action.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="932"/>
+        <source>Cut the selection to the Clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="933"/>
+        <source>Copy the selection to the Clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="934"/>
+        <source>Insert Clipboard contents.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="935"/>
+        <source>Select the entire document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="936"/>
+        <source>Customize your Cuties.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="937"/>
+        <source>Show or hide the Sidebar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="938"/>
+        <source>Show or hide the Compile Dock.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="939"/>
+        <source>Show or hide the Debug Controls.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="940"/>
+        <source>Show or hide the Debug Command Input/Output Dock.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="942"/>
+        <source>Show or hide fullscreen mode of Cuties.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="944"/>
+        <source>Search for text in the active document.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="945"/>
+        <source>Replace occurrences of search string.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="946"/>
+        <source>Search the text via online search engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="947"/>
+        <source>Go to specified line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="948"/>
+        <source>Compile the active file and run.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="949"/>
+        <source>Compile the active file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="950"/>
+        <source>Run the compiled execution.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="951"/>
+        <source>Switch to the next tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="952"/>
+        <source>Switch to the previous tab.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="953"/>
+        <source>Display the Kreogist Cuties information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="954"/>
+        <source>Display the Qt information, version number and copyright.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="956"/>
+        <source>New Source File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="957"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="958"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="959"/>
+        <source>Save As</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="960"/>
+        <source>Save All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="961"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="962"/>
+        <source>Close All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="963"/>
+        <source>Close All Other File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="964"/>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="965"/>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="966"/>
+        <source>Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="967"/>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="968"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="969"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="970"/>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="971"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="972"/>
+        <source>Sidebar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="973"/>
+        <source>Compiler Dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="974"/>
+        <source>Debug Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="975"/>
+        <source>Debug Command Dock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="977"/>
+        <location filename="mainwindow.cpp" line="1101"/>
+        <source>Enter Full Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="979"/>
+        <source>Find</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="980"/>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="981"/>
+        <source>Search Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="982"/>
+        <source>Goto Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="983"/>
         <source>Compile and Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="441"/>
-        <source>&amp;File</source>
-        <translation>&amp;File</translation>
+        <location filename="mainwindow.cpp" line="984"/>
+        <source>Compile</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="442"/>
-        <source>&amp;Edit</source>
-        <translation>&amp;Edit</translation>
+        <location filename="mainwindow.cpp" line="985"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="443"/>
-        <source>&amp;View</source>
-        <translation>&amp;View</translation>
+        <location filename="mainwindow.cpp" line="986"/>
+        <source>Next</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="444"/>
-        <source>&amp;Search</source>
-        <translation>&amp;Search</translation>
+        <location filename="mainwindow.cpp" line="987"/>
+        <source>Previous</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="445"/>
-        <source>E&amp;xecute</source>
-        <translation>E&amp;xecute</translation>
+        <location filename="mainwindow.cpp" line="988"/>
+        <source>About</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="446"/>
-        <source>&amp;Tools</source>
-        <translation>&amp;Tools</translation>
+        <location filename="mainwindow.cpp" line="989"/>
+        <source>About Qt</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="447"/>
-        <source>&amp;Tab</source>
-        <translation>&amp;Tab</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="448"/>
-        <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="1054"/>
+        <location filename="mainwindow.cpp" line="1106"/>
         <source>Exit Full Screen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1231,14 +1171,14 @@
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="main.cpp" line="73"/>
-        <location filename="main.cpp" line="87"/>
+        <location filename="kcfontconfigure.cpp" line="114"/>
+        <location filename="kcfontconfigure.cpp" line="128"/>
         <source>Error occur when load font file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.cpp" line="75"/>
-        <location filename="main.cpp" line="89"/>
+        <location filename="kcfontconfigure.cpp" line="116"/>
+        <location filename="kcfontconfigure.cpp" line="130"/>
         <source>Error: </source>
         <translation type="unfinished"></translation>
     </message>
