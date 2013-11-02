@@ -44,22 +44,6 @@
 
 #include "kccodeeditor.h"
 
-
-KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
-    QWidget(parent)
-{
-    setAutoFillBackground(true);
-    setContentsMargins(0,0,0,0);
-
-    QVBoxLayout *compileProgressLayout=new QVBoxLayout(this);
-    compileProgressLayout->setContentsMargins(0,0,0,0);
-    compileProgressLayout->setSpacing(0);
-    setLayout(compileProgressLayout);
-
-    compileProgress=new QProgressBar(this);
-    compileProgressLayout->addWidget(compileProgress);
-}
-
 static const int SearchBarOffset = 20;
 
 KCCodeEditor::KCCodeEditor(QWidget *parent) :
@@ -93,6 +77,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(editor);
     replaceLayout->addLayout(mainLayout);
 
+    currentCompileProgress=new KCCodeCompileProgress(editor);
+    currentCompileProgress->hide();
     searchBar=new KCSearchWindow(editor);
     searchBar->hide();
     replaceBar=new KCReplaceWindow(this);
@@ -119,8 +105,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     filePath.clear();
     fileError=QFileDevice::NoError;
-
-    compileProgress=new KCCodeCompileProgress(this);
 }
 
 KCCodeEditor::~KCCodeEditor()
@@ -166,6 +150,28 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
                                  editor, &KCTextEditor::showNextSearchResult);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
+}
+
+void KCCodeEditor::showCompileBar()
+{
+    /*if(!currentCompileProgress->isVisible())
+    {*/
+        currentCompileProgress->setFixedWidth(width()/3);
+
+        QPropertyAnimation *compileAnime=new QPropertyAnimation(currentCompileProgress,"geometry");
+        QRect animeEndPos=currentCompileProgress->geometry();
+        animeEndPos.setLeft(editor->width()/2-currentCompileProgress->width()/2);
+        animeEndPos.setTop(0);
+        QRect animeStartPos=animeEndPos;
+        animeStartPos.setTop(-100);
+        compileAnime->setStartValue(animeStartPos);
+        compileAnime->setDuration(1000);
+        compileAnime->setEndValue(animeEndPos);
+        compileAnime->setEasingCurve(QEasingCurve::OutCubic);
+        currentCompileProgress->setGeometry(animeStartPos);
+        currentCompileProgress->show();
+        compileAnime->start(QPropertyAnimation::DeleteWhenStopped);
+    //}
 }
 
 void KCCodeEditor::showSearchBar()

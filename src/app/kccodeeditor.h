@@ -24,11 +24,11 @@
 #include <QTextCursor>
 #include <QString>
 #include <QWidget>
-#include <QProgressBar>
 
 #include <QDebug>
 
 #include "kclanguagemode.h"
+#include "kccodecompileprogress.h"
 #include "kcconnectionhandler.h"
 
 class QVBoxLayout;
@@ -41,21 +41,6 @@ class KCTextEditor;
 class KCMarkPanel;
 class KCLinenumPanel;
 class KCSearchWidget;
-
-class KCCodeCompileProgress : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit KCCodeCompileProgress(QWidget *parent = 0);
-
-signals:
-
-public slots:
-
-private:
-    QProgressBar *compileProgress;
-
-};
 
 class KCCodeEditor : public QWidget
 {
@@ -101,6 +86,7 @@ public slots:
     QString getSelectedText();
     void showSearchBar();
     void showReplaceBar();
+    void showCompileBar();
     void hideSearchBar();
     void setOverwriteMode(bool newValue);
 
@@ -122,7 +108,7 @@ private:
 
     KCLanguageMode *languageMode;
 
-    KCCodeCompileProgress *compileProgress;
+    KCCodeCompileProgress *currentCompileProgress;
 
     QVBoxLayout *replaceLayout;
     QHBoxLayout *mainLayout;

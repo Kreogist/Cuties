@@ -38,9 +38,6 @@ public:
 signals:
     void toNewLineNum(int newLineNumber);
 
-protected:
-    void resizeEvent(QResizeEvent *e);
-
 public slots:
     void retranslate();
     void retranslateAndSet();
@@ -52,6 +49,7 @@ private slots:
     void setHideGotoBox();
 
 private:
+    void refresh();
     QSpinBox *gotoLineNum;
     QLabel *cursorPosition;
     bool gotoBarShowed;

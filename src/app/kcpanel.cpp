@@ -31,8 +31,8 @@ KCPanel::KCPanel(QWidget *parent) :
 {
     setContentsMargins(0,0,0,0);
     autoWidth=false;
-    setMinimumWidth(18);
-    setFixedWidth(18);
+    setMinimumWidth(8);
+    setFixedWidth(8);
     setAutoFillBackground(true);
     first=last=0;
 }
@@ -95,40 +95,40 @@ void KCPanel::paintEvent(QPaintEvent *event)
 
     QFontMetrics fm=e->fontMetrics();
 
-    /*FIXME: It's so ugly. But I can't solve it.I try to find the text layout's
+    /*
+     *FIXME: It's so ugly. But I can't solve it.I try to find the text layout's
      *       position. But the position of the layout of the QTextBlock is
      *       always be (0,0).
      */
 
-    int line_height = fm.lineSpacing(),
-        current_line_num=e->textCursor().block().blockNumber(),
+    int lineHeight = fm.lineSpacing(),
+        currentLineNum=e->textCursor().block().blockNumber(),
         top=e->verticalScrollBar()->value();
-
-    int block_top = (top==0)?e->geometry().y() + line_height / 4 : 0,
-        bottom=e->height()/line_height;
-
+    int bottom=e->height()/lineHeight;
 
     painter.setFont(e->font());
     QTextBlock block=e->document()->begin();
 
     if(autoWidth)
     {
-        setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+10);
+        setFixedWidth(fm.width(QString::number(block.document()->blockCount()))+2);
     }
 
     //find first visiable block
-    int line_count;
-    for(line_count=0; block.isValid();
+    int lineCount;
+    for(lineCount=0; block.isValid();
         block=block.next())
     {
-        line_count+=block.lineCount();
-        if(line_count>top)
+        lineCount+=block.lineCount();
+        if(lineCount>top)
         {
             break;
         }
     }
 
     first=block.blockNumber();
+    QRectF currentRect;
+    int topHint=top==0?4:1;
 
     for(; bottom>=0 && block.isValid();
         block=block.next())
@@ -137,14 +137,13 @@ void KCPanel::paintEvent(QPaintEvent *event)
          * If block is the first block, the real line count is (line_count-top).
          * Otherwise the real line count is block.lineCount();
          */
-        int block_height=line_height*getRealLineCount(block,line_count-top);
+        currentRect=e->blockRect(block);
         painter.save();
         this->draw(&painter, &block,
-                   0, block_top, width(), block_height,
-                   current_line_num==block.blockNumber()?1:0);
+                   0, currentRect.top()+topHint, width(), currentRect.height(),
+                   currentLineNum==block.blockNumber()?1:0);
         painter.restore();
-        block_top += block_height;
-        bottom-=getRealLineCount(block,line_count-top);
+        bottom-=getRealLineCount(block,lineCount-top);
     }
 
     last=block.blockNumber();

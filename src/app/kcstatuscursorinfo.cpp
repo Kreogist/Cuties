@@ -52,17 +52,11 @@ KCStatusCursorInfo::KCStatusCursorInfo(QWidget *parent) :
     connect(gotoHideAnime,SIGNAL(finished()),
             this,SLOT(setHideGotoBox()));
 
-    lineNumString=QString("0");
-    columnNumString=QString("0");
+    lineNumString=QString("");
+    columnNumString=QString("");
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCStatusCursorInfo::retranslateAndSet);
-}
-
-void KCStatusCursorInfo::resizeEvent(QResizeEvent *e)
-{
-    QWidget::resizeEvent(e);
-    gotoLineNum->setFixedWidth(this->width());
 }
 
 void KCStatusCursorInfo::retranslate()
@@ -76,16 +70,12 @@ void KCStatusCursorInfo::retranslate()
 void KCStatusCursorInfo::retranslateAndSet()
 {
     retranslate();
-    cursorPosition->setText(lineTextBegin+
-                            lineNumString+
-                            lineTextEnd+
-                            colTextBegin+
-                            columnNumString+
-                            colTextEnd);
+    refresh();
 }
 
 void KCStatusCursorInfo::showGotoBox(int currentValue, int maxValue)
 {
+    gotoLineNum->setFixedWidth(width());
     gotoLineNum->setValue(currentValue);
     gotoLineNum->setMaximum(maxValue);
     gotoLineNum->selectAll();
@@ -112,12 +102,10 @@ bool KCStatusCursorInfo::getGotoShowed()
     return gotoBarShowed;
 }
 
-void KCStatusCursorInfo::updateCursorPosition(int newLineNum, int newColumnNum)
+void KCStatusCursorInfo::refresh()
 {
-    if(newLineNum>0)
+    if(lineNumString.length()>0)
     {
-        lineNumString=QString::number(newLineNum);
-        columnNumString=QString::number(newColumnNum);
         cursorPosition->setText(lineTextBegin+
                                 lineNumString+
                                 lineTextEnd+
@@ -130,7 +118,22 @@ void KCStatusCursorInfo::updateCursorPosition(int newLineNum, int newColumnNum)
         cursorPosition->setText("");
         hideGotoBox();
     }
-    this->resize(cursorPosition->size());
+    resize(cursorPosition->size());
+}
+
+void KCStatusCursorInfo::updateCursorPosition(int newLineNum, int newColumnNum)
+{
+    if(newLineNum>0)
+    {
+        lineNumString=QString::number(newLineNum);
+        columnNumString=QString::number(newColumnNum);
+    }
+    else
+    {
+        lineNumString.clear();
+        columnNumString.clear();
+    }
+    refresh();
 }
 
 void KCStatusCursorInfo::finishedHideGotoBox()
@@ -162,3 +165,4 @@ void KCStatusCursorInfo::setHideGotoBox()
 {
     gotoLineNum->hide();
 }
+

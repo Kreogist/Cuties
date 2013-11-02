@@ -92,7 +92,8 @@ SOURCES += \
     kcdebugcommandio.cpp \
     kcdebugcontrolpanel.cpp \
     kcfloattoolbar.cpp \
-    kcfontconfigure.cpp
+    kcfontconfigure.cpp \
+    kccodecompileprogress.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -161,7 +162,8 @@ HEADERS += \
     kcdebugcommandio.h \
     kcdebugcontrolpanel.h \
     kcfloattoolbar.h \
-    kcfontconfigure.h
+    kcfontconfigure.h \
+    kccodecompileprogress.h
 
 # Enable C++11
 CONFIG += c++11

@@ -43,6 +43,7 @@ public:
     explicit KCTextEditor(QWidget *parent = 0);
     void setDocumentCursor(int nLine, int linePos);
     void backupSearchTextCursor();
+    QRectF blockRect(const QTextBlock &block);
 
 signals:
     void updated();

@@ -28,17 +28,18 @@
 #include "kcplaintextbrowser.h"
 #include "kccompileoutputreceiver.h"
 #include "kccolorconfigure.h"
+#include "kclanguageconfigure.h"
 
 #include "kccompiledock.h"
 
 KCCompileDock::KCCompileDock(QWidget *parent):
     QDockWidget(parent)
 {
-
+    retranslate();
     //Set compile dock properties
     setAutoFillBackground(true);
     setObjectName(QString("Compile Dock"));
-    setWindowTitle(QString(tr("Compiler")));
+    setWindowTitle(windowTitleString);
     setContentsMargins(0,0,0,0);
     setAllowedAreas(Qt::BottomDockWidgetArea);
 
@@ -100,6 +101,9 @@ KCCompileDock::KCCompileDock(QWidget *parent):
             this, &KCCompileDock::displayErrorDetails);
     connect(compileOutputErrorInfoTree, &QTreeView::activated,
             this, &KCCompileDock::jumpToError);
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCCompileDock::retranslateAndSet);
 }
 
 //When user select an error, this slot function will get the info of the
@@ -207,4 +211,15 @@ void KCCompileDock::setCompileOutputReceiver(KCCompileOutputReceiver *newReceive
                                        this, &KCCompileDock::animeShowCompileError);
     receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::compilerOutputTextChanged,
                                        compileOutputTextInfo, &KCPlainTextBrowser::setPlainText);
+}
+
+void KCCompileDock::retranslate()
+{
+    windowTitleString=tr("Compiler");
+}
+
+void KCCompileDock::retranslateAndSet()
+{
+    retranslate();
+    setWindowTitle(windowTitleString);
 }

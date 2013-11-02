@@ -54,6 +54,8 @@ signals:
     void requireSetFocus();
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
     //Show & Hide Error Animation.
     void animeShowCompileError();
     void animeHideCompileError();
@@ -70,6 +72,7 @@ private slots:
     void jumpToError(QModelIndex currentErrorItemIndex);
 
 private:
+    QString windowTitleString;
     //Define the widget splitter.
     QSplitter *compileOutputInfoSplitter;
 

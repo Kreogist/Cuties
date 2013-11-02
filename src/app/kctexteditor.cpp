@@ -37,7 +37,6 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 {
     setContentsMargins(0, 0, 0, 0);
     setObjectName("KCTextEditor");
-
     setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(false);
 
@@ -506,6 +505,11 @@ void KCTextEditor::backupSearchTextCursor()
     searchBackupCursor=textCursor();
 }
 
+QRectF KCTextEditor::blockRect(const QTextBlock &block)
+{
+    return blockBoundingGeometry(block);
+}
+
 int KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
 {
     QTextCursor cursor = textCursor();
@@ -695,7 +699,7 @@ void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &select
 
         selection.format.setBackground(lineColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
+        selection.cursor=textCursor();
         selection.cursor.clearSelection();
         selections.append(selection);
     }
