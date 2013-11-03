@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=Share+Tech);
 @font-face
 	{
 	font-family:sao;
@@ -28,6 +29,7 @@ a:active{
     left:0px;
     width:100%;
     height:32px;
+    line-height:32px;
     padding:5px;
     padding-bottom:10px;
     font-size:1.4em;
@@ -41,23 +43,24 @@ a:active{
     font-size:1.5em;
     top:0px;
     left:0px;
-    width:151px;
-    height:60px;
+    width:130px;
+    height:65px;
+    line-height:65px;
     padding-left:13px;
 	padding-top:0px;
-	padding-bottom:8px;
+	padding-bottom:0px;
     background: rgba(0,0,0,0.8);
 }
 #banner-title:after{
     z-index:9990;
     position:fixed;
     display:block;
-    left:164px;
+    left:143px;
     top:46px;
     content:"";
     width:0px;
     height:0px;
-    border-width:11px;
+    border-width:9px;
     border-style:solid;
     border-color:rgba(0,0,0,0.8) transparent transparent rgba(0,0,0,0.8);}
 #head-banner-link{
@@ -228,7 +231,7 @@ a:active{
 #help-btn:hover{background-image:url("#")}
 #help-btn:active{background-image:url("#")}
 
-#context-container{
+.context-container{
     z-index:1;
     left:50px;
     width:80%;
@@ -260,14 +263,14 @@ a:active{
     font-size:2em;
     padding:0;
     margin:0;}
-.context{
+.download-context{
     -webkit-column-count:3;
     -moz-column-count:3;
     column-count:3;
     margin-left:40px;
     margin-right:40px;
     }
-.context-box{
+.download-context-box{
     display:flex;
     flex-direction:column;
     flex-align:center;
@@ -312,7 +315,22 @@ a:active{
     color:#555;
     background:rgba(255,193,44,1);
     }
-    
+
+
+.normal-text{
+    padding-left:50px;
+    font-family:"share tech";
+}    
+.center-text{
+    text-align:center;
+}
+
+.large-text{
+    font-size:2em;
+}
+.larger-text{
+    font-size:3em;
+}
 
 @-moz-keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
