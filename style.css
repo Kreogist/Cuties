@@ -40,16 +40,17 @@ a:active{
     font-size:2em;
     top:0px;
     left:0px;
-    width:110px;
-    height:66px;
-    padding-left:6px;
+    width:151px;
+    height:60px;
+    padding-left:13px;
+	padding-top:6px;
     background: rgba(0,0,0,0.8);
 }
 #banner-title:after{
     z-index:9990;
     position:fixed;
     display:block;
-    left:116px;
+    left:164px;
     top:42px;
     content:"";
     width:0px;
@@ -63,6 +64,7 @@ a:active{
     width:auto;
     right:0px;
     text-align:center;
+	padding-top:5px;
     padding-right:1em;
 }
 #banner-subtitle{
@@ -96,7 +98,7 @@ a:active{
 .a-effect a::after{
     position:relative;
     left:0;
-    content:"}";
+    content:"|";
     opacity:0;
     transition:all 0.2s ease-in-out;
 }
@@ -107,7 +109,7 @@ a:active{
 .a-effect a::before{
     position:relative;
     left:0;
-    content:"{";
+    content:"|";
     opacity:0;
     transition:all 0.2s ease-in-out;
 }
@@ -169,8 +171,8 @@ a:active{
     top:12px;
     left:-34px;
     content: "";
-    border-top:8px solid transparent;
-    border-bottom:8px solid transparent;
+    border-top:0px solid transparent;
+    border-bottom:0px solid transparent;
     border-left:12px solid transparent;
     border-right:22px solid rgba(255,255,255,0.8);
     }
