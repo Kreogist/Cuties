@@ -22,6 +22,15 @@ a:hover{
 a:active{
     text-decoration:none;
 }
+
+/*==>common class<==*/
+.normal-text{font-family:"share tech";}
+.center-text{text-align:center;}
+.large-text{font-size:2em;}
+.larger-text{font-size:3em;}
+.shadow-text{text-shadow:1px 1px 1px rgba(0,0,0,0.8);}
+/*==>common class<==*/
+
 #head-banner{
     z-index:9999;
     position:fixed;
@@ -237,6 +246,7 @@ a:active{
     width:80%;
     margin-left:65px;
     min-height:560px;
+    padding-left:10px;
     position:absolute;
     background:rgba(255,255,255,0.4);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
@@ -315,22 +325,6 @@ a:active{
     color:#555;
     background:rgba(255,193,44,1);
     }
-
-
-.normal-text{
-    padding-left:50px;
-    font-family:"share tech";
-}    
-.center-text{
-    text-align:center;
-}
-
-.large-text{
-    font-size:2em;
-}
-.larger-text{
-    font-size:3em;
-}
 
 @-moz-keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
