@@ -91,7 +91,11 @@ qt5_add_resources(RESOURCES_RCC rc.qrc)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
-add_executable(${PROJECT_NAME} ${SRC_LIST} ${RESOURCES_RCC})
+if(WIN32)
+    add_executable(${PROJECT_NAME} WIN32 ${SRC_LIST} ${RESOURCES_RCC})
+else(WIN32)
+    add_executable(${PROJECT_NAME} ${SRC_LIST} ${RESOURCES_RCC})
+endif(WIN32)
 
 # Use the Widgets module from Qt 5.
 qt5_use_modules(${PROJECT_NAME} Widgets)
