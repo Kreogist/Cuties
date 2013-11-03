@@ -246,7 +246,7 @@ a:active{
     width:80%;
     margin-left:65px;
     min-height:560px;
-    padding-left:10px;
+    padding-left:40px;
     position:absolute;
     background:rgba(255,255,255,0.4);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
@@ -259,8 +259,7 @@ a:active{
 }
 .title:after{
     display:block;
-    margin-top:5px;
-    margin-left:25px;
+    margin-top:3px;
     height:1px;
     width:auto;
     background-color:#999;
@@ -277,7 +276,7 @@ a:active{
     -webkit-column-count:3;
     -moz-column-count:3;
     column-count:3;
-    margin-left:40px;
+    margin-left:0px;
     margin-right:40px;
     }
 .download-context-box{
