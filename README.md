@@ -23,7 +23,6 @@ Cuties is a cross-platform application. It is supported on a variety of 32-bit a
 - Apple Mac OS X Lion 10.7 or later.
 - Linux/X11
 
-
 ##Building
 
 ###Prerequisites
@@ -54,7 +53,19 @@ Launch your terminal, Input:
 
 Open the folder and find 'src' folder, open Kreogist-Cuties.pro via Qt Creator. Compile and build the ConsoleRunner project first using Release Mode and then the app project. Copy KciConsoleRunner app to the path of Kreogist-Cuties. 
 
-If you are using Windows, please copy the following DLLs to the path of Kreogist-Cuties:
+If you are using Windows, please copy the following DLLs to the path of Kreogist-Cuties if you are using a MinGW compiler:
+
+        icudt51.dll
+        icuin51.dll
+        icuuc51.dll
+        libgcc_s_dw2-1.dll
+        libstdc++-6.dll
+        libwinpthread-1.dll
+        Qt5Core.dll
+        Qt5Gui.dll
+        Qt5Widgets.dll
+
+For MSVC compiler, you should also copy the basic DLLs to the path of Kreogist-Cuties.
 
 ##Install
 
