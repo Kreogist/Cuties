@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 2.8.9)
+
+set(FONT_LIST  monaco.ttf)
+set(FONT_LIST ${FONT_LIST} UbuntuMono-B.ttf)
+set(FONT_LIST ${FONT_LIST} GothamNights.ttf)
+set(FONT_LIST ${FONT_LIST} sao.ttf)
+set(FONT_LIST ${FONT_LIST} UbuntuMono-RI.ttf)
+set(FONT_LIST ${FONT_LIST} Inconsolata.otf)
+set(FONT_LIST ${FONT_LIST} UbuntuMono-BI.ttf)
+set(FONT_LIST ${FONT_LIST} UbuntuMono-R.ttf)
+
+foreach(FONT ${FONT_LIST})
+    configure_file(${FONT} ${PROJECT_BINARY_DIR}/Fonts/${FONT} COPYONLY)
+endforeach(FONT)
