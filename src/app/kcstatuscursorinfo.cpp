@@ -25,6 +25,7 @@ KCStatusCursorInfo::KCStatusCursorInfo(QWidget *parent) :
 {
     retranslate();
     setContentsMargins(0,0,0,0);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     QHBoxLayout *textLayout=new QHBoxLayout(this);
     textLayout->setContentsMargins(0,0,0,0);
@@ -81,14 +82,15 @@ void KCStatusCursorInfo::resizeEvent(QResizeEvent *e)
 
 void KCStatusCursorInfo::showGotoBox(int currentValue, int maxValue)
 {
-    gotoLineNum->setFixedWidth(width());
-    gotoLineNum->setValue(currentValue);
-    gotoLineNum->setMaximum(maxValue);
-    gotoLineNum->selectAll();
-    gotoLineNum->show();
-
     if(!gotoBarShowed)
     {
+        gotoLineNum->setFixedWidth(width());
+        gotoBarResize=connect(this, &KCStatusCursorInfo::sizeChanged,
+                              this, &KCStatusCursorInfo::resizeGotoBox);
+        gotoLineNum->setValue(currentValue);
+        gotoLineNum->setMaximum(maxValue);
+        gotoLineNum->selectAll();
+        gotoLineNum->show();
         QPropertyAnimation *gotoAnime=new QPropertyAnimation(gotoLineNum,"geometry");
         QRect animeEndPos=QRect(0,0,this->width(),this->height());
         QRect animeStartPos=animeEndPos;
@@ -99,8 +101,6 @@ void KCStatusCursorInfo::showGotoBox(int currentValue, int maxValue)
         gotoLineNum->show();
         gotoAnime->start();
         gotoBarShowed=true;
-        gotoBarResize=connect(this, &KCStatusCursorInfo::sizeChanged,
-                              this, &KCStatusCursorInfo::resizeGotoBox);
     }
     gotoLineNum->setFocus();
 }
