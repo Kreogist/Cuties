@@ -37,6 +37,7 @@ public:
 
 signals:
     void toNewLineNum(int newLineNumber);
+    void sizeChanged();
 
 public slots:
     void retranslate();
@@ -47,6 +48,7 @@ public slots:
 
 private slots:
     void setHideGotoBox();
+    void resizeGotoBox();
 
 protected:
     void resizeEvent(QResizeEvent *e);
@@ -60,6 +62,7 @@ private:
     QPropertyAnimation *gotoHideAnime;
 
     QString lineTextBegin, lineTextEnd, colTextBegin, colTextEnd;
+    QMetaObject::Connection gotoBarResize;
 
 };
 

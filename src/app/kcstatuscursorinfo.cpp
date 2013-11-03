@@ -76,7 +76,7 @@ void KCStatusCursorInfo::retranslateAndSet()
 void KCStatusCursorInfo::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
-    gotoLineNum->setFixedWidth(width());
+    emit sizeChanged();
 }
 
 void KCStatusCursorInfo::showGotoBox(int currentValue, int maxValue)
@@ -99,6 +99,8 @@ void KCStatusCursorInfo::showGotoBox(int currentValue, int maxValue)
         gotoLineNum->show();
         gotoAnime->start();
         gotoBarShowed=true;
+        gotoBarResize=connect(this, &KCStatusCursorInfo::sizeChanged,
+                              this, &KCStatusCursorInfo::resizeGotoBox);
     }
     gotoLineNum->setFocus();
 }
@@ -164,11 +166,17 @@ void KCStatusCursorInfo::hideGotoBox()
         gotoHideAnime->setEndValue(animeEndPos);
         gotoHideAnime->setEasingCurve(QEasingCurve::OutCubic);
         gotoHideAnime->start();
+        disconnect(gotoBarResize);
     }
 }
 
 void KCStatusCursorInfo::setHideGotoBox()
 {
     gotoLineNum->hide();
+}
+
+void KCStatusCursorInfo::resizeGotoBox()
+{
+    gotoLineNum->setFixedWidth(width());
 }
 
