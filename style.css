@@ -38,7 +38,7 @@ a:active{
 #banner-title{
     display:block;
     position:fixed;
-    font-size:2em;
+    font-size:1.5em;
     top:0px;
     left:0px;
     width:151px;
@@ -167,6 +167,7 @@ a:active{
     -webkit-animation:tooltip-Animation 0.2s ease-in-out;
     animation:tooltip-Animation 0.2s ease-in-out;
 }
+
 .left-btn span:before{
     width:0px;
     height:0px;
@@ -206,14 +207,27 @@ a:active{
     align-items: center;
     width:64px;
     height:64px;
-    background-image:url("btn_normal.png");
 }
-.left-btn:hover{
-    background-image:url("btn_hover.png");
-}
-.left-btn:active{
-    background-image:url("btn_press.png");
-}
+#home-btn{background-image:url("btn_home.png")}
+#home-btn:hover{background-image:url("#")}
+#home-btn:active{background-image:url("#")}
+
+#features-btn{background-image:url("btn_features.png")}
+#features-btn:hover{background-image:url("#")}
+#features-btn:active{background-image:url("#")}
+
+#download-btn{background-image:url("btn_download.png")}
+#download-btn:hover{background-image:url("#")}
+#download-btn:avtive{background-image:url("#")}
+
+#faq-btn{background-image:url("btn_FAQ.png")}
+#faq-btn:hover{background-image:url("#")}
+#faq-btn:active{background-image:url("#")}
+
+#help-btn{background-image:url("btn_support.png")}
+#help-btn:hover{background-image:url("#")}
+#help-btn:active{background-image:url("#")}
+
 #context-container{
     z-index:1;
     left:50px;
