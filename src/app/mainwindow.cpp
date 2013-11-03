@@ -227,6 +227,8 @@ void MainWindow::createActions()
                 QString(tr("Set the input file, compile and run the document, and show output file."));
     */
 
+    //Debug -> Start Debug
+
     //Window -> Window Split
     /*act[mnuWindowSplit]=new QAction(tr("Split Window"),this);
     actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));*/
