@@ -73,6 +73,12 @@ void KCStatusCursorInfo::retranslateAndSet()
     refresh();
 }
 
+void KCStatusCursorInfo::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    gotoLineNum->setFixedWidth(width());
+}
+
 void KCStatusCursorInfo::showGotoBox(int currentValue, int maxValue)
 {
     gotoLineNum->setFixedWidth(width());

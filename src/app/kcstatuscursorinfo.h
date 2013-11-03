@@ -48,6 +48,9 @@ public slots:
 private slots:
     void setHideGotoBox();
 
+protected:
+    void resizeEvent(QResizeEvent *e);
+
 private:
     void refresh();
     QSpinBox *gotoLineNum;
