@@ -31,6 +31,8 @@
 #include <QDebug>
 #include <QTimer>
 
+#include <cstdlib>
+
 #include "mainwindow.h"
 #include "kcglobal.h"
 #include "kcsplashscreen.h"
@@ -96,12 +98,12 @@ static inline void processArg()
         if(arg == "--version" || arg == "-v")
         {
             printVersion();
-            //std::exit(0);
+            std::exit(0);
         }
         else if(arg == "--help" || arg == "-h")
         {
             printHelp();
-            //std::exit(0);
+            std::exit(0);
         }
         else if(QFileInfo(arg).exists())
         {
