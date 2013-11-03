@@ -514,6 +514,30 @@ void MainWindow::createMenu()
 #endif
     }
 
+    //Create Debug Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
+    menuMainWindowItem[menuDebug]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionDebugStart; i<=actionDebugRemoveWatch/*mnuExecuteSetInputRunShowOutput*/; i++)
+    {
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuDebug]->addAction(actionMainWindowItem[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case actionDebugRunToCursor:
+        case actionDebugReturn:
+            menuMainWindowItem[menuDebug]->addSeparator();
+            break;
+        }
+#endif
+    }
+
     //Create Tool Menu
 #ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
@@ -914,6 +938,7 @@ void MainWindow::retranslateAndSet()
     menuMainWindowText[menuView]=tr("View");
     menuMainWindowText[menuSearch]=tr("Search");
     menuMainWindowText[menuExecute]=tr("Execute");
+    menuMainWindowText[menuDebug]=tr("Debug");
     menuMainWindowText[menuTools]=tr("Tools");
     menuMainWindowText[menuWindow]=tr("Tab");
     menuMainWindowText[menuHelp]=tr("Help");
@@ -948,6 +973,18 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionExecuteCompileAndRun]=tr("Compile the active file and run.");
     actionStatusTips[actionExecuteCompile]=tr("Compile the active file.");
     actionStatusTips[actionExecuteRun]=tr("Run the compiled execution.");
+    actionStatusTips[actionDebugStart]=tr("Start GNU Debugger to debug your program.");
+    actionStatusTips[actionDebugStop]=tr("Stop debugging");
+    actionStatusTips[actionDebugRunToCursor]=tr("Run to the current cursor line.");
+    actionStatusTips[actionDebugNext]=tr("Continue to the next source line in the current (innermost) stack frame.");
+    actionStatusTips[actionDebugContinue]=tr("Resume program execution, at the address where your program last stopped; any breakpoints set at that address are bypassed. ");
+    actionStatusTips[actionDebugStep]=tr("Continue running your program until control reaches a different source line, then stop it and return control to GDB.");
+    actionStatusTips[actionDebugNexti]=tr("Execute one machine instruction, but if it is a function call, proceed until the function returns.");
+    actionStatusTips[actionDebugStepi]=tr("Execute one machine instruction, then stop and return to the debugger.");
+    actionStatusTips[actionDebugReturn]=tr("Cancel execution of a function call.");
+    actionStatusTips[actionDebugAddWatch]=tr("Add a new variable or expression to watch.");
+    actionStatusTips[actionDebugModifiedWatch]=tr("Modified a variable or expression in watching");
+    actionStatusTips[actionDebugRemoveWatch]=tr("Remove a variable or expression from watching");
     actionStatusTips[actionWindowNext]=tr("Switch to the next tab.");
     actionStatusTips[actionWindowPrev]=tr("Switch to the previous tab.");
     actionStatusTips[actionHelpAbout]=tr("Display the Kreogist Cuties information.");
@@ -983,6 +1020,18 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionExecuteCompileAndRun]=tr("Compile and Run");
     actionMainWindowText[actionExecuteCompile]=tr("Compile");
     actionMainWindowText[actionExecuteRun]=tr("Run");
+    actionMainWindowText[actionDebugStart]=tr("Start Debug");
+    actionMainWindowText[actionDebugStop]=tr("Stop Debug");
+    actionMainWindowText[actionDebugRunToCursor]=tr("Run to Cursor");
+    actionMainWindowText[actionDebugNext]=tr("Next Line");
+    actionMainWindowText[actionDebugContinue]=tr("Continue");
+    actionMainWindowText[actionDebugStep]=tr("Step Into");
+    actionMainWindowText[actionDebugNexti]=tr("Next Instruction");
+    actionMainWindowText[actionDebugStepi]=tr("Into Instruction");
+    actionMainWindowText[actionDebugReturn]=tr("Step Over");
+    actionMainWindowText[actionDebugAddWatch]=tr("Add Watch");
+    actionMainWindowText[actionDebugModifiedWatch]=tr("Modified Watch");
+    actionMainWindowText[actionDebugRemoveWatch]=tr("Remove Watch");
     actionMainWindowText[actionWindowNext]=tr("Next");
     actionMainWindowText[actionWindowPrev]=tr("Previous");
     actionMainWindowText[actionHelpAbout]=tr("About");
