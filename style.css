@@ -39,7 +39,7 @@ a:active{
     width:100%;
     height:32px;
     line-height:32px;
-    padding:5px;
+    padding:4px;
     padding-bottom:10px;
     font-size:1.4em;
     color:#eee;
@@ -52,7 +52,7 @@ a:active{
     font-size:1.5em;
     top:0px;
     left:0px;
-    width:130px;
+    width:160px;
     height:65px;
     line-height:65px;
     padding-left:13px;
@@ -64,7 +64,7 @@ a:active{
     z-index:9990;
     position:fixed;
     display:block;
-    left:143px;
+    left:173px;
     top:46px;
     content:"";
     width:0px;
@@ -253,7 +253,7 @@ a:active{
     box-shadow:0 0 10px rgba(0,0,0,0.8);
 }
 .title{
-    margin:20px 30px 30px 20px;
+    margin:20px 30px 10px 20px;
     text-align:right;
     font-size:2em;
     color:#333333;
