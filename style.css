@@ -74,7 +74,7 @@ a:active{
     border-color:rgba(0,0,0,0.8) transparent transparent rgba(0,0,0,0.8);}
 #head-banner-link{
     position:absolute;
-    display:inline-block;
+    display:inline-block;h
     width:auto;
     right:0px;
     text-align:center;
@@ -248,6 +248,7 @@ a:active{
     margin-left:65px;
     min-height:560px;
     padding-left:40px;
+    padding-right:10px;
     position:absolute;
     background:rgba(255,255,255,0.4);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
