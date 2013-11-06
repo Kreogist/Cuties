@@ -1,3 +1,4 @@
+@charset "utf-8"
 @import url(http://fonts.googleapis.com/css?family=Share+Tech);
 @font-face
 	{
@@ -35,12 +36,13 @@ a:active{
     z-index:9999;
     position:fixed;
     top:0px;
-    left:0px;
+    left:73px;
     width:100%;
     height:32px;
     line-height:32px;
     padding:4px;
     padding-bottom:10px;
+	padding-right:0px;
     font-size:1.4em;
     color:#eee;
     margin:0;
@@ -52,19 +54,22 @@ a:active{
     font-size:1.5em;
     top:0px;
     left:0px;
-    width:160px;
+    width:60px;
     height:65px;
     line-height:65px;
     padding-left:13px;
 	padding-top:0px;
 	padding-bottom:0px;
-    background: rgba(0,0,0,0.8);
+	background: rgba(0,0,0,0.8);
+	background-position: center;
+    background-image: url("kreogist.png");
+	background-repeat: no-repeat; 
 }
 #banner-title:after{
     z-index:9990;
     position:fixed;
     display:block;
-    left:173px;
+    left:73px;
     top:46px;
     content:"";
     width:0px;
@@ -79,7 +84,7 @@ a:active{
     right:0px;
     text-align:center;
 	padding-top:5px;
-    padding-right:1em;
+    padding-right:3.5em;
 }
 #banner-subtitle{
     position:fixed;
@@ -106,7 +111,6 @@ a:active{
     color:#ddd;
     margin-right:0.2em;
     padding:10px;
-    target:"_blank";
     transition:all 0.3s ease-in-out;
 }
 .a-effect a::after{
@@ -248,6 +252,7 @@ a:active{
     margin-left:65px;
     min-height:560px;
     padding-left:40px;
+    padding-right:10px;
     position:absolute;
     background:rgba(255,255,255,0.4);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
@@ -281,10 +286,30 @@ a:active{
     margin-right:40px;
     }
 .download-context-box{
-    display:flex;
-    flex-direction:column;
-    flex-align:center;
-    flex-pack:justify;
+	/* Internet Explorer 10 */
+    display:-ms-flex;
+    -ms-flex-pack:justify;
+    -ms-flex-align:stretch;
+	/* Firefox */
+	display:-moz-box;
+    -moz-box-flex:1.0;
+	-moz-box-pack:justify;
+	-moz-box-align:stretch;
+	-moz-box-orient:vertical;
+	/* Safari, Opera, and Chrome */
+	display:-webkit-box;
+    -webkit-box-flex:1.0;
+	-webkit-box-pack:justify;
+	-webkit-box-align:stretch;
+	-webkit-box-orient:vertical;
+    /* W3C */
+    display:box;
+	box-flex:1.0;
+	box-pack:justify;
+	box-align:stretch;
+    box-orient:vertical;
+    
+    width:100%;
     margin-left:8px;
     margin-right:8px;
     }
@@ -303,7 +328,7 @@ a:active{
     text-align:center;
     line-height:4em;
     height:4em;
-    width:100%;
+    width:auto;
     border-radius:2%;
     margin-bottom:15px;
     color:transparent;
@@ -315,10 +340,11 @@ a:active{
     transition:all 0.2s ease-in-out;
     }
 .download-link,.installation-link{
+    display:block;
     background:rgba(255,255,255,0.9);
     padding:5px 10px;
     margin:2px 0px;
-    width:100%;
+    width:auto;
     box-shadow:0px 0px 4px rgba(255,255,255,0.9);
     border:1px solid #fff;
     }
@@ -339,12 +365,12 @@ a:active{
     }
 
 @-moz-keyframes tooltip-Animation {
-    0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
+    0% {opacity:0;left:0;height:0;font-size:0;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
     100% {height:1.5em;line-height:1.5em;color:#222;}
 }
 @-webkit-keyframes tooltip-Animation {
-    0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
+    0% {opacity:0;left:0;height:0;font-size:0;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
     100% {height:1.5em;line-height:1.5em;color:#222;}
 }
@@ -354,7 +380,7 @@ a:active{
     100% {height:1.5em;line-height:1.5em;color:#222;} 
 }
 @keyframes tooltip-Animation {
-    0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
+    0% {opacity:0;left:0;height:0;font-size:0;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
     100% {height:1.5em;line-height:1.5em;color:#222;}
 }
