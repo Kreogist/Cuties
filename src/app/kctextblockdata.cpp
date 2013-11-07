@@ -127,6 +127,11 @@ QList<quotationInfo>::iterator KCTextBlockData::getEndQuotationInfo()
     return quotationInfos.end();
 }
 
+bool KCTextBlockData::hasNoQuotation()
+{
+    return quotationInfos.isEmpty();
+}
+
 void KCTextBlockData::insertParenthesesInfo(const int &pos,
         const char &character)
 {
@@ -186,4 +191,12 @@ void KCTextBlockData::setLineCommentPos(int value)
 {
     lineCommentPos = value;
 }
+int KCTextBlockData::getQuotationStatus() const
+{
+    return quotationStatus;
+}
 
+void KCTextBlockData::setQuotationStatus(int value)
+{
+    quotationStatus = value;
+}

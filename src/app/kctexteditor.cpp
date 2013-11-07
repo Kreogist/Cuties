@@ -847,6 +847,19 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         QPlainTextEdit::keyPressEvent(e);
         return;
     }
+    if(e->text()=="\"")
+    {
+        QPlainTextEdit::keyPressEvent(e);
+        KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+        if(_textCursor.document()->characterAt(_textCursor.position()-1)!=QChar('\\') &&
+           currData->getQuotationStatus()==-1)
+        {
+            insertPlainText("\"");
+            _textCursor.movePosition(QTextCursor::Left);
+            setTextCursor(_textCursor);
+        }
+        return;
+    }
     switch(e->key())
     {
     case Qt::Key_Tab:

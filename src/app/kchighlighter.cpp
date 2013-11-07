@@ -121,8 +121,10 @@ int KCHighlighter::parseQuotationInfo(const QString &text,
             }
             firstIndex=text.indexOf('\"', secondIndex+1);
         }
+        data->setQuotationStatus(secondIndex);
         return secondIndex;
     }
+    data->setQuotationStatus(-1);
     return -1;
 }
 

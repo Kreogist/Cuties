@@ -73,6 +73,7 @@ public:
     void resetQuotationInfos();
     QList<quotationInfo>::iterator getFirstQuotationInfo();
     QList<quotationInfo>::iterator getEndQuotationInfo();
+    bool hasNoQuotation();
 
     void insertParenthesesInfo(const int &pos, const char &character);
     void resetParentheseInfos();
@@ -88,6 +89,9 @@ public:
     int getLineCommentPos() const;
     void setLineCommentPos(int value);
 
+    int getQuotationStatus() const;
+    void setQuotationStatus(int value);
+
 private:
     unsigned long long int searchCode;
     bool needSearchAgain;
@@ -97,6 +101,7 @@ private:
     QList<quotationInfo> quotationInfos;
     int codeLevel;
     int lineCommentPos;
+    int quotationStatus;
     markUnit markInfo;
 };
 
