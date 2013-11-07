@@ -28,7 +28,7 @@ class QVBoxLayout;
 class QComboBox;
 class QTextDocument;
 class KCPlainTextBrowser;
-class gdb;
+class GdbController;
 
 class KCDebugCommandIO : public QDockWidget
 {
@@ -36,7 +36,7 @@ class KCDebugCommandIO : public QDockWidget
 public:
     explicit KCDebugCommandIO(QWidget *parent = 0);
     void setDocument(QTextDocument *document);
-    void setGdbInstance(gdb *gdbInstance);
+    void setGdbInstance(GdbController *gdbInstance);
 
 public slots:
     void retranslate();
@@ -50,7 +50,7 @@ private:
     QVBoxLayout *mainLayout;
     KCPlainTextBrowser *debugOutputTextBrowser;
     QComboBox *debugInput;
-    gdb *instance;
+    GdbController *instance;
 };
 
 #endif // KCGDBCOMMANDIO_H

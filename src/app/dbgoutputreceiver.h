@@ -38,15 +38,12 @@ public:
     QStandardItemModel *getWatchModel() const;
     QTextDocument *getTextStreamOutput() const;
 
-signals:
-
-public slots:
-    void receiveconsoleOutput(QString text);
-    void receivetargetOutput(QString text);
-    void receivelogOutput(QString text);
-    void receiveError(QString text);
-    void receiveLocals(GdbMiValue localVars);
-    void receiveExprValue(QString value);
+    void addConsoleOutput(QString text);
+    void addTargetOutput(QString text);
+    void addLogOutput(QString text);
+    void addErrorText(QString text);
+    void addLocals(GdbMiValue localVars);
+    void addExprValue(QString value);
     void addText(const QString &text);
 
 private:

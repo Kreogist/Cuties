@@ -24,6 +24,7 @@
 
 class QToolBar;
 class QToolButton;
+class GdbController;
 
 class KCDebugControlPanel : public QDockWidget
 {

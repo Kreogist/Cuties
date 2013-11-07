@@ -27,8 +27,7 @@
 
 #include "kchighlighter.h"
 #include "kccompileoutputreceiver.h"
-#include "gdb.h"
-#include "dbgoutputreceiver.h"
+#include "gdbcontroller.h"
 
 class KCCodeEditor;
 
@@ -54,13 +53,12 @@ public:
     explicit KCLanguageMode(QWidget *parent = 0);
     bool compilerIsNull();
     void compile();
-    gdb *startDebug();
+    GdbController *startDebug();
     void setMode(const modeType &type);
     void setFileSuffix(const QString &suffix);
 
     KCCompileOutputReceiver *getCompilerReceiver() const;
-    dbgOutputReceiver *getDbgReceiver() const;
-    gdb *getGdbInstance() const;
+    GdbController *getGdbController() const;
 
 signals:
     void compileSuccessfully(QString execFileName);
@@ -86,8 +84,7 @@ private:
     compileState state;
     QReadWriteLock stateLock;
 
-    gdb *gdbInstance;
-    dbgOutputReceiver *dbgReceiver;
+    GdbController *gdbControllerInstance;
 
     QMetaObject::Connection compilerFinishedConnection;
 };

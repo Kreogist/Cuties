@@ -1130,16 +1130,14 @@ void MainWindow::connectDebugDockWithCurrEditor()
 {
     KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
 
-    dbgOutputReceiver *dbgReceiver=currLangMode->getDbgReceiver();
-    if(dbgReceiver!=NULL)
-    {
-        debugCommandIO->setDocument(dbgReceiver->getTextStreamOutput());
-    }
+    GdbController *gdbControllerInstance=currLangMode->getGdbController();
 
-    gdb *gdbInstance=currLangMode->getGdbInstance();
-    if(gdbInstance!=NULL)
+    if(gdbControllerInstance!=NULL)
     {
-        debugCommandIO->setGdbInstance(gdbInstance);
+        QSharedPointer<dbgOutputReceiver> dbgOutputs=gdbControllerInstance->getDbgOutputs();
+        debugCommandIO->setDocument(dbgOutputs->getTextStreamOutput());
+
+        debugCommandIO->setGdbInstance(gdbControllerInstance);
     }
 }
 

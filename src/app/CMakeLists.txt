@@ -37,7 +37,7 @@ set(SRC_LIST ${SRC_LIST} textcharformatmap.cpp )
 set(SRC_LIST ${SRC_LIST} gcc.cpp )
 set(SRC_LIST ${SRC_LIST} kctabmanager.cpp )
 set(SRC_LIST ${SRC_LIST} kccompiledock.cpp )
-set(SRC_LIST ${SRC_LIST} gdb.cpp )
+set(SRC_LIST ${SRC_LIST} gdbcontroller.cpp )
 set(SRC_LIST ${SRC_LIST} kcmainwindow.cpp )
 set(SRC_LIST ${SRC_LIST} gdbmivalue.cpp )
 set(SRC_LIST ${SRC_LIST} kcmarkpanel.cpp )
@@ -111,3 +111,9 @@ configure_file(default.style ${PROJECT_BINARY_DIR}/default.style COPYONLY)
 configure_file(DefaultColorConfig.ini ${PROJECT_BINARY_DIR}/DefaultColorConfig.ini COPYONLY)
 
 add_subdirectory(translations)
+
+#install
+install(TARGETS ${PROJECT_NAME}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES default.style DefaultColorConfig.ini
+        DESTINATION ${CMAKE_INSTALL_PREFIX})

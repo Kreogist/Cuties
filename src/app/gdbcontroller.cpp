@@ -17,39 +17,34 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "gdb.h"
+#include "gdbcontroller.h"
 
 #ifdef Q_OS_UNIX
-QString gdb::gdbPath="/usr/bin/gdb";
+QString GdbController::gdbPath="/usr/bin/gdb";
 #endif
 
 #ifdef Q_OS_WIN32
 QString gdb::gdbPath="c:\\MinGW\\bin\\gdb";
 #endif
 
-bool gdb::checkResult=false;
+bool GdbController::checkResult=false;
 
 static bool isAnsycChar(const char &c)
 {
     return (c >= 'a' && c <= 'z') || c == '-';
 }
 
-gdb::gdb(QObject *parent) :
-    QProcess(parent)
+GdbController::GdbController(QObject *parent) :
+    QObject(parent)
 {
+    dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
-    connect(this,
-            SIGNAL(readyReadStandardOutput()),
-            SLOT(readGdbStandardOutput()));
-    connect(this,
-            SIGNAL(readyReadStandardError()),
-            SLOT(readGdbStandardError()));
 }
 
-void gdb::readGdbStandardOutput()
+void GdbController::readGdbStandardOutput()
 {
     char buf[1000];
-    while(readLine(buf,1000)>0)
+    while(gdbProcess->readLine(buf,1000)>0)
     {
         QString _msg=QString::fromUtf8(buf);
         _msg.remove('\n');
@@ -60,7 +55,7 @@ void gdb::readGdbStandardOutput()
     }
 }
 
-void gdb::parseLine(const QString &_msg)
+void GdbController::parseLine(const QString &_msg)
 {
     if(_msg.isEmpty() || _msg.contains("(gdb)"))
     {
@@ -109,12 +104,12 @@ void gdb::parseLine(const QString &_msg)
             }
             if(result.getName() == "locals")
             {
-                emit locals(result);
+                dbgOutputs->addLocals(result);
                 break;
             }
             if(result.getName() == "value")
             {
-                emit exprValue(result.getValue());
+                dbgOutputs->addExprValue(result.getValue());
                 break;
             }
         }
@@ -134,7 +129,7 @@ void gdb::parseLine(const QString &_msg)
 
             result.build(begin,end);
 
-            emit errorOccured(result.getValue()+"\n");
+            dbgOutputs->addErrorText(result.getValue()+"\n");
         }
         else
         {
@@ -184,21 +179,21 @@ void gdb::parseLine(const QString &_msg)
     case '~':
     {
         begin++;
-        emit consoleOutputStream(parseOutputStream(begin,end));
+        dbgOutputs->addConsoleOutput(parseOutputStream(begin,end));
 
         break;
     }
     case '@':
     {
         begin++;
-        emit targetOutputStream(parseOutputStream(begin,end));
+        dbgOutputs->addTargetOutput(parseOutputStream(begin,end));
 
         break;
     }
     case '&':
     {
         begin++;
-        emit logOutputStream(parseOutputStream(begin,end));
+        dbgOutputs->addLogOutput(parseOutputStream(begin,end));
 
         break;
     }
@@ -209,11 +204,11 @@ void gdb::parseLine(const QString &_msg)
     }
     default:
         //program that is being debuged outputs
-        emit targetOutputStream(_msg+'\n');
+        dbgOutputs->addTargetOutput(_msg+'\n');
     }
 }
 
-QString gdb::parseOutputStream(const QChar *begin, const QChar *end)
+QString GdbController::parseOutputStream(const QChar *begin, const QChar *end)
 {
     GdbMiValue result;
     result.build(begin,end);
@@ -221,7 +216,7 @@ QString gdb::parseOutputStream(const QChar *begin, const QChar *end)
     return result.getValue();
 }
 
-void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
+void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
 {
     bkpt_struct _tmp_bkpt;
 
@@ -255,32 +250,43 @@ void gdb::parseBkpt(const GdbMiValue &gmvBkpt)
 
 }
 
-const QVector<bkpt_struct> *gdb::getBkptVec() const
+const QVector<bkpt_struct> *GdbController::getBkptVec() const
 {
     return &bkptVec;
 }
 
-void gdb::setGDBPath(const QString &path)
+void GdbController::setGDBPath(const QString &path)
 {
     gdbPath=path;
     checkGDB();
 }
 
-bool gdb::checkGDB()
+bool GdbController::checkGDB()
 {
     QFileInfo _fileInfo(gdbPath);
 
     return checkResult=_fileInfo.exists() && _fileInfo.isExecutable();
 }
 
-bool gdb::runGDB(const QString &filePath)
+bool GdbController::runGDB(const QString &filePath)
 {
     if(checkResult)
     {
+        gdbProcess.reset(new QProcess(this));
         QStringList _arg;
         _arg<<filePath<<"--interpreter"<<"mi";
 
-        start(gdbPath,_arg);
+
+        connect(gdbProcess.data(),
+                SIGNAL(readyReadStandardOutput()),
+                this,
+                SLOT(readGdbStandardOutput()));
+        connect(gdbProcess.data(),
+                SIGNAL(readyReadStandardError()),
+                this,
+                SLOT(readGdbStandardError()));
+
+        gdbProcess->start(gdbPath,_arg);
 
         return true;
     }
@@ -290,24 +296,24 @@ bool gdb::runGDB(const QString &filePath)
     }
 }
 
-void gdb::quitGDB()
+void GdbController::quitGDB()
 {
-    write(qPrintable(QString("-gdb-exit\n")));
+    gdbProcess->write(qPrintable(QString("-gdb-exit\n")));
     //! TODO: too long waitting time if gdb doesn't quit.
-    waitForFinished();
+    gdbProcess->waitForFinished();
 
-    if(state() == QProcess::Running)
+    if(gdbProcess->state() == QProcess::Running)
     {
         //gdb doesn't quit till now, so we have to kill it.
-        this->kill();
+        gdbProcess->kill();
     }
 }
 
-void gdb::readGdbStandardError()
+void GdbController::readGdbStandardError()
 {
-    QByteArray err = readAllStandardError();
+    QByteArray err = gdbProcess->readAllStandardError();
 
-    emit errorOccured(QString(err));
+    dbgOutputs->addErrorText(QString(err));
 }
 
 /*!
@@ -315,11 +321,11 @@ void gdb::readGdbStandardError()
  *!
  *!The breakpoint number is not in effect until it has been hit count times.
  *! */
-void gdb::setBreakPoint(const QString &fileName,
+void GdbController::setBreakPoint(const QString &fileName,
                         const int &lineNum,
                         const int &count)
 {
-    write(qPrintable(QString("-break-insert ")+
+    gdbProcess->write(qPrintable(QString("-break-insert ")+
                      fileName+":"+
                      QString::number(lineNum)+" "+
                      QString::number(count)+"\n"));
@@ -329,9 +335,9 @@ void gdb::setBreakPoint(const QString &fileName,
  * \brief set the break point by the function's name.
  * \param functionName  the name of the function
  */
-void gdb::setBreakPoint(const QString &functionName)
+void GdbController::setBreakPoint(const QString &functionName)
 {
-    write(qPrintable(QString("-break-insert ")+
+    gdbProcess->write(qPrintable(QString("-break-insert ")+
                      functionName+"\n"));
 }
 
@@ -339,9 +345,9 @@ void gdb::setBreakPoint(const QString &functionName)
 /*!
  * \brief Breakpoint number will stop the program only if the condition in expr is true.
  */
-void gdb::setBreakCondition(const int &number, const QString &expr)
+void GdbController::setBreakCondition(const int &number, const QString &expr)
 {
-    write(qPrintable(QString("-break-condition ")+
+    gdbProcess->write(qPrintable(QString("-break-condition ")+
                      QString::number(number)+" "
                      +expr+"\n"));
 }
@@ -350,9 +356,9 @@ void gdb::setBreakCondition(const int &number, const QString &expr)
  * \brief Create a watchpoint
  * \param var
  */
-void gdb::setWatchPoint(const QString &var)
+void GdbController::setWatchPoint(const QString &var)
 {
-    write(qPrintable(QString("-break-watch ")+
+    gdbProcess->write(qPrintable(QString("-break-watch ")+
                      var+"\n"));
 }
 
@@ -360,57 +366,57 @@ void gdb::setWatchPoint(const QString &var)
 /*!
  * \brief Asynchronous command. Starts execution of the inferior from the beginning. The inferior executes until either a breakpoint is encountered or the program exits.
  */
-void gdb::execRun()
+void GdbController::execRun()
 {
-    write(qPrintable(QString("-exec-run\n")));
+    gdbProcess->write(qPrintable(QString("-exec-run\n")));
 }
 
 /*!
  * \brief kill the inferior running program.
  */
-void gdb::execAbort()
+void GdbController::execAbort()
 {
-    write(qPrintable(QString("-exec-abort\n")));
+    gdbProcess->write(qPrintable(QString("-exec-abort\n")));
 }
 
 /*!
  * \brief Asynchronous command. Resumes the execution of the inferior program until a breakpoint is encountered, or until the inferior exits.
  */
-void gdb::execContinue()
+void GdbController::execContinue()
 {
-    write(qPrintable(QString("-exec-continue\n")));
+    gdbProcess->write(qPrintable(QString("-exec-continue\n")));
 }
 
 /*!
  * \brief Asynchronous command. Resumes the execution of the inferior program until the current function is exited. Displays the results returned by the function.
  */
-void gdb::execFinish()
+void GdbController::execFinish()
 {
-    write(qPrintable(QString("-exec-continue\n")));
+    gdbProcess->write(qPrintable(QString("-exec-continue\n")));
 }
 
 /*!
  * \brief Asynchronous command. Asynchronous command. Resumes execution of the inferior program, stopping when the beginning of the next source line is reached.
  */
-void gdb::execNext()
+void GdbController::execNext()
 {
-    write(qPrintable(QString("-exec-next\n")));
+    gdbProcess->write(qPrintable(QString("-exec-next\n")));
 }
 
 /*!
  * \brief Makes current function return immediately. Doesn't execute the inferior. Displays the new current frame.
  */
-void gdb::execReturn()
+void GdbController::execReturn()
 {
-    write(qPrintable(QString("-exec-return\n")));
+    gdbProcess->write(qPrintable(QString("-exec-return\n")));
 }
 
 /*!
  * \brief Makes current function return immediately. Doesn't execute the inferior. Displays the new current frame.
  */
-void gdb::execStepi()
+void GdbController::execStepi()
 {
-    write(qPrintable(QString("-exec-step-instruction\n")));
+    gdbProcess->write(qPrintable(QString("-exec-step-instruction\n")));
 }
 
 /*!
@@ -418,17 +424,28 @@ void gdb::execStepi()
  *
  *example: -exec-until recursive2.c:6
  */
-void gdb::execUntil(const QString &location)
+void GdbController::execUntil(const QString &location)
 {
-    write(qPrintable(QString("-exec-until ")+location+"\n"));
+    gdbProcess->write(qPrintable(QString("-exec-until ")+location+"\n"));
 }
 
-void gdb::stackListLocals()
+void GdbController::stackListLocals()
 {
-    write(qPrintable(QString("-stack-list-locals 1\n")));
+    gdbProcess->write(qPrintable(QString("-stack-list-locals 1\n")));
 }
 
-void gdb::evaluate(const QString &expr)
+void GdbController::evaluate(const QString &expr)
 {
-    write(qPrintable(QString("-data-evaluate-expression ")+expr+"\n"));
+    gdbProcess->write(qPrintable(QString("-data-evaluate-expression ")+expr+"\n"));
 }
+
+void GdbController::execGdbCommand(const QString &command)
+{
+    gdbProcess->write(qPrintable(command));
+}
+
+QSharedPointer<dbgOutputReceiver> GdbController::getDbgOutputs()
+{
+    return dbgOutputs;
+}
+

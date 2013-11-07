@@ -33,8 +33,7 @@ KCLanguageMode::KCLanguageMode(QWidget *parent) :
 {
     m_parent=qobject_cast<KCCodeEditor *>(parent);
     compilerReceiver=NULL;
-    dbgReceiver=NULL;
-    gdbInstance=NULL;
+    gdbControllerInstance=NULL;
 
     setCompileState(uncompiled);
     m_type=Invalid;
@@ -132,32 +131,21 @@ KCCompileOutputReceiver *KCLanguageMode::getCompilerReceiver() const
     return compilerReceiver;
 }
 
-dbgOutputReceiver *KCLanguageMode::getDbgReceiver() const
+GdbController *KCLanguageMode::getGdbController() const
 {
-    return dbgReceiver;
+    return gdbControllerInstance;
 }
 
-gdb *KCLanguageMode::getGdbInstance() const
+GdbController *KCLanguageMode::startDebug()
 {
-    return gdbInstance;
-}
-
-gdb *KCLanguageMode::startDebug()
-{
-    if(gdbInstance == NULL)
+    if(gdbControllerInstance == NULL)
     {
-        gdbInstance=new gdb(this);
+        gdbControllerInstance=new GdbController(this);
     }
 
-    if(dbgReceiver == NULL)
-    {
-        dbgReceiver=new dbgOutputReceiver(this);
-    }
+    gdbControllerInstance->runGDB(m_parent->execFileName);
 
-    connectGDBAndDbgReceiver();
-    gdbInstance->runGDB(m_parent->execFileName);
-
-    return gdbInstance;
+    return gdbControllerInstance;
 }
 
 void KCLanguageMode::onCompileFinished(bool hasError)
@@ -196,22 +184,6 @@ void KCLanguageMode::connectCompilerAndOutputReceiver()
                                        compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        compilerReceiver,&KCCompileOutputReceiver::onCompileFinished);
-}
-
-void KCLanguageMode::connectGDBAndDbgReceiver()
-{
-    gdbConnectionHandles.disConnectAll();
-
-    gdbConnectionHandles+=connect(gdbInstance,&gdb::errorOccured,
-                                  dbgReceiver,&dbgOutputReceiver::receiveError);
-    gdbConnectionHandles+=connect(gdbInstance,&gdb::consoleOutputStream,
-                                  dbgReceiver,&dbgOutputReceiver::receiveconsoleOutput);
-    gdbConnectionHandles+=connect(gdbInstance,&gdb::targetOutputStream,
-                                  dbgReceiver,&dbgOutputReceiver::receivetargetOutput);
-    gdbConnectionHandles+=connect(gdbInstance,&gdb::logOutputStream,
-                                  dbgReceiver,&dbgOutputReceiver::receivelogOutput);
-    gdbConnectionHandles+=connect(gdbInstance,&gdb::locals,
-                                  dbgReceiver,&dbgOutputReceiver::receiveLocals);
 }
 
 bool KCLanguageMode::checkIfIsCompiling()

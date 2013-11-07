@@ -39,7 +39,6 @@ SOURCES += \
     gcc.cpp \
     kctabmanager.cpp \
     kccompiledock.cpp \
-    gdb.cpp \
     kcmainwindow.cpp \
     gdbmivalue.cpp \
     kcmarkpanel.cpp \
@@ -93,7 +92,8 @@ SOURCES += \
     kcdebugcontrolpanel.cpp \
     kcfloattoolbar.cpp \
     kcfontconfigure.cpp \
-    kccodecompileprogress.cpp
+    kccodecompileprogress.cpp \
+    gdbcontroller.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -109,7 +109,6 @@ HEADERS += \
     gcc.h \
     kctabmanager.h \
     kccompiledock.h \
-    gdb.h \
     kcmainwindow.h \
     gdbmivalue.h \
     kcmarkpanel.h \
@@ -163,7 +162,8 @@ HEADERS += \
     kcdebugcontrolpanel.h \
     kcfloattoolbar.h \
     kcfontconfigure.h \
-    kccodecompileprogress.h
+    kccodecompileprogress.h \
+    gdbcontroller.h
 
 # Enable C++11
 CONFIG += c++11
