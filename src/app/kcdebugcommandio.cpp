@@ -23,7 +23,7 @@
 #include <QTextDocument>
 
 #include "kcplaintextbrowser.h"
-#include "gdb.h"
+#include "gdbcontroller.h"
 #include "kclanguageconfigure.h"
 
 #include "kcdebugcommandio.h"
@@ -80,7 +80,7 @@ void KCDebugCommandIO::setDocument(QTextDocument *document)
     debugOutputTextBrowser->setDocument(document);
 }
 
-void KCDebugCommandIO::setGdbInstance(gdb *gdbInstance)
+void KCDebugCommandIO::setGdbInstance(GdbController *gdbInstance)
 {
     instance=gdbInstance;
 }
@@ -98,6 +98,6 @@ void KCDebugCommandIO::retranslateAndSet()
 
 void KCDebugCommandIO::onCurrentIndexChanged(QString command)
 {
-    instance->write(qPrintable(command+'\n'));
+    instance->execGdbCommand(qPrintable(command+'\n'));
 }
 

@@ -44,27 +44,27 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     logFormat.setForeground(QBrush(Qt::yellow));
 }
 
-void dbgOutputReceiver::receiveError(QString text)
+void dbgOutputReceiver::addErrorText(QString text)
 {
     insertText(text,errorFormat);
 }
 
-void dbgOutputReceiver::receiveconsoleOutput(QString text)
+void dbgOutputReceiver::addConsoleOutput(QString text)
 {
     insertText(text,normalFormat);
 }
 
-void dbgOutputReceiver::receivetargetOutput(QString text)
+void dbgOutputReceiver::addTargetOutput(QString text)
 {
     insertText(text,targetFormat);
 }
 
-void dbgOutputReceiver::receivelogOutput(QString text)
+void dbgOutputReceiver::addLogOutput(QString text)
 {
     insertText(text,logFormat);
 }
 
-void dbgOutputReceiver::receiveLocals(GdbMiValue localVars)
+void dbgOutputReceiver::addLocals(GdbMiValue localVars)
 {
     localVarModel->clear();
 
@@ -83,7 +83,7 @@ void dbgOutputReceiver::receiveLocals(GdbMiValue localVars)
     }
 }
 
-void dbgOutputReceiver::receiveExprValue(QString value)
+void dbgOutputReceiver::addExprValue(QString value)
 {
 
 }

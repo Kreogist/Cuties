@@ -17,8 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GDB_H
-#define GDB_H
+#ifndef GDBCONTROLLER_H
+#define GDBCONTROLLER_H
 
 
 #include <QProcess>
@@ -27,9 +27,12 @@
 #include <QStringList>
 #include <QCharRef>
 #include <QVector>
+#include <QScopedPointer>
+#include <QSharedPointer>
 #include <QDebug>
 
 #include "gdbmivalue.h"
+#include "dbgoutputreceiver.h"
 
 struct bkpt_struct
 {
@@ -47,11 +50,11 @@ struct bkpt_struct
     QString original_location;
 };
 
-class gdb : public QProcess
+class GdbController : public QObject
 {
     Q_OBJECT
 public:
-    explicit gdb(QObject *parent = 0);
+    explicit GdbController(QObject *parent = 0);
 
     static void setGDBPath(const QString &path);
     static bool checkGDB();
@@ -62,30 +65,7 @@ public:
 
     const QVector<bkpt_struct> *getBkptVec() const;
 
-signals:
-    void errorOccured(QString errMsg);
-
-    /* The console output stream contains text
-     * that should be displayed in the CLI console window.
-     * It contains the textual responses to CLI commands.
-     */
-    void consoleOutputStream(QString consoleOutput);
-
-    /* The target output stream contains any textual output
-     * from the running target.
-     */
-    void targetOutputStream(QString targetOutput);
-
-    /* The log stream contains debugging messages being produced by
-     * GDB's internals.
-     */
-    void logOutputStream(QString logOutput);
-
-    /* This signal is emited with informations about local variables
-     */
-    void locals(GdbMiValue locals);
-
-    void exprValue(QString value);
+    QSharedPointer<dbgOutputReceiver> getDbgOutputs();
 
 public slots:
     void readGdbStandardError();
@@ -117,6 +97,9 @@ public slots:
     //Data Evaluate
     void evaluate(const QString &expr);
 
+    //run gdb command
+    void execGdbCommand(const QString &command);
+
 private:
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin,const QChar *end);
@@ -125,6 +108,9 @@ private:
     static QString gdbPath;
     static bool checkResult;
     QVector<bkpt_struct> bkptVec;
+
+    QScopedPointer<QProcess> gdbProcess;
+    QSharedPointer<dbgOutputReceiver> dbgOutputs;
 };
 
-#endif // GDB_H
+#endif // GDBCONTROLLER_H

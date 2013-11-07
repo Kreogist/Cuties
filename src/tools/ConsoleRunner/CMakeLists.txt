@@ -18,3 +18,6 @@ elseif(APPLE)
     message("Building on Apple")
 endif()
 
+#install
+install(TARGETS KciConsoleRunner
+        DESTINATION ${CMAKE_INSTALL_PREFIX})
