@@ -849,8 +849,15 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     if(e->text()=="\"")
     {
-        QPlainTextEdit::keyPressEvent(e);
         KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+        if(_textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
+           currData->getQuotationStatus()!=-1)
+        {
+            _textCursor.movePosition(QTextCursor::Right);
+            setTextCursor(_textCursor);
+            return;
+        }
+        QPlainTextEdit::keyPressEvent(e);
         if(_textCursor.document()->characterAt(_textCursor.position()-1)!=QChar('\\') &&
            currData->getQuotationStatus()==-1)
         {
