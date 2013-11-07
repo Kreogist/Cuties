@@ -35,12 +35,15 @@ protected:
     void parseParenthesesInfo(const QString &text,
                               KCTextBlockData *data,
                               char character);
-    void parseQuotationInfo(const QString &text,
-                            KCTextBlockData *data);
+    int parseQuotationInfo(const QString &text,
+                           KCTextBlockData *data);
     virtual void KCHighlightBlock(const QString &text)
     {
         Q_UNUSED(text);
     }
+
+private:
+    int quotationPaired;
 };
 
 #endif // KCHIGHLIGHTER_H

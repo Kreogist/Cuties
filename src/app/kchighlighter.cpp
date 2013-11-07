@@ -49,8 +49,24 @@ void KCHighlighter::highlightBlock(const QString &text)
      * For quotation search, we need to search only one char.
      * But we need to search for two times.
      */
+
     data->resetQuotationInfos();
-    parseQuotationInfo(text, data);
+    quotationPaired=parseQuotationInfo(text, data);
+
+    /*
+     * For single line comment, we have a new way to check it.
+     * Suppose there have a comment, and we only have to know
+     * that whether there is in a pair of quatations. And
+     * fortunately, the line comment can be at only the right.
+     */
+    if(quotationPaired>-1)
+    {
+        data->setLineCommentPos(text.indexOf("//", quotationPaired));
+    }
+    else
+    {
+        data->setLineCommentPos(-1);
+    }
 
     data->resetParentheseInfos();
     for(int i=0,l=strlen(charNeedParentheses);
@@ -63,8 +79,8 @@ void KCHighlighter::highlightBlock(const QString &text)
     KCHighlightBlock(text);
 }
 
-void KCHighlighter::parseQuotationInfo(const QString &text,
-                                       KCTextBlockData *data)
+int KCHighlighter::parseQuotationInfo(const QString &text,
+                                      KCTextBlockData *data)
 {
     int firstIndex=text.indexOf('\"');
     if(firstIndex>-1)
@@ -89,7 +105,6 @@ void KCHighlighter::parseQuotationInfo(const QString &text,
                 }
                 findRealSecond=true;
             }
-
             data->insertQuotationInfo(firstIndex, secondIndex);
             /*
              * Here don't delete the if sentence.
@@ -104,7 +119,9 @@ void KCHighlighter::parseQuotationInfo(const QString &text,
             }
             firstIndex=text.indexOf('\"', secondIndex+1);
         }
+        return secondIndex;
     }
+    return -1;
 }
 
 void KCHighlighter::parseParenthesesInfo(const QString &text,

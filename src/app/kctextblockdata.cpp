@@ -176,3 +176,14 @@ void KCTextBlockData::setMarkInfo(const markUnit &value)
 {
     markInfo = value;
 }
+
+int KCTextBlockData::getLineCommentPos() const
+{
+    return lineCommentPos;
+}
+
+void KCTextBlockData::setLineCommentPos(int value)
+{
+    lineCommentPos = value;
+}
+

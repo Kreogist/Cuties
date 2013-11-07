@@ -85,6 +85,9 @@ public:
     markUnit getMarkInfo() const;
     void setMarkInfo(const markUnit &value);
 
+    int getLineCommentPos() const;
+    void setLineCommentPos(int value);
+
 private:
     unsigned long long int searchCode;
     bool needSearchAgain;
@@ -93,6 +96,7 @@ private:
     QList<parenthesesInfo> parenthesesInfos;
     QList<quotationInfo> quotationInfos;
     int codeLevel;
+    int lineCommentPos;
     markUnit markInfo;
 };
 

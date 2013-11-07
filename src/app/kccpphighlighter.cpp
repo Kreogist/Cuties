@@ -77,12 +77,6 @@ KCCppHighlighter::KCCppHighlighter(QObject *parent) :
     hlrSpTypes.type_name="todo";
     hlrSpTypes.regexp.setPattern(QString("(TODO|FIXME|BUG)([:]?)"));
     rules<<hlrSpTypes;
-
-    //Single Line Comments, this must be the last one
-    hlrSpTypes.type_name="comment";
-    hlrSpTypes.regexp.setPattern(QString("//.{0,}"));
-    rules<<hlrSpTypes;
-
 }
 
 void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
@@ -100,6 +94,7 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
 
     while(startIndex > -1)
     {
+
         int endIndex = text.indexOf(endExpression , startIndex);
         int conmmentLength;
         if(endIndex == -1)
@@ -161,6 +156,14 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
         }
     }
     data->setCodeLevel(baseLevel);
+
+    //Highlight single line comment
+    if(data->getLineCommentPos()!=-1)
+    {
+        setFormat(data->getLineCommentPos(),
+                  text.length()-data->getLineCommentPos(),
+                  instance->getTextCharFormat("comment"));
+    }
 
     stringHighlightBlock(text);
     conmmentHighlightBlock(text);
