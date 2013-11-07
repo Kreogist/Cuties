@@ -53,23 +53,6 @@ void KCHighlighter::highlightBlock(const QString &text)
     data->resetQuotationInfos();
     quotationPaired=parseQuotationInfo(text, data);
 
-    /*
-     * For single line comment, we have a new way to check it.
-     * Suppose there have a comment, and we only have to know
-     * that whether there is in a pair of quatations. And
-     * fortunately, the line comment can be at only the right.
-     * So, if the quotations are paired well, there can be a
-     * single line comment. But if not, it's impossible.
-     */
-    if(quotationPaired>-1)
-    {
-        data->setLineCommentPos(text.indexOf("//", quotationPaired));
-    }
-    else
-    {
-        data->setLineCommentPos(-1);
-    }
-
     data->resetParentheseInfos();
     for(int i=0,l=strlen(charNeedParentheses);
         i<l;
@@ -84,12 +67,14 @@ void KCHighlighter::highlightBlock(const QString &text)
 int KCHighlighter::parseQuotationInfo(const QString &text,
                                       KCTextBlockData *data)
 {
+    int singleCommentBound=text.indexOf("//");
     int firstIndex=text.indexOf('\"');
-    if(firstIndex>-1)
+    bool needToCheckComment=!(singleCommentBound==-1);
+    if(firstIndex>-1 && (needToCheckComment & (firstIndex < singleCommentBound)))
     {
         int secondIndex;
         bool findRealSecond;
-        while(firstIndex>-1)
+        while(firstIndex>-1 && (needToCheckComment & (firstIndex < singleCommentBound)))
         {
             if(text.at(firstIndex-1)==QChar('\\'))
             {
@@ -108,22 +93,37 @@ int KCHighlighter::parseQuotationInfo(const QString &text,
                 findRealSecond=true;
             }
             data->insertQuotationInfo(firstIndex, secondIndex);
-            /*
-             * Here don't delete the if sentence.
-             * If there're odd quotations, the second quotation will
-             * be -1. This time firstIndex will search from 0. So we
-             * need to check out whether it should search for the
-             * firstIndex.
-             */
-            if(secondIndex==-1)
+            if(secondIndex == -1)
             {
+                /*
+                 * Here it means: we have the first quotation, but
+                 * we don't have the second one. so the '//' is still
+                 * in a string. Ignore it.
+                 */
+                data->setLineCommentPos(-1);
                 break;
+            }
+            /*
+             * So here we do search a second quotation, we have to check
+             * the quotation is forward of the comment line or behind.
+             */
+            if(secondIndex > singleCommentBound)
+            {
+                /*
+                 * Here means the '//' is still in a string, but unlike above,
+                 * this string has been finished. So Ignore it, and try to find
+                 * next '//'.
+                 */
+                singleCommentBound=text.indexOf("//", secondIndex+1);
+                needToCheckComment=!(singleCommentBound==-1);
             }
             firstIndex=text.indexOf('\"', secondIndex+1);
         }
+        data->setLineCommentPos(singleCommentBound);
         data->setQuotationStatus(secondIndex);
         return secondIndex;
     }
+    data->setLineCommentPos(singleCommentBound);
     data->setQuotationStatus(-1);
     return -1;
 }
