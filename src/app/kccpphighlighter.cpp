@@ -83,6 +83,7 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
 {
     QRegExp startExpression("/\\*");
     QRegExp endExpression("\\*/");
+    KCTextBlockData *data=static_cast<KCTextBlockData *>(currentBlockUserData());
 
     setCurrentBlockState(0);
 
@@ -92,10 +93,47 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
         startIndex=text.indexOf(startExpression);
     }
 
+    bool searchNext;
     while(startIndex > -1)
     {
-
+        searchNext=false;
+        for(auto i=data->getFirstQuotationInfo(),
+            l=data->getEndQuotationInfo();
+            i<l;
+            i++)
+        {
+            if(startIndex >= i->beginPos && startIndex <= i->endPos)
+            {
+                startIndex=text.indexOf(startExpression, startIndex+2);
+                searchNext=true;
+                break;
+            }
+        }
+        if(searchNext)
+        {
+            continue;
+        }
         int endIndex = text.indexOf(endExpression , startIndex);
+        while(endIndex>-1)
+        {
+            searchNext=false;
+            for(auto i=data->getFirstQuotationInfo(),
+                l=data->getEndQuotationInfo();
+                i<l;
+                i++)
+            {
+                if(endIndex >= i->beginPos && endIndex <= i->endPos)
+                {
+                    endIndex=text.indexOf(endExpression, endIndex+2);
+                    searchNext=true;
+                    break;
+                }
+            }
+            if(searchNext)
+            {
+                continue;
+            }
+        }
         int conmmentLength;
         if(endIndex == -1)
         {
@@ -107,7 +145,7 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
             conmmentLength = endIndex - startIndex +endExpression.matchedLength();
         }
         setFormat(startIndex,conmmentLength,instance->getTextCharFormat("comment"));
-        startIndex = text.indexOf(startExpression,startIndex + conmmentLength);
+        startIndex = text.indexOf(startExpression, startIndex+conmmentLength);
     }
 }
 
