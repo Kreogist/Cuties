@@ -60,32 +60,32 @@ int main(int argc, char *argv[])
     printf("Please wait...");
 #endif
 
-    char *program_name=new char[l];
-    memset(program_name,0,sizeof(char)*l);
-    program_name[0]='\"';
-    strcat(program_name,argv[1]);
+    char *programName=new char[l];
+    memset(programName,0,sizeof(char)*l);
+    programName[0]='\"';
+    strcat(programName,argv[1]);
     for(int i=2; i<argc; i++)
     {
-        strcat(program_name," ");
-        strcat(program_name,argv[i]);
+        strcat(programName," ");
+        strcat(programName,argv[i]);
     }
-    strcat(program_name,"\"");
+    strcat(programName,"\"");
 
     //get start time
-    double exec_time= gettime();
+    double execTime= gettime();
 
 #ifdef _OS_WIN32_
     system("cls");
 #endif
 
     //run program
-    system(program_name);
+    system(programName);
 
     //get end time
-    exec_time= gettime()-exec_time;
+    execTime= gettime()-execTime;
 
     printf("\n------------------------------------------------------------\n");
-    printf("Program execution time : %0.3lf s",exec_time);
+    printf("Program execution time : %0.3lf s",execTime);
 
     printf("\nPress "
 

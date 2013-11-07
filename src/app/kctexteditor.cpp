@@ -899,6 +899,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     {
         if(_textCursor.position()>0)
         {
+
             if(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
                     _textCursor.document()->characterAt(_textCursor.position()) == '}')
             {
