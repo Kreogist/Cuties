@@ -70,9 +70,26 @@ void KCHighlighter::parseQuotationInfo(const QString &text,
     if(firstIndex>-1)
     {
         int secondIndex;
+        bool findRealSecond;
         while(firstIndex>-1)
         {
+            if(text.at(firstIndex-1)==QChar('\\'))
+            {
+                firstIndex=text.indexOf('\"',firstIndex+1);
+                continue;
+            }
+            findRealSecond=false;
             secondIndex=text.indexOf('\"', firstIndex+1);
+            while((!findRealSecond) && secondIndex>-1)
+            {
+                if(text.at(secondIndex-1)==QChar('\\'))
+                {
+                    secondIndex=text.indexOf('\"', secondIndex+1);
+                    continue;
+                }
+                findRealSecond=true;
+            }
+
             data->insertQuotationInfo(firstIndex, secondIndex);
             /*
              * Here don't delete the if sentence.
