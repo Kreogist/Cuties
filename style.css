@@ -247,13 +247,15 @@ a:active{
 
 .context-container{
     z-index:1;
-    left:50px;
     width:80%;
-    margin-left:65px;
+    margin-left:107px;
+	margin-bottom:50px;
     min-height:560px;
     padding-left:40px;
-    padding-right:10px;
-    position:absolute;
+    padding-right:40px;
+	padding-bottom:1em;
+	padding-top:1em;
+/*    position:absolute;*/
     background:rgba(255,255,255,0.4);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
 }
