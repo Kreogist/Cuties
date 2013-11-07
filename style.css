@@ -60,7 +60,7 @@ a:active{
     padding-left:13px;
 	padding-top:0px;
 	padding-bottom:0px;
-	background: rgba(0,0,0,0.8);
+	background:rgba(0,0,0,0.8);
 	background-position: center;
     background-image: url("kreogist.png");
 	background-repeat: no-repeat; 
@@ -144,7 +144,7 @@ a:active{
     z-index:8888;
     display:flex;
     flex-direction:column;
-    justify-content: center;  
+    justify-content: center;
     align-items: center;
     position:absolute;
     top:70px;
@@ -219,7 +219,7 @@ a:active{
 .left-btn{
     display:flex;
     flex-direction:column;
-    justify-content: center;  
+    justify-content: center;
     align-items: center;
     width:64px;
     height:64px;
@@ -308,7 +308,7 @@ a:active{
 	box-pack:justify;
 	box-align:stretch;
     box-orient:vertical;
-    
+
     width:100%;
     margin-left:8px;
     margin-right:8px;
