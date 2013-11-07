@@ -58,6 +58,8 @@ void KCHighlighter::highlightBlock(const QString &text)
      * Suppose there have a comment, and we only have to know
      * that whether there is in a pair of quatations. And
      * fortunately, the line comment can be at only the right.
+     * So, if the quotations are paired well, there can be a
+     * single line comment. But if not, it's impossible.
      */
     if(quotationPaired>-1)
     {
