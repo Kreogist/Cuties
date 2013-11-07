@@ -96,6 +96,12 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
     bool searchNext;
     while(startIndex > -1)
     {
+        if(data->getLineCommentPos() > -1 &&
+           startIndex > data->getLineCommentPos())
+        {
+            startIndex=text.indexOf(startExpression, startIndex+2);
+            continue;
+        }
         searchNext=false;
         for(auto i=data->getFirstQuotationInfo(),
             l=data->getEndQuotationInfo();
@@ -116,6 +122,12 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
         int endIndex = text.indexOf(endExpression , startIndex);
         while(endIndex>-1)
         {
+            if(data->getLineCommentPos() > -1 &&
+               endIndex > data->getLineCommentPos())
+            {
+                endIndex=text.indexOf(endExpression, endIndex+2);
+                continue;
+            }
             searchNext=false;
             for(auto i=data->getFirstQuotationInfo(),
                 l=data->getEndQuotationInfo();

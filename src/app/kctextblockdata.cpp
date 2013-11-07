@@ -127,11 +127,6 @@ QList<quotationInfo>::iterator KCTextBlockData::getEndQuotationInfo()
     return quotationInfos.end();
 }
 
-bool KCTextBlockData::hasNoQuotation()
-{
-    return quotationInfos.isEmpty();
-}
-
 void KCTextBlockData::insertParenthesesInfo(const int &pos,
         const char &character)
 {

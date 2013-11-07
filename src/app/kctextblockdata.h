@@ -73,7 +73,6 @@ public:
     void resetQuotationInfos();
     QList<quotationInfo>::iterator getFirstQuotationInfo();
     QList<quotationInfo>::iterator getEndQuotationInfo();
-    bool hasNoQuotation();
 
     void insertParenthesesInfo(const int &pos, const char &character);
     void resetParentheseInfos();
