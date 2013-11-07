@@ -227,8 +227,6 @@ void MainWindow::createActions()
                 QString(tr("Set the input file, compile and run the document, and show output file."));
     */
 
-    //Debug -> Start Debug
-
     //Window -> Window Split
     /*act[mnuWindowSplit]=new QAction(tr("Split Window"),this);
     actStatusTips[mnuWindowSplit]=QString(tr("Split the window into two part."));*/
@@ -660,16 +658,16 @@ void MainWindow::setDocOpenMenuState(bool state)
     }
     menuMainWindowItem[menuExecute]->menuAction()->setEnabled(state);
     menuMainWindowItem[menuExecute]->menuAction()->setVisible(state);
-    /*
-        //Debug Menu
-        for(i=mnuDebugStart;i<=mnuDebugRemoveWatch;i++)
-        {
-            act[i]->setEnabled(state);
-            act[i]->setVisible(state);
-        }
-        menuMainWindowItem[mnuDebug]->menuAction()->setEnabled(state);
-        menuMainWindowItem[mnuDebug]->menuAction()->setVisible(state);
-    */
+
+    //Debug Menu
+    for(i=actionDebugStart;i<=actionDebugRemoveWatch;i++)
+    {
+        actionMainWindowItem[i]->setEnabled(state);
+        actionMainWindowItem[i]->setVisible(state);
+    }
+    menuMainWindowItem[menuDebug]->menuAction()->setEnabled(state);
+    menuMainWindowItem[menuDebug]->menuAction()->setVisible(state);
+
     //Window Menu
     for(i=actionWindowNext; i<=actionWindowNext; i++)
     {
@@ -763,7 +761,7 @@ void MainWindow::saveSettings()
 
     //Save ALL settings.
     float deskWidth=float(QApplication::desktop()->width()),
-            deskHeight=float(QApplication::desktop()->height());
+          deskHeight=float(QApplication::desktop()->height());
 
     settings.beginGroup("MainWindow");
     settings.setValue("x",float(lastPositionX)/deskWidth);

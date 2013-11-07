@@ -74,6 +74,14 @@ void KCTextBlockData::insertMatchedTextPositions(const int &pos,
     matchedTextPositions.insert(i+1,newElement);
 }
 
+void KCTextBlockData::insertQuotationInfo(const int &beginPos, const int &endPos)
+{
+    quotationInfo newElement;
+    newElement.beginPos=beginPos;
+    newElement.endPos=endPos;
+    quotationInfos.append(newElement);
+}
+
 bool KCTextBlockData::isSearched(const unsigned long long &searchCodeNow)
 {
     return (searchCodeNow==searchCode) && (!needSearchAgain);
@@ -102,6 +110,21 @@ bool KCTextBlockData::hasMatched()
 void KCTextBlockData::resetParentheseInfos()
 {
     parenthesesInfos.clear();
+}
+
+void KCTextBlockData::resetQuotationInfos()
+{
+    quotationInfos.clear();
+}
+
+QList<quotationInfo>::iterator KCTextBlockData::getFirstQuotationInfo()
+{
+    return quotationInfos.begin();
+}
+
+QList<quotationInfo>::iterator KCTextBlockData::getEndQuotationInfo()
+{
+    return quotationInfos.end();
 }
 
 void KCTextBlockData::insertParenthesesInfo(const int &pos,

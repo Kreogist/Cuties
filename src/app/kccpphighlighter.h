@@ -37,6 +37,7 @@ private:
     QList<highlight_rule> rules;
 
     textCharFormatMap *instance;
+    void stringHighlightBlock(const QString &text);
     void conmmentHighlightBlock(const QString &text);
 };
 

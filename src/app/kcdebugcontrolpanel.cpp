@@ -105,6 +105,8 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
             this,SIGNAL(requireStartDebug()));
     connect(debugControlButton[debugStop],SIGNAL(clicked()),
             this,SIGNAL(requireStopDebug()));
+    connect(debugControlButton[debugRunToCursor], SIGNAL(clicked()),
+            this, SIGNAL(requireRunToCursor()));
 
     QString debugCursorControlIconPath[debugCursorControlButtonCount];
     debugCursorControlIconPath[debugNext]=QString(":/DebugToolBar/image/Debug Docks/next.png");
@@ -145,8 +147,23 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
 
+    connect(debugCursorControlButton[debugNext], SIGNAL(clicked()),
+            this, SIGNAL(requireDebugNext()));
+    connect(debugCursorControlButton[debugContinue], SIGNAL(clicked()),
+            this, SIGNAL(requireDebugContinue()));
+    connect(debugCursorControlButton[debugStep], SIGNAL(clicked()),
+            this, SIGNAL(requireDebugStep()));
+    connect(debugCursorControlButton[debugNexti], SIGNAL(clicked()),
+            this, SIGNAL(requireDebugNexti()));
+    connect(debugCursorControlButton[debugStepi], SIGNAL(clicked()),
+            this, SIGNAL(requireDebugStepi()));
+    connect(debugCursorControlButton[debugReturn], SIGNAL(clicked()),
+            this, SIGNAL(requireDebugReturn()));
+
+
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugControlPanel::retranslateAndSet);
+
 }
 
 void KCDebugControlPanel::retranslate()

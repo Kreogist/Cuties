@@ -31,6 +31,12 @@ struct matchedInfo
     int matchedLength;
 };
 
+struct quotationInfo
+{
+    int beginPos;
+    int endPos;
+};
+
 struct parenthesesInfo
 {
     char character;
@@ -63,6 +69,11 @@ public:
     bool hasMatched();
     void onBlockChanged();
 
+    void insertQuotationInfo(const int &beginPos, const int &endPos);
+    void resetQuotationInfos();
+    QList<quotationInfo>::iterator getFirstQuotationInfo();
+    QList<quotationInfo>::iterator getEndQuotationInfo();
+
     void insertParenthesesInfo(const int &pos, const char &character);
     void resetParentheseInfos();
     QList<parenthesesInfo>::iterator getFirstParenthesesInfo();
@@ -80,6 +91,7 @@ private:
     QMutex mutex;
     QList<matchedInfo> matchedTextPositions;
     QList<parenthesesInfo> parenthesesInfos;
+    QList<quotationInfo> quotationInfos;
     int codeLevel;
     markUnit markInfo;
 };

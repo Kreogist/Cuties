@@ -42,16 +42,11 @@
 static inline void setApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.2.0.0"));
+    QApplication::setApplicationVersion(QString("0.2.1.0"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.png"));
-}
-
-static inline void initApplicationFonts()
-{
-
 }
 
 static inline void initApplicationSettings()
@@ -206,8 +201,6 @@ int main(int argc, char *argv[])
     splash->raise();
     app.processEvents();
 
-    initApplicationFonts();
-    app.processEvents();
     initApplicationSettings();
     app.processEvents();
 

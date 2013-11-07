@@ -78,11 +78,6 @@ KCCppHighlighter::KCCppHighlighter(QObject *parent) :
     hlrSpTypes.regexp.setPattern(QString("(TODO|FIXME|BUG)([:]?)"));
     rules<<hlrSpTypes;
 
-    //String
-    hlrSpTypes.type_name="string";
-    hlrSpTypes.regexp.setPattern("\"([^\"']*)\"");
-    rules<<hlrSpTypes;
-
     //Single Line Comments, this must be the last one
     hlrSpTypes.type_name="comment";
     hlrSpTypes.regexp.setPattern(QString("//.{0,}"));
@@ -97,13 +92,13 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
 
     setCurrentBlockState(0);
 
-    int startIndex = 0;
+    int startIndex=0;
     if(previousBlockState() != 1)
     {
-        startIndex = text.indexOf(startExpression);
+        startIndex=text.indexOf(startExpression);
     }
 
-    while(startIndex >= 0)
+    while(startIndex > -1)
     {
         int endIndex = text.indexOf(endExpression , startIndex);
         int conmmentLength;
@@ -167,5 +162,29 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
     }
     data->setCodeLevel(baseLevel);
 
+    stringHighlightBlock(text);
     conmmentHighlightBlock(text);
+}
+
+void KCCppHighlighter::stringHighlightBlock(const QString &text)
+{
+    KCTextBlockData *data=static_cast<KCTextBlockData *>(currentBlockUserData());
+    for(auto i=data->getFirstQuotationInfo(),
+        l=data->getEndQuotationInfo();
+        i<l;
+        i++)
+    {
+        if(i->endPos == -1)
+        {
+            setFormat(i->beginPos,
+                      text.length()-i->beginPos,
+                      instance->getTextCharFormat(QString("string")));
+        }
+        else
+        {
+            setFormat(i->beginPos,
+                      i->endPos - i->beginPos,
+                      instance->getTextCharFormat(QString("string")));
+        }
+    }
 }

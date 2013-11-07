@@ -35,6 +35,13 @@ public:
 signals:
     void requireStartDebug();
     void requireStopDebug();
+    void requireRunToCursor();
+    void requireDebugNext();
+    void requireDebugContinue();
+    void requireDebugStep();
+    void requireDebugNexti();
+    void requireDebugStepi();
+    void requireDebugReturn();
 
 public slots:
     void retranslate();

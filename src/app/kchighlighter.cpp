@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "kchighlighter.h"
 
 static char charNeedParentheses[]="{}[]()";
@@ -28,7 +30,8 @@ KCHighlighter::KCHighlighter(QObject *parent) :
 
 void KCHighlighter::highlightBlock(const QString &text)
 {
-    /* This function is used to associate KCTextBlockData with QTextBlock.
+    /*
+     * This function is used to associate KCTextBlockData with QTextBlock.
      * And then call KCHighlightBlock() which highlight the source code.
      */
     KCTextBlockData *data=static_cast<KCTextBlockData *>(currentBlockUserData());
@@ -42,6 +45,13 @@ void KCHighlighter::highlightBlock(const QString &text)
     data->onBlockChanged();
     data->endUsingSearchDatas();
 
+    /*
+     * For quotation search, we need to search only one char.
+     * But we need to search for two times.
+     */
+    data->resetQuotationInfos();
+    parseQuotationInfo(text, data);
+
     data->resetParentheseInfos();
     for(int i=0,l=strlen(charNeedParentheses);
         i<l;
@@ -51,6 +61,33 @@ void KCHighlighter::highlightBlock(const QString &text)
     }
 
     KCHighlightBlock(text);
+}
+
+void KCHighlighter::parseQuotationInfo(const QString &text,
+                                       KCTextBlockData *data)
+{
+    int firstIndex=text.indexOf('\"');
+    if(firstIndex>-1)
+    {
+        int secondIndex;
+        while(firstIndex>-1)
+        {
+            secondIndex=text.indexOf('\"', firstIndex+1);
+            data->insertQuotationInfo(firstIndex, secondIndex);
+            /*
+             * Here don't delete the if sentence.
+             * If there're odd quotations, the second quotation will
+             * be -1. This time firstIndex will search from 0. So we
+             * need to check out whether it should search for the
+             * firstIndex.
+             */
+            if(secondIndex==-1)
+            {
+                break;
+            }
+            firstIndex=text.indexOf('\"', secondIndex+1);
+        }
+    }
 }
 
 void KCHighlighter::parseParenthesesInfo(const QString &text,
