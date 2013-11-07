@@ -36,12 +36,13 @@ a:active{
     z-index:9999;
     position:fixed;
     top:0px;
-    left:0px;
+    left:73px;
     width:100%;
     height:32px;
     line-height:32px;
     padding:4px;
     padding-bottom:10px;
+	padding-right:0px;
     font-size:1.4em;
     color:#eee;
     margin:0;
@@ -53,19 +54,22 @@ a:active{
     font-size:1.5em;
     top:0px;
     left:0px;
-    width:160px;
+    width:60px;
     height:65px;
     line-height:65px;
     padding-left:13px;
 	padding-top:0px;
 	padding-bottom:0px;
-    background: rgba(0,0,0,0.8);
+	background: rgba(0,0,0,0.8);
+	background-position: center;
+    background-image: url("kreogist.png");
+	background-repeat: no-repeat; 
 }
 #banner-title:after{
     z-index:9990;
     position:fixed;
     display:block;
-    left:173px;
+    left:73px;
     top:46px;
     content:"";
     width:0px;
@@ -80,7 +84,7 @@ a:active{
     right:0px;
     text-align:center;
 	padding-top:5px;
-    padding-right:1em;
+    padding-right:3.5em;
 }
 #banner-subtitle{
     position:fixed;
@@ -369,6 +373,11 @@ a:active{
     0% {opacity:0;left:0;height:0;font-size:0;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
     100% {height:1.5em;line-height:1.5em;color:#222;}
+}
+@-webkit-min-device-pixel-ratio tooltip-Animation{
+    0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
+    40% {opacity:1;left:125px;height:0;font-size:0;}
+    100% {height:1.5em;line-height:1.5em;color:#222;} 
 }
 @keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;}
