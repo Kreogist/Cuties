@@ -888,6 +888,15 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
+        KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+        if(_textCursor.document()->characterAt(_textCursor.position()-1)==QChar('\"') &&
+           _textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
+           currData->getQuotationStatus()!=-1)
+        {
+            _textCursor.deleteChar();
+            QPlainTextEdit::keyPressEvent(e);
+            break;
+        }
         int pos=findFirstCharacter(_textCursor.block());
         if(pos < 0)
         {
