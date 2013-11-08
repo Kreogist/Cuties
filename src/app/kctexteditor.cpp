@@ -538,11 +538,11 @@ int KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selecti
                         cursor.movePosition(QTextCursor::Left,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                    all[j],
-                                    all[len-j-1],
-                                i,
-                                cursor.block(),
-                                true);
+                                            all[j],
+                                            all[len-j-1],
+                                        i,
+                                        cursor.block(),
+                                        true);
                         break;
                     }
                 }
@@ -834,15 +834,29 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     {
         if(document()->characterAt(_textCursor.position()) == e->text())
         {
-            QList<QTextEdit::ExtraSelection> extraSelections;
-            if(highlightParenthesis(extraSelections)>0)
+            KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+            if(blockData!=NULL)
             {
-                _textCursor.movePosition(QTextCursor::Right);
-                setTextCursor(_textCursor);
-                return;
+                for(auto i=blockData->getFirstParenthesesInfo(),
+                    l=blockData->getEndParenthesesInfo();
+                    i<l;
+                    i++)
+                {
+                    if(i->pos == _textCursor.position())
+                    {
+                        if(matchParentheses(e->text()==")"?'(':'[',
+                                            e->text().toInt(),
+                                            i,
+                                            _textCursor.block(),
+                                            true)>0)
+                        {
+                            _textCursor.movePosition(QTextCursor::Right);
+                            setTextCursor(_textCursor);
+                            return;
+                        }
+                    }
+                }
             }
-            QPlainTextEdit::keyPressEvent(e);
-            return;
         }
         QPlainTextEdit::keyPressEvent(e);
         return;
