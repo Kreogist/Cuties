@@ -113,7 +113,7 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
         {
             if(startIndex > i->beginPos && startIndex < i->endPos)
             {
-                startIndex=text.indexOf(startExpression, startIndex+1);
+                startIndex=text.indexOf(startExpression, i->endPos+1);
                 searchNext=true;
                 break;
             }
@@ -122,7 +122,7 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
         {
             continue;
         }
-        int endIndex = text.indexOf(endExpression, startIndex+1);
+        int endIndex = text.indexOf(endExpression, startIndex);
         while(searchNext)
         {
             searchNext=false;
@@ -133,7 +133,7 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
             {
                 if(endIndex > i->beginPos && endIndex < i->endPos)
                 {
-                    endIndex=text.indexOf(endExpression, endIndex+1);
+                    endIndex=text.indexOf(endExpression, i->endPos+1);
                     searchNext=true;
                     break;
                 }
