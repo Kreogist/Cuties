@@ -24,7 +24,7 @@ QString GdbController::gdbPath="/usr/bin/gdb";
 #endif
 
 #ifdef Q_OS_WIN32
-QString gdb::gdbPath="c:\\MinGW\\bin\\gdb";
+QString GdbController::gdbPath="c:\\MinGW\\bin\\gdb";
 #endif
 
 bool GdbController::checkResult=false;
