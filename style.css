@@ -23,7 +23,7 @@ a:hover{
 a:active{
     text-decoration:none;
 }
-
+p{margin-top:2em;}
 /*==>common class<==*/
 .normal-font{font-family:"Lucida Grande";font-weight:400;}
 .center-text{text-align:center;}
@@ -58,10 +58,9 @@ a:active{
     list-style:none;
     padding:0;
     margin:0;
-    
     width:100%;
     
-    opacity:1;
+    opacity:0.9;
     max-height:2em;
     overflow:hidden;
 }
@@ -69,9 +68,8 @@ a:active{
     opacity:0.9;
     max-height:30em;
     transition:all 0.3s ease-in-out;
-    transition-delay:0.3s;
+    transition-delay:0.2s;
 }
-
 /*==>common class<==*/
 
 #head-banner{
@@ -128,27 +126,6 @@ a:active{
 	padding-top:5px;
     padding-right:3.5em;
 }
-#banner-subtitle{
-    position:fixed;
-    z-index:9998;
-    display:block;
-    top:42px;
-    left:0px;
-    height:30px;
-    line-height:30px;
-    padding:2px 15px;
-    font-size:0.8em;
-    background-color:rgba(0,0,0,0.8);
-    border-radius:0;
-    opacity:0;
-    }
-#banner-subtitle:after{
-    position:fixed;
-    display:block;
-    content:"";
-    width:0px;
-    height:0px;
-    border:30px solid red;}
 .a-effect a{
     color:#ddd;
     margin-right:0.2em;
@@ -316,19 +293,13 @@ a:active{
     content:"";
     box-shadow:2px 2px 2px black;
     }
-#download-version{
-    text-align:center;
-    font-weight:400;
-    font-size:2em;
-    padding:0;
-    margin:0;}
 .download-context{
     -webkit-column-count:3;
     -moz-column-count:3;
     column-count:3;
     margin-left:0px;
     margin-right:40px;
-    margin-bottom:2em;
+    margin-bottom:100px;
     }
 .download-context-box{
 	/* Internet Explorer 10 */
