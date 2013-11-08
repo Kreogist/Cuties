@@ -1,5 +1,5 @@
 @charset "utf-8"
-@import url(http://fonts.googleapis.com/css?family=Share+Tech);
+@import url('http://fonts.googleapis.com/css?family=Share+Tech');
 @font-face
 	{
 	font-family:sao;
@@ -25,7 +25,7 @@ a:active{
 }
 
 /*==>common class<==*/
-.normal-font{font-family:"share tech";font-weight:400;}
+.normal-font{font-family:"Lucida Grande";font-weight:400;}
 .center-text{text-align:center;}
 .large-text{font-size:2em;}
 .larger-text{font-size:3em;}
@@ -288,13 +288,15 @@ a:active{
 
 .context-container{
     z-index:1;
-    left:50px;
     width:80%;
-    margin-left:65px;
+    margin-left:107px;
+	margin-bottom:50px;
     min-height:560px;
     padding-left:40px;
-    padding-right:10px;
-    position:absolute;
+    padding-right:40px;
+	padding-bottom:1em;
+	padding-top:1em;
+/*    position:absolute;*/
     background:rgba(255,255,255,0.4);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
 }
@@ -395,7 +397,7 @@ a:active{
 @-webkit-min-device-pixel-ratio tooltip-Animation{
     0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
-    100% {height:1.5em;line-height:1.5em;color:#222;} 
+    100% {height:1.5em;line-height:1.5em;color:#222;}
 }
 @keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;}
