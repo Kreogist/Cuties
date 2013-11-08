@@ -67,15 +67,22 @@ void KCHighlighter::highlightBlock(const QString &text)
 int KCHighlighter::parseQuotationInfo(const QString &text,
                                       KCTextBlockData *data)
 {
-    int singleCommentBound=text.indexOf("//");
     int firstIndex=text.indexOf('\"');
-    bool needToCheckComment=!(singleCommentBound==-1);
-    if(firstIndex>-1 && (needToCheckComment & (firstIndex < singleCommentBound)))
+    int singleCommentPos=text.indexOf("//");
+    bool needToCheckComment=(singleCommentPos!=-1);
+    if(firstIndex>-1)
     {
-        int secondIndex;
+        int secondIndex=0;
         bool findRealSecond;
-        while(firstIndex>-1 && (needToCheckComment & (firstIndex < singleCommentBound)))
+        while(firstIndex>-1)
         {
+            if(needToCheckComment == true && firstIndex>singleCommentPos)
+            {
+                /*
+                 * Here, no need to check anymore, all of these will be comment.
+                 */
+                break;
+            }
             if(text.at(firstIndex-1)==QChar('\\'))
             {
                 firstIndex=text.indexOf('\"',firstIndex+1);
@@ -107,23 +114,23 @@ int KCHighlighter::parseQuotationInfo(const QString &text,
              * So here we do search a second quotation, we have to check
              * the quotation is forward of the comment line or behind.
              */
-            if(secondIndex > singleCommentBound)
+            if(secondIndex > singleCommentPos)
             {
                 /*
                  * Here means the '//' is still in a string, but unlike above,
                  * this string has been finished. So Ignore it, and try to find
                  * next '//'.
                  */
-                singleCommentBound=text.indexOf("//", secondIndex+1);
-                needToCheckComment=!(singleCommentBound==-1);
+                singleCommentPos=text.indexOf("//", secondIndex+1);
+                needToCheckComment=!(singleCommentPos==-1);
             }
             firstIndex=text.indexOf('\"', secondIndex+1);
         }
-        data->setLineCommentPos(singleCommentBound);
+        data->setLineCommentPos(singleCommentPos);
         data->setQuotationStatus(secondIndex);
         return secondIndex;
     }
-    data->setLineCommentPos(singleCommentBound);
+    data->setLineCommentPos(singleCommentPos);
     data->setQuotationStatus(-1);
     return -1;
 }

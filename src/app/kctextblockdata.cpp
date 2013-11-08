@@ -186,6 +186,7 @@ void KCTextBlockData::setLineCommentPos(int value)
 {
     lineCommentPos = value;
 }
+
 int KCTextBlockData::getQuotationStatus() const
 {
     return quotationStatus;
