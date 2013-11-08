@@ -31,28 +31,6 @@ a:active{
 .larger-text{font-size:3em;}
 .shadow-text{text-shadow:1px 1px 1px rgba(0,0,0,0.8);}
 
-.wrapper-dropdown{position:relative;cursor:pointer;}
-.wrapper-dropdown .dropdown{
-    position:absolute;
-    top:2.1em;
-    right:2em;
-    pointer-events:none;
-
-    padding:0;
-    margin:0;
-    list-style:none;
-
-    max-height:0;
-    overflow:hidden;
-}
-.wrapper-dropdown.active{
-    font-size:2em;
-    max-height:auto;
-}
-.wrapper-dropdown.active .dropdown{
-    pointer-events:auto;
-    max-height:auto;
-}
 .menu-link{
     display:block;
     background:rgba(255,255,255,0.9);
@@ -71,6 +49,33 @@ a:active{
     transition:all 0.2s ease-in-out;
 }
 .menu-link:active{color:#555;background:rgba(255,193,44,1);}
+
+.wrapper-dropdown{position:relative;cursor:pointer;}
+.wrapper-dropdown .dropdown{
+    position:absolute;
+    top:2.2em;
+    left:0;
+    
+    width:100%;
+    
+    opacity:0.6;
+    max-height:0;
+    overflow:hidden;
+}
+
+.wrapper-dropdown:hover .dropdown{
+    opacity:0.8;
+    max-height:auto;
+    overflow:visible;
+    transition:all 0.3s ease-in-out;
+    transition-delay:0.5s;
+}
+.dropdown:hover{
+    opacity:1;
+    max-height:auto;
+    overflow:visible;
+    transition:none;
+}
 /*==>common class<==*/
 
 #head-banner{
@@ -327,6 +332,7 @@ a:active{
     column-count:3;
     margin-left:0px;
     margin-right:40px;
+    margin-bottom:2em;
     }
 .download-context-box{
 	/* Internet Explorer 10 */
