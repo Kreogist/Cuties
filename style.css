@@ -30,6 +30,47 @@ a:active{
 .large-text{font-size:2em;}
 .larger-text{font-size:3em;}
 .shadow-text{text-shadow:1px 1px 1px rgba(0,0,0,0.8);}
+
+.wrapper-dropdown{position:relative;cursor:pointer;}
+.wrapper-dropdown .dropdown{
+    position:absolute;
+    top:2.1em;
+    right:2em;
+    pointer-events:none;
+
+    padding:0;
+    margin:0;
+    list-style:none;
+
+    max-height:0;
+    overflow:hidden;
+}
+.wrapper-dropdown.active{
+    font-size:2em;
+    max-height:auto;
+}
+.wrapper-dropdown.active .dropdown{
+    pointer-events:auto;
+    max-height:auto;
+}
+.menu-link{
+    display:block;
+    background:rgba(255,255,255,0.9);
+    padding:5px 10px;
+    margin:2px 0px;
+    width:auto;
+    box-shadow:0px 0px 4px rgba(255,255,255,0.9);
+    border:1px solid #fff;
+    }
+.menu-link:link{color:#222;}
+.menu-link:visited{color:#222;}
+.menu-link:hover{
+    background:rgba(237,179,41,1);
+    border:1px solid rgb(237,179,41);
+    box-shadow:0 0 6px rgba(255,193,44,0.8);
+    transition:all 0.2s ease-in-out;
+}
+.menu-link:active{color:#555;background:rgba(255,193,44,1);}
 /*==>common class<==*/
 
 #head-banner{
@@ -63,7 +104,7 @@ a:active{
 	background:rgba(0,0,0,0.8);
 	background-position: center;
     background-image: url("kreogist.png");
-	background-repeat: no-repeat; 
+	background-repeat: no-repeat;
 }
 #banner-title:after{
     z-index:9990;
@@ -339,30 +380,7 @@ a:active{
 ;
     transition:all 0.2s ease-in-out;
     }
-.download-link,.installation-link{
-    display:block;
-    background:rgba(255,255,255,0.9);
-    padding:5px 10px;
-    margin:2px 0px;
-    width:auto;
-    box-shadow:0px 0px 4px rgba(255,255,255,0.9);
-    border:1px solid #fff;
-    }
-.download-link:link,.installation-link:link{
-    color:#222;
-    }
-.download-link:visited,.installation-link:visited{
-    color:#222;}
-.download-link:hover,.installation-link:hover{
-    background:rgba(237,179,41,1);
-    border:1px solid rgb(237,179,41);
-    box-shadow:0 0 6px rgba(255,193,44,0.8);
-    transition:all 0.2s ease-in-out;
-}
-.download-link:active,.installation-link:active{
-    color:#555;
-    background:rgba(255,193,44,1);
-    }
+
 
 @-moz-keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;}
