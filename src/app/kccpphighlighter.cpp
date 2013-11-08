@@ -97,14 +97,23 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
     while(startIndex > -1)
     {
         searchNext=false;
+        if(data->getLineCommentPos()>-1 &&
+           startIndex > data->getLineCommentPos())
+        {
+            /*
+             * Here means: begin char is no use!
+             */
+            startIndex=text.indexOf(startExpression, startIndex+1);
+            continue;
+        }
         for(auto i=data->getFirstQuotationInfo(),
             l=data->getEndQuotationInfo();
             i<l;
             i++)
         {
-            if(startIndex >= i->beginPos && startIndex <= i->endPos)
+            if(startIndex > i->beginPos && startIndex < i->endPos)
             {
-                startIndex=text.indexOf(startExpression, startIndex+2);
+                startIndex=text.indexOf(startExpression, startIndex+1);
                 searchNext=true;
                 break;
             }
@@ -113,8 +122,8 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
         {
             continue;
         }
-        int endIndex = text.indexOf(endExpression , startIndex);
-        while(endIndex>-1)
+        int endIndex = text.indexOf(endExpression, startIndex+1);
+        while(searchNext)
         {
             searchNext=false;
             for(auto i=data->getFirstQuotationInfo(),
@@ -122,16 +131,12 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
                 i<l;
                 i++)
             {
-                if(endIndex >= i->beginPos && endIndex <= i->endPos)
+                if(endIndex > i->beginPos && endIndex < i->endPos)
                 {
-                    endIndex=text.indexOf(endExpression, endIndex+2);
+                    endIndex=text.indexOf(endExpression, endIndex+1);
                     searchNext=true;
                     break;
                 }
-            }
-            if(searchNext)
-            {
-                continue;
             }
         }
         int conmmentLength;
@@ -142,7 +147,7 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
         }
         else
         {
-            conmmentLength = endIndex - startIndex +endExpression.matchedLength();
+            conmmentLength = endIndex - startIndex + endExpression.matchedLength();
         }
         setFormat(startIndex,conmmentLength,instance->getTextCharFormat("comment"));
         startIndex = text.indexOf(startExpression, startIndex+conmmentLength);
