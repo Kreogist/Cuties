@@ -75,14 +75,10 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
             this, &KCDebugCommandIO::retranslateAndSet);
 }
 
-void KCDebugCommandIO::setDocument(QTextDocument *document)
-{
-    debugOutputTextBrowser->setDocument(document);
-}
-
 void KCDebugCommandIO::setGdbInstance(GdbController *gdbInstance)
 {
     instance=gdbInstance;
+    debugOutputTextBrowser->setDocument(gdbInstance->getDbgOutputs()->getTextStreamOutput());
 }
 
 void KCDebugCommandIO::retranslate()

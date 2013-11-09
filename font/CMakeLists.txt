@@ -11,5 +11,5 @@ set(FONT_LIST ${FONT_LIST} UbuntuMono-R.ttf)
 
 foreach(FONT ${FONT_LIST})
     configure_file(${FONT} ${PROJECT_BINARY_DIR}/Fonts/${FONT} COPYONLY)
-    install(FILES ${FONT} DESTINATION Fonts)
+    install(FILES ${FONT} DESTINATION ${PROJECT_NAME}/Fonts)
 endforeach(FONT)

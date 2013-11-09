@@ -101,13 +101,6 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     }
     mainLayout->addWidget(toolBar);
 
-    connect(debugControlButton[debugStart],SIGNAL(clicked()),
-            this,SIGNAL(requireStartDebug()));
-    connect(debugControlButton[debugStop],SIGNAL(clicked()),
-            this,SIGNAL(requireStopDebug()));
-    connect(debugControlButton[debugRunToCursor], SIGNAL(clicked()),
-            this, SIGNAL(requireRunToCursor()));
-
     QString debugCursorControlIconPath[debugCursorControlButtonCount];
     debugCursorControlIconPath[debugNext]=QString(":/DebugToolBar/image/Debug Docks/next.png");
     debugCursorControlIconPath[debugContinue]=QString(":/DebugToolBar/image/Debug Docks/continue.png");
@@ -147,18 +140,24 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
 
+    connect(debugControlButton[debugStart],SIGNAL(clicked()),
+            this,SIGNAL(debugStarted()));
+    connect(debugControlButton[debugStop],SIGNAL(clicked()),
+            this,SIGNAL(debugStopped()));
+    connect(debugControlButton[debugRunToCursor], SIGNAL(clicked()),
+            this, SLOT(onRunToCursorClicked()));
     connect(debugCursorControlButton[debugNext], SIGNAL(clicked()),
-            this, SIGNAL(requireDebugNext()));
+            this, SLOT(onDebugNextClicked()));
     connect(debugCursorControlButton[debugContinue], SIGNAL(clicked()),
-            this, SIGNAL(requireDebugContinue()));
+            this, SLOT(onDebugContinueClicked()));
     connect(debugCursorControlButton[debugStep], SIGNAL(clicked()),
-            this, SIGNAL(requireDebugStep()));
+            this, SLOT(onDebugStepClicked()));
     connect(debugCursorControlButton[debugNexti], SIGNAL(clicked()),
-            this, SIGNAL(requireDebugNexti()));
+            this, SLOT(onDebugNextiClicked()));
     connect(debugCursorControlButton[debugStepi], SIGNAL(clicked()),
-            this, SIGNAL(requireDebugStepi()));
+            this, SLOT(onDebugStepiClicked()));
     connect(debugCursorControlButton[debugReturn], SIGNAL(clicked()),
-            this, SIGNAL(requireDebugReturn()));
+            this, SLOT(onDebugReturnClicked()));
 
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
@@ -229,5 +228,48 @@ void KCDebugControlPanel::retranslateAndSet()
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
 }
+/*!
+ * \brief KCDebugControlPanel::setGdbController sets the pointer of GdbController.
+ * \param controller
+ */
+void KCDebugControlPanel::setGdbController(GdbController* controller)
+{
+    gdbController=controller;
+}
 
+void KCDebugControlPanel::onRunToCursorClicked()
+{
+    //! TODO: doesn't accomplished RunToCursor
+}
 
+//-----control program by using gdbController-----
+void KCDebugControlPanel::onDebugContinueClicked()
+{
+    gdbController->execContinue();
+}
+
+void KCDebugControlPanel::onDebugNextiClicked()
+{
+    gdbController->execNexti();
+}
+
+void KCDebugControlPanel::onDebugNextClicked()
+{
+    gdbController->execNext();
+}
+
+void KCDebugControlPanel::onDebugReturnClicked()
+{
+    gdbController->execReturn();
+}
+
+void KCDebugControlPanel::onDebugStepClicked()
+{
+    gdbController->execStep();
+}
+
+void KCDebugControlPanel::onDebugStepiClicked()
+{
+    gdbController->execStepi();
+}
+//-------------------------------------------------

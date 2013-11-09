@@ -8,7 +8,7 @@ set(CMAKE_AUTOMOC ON)
 if (DEFINED ENV{QTDIR})
     set(CMAKE_PREFIX_PATH $ENV{QTDIR} ${CMAKE_PREFIX_PATH})
 else ()
-    message (FATAL_ERROR "ERROR: Environment variable QTDIR is not set. Please locate your Qt folder MY_QT5_DIR.")
+    message (WARNING "WARNING: Environment variable QTDIR is not set. Please locate your Qt folder MY_QT5_DIR.")
 endif ()
 
 # Find the QtWidgets library
@@ -114,6 +114,6 @@ add_subdirectory(translations)
 
 #install
 install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+        RUNTIME DESTINATION ${PROJECT_NAME})
 install(FILES default.style DefaultColorConfig.ini
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
+        DESTINATION ${PROJECT_NAME})

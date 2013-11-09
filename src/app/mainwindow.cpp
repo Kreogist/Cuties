@@ -358,8 +358,8 @@ void MainWindow::createDocks()
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
-    connect(debugControl,SIGNAL(requireStartDebug()),
-            this,SLOT(startDebug()));
+    connect(debugControl,&KCDebugControlPanel::debugStarted,
+            this,&MainWindow::startDebug);
     debugControl->hide();
 
     //Debug Command IO
@@ -1132,10 +1132,8 @@ void MainWindow::connectDebugDockWithCurrEditor()
 
     if(gdbControllerInstance!=NULL)
     {
-        QSharedPointer<dbgOutputReceiver> dbgOutputs=gdbControllerInstance->getDbgOutputs();
-        debugCommandIO->setDocument(dbgOutputs->getTextStreamOutput());
-
         debugCommandIO->setGdbInstance(gdbControllerInstance);
+        debugControl->setGdbController(gdbControllerInstance);
     }
 }
 

@@ -88,7 +88,9 @@ public slots:
     void execFinish();
     void execNext();
     void execReturn();
+    void execStep();
     void execStepi();
+    void execNexti();
     void execUntil(const QString &location);
 
     //Stack Manipulation

@@ -404,11 +404,26 @@ void GdbController::execNext()
 }
 
 /*!
+ * \brief Asynchronous command. Executes one machine instruction. If the instruction is a function call continues until the function returns. If the program stops at an instruction in the middle of a source line, the address will be printed as well.
+ */
+void GdbController::execNexti()
+{
+    gdbProcess->write(qPrintable(QString("-exec-next-instruction\n")));
+}
+
+/*!
  * \brief Makes current function return immediately. Doesn't execute the inferior. Displays the new current frame.
  */
 void GdbController::execReturn()
 {
     gdbProcess->write(qPrintable(QString("-exec-return\n")));
+}
+/*!
+ * \brief Asynchronous command. Resumes execution of the inferior program, stopping when the beginning of the next source line is reached, if the next source line is not a function call. If it is, stop at the first instruction of the called function.
+ */
+void GdbController::execStep()
+{
+    gdbProcess->write(qPrintable(QString("-exec-step\n")));
 }
 
 /*!

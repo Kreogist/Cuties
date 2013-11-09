@@ -20,4 +20,4 @@ endif()
 
 #install
 install(TARGETS KciConsoleRunner
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
+        DESTINATION ${PROJECT_NAME})

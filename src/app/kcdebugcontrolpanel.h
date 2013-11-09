@@ -22,6 +22,8 @@
 
 #include <QDockWidget>
 
+#include "gdbcontroller.h"
+
 class QToolBar;
 class QToolButton;
 class GdbController;
@@ -31,21 +33,24 @@ class KCDebugControlPanel : public QDockWidget
     Q_OBJECT
 public:
     explicit KCDebugControlPanel(QWidget *parent = 0);
+    void setGdbController(GdbController *controller);
 
 signals:
-    void requireStartDebug();
-    void requireStopDebug();
-    void requireRunToCursor();
-    void requireDebugNext();
-    void requireDebugContinue();
-    void requireDebugStep();
-    void requireDebugNexti();
-    void requireDebugStepi();
-    void requireDebugReturn();
+    void debugStarted();
+    void debugStopped();
 
 public slots:
     void retranslate();
     void retranslateAndSet();
+
+private slots:
+    void onRunToCursorClicked();
+    void onDebugNextClicked();
+    void onDebugContinueClicked();
+    void onDebugStepClicked();
+    void onDebugNextiClicked();
+    void onDebugStepiClicked();
+    void onDebugReturnClicked();
 
 private:
     enum debugContolButtons
@@ -66,6 +71,8 @@ private:
         debugReturn,
         debugCursorControlButtonCount
     };
+
+    GdbController* gdbController;
 
     QToolBar *toolBar;
     QToolButton *debugControlButton[debugControlButtonCount];
