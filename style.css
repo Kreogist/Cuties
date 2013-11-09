@@ -244,25 +244,25 @@ p{margin-top:2em;}
     height:64px;
 }
 
-#home-btn{background-image:url("btn_home_normal.png")}
-#home-btn:hover{background-image:url("btn_home_hover.png")}
-#home-btn:active{background-image:url("btn_home_press.png")}
+#home-btn{background-image:url("http://kreogist.github.io/Cuties/btn_home_normal.png")}
+#home-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_home_hover.png")}
+#home-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_home_press.png")}
 
-#features-btn{background-image:url("btn_features_normal.png")}
-#features-btn:hover{background-image:url("btn_features_hover.png")}
-#features-btn:active{background-image:url("btn_features_press.png")}
+#features-btn{background-image:url("http://kreogist.github.io/Cuties/btn_features_normal.png")}
+#features-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_features_hover.png")}
+#features-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_features_press.png")}
 
-#download-btn{background-image:url("btn_download_normal.png")}
-#download-btn:hover{background-image:url("btn_download_hover.png")}
-#download-btn:active{background-image:url("btn_download_press.png")}
+#download-btn{background-image:url("http://kreogist.github.io/Cuties/btn_download_normal.png")}
+#download-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_download_hover.png")}
+#download-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_download_press.png")}
 
-#faq-btn{background-image:url("btn_faq_normal.png")}
-#faq-btn:hover{background-image:url("btn_faq_hover.png")}
-#faq-btn:active{background-image:url("btn_faq_press.png")}
+#faq-btn{background-image:url("http://kreogist.github.io/Cuties/btn_faq_normal.png")}
+#faq-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_faq_hover.png")}
+#faq-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_faq_press.png")}
 
-#help-btn{background-image:url("btn_support_normal.png")}
-#help-btn:hover{background-image:url("btn_support_hover.png")}
-#help-btn:active{background-image:url("btn_support_press.png")}
+#help-btn{background-image:url("http://kreogist.github.io/Cuties/btn_support_normal.png")}
+#help-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_support_hover.png")}
+#help-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_support_press.png")}
 
 .context-container{
     z-index:1;
