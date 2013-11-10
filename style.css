@@ -24,7 +24,7 @@ a:active{
 }
 p{margin-top:2em;}
 /*==>common class<==*/
-.normal-font{font-family:"Lucida Grande";font-weight:400;}
+.normal-font{font-family:"Lucida Grande", "Arial";font-weight:400;}
 .center-text{text-align:center;}
 .large-text{font-size:2em;}
 .larger-text{font-size:3em;}
