@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDebug>
+#include <QPainter>
 
 #include "kctextblockdata.h"
 #include "kcclipboard.h"
@@ -540,9 +541,9 @@ int KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selecti
                         matchedParentheses=matchParentheses(
                                             all[j],
                                             all[len-j-1],
-                                        i,
-                                        cursor.block(),
-                                        true);
+                                            i,
+                                            cursor.block(),
+                                            true);
                         break;
                     }
                 }
@@ -556,11 +557,11 @@ int KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selecti
                         cursor.movePosition(QTextCursor::Right,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                    all[j],
-                                    all[len-j-1],
-                                i,
-                                cursor.block(),
-                                false);
+                                           all[j],
+                                           all[len-j-1],
+                                           i,
+                                           cursor.block(),
+                                           false);
                         break;
                     }
                 }
@@ -651,13 +652,11 @@ int KCTextEditor::matchParentheses(const char &parenthesesA,
                 {
                     count--;
                 }
-
                 if(count == 0)
                 {
-                    return block.position()+i->pos;
+                    return block.position() + i->pos;
                 }
             }
-
             block= forward? block.next() : block.previous();
             blockData=static_cast<KCTextBlockData *>(block.userData());
             if(blockData == NULL)
@@ -842,13 +841,13 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                     i<l;
                     i++)
                 {
-                    if(i->pos == _textCursor.position())
+                    if(i->pos == _textCursor.positionInBlock())
                     {
                         if(matchParentheses(e->text()==")"?'(':'[',
                                             e->text().toInt(),
                                             i,
                                             _textCursor.block(),
-                                            true)>0)
+                                            true) > 0)
                         {
                             _textCursor.movePosition(QTextCursor::Right);
                             setTextCursor(_textCursor);
