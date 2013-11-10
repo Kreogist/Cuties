@@ -24,7 +24,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDebug>
-#include <QPainter>
 
 #include "kctextblockdata.h"
 #include "kcclipboard.h"
@@ -480,7 +479,7 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
     }
     else
     {
-        //qDebug()<<tabPressCursor;
+        qDebug()<<"test";
     }
 }
 
