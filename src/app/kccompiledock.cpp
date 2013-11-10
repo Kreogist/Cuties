@@ -29,6 +29,7 @@
 #include "kccompileoutputreceiver.h"
 #include "kccolorconfigure.h"
 #include "kclanguageconfigure.h"
+#include "kcfontconfigure.h"
 
 #include "kccompiledock.h"
 
@@ -65,6 +66,7 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     compileOutputTextInfo->setContentsMargins(0,0,0,0);
     compileOutputTextInfo->setMinimumWidth(0);
     compileOutputTextInfo->setWordWrapMode(QTextOption::NoWrap);
+    compileOutputTextInfo->setFont(KCFontConfigure::getInstance()->getCodeFont());
     compileOutputInfoSplitter->addWidget(compileOutputTextInfo);
     //Set treeview output widget
     compileOutputErrorInfoTree=new QTreeView(this);
@@ -74,6 +76,7 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     compileOutputErrorInfoTree->setRootIsDecorated(false);
     compileOutputErrorInfoTree->setHeaderHidden(true);
     compileOutputErrorInfoTree->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    compileOutputErrorInfoTree->setFont(KCFontConfigure::getInstance()->getCodeFont());
     pal=compileOutputErrorInfoTree->palette();
     KCColorConfigure::getInstance()->registerColorInfo(QPalette::WindowText,QColor(255,255,255),compileOutputErrorInfoTree->objectName());
     KCColorConfigure::getInstance()->getPalette(pal,compileOutputErrorInfoTree->objectName());
