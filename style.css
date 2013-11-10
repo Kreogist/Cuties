@@ -8,6 +8,7 @@ body{
     background-color:#444;
     font-size:18px;
     font-family:"sao";
+    min-width:980px;
 }
 a:link{
     text-decoration:none;
@@ -272,7 +273,6 @@ p{margin-top:2em;}
     padding-right:40px;
 	padding-bottom:1em;
 	padding-top:1em;
-/*    position:absolute;*/
     background:rgba(255,255,255,0.4);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
 }
@@ -292,12 +292,34 @@ p{margin-top:2em;}
     box-shadow:2px 2px 2px black;
     }
 .download-context{
-    -webkit-column-count:3;
-    -moz-column-count:3;
-    column-count:3;
+    /* Internet Explorer 10 */
+    display:-ms-flex;
+    -ms-flex-pack:justify;
+    -ms-flex-align:stretch;
+	/* Firefox */
+	display:-moz-box;
+	-moz-box-flex:3;
+	-moz-box-pack:justify;
+	-moz-box-align:stretch;
+	-moz-box-orient:horizontal;
+
+	/* Safari, Opera, and Chrome */
+	display:-webkit-box;
+	-webkit-box-flex:3;
+	-webkit-box-pack:justify;
+	-webkit-box-align:stretch;
+	-webkit-box-orient:horizontal;
+    /* W3C */
+    display:box;
+    box-flex:3;
+	box-pack:justify;
+	box-align:stretch;
+    box-orient:horizontal;
+    
     margin-left:0px;
     margin-right:40px;
     margin-bottom:0px;
+    width:100%;
     }
 .download-context-box{
 	/* Internet Explorer 10 */
@@ -306,24 +328,23 @@ p{margin-top:2em;}
     -ms-flex-align:stretch;
 	/* Firefox */
 	display:-moz-box;
-    -moz-box-flex:1.0;
+    -moz-box-flex:1;
 	-moz-box-pack:justify;
 	-moz-box-align:stretch;
 	-moz-box-orient:vertical;
 	/* Safari, Opera, and Chrome */
 	display:-webkit-box;
-    -webkit-box-flex:1.0;
+    -webkit-box-flex:1;
 	-webkit-box-pack:justify;
 	-webkit-box-align:stretch;
 	-webkit-box-orient:vertical;
     /* W3C */
     display:box;
-	box-flex:1.0;
+	box-flex:1;
 	box-pack:justify;
 	box-align:stretch;
     box-orient:vertical;
-
-    width:100%;
+    
     margin-left:8px;
     margin-right:8px;
     }
