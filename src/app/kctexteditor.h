@@ -79,7 +79,7 @@ protected:
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection> &selections);
-    int highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections);
+    int highlightParentheses(QList<QTextEdit::ExtraSelection> &selections);
     void highlightParenthesisPairs(QList<QTextEdit::ExtraSelection> &selections,
                                    int matchedParentheses,
                                    QTextCursor cursor);

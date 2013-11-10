@@ -511,7 +511,7 @@ QRectF KCTextEditor::blockRect(const QTextBlock &block)
     return blockBoundingGeometry(block);
 }
 
-int KCTextEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection> &selections)
+int KCTextEditor::highlightParentheses(QList<QTextEdit::ExtraSelection> &selections)
 {
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
@@ -685,7 +685,7 @@ void KCTextEditor::updateHighlights()
 
     highlightCurrentLine(extraSelections);
     highlightSearchResult(extraSelections);
-    highlightParenthesis(extraSelections);
+    highlightParentheses(extraSelections);
 
     setExtraSelections(extraSelections);
 }
