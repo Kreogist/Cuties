@@ -32,7 +32,7 @@ class KCPanel : public QWidget
     Q_OBJECT
 public:
     explicit KCPanel(QWidget *parent = 0);
-    void setKciTextEditor(KCTextEditor *editor);
+    void setTextEditor(KCTextEditor *editor);
     void setAutoAdaptWidth(bool newValue);
     bool autoAdaptWidth();
 

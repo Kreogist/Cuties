@@ -65,7 +65,7 @@ public slots:
 
 private:
     bool enabled;
-    QWidget *m_proxyWidget;
+    QWidget *proxyWidget;
     int m_top, m_right, m_bottom, m_left;
     QRect m_regions[9];
 

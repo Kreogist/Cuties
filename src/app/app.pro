@@ -93,7 +93,8 @@ SOURCES += \
     kcfloattoolbar.cpp \
     kcfontconfigure.cpp \
     kccodecompileprogress.cpp \
-    gdbcontroller.cpp
+    gdbcontroller.cpp \
+    kcpreference.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -163,7 +164,8 @@ HEADERS += \
     kcfloattoolbar.h \
     kcfontconfigure.h \
     kccodecompileprogress.h \
-    gdbcontroller.h
+    gdbcontroller.h \
+    kcpreference.h
 
 # Enable C++11
 CONFIG += c++11

@@ -861,20 +861,36 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     if(e->text()=="\"")
     {
-        KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
-        if(_textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
-           currData->getQuotationStatus()!=-1)
+        if(_textCursor.selectedText().isEmpty())
         {
-            _textCursor.movePosition(QTextCursor::Right);
-            setTextCursor(_textCursor);
-            return;
+            KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+            if(_textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
+                    currData->getQuotationStatus()!=-1)
+            {
+                _textCursor.movePosition(QTextCursor::Right);
+                setTextCursor(_textCursor);
+                return;
+            }
+            QPlainTextEdit::keyPressEvent(e);
+            if(_textCursor.document()->characterAt(_textCursor.position()-1)!=QChar('\\') &&
+                    currData->getQuotationStatus()==-1)
+            {
+                insertPlainText("\"");
+                _textCursor.movePosition(QTextCursor::Left);
+                setTextCursor(_textCursor);
+            }
         }
-        QPlainTextEdit::keyPressEvent(e);
-        if(_textCursor.document()->characterAt(_textCursor.position()-1)!=QChar('\\') &&
-           currData->getQuotationStatus()==-1)
+        else
         {
-            insertPlainText("\"");
-            _textCursor.movePosition(QTextCursor::Left);
+            int start=_textCursor.selectionStart(),
+                end=_textCursor.selectionEnd();
+            _textCursor.beginEditBlock();
+            _textCursor.clearSelection();
+            _textCursor.setPosition(start);
+            _textCursor.insertText("\"");
+            _textCursor.setPosition(end+1);
+            _textCursor.insertText("\"");
+            _textCursor.endEditBlock();
             setTextCursor(_textCursor);
         }
         return;

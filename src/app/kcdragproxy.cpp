@@ -22,11 +22,11 @@
 KCDragProxy::KCDragProxy(QWidget *parent)
     : QObject((QObject *)parent)
 {
-    m_proxyWidget = parent;
+    proxyWidget = parent;
     m_top = m_right = m_bottom = m_left = 0;
 
-    m_proxyWidget->setMouseTracking(true);
-    m_proxyWidget->installEventFilter(this);
+    proxyWidget->setMouseTracking(true);
+    proxyWidget->installEventFilter(this);
 
     m_mousePressed=false;
     m_regionPressed=Unknown;
@@ -57,17 +57,17 @@ void KCDragProxy::setBorderWidth(int top, int right, int bottom, int left)
 
 void KCDragProxy::updateGeometry(int x, int y, int w, int h)
 {
-    minWidth = m_proxyWidget->minimumWidth();
-    minHeight = m_proxyWidget->minimumHeight();
-    maxWidth = m_proxyWidget->maximumWidth();
-    maxHeight = m_proxyWidget->maximumHeight();
+    minWidth = proxyWidget->minimumWidth();
+    minHeight = proxyWidget->minimumHeight();
+    maxWidth = proxyWidget->maximumWidth();
+    maxHeight = proxyWidget->maximumHeight();
 
     if(w < minWidth || w > maxWidth || h < minHeight || h > maxHeight)
     {
         return;
     }
 
-    m_proxyWidget->setGeometry(x, y, w, h);
+    proxyWidget->setGeometry(x, y, w, h);
 }
 
 bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
@@ -83,27 +83,27 @@ bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
         QPoint curPosLocal = mouseEvent->pos();
         KCDragProxy::WidgetRegion regionType = HitTest(curPosLocal);
 
-        QPoint curPosGlobal = m_proxyWidget->mapToGlobal(curPosLocal);
+        QPoint curPosGlobal = proxyWidget->mapToGlobal(curPosLocal);
 
         if(!m_mousePressed)
         {
             switch(regionType)
             {
             case Bottom:
-                m_proxyWidget->setCursor(Qt::SizeVerCursor);
+                proxyWidget->setCursor(Qt::SizeVerCursor);
                 break;
             case LeftBottom:
-                m_proxyWidget->setCursor(Qt::SizeBDiagCursor);
+                proxyWidget->setCursor(Qt::SizeBDiagCursor);
                 break;
             case Right:
             case Left:
-                m_proxyWidget->setCursor(Qt::SizeHorCursor);
+                proxyWidget->setCursor(Qt::SizeHorCursor);
                 break;
             case RightBottom:
-                m_proxyWidget->setCursor(Qt::SizeFDiagCursor);
+                proxyWidget->setCursor(Qt::SizeFDiagCursor);
                 break;
             default:
-                m_proxyWidget->setCursor(Qt::ArrowCursor);
+                proxyWidget->setCursor(Qt::ArrowCursor);
                 break;
             }
 
@@ -148,8 +148,8 @@ bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
             QPoint curPos = mouseEvent->pos();
             m_regionPressed = HitTest(curPos);
 
-            m_originPosGlobal = m_proxyWidget->mapToGlobal(curPos);
-            m_originGeo = m_proxyWidget->geometry();
+            m_originPosGlobal = proxyWidget->mapToGlobal(curPos);
+            m_originGeo = proxyWidget->geometry();
 
             stopCursorTimer();
         }
@@ -159,7 +159,7 @@ bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
         m_mousePressed = false;
         m_regionPressed = Unknown;
 
-        m_proxyWidget->setCursor(Qt::ArrowCursor);
+        proxyWidget->setCursor(Qt::ArrowCursor);
     }
     else if(eventType == QEvent::Resize)
     {
@@ -167,7 +167,7 @@ bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
     }
     else if(eventType == QEvent::Leave)
     {
-        m_proxyWidget->setCursor(Qt::ArrowCursor);
+        proxyWidget->setCursor(Qt::ArrowCursor);
         stopCursorTimer();
     }
     else if(eventType == QEvent::Timer)
@@ -175,9 +175,9 @@ bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
         QTimerEvent *timerEvent = (QTimerEvent *)event;
         if(timerEvent->timerId() == m_cursorTimerId)
         {
-            if(m_regions[Inner].contains(m_proxyWidget->mapFromGlobal(QCursor::pos())))
+            if(m_regions[Inner].contains(proxyWidget->mapFromGlobal(QCursor::pos())))
             {
-                m_proxyWidget->setCursor(Qt::ArrowCursor);
+                proxyWidget->setCursor(Qt::ArrowCursor);
                 stopCursorTimer();
             }
         }
@@ -189,22 +189,22 @@ bool KCDragProxy::eventFilter(QObject *obj, QEvent *event)
 void KCDragProxy::startCursorTimer()
 {
     stopCursorTimer();
-    m_cursorTimerId = m_proxyWidget->startTimer(50);
+    m_cursorTimerId = proxyWidget->startTimer(50);
 }
 
 void KCDragProxy::stopCursorTimer()
 {
     if(m_cursorTimerId != 0)
     {
-        m_proxyWidget->killTimer(m_cursorTimerId);
+        proxyWidget->killTimer(m_cursorTimerId);
         m_cursorTimerId = 0;
     }
 }
 
 void KCDragProxy::MakeRegions()
 {
-    regWidth = m_proxyWidget->width();
-    regHeight = m_proxyWidget->height();
+    regWidth = proxyWidget->width();
+    regHeight = proxyWidget->height();
 
     m_regions[Right]        = QRect(regWidth - m_right, m_top, m_right, regHeight - m_top - m_bottom);
     m_regions[RightBottom]  = QRect(regWidth - m_right, regHeight - m_bottom, m_right, m_bottom);

@@ -258,6 +258,7 @@ private:
 
     QWidget *contentIndex;
 };
+
 class KCControlCenter : public QDialog
 {
     Q_OBJECT

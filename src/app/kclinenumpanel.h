@@ -17,7 +17,6 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef KCLINENUMPANEL_H
 #define KCLINENUMPANEL_H
 

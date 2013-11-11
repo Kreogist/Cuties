@@ -131,6 +131,8 @@ void MainWindow::createActions()
     stringActionIconPath[actionEditSelectAll]=QString(":/menuicon/image/MenuIcons/mnuEditSelectAll.png");
     connect(actionMainWindowItem[actionEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(selectAll()));
 
+    connect(actionMainWindowItem[actionEditControlCenter], SIGNAL(triggered()), this, SLOT(showControlCenter()));
+
     //Edit -> Preferences
     actionMainWindowItem[actionEditPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
     actionMainWindowItem[actionEditPreferences]->setMenuRole(QAction::PreferencesRole);
@@ -1065,10 +1067,16 @@ void MainWindow::retranslateAndSet()
     }
 }
 
-void MainWindow::showPreference()
+void MainWindow::showControlCenter()
 {
     KCControlCenter *newControlCenter=new KCControlCenter(this);
     newControlCenter->exec();
+}
+
+void MainWindow::showPreference()
+{
+    KCPreference *newPreference=new KCPreference(this);
+    newPreference->exec();
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)

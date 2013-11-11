@@ -72,8 +72,9 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(linePanel);
 
     editor=new KCTextEditor(this);
-    linePanel->setKciTextEditor(editor);
-    markPanel->setKciTextEditor(editor);
+    markPanel->setTextEditor(editor);
+    linePanel->setTextEditor(editor);
+
     mainLayout->addWidget(editor);
     replaceLayout->addLayout(mainLayout);
 
