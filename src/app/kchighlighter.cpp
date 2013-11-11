@@ -99,7 +99,7 @@ int KCHighlighter::parseQuotationInfo(const QString &text,
                 }
                 findRealSecond=true;
             }
-            data->insertQuotationInfo(firstIndex, secondIndex);
+            data->insertQuotationInfo(firstIndex, secondIndex+1);
             if(secondIndex == -1)
             {
                 /*
