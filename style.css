@@ -188,9 +188,7 @@ p{margin-top:2em;}
     position:relative;
     display:block;
     left:0px;
-    pointer-events: none;
     opacity:0;
-    /*transition: all 0.3s ease-in-out;*/
 }
 .left-btn:hover span{
     color:#222;
