@@ -5,6 +5,7 @@
 #include "kccolorconfigure.h"
 
 #include "kcpreference.h"
+#include "kcpreferenceembedded.h"
 
 KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     QWidget(parent)
@@ -15,7 +16,7 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     //Set Properties.
     setObjectName("KCControlCenterBanner");
     setFixedHeight(50);
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(15,0,15,0);
     setAutoFillBackground(true);
 
     //Set Palette
@@ -64,26 +65,36 @@ KCPreferenceListButton::KCPreferenceListButton(QWidget *parent) :
     categoryPressed=false;
     setFixedHeight(40);
 
-    //Set All Color
-    normalColor=QColor(255,255,255,0);
-    changedColor=QColor(255,255,255,70);
-    hoverColor=QColor(255,255,255,200);
-    pushColor=QColor(255,255,255,255);
+    //Set all status alpha
+    normalAlpha=0;
+    changedAlpha=30;
+    hoverAlpha=80;
+    pushAlpha=255;
+
+    //Set background color
+    backgroundColor=QColor(0xf7,0xcf,0x3d, normalAlpha);
 
     //Get Palette and Colors
     pal=this->palette();
-    pal.setColor(QPalette::Window, normalColor);
+    pal.setColor(QPalette::Window, backgroundColor);
     setPalette(pal);
 
     //Set Layout.
     QHBoxLayout *listButtonLayout=new QHBoxLayout(this);
-    listButtonLayout->setContentsMargins(0,0,0,0);
+    listButtonLayout->setContentsMargins(5,5,5,5);
     listButtonLayout->setSpacing(0);
     categoryIcon=new QLabel(this);
     listButtonLayout->addWidget(categoryIcon);
     categoryCaption=new QLabel(this);
     listButtonLayout->addWidget(categoryCaption);
     listButtonLayout->addStretch();
+
+    //Init Fade Out Animation
+    fadeOutAnimation=new QTimeLine(128, this);
+    fadeOutAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    fadeOutAnimation->setEndFrame(0);
+    connect(fadeOutAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(changeBackAlpha(int)));
 }
 
 void KCPreferenceListButton::setCategoryIcon(const QString &fileName)
@@ -100,8 +111,7 @@ void KCPreferenceListButton::enterEvent(QEvent *e)
 {
     if(!categoryPressed)
     {
-        pal.setColor(QPalette::Window, hoverColor);
-        setPalette(pal);
+        changeBackAlpha(hoverAlpha);
         QWidget::enterEvent(e);
     }
 }
@@ -110,28 +120,15 @@ void KCPreferenceListButton::leaveEvent(QEvent *e)
 {
     if(!categoryPressed)
     {
-        if(!categoryChanged)
-        {
-            pal.setColor(QPalette::Window, normalColor);
-            setPalette(pal);
-            QWidget::enterEvent(e);
-        }
-
+        fadeMeOut();
     }
     QWidget::leaveEvent(e);
 }
 
 void KCPreferenceListButton::mouseReleaseEvent(QMouseEvent *e)
 {
-    if(!categoryPressed)
-    {
-        //Change state, emit signal
-        categoryPressed=!categoryPressed;
-        pal.setColor(QPalette::Window, pushColor);
-        setPalette(pal);
-        emit categorySelected();
-        QWidget::enterEvent(e);
-    }
+    setCategoryPressed(true);
+    emit categorySelected();
     QWidget::mouseReleaseEvent(e);
 }
 
@@ -140,14 +137,35 @@ bool KCPreferenceListButton::getCategoryPressed() const
     return categoryPressed;
 }
 
+void KCPreferenceListButton::changeBackAlpha(int newAlpha)
+{
+    backgroundColor.setAlpha(newAlpha);
+    pal.setColor(QPalette::Window, backgroundColor);
+    setPalette(pal);
+}
+
 void KCPreferenceListButton::setCategoryPressed(bool value)
 {
     categoryPressed = value;
+    if(categoryPressed)
+    {
+        changeBackAlpha(pushAlpha);
+    }
+    else
+    {
+        fadeMeOut();
+    }
 }
 
 void KCPreferenceListButton::fadeMeOut()
 {
-
+    if(fadeOutAnimation->state()!=QTimeLine::Running)
+    {
+        backgroundColor=pal.color(QPalette::Window);
+        fadeOutAnimation->stop();
+        fadeOutAnimation->setStartFrame(pal.color(QPalette::Window).alpha());
+        fadeOutAnimation->start();
+    }
 }
 
 KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
@@ -161,21 +179,10 @@ KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
     categoryIcons[KCPreferenceCompiler]=":/controlcenter/image/Control Center/cciCompiler.png";
     categoryIcons[KCPreferenceDebugger]=":/controlcenter/image/Control Center/cciDebugger.png";
     categoryIcons[KCPreferenceFileAssociation]=":/controlcenter/image/Control Center/cciFileAssociation.png";
-    categoryIcons[KCPreferenceLanguage]=":/controlcenter/image/Control Center/cciLanguage.png";
 
     //Set Properties
     setContentsMargins(0,0,0,0);
     setFixedWidth(215);
-
-    //Current Index
-    /*
-     * Fixed Here!
-     *
-     * Change this to a previous settings.
-     * This should be saved.
-     *
-     */
-    currentCategory=KCPreferenceGerneral;
 
     //Set Layout and Add Widgets;
     QVBoxLayout *categoryListLayout=new QVBoxLayout(this);
@@ -191,17 +198,36 @@ KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
         categoryButton[i]=new KCPreferenceListButton(this);
         categoryButton[i]->setCategoryTitle(categoryCaptions[i]);
         categoryButton[i]->setCategoryIcon(categoryIcons[i]);
-        listSelectSignals->setMapping(categoryButton[i],i);
+        connect(categoryButton[i], SIGNAL(categorySelected()),
+                listSelectSignals, SLOT(map()));
+        listSelectSignals->setMapping(categoryButton[i], i);
         categoryListLayout->addWidget(categoryButton[i]);
     }
     categoryListLayout->addStretch();
+    connect(listSelectSignals, SIGNAL(mapped(int)),
+            this, SLOT(listSelectChangedEvent(int)));
+
+    //Current Index
+    /*
+     * Fixed Here!
+     *
+     * Change this to a previous settings.
+     * This should be saved.
+     *
+     */
+    currentCategory=KCPreferenceGerneral;
+    categoryButton[currentCategory]->setCategoryPressed(true);
 }
 
 void KCPreferenceCategoryList::listSelectChangedEvent(int listIndex)
 {
-    categoryButton[listIndex]->setCategoryPressed(true);
+    if(currentCategory==listIndex)
+    {
+        return;
+    }
     categoryButton[currentCategory]->setCategoryPressed(false);
     currentCategory=listIndex;
+    categoryButton[currentCategory]->setCategoryPressed(true);
 }
 
 void KCPreferenceCategoryList::retranslate()
@@ -211,12 +237,18 @@ void KCPreferenceCategoryList::retranslate()
     categoryCaptions[KCPreferenceCompiler]=tr("Compiler");
     categoryCaptions[KCPreferenceDebugger]=tr("Debugger");
     categoryCaptions[KCPreferenceFileAssociation]=tr("File Association");
-    categoryCaptions[KCPreferenceLanguage]="";
 }
 
 void KCPreferenceCategoryList::retranslateAndSet()
 {
     retranslate();
+}
+
+KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
+    KCPreferencePager(parent)
+{
+    KCPreferenceEmbeddedGeneral *newGeneralSetting=new KCPreferenceEmbeddedGeneral(this);
+    addSuperList(newGeneralSetting);
 }
 
 KCPreference::KCPreference(QWidget *parent) :
@@ -248,6 +280,10 @@ KCPreference::KCPreference(QWidget *parent) :
     //Set Category List
     categoryList=new KCPreferenceCategoryList(this);
     contentLayout->addWidget(categoryList);
+
+    //Set Contents
+    contents=new KCPreferenceContents(this);
+    contentLayout->addWidget(contents, 1);
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCPreference::retranslateAndSet);

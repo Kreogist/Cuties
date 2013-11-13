@@ -94,7 +94,10 @@ SOURCES += \
     kcfontconfigure.cpp \
     kccodecompileprogress.cpp \
     gdbcontroller.cpp \
-    kcpreference.cpp
+    kcpreference.cpp \
+    kcpreferencesuperlist.cpp \
+    kcpreferencepager.cpp \
+    kcpreferenceembedded.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -165,7 +168,10 @@ HEADERS += \
     kcfontconfigure.h \
     kccodecompileprogress.h \
     gdbcontroller.h \
-    kcpreference.h
+    kcpreference.h \
+    kcpreferencesuperlist.h \
+    kcpreferencepager.h \
+    kcpreferenceembedded.h
 
 # Enable C++11
 CONFIG += c++11

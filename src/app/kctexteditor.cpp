@@ -479,7 +479,7 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
     }
     else
     {
-        qDebug()<<"test";
+        ;
     }
 }
 

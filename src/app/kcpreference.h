@@ -8,6 +8,7 @@
 #include <QTimeLine>
 
 #include "kclistbutton.h"
+#include "kcpreferencepager.h"
 
 enum KCPreferenceCategory
 {
@@ -16,7 +17,6 @@ enum KCPreferenceCategory
     KCPreferenceCompiler,
     KCPreferenceDebugger,
     KCPreferenceFileAssociation,
-    KCPreferenceLanguage,
     KCCategoryCount
 };
 
@@ -52,6 +52,9 @@ signals:
 public slots:
     void fadeMeOut();
 
+private slots:
+    void changeBackAlpha(int newAlpha);
+
 protected:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
@@ -60,7 +63,8 @@ protected:
 private:
     QLabel *categoryIcon, *categoryCaption;
     QPalette pal;
-    QColor normalColor, changedColor, hoverColor, pushColor;
+    int normalAlpha, changedAlpha, hoverAlpha, pushAlpha;
+    QColor backgroundColor;
     QTimeLine *fadeOutAnimation;
     bool categoryChanged, categoryPressed;
 };
@@ -75,7 +79,7 @@ public slots:
     void retranslate();
     void retranslateAndSet();
 
-protected:
+private slots:
     void listSelectChangedEvent(int listIndex);
 
 private:
@@ -83,6 +87,15 @@ private:
     int currentCategory;
 
     KCPreferenceListButton *categoryButton[KCCategoryCount];
+};
+
+class KCPreferenceContents : public KCPreferencePager
+{
+public:
+    explicit KCPreferenceContents(QWidget *parent = 0);
+
+private:
+
 };
 
 class KCPreference : public QDialog
@@ -104,6 +117,7 @@ private:
     //Widgets:
     KCPreferenceBannerWidget *bannerWidget;
     KCPreferenceCategoryList *categoryList;
+    KCPreferenceContents *contents;
     //Translate Strings
     QString titleText;
 };

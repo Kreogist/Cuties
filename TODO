@@ -1,7 +1,14 @@
-1. Whole Line Delete.
+0. Debug
+1. Plugins structure.
 2. Font Settings.
-3. Highlighter Configure.
+3. Whole Line Delete.
 4. File Encode.
-5. Enable Line Num.
-6. Input/Output Redirect.
-7. Judge Dock.
+5. Input/Output Redirect.
+6. Judge Dock.
+7. Welcome Screen
+8. Highlighter Configure.
+9. Compiler Unfound Bugs.
+10. Multi-language.
+11. FakeVim
+12. Notes
+13. Web Browser
