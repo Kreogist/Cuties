@@ -7,15 +7,14 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QList>
-#include <QApplication>
+#include <QResizeEvent>
 
 class KCPreferenceSuperListContent : public QWidget
 {
     Q_OBJECT
 public:
     explicit KCPreferenceSuperListContent(QWidget *parent = 0);
-    QVBoxLayout *getSuperListLayout();
-    QList<QLabel *> getSuperListTitles();
+    void appendTitle(QLabel *newTitleWidget);
 
 private:
     QVBoxLayout *superListLayout;
@@ -32,6 +31,9 @@ public:
 signals:
 
 public slots:
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 
 private:
     QFont titleFont;

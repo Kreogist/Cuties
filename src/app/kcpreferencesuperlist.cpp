@@ -4,10 +4,6 @@
 KCPreferenceSuperListContent::KCPreferenceSuperListContent(QWidget *parent) :
     QWidget(parent)
 {
-    //Set widget size policy
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setFixedSize(500,500);
-
     //Set super layout
     superListLayout=new QVBoxLayout(this);
     superListLayout->setContentsMargins(0,0,0,0);
@@ -15,14 +11,12 @@ KCPreferenceSuperListContent::KCPreferenceSuperListContent(QWidget *parent) :
     setLayout(superListLayout);
 }
 
-QVBoxLayout *KCPreferenceSuperListContent::getSuperListLayout()
+void KCPreferenceSuperListContent::appendTitle(QLabel *newTitleWidget)
 {
-    return superListLayout;
-}
-
-QList<QLabel *> KCPreferenceSuperListContent::getSuperListTitles()
-{
-    return superListTitles;
+    superListTitles.append(newTitleWidget);
+    superListLayout->addSpacing(5);
+    superListLayout->addWidget(newTitleWidget);
+    setFixedHeight(superListLayout->sizeHint().height());
 }
 
 KCPreferenceSuperList::KCPreferenceSuperList(QWidget *parent) :
@@ -47,7 +41,11 @@ void KCPreferenceSuperList::addTitle(const QString &titleText)
     newTitleWidget->setText(" " + titleText);
     newTitleWidget->setFont(titleFont);
     newTitleWidget->setFixedHeight(30);
-    contents->getSuperListTitles().append(newTitleWidget);
-    contents->getSuperListLayout()->addSpacing(5);
-    contents->getSuperListLayout()->addWidget(newTitleWidget);
+    contents->appendTitle(newTitleWidget);
+}
+
+void KCPreferenceSuperList::resizeEvent(QResizeEvent *event)
+{
+    QScrollArea::resizeEvent(event);
+    contents->setFixedWidth(event->size().width());
 }
