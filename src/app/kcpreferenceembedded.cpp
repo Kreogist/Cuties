@@ -22,7 +22,9 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
                    instance->getRememberUnclosedFile());
     addTitle(generalTitleText[titleHistory]);
     addItemInt(intItemCaption[intItemHistoryMax],
-               KCHistoryConfigure::getInstance()->getMaxRecentFilesSize());
+               KCHistoryConfigure::getInstance()->getMaxRecentFilesSize(),
+               100,
+               4);
     addTitle(generalTitleText[titleSearchOptions]);
     addItemCombo(comboItemCaption[comboSearchEngine],
                  comboItemText[comboSearchEngine],

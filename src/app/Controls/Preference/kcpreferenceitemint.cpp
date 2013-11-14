@@ -35,8 +35,8 @@ KCPreferenceItemInt::KCPreferenceItemInt(QWidget *parent) :
     intSliderValueChanger->setContentsMargins(0,0,0,0);
     intDialValueChanger=new QDial(this);
     intDialValueChanger->setContentsMargins(0,0,0,0);
-    intDialValueChanger->setFixedSize(48,48);
-    hideEditWidget();
+    intDialValueChanger->setFixedSize(52,52);
+    setEditWidgetStatus(false);
     connect(intSpinValueChanger, SIGNAL(valueChanged(int)),
             this, SLOT(syncValue(int)));
     connect(intSliderValueChanger, SIGNAL(valueChanged(int)),
@@ -50,7 +50,7 @@ KCPreferenceItemInt::KCPreferenceItemInt(QWidget *parent) :
     dialLayout->addLayout(editLayout);
     dialLayout->addWidget(intDialValueChanger);
 
-    setExpandFinishedHeight(48);
+    setExpandFinishedHeight(52);
 }
 
 KCPreferenceItemInt::~KCPreferenceItemInt()
@@ -72,6 +72,20 @@ void KCPreferenceItemInt::setIntCaptionText(const QString &value)
     intCaption->setText(value);
 }
 
+void KCPreferenceItemInt::setMaximumInt(const int &itemMax)
+{
+    intSpinValueChanger->setMaximum(itemMax);
+    intSliderValueChanger->setMaximum(itemMax);
+    intDialValueChanger->setMaximum(itemMax);
+}
+
+void KCPreferenceItemInt::setMinimumInt(const int &itemMin)
+{
+    intSpinValueChanger->setMinimum(itemMin);
+    intSliderValueChanger->setMinimum(itemMin);
+    intDialValueChanger->setMinimum(itemMin);
+}
+
 void KCPreferenceItemInt::syncValue(int newValue)
 {
     intSpinValueChanger->setValue(newValue);
@@ -79,24 +93,14 @@ void KCPreferenceItemInt::syncValue(int newValue)
     intDialValueChanger->setValue(newValue);
 }
 
-void KCPreferenceItemInt::showEditWidget()
+void KCPreferenceItemInt::setEditWidgetStatus(bool states)
 {
-    intSpinValueChanger->setEnabled(true);
-    intSpinValueChanger->setVisible(true);
-    intSliderValueChanger->setEnabled(true);
-    intSliderValueChanger->setVisible(true);
-    intDialValueChanger->setEnabled(true);
-    intDialValueChanger->setVisible(true);
-}
-
-void KCPreferenceItemInt::hideEditWidget()
-{
-    intSpinValueChanger->setEnabled(false);
-    intSpinValueChanger->setVisible(false);
-    intSliderValueChanger->setEnabled(false);
-    intSliderValueChanger->setVisible(false);
-    intDialValueChanger->setEnabled(false);
-    intDialValueChanger->setVisible(false);
+    intSpinValueChanger->setEnabled(states);
+    intSpinValueChanger->setVisible(states);
+    intSliderValueChanger->setEnabled(states);
+    intSliderValueChanger->setVisible(states);
+    intDialValueChanger->setEnabled(states);
+    intDialValueChanger->setVisible(states);
 }
 
 QVariant KCPreferenceItemInt::getUserNewValue()

@@ -17,6 +17,8 @@ public:
     ~KCPreferenceItemInt();
     void setOriginalValue(const QVariant &value);
     void setIntCaptionText(const QString &value);
+    void setMaximumInt(const int &itemMax);
+    void setMinimumInt(const int &itemMin);
 
 signals:
 
@@ -24,12 +26,11 @@ public slots:
 
 private slots:
     void syncValue(int newValue);
-    void showEditWidget();
-    void hideEditWidget();
 
 protected:
     QVariant getUserNewValue();
     void refreshValueDisplay();
+    void setEditWidgetStatus(bool states);
 
 private:
     QString intCaptionText;

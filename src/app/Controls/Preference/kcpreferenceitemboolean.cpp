@@ -7,8 +7,8 @@ KCPreferenceItemBoolean::KCPreferenceItemBoolean(QWidget *parent) :
 {
     retranslate();
 
-    enabledColor=QColor();
-    disabledColor=QColor();
+    enabledColor=QColor(0x54,0x8f,0x40);
+    disabledColor=QColor(254, 0, 0);
 
     //Set Edit Mode Layout
     editLayout=new QVBoxLayout(this);
@@ -27,16 +27,17 @@ KCPreferenceItemBoolean::KCPreferenceItemBoolean(QWidget *parent) :
     booleanLayout->addWidget(originalValueDisplayer);
     booleanLayout->addStretch();
 
+    displayPalette=valueDisplayer->palette();
+
     editLayout->addLayout(booleanLayout);
 
     booleanData=new QCheckBox(this);
     booleanData->setText(booleanDataText);
-    booleanData->setVisible(false);
-    booleanData->setEnabled(false);
+    setEditWidgetStatus(false);
     editLayout->addWidget(booleanData);
     editLayout->addStretch();
 
-    setExpandFinishedHeight(48);
+    setExpandFinishedHeight(52);
 }
 
 KCPreferenceItemBoolean::~KCPreferenceItemBoolean()
@@ -48,6 +49,8 @@ void KCPreferenceItemBoolean::setOriginalValue(const QVariant &value)
 {
     booleanData->setChecked(value.toBool());
     valueDisplayer->setText(booleanStatusText[int(value.toBool())]);
+    displayPalette.setColor(QPalette::WindowText, value.toBool()?enabledColor:disabledColor);
+    valueDisplayer->setPalette(displayPalette);
     KCPreferenceItemBase::setOriginalValue(value);
 }
 
@@ -79,16 +82,10 @@ void KCPreferenceItemBoolean::retranslateAndSet()
     booleanData->setText(booleanDataText);
 }
 
-void KCPreferenceItemBoolean::showEditWidget()
+void KCPreferenceItemBoolean::setEditWidgetStatus(bool states)
 {
-    booleanData->setVisible(true);
-    booleanData->setEnabled(true);
-}
-
-void KCPreferenceItemBoolean::hideEditWidget()
-{
-    booleanData->setVisible(false);
-    booleanData->setEnabled(false);
+    booleanData->setVisible(states);
+    booleanData->setEnabled(states);
 }
 
 QVariant KCPreferenceItemBoolean::getUserNewValue()
@@ -99,6 +96,8 @@ QVariant KCPreferenceItemBoolean::getUserNewValue()
 void KCPreferenceItemBoolean::refreshValueDisplay()
 {
     valueDisplayer->setText(booleanStatusText[int(booleanData->isChecked())]);
+    displayPalette.setColor(QPalette::WindowText, booleanData->isChecked()?enabledColor:disabledColor);
+    valueDisplayer->setPalette(displayPalette);
     if(booleanData->isChecked() == originalValue.toBool())
     {
         setOriginalDisplayVisible(false);

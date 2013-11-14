@@ -25,12 +25,11 @@ KCPreferenceItemCombo::KCPreferenceItemCombo(QWidget *parent) :
     editLayout->addLayout(comboLayout);
 
     comboData=new QComboBox(this);
-    comboData->setVisible(false);
-    comboData->setEnabled(false);
+    setEditWidgetStatus(false);
     editLayout->addWidget(comboData);
     editLayout->addStretch();
 
-    setExpandFinishedHeight(48);
+    setExpandFinishedHeight(52);
 }
 
 KCPreferenceItemCombo::~KCPreferenceItemCombo()
@@ -62,16 +61,10 @@ void KCPreferenceItemCombo::setComboCaptionText(const QString &value)
     comboCaption->setText(value);
 }
 
-void KCPreferenceItemCombo::showEditWidget()
+void KCPreferenceItemCombo::setEditWidgetStatus(bool states)
 {
-    comboData->setVisible(true);
-    comboData->setEnabled(true);
-}
-
-void KCPreferenceItemCombo::hideEditWidget()
-{
-    comboData->setVisible(false);
-    comboData->setEnabled(false);
+    comboData->setVisible(states);
+    comboData->setEnabled(states);
 }
 
 QVariant KCPreferenceItemCombo::getUserNewValue()

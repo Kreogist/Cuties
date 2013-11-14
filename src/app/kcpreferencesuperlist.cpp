@@ -119,11 +119,15 @@ void KCPreferenceSuperList::addItemBoolean(const QString &captionText,
 }
 
 void KCPreferenceSuperList::addItemInt(const QString &captionText,
-                                       int defaultValue)
+                                       int defaultValue,
+                                       int maxValue,
+                                       int minValue)
 {
     KCPreferenceItemInt *newIntItem=new KCPreferenceItemInt(contents);
     newIntItem->setIntCaptionText(captionText);
     newIntItem->setOriginalValue(defaultValue);
+    newIntItem->setMaximumInt(maxValue);
+    newIntItem->setMinimumInt(minValue);
     contents->appendItem(newIntItem);
 }
 

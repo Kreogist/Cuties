@@ -24,13 +24,10 @@ public slots:
     void retranslate();
     void retranslateAndSet();
 
-private slots:
-    void showEditWidget();
-    void hideEditWidget();
-
 protected:
     QVariant getUserNewValue();
     void refreshValueDisplay();
+    void setEditWidgetStatus(bool states);
 
 private:
     QString booleanText;
@@ -42,6 +39,7 @@ private:
     QCheckBox *booleanData;
 
     QColor enabledColor, disabledColor;
+    QPalette displayPalette;
 };
 
 #endif // KCPREFERENCEITEMBOOLEAN_H

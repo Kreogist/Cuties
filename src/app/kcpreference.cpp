@@ -85,6 +85,7 @@ KCPreferenceListButton::KCPreferenceListButton(QWidget *parent) :
     listButtonLayout->setSpacing(0);
     categoryIcon=new QLabel(this);
     listButtonLayout->addWidget(categoryIcon);
+    listButtonLayout->addSpacing(5);
     categoryCaption=new QLabel(this);
     listButtonLayout->addWidget(categoryCaption);
     listButtonLayout->addStretch();

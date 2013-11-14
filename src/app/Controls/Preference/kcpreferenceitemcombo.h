@@ -23,12 +23,11 @@ signals:
 public slots:
 
 private slots:
-    void showEditWidget();
-    void hideEditWidget();
 
 protected:
     QVariant getUserNewValue();
     void refreshValueDisplay();
+    void setEditWidgetStatus(bool states);
 
 private:
     QList<QString> comboTextList;

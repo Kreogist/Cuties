@@ -144,6 +144,16 @@ void KCPreferenceItemBase::setItemHeight(int newHeight)
     setFixedHeight(newHeight);
 }
 
+void KCPreferenceItemBase::showEditWidget()
+{
+    setEditWidgetStatus(true);
+}
+
+void KCPreferenceItemBase::hideEditWidget()
+{
+    setEditWidgetStatus(false);
+}
+
 void KCPreferenceItemBase::setOriginalDisplayVisible(bool statue)
 {
     originalValueDisplayer->setEnabled(statue);

@@ -52,7 +52,9 @@ public:
     void addItemBoolean(const QString &captionText,
                         bool defaultValue);
     void addItemInt(const QString &captionText,
-                    int defaultValue);
+                    int defaultValue,
+                    int maxValue=100,
+                    int minValue=0);
     void addStretch();
 
 signals:

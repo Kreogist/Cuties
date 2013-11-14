@@ -32,10 +32,11 @@ public slots:
 private slots:
     void setBackgroundAlpha(int newAlpha);
     void setItemHeight(int newHeight);
-    virtual void showEditWidget()=0;
-    virtual void hideEditWidget()=0;
+    void showEditWidget();
+    void hideEditWidget();
 
 protected:
+    virtual void setEditWidgetStatus(bool states)=0;
     virtual QVariant getUserNewValue()=0;
     virtual void refreshValueDisplay()=0;
     void setOriginalDisplayVisible(bool statue);
