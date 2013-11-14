@@ -8,6 +8,7 @@
 #include "kcpreferencesuperlist.h"
 
 #include "kcgeneralconfigure.h"
+#include "kceditorconfigure.h"
 #include "kchistoryconfigure.h"
 
 class KCPreferenceEmbeddedGeneral : public KCPreferenceSuperList
@@ -59,6 +60,60 @@ private:
     QString intItemCaption[intItemCount];
 
     KCGeneralConfigure *instance;
+};
+
+class KCPreferenceEmbeddedEditor : public KCPreferenceSuperList
+{
+    Q_OBJECT
+public:
+    explicit KCPreferenceEmbeddedEditor(QWidget *parent = 0);
+
+public slots:
+    void retranslate();
+    void retranslateAndSet();
+
+private:
+    enum EditorTitleEnum
+    {
+        titleViewOptions,
+        titleCount
+    };
+    QString editorTitleText[titleCount];
+
+    enum EditorBooleanEnum
+    {
+
+    };
+
+    KCEditorConfigure *instance;
+};
+
+class KCPreferenceEmbeddedCompiler : public KCPreferenceSuperList
+{
+    Q_OBJECT
+public:
+    explicit KCPreferenceEmbeddedCompiler(QWidget *parent = 0);
+
+private:
+};
+
+class KCPreferenceEmbeddedDebugger : public KCPreferenceSuperList
+{
+    Q_OBJECT
+public:
+    explicit KCPreferenceEmbeddedDebugger(QWidget *parent = 0);
+
+private:
+};
+
+class KCPreferenceEmbeddedFileAssociation : public KCPreferenceSuperList
+{
+    Q_OBJECT
+public:
+    explicit KCPreferenceEmbeddedFileAssociation(QWidget *parent = 0);
+
+private:
+
 };
 
 #endif // KCPREFERENCEEMBEDDED_H

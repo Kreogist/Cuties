@@ -75,6 +75,9 @@ class KCPreferenceCategoryList : public QWidget
 public:
     explicit KCPreferenceCategoryList(QWidget *parent = 0);
 
+signals:
+    void categoryChanged(int newCategoryIndex);
+
 public slots:
     void retranslate();
     void retranslateAndSet();

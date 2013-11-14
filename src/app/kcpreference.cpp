@@ -228,6 +228,7 @@ void KCPreferenceCategoryList::listSelectChangedEvent(int listIndex)
     }
     categoryButton[currentCategory]->setCategoryPressed(false);
     currentCategory=listIndex;
+    emit categoryChanged(currentCategory);
     categoryButton[currentCategory]->setCategoryPressed(true);
 }
 
@@ -249,7 +250,16 @@ KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
     KCPreferencePager(parent)
 {
     KCPreferenceEmbeddedGeneral *newGeneralSetting=new KCPreferenceEmbeddedGeneral(this);
+    KCPreferenceEmbeddedEditor *newEditorSetting=new KCPreferenceEmbeddedEditor(this);
+    KCPreferenceEmbeddedCompiler *newCompilerSetting=new KCPreferenceEmbeddedCompiler(this);
+    KCPreferenceEmbeddedDebugger *newDebuggerSetting=new KCPreferenceEmbeddedDebugger(this);
+    KCPreferenceEmbeddedFileAssociation *newFileAssociationSetting=new KCPreferenceEmbeddedFileAssociation(this);
     addSuperList(newGeneralSetting);
+    addSuperList(newEditorSetting);
+    addSuperList(newCompilerSetting);
+    addSuperList(newDebuggerSetting);
+    addSuperList(newFileAssociationSetting);
+    initPager();
 }
 
 KCPreference::KCPreference(QWidget *parent) :
@@ -285,6 +295,9 @@ KCPreference::KCPreference(QWidget *parent) :
     //Set Contents
     contents=new KCPreferenceContents(this);
     contentLayout->addWidget(contents, 1);
+
+    connect(categoryList, SIGNAL(categoryChanged(int)),
+            contents, SLOT(switchToPage(int)));
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCPreference::retranslateAndSet);

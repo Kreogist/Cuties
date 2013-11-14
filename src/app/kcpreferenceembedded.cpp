@@ -69,3 +69,44 @@ void KCPreferenceEmbeddedGeneral::retranslateAndSet()
         contents->getSuperListTitles().at(i)->setText(generalTitleText[i]);
     }
 }
+
+
+KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
+    KCPreferenceSuperList(parent)
+{
+    //Get Translate
+    retranslate();
+
+    //Get configure settings
+    instance=KCEditorConfigure::getInstance();
+
+    addTitle(editorTitleText[titleViewOptions]);
+}
+
+void KCPreferenceEmbeddedEditor::retranslate()
+{
+    editorTitleText[titleViewOptions]=QString(" " + tr("View Option"));
+}
+
+void KCPreferenceEmbeddedEditor::retranslateAndSet()
+{
+    retranslate();
+}
+
+KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
+    KCPreferenceSuperList(parent)
+{
+    ;
+}
+
+KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
+    KCPreferenceSuperList(parent)
+{
+    ;
+}
+
+KCPreferenceEmbeddedFileAssociation::KCPreferenceEmbeddedFileAssociation(QWidget *parent) :
+    KCPreferenceSuperList(parent)
+{
+    ;
+}
