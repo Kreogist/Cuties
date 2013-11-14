@@ -108,7 +108,7 @@ void KCPreferenceItemBoolean::refreshValueDisplay()
                                     originalValueIs +
                                     booleanStatusText[int(originalValue.toBool())] +
                                     ")");
-    setOriginalDisplayVisible(true)
+    setOriginalDisplayVisible(true);
 }
 
 void KCPreferenceItemBoolean::refreshBooleanText()

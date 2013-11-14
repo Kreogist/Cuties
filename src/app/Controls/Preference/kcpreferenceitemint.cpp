@@ -116,7 +116,7 @@ void KCPreferenceItemInt::refreshValueDisplay()
                                     originalValueIs +
                                     QString::number(originalValue.toInt()) +
                                     ")");
-    setOriginalDisplayVisible(true)
+    setOriginalDisplayVisible(true);
 }
 
 
