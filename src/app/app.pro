@@ -97,7 +97,11 @@ SOURCES += \
     kcpreference.cpp \
     kcpreferencesuperlist.cpp \
     kcpreferencepager.cpp \
-    kcpreferenceembedded.cpp
+    kcpreferenceembedded.cpp \
+    Controls/Preference/kcpreferenceitembase.cpp \
+    Controls/Preference/kcpreferenceitemcombo.cpp \
+    Controls/Preference/kcpreferenceitemboolean.cpp \
+    Controls/Preference/kcpreferenceitemint.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -171,7 +175,11 @@ HEADERS += \
     kcpreference.h \
     kcpreferencesuperlist.h \
     kcpreferencepager.h \
-    kcpreferenceembedded.h
+    kcpreferenceembedded.h \
+    Controls/Preference/kcpreferenceitembase.h \
+    Controls/Preference/kcpreferenceitemcombo.h \
+    Controls/Preference/kcpreferenceitemboolean.h \
+    Controls/Preference/kcpreferenceitemint.h
 
 # Enable C++11
 CONFIG += c++11

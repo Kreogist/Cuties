@@ -8,6 +8,12 @@
 #include <QVBoxLayout>
 #include <QList>
 #include <QResizeEvent>
+#include <QSignalMapper>
+
+#include "Controls/Preference/kcpreferenceitembase.h"
+#include "Controls/Preference/kcpreferenceitemcombo.h"
+#include "Controls/Preference/kcpreferenceitemboolean.h"
+#include "Controls/Preference/kcpreferenceitemint.h"
 
 class KCPreferenceSuperListContent : public QWidget
 {
@@ -15,10 +21,23 @@ class KCPreferenceSuperListContent : public QWidget
 public:
     explicit KCPreferenceSuperListContent(QWidget *parent = 0);
     void appendTitle(QLabel *newTitleWidget);
+    void appendItem(KCPreferenceItemBase *newItemWidget);
+    void appendStretch();
+    QList<QLabel *> getSuperListTitles() const;
+    QList<KCPreferenceItemBase *> getSuperListItems() const;
+
+signals:
+    void changeHeight(int changedHeight);
+
+private slots:
+    void transferCurrentIndex(int newIndex);
 
 private:
+    int currentItemIndex;
     QVBoxLayout *superListLayout;
     QList<QLabel *> superListTitles;
+    QList<KCPreferenceItemBase *> superListItems;
+    QSignalMapper *superListItemSignalProcessor;
 };
 
 class KCPreferenceSuperList : public QScrollArea
@@ -27,6 +46,14 @@ class KCPreferenceSuperList : public QScrollArea
 public:
     explicit KCPreferenceSuperList(QWidget *parent = 0);
     void addTitle(const QString &titleText);
+    void addItemCombo(const QString &captionText,
+                      const QList<QString> &comboItemList,
+                      int defaultValue);
+    void addItemBoolean(const QString &captionText,
+                        bool defaultValue);
+    void addItemInt(const QString &captionText,
+                    int defaultValue);
+    void addStretch();
 
 signals:
 
@@ -34,10 +61,9 @@ public slots:
 
 protected:
     void resizeEvent(QResizeEvent *event);
-
-private:
     QFont titleFont;
     KCPreferenceSuperListContent *contents;
+
 };
 
 #endif // KCPREFERENCESUPERLIST_H

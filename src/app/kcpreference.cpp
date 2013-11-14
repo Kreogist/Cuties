@@ -259,7 +259,7 @@ KCPreference::KCPreference(QWidget *parent) :
 
     //Set Dialog Properties
     setWindowTitle(titleText);
-    setMinimumSize(640, 400);
+    setMinimumSize(800, 400);
 
     //Banner Layout
     QVBoxLayout *bannerLayout=new QVBoxLayout(this);

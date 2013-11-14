@@ -27,6 +27,7 @@ signals:
 public slots:
     void setEditMode(bool value);
     void setItemSelected(bool value);
+
 private slots:
     void changeBackgroundAlpha(int alpha);
 
