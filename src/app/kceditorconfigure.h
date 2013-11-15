@@ -52,6 +52,8 @@ public:
     void setLineNumVisible(bool value);
     QString getEditorFont() const;
     void setEditorFont(const QString &value);
+    int getWrapModeInt() const;
+    int getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const;
 
 signals:
     void tabWidthChanged(int newValue);
@@ -68,6 +70,7 @@ private:
 
     //Values:
     QTextOption::WrapMode wrapMode;
+    int wrapModeInt;
     bool isUsingBlankInsteadTab, overwriteMode;
     bool lineNumVisible;
     int tabWidth, cursorWidth;

@@ -296,6 +296,7 @@ KCPreference::KCPreference(QWidget *parent) :
     contents=new KCPreferenceContents(this);
     contentLayout->addWidget(contents, 1);
 
+    //Connect category list and contents
     connect(categoryList, SIGNAL(categoryChanged(int)),
             contents, SLOT(switchToPage(int)));
 

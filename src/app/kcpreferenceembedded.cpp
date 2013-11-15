@@ -91,7 +91,7 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
                                                      instance->getTabWidth()));
     addItemCombo(comboItemCaption[comboWordWrapMode],
                  comboItemText[comboWordWrapMode],
-                 instance->getWrapMode());
+                 instance->getWrapModeInt());
     addTitle(editorTitleText[titleMultipleTabs]);
     addTitle(editorTitleText[titleClipboard]);
     addStretch();

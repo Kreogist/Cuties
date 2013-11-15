@@ -24,6 +24,7 @@ KCEditorConfigure *KCEditorConfigure::instance=nullptr;
 KCEditorConfigure::KCEditorConfigure()
 {
     wrapMode=QTextOption::NoWrap;
+    wrapModeInt=0;
     isUsingBlankInsteadTab=true;
     lineNumVisible=true;
     tabWidth=4;
@@ -49,6 +50,8 @@ void KCEditorConfigure::setLineNumVisible(bool value)
     emit lineNumPanelVisibleChanged(value);
 }
 
+
+
 void KCEditorConfigure::readConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
@@ -57,7 +60,7 @@ void KCEditorConfigure::readConfigure()
     isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
                                           isUsingBlankInsteadTab).toBool();
     lineNumVisible=settings.value("LineNumVisible", lineNumVisible).toBool();
-    int wMode=settings.value("WordWrap", wrapMode).toInt();
+    int wMode=settings.value("WordWrap", 0).toInt();
     switch(wMode)
     {
     case 0:
@@ -79,11 +82,34 @@ void KCEditorConfigure::readConfigure()
         wrapMode=QTextOption::NoWrap;
         break;
     }
+    wrapModeInt=getWrapModeNumber(wrapMode);
     cursorWidth=settings.value("CursorWidth", cursorWidth).toInt();
     overwriteMode=settings.value("OverwriteMode", overwriteMode).toBool();
     tabMoveable=settings.value("TabMoveable", tabMoveable).toBool();
     tabCloseable=settings.value("TabCloseable", tabCloseable).toBool();
     settings.endGroup();
+}
+
+int KCEditorConfigure::getWrapModeInt() const
+{
+    return wrapModeInt;
+}
+
+int KCEditorConfigure::getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const
+{
+    switch(destinationWrapMode)
+    {
+    case QTextOption::NoWrap:
+    case QTextOption::ManualWrap:
+        return 0;
+    case QTextOption::WordWrap:
+        return 1;
+    case QTextOption::WrapAnywhere:
+        return 2;
+    case QTextOption::WrapAtWordBoundaryOrAnywhere:
+        return 3;
+    }
+    return 0;
 }
 
 void KCEditorConfigure::writeConfigure()
@@ -131,6 +157,7 @@ QTextOption::WrapMode KCEditorConfigure::getWrapMode() const
 void KCEditorConfigure::setWrapMode(QTextOption::WrapMode value)
 {
     wrapMode = value;
+    //wrapModeInt =
     emit wrapModeChanged(value);
 }
 
