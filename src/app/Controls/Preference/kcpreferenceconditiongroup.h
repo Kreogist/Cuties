@@ -29,6 +29,8 @@ private:
 
     KCPreferenceSuperList *normalList;
     KCPreferenceSuperList *conditionList;
+
+    bool normalStatus;
 };
 
 #endif // KCPREFERENCECONDITIONGROUP_H

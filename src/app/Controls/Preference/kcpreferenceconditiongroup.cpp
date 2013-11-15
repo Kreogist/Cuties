@@ -8,6 +8,7 @@ KCPreferenceConditionGroup::KCPreferenceConditionGroup(KCPreferenceItemBase *con
     //Set condition values
     conditionItem=condition;
     conditionValue=establishValue;
+    normalStatus=true;
 
     //Set group properties
     setContentsMargins(0,0,0,0);
@@ -23,13 +24,19 @@ void KCPreferenceConditionGroup::conditionJudge(QVariant newItemValue)
 {
     if(newItemValue==conditionValue)
     {
-        //Expand animation happend
-        ;
+        if(normalStatus)
+        {
+            //Condition established animation happend
+            ;
+        }
     }
     else
     {
-        //Normal animation happend
-        ;
+        if(!normalStatus)
+        {
+            //Normal animation happend
+            ;
+        }
     }
 }
 
