@@ -24,6 +24,7 @@ public:
 
 signals:
     void editFocusCapture();
+    void requireValueChanged(const QVariant &newValue);
 
 public slots:
     void retranslate();

@@ -37,6 +37,9 @@ KCPreferenceItemBoolean::KCPreferenceItemBoolean(QWidget *parent) :
     editLayout->addWidget(booleanData);
     editLayout->addStretch();
 
+    connect(booleanData, SIGNAL(stateChanged(int)),
+            this, SIGNAL(requireValueChanged(QVariant)));
+
     setExpandFinishedHeight(52);
 }
 

@@ -29,6 +29,9 @@ KCPreferenceItemCombo::KCPreferenceItemCombo(QWidget *parent) :
     editLayout->addWidget(comboData);
     editLayout->addStretch();
 
+    connect(comboData, SIGNAL(currentIndexChanged(int)),
+            this, SIGNAL(requireValueChanged(QVariant)));
+
     setExpandFinishedHeight(52);
 }
 
