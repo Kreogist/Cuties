@@ -81,11 +81,23 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     instance=KCEditorConfigure::getInstance();
 
     addTitle(editorTitleText[titleViewOptions]);
+    addItemBoolean(booleanItemCaption[booleanShowLinePanel],
+                   instance->getLineNumVisible());
+    addItemBoolean(booleanItemCaption[booleanUseSpaceInsteadOfTab],
+                   instance->usingBlankInsteadTab());
+    addTitle(editorTitleText[titleMultipleTabs]);
+    addTitle(editorTitleText[titleClipboard]);
+    addStretch();
 }
 
 void KCPreferenceEmbeddedEditor::retranslate()
 {
     editorTitleText[titleViewOptions]=QString(" " + tr("View Option"));
+    editorTitleText[titleMultipleTabs]=QString(" " + tr("Multiple Tabs Option"));
+    editorTitleText[titleClipboard]=QString(" " + tr("Clipboard"));
+
+    booleanItemCaption[booleanShowLinePanel]=tr("Show line panel.");
+    booleanItemCaption[booleanUseSpaceInsteadOfTab]=tr("Use space instead of tab:");
 }
 
 void KCPreferenceEmbeddedEditor::retranslateAndSet()

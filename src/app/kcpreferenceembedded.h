@@ -76,14 +76,19 @@ private:
     enum EditorTitleEnum
     {
         titleViewOptions,
+        titleMultipleTabs,
+        titleClipboard,
         titleCount
     };
     QString editorTitleText[titleCount];
 
     enum EditorBooleanEnum
     {
-
+        booleanShowLinePanel,
+        booleanUseSpaceInsteadOfTab,
+        booleanItemCount
     };
+    QString booleanItemCaption[booleanItemCount];
 
     KCEditorConfigure *instance;
 };

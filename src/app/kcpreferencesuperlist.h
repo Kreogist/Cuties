@@ -45,16 +45,19 @@ class KCPreferenceSuperList : public QScrollArea
     Q_OBJECT
 public:
     explicit KCPreferenceSuperList(QWidget *parent = 0);
-    void addTitle(const QString &titleText);
-    void addItemCombo(const QString &captionText,
-                      const QList<QString> &comboItemList,
-                      int defaultValue);
-    void addItemBoolean(const QString &captionText,
-                        bool defaultValue);
-    void addItemInt(const QString &captionText,
+    QLabel *addTitle(const QString &titleText);
+    KCPreferenceItemCombo *addItemCombo(const QString &captionText,
+                                        const QList<QString> &comboItemList,
+                                        int defaultValue);
+    KCPreferenceItemCombo *addItemCombo(KCPreferenceItemCombo *newComboItem);
+    KCPreferenceItemBoolean *addItemBoolean(const QString &captionText,
+                                            bool defaultValue);
+    KCPreferenceItemBoolean *addItemBoolean(KCPreferenceItemBoolean *newBooleanItem);
+    KCPreferenceItemInt *addItemInt(const QString &captionText,
                     int defaultValue,
                     int maxValue=100,
                     int minValue=0);
+    KCPreferenceItemInt *addItemInt(KCPreferenceItemInt *newIntItem);
     void addStretch();
 
 signals:

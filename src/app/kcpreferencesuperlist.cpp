@@ -88,18 +88,19 @@ KCPreferenceSuperList::KCPreferenceSuperList(QWidget *parent) :
     titleFont.setPixelSize(20);
 }
 
-void KCPreferenceSuperList::addTitle(const QString &titleText)
+QLabel *KCPreferenceSuperList::addTitle(const QString &titleText)
 {
     QLabel *newTitleWidget=new QLabel(contents);
     newTitleWidget->setText(" " + titleText);
     newTitleWidget->setFont(titleFont);
     newTitleWidget->setFixedHeight(30);
     contents->appendTitle(newTitleWidget);
+    return newTitleWidget;
 }
 
-void KCPreferenceSuperList::addItemCombo(const QString &captionText,
-                                         const QList<QString> &comboItemList,
-                                         int defaultValue)
+KCPreferenceItemCombo *KCPreferenceSuperList::addItemCombo(const QString &captionText,
+                                                           const QList<QString> &comboItemList,
+                                                           int defaultValue)
 {
     KCPreferenceItemCombo *newComboItem=new KCPreferenceItemCombo(contents);
     newComboItem->setComboCaptionText(captionText);
@@ -107,21 +108,35 @@ void KCPreferenceSuperList::addItemCombo(const QString &captionText,
     newComboItem->refreshComboText();
     newComboItem->setOriginalValue(defaultValue);
     contents->appendItem(newComboItem);
+    return newComboItem;
 }
 
-void KCPreferenceSuperList::addItemBoolean(const QString &captionText,
-                                           bool defaultValue)
+KCPreferenceItemCombo *KCPreferenceSuperList::addItemCombo(KCPreferenceItemCombo *newComboItem)
+{
+    contents->appendItem(newComboItem);
+    return newComboItem;
+}
+
+KCPreferenceItemBoolean *KCPreferenceSuperList::addItemBoolean(const QString &captionText,
+                                                               bool defaultValue)
 {
     KCPreferenceItemBoolean *newBooleanItem=new KCPreferenceItemBoolean(contents);
     newBooleanItem->setBooleanCaptionText(captionText);
     newBooleanItem->setOriginalValue(defaultValue);
     contents->appendItem(newBooleanItem);
+    return newBooleanItem;
 }
 
-void KCPreferenceSuperList::addItemInt(const QString &captionText,
-                                       int defaultValue,
-                                       int maxValue,
-                                       int minValue)
+KCPreferenceItemBoolean *KCPreferenceSuperList::addItemBoolean(KCPreferenceItemBoolean *newBooleanItem)
+{
+    contents->appendItem(newBooleanItem);
+    return newBooleanItem;
+}
+
+KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(const QString &captionText,
+                                                       int defaultValue,
+                                                       int maxValue,
+                                                       int minValue)
 {
     KCPreferenceItemInt *newIntItem=new KCPreferenceItemInt(contents);
     newIntItem->setIntCaptionText(captionText);
@@ -129,6 +144,13 @@ void KCPreferenceSuperList::addItemInt(const QString &captionText,
     newIntItem->setMaximumInt(maxValue);
     newIntItem->setMinimumInt(minValue);
     contents->appendItem(newIntItem);
+    return newIntItem;
+}
+
+KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(KCPreferenceItemInt *newIntItem)
+{
+    contents->appendItem(newIntItem);
+    return newIntItem;
 }
 
 void KCPreferenceSuperList::addStretch()
