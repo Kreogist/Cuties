@@ -6,6 +6,7 @@
 #include <QList>
 
 #include "kcpreferencesuperlist.h"
+#include "Controls/Preference/kcpreferenceconditiongroup.h"
 
 #include "kcgeneralconfigure.h"
 #include "kceditorconfigure.h"

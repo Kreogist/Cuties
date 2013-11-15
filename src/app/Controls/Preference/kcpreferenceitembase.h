@@ -24,17 +24,21 @@ public:
 
 signals:
     void editFocusCapture();
-    void requireValueChanged(const QVariant &newValue);
+    void requireValueChanged();
 
 public slots:
     void retranslate();
     void retranslateAndSet();
+
 
 private slots:
     void setBackgroundAlpha(int newAlpha);
     void setItemHeight(int newHeight);
     void showEditWidget();
     void hideEditWidget();
+
+protected slots:
+    virtual void valueChangedEvent();
 
 protected:
     virtual void setEditWidgetStatus(bool states)=0;

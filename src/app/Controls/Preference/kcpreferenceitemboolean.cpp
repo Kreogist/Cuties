@@ -37,9 +37,6 @@ KCPreferenceItemBoolean::KCPreferenceItemBoolean(QWidget *parent) :
     editLayout->addWidget(booleanData);
     editLayout->addStretch();
 
-    connect(booleanData, SIGNAL(stateChanged(int)),
-            this, SIGNAL(requireValueChanged(QVariant)));
-
     setExpandFinishedHeight(52);
 }
 
@@ -51,10 +48,18 @@ KCPreferenceItemBoolean::~KCPreferenceItemBoolean()
 void KCPreferenceItemBoolean::setOriginalValue(const QVariant &value)
 {
     booleanData->setChecked(value.toBool());
+    KCPreferenceItemBase::setOriginalValue(value);
     valueDisplayer->setText(booleanStatusText[int(value.toBool())]);
     displayPalette.setColor(QPalette::WindowText, value.toBool()?enabledColor:disabledColor);
     valueDisplayer->setPalette(displayPalette);
-    KCPreferenceItemBase::setOriginalValue(value);
+
+    /*
+     * Change logical:
+     *
+     * When we set a original value, we connent the signal and slot this time.
+     */
+    connect(booleanData, SIGNAL(stateChanged(int)),
+            this, SLOT(valueChangedEvent()));
 }
 
 QString KCPreferenceItemBoolean::getBooleanText() const

@@ -83,8 +83,12 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     addTitle(editorTitleText[titleViewOptions]);
     addItemBoolean(booleanItemCaption[booleanShowLinePanel],
                    instance->getLineNumVisible());
-    addItemBoolean(booleanItemCaption[booleanUseSpaceInsteadOfTab],
-                   instance->usingBlankInsteadTab());
+
+    KCPreferenceItemBoolean *tabSpacingItem=new KCPreferenceItemBoolean(contents);
+    tabSpacingItem->setBooleanCaptionText(booleanItemCaption[booleanUseSpaceInsteadOfTab]);
+    tabSpacingItem->setOriginalValue(instance->usingBlankInsteadTab());
+    contents->appendItem(tabSpacingItem);
+
     addTitle(editorTitleText[titleMultipleTabs]);
     addTitle(editorTitleText[titleClipboard]);
     addStretch();

@@ -29,9 +29,6 @@ KCPreferenceItemCombo::KCPreferenceItemCombo(QWidget *parent) :
     editLayout->addWidget(comboData);
     editLayout->addStretch();
 
-    connect(comboData, SIGNAL(currentIndexChanged(int)),
-            this, SIGNAL(requireValueChanged(QVariant)));
-
     setExpandFinishedHeight(52);
 }
 
@@ -95,4 +92,7 @@ void KCPreferenceItemCombo::setOriginalValue(const QVariant &value)
     comboData->setCurrentIndex(value.toInt());
     valueDisplayer->setText(comboTextList.at(value.toInt()));
     KCPreferenceItemBase::setOriginalValue(value);
+
+    connect(comboData, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(valueChangedEvent()));
 }

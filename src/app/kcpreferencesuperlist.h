@@ -58,6 +58,7 @@ public:
                     int maxValue=100,
                     int minValue=0);
     KCPreferenceItemInt *addItemInt(KCPreferenceItemInt *newIntItem);
+
     void addStretch();
 
 signals:

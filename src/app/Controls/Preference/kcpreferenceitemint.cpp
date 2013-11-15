@@ -44,9 +44,6 @@ KCPreferenceItemInt::KCPreferenceItemInt(QWidget *parent) :
     connect(intDialValueChanger, SIGNAL(valueChanged(int)),
             this, SLOT(syncValue(int)));
 
-    connect(intSpinValueChanger, SIGNAL(valueChanged(int)),
-            this, SIGNAL(requireValueChanged(QVariant)));
-
     intSliderLayout->addWidget(intSpinValueChanger);
     intSliderLayout->addWidget(intSliderValueChanger);
     editLayout->addLayout(intSliderLayout);
@@ -69,6 +66,9 @@ void KCPreferenceItemInt::setOriginalValue(const QVariant &value)
     syncValue(value.toInt());
     valueDisplayer->setText(QString::number(value.toInt()));
     KCPreferenceItemBase::setOriginalValue(value);
+
+    connect(intSpinValueChanger, SIGNAL(valueChanged(int)),
+            this, SLOT(valueChangedEvent()));
 }
 
 void KCPreferenceItemInt::setIntCaptionText(const QString &value)

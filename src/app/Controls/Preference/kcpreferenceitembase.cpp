@@ -79,8 +79,6 @@ void KCPreferenceItemBase::setOriginalValue(const QVariant &value)
 void KCPreferenceItemBase::editFinished()
 {
     expandAnimation->stop();
-    setCurrentValue(getUserNewValue());
-    refreshValueDisplay();
     if(valueChanged)
     {
         fadeMeOut->setEndFrame(valueChangedAlpha);
@@ -152,6 +150,12 @@ void KCPreferenceItemBase::showEditWidget()
 void KCPreferenceItemBase::hideEditWidget()
 {
     setEditWidgetStatus(false);
+}
+
+void KCPreferenceItemBase::valueChangedEvent()
+{
+    setCurrentValue(getUserNewValue());
+    refreshValueDisplay();
 }
 
 void KCPreferenceItemBase::setOriginalDisplayVisible(bool statue)
