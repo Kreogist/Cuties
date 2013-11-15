@@ -33,6 +33,7 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
     setBackgroundAlpha(0);
 
     //Init animation
+    //Fade out Animation
     fadeMeOut=new QTimeLine(100, this);
     fadeMeOut->setStartFrame(255);
     connect(fadeMeOut, SIGNAL(frameChanged(int)),
@@ -52,6 +53,22 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
     foldAnimation->setEasingCurve(QEasingCurve::OutCubic);
     connect(foldAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(setItemHeight(int)));
+
+    //Show Animation
+    showAnimation=new QTimeLine(100, this);
+    showAnimation->setEndFrame(27);
+    showAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    connect(showAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(setItemHeight(int)));
+
+    //Hide Animation
+    hideAnimation=new QTimeLine(100, this);
+    hideAnimation->setEndFrame(0);
+    hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    connect(hideAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(setItemHeight(int)));
+    connect(hideAnimation, SIGNAL(finished()),
+            this, SLOT(hide()));
 }
 
 QVariant KCPreferenceItemBase::getCurrentValue() const
@@ -114,6 +131,32 @@ void KCPreferenceItemBase::retranslateAndSet()
 {
     retranslate();
     refreshValueDisplay();
+}
+
+void KCPreferenceItemBase::animateShow()
+{
+    if(showAnimation->state()!=QTimeLine::Running)
+    {
+        //Prepare animation
+        show();
+        //Stop hide animation
+        hideAnimation->stop();
+        //Set show animation
+        showAnimation->setStartFrame(height());
+        showAnimation->start();
+    }
+}
+
+void KCPreferenceItemBase::animateHide()
+{
+    if(hideAnimation->state()!=QTimeLine::Running)
+    {
+        //Stop show animation
+        showAnimation->stop();
+        //Set hide animation
+        hideAnimation->setStartFrame(height());
+        hideAnimation->start();
+    }
 }
 
 void KCPreferenceItemBase::mousePressEvent(QMouseEvent *e)

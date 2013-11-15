@@ -84,10 +84,11 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     addItemBoolean(booleanItemCaption[booleanShowLinePanel],
                    instance->getLineNumVisible());
 
-    KCPreferenceItemBoolean *tabSpacingItem=new KCPreferenceItemBoolean(contents);
-    tabSpacingItem->setBooleanCaptionText(booleanItemCaption[booleanUseSpaceInsteadOfTab]);
-    tabSpacingItem->setOriginalValue(instance->usingBlankInsteadTab());
-    contents->appendItem(tabSpacingItem);
+    KCPreferenceItemBooleanGroup *tabSpacingItem=
+    addItemBooleanGroup(booleanItemCaption[booleanUseSpaceInsteadOfTab],
+                        instance->usingBlankInsteadTab());
+    tabSpacingItem->addTrueValueGroupItem(addItemInt(intItemCaption[intTabSpacing],
+                                                     instance->getTabWidth()));
 
     addTitle(editorTitleText[titleMultipleTabs]);
     addTitle(editorTitleText[titleClipboard]);
@@ -100,8 +101,10 @@ void KCPreferenceEmbeddedEditor::retranslate()
     editorTitleText[titleMultipleTabs]=QString(" " + tr("Multiple Tabs Option"));
     editorTitleText[titleClipboard]=QString(" " + tr("Clipboard"));
 
-    booleanItemCaption[booleanShowLinePanel]=tr("Show line panel.");
+    booleanItemCaption[booleanShowLinePanel]=tr("Show code line panel:");
     booleanItemCaption[booleanUseSpaceInsteadOfTab]=tr("Use space instead of tab:");
+
+    intItemCaption[intTabSpacing]=tr("Tab Spacing:");
 }
 
 void KCPreferenceEmbeddedEditor::retranslateAndSet()

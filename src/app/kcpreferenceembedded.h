@@ -6,7 +6,7 @@
 #include <QList>
 
 #include "kcpreferencesuperlist.h"
-#include "Controls/Preference/kcpreferenceconditiongroup.h"
+#include "Controls/Preference/kcpreferenceitembooleangroup.h"
 
 #include "kcgeneralconfigure.h"
 #include "kceditorconfigure.h"
@@ -82,6 +82,7 @@ private:
         titleCount
     };
     QString editorTitleText[titleCount];
+    QLabel *editorTitles[titleCount];
 
     enum EditorBooleanEnum
     {
@@ -90,6 +91,13 @@ private:
         booleanItemCount
     };
     QString booleanItemCaption[booleanItemCount];
+
+    enum EditorIntEnum
+    {
+        intTabSpacing,
+        intItemCount
+    };
+    QString intItemCaption[intItemCount];
 
     KCEditorConfigure *instance;
 };

@@ -29,7 +29,8 @@ signals:
 public slots:
     void retranslate();
     void retranslateAndSet();
-
+    void animateShow();
+    void animateHide();
 
 private slots:
     void setBackgroundAlpha(int newAlpha);
@@ -54,6 +55,8 @@ protected:
     QTimeLine *fadeMeOut;
     QTimeLine *expandAnimation;
     QTimeLine *foldAnimation;
+    QTimeLine *showAnimation;
+    QTimeLine *hideAnimation;
     QPalette pal;
     QColor backgroundColor;
     QVBoxLayout *editLayout;

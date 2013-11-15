@@ -153,6 +153,16 @@ KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(KCPreferenceItemInt *newI
     return newIntItem;
 }
 
+KCPreferenceItemBooleanGroup *KCPreferenceSuperList::addItemBooleanGroup(const QString &captionText,
+                                                                         bool defaultValue)
+{
+    KCPreferenceItemBooleanGroup *newBooleanGroupItem=new KCPreferenceItemBooleanGroup(contents);
+    newBooleanGroupItem->setBooleanCaptionText(captionText);
+    newBooleanGroupItem->setOriginalValue(defaultValue);
+    contents->appendItem(newBooleanGroupItem);
+    return newBooleanGroupItem;
+}
+
 void KCPreferenceSuperList::addStretch()
 {
     contents->appendStretch();

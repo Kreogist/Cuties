@@ -14,6 +14,7 @@
 #include "Controls/Preference/kcpreferenceitemcombo.h"
 #include "Controls/Preference/kcpreferenceitemboolean.h"
 #include "Controls/Preference/kcpreferenceitemint.h"
+#include "Controls/Preference/kcpreferenceitembooleangroup.h"
 
 class KCPreferenceSuperListContent : public QWidget
 {
@@ -58,6 +59,8 @@ public:
                     int maxValue=100,
                     int minValue=0);
     KCPreferenceItemInt *addItemInt(KCPreferenceItemInt *newIntItem);
+    KCPreferenceItemBooleanGroup *addItemBooleanGroup(const QString &captionText,
+                                                      bool defaultValue);
 
     void addStretch();
 
