@@ -89,7 +89,9 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
                         instance->usingBlankInsteadTab());
     tabSpacingItem->addTrueValueGroupItem(addItemInt(intItemCaption[intTabSpacing],
                                                      instance->getTabWidth()));
-
+    addItemCombo(comboItemCaption[comboWordWrapMode],
+                 comboItemText[comboWordWrapMode],
+                 instance->getWrapMode());
     addTitle(editorTitleText[titleMultipleTabs]);
     addTitle(editorTitleText[titleClipboard]);
     addStretch();
@@ -105,6 +107,13 @@ void KCPreferenceEmbeddedEditor::retranslate()
     booleanItemCaption[booleanUseSpaceInsteadOfTab]=tr("Use space instead of tab:");
 
     intItemCaption[intTabSpacing]=tr("Tab Spacing:");
+
+    comboItemCaption[comboWordWrapMode]=tr("Word Wrap Mode:");
+    comboItemText[comboWordWrapMode].clear();
+    comboItemText[comboWordWrapMode].append(tr("No word wrapped"));
+    comboItemText[comboWordWrapMode].append(tr("Wrapped at word boundaries"));
+    comboItemText[comboWordWrapMode].append(tr("Wrapped at any point"));
+    comboItemText[comboWordWrapMode].append(tr("Wrapping at word boundary or anywhere"));
 }
 
 void KCPreferenceEmbeddedEditor::retranslateAndSet()

@@ -84,6 +84,14 @@ private:
     QString editorTitleText[titleCount];
     QLabel *editorTitles[titleCount];
 
+    enum EditorComboEnum
+    {
+        comboWordWrapMode,
+        comboItemCount
+    };
+    QString comboItemCaption[comboItemCount];
+    QList<QString> comboItemText[comboItemCount];
+
     enum EditorBooleanEnum
     {
         booleanShowLinePanel,
