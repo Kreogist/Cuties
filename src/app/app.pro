@@ -102,7 +102,8 @@ SOURCES += \
     Controls/Preference/kcpreferenceitemcombo.cpp \
     Controls/Preference/kcpreferenceitemboolean.cpp \
     Controls/Preference/kcpreferenceitemint.cpp \
-    Controls/Preference/kcpreferenceitembooleangroup.cpp
+    Controls/Preference/kcpreferenceitembooleangroup.cpp \
+    Controls/Preference/kcpreferenceitempath.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -181,7 +182,8 @@ HEADERS += \
     Controls/Preference/kcpreferenceitemcombo.h \
     Controls/Preference/kcpreferenceitemboolean.h \
     Controls/Preference/kcpreferenceitemint.h \
-    Controls/Preference/kcpreferenceitembooleangroup.h
+    Controls/Preference/kcpreferenceitembooleangroup.h \
+    Controls/Preference/kcpreferenceitempath.h
 
 # Enable C++11
 CONFIG += c++11

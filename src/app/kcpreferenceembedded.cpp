@@ -92,8 +92,20 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     addItemCombo(comboItemCaption[comboWordWrapMode],
                  comboItemText[comboWordWrapMode],
                  instance->getWrapModeInt());
+    addItemInt(intItemCaption[intCursorWidth],
+               instance->getCursorWidth());
+
     addTitle(editorTitleText[titleMultipleTabs]);
+    addItemBoolean(booleanItemCaption[booleanTabMoveable],
+                   instance->getTabMoveable());
+    addItemBoolean(booleanItemCaption[booleanTabCloseable],
+                   instance->getTabCloseable());
+
     addTitle(editorTitleText[titleClipboard]);
+    addItemInt(intItemCaption[intClipboardTrackingMax],
+               KCClipboard::getInstance()->getMaxDataCount(),
+               100,
+               5);
     addStretch();
 }
 
@@ -105,8 +117,12 @@ void KCPreferenceEmbeddedEditor::retranslate()
 
     booleanItemCaption[booleanShowLinePanel]=tr("Show code line panel:");
     booleanItemCaption[booleanUseSpaceInsteadOfTab]=tr("Use space instead of tab:");
+    booleanItemCaption[booleanTabMoveable]=tr("Tab moving:");
+    booleanItemCaption[booleanTabCloseable]=tr("Tab closing:");
 
     intItemCaption[intTabSpacing]=tr("Tab Spacing:");
+    intItemCaption[intCursorWidth]=tr("Cursor Width:");
+    intItemCaption[intClipboardTrackingMax]=tr("Maximum Clipboard Tracking Items:");
 
     comboItemCaption[comboWordWrapMode]=tr("Word Wrap Mode:");
     comboItemText[comboWordWrapMode].clear();
@@ -124,7 +140,34 @@ void KCPreferenceEmbeddedEditor::retranslateAndSet()
 KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
     KCPreferenceSuperList(parent)
 {
-    ;
+    //Get translate
+    retranslate();
+
+    //Get configure instance
+    instance=KCCompilerConfigure::getInstance();
+
+    addTitle(compilerTitleText[titleCompilerPath]);
+    addItemPath(pathItemCaption[pathGPPCompiler],
+                instance->getGppPath());
+    addItemPath(pathItemCaption[pathGCCCompiler],
+                instance->getGccPath());
+    addItemPath(pathItemCaption[pathFPCCompiler],
+                instance->getFpcPath());
+    addStretch();
+}
+
+void KCPreferenceEmbeddedCompiler::retranslate()
+{
+    compilerTitleText[titleCompilerPath]=tr("Compiler Path");
+
+    pathItemCaption[pathGPPCompiler]=tr("g++ Compiler:");
+    pathItemCaption[pathGCCCompiler]=tr("gcc Compiler:");
+    pathItemCaption[pathFPCCompiler]=tr("FPC Compiler:");
+}
+
+void KCPreferenceEmbeddedCompiler::retranslateAndSet()
+{
+    retranslate();
 }
 
 KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :

@@ -163,6 +163,21 @@ KCPreferenceItemBooleanGroup *KCPreferenceSuperList::addItemBooleanGroup(const Q
     return newBooleanGroupItem;
 }
 
+KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(KCPreferenceItemPath *newPathItem)
+{
+    contents->appendItem(newPathItem);
+    return newPathItem;
+}
+
+KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionText, QString defaultValue)
+{
+    KCPreferenceItemPath *newPathItem=new KCPreferenceItemPath(this);
+    newPathItem->setPathCaptionText(captionText);
+    newPathItem->setOriginalValue(defaultValue);
+    contents->appendItem(newPathItem);
+    return newPathItem;
+}
+
 void KCPreferenceSuperList::addStretch()
 {
     contents->appendStretch();

@@ -15,6 +15,7 @@
 #include "Controls/Preference/kcpreferenceitemboolean.h"
 #include "Controls/Preference/kcpreferenceitemint.h"
 #include "Controls/Preference/kcpreferenceitembooleangroup.h"
+#include "Controls/Preference/kcpreferenceitempath.h"
 
 class KCPreferenceSuperListContent : public QWidget
 {
@@ -61,7 +62,9 @@ public:
     KCPreferenceItemInt *addItemInt(KCPreferenceItemInt *newIntItem);
     KCPreferenceItemBooleanGroup *addItemBooleanGroup(const QString &captionText,
                                                       bool defaultValue);
-
+    KCPreferenceItemPath *addItemPath(KCPreferenceItemPath *newPathItem);
+    KCPreferenceItemPath *addItemPath(const QString &captionText,
+                                      QString defaultValue);
     void addStretch();
 
 signals:

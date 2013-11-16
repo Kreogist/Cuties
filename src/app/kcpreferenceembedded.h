@@ -10,7 +10,9 @@
 
 #include "kcgeneralconfigure.h"
 #include "kceditorconfigure.h"
+#include "kccompilerconfigure.h"
 #include "kchistoryconfigure.h"
+#include "kcclipboard.h"
 
 class KCPreferenceEmbeddedGeneral : public KCPreferenceSuperList
 {
@@ -96,6 +98,8 @@ private:
     {
         booleanShowLinePanel,
         booleanUseSpaceInsteadOfTab,
+        booleanTabMoveable,
+        booleanTabCloseable,
         booleanItemCount
     };
     QString booleanItemCaption[booleanItemCount];
@@ -103,6 +107,8 @@ private:
     enum EditorIntEnum
     {
         intTabSpacing,
+        intCursorWidth,
+        intClipboardTrackingMax,
         intItemCount
     };
     QString intItemCaption[intItemCount];
@@ -116,7 +122,28 @@ class KCPreferenceEmbeddedCompiler : public KCPreferenceSuperList
 public:
     explicit KCPreferenceEmbeddedCompiler(QWidget *parent = 0);
 
+public slots:
+    void retranslate();
+    void retranslateAndSet();
+
 private:
+    enum CompilerTitleEnum
+    {
+        titleCompilerPath,
+        titleCount
+    };
+    QString compilerTitleText[titleCount];
+
+    enum pathItemEnum
+    {
+        pathGPPCompiler,
+        pathGCCCompiler,
+        pathFPCCompiler,
+        pathItemCount
+    };
+    QString pathItemCaption[pathItemCount];
+
+    KCCompilerConfigure *instance;
 };
 
 class KCPreferenceEmbeddedDebugger : public KCPreferenceSuperList

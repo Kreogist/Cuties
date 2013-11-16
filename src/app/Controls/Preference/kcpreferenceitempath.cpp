@@ -1,0 +1,112 @@
+#include "kcpreferenceitempath.h"
+
+KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
+    KCPreferenceItemBase(parent)
+{
+    //Set properties
+    setFixedHeight(45);
+    foldAnimation->setEndFrame(45);
+    showAnimation->setEndFrame(45);
+
+    //Set language
+    retranslate();
+
+    //Set Edit Mode Layout
+    editLayout=new QVBoxLayout(this);
+    editLayout->setContentsMargins(5,5,5,5);
+    editLayout->setSpacing(3);
+    setLayout(editLayout);
+
+    pathCaption=new QLabel(this);
+    editLayout->addWidget(pathCaption);
+    editLayout->addWidget(valueDisplayer);
+    editLayout->addWidget(originalValueDisplayer);
+
+    pathLayout=new QHBoxLayout();
+    pathLayout->setContentsMargins(0,0,0,0);
+    pathLayout->setSpacing(0);
+
+    filePathData=new QLineEdit(this);
+    browseFileAction=new QPushButton(this);
+    browseFileAction->setText(browseText);
+    setEditWidgetStatus(false);
+    pathLayout->addWidget(filePathData, 1);
+    pathLayout->addWidget(browseFileAction);
+
+    editLayout->addLayout(pathLayout);
+    editLayout->addStretch();
+
+    setExpandFinishedHeight(70);
+}
+
+KCPreferenceItemPath::~KCPreferenceItemPath()
+{
+    pathLayout->deleteLater();
+}
+
+void KCPreferenceItemPath::setOriginalValue(const QVariant &value)
+{
+    filePathData->setText(value.toString());
+    KCPreferenceItemBase::setOriginalValue(value);
+    valueDisplayer->setText(value.toString());
+    setOriginalDisplayVisible(false);
+
+    connect(filePathData, SIGNAL(textChanged(QString)),
+            this, SLOT(valueChangedEvent()));
+}
+
+void KCPreferenceItemPath::setPathText(const QString &value)
+{
+    pathText = value;
+}
+
+void KCPreferenceItemPath::setPathCaptionText(const QString &value)
+{
+    pathCaption->setText(value);
+}
+
+void KCPreferenceItemPath::retranslate()
+{
+    browseText=tr("Browse");
+}
+
+void KCPreferenceItemPath::retranslateAndSet()
+{
+    retranslate();
+}
+
+void KCPreferenceItemPath::setEditWidgetStatus(bool states)
+{
+    filePathData->setVisible(states);
+    filePathData->setEnabled(states);
+    browseFileAction->setVisible(states);
+    browseFileAction->setEnabled(states);
+}
+
+QVariant KCPreferenceItemPath::getUserNewValue()
+{
+    return filePathData->text();
+}
+
+void KCPreferenceItemPath::refreshValueDisplay()
+{
+    valueDisplayer->setText(filePathData->text());
+    if(valueDisplayer->text() == originalValue.toString())
+    {
+        setOriginalDisplayVisible(false);
+        //Here, we have to set some values
+        setExpandFinishedHeight(70);
+        setFixedHeight(70);
+        foldAnimation->setEndFrame(45);
+        showAnimation->setEndFrame(45);
+        return;
+    }
+    originalValueDisplayer->setText(originalValueIs +
+                                    originalValue.toString());
+    //Some value:
+    setExpandFinishedHeight(90);
+    setFixedHeight(90);
+    foldAnimation->setEndFrame(60);
+    showAnimation->setEndFrame(60);
+    setOriginalDisplayVisible(true);
+}
