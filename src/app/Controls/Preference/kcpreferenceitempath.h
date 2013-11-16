@@ -3,6 +3,8 @@
 
 #include <QLineEdit>
 #include <QPushButton>
+#include <QFileInfo>
+#include <QFileDialog>
 
 #include "kcpreferenceitembase.h"
 
@@ -15,6 +17,7 @@ public:
     void setOriginalValue(const QVariant &value);
     void setPathText(const QString &value);
     void setPathCaptionText(const QString &value);
+    void setDialogTitle(const QString &newDialogTitle);
 
 signals:
 
@@ -28,9 +31,13 @@ protected:
     void setEditWidgetStatus(bool states);
     void setWidgetValue(QVariant newWidgeValue);
 
+private slots:
+    void getFilePath();
+
 private:
     QString pathText,
-            browseText;
+            browseText,
+            dialogTitleText;
 
     QHBoxLayout *pathLayout;
     QLabel *pathCaption;

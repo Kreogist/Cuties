@@ -36,6 +36,9 @@ KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
     editLayout->addLayout(pathLayout);
     editLayout->addStretch();
 
+    connect(browseFileAction, SIGNAL(clicked()),
+            this, SLOT(getFilePath()));
+
     setExpandFinishedHeight(70);
 }
 
@@ -65,6 +68,11 @@ void KCPreferenceItemPath::setPathCaptionText(const QString &value)
     pathCaption->setText(value);
 }
 
+void KCPreferenceItemPath::setDialogTitle(const QString &newDialogTitle)
+{
+    dialogTitleText=newDialogTitle;
+}
+
 void KCPreferenceItemPath::retranslate()
 {
     browseText=tr("Browse");
@@ -86,6 +94,24 @@ void KCPreferenceItemPath::setEditWidgetStatus(bool states)
 void KCPreferenceItemPath::setWidgetValue(QVariant newWidgeValue)
 {
     filePathData->setText(newWidgeValue.toString());
+}
+
+void KCPreferenceItemPath::getFilePath()
+{
+    QString newItemPath,
+            defaultBrowsePath;
+    QFileInfo currentfileInfo;
+    currentfileInfo.setFile(getCurrentValue().toString());
+    defaultBrowsePath=currentfileInfo.exists()?
+                      currentfileInfo.absoluteDir().absolutePath():
+                      ".";
+    newItemPath=QFileDialog::getOpenFileName(this,
+                                             dialogTitleText,
+                                             defaultBrowsePath);
+    if(!newItemPath.isEmpty())
+    {
+        setWidgetValue(newItemPath);
+    }
 }
 
 QVariant KCPreferenceItemPath::getUserNewValue()
@@ -111,7 +137,7 @@ void KCPreferenceItemPath::refreshValueDisplay()
     //Some value:
     setExpandFinishedHeight(90);
     setFixedHeight(90);
-    foldAnimation->setEndFrame(60);
-    showAnimation->setEndFrame(60);
+    foldAnimation->setEndFrame(63);
+    showAnimation->setEndFrame(63);
     setOriginalDisplayVisible(true);
 }
