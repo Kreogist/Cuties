@@ -25,6 +25,7 @@ signals:
 public slots:
     void retranslate();
     void retranslateAndSet();
+    void applyPreference();
 
 private:
     enum GeneralTitleEnum
@@ -77,6 +78,7 @@ public:
 public slots:
     void retranslate();
     void retranslateAndSet();
+    void applyPreference();
 
 private:
     enum EditorTitleEnum
@@ -128,6 +130,7 @@ public:
 public slots:
     void retranslate();
     void retranslateAndSet();
+    void applyPreference();
 
 private:
     enum CompilerTitleEnum
@@ -155,6 +158,9 @@ class KCPreferenceEmbeddedDebugger : public KCPreferenceSuperList
 public:
     explicit KCPreferenceEmbeddedDebugger(QWidget *parent = 0);
 
+public slots:
+    void applyPreference();
+
 private:
 };
 
@@ -163,6 +169,9 @@ class KCPreferenceEmbeddedFileAssociation : public KCPreferenceSuperList
     Q_OBJECT
 public:
     explicit KCPreferenceEmbeddedFileAssociation(QWidget *parent = 0);
+
+public slots:
+    void applyPreference();
 
 private:
 
