@@ -26,6 +26,7 @@ protected:
     QVariant getUserNewValue();
     void refreshValueDisplay();
     void setEditWidgetStatus(bool states);
+    void setWidgetValue(QVariant newWidgeValue);
 
 private:
     QString pathText,

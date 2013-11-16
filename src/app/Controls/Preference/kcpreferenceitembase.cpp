@@ -2,6 +2,18 @@
 
 #include "kcpreferenceitembase.h"
 
+KCPreferenceOriginalLabel::KCPreferenceOriginalLabel(QWidget *parent) :
+    QLabel(parent)
+{
+    ;
+}
+
+void KCPreferenceOriginalLabel::mouseReleaseEvent(QMouseEvent *event)
+{
+    QLabel::mouseReleaseEvent(event);
+    emit requireResetCurrentValue();
+}
+
 KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
     QWidget(parent)
 {
@@ -15,12 +27,15 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
 
     //Set the original value displayer.
     valueDisplayer=new QLabel(this);
-    originalValueDisplayer=new QLabel(this);
+    originalValueDisplayer=new KCPreferenceOriginalLabel(this);
     setOriginalDisplayVisible(false);
 
     pal=originalValueDisplayer->palette();
     pal.setColor(QPalette::WindowText, QColor(150,150,150));
     originalValueDisplayer->setPalette(pal);
+
+    connect(originalValueDisplayer, SIGNAL(requireResetCurrentValue()),
+            this, SLOT(resetCurrentValue()));
 
     //Set default switch
     valueChanged=false;
@@ -159,6 +174,11 @@ void KCPreferenceItemBase::animateHide()
     }
 }
 
+void KCPreferenceItemBase::resetCurrentValue()
+{
+    setWidgetValue(getOriginalValue());
+}
+
 void KCPreferenceItemBase::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
@@ -206,5 +226,3 @@ void KCPreferenceItemBase::setOriginalDisplayVisible(bool statue)
     originalValueDisplayer->setEnabled(statue);
     originalValueDisplayer->setVisible(statue);
 }
-
-

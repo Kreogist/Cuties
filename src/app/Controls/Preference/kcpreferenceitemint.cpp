@@ -107,6 +107,11 @@ void KCPreferenceItemInt::setEditWidgetStatus(bool states)
     intDialValueChanger->setVisible(states);
 }
 
+void KCPreferenceItemInt::setWidgetValue(QVariant newWidgeValue)
+{
+    syncValue(newWidgeValue.toInt());
+}
+
 QVariant KCPreferenceItemInt::getUserNewValue()
 {
     return intSpinValueChanger->value();

@@ -96,6 +96,11 @@ void KCPreferenceItemBoolean::setEditWidgetStatus(bool states)
     booleanData->setEnabled(states);
 }
 
+void KCPreferenceItemBoolean::setWidgetValue(QVariant newWidgeValue)
+{
+    booleanData->setChecked(newWidgeValue.toBool());
+}
+
 QVariant KCPreferenceItemBoolean::getUserNewValue()
 {
     return booleanData->isChecked();

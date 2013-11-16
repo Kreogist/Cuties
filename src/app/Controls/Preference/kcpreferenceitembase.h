@@ -9,6 +9,19 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+class KCPreferenceOriginalLabel : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit KCPreferenceOriginalLabel(QWidget *parent = 0);
+
+signals:
+    void requireResetCurrentValue();
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *event);
+};
+
 class KCPreferenceItemBase : public QWidget
 {
     Q_OBJECT
@@ -31,6 +44,7 @@ public slots:
     void retranslateAndSet();
     void animateShow();
     void animateHide();
+    void resetCurrentValue();
 
 private slots:
     void setBackgroundAlpha(int newAlpha);
@@ -45,6 +59,7 @@ protected:
     virtual void setEditWidgetStatus(bool states)=0;
     virtual QVariant getUserNewValue()=0;
     virtual void refreshValueDisplay()=0;
+    virtual void setWidgetValue(QVariant newWidgeValue)=0;
     void setOriginalDisplayVisible(bool statue);
     void mousePressEvent(QMouseEvent *e);
     bool valueChanged;
@@ -60,7 +75,8 @@ protected:
     QPalette pal;
     QColor backgroundColor;
     QVBoxLayout *editLayout;
-    QLabel *valueDisplayer, *originalValueDisplayer;
+    QLabel *valueDisplayer;
+    KCPreferenceOriginalLabel *originalValueDisplayer;
     QString originalValueIs;
 };
 

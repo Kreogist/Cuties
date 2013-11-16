@@ -83,6 +83,11 @@ void KCPreferenceItemPath::setEditWidgetStatus(bool states)
     browseFileAction->setEnabled(states);
 }
 
+void KCPreferenceItemPath::setWidgetValue(QVariant newWidgeValue)
+{
+    filePathData->setText(newWidgeValue.toString());
+}
+
 QVariant KCPreferenceItemPath::getUserNewValue()
 {
     return filePathData->text();

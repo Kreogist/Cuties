@@ -67,6 +67,11 @@ void KCPreferenceItemCombo::setEditWidgetStatus(bool states)
     comboData->setEnabled(states);
 }
 
+void KCPreferenceItemCombo::setWidgetValue(QVariant newWidgeValue)
+{
+    comboData->setCurrentIndex(newWidgeValue.toInt());
+}
+
 QVariant KCPreferenceItemCombo::getUserNewValue()
 {
     return comboData->currentIndex();
