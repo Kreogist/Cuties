@@ -36,6 +36,18 @@ KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
     editLayout->addLayout(pathLayout);
     editLayout->addStretch();
 
+    showOriginalAnimation=new QTimeLine(100, this);
+    showOriginalAnimation->setEndFrame(90);
+    showOriginalAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    connect(showOriginalAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(setItemHeight(int)));
+
+    hideOriginalAnimation=new QTimeLine(100, this);
+    hideOriginalAnimation->setEndFrame(70);
+    hideOriginalAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    connect(hideOriginalAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(setItemHeight(int)));
+
     connect(browseFileAction, SIGNAL(clicked()),
             this, SLOT(getFilePath()));
 
@@ -53,6 +65,7 @@ void KCPreferenceItemPath::setOriginalValue(const QVariant &value)
     KCPreferenceItemBase::setOriginalValue(value);
     valueDisplayer->setText(value.toString());
     setOriginalDisplayVisible(false);
+    originalExpanded=false;
 
     connect(filePathData, SIGNAL(textChanged(QString)),
             this, SLOT(valueChangedEvent()));
@@ -127,7 +140,13 @@ void KCPreferenceItemPath::refreshValueDisplay()
         setOriginalDisplayVisible(false);
         //Here, we have to set some values
         setExpandFinishedHeight(70);
-        setFixedHeight(70);
+        if(hideOriginalAnimation->state()!=QTimeLine::Running)
+        {
+            showOriginalAnimation->stop();
+            hideOriginalAnimation->setStartFrame(height());
+            hideOriginalAnimation->start();
+        }
+        originalExpanded=false;
         foldAnimation->setEndFrame(45);
         showAnimation->setEndFrame(45);
         return;
@@ -136,7 +155,16 @@ void KCPreferenceItemPath::refreshValueDisplay()
                                     originalValue.toString());
     //Some value:
     setExpandFinishedHeight(90);
-    setFixedHeight(90);
+    if(!originalExpanded)
+    {
+        if(showOriginalAnimation->state()!=QTimeLine::Running)
+        {
+            hideOriginalAnimation->stop();
+            showOriginalAnimation->setStartFrame(height());
+            showOriginalAnimation->start();
+        }
+        originalExpanded=true;
+    }
     foldAnimation->setEndFrame(63);
     showAnimation->setEndFrame(63);
     setOriginalDisplayVisible(true);

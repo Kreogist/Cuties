@@ -43,6 +43,9 @@ private:
     QLabel *pathCaption;
     QLineEdit *filePathData;
     QPushButton *browseFileAction;
+    QTimeLine *showOriginalAnimation,
+              *hideOriginalAnimation;
+    bool originalExpanded;
 };
 
 #endif // KCPREFERENCEITEMPATH_H

@@ -48,12 +48,12 @@ public slots:
 
 private slots:
     void setBackgroundAlpha(int newAlpha);
-    void setItemHeight(int newHeight);
     void showEditWidget();
     void hideEditWidget();
 
 protected slots:
     virtual void valueChangedEvent();
+    void setItemHeight(int newHeight);
 
 protected:
     virtual void setEditWidgetStatus(bool states)=0;
