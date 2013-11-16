@@ -36,6 +36,7 @@ private:
         titleCount
     };
     QString generalTitleText[titleCount];
+    QLabel *gerneralTitles[titleCount];
 
     enum GeneralComboItem
     {
@@ -45,6 +46,7 @@ private:
     };
     QString comboItemCaption[comboItemCount];
     QList<QString> comboItemText[comboItemCount];
+    KCPreferenceItemCombo *generalCombos[comboItemCount];
 
     enum GeneralBooleanItem
     {
@@ -54,6 +56,7 @@ private:
         booleanItemCount
     };
     QString booleanItemCaption[booleanItemCount];
+    KCPreferenceItemBoolean *generalBooleans[booleanItemCount];
 
     enum GeneralIntItem
     {

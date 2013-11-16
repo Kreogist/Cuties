@@ -9,15 +9,18 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
     //Get configure settings
     instance=KCGeneralConfigure::getInstance();
 
-    addTitle(generalTitleText[titleEnvironment]);
-    addItemCombo(comboItemCaption[comboDefaultProgrammingLanguage],
-                 comboItemText[comboDefaultProgrammingLanguage],
-                 instance->getDefaultLanguageMode());
-    addItemBoolean(booleanItemCaption[booleanUseDefaultLanguageOnOpen],
-                   instance->getUseDefaultLanguageWhenOpen());
-    addItemBoolean(booleanItemCaption[booleanUseDefaultLanguageOnSave],
-                   instance->getUseDefaultLanguageWhenSave());
-    addTitle(generalTitleText[titleAutomaticRemember]);
+    gerneralTitles[titleEnvironment]=addTitle(generalTitleText[titleEnvironment]);
+    generalCombos[comboDefaultProgrammingLanguage]=
+        addItemCombo(comboItemCaption[comboDefaultProgrammingLanguage],
+                     comboItemText[comboDefaultProgrammingLanguage],
+                     instance->getDefaultLanguageMode());
+    generalBooleans[booleanUseDefaultLanguageOnOpen]=
+        addItemBoolean(booleanItemCaption[booleanUseDefaultLanguageOnOpen],
+                       instance->getUseDefaultLanguageWhenOpen());
+    generalBooleans[booleanUseDefaultLanguageOnSave]=
+        addItemBoolean(booleanItemCaption[booleanUseDefaultLanguageOnSave],
+                       instance->getUseDefaultLanguageWhenSave());
+    gerneralTitles[titleAutomaticRemember]=addTitle(generalTitleText[titleAutomaticRemember]);
     addItemBoolean(booleanItemCaption[booleanAutoOpenUnclosed],
                    instance->getRememberUnclosedFile());
     addTitle(generalTitleText[titleHistory]);

@@ -70,6 +70,7 @@ public:
 signals:
 
 public slots:
+    virtual void applyPreference()=0;
 
 protected:
     void resizeEvent(QResizeEvent *event);
