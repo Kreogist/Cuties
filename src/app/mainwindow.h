@@ -218,7 +218,7 @@ private:
     int lastPositionX, lastPostionY, lastPositionHeight, lastPostionWidth;
 
     //All the names we need to translate.
-    QString trWindowTitle="Kreogist Cuties";
+    QString trWindowTitle="Cuties";
 
     KCTabManager *tabManager;
     KCSideBar *sideBar;

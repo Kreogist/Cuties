@@ -37,7 +37,7 @@ private:
         titleCount
     };
     QString generalTitleText[titleCount];
-    QLabel *gerneralTitles[titleCount];
+    QLabel *generalTitles[titleCount];
 
     enum GeneralComboItem
     {
@@ -65,6 +65,7 @@ private:
         intItemCount
     };
     QString intItemCaption[intItemCount];
+    KCPreferenceItemInt *generalInts[intItemCount];
 
     KCGeneralConfigure *instance;
 };
@@ -147,7 +148,9 @@ private:
         pathFPCCompiler,
         pathItemCount
     };
+    KCPreferenceItemPath *compilerPathItems[pathItemCount];
     QString pathItemCaption[pathItemCount];
+    QString pathItemTitleCaption[pathItemCount];
 
     KCCompilerConfigure *instance;
 };

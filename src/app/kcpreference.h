@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QDialog>
 #include <QTimeLine>
+#include <QToolButton>
 
 #include "kclistbutton.h"
 #include "kcpreferencepager.h"

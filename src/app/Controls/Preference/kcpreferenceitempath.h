@@ -18,6 +18,8 @@ public:
     void setPathText(const QString &value);
     void setPathCaptionText(const QString &value);
     void setDialogTitle(const QString &newDialogTitle);
+    bool getGuaranteeFileExsist() const;
+    void setGuaranteeFileExsist(bool value);
 
 signals:
 
@@ -35,6 +37,8 @@ private slots:
     void getFilePath();
 
 private:
+    bool guaranteeFileExsist;
+
     QString pathText,
             browseText,
             dialogTitleText;

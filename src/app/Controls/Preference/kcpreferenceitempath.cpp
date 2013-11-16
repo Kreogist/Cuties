@@ -36,6 +36,8 @@ KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
     editLayout->addLayout(pathLayout);
     editLayout->addStretch();
 
+    guaranteeFileExsist=false;
+
     connect(browseFileAction, SIGNAL(clicked()),
             this, SLOT(getFilePath()));
 
@@ -104,14 +106,31 @@ void KCPreferenceItemPath::getFilePath()
     defaultBrowsePath=currentfileInfo.exists()?
                       currentfileInfo.absoluteDir().absolutePath():
                       ".";
-    newItemPath=QFileDialog::getOpenFileName(this,
-                                             dialogTitleText,
-                                             defaultBrowsePath);
+
+    QFileDialog getItemPath(this);
+    if(guaranteeFileExsist)
+    {
+        getItemPath.setFileMode(QFileDialog::ExistingFile);
+    }
+    newItemPath=getItemPath.getOpenFileName(this,
+                                            dialogTitleText,
+                                            defaultBrowsePath);
     if(!newItemPath.isEmpty())
     {
         setWidgetValue(newItemPath);
     }
 }
+
+bool KCPreferenceItemPath::getGuaranteeFileExsist() const
+{
+    return guaranteeFileExsist;
+}
+
+void KCPreferenceItemPath::setGuaranteeFileExsist(bool value)
+{
+    guaranteeFileExsist = value;
+}
+
 
 QVariant KCPreferenceItemPath::getUserNewValue()
 {

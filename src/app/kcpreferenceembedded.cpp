@@ -9,7 +9,7 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
     //Get configure settings
     instance=KCGeneralConfigure::getInstance();
 
-    gerneralTitles[titleEnvironment]=addTitle(generalTitleText[titleEnvironment]);
+    generalTitles[titleEnvironment]=addTitle(generalTitleText[titleEnvironment]);
     generalCombos[comboDefaultProgrammingLanguage]=
         addItemCombo(comboItemCaption[comboDefaultProgrammingLanguage],
                      comboItemText[comboDefaultProgrammingLanguage],
@@ -20,18 +20,21 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
     generalBooleans[booleanUseDefaultLanguageOnSave]=
         addItemBoolean(booleanItemCaption[booleanUseDefaultLanguageOnSave],
                        instance->getUseDefaultLanguageWhenSave());
-    gerneralTitles[titleAutomaticRemember]=addTitle(generalTitleText[titleAutomaticRemember]);
-    addItemBoolean(booleanItemCaption[booleanAutoOpenUnclosed],
-                   instance->getRememberUnclosedFile());
-    addTitle(generalTitleText[titleHistory]);
-    addItemInt(intItemCaption[intItemHistoryMax],
-               KCHistoryConfigure::getInstance()->getMaxRecentFilesSize(),
-               100,
-               4);
-    addTitle(generalTitleText[titleSearchOptions]);
-    addItemCombo(comboItemCaption[comboSearchEngine],
-                 comboItemText[comboSearchEngine],
-                 instance->getSearchEngineIndex());
+    generalTitles[titleAutomaticRemember]=addTitle(generalTitleText[titleAutomaticRemember]);
+    generalBooleans[booleanAutoOpenUnclosed]=
+        addItemBoolean(booleanItemCaption[booleanAutoOpenUnclosed],
+                       instance->getRememberUnclosedFile());
+    generalTitles[titleHistory]=addTitle(generalTitleText[titleHistory]);
+    generalInts[intItemHistoryMax]=
+        addItemInt(intItemCaption[intItemHistoryMax],
+                   KCHistoryConfigure::getInstance()->getMaxRecentFilesSize(),
+                   100,
+                   4);
+    generalTitles[titleSearchOptions]=addTitle(generalTitleText[titleSearchOptions]);
+    generalCombos[comboSearchEngine]=
+        addItemCombo(comboItemCaption[comboSearchEngine],
+                     comboItemText[comboSearchEngine],
+                     instance->getSearchEngineIndex());
     addStretch();
 }
 
@@ -67,10 +70,25 @@ void KCPreferenceEmbeddedGeneral::retranslate()
 void KCPreferenceEmbeddedGeneral::retranslateAndSet()
 {
     retranslate();
-    for(int i=titleEnvironment; i<titleCount; i++)
+    int i;
+    for(i=titleEnvironment; i<titleCount; i++)
     {
         contents->getSuperListTitles().at(i)->setText(generalTitleText[i]);
     }
+}
+
+void KCPreferenceEmbeddedGeneral::applyPreference()
+{
+    //Set each value
+    //Default Language
+    instance->setDefaultLanguageMode(generalCombos[comboDefaultProgrammingLanguage]->getCurrentValue().toInt());
+    //Default use default language suffix
+    instance->setUseDefaultLanguageWhenOpen(generalBooleans[booleanUseDefaultLanguageOnOpen]->getCurrentValue().toBool());
+    instance->setUseDefaultLanguageWhenSave(generalBooleans[booleanUseDefaultLanguageOnSave]->getCurrentValue().toBool());
+    //Set automatic remember
+    instance->setRememberUnclosedFile(generalBooleans[booleanAutoOpenUnclosed]->getCurrentValue().toBool());
+    //Set history max
+    KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(generalInts[intItemHistoryMax]->getCurrentValue().toInt());
 }
 
 
@@ -140,6 +158,11 @@ void KCPreferenceEmbeddedEditor::retranslateAndSet()
     retranslate();
 }
 
+void KCPreferenceEmbeddedEditor::applyPreference()
+{
+
+}
+
 KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
     KCPreferenceSuperList(parent)
 {
@@ -150,12 +173,18 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
     instance=KCCompilerConfigure::getInstance();
 
     addTitle(compilerTitleText[titleCompilerPath]);
-    addItemPath(pathItemCaption[pathGPPCompiler],
-                instance->getGppPath());
-    addItemPath(pathItemCaption[pathGCCCompiler],
-                instance->getGccPath());
-    addItemPath(pathItemCaption[pathFPCCompiler],
-                instance->getFpcPath());
+    compilerPathItems[pathGPPCompiler]=
+        addItemPath(pathItemCaption[pathGPPCompiler],
+                    instance->getGppPath());
+    compilerPathItems[pathGPPCompiler]->setDialogTitle(pathItemTitleCaption[pathGPPCompiler]);
+    compilerPathItems[pathGCCCompiler]=
+        addItemPath(pathItemCaption[pathGCCCompiler],
+                    instance->getGccPath());
+    compilerPathItems[pathGCCCompiler]->setDialogTitle(pathItemTitleCaption[pathGCCCompiler]);
+    compilerPathItems[pathFPCCompiler]=
+        addItemPath(pathItemCaption[pathFPCCompiler],
+                    instance->getFpcPath());
+    compilerPathItems[pathFPCCompiler]->setDialogTitle(pathItemTitleCaption[pathFPCCompiler]);
     addStretch();
 }
 
@@ -166,11 +195,20 @@ void KCPreferenceEmbeddedCompiler::retranslate()
     pathItemCaption[pathGPPCompiler]=tr("g++ Compiler:");
     pathItemCaption[pathGCCCompiler]=tr("gcc Compiler:");
     pathItemCaption[pathFPCCompiler]=tr("FPC Compiler:");
+
+    pathItemTitleCaption[pathGPPCompiler]=tr("Browse g++ compiler");
+    pathItemTitleCaption[pathGCCCompiler]=tr("Browse gcc compiler");
+    pathItemTitleCaption[pathFPCCompiler]=tr("Browse fpc compiler");
 }
 
 void KCPreferenceEmbeddedCompiler::retranslateAndSet()
 {
     retranslate();
+}
+
+void KCPreferenceEmbeddedCompiler::applyPreference()
+{
+
 }
 
 KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
@@ -179,8 +217,18 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
     ;
 }
 
+void KCPreferenceEmbeddedDebugger::applyPreference()
+{
+
+}
+
 KCPreferenceEmbeddedFileAssociation::KCPreferenceEmbeddedFileAssociation(QWidget *parent) :
     KCPreferenceSuperList(parent)
 {
     ;
+}
+
+void KCPreferenceEmbeddedFileAssociation::applyPreference()
+{
+
 }
