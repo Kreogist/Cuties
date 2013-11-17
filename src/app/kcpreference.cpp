@@ -299,6 +299,13 @@ KCPreferenceCommander::KCPreferenceCommander(QWidget *parent) :
         commanderLayout->addWidget(commanderControls[i]);
         commanderLayout->addSpacing(3);
     }
+
+    connect(commanderControls[commanderYes], SIGNAL(clicked()),
+            this, SIGNAL(requireYes()));
+    connect(commanderControls[commanderCancel], SIGNAL(clicked()),
+            this, SIGNAL(requireCancel()));
+    connect(commanderControls[commanderApply], SIGNAL(clicked()),
+            this, SIGNAL(requireApply()));
 }
 
 void KCPreferenceCommander::retranslate()
@@ -355,6 +362,14 @@ KCPreference::KCPreference(QWidget *parent) :
     commander=new KCPreferenceCommander(this);
     bannerLayout->addWidget(commander);
 
+    connect(commander, &KCPreferenceCommander::requireYes,
+            this, &KCPreference::yesAction);
+    connect(commander, &KCPreferenceCommander::requireCancel,
+            this, &KCPreference::cancelAction);
+    connect(commander, &KCPreferenceCommander::requireApply,
+            this, &KCPreference::applyAction);
+
+
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCPreference::retranslateAndSet);
 }
@@ -375,5 +390,20 @@ void KCPreference::retranslateAndSet()
     bannerWidget->retranslateAndSet();
     retranslate();
     setWindowTitle(titleText);
+}
+
+void KCPreference::yesAction()
+{
+    applyAction();
+}
+
+void KCPreference::cancelAction()
+{
+    close();
+}
+
+void KCPreference::applyAction()
+{
+    contents->applyAllSettings();
 }
 

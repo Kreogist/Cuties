@@ -153,6 +153,11 @@ public slots:
     void retranslate();
     void retranslateAndSet();
 
+private slots:
+    void yesAction();
+    void cancelAction();
+    void applyAction();
+
 private:
     //Layouts.
     QHBoxLayout *contentLayout;
