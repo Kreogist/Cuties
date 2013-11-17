@@ -84,6 +84,20 @@ void KCPreferenceItemPath::retranslateAndSet()
     retranslate();
 }
 
+void KCPreferenceItemPath::heightState(bool newState)
+{
+    if(newState)
+    {
+        setFixedHeight(45);
+        show();
+    }
+    else
+    {
+        setFixedHeight(0);
+        hide();
+    }
+}
+
 void KCPreferenceItemPath::setEditWidgetStatus(bool states)
 {
     filePathData->setVisible(states);

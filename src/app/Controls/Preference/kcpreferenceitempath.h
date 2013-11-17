@@ -26,6 +26,7 @@ signals:
 public slots:
     void retranslate();
     void retranslateAndSet();
+    void heightState(bool newState);
 
 protected:
     QVariant getUserNewValue();
