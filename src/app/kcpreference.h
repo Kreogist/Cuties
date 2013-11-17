@@ -145,6 +145,7 @@ private:
     KCPreferenceBannerWidget *bannerWidget;
     KCPreferenceCategoryList *categoryList;
     KCPreferenceContents *contents;
+    KCPreferenceCommander *commander;
     //Translate Strings
     QString titleText;
 };

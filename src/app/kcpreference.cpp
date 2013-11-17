@@ -265,21 +265,39 @@ KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
 KCPreferenceCommander::KCPreferenceCommander(QWidget *parent) :
     QWidget(parent)
 {
-    setContentsMargins(0,0,0,0);
+    retranslate();
+    setContentsMargins(8,8,8,8);
+    setAutoFillBackground(true);
 
     commanderLayout=new QHBoxLayout(this);
     commanderLayout->setContentsMargins(0,0,0,0);
     commanderLayout->setSpacing(0);
     setLayout(commanderLayout);
 
-    commanderControls[commanderYes]=new QToolButton(this);
-    commanderControls[commanderCancel]=new QToolButton(this);
-    commanderControls[commanderApply]=new QToolButton(this);
+    int maxButtonWidth=0;
+    for(int i=commanderYes; i<commanderCount; i++)
+    {
+        commanderControls[i]=new QToolButton(this);
+        commanderControls[i]->setText(commanderTitle[i]);
+        if(commanderControls[i]->sizeHint().width()>maxButtonWidth)
+        {
+            maxButtonWidth=commanderControls[i]->sizeHint().width();
+        }
+    }
+    commanderLayout->addStretch();
+    for(int i=commanderYes; i<=commanderApply; i++)
+    {
+        commanderControls[i]->setFixedWidth(maxButtonWidth);
+        commanderLayout->addWidget(commanderControls[i]);
+        commanderLayout->addSpacing(3);
+    }
 }
 
 void KCPreferenceCommander::retranslate()
 {
-
+    commanderTitle[commanderYes]=tr("Yes");
+    commanderTitle[commanderCancel]=tr("Cancel");
+    commanderTitle[commanderApply]=tr("Apply");
 }
 
 void KCPreferenceCommander::retranslateAndSet()
@@ -311,7 +329,7 @@ KCPreference::KCPreference(QWidget *parent) :
     contentLayout=new QHBoxLayout();
     contentLayout->setContentsMargins(0,0,0,0);
     contentLayout->setSpacing(0);
-    bannerLayout->addLayout(contentLayout);
+    bannerLayout->addLayout(contentLayout, 1);
 
     //Set Category List
     categoryList=new KCPreferenceCategoryList(this);
@@ -324,6 +342,10 @@ KCPreference::KCPreference(QWidget *parent) :
     //Connect category list and contents
     connect(categoryList, SIGNAL(categoryChanged(int)),
             contents, SLOT(switchToPage(int)));
+
+    //Set Commander
+    commander=new KCPreferenceCommander(this);
+    bannerLayout->addWidget(commander);
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCPreference::retranslateAndSet);
