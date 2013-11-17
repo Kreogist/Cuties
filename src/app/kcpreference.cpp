@@ -5,7 +5,6 @@
 #include "kccolorconfigure.h"
 
 #include "kcpreference.h"
-#include "kcpreferenceembedded.h"
 
 KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     QWidget(parent)
@@ -249,17 +248,26 @@ void KCPreferenceCategoryList::retranslateAndSet()
 KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
     KCPreferencePager(parent)
 {
-    KCPreferenceEmbeddedGeneral *newGeneralSetting=new KCPreferenceEmbeddedGeneral(this);
-    KCPreferenceEmbeddedEditor *newEditorSetting=new KCPreferenceEmbeddedEditor(this);
-    KCPreferenceEmbeddedCompiler *newCompilerSetting=new KCPreferenceEmbeddedCompiler(this);
-    KCPreferenceEmbeddedDebugger *newDebuggerSetting=new KCPreferenceEmbeddedDebugger(this);
-    KCPreferenceEmbeddedFileAssociation *newFileAssociationSetting=new KCPreferenceEmbeddedFileAssociation(this);
+    newGeneralSetting=new KCPreferenceEmbeddedGeneral(this);
+    newEditorSetting=new KCPreferenceEmbeddedEditor(this);
+    newCompilerSetting=new KCPreferenceEmbeddedCompiler(this);
+    newDebuggerSetting=new KCPreferenceEmbeddedDebugger(this);
+    newFileAssociationSetting=new KCPreferenceEmbeddedFileAssociation(this);
     addSuperList(newGeneralSetting);
     addSuperList(newEditorSetting);
     addSuperList(newCompilerSetting);
     addSuperList(newDebuggerSetting);
     addSuperList(newFileAssociationSetting);
     initPager();
+}
+
+void KCPreferenceContents::applyAllSettings()
+{
+    newGeneralSetting->applyPreference();
+    newEditorSetting->applyPreference();
+    newCompilerSetting->applyPreference();
+    newDebuggerSetting->applyPreference();
+    newFileAssociationSetting->applyPreference();
 }
 
 KCPreferenceCommander::KCPreferenceCommander(QWidget *parent) :

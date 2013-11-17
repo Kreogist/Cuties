@@ -10,6 +10,7 @@
 
 #include "kclistbutton.h"
 #include "kcpreferencepager.h"
+#include "kcpreferenceembedded.h"
 
 enum KCPreferenceCategory
 {
@@ -95,10 +96,19 @@ private:
 
 class KCPreferenceContents : public KCPreferencePager
 {
+    Q_OBJECT
 public:
     explicit KCPreferenceContents(QWidget *parent = 0);
 
+public slots:
+    void applyAllSettings();
+
 private:
+    KCPreferenceEmbeddedGeneral *newGeneralSetting;
+    KCPreferenceEmbeddedEditor *newEditorSetting;
+    KCPreferenceEmbeddedCompiler *newCompilerSetting;
+    KCPreferenceEmbeddedDebugger *newDebuggerSetting;
+    KCPreferenceEmbeddedFileAssociation *newFileAssociationSetting;
 
 };
 
@@ -107,6 +117,11 @@ class KCPreferenceCommander : public QWidget
     Q_OBJECT
 public:
     explicit KCPreferenceCommander(QWidget *parent = 0);
+
+signals:
+    void requireYes();
+    void requireCancel();
+    void requireApply();
 
 public slots:
     void retranslate();
