@@ -8,11 +8,13 @@ KCPreferenceItemBooleanGroup::KCPreferenceItemBooleanGroup(QWidget *parent) :
 
 void KCPreferenceItemBooleanGroup::addTrueValueGroupItem(KCPreferenceItemBase *newGroupItem)
 {
+    newGroupItem->heightState(getCurrentValue().toBool());
     trueValueItemGroup.append(newGroupItem);
 }
 
 void KCPreferenceItemBooleanGroup::addFalseValueGroupItem(KCPreferenceItemBase *newGroupItem)
 {
+    newGroupItem->heightState(!getCurrentValue().toBool());
     falseValueItemGroup.append(newGroupItem);
 }
 

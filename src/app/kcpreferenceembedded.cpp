@@ -108,8 +108,8 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     KCPreferenceItemBooleanGroup *tabSpacingItem=
     addItemBooleanGroup(booleanItemCaption[booleanUseSpaceInsteadOfTab],
                         instance->usingBlankInsteadTab());
-    tabSpacingItem->addTrueValueGroupItem(addItemInt(intItemCaption[intTabSpacing],
-                                                     instance->getTabWidth()));
+    tabSpacingItem->addFalseValueGroupItem(addItemInt(intItemCaption[intTabSpacing],
+                                                      instance->getTabWidth()));
     addItemCombo(comboItemCaption[comboWordWrapMode],
                  comboItemText[comboWordWrapMode],
                  instance->getWrapModeInt());

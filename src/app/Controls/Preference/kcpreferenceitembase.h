@@ -42,6 +42,7 @@ signals:
 public slots:
     void retranslate();
     void retranslateAndSet();
+    void heightState(bool newState);
     void animateShow();
     void animateHide();
     void resetCurrentValue();

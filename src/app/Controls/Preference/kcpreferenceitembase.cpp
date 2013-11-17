@@ -148,6 +148,20 @@ void KCPreferenceItemBase::retranslateAndSet()
     refreshValueDisplay();
 }
 
+void KCPreferenceItemBase::heightState(bool newState)
+{
+    if(newState)
+    {
+        setFixedHeight(27);
+        show();
+    }
+    else
+    {
+        setFixedHeight(0);
+        hide();
+    }
+}
+
 void KCPreferenceItemBase::animateShow()
 {
     if(showAnimation->state()!=QTimeLine::Running)
