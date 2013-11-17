@@ -108,6 +108,8 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     KCPreferenceItemBooleanGroup *tabSpacingItem=
     addItemBooleanGroup(booleanItemCaption[booleanUseSpaceInsteadOfTab],
                         instance->usingBlankInsteadTab());
+    tabSpacingItem->addTrueValueGroupItem(addItemInt(intItemCaption[intSpacePerTab],
+                                                     instance->getSpacePerTab()));
     tabSpacingItem->addFalseValueGroupItem(addItemInt(intItemCaption[intTabSpacing],
                                                       instance->getTabWidth()));
     addItemCombo(comboItemCaption[comboWordWrapMode],
@@ -142,6 +144,7 @@ void KCPreferenceEmbeddedEditor::retranslate()
     booleanItemCaption[booleanTabCloseable]=tr("Tab closing:");
 
     intItemCaption[intTabSpacing]=tr("Tab Spacing:");
+    intItemCaption[intSpacePerTab]=tr("Space per tab:");
     intItemCaption[intCursorWidth]=tr("Cursor Width:");
     intItemCaption[intClipboardTrackingMax]=tr("Maximum Clipboard Tracking Items:");
 

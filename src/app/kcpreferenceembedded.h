@@ -113,6 +113,7 @@ private:
     enum EditorIntEnum
     {
         intTabSpacing,
+        intSpacePerTab,
         intCursorWidth,
         intClipboardTrackingMax,
         intItemCount

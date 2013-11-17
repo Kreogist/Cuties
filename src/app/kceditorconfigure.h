@@ -54,8 +54,11 @@ public:
     void setEditorFont(const QString &value);
     int getWrapModeInt() const;
     int getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const;
+    int getSpacePerTab() const;
+    void setSpacePerTab(int value);
 
 signals:
+    void spacePerTabChanged(int newValue);
     void tabWidthChanged(int newValue);
     void wrapModeChanged(QTextOption::WrapMode newWrapMode);
     void cursorWidthChanged(int newValue);
@@ -75,6 +78,7 @@ private:
     bool lineNumVisible;
     int tabWidth, cursorWidth;
     bool tabMoveable, tabCloseable;
+    int spacePerTab;
 };
 
 

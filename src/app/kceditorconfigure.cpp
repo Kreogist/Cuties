@@ -33,6 +33,16 @@ KCEditorConfigure::KCEditorConfigure()
     tabMoveable=true;
     tabCloseable=true;
 }
+int KCEditorConfigure::getSpacePerTab() const
+{
+    return spacePerTab;
+}
+
+void KCEditorConfigure::setSpacePerTab(int value)
+{
+    spacePerTab = value;
+    emit spacePerTabChanged(value);
+}
 
 KCEditorConfigure *KCEditorConfigure::getInstance()
 {
