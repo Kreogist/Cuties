@@ -444,7 +444,7 @@ void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
     {
         insertTabCursor.clearSelection();
         QString spaceChar=configureInstance->usingBlankInsteadTab()?
-                          QString(" ").repeated(configureInstance->getTabWidth()):
+                          QString(" ").repeated(configureInstance->getSpacePerTab()):
                           "\t";
         insertTabCursor.insertText(spaceChar.repeated(tabCount));
     }

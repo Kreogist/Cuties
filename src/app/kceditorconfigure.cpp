@@ -28,6 +28,7 @@ KCEditorConfigure::KCEditorConfigure()
     isUsingBlankInsteadTab=true;
     lineNumVisible=true;
     tabWidth=4;
+    spacePerTab=4;
     cursorWidth=1;
     overwriteMode=false;
     tabMoveable=true;
