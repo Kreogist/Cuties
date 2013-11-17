@@ -262,6 +262,31 @@ KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
     initPager();
 }
 
+KCPreferenceCommander::KCPreferenceCommander(QWidget *parent) :
+    QWidget(parent)
+{
+    setContentsMargins(0,0,0,0);
+
+    commanderLayout=new QHBoxLayout(this);
+    commanderLayout->setContentsMargins(0,0,0,0);
+    commanderLayout->setSpacing(0);
+    setLayout(commanderLayout);
+
+    commanderControls[commanderYes]=new QToolButton(this);
+    commanderControls[commanderCancel]=new QToolButton(this);
+    commanderControls[commanderApply]=new QToolButton(this);
+}
+
+void KCPreferenceCommander::retranslate()
+{
+
+}
+
+void KCPreferenceCommander::retranslateAndSet()
+{
+    retranslate();
+}
+
 KCPreference::KCPreference(QWidget *parent) :
     QDialog(parent)
 {
@@ -321,3 +346,4 @@ void KCPreference::retranslateAndSet()
     retranslate();
     setWindowTitle(titleText);
 }
+

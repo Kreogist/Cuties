@@ -102,6 +102,29 @@ private:
 
 };
 
+class KCPreferenceCommander : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCPreferenceCommander(QWidget *parent = 0);
+
+public slots:
+    void retranslate();
+    void retranslateAndSet();
+
+private:
+    QHBoxLayout *commanderLayout;
+    enum commanderEnum
+    {
+        commanderYes,
+        commanderCancel,
+        commanderApply,
+        commanderCount
+    };
+    QToolButton *commanderControls[commanderCount];
+    QString commanderTitle[commanderCount];
+};
+
 class KCPreference : public QDialog
 {
     Q_OBJECT
