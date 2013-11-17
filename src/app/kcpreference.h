@@ -11,10 +11,11 @@
 #include "kclistbutton.h"
 #include "kcpreferencepager.h"
 #include "kcpreferenceembedded.h"
+#include "kcglobal.h"
 
 enum KCPreferenceCategory
 {
-    KCPreferenceGerneral,
+    KCPreferenceGeneral,
     KCPreferenceEditor,
     KCPreferenceCompiler,
     KCPreferenceDebugger,
@@ -104,12 +105,7 @@ public slots:
     void applyAllSettings();
 
 private:
-    KCPreferenceEmbeddedGeneral *newGeneralSetting;
-    KCPreferenceEmbeddedEditor *newEditorSetting;
-    KCPreferenceEmbeddedCompiler *newCompilerSetting;
-    KCPreferenceEmbeddedDebugger *newDebuggerSetting;
-    KCPreferenceEmbeddedFileAssociation *newFileAssociationSetting;
-
+    KCPreferenceSuperList *embeddedSuperList[KCCategoryCount];
 };
 
 class KCPreferenceCommander : public QWidget

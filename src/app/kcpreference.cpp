@@ -174,7 +174,7 @@ KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
     //Set Language String
     retranslate();
     QString categoryIcons[KCCategoryCount];
-    categoryIcons[KCPreferenceGerneral]=":/controlcenter/image/Control Center/cciGeneral.png";
+    categoryIcons[KCPreferenceGeneral]=":/controlcenter/image/Control Center/cciGeneral.png";
     categoryIcons[KCPreferenceEditor]=":/controlcenter/image/Control Center/cciEditor.png";
     categoryIcons[KCPreferenceCompiler]=":/controlcenter/image/Control Center/cciCompiler.png";
     categoryIcons[KCPreferenceDebugger]=":/controlcenter/image/Control Center/cciDebugger.png";
@@ -193,7 +193,7 @@ KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
     //Signal mapper sets
     QSignalMapper *listSelectSignals=new QSignalMapper(this);
 
-    for(int i=KCPreferenceGerneral; i<KCCategoryCount; i++)
+    for(int i=KCPreferenceGeneral; i<KCCategoryCount; i++)
     {
         categoryButton[i]=new KCPreferenceListButton(this);
         categoryButton[i]->setCategoryTitle(categoryCaptions[i]);
@@ -215,7 +215,7 @@ KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
      * This should be saved.
      *
      */
-    currentCategory=KCPreferenceGerneral;
+    currentCategory=KCPreferenceGeneral;
     categoryButton[currentCategory]->setCategoryPressed(true);
 }
 
@@ -233,7 +233,7 @@ void KCPreferenceCategoryList::listSelectChangedEvent(int listIndex)
 
 void KCPreferenceCategoryList::retranslate()
 {
-    categoryCaptions[KCPreferenceGerneral]=tr("Gerneral");
+    categoryCaptions[KCPreferenceGeneral]=tr("Gerneral");
     categoryCaptions[KCPreferenceEditor]=tr("Editor");
     categoryCaptions[KCPreferenceCompiler]=tr("Compiler");
     categoryCaptions[KCPreferenceDebugger]=tr("Debugger");
@@ -248,26 +248,26 @@ void KCPreferenceCategoryList::retranslateAndSet()
 KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
     KCPreferencePager(parent)
 {
-    newGeneralSetting=new KCPreferenceEmbeddedGeneral(this);
-    newEditorSetting=new KCPreferenceEmbeddedEditor(this);
-    newCompilerSetting=new KCPreferenceEmbeddedCompiler(this);
-    newDebuggerSetting=new KCPreferenceEmbeddedDebugger(this);
-    newFileAssociationSetting=new KCPreferenceEmbeddedFileAssociation(this);
-    addSuperList(newGeneralSetting);
-    addSuperList(newEditorSetting);
-    addSuperList(newCompilerSetting);
-    addSuperList(newDebuggerSetting);
-    addSuperList(newFileAssociationSetting);
+    embeddedSuperList[KCPreferenceGeneral]=new KCPreferenceEmbeddedGeneral(this);
+    embeddedSuperList[KCPreferenceEditor]=new KCPreferenceEmbeddedEditor(this);
+    embeddedSuperList[KCPreferenceCompiler]=new KCPreferenceEmbeddedCompiler(this);
+    embeddedSuperList[KCPreferenceDebugger]=new KCPreferenceEmbeddedDebugger(this);
+    embeddedSuperList[KCPreferenceFileAssociation]=new KCPreferenceEmbeddedFileAssociation(this);
+
+    for(int i=KCPreferenceGeneral; i<KCCategoryCount; i++)
+    {
+        addSuperList(embeddedSuperList[i]);
+    }
     initPager();
 }
 
 void KCPreferenceContents::applyAllSettings()
 {
-    newGeneralSetting->applyPreference();
-    newEditorSetting->applyPreference();
-    newCompilerSetting->applyPreference();
-    newDebuggerSetting->applyPreference();
-    newFileAssociationSetting->applyPreference();
+    for(int i=KCPreferenceGeneral; i<KCCategoryCount; i++)
+    {
+        embeddedSuperList[i]->applyPreference();
+    }
+    KCGlobal::getInstance()->writeSettings();
 }
 
 KCPreferenceCommander::KCPreferenceCommander(QWidget *parent) :
@@ -394,6 +394,7 @@ void KCPreference::retranslateAndSet()
 void KCPreference::yesAction()
 {
     applyAction();
+    close();
 }
 
 void KCPreference::cancelAction()
