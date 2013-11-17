@@ -369,7 +369,6 @@ KCPreference::KCPreference(QWidget *parent) :
     connect(commander, &KCPreferenceCommander::requireApply,
             this, &KCPreference::applyAction);
 
-
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCPreference::retranslateAndSet);
 }
