@@ -1,4 +1,5 @@
 #include "kcpreferenceembedded.h"
+#include "kclanguageconfigure.h"
 
 KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
     KCPreferenceSuperList(parent)
