@@ -70,12 +70,25 @@ void KCPreferenceEmbeddedGeneral::retranslate()
 
 void KCPreferenceEmbeddedGeneral::retranslateAndSet()
 {
+    //Re-translate strings.
     retranslate();
+
+    //Reset title strings.
     int i;
     for(i=titleEnvironment; i<titleCount; i++)
     {
-        contents->getSuperListTitles().at(i)->setText(generalTitleText[i]);
+        generalTitles[titleEnvironment]->setText(generalTitleText[i]);
     }
+
+    //Reset combo items.
+    for(i=comboDefaultProgrammingLanguage; i<comboItemCount; i++)
+    {
+        generalCombos[i]->setComboCaptionText(comboItemCaption[i]);
+        generalCombos[i]->setComboTextList(comboItemText[i]);
+        generalCombos[i]->refreshComboText();
+    }
+
+    //Reset
 }
 
 void KCPreferenceEmbeddedGeneral::applyPreference()
