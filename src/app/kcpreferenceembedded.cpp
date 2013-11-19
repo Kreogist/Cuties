@@ -37,6 +37,9 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
                      comboItemText[comboSearchEngine],
                      instance->getSearchEngineIndex());
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedGeneral::retranslate()

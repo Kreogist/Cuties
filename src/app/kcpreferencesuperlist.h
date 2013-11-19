@@ -25,8 +25,6 @@ public:
     void appendTitle(QLabel *newTitleWidget);
     void appendItem(KCPreferenceItemBase *newItemWidget);
     void appendStretch();
-    QList<QLabel *> getSuperListTitles() const;
-    QList<KCPreferenceItemBase *> getSuperListItems() const;
 
 signals:
     void changeHeight(int changedHeight);

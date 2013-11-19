@@ -62,16 +62,6 @@ void KCPreferenceSuperListContent::appendStretch()
     superListLayout->addStretch();
 }
 
-QList<QLabel *> KCPreferenceSuperListContent::getSuperListTitles() const
-{
-    return superListTitles;
-}
-
-QList<KCPreferenceItemBase *> KCPreferenceSuperListContent::getSuperListItems() const
-{
-    return superListItems;
-}
-
 KCPreferenceSuperList::KCPreferenceSuperList(QWidget *parent) :
     QScrollArea(parent)
 {
