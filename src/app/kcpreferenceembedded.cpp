@@ -76,6 +76,10 @@ void KCPreferenceEmbeddedGeneral::retranslateAndSet()
     {
         contents->getSuperListTitles().at(i)->setText(generalTitleText[i]);
     }
+    for(i=comboDefaultProgrammingLanguage; i<comboItemCount; i++)
+    {
+
+    }
 }
 
 void KCPreferenceEmbeddedGeneral::applyPreference()
