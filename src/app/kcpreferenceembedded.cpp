@@ -130,7 +130,7 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
                    instance->getLineNumVisible());
 
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]=
-            addItemBooleanGroup(booleanItemCaption[booleanGroupSpacingInsteadOfTab],
+            addItemBooleanGroup(booleanGroupCaption[booleanGroupSpacingInsteadOfTab],
                                 instance->usingBlankInsteadTab());
     editorInts[intSpacePerTab]=addItemInt(intItemCaption[intSpacePerTab],
                                           instance->getSpacePerTab());
