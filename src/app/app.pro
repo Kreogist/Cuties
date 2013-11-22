@@ -103,7 +103,8 @@ SOURCES += \
     Controls/Preference/kcpreferenceitemboolean.cpp \
     Controls/Preference/kcpreferenceitemint.cpp \
     Controls/Preference/kcpreferenceitembooleangroup.cpp \
-    Controls/Preference/kcpreferenceitempath.cpp
+    Controls/Preference/kcpreferenceitempath.cpp \
+    kcpreferencelangaugelist.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -183,7 +184,8 @@ HEADERS += \
     Controls/Preference/kcpreferenceitemboolean.h \
     Controls/Preference/kcpreferenceitemint.h \
     Controls/Preference/kcpreferenceitembooleangroup.h \
-    Controls/Preference/kcpreferenceitempath.h
+    Controls/Preference/kcpreferenceitempath.h \
+    kcpreferencelangaugelist.h
 
 # Enable C++11
 CONFIG += c++11

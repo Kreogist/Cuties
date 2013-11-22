@@ -173,11 +173,14 @@ KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(KCPreferenceItemPath *n
     return newPathItem;
 }
 
-KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionText, QString defaultValue)
+KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionText,
+                                                         QString defaultValue,
+                                                         QString defaultTitleValue)
 {
     KCPreferenceItemPath *newPathItem=new KCPreferenceItemPath(this);
     newPathItem->setPathCaptionText(captionText);
     newPathItem->setOriginalValue(defaultValue);
+    newPathItem->setDialogTitle(defaultTitleValue);
     contents->appendItem(newPathItem);
     return newPathItem;
 }

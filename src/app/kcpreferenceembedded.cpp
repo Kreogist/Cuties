@@ -250,19 +250,19 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
     //Get configure instance
     instance=KCCompilerConfigure::getInstance();
 
-    addTitle(compilerTitleText[titleCompilerPath]);
+    compilerTitles[titleCompilerPath]=addTitle(compilerTitleText[titleCompilerPath]);
     compilerPathItems[pathGPPCompiler]=
         addItemPath(pathItemCaption[pathGPPCompiler],
-                    instance->getGppPath());
-    compilerPathItems[pathGPPCompiler]->setDialogTitle(pathItemTitleCaption[pathGPPCompiler]);
+                    instance->getGppPath(),
+                    pathItemTitleCaption[pathGPPCompiler]);
     compilerPathItems[pathGCCCompiler]=
         addItemPath(pathItemCaption[pathGCCCompiler],
-                    instance->getGccPath());
-    compilerPathItems[pathGCCCompiler]->setDialogTitle(pathItemTitleCaption[pathGCCCompiler]);
+                    instance->getGccPath(),
+                    pathItemTitleCaption[pathGCCCompiler]);
     compilerPathItems[pathFPCCompiler]=
         addItemPath(pathItemCaption[pathFPCCompiler],
-                    instance->getFpcPath());
-    compilerPathItems[pathFPCCompiler]->setDialogTitle(pathItemTitleCaption[pathFPCCompiler]);
+                    instance->getFpcPath(),
+                    pathItemTitleCaption[pathFPCCompiler]);
     addStretch();
 }
 
@@ -281,18 +281,74 @@ void KCPreferenceEmbeddedCompiler::retranslate()
 
 void KCPreferenceEmbeddedCompiler::retranslateAndSet()
 {
+    //Get translate
     retranslate();
+
+    int i;
+    //Reset title strings.
+    for(i=titleCompilerPath; i<titleCount; i++)
+    {
+        compilerTitles[i]->setText(compilerTitleText[i]);
+    }
+
+    //Reset path items.
+    for(i=pathGPPCompiler; i<pathItemCount; i++)
+    {
+        compilerPathItems[i]->setPathCaptionText(pathItemCaption[i]);
+        compilerPathItems[i]->setDialogTitle(pathItemTitleCaption[i]);
+    }
 }
 
 void KCPreferenceEmbeddedCompiler::applyPreference()
 {
-
+    instance->setGppPath(compilerPathItems[pathGPPCompiler]->getCurrentValue().toString());
+    instance->setGccPath(compilerPathItems[pathGCCCompiler]->getCurrentValue().toString());
+    instance->setFpcPath(compilerPathItems[pathFPCCompiler]->getCurrentValue().toString());
 }
 
 KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
     KCPreferenceSuperList(parent)
 {
-    ;
+    //Get translate
+    retranslate();
+
+    //Get configure instance
+    instance=KCDebuggerConfigure::getInstance();
+
+    debuggerTitles[titleGDBSettings]=addTitle(debuggerTitleText[titleGDBSettings]);
+
+    debuggerPathItems[pathGDBDebugger]=addItemPath(pathItemCaption[pathGDBDebugger],
+                                                   "",
+                                                   pathItemTitleCaption[pathGDBDebugger]);
+}
+
+void KCPreferenceEmbeddedDebugger::retranslate()
+{
+    debuggerTitleText[titleGDBSettings]=tr("GDB Settings");
+
+    pathItemCaption[pathGDBDebugger]=tr("GDB Debugger:");
+
+    pathItemTitleCaption[pathGDBDebugger]=tr("Browse gdb debugger");
+}
+
+void KCPreferenceEmbeddedDebugger::retranslateAndSet()
+{
+    //Get translate
+    retranslate();
+
+    int i;
+    //Reset title strings.
+    for(i=titleGDBSettings; i<titleCount; i++)
+    {
+        debuggerTitles[i]->setText(debuggerTitleText[i]);
+    }
+
+    //Reset path items.
+    for(i=pathGDBDebugger; i<pathItemCount; i++)
+    {
+        debuggerPathItems[i]->setPathCaptionText(pathItemCaption[i]);
+        debuggerPathItems[i]->setDialogTitle(pathItemTitleCaption[i]);
+    }
 }
 
 void KCPreferenceEmbeddedDebugger::applyPreference()

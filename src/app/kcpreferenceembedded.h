@@ -11,6 +11,9 @@
 #include "kcgeneralconfigure.h"
 #include "kceditorconfigure.h"
 #include "kccompilerconfigure.h"
+#include "kcdebuggerconfigure.h"
+#include "kcfileassociation.h"
+#include "kclanguageconfigure.h"
 #include "kchistoryconfigure.h"
 #include "kcclipboard.h"
 
@@ -146,8 +149,9 @@ private:
         titleCount
     };
     QString compilerTitleText[titleCount];
+    QLabel *compilerTitles[titleCount];
 
-    enum pathItemEnum
+    enum CompilerPathItemEnum
     {
         pathGPPCompiler,
         pathGCCCompiler,
@@ -168,9 +172,29 @@ public:
     explicit KCPreferenceEmbeddedDebugger(QWidget *parent = 0);
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
     void applyPreference();
 
 private:
+    enum DebuggerTitleEnum
+    {
+        titleGDBSettings,
+        titleCount
+    };
+    QString debuggerTitleText[titleCount];
+    QLabel *debuggerTitles[titleCount];
+
+    enum DebuggerPathItem
+    {
+        pathGDBDebugger,
+        pathItemCount
+    };
+    KCPreferenceItemPath *debuggerPathItems[pathItemCount];
+    QString pathItemCaption[pathItemCount];
+    QString pathItemTitleCaption[pathItemCount];
+
+    KCDebuggerConfigure *instance;
 };
 
 class KCPreferenceEmbeddedFileAssociation : public KCPreferenceSuperList

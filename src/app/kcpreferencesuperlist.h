@@ -66,7 +66,8 @@ public:
                                                       bool defaultValue);
     KCPreferenceItemPath *addItemPath(KCPreferenceItemPath *newPathItem);
     KCPreferenceItemPath *addItemPath(const QString &captionText,
-                                      QString defaultValue);
+                                      QString defaultValue,
+                                      QString defaultTitleValue=QString(""));
     void addStretch();
 
 signals:
