@@ -859,28 +859,25 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     if(e->text()==")" || e->text()=="]")
     {
-        if(document()->characterAt(_textCursor.position()) == e->text())
+        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+        if(blockData!=NULL)
         {
-            KCTextBlockData *blockData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
-            if(blockData!=NULL)
+            for(auto i=blockData->getFirstParenthesesInfo(),
+                l=blockData->getEndParenthesesInfo();
+                i<l;
+                i++)
             {
-                for(auto i=blockData->getFirstParenthesesInfo(),
-                    l=blockData->getEndParenthesesInfo();
-                    i<l;
-                    i++)
+                if(i->pos == _textCursor.positionInBlock())
                 {
-                    if(i->pos == _textCursor.positionInBlock())
+                    if(matchParentheses(e->text()==")"?'(':'[',
+                                        e->text().toInt(),
+                                        i,
+                                        _textCursor.block(),
+                                        true) > 0)
                     {
-                        if(matchParentheses(e->text()==")"?'(':'[',
-                                            e->text().toInt(),
-                                            i,
-                                            _textCursor.block(),
-                                            true) > 0)
-                        {
-                            _textCursor.movePosition(QTextCursor::Right);
-                            setTextCursor(_textCursor);
-                            return;
-                        }
+                        _textCursor.movePosition(QTextCursor::Right);
+                        setTextCursor(_textCursor);
+                        return;
                     }
                 }
             }
@@ -997,13 +994,14 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     {
         if(_textCursor.position()>0)
         {
-
-            if(_textCursor.document()->characterAt(_textCursor.position()-1) == '{' &&
-                    _textCursor.document()->characterAt(_textCursor.position()) == '}')
+            QChar previousChar=_textCursor.document()->characterAt(_textCursor.position()-1),
+                  currentChar=_textCursor.document()->characterAt(_textCursor.position());
+            if(previousChar == '{' && currentChar == '}')
             {
+                //It's a pair of char '{}'
+                // Indent it!
                 QPlainTextEdit::keyPressEvent(e);
                 _textCursor.insertBlock();
-
                 QTextBlock nextBlock=_textCursor.block();
                 QTextBlock currBlock=nextBlock.previous();
                 QTextBlock prevBlock=currBlock.previous();
@@ -1018,6 +1016,42 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 _textCursor.movePosition(QTextCursor::PreviousBlock);
                 setTextCursor(_textCursor);
                 insertTab(_textCursor, prevData->getCodeLevel() + 1);
+                break;
+            }
+            if(currentChar == ')' || currentChar == ']')
+            {
+                QPlainTextEdit::keyPressEvent(e);
+                QTextBlock currBlock=_textCursor.block();
+                QTextBlock prevBlock=currBlock.previous();
+                KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
+                KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
+                currData->setCodeLevel(prevData->getCodeLevel());
+                _textCursor.setPosition(currBlock.position());
+                int findParenthesesInfo;
+                if(currData!=NULL)
+                {
+                    for(auto i=currData->getFirstParenthesesInfo(),
+                        l=currData->getEndParenthesesInfo();
+                        i<l;
+                        i++)
+                    {
+                        if(i->pos == _textCursor.positionInBlock())
+                        {
+
+                            findParenthesesInfo=matchParentheses(currentChar==')'?'(':'[',
+                                                                 currentChar.toLatin1(),
+                                                                 i,
+                                                                 currBlock,
+                                                                 true);
+                            qDebug()<<currentChar.toLatin1();
+                            if(findParenthesesInfo > -1)
+                            {
+                                QString filledSpacing=QString(" ");
+                                _textCursor.insertText(filledSpacing.repeated(prevBlock.text().length()));
+                            }
+                        }
+                    }
+                }
                 break;
             }
         }
