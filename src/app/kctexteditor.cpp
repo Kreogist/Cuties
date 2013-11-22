@@ -961,7 +961,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             break;
         }
 
-        //Now we have to judge normal case.
+        /*//Now we have to judge normal case.
         int pos=findFirstCharacter(_textCursor.block());
         //If we are at the before place, and this is just a blank
         //line or only contains spaces or tabs.
@@ -972,26 +972,23 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             {
                 if(_textCursor.positionInBlock()==0)
                 {
-                    qDebug()<<"pos<0 inblock==0";
                     QPlainTextEdit::keyPressEvent(e);
                     break;
                 }
-                qDebug()<<"pos<0 inblock!=0";
                 removeTab(_textCursor);
                 break;
             }
-            qDebug()<<"pos<0 no using";
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
-        if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->getTabSpacing()))
+        if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->usingBlankInsteadTab()))
         {
             if(_textCursor.positionInBlock()>0)
             {
                 removeTab(_textCursor);
                 break;
             }
-        }
+        }*/
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
