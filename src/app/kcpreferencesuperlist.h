@@ -25,17 +25,19 @@ public:
     void appendTitle(QLabel *newTitleWidget);
     void appendItem(KCPreferenceItemBase *newItemWidget);
     void appendStretch();
-    QList<QLabel *> getSuperListTitles() const;
-    QList<KCPreferenceItemBase *> getSuperListItems() const;
 
 signals:
     void changeHeight(int changedHeight);
+
+public slots:
+    void resetCurrentIndex();
 
 private slots:
     void transferCurrentIndex(int newIndex);
 
 private:
     int currentItemIndex;
+    int originalHeight;
     QVBoxLayout *superListLayout;
     QList<QLabel *> superListTitles;
     QList<KCPreferenceItemBase *> superListItems;
@@ -70,6 +72,7 @@ public:
 signals:
 
 public slots:
+    void resetCurrentIndex();
     virtual void applyPreference()=0;
 
 protected:

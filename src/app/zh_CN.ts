@@ -726,37 +726,37 @@ Cancel execution of a function call.</translation>
 <context>
     <name>KCPreferenceEmbeddedCompiler</name>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="196"/>
+        <location filename="kcpreferenceembedded.cpp" line="216"/>
         <source>Compiler Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="198"/>
+        <location filename="kcpreferenceembedded.cpp" line="218"/>
         <source>g++ Compiler:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="199"/>
+        <location filename="kcpreferenceembedded.cpp" line="219"/>
         <source>gcc Compiler:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="200"/>
+        <location filename="kcpreferenceembedded.cpp" line="220"/>
         <source>FPC Compiler:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="202"/>
+        <location filename="kcpreferenceembedded.cpp" line="222"/>
         <source>Browse g++ compiler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="203"/>
+        <location filename="kcpreferenceembedded.cpp" line="223"/>
         <source>Browse gcc compiler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="204"/>
+        <location filename="kcpreferenceembedded.cpp" line="224"/>
         <source>Browse fpc compiler</source>
         <translation type="unfinished"></translation>
     </message>
@@ -764,82 +764,82 @@ Cancel execution of a function call.</translation>
 <context>
     <name>KCPreferenceEmbeddedEditor</name>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="137"/>
+        <location filename="kcpreferenceembedded.cpp" line="157"/>
         <source>View Option</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="138"/>
+        <location filename="kcpreferenceembedded.cpp" line="158"/>
         <source>Multiple Tabs Option</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="139"/>
+        <location filename="kcpreferenceembedded.cpp" line="159"/>
         <source>Clipboard</source>
         <translation type="unfinished">剪切板</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="141"/>
+        <location filename="kcpreferenceembedded.cpp" line="161"/>
         <source>Show code line panel:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="142"/>
+        <location filename="kcpreferenceembedded.cpp" line="162"/>
         <source>Use space instead of tab:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="143"/>
+        <location filename="kcpreferenceembedded.cpp" line="163"/>
         <source>Tab moving:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="144"/>
+        <location filename="kcpreferenceembedded.cpp" line="164"/>
         <source>Tab closing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="146"/>
+        <location filename="kcpreferenceembedded.cpp" line="166"/>
         <source>Tab Spacing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="147"/>
+        <location filename="kcpreferenceembedded.cpp" line="167"/>
         <source>Space per tab:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="148"/>
+        <location filename="kcpreferenceembedded.cpp" line="168"/>
         <source>Cursor Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="149"/>
+        <location filename="kcpreferenceembedded.cpp" line="169"/>
         <source>Maximum Clipboard Tracking Items:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="151"/>
+        <location filename="kcpreferenceembedded.cpp" line="171"/>
         <source>Word Wrap Mode:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="153"/>
+        <location filename="kcpreferenceembedded.cpp" line="173"/>
         <source>No word wrapped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="154"/>
+        <location filename="kcpreferenceembedded.cpp" line="174"/>
         <source>Wrapped at word boundaries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="155"/>
+        <location filename="kcpreferenceembedded.cpp" line="175"/>
         <source>Wrapped at any point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="156"/>
+        <location filename="kcpreferenceembedded.cpp" line="176"/>
         <source>Wrapping at word boundary or anywhere</source>
         <translation type="unfinished"></translation>
     </message>
@@ -847,74 +847,74 @@ Cancel execution of a function call.</translation>
 <context>
     <name>KCPreferenceEmbeddedGeneral</name>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="43"/>
+        <location filename="kcpreferenceembedded.cpp" line="47"/>
         <source>Envronment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="44"/>
-        <source>Automatic Remember</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="45"/>
-        <source>History</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="46"/>
-        <source>Search Options</source>
-        <translation type="unfinished"></translation>
+        <translation> 环境</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="48"/>
-        <source>Default Programming Language:</source>
-        <translation type="unfinished"></translation>
+        <source>Automatic Remember</source>
+        <translation>自动记忆</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="49"/>
+        <source>History</source>
+        <translation>历史记录</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="50"/>
-        <source>Plain Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="51"/>
-        <source>C</source>
-        <translation type="unfinished"></translation>
+        <source>Search Options</source>
+        <translation> 搜索选项</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="52"/>
-        <source>C++</source>
-        <translation type="unfinished"></translation>
+        <source>Default Programming Language:</source>
+        <translation>默认程序语言：</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="53"/>
-        <source>Pascal</source>
-        <translation type="unfinished"></translation>
+        <location filename="kcpreferenceembedded.cpp" line="54"/>
+        <source>Plain Text</source>
+        <translation>文本文档</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="55"/>
+        <source>C</source>
+        <translation>C</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="56"/>
+        <source>C++</source>
+        <translation>C++</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="57"/>
+        <source>Pascal</source>
+        <translation>Pascal</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="59"/>
         <source>Online Search Engine:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="63"/>
-        <source>Auto select default language file suffix when opening files:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="64"/>
-        <source>Auto select default language file suffix when saving a file:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="65"/>
-        <source>Restore files when quitting and re-opening files:</source>
-        <translation type="unfinished"></translation>
+        <translation>在线搜索引擎：</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="67"/>
+        <source>Auto select default language file suffix when opening files:</source>
+        <translation>打开文件时使用默认语言的拓展名：</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="68"/>
+        <source>Auto select default language file suffix when saving a file:</source>
+        <translation>保存文件时使用默认语言的拓展名：</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="69"/>
+        <source>Restore files when quitting and re-opening files:</source>
+        <translation>打开上一次未关闭的文件：</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="71"/>
         <source>Maximum History Tracking Items:</source>
-        <translation type="unfinished"></translation>
+        <translation>历史记录上限：</translation>
     </message>
 </context>
 <context>
@@ -922,7 +922,7 @@ Cancel execution of a function call.</translation>
     <message>
         <location filename="Controls/Preference/kcpreferenceitembase.cpp" line="142"/>
         <source>Original Setting: </source>
-        <translation type="unfinished"></translation>
+        <translation>初始值：</translation>
     </message>
 </context>
 <context>
@@ -930,17 +930,17 @@ Cancel execution of a function call.</translation>
     <message>
         <location filename="Controls/Preference/kcpreferenceitemboolean.cpp" line="82"/>
         <source>Enabled this feature.</source>
-        <translation type="unfinished"></translation>
+        <translation>启用这个特性。</translation>
     </message>
     <message>
         <location filename="Controls/Preference/kcpreferenceitemboolean.cpp" line="83"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>启用</translation>
     </message>
     <message>
         <location filename="Controls/Preference/kcpreferenceitemboolean.cpp" line="84"/>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>禁用</translation>
     </message>
 </context>
 <context>
@@ -948,7 +948,7 @@ Cancel execution of a function call.</translation>
     <message>
         <location filename="Controls/Preference/kcpreferenceitempath.cpp" line="79"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>浏览</translation>
     </message>
 </context>
 <context>

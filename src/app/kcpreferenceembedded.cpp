@@ -37,6 +37,9 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
                      comboItemText[comboSearchEngine],
                      instance->getSearchEngineIndex());
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedGeneral::retranslate()
@@ -70,15 +73,32 @@ void KCPreferenceEmbeddedGeneral::retranslate()
 
 void KCPreferenceEmbeddedGeneral::retranslateAndSet()
 {
+    //Re-translate strings.
     retranslate();
+
+    //Reset title strings.
     int i;
     for(i=titleEnvironment; i<titleCount; i++)
     {
-        contents->getSuperListTitles().at(i)->setText(generalTitleText[i]);
+        generalTitles[i]->setText(generalTitleText[i]);
     }
+
+    //Reset combo items.
     for(i=comboDefaultProgrammingLanguage; i<comboItemCount; i++)
     {
-
+        generalCombos[i]->setComboCaptionText(comboItemCaption[i]);
+        generalCombos[i]->setComboTextList(comboItemText[i]);
+        generalCombos[i]->refreshComboText();
+    }
+    //Reset boolean items
+    for(i=booleanUseDefaultLanguageOnOpen; i<booleanItemCount; i++)
+    {
+        generalBooleans[i]->setBooleanCaptionText(booleanItemCaption[i]);
+    }
+    //Reset int items
+    for(i=intItemHistoryMax; i<intItemCount; i++)
+    {
+        generalInts[i]->setIntCaptionText(intItemCaption[i]);
     }
 }
 
@@ -106,34 +126,37 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     //Get configure settings
     instance=KCEditorConfigure::getInstance();
 
-    addTitle(editorTitleText[titleViewOptions]);
-    addItemBoolean(booleanItemCaption[booleanShowLinePanel],
+    editorTitles[titleViewOptions]=addTitle(editorTitleText[titleViewOptions]);
+    editorBooleans[booleanShowLinePanel]=addItemBoolean(booleanItemCaption[booleanShowLinePanel],
                    instance->getLineNumVisible());
 
-    KCPreferenceItemBooleanGroup *tabSpacingItem=
-    addItemBooleanGroup(booleanItemCaption[booleanUseSpaceInsteadOfTab],
+    tabSpacingItem=addItemBooleanGroup(booleanItemCaption[booleanUseSpaceInsteadOfTab],
                         instance->usingBlankInsteadTab());
-    tabSpacingItem->addTrueValueGroupItem(addItemInt(intItemCaption[intSpacePerTab],
-                                                     instance->getSpacePerTab()));
-    tabSpacingItem->addFalseValueGroupItem(addItemInt(intItemCaption[intTabSpacing],
-                                                      instance->getTabWidth()));
-    addItemCombo(comboItemCaption[comboWordWrapMode],
-                 comboItemText[comboWordWrapMode],
-                 instance->getWrapModeInt());
-    addItemInt(intItemCaption[intCursorWidth],
-               instance->getCursorWidth());
+    editorInts[intSpacePerTab]=addItemInt(intItemCaption[intSpacePerTab],
+                                          instance->getSpacePerTab());
+    editorInts[intTabSpacing]=addItemInt(intItemCaption[intTabSpacing],
+                                         instance->getTabWidth());
+    tabSpacingItem->addTrueValueGroupItem(editorInts[intSpacePerTab]);
+    tabSpacingItem->addFalseValueGroupItem(editorInts[intTabSpacing]);
+    editorCombos[comboWordWrapMode]=addItemCombo(comboItemCaption[comboWordWrapMode],
+                                                 comboItemText[comboWordWrapMode],
+                                                 instance->getWrapModeInt());
+    editorInts[intCursorWidth]=addItemInt(intItemCaption[intCursorWidth],
+                                          instance->getCursorWidth(),
+                                          10,
+                                          1);
 
-    addTitle(editorTitleText[titleMultipleTabs]);
-    addItemBoolean(booleanItemCaption[booleanTabMoveable],
-                   instance->getTabMoveable());
-    addItemBoolean(booleanItemCaption[booleanTabCloseable],
-                   instance->getTabCloseable());
+    editorTitles[titleMultipleTabs]=addTitle(editorTitleText[titleMultipleTabs]);
+    editorBooleans[booleanTabMoveable]=addItemBoolean(booleanItemCaption[booleanTabMoveable],
+                                                      instance->getTabMoveable());
+    editorBooleans[booleanTabCloseable]=addItemBoolean(booleanItemCaption[booleanTabCloseable],
+                                                       instance->getTabCloseable());
 
-    addTitle(editorTitleText[titleClipboard]);
-    addItemInt(intItemCaption[intClipboardTrackingMax],
-               KCClipboard::getInstance()->getMaxDataCount(),
-               100,
-               5);
+    editorTitles[titleClipboard]=addTitle(editorTitleText[titleClipboard]);
+    editorInts[intClipboardTrackingMax]=addItemInt(intItemCaption[intClipboardTrackingMax],
+                                                   KCClipboard::getInstance()->getMaxDataCount(),
+                                                   100,
+                                                   5);
     addStretch();
 }
 
@@ -163,11 +186,56 @@ void KCPreferenceEmbeddedEditor::retranslate()
 
 void KCPreferenceEmbeddedEditor::retranslateAndSet()
 {
+    //Get translate
     retranslate();
+
+    //Reset title strings.
+    int i;
+    for(i=titleViewOptions; i<titleCount; i++)
+    {
+        editorTitles[i]->setText(editorTitleText[i]);
+    }
+
+    //Reset combo items.
+    for(i=comboWordWrapMode; i<comboItemCount; i++)
+    {
+        editorCombos[i]->setComboCaptionText(comboItemCaption[i]);
+        editorCombos[i]->setComboTextList(comboItemText[i]);
+        editorCombos[i]->refreshComboText();
+    }
+    //Reset boolean items
+    for(i=booleanShowLinePanel; i<booleanItemCount; i++)
+    {
+        editorBooleans[i]->setBooleanCaptionText(booleanItemCaption[i]);
+    }
+    //Reset int items
+    for(i=intTabSpacing; i<intItemCount; i++)
+    {
+        editorInts[i]->setIntCaptionText(intItemCaption[i]);
+    }
 }
 
 void KCPreferenceEmbeddedEditor::applyPreference()
 {
+    instance->setLineNumVisible(editorBooleans[booleanShowLinePanel]->getCurrentValue().toBool());
+    instance->setUsingBlankInsteadTab(editorBooleans[booleanUseSpaceInsteadOfTab]->getCurrentValue().toBool());
+    instance->setSpacePerTab(editorInts[intSpacePerTab]->getCurrentValue().toInt());
+    instance->setTabWidth(editorInts[intTabSpacing]->getCurrentValue().toInt());
+    switch(editorCombos[comboWordWrapMode]->getCurrentValue().toInt())
+    {
+    case 0:
+        instance->setWrapMode(QTextOption::NoWrap);
+        break;
+    case 1:
+        instance->setWrapMode(QTextOption::WordWrap);
+        break;
+    case 2:
+        instance->setWrapMode(QTextOption::WrapAnywhere);
+        break;
+    case 3:
+        instance->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+        break;
+    }
 
 }
 

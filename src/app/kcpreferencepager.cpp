@@ -39,6 +39,7 @@ void KCPreferencePager::setPageVisible(int pageIndex, bool visible)
 
 void KCPreferencePager::switchToPage(int pageIndex)
 {
+    preferenceSuperLists.at(currentPageIndex)->resetCurrentIndex();
     QParallelAnimationGroup *moveAnimationGroup=new QParallelAnimationGroup(this);
     QPropertyAnimation *throwLastPage=new QPropertyAnimation(preferenceSuperLists.at(currentPageIndex), "geometry", this);
     QPropertyAnimation *putCurrentPage=new QPropertyAnimation(preferenceSuperLists.at(pageIndex), "geometry", this);

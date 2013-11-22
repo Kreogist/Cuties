@@ -17,6 +17,9 @@ KCPreferenceSuperListContent::KCPreferenceSuperListContent(QWidget *parent) :
     //Set current index
     currentItemIndex=-1;
 
+    //Set original height
+    originalHeight=0;
+
     //Set item signal mapper
     superListItemSignalProcessor=new QSignalMapper(this);
     connect(superListItemSignalProcessor, SIGNAL(mapped(int)),
@@ -29,14 +32,23 @@ void KCPreferenceSuperListContent::transferCurrentIndex(int newIndex)
     {
         return;
     }
-    int lastItemHeight=0;
     if(currentItemIndex!=-1)
     {
         superListItems.at(currentItemIndex)->editFinished();
-        lastItemHeight=superListItems.at(currentItemIndex)->getExpandFinishedHeight();
     }
     currentItemIndex=newIndex;
-    setFixedHeight(size().height()+superListItems.at(currentItemIndex)->getExpandFinishedHeight()-lastItemHeight);
+    setFixedHeight(originalHeight+superListItems.at(currentItemIndex)->getExpandFinishedHeight());
+}
+
+void KCPreferenceSuperListContent::resetCurrentIndex()
+{
+    //If there's a select item, finish edit.
+    if(currentItemIndex!=-1)
+    {
+        superListItems.at(currentItemIndex)->editFinished();
+        setFixedHeight(originalHeight);
+        currentItemIndex=-1;
+    }
 }
 
 void KCPreferenceSuperListContent::appendTitle(QLabel *newTitleWidget)
@@ -44,7 +56,8 @@ void KCPreferenceSuperListContent::appendTitle(QLabel *newTitleWidget)
     superListTitles.append(newTitleWidget);
     superListLayout->addSpacing(5);
     superListLayout->addWidget(newTitleWidget);
-    setFixedHeight(superListLayout->sizeHint().height());
+    originalHeight=superListLayout->sizeHint().height();
+    setFixedHeight(originalHeight);
 }
 
 void KCPreferenceSuperListContent::appendItem(KCPreferenceItemBase *newItemWidget)
@@ -54,22 +67,13 @@ void KCPreferenceSuperListContent::appendItem(KCPreferenceItemBase *newItemWidge
     superListItemSignalProcessor->setMapping(newItemWidget, superListItems.count());
     superListItems.append(newItemWidget);
     superListLayout->addWidget(newItemWidget);
-    setFixedHeight(superListLayout->sizeHint().height());
+    originalHeight=superListLayout->sizeHint().height();
+    setFixedHeight(originalHeight);
 }
 
 void KCPreferenceSuperListContent::appendStretch()
 {
     superListLayout->addStretch();
-}
-
-QList<QLabel *> KCPreferenceSuperListContent::getSuperListTitles() const
-{
-    return superListTitles;
-}
-
-QList<KCPreferenceItemBase *> KCPreferenceSuperListContent::getSuperListItems() const
-{
-    return superListItems;
 }
 
 KCPreferenceSuperList::KCPreferenceSuperList(QWidget *parent) :
@@ -181,6 +185,11 @@ KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionT
 void KCPreferenceSuperList::addStretch()
 {
     contents->appendStretch();
+}
+
+void KCPreferenceSuperList::resetCurrentIndex()
+{
+    contents->resetCurrentIndex();
 }
 
 void KCPreferenceSuperList::resizeEvent(QResizeEvent *event)

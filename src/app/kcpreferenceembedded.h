@@ -99,6 +99,7 @@ private:
     };
     QString comboItemCaption[comboItemCount];
     QList<QString> comboItemText[comboItemCount];
+    KCPreferenceItemCombo *editorCombos[comboItemCount];
 
     enum EditorBooleanEnum
     {
@@ -109,6 +110,7 @@ private:
         booleanItemCount
     };
     QString booleanItemCaption[booleanItemCount];
+    KCPreferenceItemBoolean *editorBooleans[booleanItemCount];
 
     enum EditorIntEnum
     {
@@ -119,6 +121,9 @@ private:
         intItemCount
     };
     QString intItemCaption[intItemCount];
+    KCPreferenceItemInt *editorInts[intItemCount];
+
+    KCPreferenceItemBooleanGroup *tabSpacingItem;
 
     KCEditorConfigure *instance;
 };

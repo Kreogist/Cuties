@@ -94,6 +94,7 @@ void KCEditorConfigure::readConfigure()
         break;
     }
     wrapModeInt=getWrapModeNumber(wrapMode);
+
     cursorWidth=settings.value("CursorWidth", cursorWidth).toInt();
     overwriteMode=settings.value("OverwriteMode", overwriteMode).toBool();
     tabMoveable=settings.value("TabMoveable", tabMoveable).toBool();
