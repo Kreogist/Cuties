@@ -453,6 +453,35 @@ void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
 void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
 {
     removeTabCursor.clearSelection();
+
+    //We have to judge whether we are using tab or space.
+    if(configureInstance->usingBlankInsteadTab())
+    {
+        int expectLength=tabCount * configureInstance->getSpacePerTab();
+        if(expectLength > removeTabCursor.positionInBlock())
+        {
+            /*
+             * Here means: we don't have so much space to remove,
+             * just remove all of them
+             */
+            removeTabCursor.movePosition(QTextCursor::Left,
+                                         QTextCursor::KeepAnchor,
+                                         removeTabCursor.positionInBlock());
+        }
+        else
+        {
+            //Remove the expect length
+            removeTabCursor.movePosition(QTextCursor::Left,
+                                         QTextCursor::KeepAnchor,
+                                         expectLength);
+        }
+    }
+    else
+    {
+        //Test for first time.
+
+    }
+/*
     while(tabCount-- && !removeTabCursor.atBlockStart())
     {
         if(configureInstance->usingBlankInsteadTab())
@@ -466,7 +495,7 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
             removeTabCursor.movePosition(QTextCursor::Left,
                                          QTextCursor::KeepAnchor);
         }
-    }
+    }*/
 
     removeTabCursor.removeSelectedText();
 }
@@ -904,41 +933,56 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     case Qt::Key_Backspace:
     {
+        //If there's text selected, just delete them.
         if(_textCursor.selectedText().length()>0)
         {
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
-        if(parenthesesPair(_textCursor.document()->characterAt(_textCursor.position()-1)) ==
-           _textCursor.document()->characterAt(_textCursor.position()))
+        //Now we have to judge the status.
+        QChar previousChar=_textCursor.document()->characterAt(_textCursor.position()-1),
+              currentChar=_textCursor.document()->characterAt(_textCursor.position());
+        //If the previous is a panethese and there's the other part of the current panethese,
+        //Delete all of them.
+        if(parenthesesPair(previousChar)==currentChar)
         {
             _textCursor.deleteChar();
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
+        //So as quotations.
         KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
-        if(_textCursor.document()->characterAt(_textCursor.position()-1)==QChar('\"') &&
-           _textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
+        if(previousChar==QChar('\"') &&
+           currentChar==QChar('\"') &&
            currData->getQuotationStatus()!=-1)
         {
             _textCursor.deleteChar();
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
+
+        //Now we have to judge normal case.
         int pos=findFirstCharacter(_textCursor.block());
+        //If we are at the before place, and this is just a blank
+        //line or only contains spaces or tabs.
         if(pos < 0)
         {
-            if((!pos<configureInstance->getTabSpacing()))
+            //If using tab instead of tab
+            if(configureInstance->usingBlankInsteadTab())
             {
-                if(_textCursor.positionInBlock()>0)
+                if(_textCursor.positionInBlock()==0)
                 {
-                    removeTab(_textCursor);
+                    qDebug()<<"pos<0 inblock==0";
+                    QPlainTextEdit::keyPressEvent(e);
                     break;
                 }
+                qDebug()<<"pos<0 inblock!=0";
+                removeTab(_textCursor);
+                break;
             }
+            qDebug()<<"pos<0 no using";
             QPlainTextEdit::keyPressEvent(e);
             break;
-
         }
         if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->getTabSpacing()))
         {

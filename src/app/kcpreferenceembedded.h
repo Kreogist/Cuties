@@ -107,13 +107,20 @@ private:
     enum EditorBooleanEnum
     {
         booleanShowLinePanel,
-        booleanUseSpaceInsteadOfTab,
         booleanTabMoveable,
         booleanTabCloseable,
         booleanItemCount
     };
     QString booleanItemCaption[booleanItemCount];
     KCPreferenceItemBoolean *editorBooleans[booleanItemCount];
+
+    enum EditorBooleanGroupEnum
+    {
+        booleanGroupSpacingInsteadOfTab,
+        booleanGroupCount
+    };
+    QString booleanGroupCaption[booleanGroupCount];
+    KCPreferenceItemBooleanGroup *editorBooleanGroups[booleanGroupCount];
 
     enum EditorIntEnum
     {

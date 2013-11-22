@@ -129,14 +129,15 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     editorBooleans[booleanShowLinePanel]=addItemBoolean(booleanItemCaption[booleanShowLinePanel],
                    instance->getLineNumVisible());
 
-    tabSpacingItem=addItemBooleanGroup(booleanItemCaption[booleanUseSpaceInsteadOfTab],
-                        instance->usingBlankInsteadTab());
+    editorBooleanGroups[booleanGroupSpacingInsteadOfTab]=
+            addItemBooleanGroup(booleanItemCaption[booleanGroupSpacingInsteadOfTab],
+                                instance->usingBlankInsteadTab());
     editorInts[intSpacePerTab]=addItemInt(intItemCaption[intSpacePerTab],
                                           instance->getSpacePerTab());
     editorInts[intTabSpacing]=addItemInt(intItemCaption[intTabSpacing],
                                          instance->getTabSpacing());
-    tabSpacingItem->addTrueValueGroupItem(editorInts[intSpacePerTab]);
-    tabSpacingItem->addFalseValueGroupItem(editorInts[intTabSpacing]);
+    editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addTrueValueGroupItem(editorInts[intSpacePerTab]);
+    editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addFalseValueGroupItem(editorInts[intTabSpacing]);
     editorCombos[comboWordWrapMode]=addItemCombo(comboItemCaption[comboWordWrapMode],
                                                  comboItemText[comboWordWrapMode],
                                                  instance->getWrapModeInt());
@@ -166,9 +167,10 @@ void KCPreferenceEmbeddedEditor::retranslate()
     editorTitleText[titleClipboard]=QString(" " + tr("Clipboard"));
 
     booleanItemCaption[booleanShowLinePanel]=tr("Show code line panel:");
-    booleanItemCaption[booleanUseSpaceInsteadOfTab]=tr("Use space instead of tab:");
     booleanItemCaption[booleanTabMoveable]=tr("Tab moving:");
     booleanItemCaption[booleanTabCloseable]=tr("Tab closing:");
+
+    booleanGroupCaption[booleanGroupSpacingInsteadOfTab]=tr("Use space instead of tab:");
 
     intItemCaption[intTabSpacing]=tr("Tab Spacing:");
     intItemCaption[intSpacePerTab]=tr("Space per tab:");
@@ -212,12 +214,17 @@ void KCPreferenceEmbeddedEditor::retranslateAndSet()
     {
         editorInts[i]->setIntCaptionText(intItemCaption[i]);
     }
+    //Reset boolean group
+    for(i=booleanGroupSpacingInsteadOfTab; i<booleanGroupCount; i++)
+    {
+        editorBooleanGroups[i]->setBooleanCaptionText(booleanGroupCaption[booleanGroupSpacingInsteadOfTab]);
+    }
 }
 
 void KCPreferenceEmbeddedEditor::applyPreference()
 {
     instance->setLineNumVisible(editorBooleans[booleanShowLinePanel]->getCurrentValue().toBool());
-    instance->setUsingBlankInsteadTab(editorBooleans[booleanUseSpaceInsteadOfTab]->getCurrentValue().toBool());
+    instance->setUsingBlankInsteadTab(editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->getCurrentValue().toBool());
     instance->setSpacePerTab(editorInts[intSpacePerTab]->getCurrentValue().toInt());
     instance->setTabSpacing(editorInts[intTabSpacing]->getCurrentValue().toInt());
     switch(editorCombos[comboWordWrapMode]->getCurrentValue().toInt())
