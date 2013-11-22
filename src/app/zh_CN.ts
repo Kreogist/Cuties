@@ -6,7 +6,7 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="496"/>
         <source>Compiler Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">编译器路径</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="505"/>
@@ -140,32 +140,32 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="237"/>
         <source>Envronment</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> 环境</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="244"/>
         <source>Default Programming Language:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">默认程序语言：</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="245"/>
         <source>Plain Text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">文本文档</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="246"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">C</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="247"/>
         <source>C++</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">C++</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="248"/>
         <source>Pascal</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pascal</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="253"/>
@@ -190,7 +190,7 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="265"/>
         <source>Automatic Remember</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">自动记忆</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="272"/>
@@ -210,7 +210,7 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="285"/>
         <source>Maximum History Tracking Items:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">历史记录上限：</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="292"/>
@@ -220,12 +220,12 @@
     <message>
         <location filename="kccontrolcenter.cpp" line="298"/>
         <source>Search Options</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> 搜索选项</translation>
     </message>
     <message>
         <location filename="kccontrolcenter.cpp" line="305"/>
         <source>Online Search Engine:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">在线搜索引擎：</translation>
     </message>
 </context>
 <context>
@@ -726,122 +726,123 @@ Cancel execution of a function call.</translation>
 <context>
     <name>KCPreferenceEmbeddedCompiler</name>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="216"/>
+        <location filename="kcpreferenceembedded.cpp" line="271"/>
         <source>Compiler Path</source>
-        <translation type="unfinished"></translation>
+        <translation>编译器路径</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="218"/>
+        <location filename="kcpreferenceembedded.cpp" line="273"/>
         <source>g++ Compiler:</source>
-        <translation type="unfinished"></translation>
+        <translation>g++编译器：</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="219"/>
+        <location filename="kcpreferenceembedded.cpp" line="274"/>
         <source>gcc Compiler:</source>
-        <translation type="unfinished"></translation>
+        <translation>gcc编译器：</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="220"/>
+        <location filename="kcpreferenceembedded.cpp" line="275"/>
         <source>FPC Compiler:</source>
-        <translation type="unfinished"></translation>
+        <translation>FPC编译器：</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="222"/>
+        <location filename="kcpreferenceembedded.cpp" line="277"/>
         <source>Browse g++ compiler</source>
-        <translation type="unfinished"></translation>
+        <translation>查找g++编译器位置</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="223"/>
+        <location filename="kcpreferenceembedded.cpp" line="278"/>
         <source>Browse gcc compiler</source>
-        <translation type="unfinished"></translation>
+        <translation>查找gcc编译器位置</translation>
     </message>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="224"/>
-        <source>Browse fpc compiler</source>
-        <translation type="unfinished"></translation>
+        <location filename="kcpreferenceembedded.cpp" line="279"/>
+        <source>Browse FPC compiler</source>
+        <oldsource>Browse fpc compiler</oldsource>
+        <translation>查找FPC编译器路径</translation>
     </message>
 </context>
 <context>
     <name>KCPreferenceEmbeddedEditor</name>
     <message>
-        <location filename="kcpreferenceembedded.cpp" line="157"/>
-        <source>View Option</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="158"/>
-        <source>Multiple Tabs Option</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="159"/>
-        <source>Clipboard</source>
-        <translation type="unfinished">剪切板</translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="161"/>
-        <source>Show code line panel:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="162"/>
-        <source>Use space instead of tab:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="163"/>
-        <source>Tab moving:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="kcpreferenceembedded.cpp" line="164"/>
-        <source>Tab closing:</source>
-        <translation type="unfinished"></translation>
+        <source>View Option</source>
+        <translation>显示选项</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="165"/>
+        <source>Multiple Tabs Option</source>
+        <translation>多标签选项</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="166"/>
-        <source>Tab Spacing:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="kcpreferenceembedded.cpp" line="167"/>
-        <source>Space per tab:</source>
-        <translation type="unfinished"></translation>
+        <source>Clipboard</source>
+        <translation>剪切板</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="168"/>
-        <source>Cursor Width:</source>
-        <translation type="unfinished"></translation>
+        <source>Show code line panel:</source>
+        <translation>显示行号：</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="169"/>
-        <source>Maximum Clipboard Tracking Items:</source>
-        <translation type="unfinished"></translation>
+        <source>Use space instead of tab:</source>
+        <translation>使用空格替代制表符(Tab)：</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="170"/>
+        <source>Tab moving:</source>
+        <translation>标签移动：</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="171"/>
-        <source>Word Wrap Mode:</source>
-        <translation type="unfinished"></translation>
+        <source>Tab closing:</source>
+        <translation>标签关闭：</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="173"/>
-        <source>No word wrapped</source>
-        <translation type="unfinished"></translation>
+        <source>Tab Spacing:</source>
+        <translation>制表符间距：</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="174"/>
-        <source>Wrapped at word boundaries</source>
-        <translation type="unfinished"></translation>
+        <source>Space per tab:</source>
+        <translation>代替制表符的空格数：</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="175"/>
-        <source>Wrapped at any point</source>
-        <translation type="unfinished"></translation>
+        <source>Cursor Width:</source>
+        <translation>光标宽度：</translation>
     </message>
     <message>
         <location filename="kcpreferenceembedded.cpp" line="176"/>
+        <source>Maximum Clipboard Tracking Items:</source>
+        <translation>最大剪切板条目数量：</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="178"/>
+        <source>Word Wrap Mode:</source>
+        <translation>自动换行模式：</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="180"/>
+        <source>No word wrapped</source>
+        <translation>不使用自动换行</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="181"/>
+        <source>Wrapped at word boundaries</source>
+        <translation>在单词边界换行</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="182"/>
+        <source>Wrapped at any point</source>
+        <translation>在任意位置换行</translation>
+    </message>
+    <message>
+        <location filename="kcpreferenceembedded.cpp" line="183"/>
         <source>Wrapping at word boundary or anywhere</source>
-        <translation type="unfinished"></translation>
+        <translation>尽可能在单词边界换行</translation>
     </message>
 </context>
 <context>
@@ -1012,7 +1013,7 @@ Cancel execution of a function call.</translation>
         <location filename="Controls/SettingItems/kcsettinglistitembrowsetext.cpp" line="116"/>
         <location filename="Controls/SettingItems/kcsettinglistitembrowsetext.cpp" line="122"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">浏览</translation>
     </message>
 </context>
 <context>

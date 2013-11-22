@@ -276,7 +276,7 @@ void KCPreferenceEmbeddedCompiler::retranslate()
 
     pathItemTitleCaption[pathGPPCompiler]=tr("Browse g++ compiler");
     pathItemTitleCaption[pathGCCCompiler]=tr("Browse gcc compiler");
-    pathItemTitleCaption[pathFPCCompiler]=tr("Browse fpc compiler");
+    pathItemTitleCaption[pathFPCCompiler]=tr("Browse FPC compiler");
 }
 
 void KCPreferenceEmbeddedCompiler::retranslateAndSet()
