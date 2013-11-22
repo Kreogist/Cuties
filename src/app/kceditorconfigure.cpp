@@ -150,12 +150,12 @@ void KCEditorConfigure::setUsingBlankInsteadTab(bool enabled)
     emit spaceInsteadOfTab(enabled);
 }
 
-int KCEditorConfigure::getTabWidth() const
+int KCEditorConfigure::getTabSpacing() const
 {
     return tabWidth;
 }
 
-void KCEditorConfigure::setTabWidth(const int &width)
+void KCEditorConfigure::setTabSpacing(const int &width)
 {
     tabWidth=width;
     emit tabWidthChanged(tabWidth);

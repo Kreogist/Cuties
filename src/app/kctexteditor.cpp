@@ -53,7 +53,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 
     //Set Customize TextEditor Properties.
     //Set Tab Width.
-    setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabWidth());
+    setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabSpacing());
     //Set WordWarp Mode.
     setWordWrapMode(configureInstance->getWrapMode());
     //Set Cursor Width.
@@ -459,7 +459,7 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
         {
             removeTabCursor.movePosition(QTextCursor::Left,
                                          QTextCursor::KeepAnchor,
-                                         configureInstance->getTabWidth());
+                                         configureInstance->getTabSpacing());
         }
         else
         {
@@ -928,7 +928,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         int pos=findFirstCharacter(_textCursor.block());
         if(pos < 0)
         {
-            if((!pos<configureInstance->getTabWidth()))
+            if((!pos<configureInstance->getTabSpacing()))
             {
                 if(_textCursor.positionInBlock()>0)
                 {
@@ -940,7 +940,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             break;
 
         }
-        if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->getTabWidth()))
+        if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->getTabSpacing()))
         {
             if(_textCursor.positionInBlock()>0)
             {

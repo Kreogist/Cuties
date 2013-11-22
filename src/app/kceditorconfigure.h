@@ -36,8 +36,8 @@ public:
     static KCEditorConfigure *getInstance();
     bool usingBlankInsteadTab() const;
     void setUsingBlankInsteadTab(bool enabled);
-    int getTabWidth() const;
-    void setTabWidth(const int &width);
+    int getTabSpacing() const;
+    void setTabSpacing(const int &width);
     QTextOption::WrapMode getWrapMode() const;
     void setWrapMode(QTextOption::WrapMode value);
     int getCursorWidth() const;

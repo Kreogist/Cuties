@@ -370,7 +370,7 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
 
     tabSpaceNum=new KCSettingListItemNumInput(this);
     tabSpaceNum->captionText->setText(tr("Tab Spacing:"));
-    tabSpaceNum->setValue(KCEditorConfigure::getInstance()->getTabWidth());
+    tabSpaceNum->setValue(KCEditorConfigure::getInstance()->getTabSpacing());
     MainLayout->addWidget(tabSpaceNum);
 
     wrapMode=new KCSettingListItemCombo(this);
@@ -451,7 +451,7 @@ KCCCTabEditorContent::KCCCTabEditorContent(QWidget *parent) :
 void KCCCTabEditorContent::apply()
 {
     KCEditorConfigure *instance=KCEditorConfigure::getInstance();
-    instance->setTabWidth(tabSpaceNum->getValue());
+    instance->setTabSpacing(tabSpaceNum->getValue());
     instance->setCursorWidth(cursorWidth->getValue());
     switch(wrapMode->getValue())
     {

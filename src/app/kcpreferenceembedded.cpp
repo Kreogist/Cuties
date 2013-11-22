@@ -116,7 +116,6 @@ void KCPreferenceEmbeddedGeneral::applyPreference()
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(generalInts[intItemHistoryMax]->getCurrentValue().toInt());
 }
 
-
 KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     KCPreferenceSuperList(parent)
 {
@@ -135,7 +134,7 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     editorInts[intSpacePerTab]=addItemInt(intItemCaption[intSpacePerTab],
                                           instance->getSpacePerTab());
     editorInts[intTabSpacing]=addItemInt(intItemCaption[intTabSpacing],
-                                         instance->getTabWidth());
+                                         instance->getTabSpacing());
     tabSpacingItem->addTrueValueGroupItem(editorInts[intSpacePerTab]);
     tabSpacingItem->addFalseValueGroupItem(editorInts[intTabSpacing]);
     editorCombos[comboWordWrapMode]=addItemCombo(comboItemCaption[comboWordWrapMode],
@@ -220,7 +219,7 @@ void KCPreferenceEmbeddedEditor::applyPreference()
     instance->setLineNumVisible(editorBooleans[booleanShowLinePanel]->getCurrentValue().toBool());
     instance->setUsingBlankInsteadTab(editorBooleans[booleanUseSpaceInsteadOfTab]->getCurrentValue().toBool());
     instance->setSpacePerTab(editorInts[intSpacePerTab]->getCurrentValue().toInt());
-    instance->setTabWidth(editorInts[intTabSpacing]->getCurrentValue().toInt());
+    instance->setTabSpacing(editorInts[intTabSpacing]->getCurrentValue().toInt());
     switch(editorCombos[comboWordWrapMode]->getCurrentValue().toInt())
     {
     case 0:
@@ -236,7 +235,10 @@ void KCPreferenceEmbeddedEditor::applyPreference()
         instance->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
         break;
     }
-
+    instance->setCursorWidth(editorInts[intCursorWidth]->getCurrentValue().toInt());
+    instance->setTabMoveable(editorBooleans[booleanTabMoveable]->getCurrentValue().toBool());
+    instance->setTabCloseable(editorBooleans[booleanTabCloseable]->getCurrentValue().toBool());
+    KCClipboard::getInstance()->setMaxDataCount(editorInts[intClipboardTrackingMax]->getCurrentValue().toInt());
 }
 
 KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
