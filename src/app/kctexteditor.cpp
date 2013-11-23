@@ -1028,6 +1028,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
                 KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
                 currData->setCodeLevel(prevData->getCodeLevel());
+                int matchedStatus;
                 for(auto i=currData->getFirstParenthesesInfo(),
                     l=currData->getEndParenthesesInfo();
                     i<l;
@@ -1035,13 +1036,17 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 {
                     if(i->pos == _textCursor.positionInBlock())
                     {
-                        if(matchParentheses(currentChar==')'?'(':'[',
-                                            currentChar.toLatin1(),
-                                            i,
-                                            currBlock,
-                                            true) > -1)
+                        matchedStatus=matchParentheses(currentChar.toLatin1(),
+                                                       currentChar==')'?'(':'[',
+                                                       i,
+                                                       currBlock,
+                                                       false);
+                        if(matchedStatus > -1)
                         {
-                            qDebug()<<"Find?";
+                            QTextCursor meterCursor(document());
+                            meterCursor.setPosition(matchedStatus);
+                            QString blankFill=QString(" ").repeated(meterCursor.positionInBlock()+1);
+                            _textCursor.insertText(blankFill);
                             return;
                         }
                     }
