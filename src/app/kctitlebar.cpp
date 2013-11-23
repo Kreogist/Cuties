@@ -17,24 +17,7 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "kctitlebar.h"
-
-#ifndef Q_OS_MACX
-KCTitleBarAutoFill::KCTitleBarAutoFill(QWidget *parent) :
-    QWidget(parent)
-{
-}
-
-void KCTitleBarAutoFill::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    e->accept();
-    if(e->button() == Qt::LeftButton)
-    {
-        emit dblClickEmit();
-    }
-}
-#endif
 
 KCTitleBar::KCTitleBar(QWidget *parent) :
     QWidget(parent),
@@ -51,38 +34,12 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
     QPalette pal;
 
 #ifndef Q_OS_MACX
-    closeButton = new QToolButton(this);
-    closeButton->setIcon(QIcon(QString(":/toolbutton/image/Close.png")));
-    closeButton->setObjectName("Close Button");
-
-    QPalette bpal=closeButton->palette();
-    KCColorConfigure::getInstance()->getPalette(bpal,"window control button");
-    closeButton->setPalette(bpal);
-
-    minimizeButton = new QToolButton(this);
-    minimizeButton->setIcon(QIcon(QString(":/toolbutton/image/Minimized.png")));
-    minimizeButton->setPalette(bpal);
-
-    maximizeButton = new QToolButton(this);
-    maximizeButtonIcon=QIcon(QString(":/toolbutton/image/Maxmized.png"));
-    maximizeButton->setIcon(maximizeButtonIcon);
-    maximizeButton->setPalette(bpal);
-    isShowingNormalButton = false;
-
-    normalButtonIcon=QIcon(QString(":/toolbutton/image/Normalmized.png"));
-
-    connect(closeButton,SIGNAL(clicked()),this->parent(),SLOT(close()));
-    connect(minimizeButton,SIGNAL(clicked()),
-            this->parent(),SLOT(showMinimized()));
-    connect(maximizeButton,SIGNAL(clicked()),
-            this,SLOT(_exchange_button_state()));
-
     mainButton=new QToolButton(this);
     mainButton->setAutoRaise(true);
-    mainButton->setFixedHeight(32);
+    mainButton->setFixedSize(32,32);
     pal=mainButton->palette();
-    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
+    pal.setColor(QPalette::Window, QColor(0x9c, 0x9c, 0x9c));
+    pal.setColor(QPalette::Button, QColor(0xf7,0xcf,0x3d));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
@@ -101,57 +58,14 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
     mainToolBar->setMovable(true);
 #ifdef Q_OS_MACX
     mainToolBar->setGeometry(0,
-                             0,
-                             mainToolBar->width(),
-                             mainToolBar->height());
 #else
     mainToolBar->setGeometry(mainButton->width(),
+#endif
                              0,
                              mainToolBar->width(),
                              mainToolBar->height());
-
-    autoFill=new KCTitleBarAutoFill(this);
-    connect(autoFill, SIGNAL(dblClickEmit()),
-            this, SLOT(spacingDblClick()));
-#endif
     mainToolBar->hide();
     toolbarShown=false;
-
-    NoUseSpacing=new QSpacerItem(0,this->height());
-
-    hLayout = new QHBoxLayout(this);
-    hLayout->setContentsMargins(0,0,0,0);
-    hLayout->setSpacing(0);
-    setLayout(hLayout);
-
-#ifndef Q_OS_MACX
-    hLayout->addWidget(mainButton);
-    hLayout->addSpacerItem(NoUseSpacing);
-    hLayout->addWidget(autoFill, 1);
-
-    hLayout->addSpacing(3);
-
-    vMinLayout = new QVBoxLayout();
-    minimizeButton->setFixedWidth(30);
-    minimizeButton->setFixedHeight(20);
-    vMinLayout->addWidget(minimizeButton);
-    vMinLayout->addStretch();
-    hLayout->addLayout(vMinLayout);
-
-    vMaxLayout = new QVBoxLayout();
-    maximizeButton->setFixedHeight(20);
-    maximizeButton->setFixedWidth(30);
-    vMaxLayout->addWidget(maximizeButton);
-    vMaxLayout->addStretch();
-    hLayout->addLayout(vMaxLayout);
-
-    vCloseLayout = new QVBoxLayout();
-    closeButton->setFixedWidth(50);
-    closeButton->setFixedHeight(20);
-    vCloseLayout->addWidget(closeButton);
-    vCloseLayout->addStretch();
-    hLayout->addLayout(vCloseLayout);
-#endif
 
     tlbShowAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
     tlbHideAnime=new QPropertyAnimation(mainToolBar,"geometry",this);
@@ -181,7 +95,6 @@ void KCTitleBar::showToolBar()
         tlbShowAnime->setStartValue(animeStartPos);
         tlbShowAnime->setEndValue(animeEndPos);
         tlbShowAnime->setEasingCurve(QEasingCurve::OutCubic);
-        NoUseSpacing->changeSize(mainToolBar->width(),this->height());
         mainToolBar->show();
         toolbarShown=true;
 
@@ -201,7 +114,6 @@ void KCTitleBar::hideToolBar()
         tlbHideAnime->setStartValue(animeStartPos);
         tlbHideAnime->setEndValue(animeEndPos);
         tlbHideAnime->setEasingCurve(QEasingCurve::OutCubic);
-        NoUseSpacing->changeSize(0,this->height());
         tlbHideAnime->start();
         toolbarShown=false;
     }
@@ -219,43 +131,6 @@ void KCTitleBar::addToolButton(QToolButton *tblMainButton)
     mainToolBar->setFixedWidth(mainToolBar->sizeHint().width());
 }
 
-void KCTitleBar::_exchange_button_state()
-{
-    if(isShowingNormalButton)
-    {
-        setWindowNormal();
-    }
-    else
-    {
-        setWindowMax();
-    }
-}
-
-void KCTitleBar::setWindowMin()
-{
-    mainWindow->showMinimized();
-}
-
-void KCTitleBar::setWindowNormal()
-{
-    mainWindow->showNormal();
-    maximizeButton->setIcon(maximizeButtonIcon);
-    isShowingNormalButton=false;
-#ifndef Q_OS_MACX
-    emit dragProxyEnabled(!isShowingNormalButton);
-#endif
-}
-
-void KCTitleBar::setWindowMax()
-{
-    mainWindow->showMaximized();
-    maximizeButton->setIcon(normalButtonIcon);
-    isShowingNormalButton=true;
-#ifndef Q_OS_MACX
-    emit dragProxyEnabled(!isShowingNormalButton);
-#endif
-}
-
 #ifndef Q_OS_MACX
 void KCTitleBar::setMenu(QMenu *menu)
 {
@@ -267,49 +142,5 @@ void KCTitleBar::setMainButtonIcon(const QString &mainIcon)
     QPixmap mainButtonImage(mainIcon);
     mainButton->setIcon(QIcon(mainIcon));
     mainButton->setIconSize(QSize(mainButtonImage.width(),mainButtonImage.height()));
-}
-
-void KCTitleBar::mousePressEvent(QMouseEvent *event)
-{
-    if(event->buttons() == Qt::LeftButton &&
-       event->pos().x()>=this->pos().x() &&
-       event->pos().y()>=this->pos().y() &&
-       event->pos().x()<=this->pos().x()+this->width()&&
-       event->pos().y()<=this->pos().y()+this->height())
-    {
-        hasPressed=true;
-        mousePosStart=event->pos();
-        event->accept();
-    }
-    else
-    {
-        event->ignore();
-    }
-}
-
-void KCTitleBar::mouseMoveEvent(QMouseEvent *event)
-{
-    if(!isShowingNormalButton && hasPressed && event->buttons() == Qt::LeftButton)
-    {
-        mainWindow->move(mainWindow->pos() + event->pos() - mousePosStart);
-    }
-}
-
-void KCTitleBar::mouseReleaseEvent(QMouseEvent *event)
-{
-    if(hasPressed)
-    {
-        hasPressed=false;
-        event->accept();
-    }
-    else
-    {
-        event->ignore();
-    }
-}
-
-void KCTitleBar::spacingDblClick()
-{
-    _exchange_button_state();
 }
 #endif

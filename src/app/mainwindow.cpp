@@ -721,9 +721,9 @@ void MainWindow::restoreSettings()
     switch(n_WindowState)
     {
     case 1:
-        titlebar->setWindowMin();
+        setWindowState(Qt::WindowMinimized);
     case 2:
-        titlebar->setWindowMax();
+        setWindowState(Qt::WindowMaximized);
     }
 #endif
     settings.endGroup();

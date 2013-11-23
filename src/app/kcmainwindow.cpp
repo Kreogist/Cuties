@@ -17,8 +17,6 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "kcdragproxy.h"
-
 #include "kcmainwindow.h"
 
 KCMainWindow::KCMainWindow(QWidget *parent) :
@@ -30,14 +28,8 @@ KCMainWindow::KCMainWindow(QWidget *parent) :
 
 #ifdef Q_OS_MACX
     QMainWindow::setUnifiedTitleAndToolBarOnMac(false);
-#else
-    setContentsMargins(2,2,2,2);
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-    dragProxy=new KCDragProxy(this);
-    dragProxy->setBorderWidth(8,8,8,8);
-    connect(titleBar, &KCTitleBar::dragProxyEnabled,
-            dragProxy,&KCDragProxy::setEnabled);
 #endif
+    setContentsMargins(0,0,0,0);
 }
 
 KCTitleBar *KCMainWindow::getTitleBar() const

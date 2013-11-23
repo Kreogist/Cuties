@@ -40,23 +40,6 @@
 
 #include "kccolorconfigure.h"
 
-#ifndef Q_OS_MACX
-class KCTitleBarAutoFill : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit KCTitleBarAutoFill(QWidget *parent = 0);
-
-signals:
-    void dblClickEmit();
-
-protected:
-    void mouseDoubleClickEvent(QMouseEvent *e);
-
-private:
-};
-#endif
-
 class KCTitleBar : public QWidget
 {
     Q_OBJECT
@@ -64,60 +47,34 @@ public:
     explicit KCTitleBar(QWidget *parent = 0);
     void addToolButton(QToolButton *tblMainButton);
     void addToolSeparator();
-    void setWindowMax();
-    void setWindowNormal();
-    void setWindowMin();
 #ifndef Q_OS_MACX
     void setMenu(QMenu *menu);
     void setMainButtonIcon(const QString &mainIcon);
 #endif
 
 signals:
-#ifndef Q_OS_MACX
-    void dragProxyEnabled(bool newValue);
-#endif
 
 public slots:
     void showToolBar();
     void hideToolBar();
 
-private slots:
-    void _exchange_button_state();
-#ifndef Q_OS_MACX
-    void spacingDblClick();
-#endif
-
-protected:
-#ifndef Q_OS_MACX
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-#endif
-
 private:
     bool hasPressed;
-    bool isShowingNormalButton;   //false when show minimizeButton, true when show normalButton
     bool toolbarShown;
     QPoint mousePosStart;
     QWidget *mainWindow;
-
-    QToolButton *maximizeButton,*minimizeButton;
-    QToolButton *closeButton;
 
     QVBoxLayout *vMinLayout, *vMaxLayout, *vCloseLayout;
     QHBoxLayout *hLayout;
     QString windowTitle;
 
 #ifndef Q_OS_MACX
-    KCTitleBarAutoFill *autoFill;
     QToolButton *mainButton;
 #endif
 
     QIcon mainButtonIcon,normalButtonIcon,maximizeButtonIcon,minimizeButtonIcon,closeButtonIcon;
     QToolBar *mainToolBar;
     QPropertyAnimation *tlbHideAnime, *tlbShowAnime;
-
-    QSpacerItem *NoUseSpacing;
 };
 
 #endif // KCTITLEBAR_H

@@ -24,8 +24,6 @@
 
 #include "kctitlebar.h"
 
-class KCDragProxy;
-
 class KCMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -45,9 +43,6 @@ public slots:
 
 private:
     KCTitleBar *titleBar;
-#ifndef Q_OS_MACX
-    KCDragProxy *dragProxy;
-#endif
 };
 
 #endif // KCMAINWINDOW_H

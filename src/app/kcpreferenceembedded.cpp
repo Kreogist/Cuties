@@ -327,6 +327,8 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
     debuggerPathItems[pathGDBDebugger]=addItemPath(pathItemCaption[pathGDBDebugger],
                                                    "",
                                                    pathItemTitleCaption[pathGDBDebugger]);
+
+    addStretch();
 }
 
 void KCPreferenceEmbeddedDebugger::retranslate()
