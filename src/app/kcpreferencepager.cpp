@@ -16,6 +16,9 @@ KCPreferencePager::KCPreferencePager(QWidget *parent) :
 
     //Set current page index
     currentPageIndex=-1;
+
+    //Set animation group
+    moveAnimationGroup=new QParallelAnimationGroup(this);
 }
 
 void KCPreferencePager::addSuperList(KCPreferenceSuperList *newSuperList)
@@ -39,8 +42,10 @@ void KCPreferencePager::setPageVisible(int pageIndex, bool visible)
 
 void KCPreferencePager::switchToPage(int pageIndex)
 {
+    moveAnimationGroup->stop();
+    moveAnimationGroup->clear();
+
     preferenceSuperLists.at(currentPageIndex)->resetCurrentIndex();
-    QParallelAnimationGroup *moveAnimationGroup=new QParallelAnimationGroup(this);
     QPropertyAnimation *throwLastPage=new QPropertyAnimation(preferenceSuperLists.at(currentPageIndex), "geometry", this);
     QPropertyAnimation *putCurrentPage=new QPropertyAnimation(preferenceSuperLists.at(pageIndex), "geometry", this);
     throwLastPage->setEasingCurve(QEasingCurve::OutCubic);
@@ -61,7 +66,7 @@ void KCPreferencePager::switchToPage(int pageIndex)
     {
         //This page is above the current page, move down
         throwFromPosition.setTop(-lastEndPosition.height());
-        lastEndPosition.setTop(lastEndPosition.height());
+        lastEndPosition.setTop(lastEndPosition.height()+10);
     }
     throwLastPage->setStartValue(currentPosition);
     throwLastPage->setEndValue(lastEndPosition);
@@ -73,7 +78,7 @@ void KCPreferencePager::switchToPage(int pageIndex)
     connect(moveAnimationGroup, SIGNAL(finished()),
             this, SLOT(hideBackupPage()));
     setPageVisible(pageIndex, true);
-    moveAnimationGroup->start(QAbstractAnimation::DeleteWhenStopped);
+    moveAnimationGroup->start();
     currentPageIndex=pageIndex;
 }
 

@@ -33,6 +33,7 @@ private:
     QList<KCPreferenceSuperList *> preferenceSuperLists;
     int currentPageIndex;
     int backupPage;
+    QParallelAnimationGroup *moveAnimationGroup;
 };
 
 #endif // KCPREFERENCEPAGER_H
