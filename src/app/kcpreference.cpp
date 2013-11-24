@@ -38,8 +38,12 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     titleCaption->setPalette(pal);
     titleCaption->setText(titleCaptionText);
-
     titleLayout->addWidget(titleCaption);
+
+    localeIcon=new QLabel(this);
+    //
+    titleLayout->addWidget(localeIcon);
+
     titleLayout->addStretch();
 }
 

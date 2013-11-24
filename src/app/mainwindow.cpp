@@ -133,12 +133,6 @@ void MainWindow::createActions()
 
     connect(actionMainWindowItem[actionEditControlCenter], SIGNAL(triggered()), this, SLOT(showControlCenter()));
 
-    //Edit -> Preferences
-    actionMainWindowItem[actionEditPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
-    actionMainWindowItem[actionEditPreferences]->setMenuRole(QAction::PreferencesRole);
-    stringActionIconPath[actionEditPreferences]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
-    connect(actionMainWindowItem[actionEditPreferences],SIGNAL(triggered()),this,SLOT(showPreference()));
-
     //View -> Sidebar
     connect(actionMainWindowItem[actionViewSidebar], &QAction::triggered,
             this, &MainWindow::changeSidebarVisibleState);
@@ -228,6 +222,12 @@ void MainWindow::createActions()
         actStatusTips[mnuExecuteSetInputRunShowOutput]=
                 QString(tr("Set the input file, compile and run the document, and show output file."));
     */
+
+    //Tools -> Preferences
+    actionMainWindowItem[actionToolsPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
+    actionMainWindowItem[actionToolsPreferences]->setMenuRole(QAction::PreferencesRole);
+    stringActionIconPath[actionToolsPreferences]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
+    connect(actionMainWindowItem[actionToolsPreferences],SIGNAL(triggered()),this,SLOT(showPreference()));
 
     //Window -> Window Split
     /*act[mnuWindowSplit]=new QAction(tr("Split Window"),this);
@@ -424,7 +424,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
     menuMainWindowItem[menuEdit]->setIcon(*MenuIconAddor);
 #endif
-    for(i=actionEditUndo; i<=actionEditPreferences; i++)
+    for(i=actionEditUndo; i<=actionEditControlCenter; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -545,6 +545,15 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
     menuMainWindowItem[menuTools]->setIcon(*MenuIconAddor);
 #endif
+    for(i=actionToolsPreferences; i<=actionToolsPreferences; i++)
+    {
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuTools]->addAction(actionMainWindowItem[i]);
+    }
 
     //Create Window Menu
 #ifndef Q_OS_MACX
@@ -960,7 +969,6 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionEditCopy]=tr("Copy the selection to the Clipboard.");
     actionStatusTips[actionEditPaste]=tr("Insert Clipboard contents.");
     actionStatusTips[actionEditSelectAll]=tr("Select the entire document.");
-    actionStatusTips[actionEditPreferences]=tr("Customize your Cuties.");
     actionStatusTips[actionViewSidebar]=tr("Show or hide the Sidebar.");
     actionStatusTips[actionViewCompileDock]=tr("Show or hide the Compile Dock.");
     actionStatusTips[actionViewDebugControls]=tr("Show or hide the Debug Controls.");
@@ -987,6 +995,7 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionDebugAddWatch]=tr("Add a new variable or expression to watch.");
     actionStatusTips[actionDebugModifiedWatch]=tr("Modified a variable or expression in watching");
     actionStatusTips[actionDebugRemoveWatch]=tr("Remove a variable or expression from watching");
+    actionStatusTips[actionToolsPreferences]=tr("Customize your Cuties.");
     actionStatusTips[actionWindowNext]=tr("Switch to the next tab.");
     actionStatusTips[actionWindowPrev]=tr("Switch to the previous tab.");
     actionStatusTips[actionHelpAbout]=tr("Display the Kreogist Cuties information.");
@@ -1007,7 +1016,6 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionEditCopy]=tr("Copy");
     actionMainWindowText[actionEditPaste]=tr("Paste");
     actionMainWindowText[actionEditSelectAll]=tr("Select All");
-    actionMainWindowText[actionEditPreferences]=tr("Preferences");
     actionMainWindowText[actionViewSidebar]=tr("Sidebar");
     actionMainWindowText[actionViewCompileDock]=tr("Compiler Dock");
     actionMainWindowText[actionViewDebugControls]=tr("Debug Controls");
@@ -1034,6 +1042,7 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionDebugAddWatch]=tr("Add Watch");
     actionMainWindowText[actionDebugModifiedWatch]=tr("Modified Watch");
     actionMainWindowText[actionDebugRemoveWatch]=tr("Remove Watch");
+    actionMainWindowText[actionToolsPreferences]=tr("Preferences");
     actionMainWindowText[actionWindowNext]=tr("Next");
     actionMainWindowText[actionWindowPrev]=tr("Previous");
     actionMainWindowText[actionHelpAbout]=tr("About");

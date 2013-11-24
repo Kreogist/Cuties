@@ -146,7 +146,6 @@ private:
         actionEditPaste,
         actionEditSelectAll,
         actionEditControlCenter,    //Rebuild
-        actionEditPreferences,
         actionViewSidebar,
         actionViewCompileDock,
         actionViewDebugControls,
@@ -182,6 +181,7 @@ private:
         actionDebugAddWatch,
         actionDebugModifiedWatch,
         actionDebugRemoveWatch,
+        actionToolsPreferences,
         actionWindowPrev,
         actionWindowNext,
         actionHelpAbout,

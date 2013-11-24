@@ -217,4 +217,14 @@ private:
 
 };
 
+class KCPreferenceEmbeddedLanguage : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCPreferenceEmbeddedLanguage(QWidget *parent = 0);
+
+private:
+
+};
+
 #endif // KCPREFERENCEEMBEDDED_H

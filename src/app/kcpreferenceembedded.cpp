@@ -375,3 +375,10 @@ void KCPreferenceEmbeddedFileAssociation::applyPreference()
 {
 
 }
+
+
+KCPreferenceEmbeddedLanguage::KCPreferenceEmbeddedLanguage(QWidget *parent) :
+    QWidget(parent)
+{
+    ;
+}

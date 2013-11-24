@@ -10,13 +10,15 @@ KCLanguageConfigure *KCLanguageConfigure::getInstance()
 KCLanguageConfigure::KCLanguageConfigure()
 {
     //Set default settings.
-    languageFileDir=qApp->applicationDirPath() + "/Locale/";
+    localeFileDir=qApp->applicationDirPath() + "/Locale/";
+    localeTranslation=localeFileDir+"Locale.db";
     //Load Language File List.
     loadLanguageList();
     //Set Default Language.
     QLocale::setDefault(QLocale(QLocale::system().language(), QLocale::system().country()));
     currLanguageName=QLocale::system().name();
     setLanguage(currLanguageName);
+    qDebug()<<QLocale::scriptToString(QLocale::system().script());
 }
 
 void KCLanguageConfigure::readConfigure()
@@ -81,9 +83,12 @@ int KCLanguageConfigure::getCurrLanguageIndex() const
 void KCLanguageConfigure::loadLanguageList()
 {
     //Initialize Application Languages.
+    //Load language translation
+
+    /*
     QString currFileName;
     QStringList filter;
-    QDir *dir=new QDir(languageFileDir);
+    QDir *dir=new QDir(localeFileDir);
     QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
     for(QList<QFileInfo>::iterator i=list->begin();
         i!=list->end();
@@ -99,5 +104,5 @@ void KCLanguageConfigure::loadLanguageList()
             languageFileList.append(i->filePath());
             languageName.append(currFileName);
         }
-    }
+    }*/
 }

@@ -36,6 +36,8 @@ public slots:
 private:
     QLabel *titleCaption;
     QString titleCaptionText;
+
+    QLabel *localeIcon;
 };
 
 class KCPreferenceListButton : public QWidget

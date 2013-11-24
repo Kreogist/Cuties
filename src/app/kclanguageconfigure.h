@@ -32,7 +32,11 @@ signals:
 private:
     void applyLangaugeSet(int languageIndex);
 
-    QString languageFileDir, currLanguageName;
+    //Language file folder & language translation file
+    QString localeFileDir, localeTranslation;
+    QString countryTranslation[QLocale::LastCountry];
+
+    QString currLanguageName;
     int currLanguageIndex;
 
     KCLanguageConfigure();

@@ -9,6 +9,8 @@ class KCPreferenceLangaugeListItem : public QWidget
     Q_OBJECT
 public:
     explicit KCPreferenceLangaugeListItem(QWidget *parent = 0);
+    void setLanguageIcon(const QString &iconPath);
+    void setLanguageName(const QString &captionText);
 
 private:
     QLabel *languageIcon, *languageName;
