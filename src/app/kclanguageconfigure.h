@@ -25,6 +25,7 @@ public:
     bool setLanguage(const QString &newLanguageName);
     bool setLanguageIndex(int newLangaugeIndex);
     QStringList getLanguageList() const;
+    QStringList getLanguageCaption() const;
     QStringList getLanguageNameList() const;
     QList<QPixmap> getLanguageFileIcon() const;
     int getCurrentLanguageIndex() const;
@@ -43,7 +44,7 @@ private:
     QString localeFileDir, localeTranslation;
 
     //Cache list
-    QStringList languageFileList, languageName;
+    QStringList languageFileList, languageName, languageCaption;
     QList<QPixmap> languageFileIcon;
 
     QString defaultLanguageName;

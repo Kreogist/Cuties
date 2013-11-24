@@ -1,4 +1,5 @@
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "kcpreferencelangaugelist.h"
 
@@ -32,15 +33,33 @@ void KCPreferenceLangaugeListItem::setLanguageName(const QString &captionText)
 }
 
 KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
-    QWidget(parent)
+    QScrollArea(parent)
 {
+    //Set properties
+    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
+
+    //Set content widget
+    QWidget *languageContents=new QWidget(this);
+    languageContents->setContentsMargins(0,0,0,0);
+    setWidget(languageContents);
+
+    //Set layout
+    QVBoxLayout *languageListLayout=new QVBoxLayout(languageContents);
+    languageListLayout->setContentsMargins(0,0,0,0);
+    languageListLayout->setSpacing(0);
+    languageContents->setLayout(languageListLayout);
+
     instance=KCLanguageConfigure::getInstance();
     int languageCount=instance->getLanguageList().count();
     for(int i=0;i<languageCount;i++)
     {
-        languageItems.append(addLanguageItem(instance->getLanguageNameList().at(i),
+        languageItems.append(addLanguageItem(instance->getLanguageCaption().at(i),
                                              instance->getLanguageFileIcon().at(i)));
+        languageListLayout->addWidget(languageItems.at(i));
     }
+    languageListLayout->addStretch();
+    languageContents->setFixedSize(languageContents->sizeHint());
 }
 
 KCPreferenceLangaugeListItem *KCPreferenceLangaugeList::addLanguageItem(const QString &languageName,

@@ -65,7 +65,7 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
 void KCPreferenceBannerWidget::refreshLanguageInfo()
 {
     localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
-    localeSettings->setText(instance->getLanguageNameList().at(instance->getCurrentLanguageIndex()));
+    localeSettings->setText(instance->getLanguageCaption().at(instance->getCurrentLanguageIndex()));
 }
 
 void KCPreferenceBannerWidget::retranslate()

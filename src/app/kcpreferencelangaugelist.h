@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QScrollArea>
 
 #include "kclanguageconfigure.h"
 
@@ -18,7 +19,7 @@ private:
     QLabel *languageIcon, *languageName;
 };
 
-class KCPreferenceLangaugeList : public QWidget
+class KCPreferenceLangaugeList : public QScrollArea
 {
     Q_OBJECT
 public:

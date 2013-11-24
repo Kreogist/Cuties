@@ -28,7 +28,7 @@ void KCLanguageConfigure::readConfigure()
     settings.beginGroup("Language");
     configLanguageName=settings.value("Language",
                                       currentLanguageName).toString();
-    setLanguage(currentLanguageName);
+    //setLanguage(currentLanguageName);
     settings.endGroup();
 }
 
@@ -43,6 +43,7 @@ void KCLanguageConfigure::writeConfigure()
 bool KCLanguageConfigure::setLanguage(const QString &newLanguageName)
 {
     int newLanguageIndex=languageName.indexOf(newLanguageName);
+    qDebug()<<languageName.at(0)<<languageName.at(1);
     newLanguageIndex=newLanguageIndex==-1?0:newLanguageIndex;
     return setLanguageIndex(newLanguageIndex);
 }
@@ -64,6 +65,11 @@ bool KCLanguageConfigure::applyLangaugeSet(int languageIndex)
         emit newLanguageSet();
     }
     return installStatus;
+}
+
+QStringList KCLanguageConfigure::getLanguageCaption() const
+{
+    return languageCaption;
 }
 
 QList<QPixmap> KCLanguageConfigure::getLanguageFileIcon() const
@@ -119,6 +125,7 @@ void KCLanguageConfigure::loadLanguageList()
     //Initialize Application Languages.
     //Clear current list
     languageName.clear();
+    languageCaption.clear();
     languageFileList.clear();
     languageFileIcon.clear();
 
@@ -144,8 +151,9 @@ void KCLanguageConfigure::loadLanguageList()
         {
             languageFileList.append(i->filePath());
             localeName=localeFileName.left(localeFileName.length()-3);
-            languageName.append(languageNameTranslate.value(localeName,
-                                                            localeName).toString());
+            languageName.append(localeName);
+            languageCaption.append(languageNameTranslate.value(localeName,
+                                                               localeName).toString());
             localeIconFileName=localeFileDir+localeName+".png";
             localeIcon.setFileName(localeIconFileName);
             if(localeIcon.exists())
