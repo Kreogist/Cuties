@@ -4,12 +4,14 @@
 #include <QLabel>
 #include <QWidget>
 
+#include "kclanguageconfigure.h"
+
 class KCPreferenceLangaugeListItem : public QWidget
 {
     Q_OBJECT
 public:
     explicit KCPreferenceLangaugeListItem(QWidget *parent = 0);
-    void setLanguageIcon(const QString &iconPath);
+    void setLanguageIcon(const QPixmap &languagePixmap);
     void setLanguageName(const QString &captionText);
 
 private:
@@ -21,11 +23,16 @@ class KCPreferenceLangaugeList : public QWidget
     Q_OBJECT
 public:
     explicit KCPreferenceLangaugeList(QWidget *parent = 0);
+    KCPreferenceLangaugeListItem *addLanguageItem(const QString &languageName,
+                                                  const QPixmap &languageIcon);
 
 signals:
 
 public slots:
 
+private:
+    KCLanguageConfigure *instance;
+    QList<KCPreferenceLangaugeListItem *> languageItems;
 };
 
 #endif // KCPREFERENCELANGAUGELIST_H

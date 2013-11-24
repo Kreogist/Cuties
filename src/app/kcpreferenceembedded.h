@@ -16,6 +16,7 @@
 #include "kclanguageconfigure.h"
 #include "kchistoryconfigure.h"
 #include "kcclipboard.h"
+#include "kcpreferencelangaugelist.h"
 
 class KCPreferenceEmbeddedGeneral : public KCPreferenceSuperList
 {
@@ -224,7 +225,8 @@ public:
     explicit KCPreferenceEmbeddedLanguage(QWidget *parent = 0);
 
 private:
-
+    KCPreferenceLangaugeList *languageList;
+    QVBoxLayout *languageSettingsLayout;
 };
 
 #endif // KCPREFERENCEEMBEDDED_H

@@ -380,5 +380,11 @@ void KCPreferenceEmbeddedFileAssociation::applyPreference()
 KCPreferenceEmbeddedLanguage::KCPreferenceEmbeddedLanguage(QWidget *parent) :
     QWidget(parent)
 {
-    ;
+    languageSettingsLayout=new QVBoxLayout(this);
+    languageSettingsLayout->setContentsMargins(0,0,0,0);
+    languageSettingsLayout->setSpacing(0);
+    setLayout(languageSettingsLayout);
+
+    languageList=new KCPreferenceLangaugeList(this);
+    languageSettingsLayout->addWidget(languageList);
 }

@@ -584,7 +584,7 @@ KCCCTabLanguageContent::KCCCTabLanguageContent(QWidget *parent) :
     {
         KCSettingListItemLanguageItem *lanItem=new KCSettingListItemLanguageItem(this);
         lanItem->setLanguageName(instance->getLanguageNameList().at(i));
-        if(i==instance->getCurrLanguageIndex())
+        if(i==instance->getCurrentLanguageIndex())
         {
             lanItem->setCheck(true);
         }
@@ -598,7 +598,7 @@ KCCCTabLanguageContent::KCCCTabLanguageContent(QWidget *parent) :
 
 void KCCCTabLanguageContent::applyLanguageSettings(int newLangaugeIndex)
 {
-    languageItem.at(KCLanguageConfigure::getInstance()->getCurrLanguageIndex())->setCheck(false);
+    languageItem.at(KCLanguageConfigure::getInstance()->getCurrentLanguageIndex())->setCheck(false);
     languageItem.at(newLangaugeIndex)->setCheck(true);
     KCLanguageConfigure::getInstance()->setLanguageIndex(newLangaugeIndex);
 }

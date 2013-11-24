@@ -33,11 +33,15 @@ public slots:
     void retranslate();
     void retranslateAndSet();
 
+private slots:
+    void refreshLanguageInfo();
+
 private:
     QLabel *titleCaption;
     QString titleCaptionText;
 
-    QLabel *localeIcon;
+    QToolButton *localeSettings;
+    KCLanguageConfigure *instance;
 };
 
 class KCPreferenceListButton : public QWidget
@@ -164,6 +168,7 @@ private:
     KCPreferenceCategoryList *categoryList;
     KCPreferenceContents *contents;
     KCPreferenceCommander *commander;
+    KCPreferenceEmbeddedLanguage *languageSelector;
     //Translate Strings
     QString titleText;
 };

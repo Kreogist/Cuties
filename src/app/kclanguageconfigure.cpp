@@ -16,9 +16,9 @@ KCLanguageConfigure::KCLanguageConfigure()
     loadLanguageList();
     //Set Default Language.
     QLocale::setDefault(QLocale(QLocale::system().language(), QLocale::system().country()));
-    currLanguageName=QLocale::system().name();
-    setLanguage(currLanguageName);
-    qDebug()<<QLocale::scriptToString(QLocale::system().script());
+    //Get system default language name.
+    defaultLanguageName=getLanguageString(QLocale::system().language());
+    setLanguage(defaultLanguageName);
 }
 
 void KCLanguageConfigure::readConfigure()
@@ -27,7 +27,8 @@ void KCLanguageConfigure::readConfigure()
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Language");
     configLanguageName=settings.value("Language",
-                                      currLanguageName).toString();
+                                      currentLanguageName).toString();
+    setLanguage(currentLanguageName);
     settings.endGroup();
 }
 
@@ -35,34 +36,44 @@ void KCLanguageConfigure::writeConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Language");
-    settings.setValue("Language", currLanguageName);
+    settings.setValue("Language", currentLanguageName);
     settings.endGroup();
 }
 
-int KCLanguageConfigure::setLanguage(QString newLanguageName)
+bool KCLanguageConfigure::setLanguage(const QString &newLanguageName)
 {
-    int languageIndex=languageName.indexOf(newLanguageName + ".qm");
-    if(languageIndex != -1)
-    {
-        currLanguageIndex=languageIndex;
-        applyLangaugeSet(currLanguageIndex);
-    }
-    return languageIndex;
+    int newLanguageIndex=languageName.indexOf(newLanguageName);
+    newLanguageIndex=newLanguageIndex==-1?0:newLanguageIndex;
+    return setLanguageIndex(newLanguageIndex);
 }
 
-void KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)
+bool KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)
 {
-    currLanguageIndex=newLanguageIndex;
-    currLanguageName=languageName.at(currLanguageIndex);
-    applyLangaugeSet(currLanguageIndex);
+    currentLanguageIndex=newLanguageIndex;
+    currentLanguageName=languageName.at(currentLanguageIndex);
+    return applyLangaugeSet(currentLanguageIndex);
 }
 
-void KCLanguageConfigure::applyLangaugeSet(int languageIndex)
+bool KCLanguageConfigure::applyLangaugeSet(int languageIndex)
 {
     qApp->removeTranslator(&appTrans);
     appTrans.load(languageFileList.at(languageIndex));
-    qApp->installTranslator(&appTrans);
-    emit newLanguageSet();
+    bool installStatus=qApp->installTranslator(&appTrans);
+    if(installStatus)
+    {
+        emit newLanguageSet();
+    }
+    return installStatus;
+}
+
+QList<QPixmap> KCLanguageConfigure::getLanguageFileIcon() const
+{
+    return languageFileIcon;
+}
+
+QString KCLanguageConfigure::getLocaleFileDir() const
+{
+    return localeFileDir;
 }
 
 QStringList KCLanguageConfigure::getLanguageList() const
@@ -75,34 +86,78 @@ QStringList KCLanguageConfigure::getLanguageNameList() const
     return languageName;
 }
 
-int KCLanguageConfigure::getCurrLanguageIndex() const
+int KCLanguageConfigure::getCurrentLanguageIndex() const
 {
-    return currLanguageIndex;
+    return currentLanguageIndex;
+}
+
+QString KCLanguageConfigure::getCurrentLanguageName() const
+{
+    return currentLanguageName;
+}
+
+QPixmap KCLanguageConfigure::getCurrentLanguageIcon() const
+{
+    return languageFileIcon.at(currentLanguageIndex);
+}
+
+QString KCLanguageConfigure::getLanguageString(QLocale::Language language)
+{
+    if(language==QLocale::Chinese)
+    {
+        if(QLocale::system().country()==QLocale::China)
+        {
+            return QString("SimplifiedChinese");
+        }
+        return QString("TraditionalChinese");
+    }
+    return QLocale::languageToString(language);
 }
 
 void KCLanguageConfigure::loadLanguageList()
 {
     //Initialize Application Languages.
-    //Load language translation
+    //Clear current list
+    languageName.clear();
+    languageFileList.clear();
+    languageFileIcon.clear();
 
-    /*
-    QString currFileName;
+    //Search all qm language file
+    QString localeFileName, localeName, localeIconFileName;
     QStringList filter;
+    QSettings languageNameTranslate(localeTranslation, QSettings::IniFormat);
     QDir *dir=new QDir(localeFileDir);
+    QFile localeIcon;
     QList<QFileInfo> *list=new QList<QFileInfo>(dir->entryInfoList(filter));
+    languageNameTranslate.beginGroup("Languages");
     for(QList<QFileInfo>::iterator i=list->begin();
         i!=list->end();
         ++i)
     {
-        currFileName=i->fileName();
-        if(currFileName.length() < 4)
+        localeFileName=i->fileName();
+        if(localeFileName.length() < 4)
         {
             continue;
         }
-        if(currFileName.right(3)==QString(".qm"))
+        //Load qm file to language list
+        if(localeFileName.right(3)==QString(".qm"))
         {
             languageFileList.append(i->filePath());
-            languageName.append(currFileName);
+            localeName=localeFileName.left(localeFileName.length()-3);
+            languageName.append(languageNameTranslate.value(localeName,
+                                                            localeName).toString());
+            localeIconFileName=localeFileDir+localeName+".png";
+            localeIcon.setFileName(localeIconFileName);
+            if(localeIcon.exists())
+            {
+                languageFileIcon.append(QPixmap(localeIconFileName));
+            }
+            else
+            {
+                //TODO: Here should be replace by no icon
+                languageFileIcon.append(QPixmap(localeIconFileName));
+            }
         }
-    }*/
+    }
+    languageNameTranslate.endGroup();
 }

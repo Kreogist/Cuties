@@ -1,5 +1,6 @@
 
 #include <QSignalMapper>
+#include <QIcon>
 
 #include "kclanguageconfigure.h"
 #include "kccolorconfigure.h"
@@ -40,11 +41,31 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     titleCaption->setText(titleCaptionText);
     titleLayout->addWidget(titleCaption);
 
-    localeIcon=new QLabel(this);
-    //
-    titleLayout->addWidget(localeIcon);
-
     titleLayout->addStretch();
+
+    localeSettings=new QToolButton(this);
+    localeSettings->setAutoRaise(true);
+    localeSettings->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    localeSettings->setFixedHeight(32);
+    pal=localeSettings->palette();
+    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
+    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
+    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
+    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    localeSettings->setPalette(pal);
+    titleLayout->addWidget(localeSettings);
+
+    instance=KCLanguageConfigure::getInstance();
+    connect(instance, &KCLanguageConfigure::newLanguageSet,
+            this, &KCPreferenceBannerWidget::refreshLanguageInfo);
+    refreshLanguageInfo();
+}
+
+void KCPreferenceBannerWidget::refreshLanguageInfo()
+{
+    localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
+    localeSettings->setText(instance->getLanguageNameList().at(instance->getCurrentLanguageIndex()));
 }
 
 void KCPreferenceBannerWidget::retranslate()
@@ -365,6 +386,9 @@ KCPreference::KCPreference(QWidget *parent) :
     //Set Commander
     commander=new KCPreferenceCommander(this);
     bannerLayout->addWidget(commander);
+
+    //Set language selector
+    languageSelector=new KCPreferenceEmbeddedLanguage(this);
 
     connect(commander, &KCPreferenceCommander::requireYes,
             this, &KCPreference::yesAction);
