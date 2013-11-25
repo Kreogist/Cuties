@@ -47,7 +47,6 @@
 #include "kctabmanager.h"
 #include "kctexteditor.h"
 #include "kcmainwindow.h"
-#include "kccontrolcenter.h"
 #include "kcpreference.h"
 #include "kcexecutor.h"
 #include "kreogistcutestyle.h"
@@ -96,7 +95,6 @@ private slots:
     void changeDebugControlVisibleState();
     void changeDebugCommandIOVisibleState();
     void changeJudgeDockVisibleState();
-    void showControlCenter();
     void showPreference();
 #ifdef Q_OS_MACX
     void setFullScreen();
@@ -145,7 +143,6 @@ private:
         actionEditCopy,
         actionEditPaste,
         actionEditSelectAll,
-        actionEditControlCenter,    //Rebuild
         actionViewSidebar,
         actionViewCompileDock,
         actionViewDebugControls,

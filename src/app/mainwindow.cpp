@@ -131,8 +131,6 @@ void MainWindow::createActions()
     stringActionIconPath[actionEditSelectAll]=QString(":/menuicon/image/MenuIcons/mnuEditSelectAll.png");
     connect(actionMainWindowItem[actionEditSelectAll],SIGNAL(triggered()),tabManager,SLOT(selectAll()));
 
-    connect(actionMainWindowItem[actionEditControlCenter], SIGNAL(triggered()), this, SLOT(showControlCenter()));
-
     //View -> Sidebar
     connect(actionMainWindowItem[actionViewSidebar], &QAction::triggered,
             this, &MainWindow::changeSidebarVisibleState);
@@ -424,7 +422,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
     menuMainWindowItem[menuEdit]->setIcon(*MenuIconAddor);
 #endif
-    for(i=actionEditUndo; i<=actionEditControlCenter; i++)
+    for(i=actionEditUndo; i<=actionEditSelectAll; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -1074,12 +1072,6 @@ void MainWindow::retranslateAndSet()
     {
         buttonMainToolbarItem[i]->setToolTip(toolButtonTips[i]);
     }
-}
-
-void MainWindow::showControlCenter()
-{
-    KCControlCenter *newControlCenter=new KCControlCenter(this);
-    newControlCenter->exec();
 }
 
 void MainWindow::showPreference()
