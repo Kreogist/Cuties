@@ -51,18 +51,12 @@ SOURCES += \
     kclanguagemode.cpp \
     fpc.cpp \
     kclistbutton.cpp \
-    Controls/SettingItems/kcsettinglistitemboolean.cpp \
-    Controls/SettingItems/kcsettinglistitembase.cpp \
-    Controls/SettingItems/kcsettinglistitemcombo.cpp \
-    Controls/SettingItems/kcsettinglistitemlinetext.cpp \
     dbgoutputreceiver.cpp \
     kcplaintextbrowser.cpp \
     kcdragproxy.cpp \
     kctextblockdata.cpp \
     kchighlighter.cpp \
     kcsidebar.cpp \
-    Controls/SettingItems/kcsettinglistitembrowsetext.cpp \
-    Controls/SettingItems/kcsettinglistitemlanguageitem.cpp \
     kcgeneralconfigure.cpp \
     kceditorconfigure.cpp \
     kccompilerconfigure.cpp \
@@ -70,13 +64,11 @@ SOURCES += \
     kclanguageconfigure.cpp \
     kcfileassociation.cpp \
     kcconfigure.cpp \
-    Controls/SettingItems/kcsettinglistitemnuminput.cpp \
     kchistoryconfigure.cpp \
     kcmessagebox.cpp \
     kcsearchlinetext.cpp \
     kcsearchwidget.cpp \
     kcstatusrewriteinfo.cpp \
-    Controls/SettingItems/kcsettinglistitembutton.cpp \
     kcsplashscreen.cpp \
     kcclipboard.cpp \
     kccompilerbase.cpp \
@@ -86,7 +78,6 @@ SOURCES += \
     kcpascalhighlighter.cpp \
     kcreplacewindow.cpp \
     kccolorconfigure.cpp \
-    Controls/SettingItems/kcsettingcontrollineedit.cpp \
     kcdebugcommandio.cpp \
     kcdebugcontrolpanel.cpp \
     kcfloattoolbar.cpp \
@@ -134,18 +125,12 @@ HEADERS += \
     kcsearchlinetext.h \
     fpc.h \
     kclistbutton.h \
-    Controls/SettingItems/kcsettinglistitemboolean.h \
-    Controls/SettingItems/kcsettinglistitembase.h \
-    Controls/SettingItems/kcsettinglistitemcombo.h \
-    Controls/SettingItems/kcsettinglistitemlinetext.h \
     dbgoutputreceiver.h \
     kcplaintextbrowser.h \
     kcdragproxy.h \
     kctextblockdata.h \
     kchighlighter.h \
     kcsidebar.h \
-    Controls/SettingItems/kcsettinglistitembrowsetext.h \
-    Controls/SettingItems/kcsettinglistitemlanguageitem.h \
     kcconfigure.h \
     kcgeneralconfigure.h \
     kceditorconfigure.h \
@@ -153,12 +138,10 @@ HEADERS += \
     kcdebuggerconfigure.h \
     kclanguageconfigure.h \
     kcfileassociation.h \
-    Controls/SettingItems/kcsettinglistitemnuminput.h \
     kchistoryconfigure.h \
     kcmessagebox.h \
     kcsearchwidget.h \
     kcstatusrewriteinfo.h \
-    Controls/SettingItems/kcsettinglistitembutton.h \
     kcsplashscreen.h \
     kcclipboard.h \
     kccompileoutputreceiver.h \
@@ -168,7 +151,6 @@ HEADERS += \
     kcpascalhighlighter.h \
     kcreplacewindow.h \
     kccolorconfigure.h \
-    Controls/SettingItems/kcsettingcontrollineedit.h \
     kcdebugcommandio.h \
     kcdebugcontrolpanel.h \
     kcfloattoolbar.h \
