@@ -104,7 +104,9 @@ SOURCES += \
     Controls/Preference/kcpreferenceitemint.cpp \
     Controls/Preference/kcpreferenceitembooleangroup.cpp \
     Controls/Preference/kcpreferenceitempath.cpp \
-    kcpreferencelangaugelist.cpp
+    kcpreferencelangaugelist.cpp \
+    Controls/GraphicButtons/kcgraphicbuttonbase.cpp \
+    Controls/GraphicButtons/kcgraphicbuttonok.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -185,7 +187,9 @@ HEADERS += \
     Controls/Preference/kcpreferenceitemint.h \
     Controls/Preference/kcpreferenceitembooleangroup.h \
     Controls/Preference/kcpreferenceitempath.h \
-    kcpreferencelangaugelist.h
+    kcpreferencelangaugelist.h \
+    Controls/GraphicButtons/kcgraphicbuttonbase.h \
+    Controls/GraphicButtons/kcgraphicbuttonok.h
 
 # Enable C++11
 CONFIG += c++11

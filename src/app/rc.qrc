@@ -105,4 +105,8 @@
         <file>image/Sidebar/source_others.png</file>
         <file>image/Sidebar/source_pas.png</file>
     </qresource>
+    <qresource prefix="/Buttons">
+        <file>image/Buttons/ok_hover.png</file>
+        <file>image/Buttons/ok_normal.png</file>
+    </qresource>
 </RCC>

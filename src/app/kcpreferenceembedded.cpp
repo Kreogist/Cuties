@@ -384,6 +384,7 @@ KCPreferenceEmbeddedLanguage::KCPreferenceEmbeddedLanguage(QWidget *parent) :
     QWidget(parent)
 {
     //Set properties
+    setAutoFillBackground(true);
 
     //Load instance
     instance=KCLanguageConfigure::getInstance();
@@ -397,15 +398,28 @@ KCPreferenceEmbeddedLanguage::KCPreferenceEmbeddedLanguage(QWidget *parent) :
 
     //Set layout
     languageSettingsLayout=new QVBoxLayout(this);
-    languageSettingsLayout->setContentsMargins(0,0,0,0);
-    languageSettingsLayout->setSpacing(0);
+    languageSettingsLayout->setContentsMargins(5,5,5,5);
+    languageSettingsLayout->setSpacing(5);
     setLayout(languageSettingsLayout);
 
     //Set language list
     languageList=new KCPreferenceLangaugeList(this);
     languageSettingsLayout->addWidget(languageList);
 
+    languageControls=new QHBoxLayout();
+    KCGraphicButtonOK *okButton=new KCGraphicButtonOK(this);
+    languageControls->addWidget(okButton);
+    languageSettingsLayout->addLayout(languageControls);
+
+    connect(okButton, &KCGraphicButtonOK::clicked,
+            this, &KCPreferenceEmbeddedLanguage::requiredHideLanguageSelector);
+
     //Connect language change event
     connect(languageList, SIGNAL(requireChangeLanguage(int)),
             instance, SLOT(setLanguageIndex(int)));
+}
+
+KCPreferenceEmbeddedLanguage::~KCPreferenceEmbeddedLanguage()
+{
+    languageControls->deleteLater();
 }

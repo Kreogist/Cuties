@@ -163,7 +163,7 @@ private slots:
     void yesAction();
     void cancelAction();
     void applyAction();
-
+    void hideLanguageSelector();
     void showLanguageSelector();
 
 protected:
@@ -181,7 +181,7 @@ private:
     //Translate Strings
     QString titleText;
     //Animation
-    QPropertyAnimation *languageSelectorShow;
+    QPropertyAnimation *languageSelectorShow, *languageSelectorHide;
 };
 
 #endif // KCPREFERENCE_H

@@ -399,10 +399,17 @@ KCPreference::KCPreference(QWidget *parent) :
 
     languageSelectorShow=new QPropertyAnimation(languageSelector, "geometry", this);
     languageSelectorShow->setEasingCurve(QEasingCurve::OutCubic);
-    languageSelectorShow->setDuration(300);
+    languageSelectorShow->setDuration(500);
+
+    languageSelectorHide=new QPropertyAnimation(languageSelector, "geometry", this);
+    languageSelectorHide->setEasingCurve(QEasingCurve::OutCubic);
+    languageSelectorHide->setDuration(500);
 
     connect(bannerWidget, &KCPreferenceBannerWidget::requiredChangeLanguage,
             this, &KCPreference::showLanguageSelector);
+
+    connect(languageSelector, &KCPreferenceEmbeddedLanguage::requiredHideLanguageSelector,
+            this, &KCPreference::hideLanguageSelector);
 
     connect(commander, &KCPreferenceCommander::requireYes,
             this, &KCPreference::yesAction);
@@ -449,8 +456,21 @@ void KCPreference::applyAction()
     contents->applyAllSettings();
 }
 
+void KCPreference::hideLanguageSelector()
+{
+    languageSelectorShow->stop();
+    QRect endValue=QRect(width()/4,
+                         -height()/2 - 10,
+                         width()/2,
+                         height()/2);
+    languageSelectorHide->setStartValue(languageSelector->geometry());
+    languageSelectorHide->setEndValue(endValue);
+    languageSelectorHide->start();
+}
+
 void KCPreference::showLanguageSelector()
 {
+    languageSelectorHide->stop();
     QRect endValue=QRect(width()/4,
                          0,
                          width()/2,
@@ -469,13 +489,12 @@ void KCPreference::resizeEvent(QResizeEvent *e)
     if(languageSelectorShow->state()==QPropertyAnimation::Running)
     {
         languageSelectorShow->stop();
-        QRect endValue=QRect(width()/4,
-                             0,
-                             width()/2,
-                             height()/2);
-        languageSelectorShow->setStartValue(languageSelector->geometry());
-        languageSelectorShow->setEndValue(endValue);
-        languageSelectorShow->start();
+        showLanguageSelector();
+    }
+    if(languageSelectorHide->state()==QPropertyAnimation::Running)
+    {
+        languageSelectorHide->stop();
+        hideLanguageSelector();
     }
     QWidget::resizeEvent(e);
 }

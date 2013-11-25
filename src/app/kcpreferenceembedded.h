@@ -7,6 +7,7 @@
 
 #include "kcpreferencesuperlist.h"
 #include "Controls/Preference/kcpreferenceitembooleangroup.h"
+#include "Controls/GraphicButtons/kcgraphicbuttonok.h"
 
 #include "kcgeneralconfigure.h"
 #include "kceditorconfigure.h"
@@ -223,12 +224,17 @@ class KCPreferenceEmbeddedLanguage : public QWidget
     Q_OBJECT
 public:
     explicit KCPreferenceEmbeddedLanguage(QWidget *parent = 0);
+    ~KCPreferenceEmbeddedLanguage();
+
+signals:
+    void requiredHideLanguageSelector();
 
 private:
     KCPreferenceLangaugeList *languageList;
     QVBoxLayout *languageSettingsLayout;
 
     KCLanguageConfigure *instance;
+    QHBoxLayout *languageControls;
 };
 
 #endif // KCPREFERENCEEMBEDDED_H
