@@ -25,10 +25,6 @@ KCMainWindow::KCMainWindow(QWidget *parent) :
     titleBar=new KCTitleBar(this);
     setMenuWidget(titleBar);
     setAcceptDrops(true);
-
-#ifdef Q_OS_MACX
-    QMainWindow::setUnifiedTitleAndToolBarOnMac(false);
-#endif
     setContentsMargins(0,0,0,0);
 }
 

@@ -46,7 +46,6 @@ SOURCES += \
     kctextsearcher.cpp \
     kcsearchwindow.cpp \
     kcstatuscursorinfo.cpp \
-    kccontrolcenter.cpp \
     kcexecutor.cpp \
     kcjudgedock.cpp \
     kclanguagemode.cpp \
@@ -129,7 +128,6 @@ HEADERS += \
     kctextsearcher.h \
     kcsearchwindow.h \
     kcstatuscursorinfo.h \
-    kccontrolcenter.h \
     kcexecutor.h \
     kcjudgedock.h \
     kclanguagemode.h \

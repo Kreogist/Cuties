@@ -28,7 +28,7 @@ void KCLanguageConfigure::readConfigure()
     settings.beginGroup("Language");
     configLanguageName=settings.value("Language",
                                       currentLanguageName).toString();
-    //setLanguage(currentLanguageName);
+    setLanguage(currentLanguageName);
     settings.endGroup();
 }
 
@@ -43,7 +43,6 @@ void KCLanguageConfigure::writeConfigure()
 bool KCLanguageConfigure::setLanguage(const QString &newLanguageName)
 {
     int newLanguageIndex=languageName.indexOf(newLanguageName);
-    qDebug()<<languageName.at(0)<<languageName.at(1);
     newLanguageIndex=newLanguageIndex==-1?0:newLanguageIndex;
     return setLanguageIndex(newLanguageIndex);
 }
