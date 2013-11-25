@@ -7,6 +7,16 @@
 KCPreferenceLangaugeListItem::KCPreferenceLangaugeListItem(QWidget *parent) :
     QWidget(parent)
 {
+    //Set properties
+    setAutoFillBackground(true);
+    setFixedHeight(36);
+
+    //Get palette
+    backgroundColor=QColor(0xf7,0xcf,0x3d,0);
+    pal=palette();
+    setBackgroundAlpha(0);
+
+    //Set layout
     QHBoxLayout *languageItemLayout=new QHBoxLayout(this);
     languageItemLayout->setContentsMargins(5,0,5,0);
     languageItemLayout->setSpacing(5);
@@ -33,6 +43,25 @@ void KCPreferenceLangaugeListItem::setLanguageName(const QString &captionText)
     languageName->setText(captionText);
 }
 
+void KCPreferenceLangaugeListItem::setBackgroundAlpha(int newAlpha)
+{
+    backgroundColor.setAlpha(newAlpha);
+    pal.setColor(QPalette::Window, backgroundColor);
+    setPalette(pal);
+}
+
+void KCPreferenceLangaugeListItem::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+    setBackgroundAlpha(255);
+}
+
+void KCPreferenceLangaugeListItem::leaveEvent(QEvent *e)
+{
+    QWidget::leaveEvent(e);
+    setBackgroundAlpha(0);
+}
+
 void KCPreferenceLangaugeListItem::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
@@ -50,7 +79,7 @@ KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
     QSignalMapper *languageChangeMapper=new QSignalMapper(this);
 
     //Set content widget
-    QWidget *languageContents=new QWidget(this);
+    languageContents=new QWidget(this);
     languageContents->setContentsMargins(0,0,0,0);
     setWidget(languageContents);
 
@@ -85,4 +114,3 @@ KCPreferenceLangaugeListItem *KCPreferenceLangaugeList::addLanguageItem(const QS
     newLanguageItem->setLanguageIcon(languageIcon);
     return newLanguageItem;
 }
-

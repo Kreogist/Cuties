@@ -2,6 +2,7 @@
 #define KCPREFERENCELANGAUGELIST_H
 
 #include <QLabel>
+#include <QResizeEvent>
 #include <QWidget>
 #include <QScrollArea>
 
@@ -18,11 +19,18 @@ public:
 signals:
     void requireChangeLanguage();
 
+private slots:
+    void setBackgroundAlpha(int newAlpha);
+
 protected:
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
 private:
     QLabel *languageIcon, *languageName;
+    QPalette pal;
+    QColor backgroundColor;
 };
 
 class KCPreferenceLangaugeList : public QScrollArea
@@ -38,9 +46,11 @@ signals:
 
 public slots:
 
+
 private:
     KCLanguageConfigure *instance;
     QList<KCPreferenceLangaugeListItem *> languageItems;
+    QWidget *languageContents;
 };
 
 #endif // KCPREFERENCELANGAUGELIST_H
