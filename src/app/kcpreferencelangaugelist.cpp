@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QSignalMapper>
 
 #include "kcpreferencelangaugelist.h"
 
@@ -7,8 +8,8 @@ KCPreferenceLangaugeListItem::KCPreferenceLangaugeListItem(QWidget *parent) :
     QWidget(parent)
 {
     QHBoxLayout *languageItemLayout=new QHBoxLayout(this);
-    languageItemLayout->setContentsMargins(0,0,0,0);
-    languageItemLayout->setSpacing(0);
+    languageItemLayout->setContentsMargins(5,0,5,0);
+    languageItemLayout->setSpacing(5);
     setLayout(languageItemLayout);
 
     languageIcon=new QLabel(this);
@@ -32,12 +33,21 @@ void KCPreferenceLangaugeListItem::setLanguageName(const QString &captionText)
     languageName->setText(captionText);
 }
 
+void KCPreferenceLangaugeListItem::mousePressEvent(QMouseEvent *e)
+{
+    QWidget::mousePressEvent(e);
+    emit requireChangeLanguage();
+}
+
 KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
     QScrollArea(parent)
 {
     //Set properties
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
+
+    //Set signal mapper
+    QSignalMapper *languageChangeMapper=new QSignalMapper(this);
 
     //Set content widget
     QWidget *languageContents=new QWidget(this);
@@ -56,8 +66,13 @@ KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
     {
         languageItems.append(addLanguageItem(instance->getLanguageCaption().at(i),
                                              instance->getLanguageFileIcon().at(i)));
+        connect(languageItems.at(i), SIGNAL(requireChangeLanguage()),
+                languageChangeMapper, SLOT(map()));
+        languageChangeMapper->setMapping(languageItems.at(i), i);
         languageListLayout->addWidget(languageItems.at(i));
     }
+    connect(languageChangeMapper, SIGNAL(mapped(int)),
+            this, SIGNAL(requireChangeLanguage(int)));
     languageListLayout->addStretch();
     languageContents->setFixedSize(languageContents->sizeHint());
 }

@@ -396,8 +396,10 @@ KCPreference::KCPreference(QWidget *parent) :
                                   -height()/2 - 10,
                                   width()/2,
                                   height()/2);
+
     languageSelectorShow=new QPropertyAnimation(languageSelector, "geometry", this);
     languageSelectorShow->setEasingCurve(QEasingCurve::OutCubic);
+    languageSelectorShow->setDuration(300);
 
     connect(bannerWidget, &KCPreferenceBannerWidget::requiredChangeLanguage,
             this, &KCPreference::showLanguageSelector);

@@ -15,6 +15,12 @@ public:
     void setLanguageIcon(const QPixmap &languagePixmap);
     void setLanguageName(const QString &captionText);
 
+signals:
+    void requireChangeLanguage();
+
+protected:
+    void mousePressEvent(QMouseEvent *e);
+
 private:
     QLabel *languageIcon, *languageName;
 };
@@ -28,6 +34,7 @@ public:
                                                   const QPixmap &languageIcon);
 
 signals:
+    void requireChangeLanguage(int languageIndex);
 
 public slots:
 

@@ -385,6 +385,9 @@ KCPreferenceEmbeddedLanguage::KCPreferenceEmbeddedLanguage(QWidget *parent) :
 {
     //Set properties
 
+    //Load instance
+    instance=KCLanguageConfigure::getInstance();
+
     //Set effects
     QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
     wndShadow->setBlurRadius(15.0);
@@ -401,4 +404,8 @@ KCPreferenceEmbeddedLanguage::KCPreferenceEmbeddedLanguage(QWidget *parent) :
     //Set language list
     languageList=new KCPreferenceLangaugeList(this);
     languageSettingsLayout->addWidget(languageList);
+
+    //Connect language change event
+    connect(languageList, SIGNAL(requireChangeLanguage(int)),
+            instance, SLOT(setLanguageIndex(int)));
 }

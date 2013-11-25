@@ -227,6 +227,8 @@ public:
 private:
     KCPreferenceLangaugeList *languageList;
     QVBoxLayout *languageSettingsLayout;
+
+    KCLanguageConfigure *instance;
 };
 
 #endif // KCPREFERENCEEMBEDDED_H

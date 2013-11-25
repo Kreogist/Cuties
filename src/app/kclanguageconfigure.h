@@ -22,8 +22,6 @@ public:
     void writeConfigure();
     static KCLanguageConfigure *getInstance();
 
-    bool setLanguage(const QString &newLanguageName);
-    bool setLanguageIndex(int newLangaugeIndex);
     QStringList getLanguageList() const;
     QStringList getLanguageCaption() const;
     QStringList getLanguageNameList() const;
@@ -36,6 +34,10 @@ public:
 
 signals:
     void newLanguageSet();
+
+public slots:
+    bool setLanguage(const QString &newLanguageName);
+    bool setLanguageIndex(int newLangaugeIndex);
 
 private:
     bool applyLangaugeSet(int languageIndex);
