@@ -7,6 +7,7 @@
 #include <QDialog>
 #include <QTimeLine>
 #include <QToolButton>
+#include <QPropertyAnimation>
 
 #include "kclistbutton.h"
 #include "kcpreferencepager.h"
@@ -28,6 +29,9 @@ class KCPreferenceBannerWidget : public QWidget
     Q_OBJECT
 public:
     explicit KCPreferenceBannerWidget(QWidget *parent = 0);
+
+signals:
+    void requiredChangeLanguage();
 
 public slots:
     void retranslate();
@@ -160,6 +164,11 @@ private slots:
     void cancelAction();
     void applyAction();
 
+    void showLanguageSelector();
+
+protected:
+    void resizeEvent(QResizeEvent *e);
+
 private:
     //Layouts.
     QHBoxLayout *contentLayout;
@@ -171,6 +180,8 @@ private:
     KCPreferenceEmbeddedLanguage *languageSelector;
     //Translate Strings
     QString titleText;
+    //Animation
+    QPropertyAnimation *languageSelectorShow;
 };
 
 #endif // KCPREFERENCE_H

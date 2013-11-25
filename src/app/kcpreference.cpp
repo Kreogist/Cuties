@@ -56,6 +56,9 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     localeSettings->setPalette(pal);
     titleLayout->addWidget(localeSettings);
 
+    connect(localeSettings, SIGNAL(clicked()),
+            this, SIGNAL(requiredChangeLanguage()));
+
     instance=KCLanguageConfigure::getInstance();
     connect(instance, &KCLanguageConfigure::newLanguageSet,
             this, &KCPreferenceBannerWidget::refreshLanguageInfo);
@@ -389,6 +392,15 @@ KCPreference::KCPreference(QWidget *parent) :
 
     //Set language selector
     languageSelector=new KCPreferenceEmbeddedLanguage(this);
+    languageSelector->setGeometry(width()/4,
+                                  -height()/2 - 10,
+                                  width()/2,
+                                  height()/2);
+    languageSelectorShow=new QPropertyAnimation(languageSelector, "geometry", this);
+    languageSelectorShow->setEasingCurve(QEasingCurve::OutCubic);
+
+    connect(bannerWidget, &KCPreferenceBannerWidget::requiredChangeLanguage,
+            this, &KCPreference::showLanguageSelector);
 
     connect(commander, &KCPreferenceCommander::requireYes,
             this, &KCPreference::yesAction);
@@ -433,5 +445,36 @@ void KCPreference::cancelAction()
 void KCPreference::applyAction()
 {
     contents->applyAllSettings();
+}
+
+void KCPreference::showLanguageSelector()
+{
+    QRect endValue=QRect(width()/4,
+                         0,
+                         width()/2,
+                         height()/2);
+    languageSelectorShow->setStartValue(languageSelector->geometry());
+    languageSelectorShow->setEndValue(endValue);
+    languageSelectorShow->start();
+}
+
+void KCPreference::resizeEvent(QResizeEvent *e)
+{
+    languageSelector->setGeometry(width()/4,
+                                  languageSelector->y(),
+                                  width()/2,
+                                  height()/2);
+    if(languageSelectorShow->state()==QPropertyAnimation::Running)
+    {
+        languageSelectorShow->stop();
+        QRect endValue=QRect(width()/4,
+                             0,
+                             width()/2,
+                             height()/2);
+        languageSelectorShow->setStartValue(languageSelector->geometry());
+        languageSelectorShow->setEndValue(endValue);
+        languageSelectorShow->start();
+    }
+    QWidget::resizeEvent(e);
 }
 

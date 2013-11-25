@@ -1,3 +1,6 @@
+
+#include <QGraphicsDropShadowEffect>
+
 #include "kcpreferenceembedded.h"
 #include "kclanguageconfigure.h"
 
@@ -380,11 +383,22 @@ void KCPreferenceEmbeddedFileAssociation::applyPreference()
 KCPreferenceEmbeddedLanguage::KCPreferenceEmbeddedLanguage(QWidget *parent) :
     QWidget(parent)
 {
+    //Set properties
+
+    //Set effects
+    QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
+    wndShadow->setBlurRadius(15.0);
+    wndShadow->setColor(QColor(0, 0, 0, 200));
+    wndShadow->setOffset(0);
+    setGraphicsEffect(wndShadow);
+
+    //Set layout
     languageSettingsLayout=new QVBoxLayout(this);
     languageSettingsLayout->setContentsMargins(0,0,0,0);
     languageSettingsLayout->setSpacing(0);
     setLayout(languageSettingsLayout);
 
+    //Set language list
     languageList=new KCPreferenceLangaugeList(this);
     languageSettingsLayout->addWidget(languageList);
 }
