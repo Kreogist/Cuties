@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Kreogist - Cuties - Download Cuties Now</title>
+    <title>Kreogist - Cuties - 立刻获得您的Cuties!</title>
     <link rel="stylesheet" href="../style.css" type="text/css" />
 	<link rel="shortcut icon" href="http://kreogist.github.io/Cuties/favicon.ico" />
     <meta charset="utf-8" />
@@ -30,7 +30,17 @@
         </ul>
         <div class="context-container">
             <p class="title">下载</p>
-			<p class="normal-font">二进制包：</p>
+			<p class="normal-font center-text download-normal-context"><strong>立即获得您的Cuties！</strong></p>
+			<p class="normal-font center-text">如果您不知道您应当下载哪个版本，请您下载下面这个安装包：</p>
+			<script>
+			var osString = navigator.platform.toLowerCase();
+			if(osString.indexOf("mac")>-1)
+			{
+			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
+				document.write("<p class=\"normal-font center-text\">暂时无法提供 Mac OS X 的安装包</p>");
+			}
+			</script>
+			<p class="normal-font"><br />目前 Cuties 的所有版本下载：</p>
             <div class="download-context">
                 <div class="download-context-box">
                     <h1 class="platform">Windows</h1>
@@ -63,12 +73,12 @@
                     </div>
                 </div>
             </div>
-			<p class="normal-font">源代码：</p>
-            <div class="download-context">
-                <div class="download-context-box"><h1 class="platform">tar.gz</h1><a class="menu-link" href="https://github.com/Kreogist/Cuties/tarball/master">下载</a></div>
-                <div class="download-context-box"><h1 class="platform">zip</h1><a class="menu-link" href="https://github.com/Kreogist/Cuties/zipball/master">下载</a></div>
-                <div class="download-context-box"><h1 class="platform">浏览所有</h1><a class="menu-link" href="https://github.com/Kreogist/Cuties">在 Github 上查看</a></div>
-            </div>
+			<p class="normal-font"><br /><br />Cuties 的源代码下载地址：<br />
+			 <br /><a href="https://github.com/Kreogist/Cuties/tarball/master">Cuties 源代码 tar.gz 包（master 分支）</a>：主分支的源代码包，tar.gz格式。
+			 <br /><a href="https://github.com/Kreogist/Cuties/zipball/master">Cuties 源代码 zip 包（master 分支）</a>：主分支的源代码包，zip格式。
+			 <br /><a href="https://github.com/Kreogist/Cuties/tarball/dev">Cuties 源代码 tar.gz 包（dev 分支）</a>：开发分支的源代码包，tar.gz格式。
+			 <br /><a href="https://github.com/Kreogist/Cuties/zipball/dev">Cuties 源代码 zip 包（dev 分支）</a>：开发分支的源代码包，zip格式。
+ 			 <br /><a href="https://github.com/Kreogist/Cuties">Cuties 项目主页</a>：访问Cuties项目主页获得更多有关Cuties的源代码信息。</p>
         </div>
     </div>
 

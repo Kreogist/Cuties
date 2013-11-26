@@ -24,7 +24,7 @@ a:active{
 }
 p{margin-top:2em;}
 /*==>common class<==*/
-.normal-font{font-family:"Lucida Grande", "Arial";font-weight:400;}
+.normal-font{font-family:"Lucida Grande", "Arial", "微软雅黑", "SimHei";font-weight:400;}
 .center-text{text-align:center;}
 .large-text{font-size:2em;}
 .larger-text{font-size:3em;}
@@ -289,6 +289,9 @@ p{margin-top:2em;}
     content:"";
     box-shadow:2px 2px 2px black;
     }
+.download-normal-context{
+    font-size:3em;
+	}
 .download-context{
     /* Internet Explorer 10 */
     display:-ms-flex;

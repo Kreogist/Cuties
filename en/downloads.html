@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Kreogist - Cuties - Download Cuties Now</title>
+    <title>Kreogist - Cuties - Download Cuties Now!</title>
     <link rel="stylesheet" href="../style.css" type="text/css" />
 	<link rel="shortcut icon" href="http://kreogist.github.io/Cuties/favicon.ico" />
     <meta charset="utf-8" />
@@ -30,7 +30,18 @@
         </ul>
         <div class="context-container">
             <p class="title">Downloads</p>
-			<p class="normal-font">Binary pacakges:</p>
+			<p class="normal-font center-text download-normal-context"><strong>Get your own Cuties!</strong></p>
+			<p class="normal-font center-text">If you don't know which version you should donwload, please get this:</p>
+			<script>
+			var osString = navigator.platform.toLowerCase();
+			if(osString.indexOf("mac")>-1)
+			{
+			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
+				document.write("<p class=\"normal-font center-text\">Sorry, no Mac OS X version currently...</p>");
+			}
+			</script>
+			<p class="normal-font"><br />All versions of Cuties provided: </p>
+
             <div class="download-context">
                 <div class="download-context-box">
                     <h1 class="platform">Windows</h1>
@@ -63,12 +74,12 @@
                     </div>
                 </div>
             </div>
-			<p class="normal-font">Source code:</p>
-            <div class="download-context">
-                <div class="download-context-box"><h1 class="platform">tar.gz</h1><a class="menu-link" href="https://github.com/Kreogist/Cuties/tarball/master">Download</a></div>
-                <div class="download-context-box"><h1 class="platform">zip</h1><a class="menu-link" href="https://github.com/Kreogist/Cuties/zipball/master">Download</a></div>
-                <div class="download-context-box"><h1 class="platform">Browse All</h1><a class="menu-link" href="https://github.com/Kreogist/Cuties">Visit on Github</a></div>
-            </div>
+			<p class="normal-font"><br /><br />Cuties Source Code：<br />
+						 <br /><a href="https://github.com/Kreogist/Cuties/tarball/master">Cuties source code tar.gz package(master)</a>: tar.gz format source code package of branch master.
+						 <br /><a href="https://github.com/Kreogist/Cuties/zipball/master">Cuties source code zip package(master)</a>: zip format source code package of branch master.
+						 <br /><a href="https://github.com/Kreogist/Cuties/tarball/dev">Cuties source code tar.gz package(dev)</a>: tar.gz format source code package of branch dev.
+						 <br /><a href="https://github.com/Kreogist/Cuties/zipball/dev">Cuties source code zip package(dev)</a>: zip format source code package of branch dev.
+			 			 <br /><a href="https://github.com/Kreogist/Cuties">Project Cuties home page</a>：Visit the homepage of project Cuties for more details.</p>
         </div>
     </div>
 
