@@ -1,5 +1,5 @@
 
-#include <QVBoxLayout>
+
 
 #include "kcdebugwatch.h"
 
@@ -51,9 +51,28 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     customWatchCombineLayout->setSpacing(0);
     customWatchCombine->setLayout(customWatchCombineLayout);
 
+    customWatchControlLayout=new QHBoxLayout();
+    customWatchControlLayout->setContentsMargins(0,0,0,0);
+    customWatchControlLayout->setSpacing(0);
     customWatchCaption=new QLabel(customWatchCombine);
     customWatchCaption->setText(customWatchTitle);
-    customWatchCombineLayout->addWidget(customWatchCaption);
+    customWatchControlLayout->addWidget(customWatchCaption);
+    customWatchControl=new QToolBar(watchDockContainer);
+
+    customWatchCommands[customWatchAdd]=new QToolButton(watchDockContainer);
+    customWatchCommands[customWatchAdd]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/AddWatch.png"));
+    customWatchControl->addWidget(customWatchCommands[customWatchAdd]);
+    customWatchCommands[customWatchEdit]=new QToolButton(watchDockContainer);
+    customWatchCommands[customWatchEdit]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/ModifyWatch.png"));
+    customWatchControl->addWidget(customWatchCommands[customWatchEdit]);
+    customWatchControl->addSeparator();
+    customWatchCommands[customWatchRemove]=new QToolButton(watchDockContainer);
+    customWatchCommands[customWatchRemove]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/RemoveWatch.png"));
+    customWatchControl->addWidget(customWatchCommands[customWatchRemove]);
+
+    customWatchControlLayout->addWidget(customWatchControl);
+    customWatchControlLayout->addStretch();
+    customWatchCombineLayout->addLayout(customWatchControlLayout);
     customWatch=new QTreeView(watchDockContainer);
     customWatchCombineLayout->addWidget(customWatch);
     watchDockContainer->addWidget(customWatchCombine);
@@ -61,11 +80,20 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     setWidget(watchDockContainer);
 }
 
+KCDebugWatch::~KCDebugWatch()
+{
+    customWatchControlLayout->deleteLater();
+}
+
 void KCDebugWatch::retranslate()
 {
     windowTitleString=tr("Watch");
     localWatchTitle=tr("Local Watch");
     customWatchTitle=tr("Custom Watch");
+
+    customWatchCommandTitle[customWatchAdd]=tr("Add watch");
+    customWatchCommandTitle[customWatchEdit]=tr("Edit watch");
+    customWatchCommandTitle[customWatchRemove]=tr("Remove watch");
 }
 
 void KCDebugWatch::retranslateAndSet()

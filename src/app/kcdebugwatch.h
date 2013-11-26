@@ -7,12 +7,15 @@
 #include <QToolButton>
 #include <QLabel>
 #include <QDockWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 class KCDebugWatch : public QDockWidget
 {
     Q_OBJECT
 public:
     explicit KCDebugWatch(QWidget *parent = 0);
+    ~KCDebugWatch();
 
 signals:
 
@@ -25,6 +28,19 @@ private:
     QTreeView *localWatch;
     QTreeView *customWatch;
     QLabel *localWatchCaption, *customWatchCaption;
+    QToolBar *customWatchControl;
+
+    enum CustomWatchCommand
+    {
+        customWatchAdd,
+        customWatchEdit,
+        customWatchRemove,
+        CustomWatchCommandCount
+    };
+    QToolButton *customWatchCommands[CustomWatchCommandCount];
+    QString customWatchCommandTitle[CustomWatchCommandCount];
+
+    QHBoxLayout *customWatchControlLayout;
 
     QString windowTitleString,
             localWatchTitle,
