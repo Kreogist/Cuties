@@ -43,6 +43,11 @@
 			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
 				document.write("<p class=\"normal-font center-text\">Sorry, no Mac OS X version currently...</p>");
 			}
+			else if(osString.indexOf("linux")>-1)
+			{
+			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
+				document.write("<p class=\"normal-font center-text\">Sorry, no " + navigator.platform + " version currently...</p>");
+			}
 			else
 			{
 				document.write("<p class=\"normal-font center-text\">Sorry, but we have no " + navigator.platform + " version.</p>");

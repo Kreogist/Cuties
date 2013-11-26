@@ -43,6 +43,11 @@
 			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
 				document.write("<p class=\"normal-font center-text\">暂时无法提供 Mac OS X 的安装包</p>");
 			}
+			else if(osString.indexOf("linux")>-1)
+			{
+			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
+				document.write("<p class=\"normal-font center-text\">暂时无法提供 " + navigator.platform + " 的安装包</p>");
+			}
 			else
 			{
 				document.write("<p class=\"normal-font center-text\">很遗憾，Cuties 没有 " + navigator.platform + " 版本.</p>");
