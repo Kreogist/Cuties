@@ -39,7 +39,7 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
     mainButton->setFixedSize(32,32);
     pal=mainButton->palette();
     pal.setColor(QPalette::Window, QColor(0x9c, 0x9c, 0x9c));
-    pal.setColor(QPalette::Button, QColor(0xf7,0xcf,0x3d));
+    pal.setColor(QPalette::Button, QColor(0x9c, 0x9c, 0x9c));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));

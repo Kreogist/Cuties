@@ -638,10 +638,8 @@ void MainWindow::setDocOpenMenuState(bool state)
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
     }
-#ifdef Q_OS_MACX
     menuMainWindowItem[menuEdit]->menuAction()->setEnabled(state);
     menuMainWindowItem[menuEdit]->menuAction()->setVisible(state);
-#endif
 
     //View Menu
     for(i=actionViewCompileDock;i<=actionViewDebugCommandIO;i++)

@@ -36,11 +36,11 @@ signals:
     void newLanguageSet();
 
 public slots:
-    bool setLanguage(const QString &newLanguageName);
-    bool setLanguageIndex(int newLangaugeIndex);
+    void setLanguage(const QString &newLanguageName);
+    void setLanguageIndex(int newLangaugeIndex);
 
 private:
-    bool applyLangaugeSet(int languageIndex);
+    void applyLangaugeSet(int languageIndex);
 
     //Language file folder & language translation file
     QString localeFileDir, localeTranslation;

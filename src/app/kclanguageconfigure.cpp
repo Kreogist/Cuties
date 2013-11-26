@@ -23,11 +23,10 @@ KCLanguageConfigure::KCLanguageConfigure()
 
 void KCLanguageConfigure::readConfigure()
 {
-    QString configLanguageName;
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Language");
-    configLanguageName=settings.value("Language",
-                                      currentLanguageName).toString();
+    currentLanguageName=settings.value("Language",
+                                       currentLanguageName).toString();
     setLanguage(currentLanguageName);
     settings.endGroup();
 }
@@ -40,30 +39,26 @@ void KCLanguageConfigure::writeConfigure()
     settings.endGroup();
 }
 
-bool KCLanguageConfigure::setLanguage(const QString &newLanguageName)
+void KCLanguageConfigure::setLanguage(const QString &newLanguageName)
 {
     int newLanguageIndex=languageName.indexOf(newLanguageName);
     newLanguageIndex=newLanguageIndex==-1?0:newLanguageIndex;
-    return setLanguageIndex(newLanguageIndex);
+    setLanguageIndex(newLanguageIndex);
 }
 
-bool KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)
+void KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)
 {
     currentLanguageIndex=newLanguageIndex;
     currentLanguageName=languageName.at(currentLanguageIndex);
-    return applyLangaugeSet(currentLanguageIndex);
+    applyLangaugeSet(currentLanguageIndex);
 }
 
-bool KCLanguageConfigure::applyLangaugeSet(int languageIndex)
+void KCLanguageConfigure::applyLangaugeSet(int languageIndex)
 {
     qApp->removeTranslator(&appTrans);
     appTrans.load(languageFileList.at(languageIndex));
-    bool installStatus=qApp->installTranslator(&appTrans);
-    if(installStatus)
-    {
-        emit newLanguageSet();
-    }
-    return installStatus;
+    qApp->installTranslator(&appTrans);
+    emit newLanguageSet();
 }
 
 QStringList KCLanguageConfigure::getLanguageCaption() const
