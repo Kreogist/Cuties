@@ -142,9 +142,13 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionViewDebugControls], &QAction::triggered,
             this, &MainWindow::changeDebugControlVisibleState);
 
-    //View -> Debug Watch Dock
+    //View -> Debug Command IO
     connect(actionMainWindowItem[actionViewDebugCommandIO], &QAction::triggered,
             this, &MainWindow::changeDebugCommandIOVisibleState);
+
+    //View -> Debug Watch
+    connect(actionMainWindowItem[actionViewDebugWatch], &QAction::triggered,
+            this, &MainWindow::changeDebugWatchVisibleState);
 
     //View -> Judge Dock
     /*act[mnuViewJudgeDock]=new QAction(tr("Judge Dock"),this);
@@ -366,6 +370,11 @@ void MainWindow::createDocks()
     debugCommandIO=new KCDebugCommandIO(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
     debugCommandIO->hide();
+
+    //Debug Watch
+    debugWatch=new KCDebugWatch(this);
+    addDockWidget(Qt::RightDockWidgetArea, debugWatch, Qt::Vertical);
+    debugWatch->hide();
 }
 
 void MainWindow::showDebugDocks()
@@ -642,7 +651,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     menuMainWindowItem[menuEdit]->menuAction()->setVisible(state);
 
     //View Menu
-    for(i=actionViewCompileDock;i<=actionViewDebugCommandIO;i++)
+    for(i=actionViewCompileDock;i<=actionViewDebugWatch;i++)
     {
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
@@ -922,6 +931,11 @@ void MainWindow::changeDebugCommandIOVisibleState()
     debugCommandIO->setVisible(!debugCommandIO->isVisible());
 }
 
+void MainWindow::changeDebugWatchVisibleState()
+{
+    debugWatch->setVisible(!debugWatch->isVisible());
+}
+
 void MainWindow::changeJudgeDockVisibleState()
 {
     judgeDock->setVisible(!judgeDock->isVisible());
@@ -969,6 +983,7 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionViewCompileDock]=tr("Show or hide the Compile Dock.");
     actionStatusTips[actionViewDebugControls]=tr("Show or hide the Debug Controls.");
     actionStatusTips[actionViewDebugCommandIO]=tr("Show or hide the Debug Command Input/Output Dock.");
+    actionStatusTips[actionViewDebugWatch]=tr("Show or hide the Debug Watch dock.");
     #ifdef Q_OS_MACX
     actionStatusTips[actionViewFullscreen]=tr("Show or hide fullscreen mode of Cuties.");
     #endif
@@ -1016,6 +1031,7 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionViewCompileDock]=tr("Compiler Dock");
     actionMainWindowText[actionViewDebugControls]=tr("Debug Controls");
     actionMainWindowText[actionViewDebugCommandIO]=tr("Debug Command Dock");
+    actionMainWindowText[actionViewDebugWatch]=tr("Debug Watch Dock");
 #ifdef Q_OS_MACX
     actionMainWindowText[actionViewFullscreen]=tr("Enter Full Screen");
 #endif

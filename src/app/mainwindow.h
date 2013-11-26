@@ -54,6 +54,7 @@
 #include "kcconnectionhandler.h"
 #include "kcdebugcontrolpanel.h"
 #include "kcdebugcommandio.h"
+#include "kcdebugwatch.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -94,6 +95,7 @@ private slots:
     void changeCompileDockVisibleState();
     void changeDebugControlVisibleState();
     void changeDebugCommandIOVisibleState();
+    void changeDebugWatchVisibleState();
     void changeJudgeDockVisibleState();
     void showPreference();
 #ifdef Q_OS_MACX
@@ -147,6 +149,7 @@ private:
         actionViewCompileDock,
         actionViewDebugControls,
         actionViewDebugCommandIO,
+        actionViewDebugWatch,
         //mnuViewJudgeDock,
 #ifdef Q_OS_MACX
         actionViewFullscreen,
@@ -227,6 +230,7 @@ private:
 
     KCDebugControlPanel *debugControl;
     KCDebugCommandIO *debugCommandIO;
+    KCDebugWatch *debugWatch;
 
     void compileProgram();
 

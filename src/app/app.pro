@@ -97,7 +97,8 @@ SOURCES += \
     kcpreferencelangaugelist.cpp \
     Controls/GraphicButtons/kcgraphicbuttonbase.cpp \
     Controls/GraphicButtons/kcgraphicbuttonok.cpp \
-    kcwelcomewindow.cpp
+    kcwelcomewindow.cpp \
+    kcdebugwatch.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -171,7 +172,8 @@ HEADERS += \
     kcpreferencelangaugelist.h \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
     Controls/GraphicButtons/kcgraphicbuttonok.h \
-    kcwelcomewindow.h
+    kcwelcomewindow.h \
+    kcdebugwatch.h
 
 # Enable C++11
 CONFIG += c++11
