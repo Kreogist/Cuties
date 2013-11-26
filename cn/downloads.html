@@ -34,10 +34,18 @@
 			<p class="normal-font center-text">如果您不知道您应当下载哪个版本，请您下载下面这个安装包：</p>
 			<script>
 			var osString = navigator.platform.toLowerCase();
-			if(osString.indexOf("mac")>-1)
+			if(osString.indexOf("win")>-1)
+			{
+			    document.write("<a href=\"http://dl.vmall.com/c0akrb6hnj\"><p class=\"normal-font center-text\"><img src=\"../package_download.png\" /><br />Cuties MinGW 编译器 (7z, 91.15MB)</p></a>");
+			}
+			else if(osString.indexOf("mac")>-1)
 			{
 			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
 				document.write("<p class=\"normal-font center-text\">暂时无法提供 Mac OS X 的安装包</p>");
+			}
+			else
+			{
+				document.write("<p class=\"normal-font center-text\">很遗憾，Cuties 没有 " + osString + " 版本.</p>");
 			}
 			</script>
 			<p class="normal-font"><br />目前 Cuties 的所有版本下载：</p>
@@ -48,10 +56,10 @@
                         <ul class="dropdown">
                             <li><a class="menu-link" href="#">立即下载</a></li>
                             <li ><a class="menu-link" href="http://dl.vmall.com/c0akrb6hnj">MinGW 编译器 (7z, 91.15MB)</a></li>
-                            <li ><a class="menu-link" href="http://dl.vmall.com/c01la4za66">无编译器 (7z, 12.43MB) Mirror 1</a></li>
-                            <li ><a class="menu-link" href="http://pan.baidu.com/s/1DsUMo">无编译器 (7z, 12.43MB) Mirror 2</a></li>
-                            <li ><a class="menu-link" href="http://dl.vmall.com/c0vg51hhjx">无编译器 (zip, 12.43MB) Mirror 1</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1FuL8e">无编译器 (zip, 12.43MB) Mirror 2</a></li>
+                            <li ><a class="menu-link" href="http://dl.vmall.com/c01la4za66">无编译器 (7z, 12.43MB) 镜像 1</a></li>
+                            <li ><a class="menu-link" href="http://pan.baidu.com/s/1DsUMo">无编译器 (7z, 12.43MB) 镜像 2</a></li>
+                            <li ><a class="menu-link" href="http://dl.vmall.com/c0vg51hhjx">无编译器 (zip, 12.43MB) 镜像 1</a></li>
+							<li ><a class="menu-link" href="http://pan.baidu.com/s/1FuL8e">无编译器 (zip, 12.43MB) 镜像 2</a></li>
                         </ul>
                     </div>
                 </div>

@@ -34,10 +34,18 @@
 			<p class="normal-font center-text">If you don't know which version you should donwload, please get this:</p>
 			<script>
 			var osString = navigator.platform.toLowerCase();
-			if(osString.indexOf("mac")>-1)
+			if(osString.indexOf("win")>-1)
+			{
+			    document.write("<a href=\"http://dl.vmall.com/c0akrb6hnj\"><p class=\"normal-font center-text\"><img src=\"../package_download.png\" /><br />Cuties with MinGW Compiler (7z, 91.15MB)</p></a>");
+			}
+			else if(osString.indexOf("mac")>-1)
 			{
 			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
 				document.write("<p class=\"normal-font center-text\">Sorry, no Mac OS X version currently...</p>");
+			}
+			else
+			{
+				document.write("<p class=\"normal-font center-text\">Sorry, but we have no " + osString + " version.</p>");
 			}
 			</script>
 			<p class="normal-font"><br />All versions of Cuties provided: </p>
