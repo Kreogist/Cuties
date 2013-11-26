@@ -39,6 +39,7 @@
 #include "kccolorconfigure.h"
 #include "kcsearchwindow.h"
 #include "kccodeeditor.h"
+#include "kcwelcomewindow.h"
 
 class KCTabManager : public QTabWidget
 {
@@ -48,7 +49,6 @@ public:
     int getCurrentLineCount() const;
     int getCurrentLineNum() const;
     void restoreUnclosedFiles();
-
     KCCodeEditor *getCurrentEditor() const;
 
 signals:
@@ -91,8 +91,13 @@ public slots:
 protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
+    void resizeEvent(QResizeEvent *e);
 
 private slots:
+    void animateShowWelcomeWindow();
+    void animateHideWelcomeWindow();
+    void tabAddEvent();
+    void tabClearEvent();
     void setTabMoveableValue(bool newValue);
     void setTabCloseable(bool newValue);
 
@@ -102,6 +107,9 @@ private:
     KCCodeEditor *currentEditor;
     KCEditorConfigure *editorConfigureInstance;
     QTabBar *tabBarControl;
+    KCWelcomeWindow *welcomeWindow;
+
+    QPropertyAnimation *showWelcomeWindow, *hideWelcomeWindow;
 };
 
 #endif // KCTABMANAGER_H
