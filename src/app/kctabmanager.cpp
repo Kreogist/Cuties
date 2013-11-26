@@ -62,7 +62,6 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     newFileCount=1;
     currentEditor=NULL;
-    animateShowWelcomeWindow();
 }
 
 void KCTabManager::restoreUnclosedFiles()
@@ -485,6 +484,15 @@ void KCTabManager::resizeEvent(QResizeEvent *e)
                                    width()/4*3,
                                    height()/4*3);
     }
+}
+
+void KCTabManager::showEvent(QShowEvent *e)
+{
+    QTabWidget::showEvent(e);
+    welcomeWindow->setGeometry(width()/8,
+                               height()/8,
+                               width()/4*3,
+                               height()/4*3);
 }
 
 void KCTabManager::animateShowWelcomeWindow()

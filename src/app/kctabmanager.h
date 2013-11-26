@@ -92,6 +92,7 @@ protected:
     void closeEvent(QCloseEvent *e);
     void tabInserted(int index);
     void resizeEvent(QResizeEvent *e);
+    void showEvent(QShowEvent *e);
 
 private slots:
     void animateShowWelcomeWindow();
