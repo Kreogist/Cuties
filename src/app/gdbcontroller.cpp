@@ -49,8 +49,6 @@ void GdbController::readGdbStandardOutput()
         QString _msg=QString::fromUtf8(buf);
         _msg.remove('\n');
 
-        qDebug()<<_msg;
-
         parseLine(_msg);
     }
 }
