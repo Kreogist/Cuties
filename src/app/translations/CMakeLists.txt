@@ -8,3 +8,4 @@ if(Qt5LinguistTools_FOUND)
 qt5_add_translation(${PROJECT_BINARY_DIR}/Locale ${TRANSLATIONS_LIST})
 endif(Qt5LinguistTools_FOUND)
 
+configure_file(Locale.db ${PROJECT_BINARY_DIR}/Locale/Locale.db COPYONLY)
