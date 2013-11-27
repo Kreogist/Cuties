@@ -44,19 +44,8 @@ KCTabManager::KCTabManager(QWidget *parent) :
     setElideMode(Qt::ElideRight);
     setTabPosition(QTabWidget::South);
 
-    welcomeWindow=new KCWelcomeWindow(this);
-
-    showWelcomeWindow=new QPropertyAnimation(welcomeWindow, "geometry", this);
-    showWelcomeWindow->setEasingCurve(QEasingCurve::OutCubic);
-
-    hideWelcomeWindow=new QPropertyAnimation(welcomeWindow, "geometry", this);
-    hideWelcomeWindow->setEasingCurve(QEasingCurve::OutCubic);
-
-    connect(hideWelcomeWindow, &QPropertyAnimation::finished, welcomeWindow, &KCWelcomeWindow::hide);
-
     connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(onTabCloseRequested(int)));
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(onCurrentTabChange(int)));
-    connect(this, &KCTabManager::tabAdded, this, &KCTabManager::tabAddEvent);
     connect(editorConfigureInstance, SIGNAL(tabMoveableChanged(bool)),this,SLOT(setTabMoveableValue(bool)));
     connect(editorConfigureInstance, SIGNAL(tabCloseableChanged(bool)),this,SLOT(setTabCloseable(bool)));
 
@@ -119,6 +108,10 @@ int KCTabManager::open(const QString &filePath)
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
         connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
         emit tabAdded();
+        if(count()==1)
+        {
+            emit tabNonClear();
+        }
         return addTab(tmp,name);
     }
     else
@@ -202,6 +195,10 @@ void KCTabManager::newFile()
         currentTextCursorChanged();
 
         emit tabAdded();
+        if(count()==1)
+        {
+            emit tabNonClear();
+        }
     }
     else
     {
@@ -350,7 +347,6 @@ void KCTabManager::onTabCloseRequested(int index)
     if(this->count()==0)
     {
         emit tabClear();
-        tabClearEvent();
     }
 }
 
@@ -447,79 +443,6 @@ void KCTabManager::tabInserted(int index)
     }
 }
 
-void KCTabManager::resizeEvent(QResizeEvent *e)
-{
-    QTabWidget::resizeEvent(e);
-    if(showWelcomeWindow->state()==QPropertyAnimation::Running)
-    {
-        welcomeWindow->setGeometry(width()/8,
-                                   welcomeWindow->y(),
-                                   width()/4*3,
-                                   height()/4*3);
-        showWelcomeWindow->stop();
-        animateShowWelcomeWindow();
-        return;
-    }
-    if(hideWelcomeWindow->state()==QPropertyAnimation::Running)
-    {
-        welcomeWindow->setGeometry(width()/8,
-                                   welcomeWindow->y(),
-                                   width()/4*3,
-                                   height()/4*3);
-        hideWelcomeWindow->stop();
-        animateHideWelcomeWindow();
-        return;
-    }
-    if(welcomeWindow->isVisible())
-    {
-        welcomeWindow->setGeometry(width()/8,
-                                   height()/8,
-                                   width()/4*3,
-                                   height()/4*3);
-    }
-    else
-    {
-        welcomeWindow->setGeometry(width()/8,
-                                   -height(),
-                                   width()/4*3,
-                                   height()/4*3);
-    }
-}
-
-void KCTabManager::showEvent(QShowEvent *e)
-{
-    QTabWidget::showEvent(e);
-    welcomeWindow->setGeometry(width()/8,
-                               height()/8,
-                               width()/4*3,
-                               height()/4*3);
-}
-
-void KCTabManager::animateShowWelcomeWindow()
-{
-    welcomeWindow->show();
-    hideWelcomeWindow->stop();
-    QRect endValue=QRect(width()/8,
-                         height()/8,
-                         width()/4*3,
-                         height()/4*3);
-    showWelcomeWindow->setStartValue(welcomeWindow->geometry());
-    showWelcomeWindow->setEndValue(endValue);
-    showWelcomeWindow->start();
-}
-
-void KCTabManager::animateHideWelcomeWindow()
-{
-    showWelcomeWindow->stop();
-    QRect endValue=QRect(width()/8,
-                         -height(),
-                         width()/4*3,
-                         height()/4*3);
-    hideWelcomeWindow->setStartValue(welcomeWindow->geometry());
-    hideWelcomeWindow->setEndValue(endValue);
-    hideWelcomeWindow->start();
-}
-
 void KCTabManager::currentTextCursorChanged()
 {
     if(currentEditor!=NULL)
@@ -562,16 +485,6 @@ QString KCTabManager::textNowSelect()
         }
     }
     return QString("");
-}
-
-void KCTabManager::tabAddEvent()
-{
-    animateHideWelcomeWindow();
-}
-
-void KCTabManager::tabClearEvent()
-{
-    animateShowWelcomeWindow();
 }
 
 void KCTabManager::switchCurrentToLine(int nLineNum, int nColNum)

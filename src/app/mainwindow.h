@@ -39,6 +39,7 @@
 #endif
 
 #include "kcglobal.h"
+#include "kcwelcomewindow.h"
 #include "kcsidebar.h"
 #include "kccompiledock.h"
 #include "kcjudgedock.h"
@@ -91,6 +92,8 @@ public slots:
 private slots:
     void aboutQt();
     void aboutCuties();
+    void animateShowWelcomeWindow();
+    void animateHideWelcomeWindow();
     void changeSidebarVisibleState();
     void changeCompileDockVisibleState();
     void changeDebugControlVisibleState();
@@ -103,12 +106,17 @@ private slots:
 #endif
 
 protected:
-    void closeEvent(QCloseEvent *e);
+    void showEvent(QShowEvent *e);
     void resizeEvent(QResizeEvent *e);
+    void closeEvent(QCloseEvent *e);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 
 private:
+
+    KCWelcomeWindow *welcomeWindow;
+    QPropertyAnimation *showWelcomeWindow, *hideWelcomeWindow;
+
     //Enumerate MainWindow menu items
     enum menuMainWindow
     {
@@ -213,6 +221,14 @@ private:
     //Define MainWindow Toolbar buttons.
     QToolButton *buttonMainToolbarItem[mainToolbarButtonCount];
     QString toolButtonTips[mainToolbarButtonCount];
+
+    enum sidebarState
+    {
+        sidebarLock,
+        sidebarUnlock,
+        SidebarStateCount
+    };
+    QString sidebarStateString[SidebarStateCount];
 
     //Define MainWindow last time opened position.
     int lastPositionX, lastPostionY, lastPositionHeight, lastPostionWidth;

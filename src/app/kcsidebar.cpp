@@ -410,6 +410,11 @@ bool KCSideBar::getUnlockState() const
 void KCSideBar::setUnlockState(bool value)
 {
     unlockState = value;
+    //If is now expanded, ignore the animation request.
+    if(expandState)
+    {
+        return;
+    }
     if(unlockState)
     {
         pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));

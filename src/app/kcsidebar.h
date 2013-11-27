@@ -155,7 +155,6 @@ public:
 
     bool getExpandState() const;
     void setExpandState(bool value);
-
     bool getUnlockState() const;
     void setUnlockState(bool value);
 

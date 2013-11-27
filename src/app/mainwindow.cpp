@@ -54,6 +54,53 @@ MainWindow::MainWindow(QWidget *parent) :
     retranslateAndSet();
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &MainWindow::retranslateAndSet);
+
+    welcomeWindow=new KCWelcomeWindow(this);
+
+    showWelcomeWindow=new QPropertyAnimation(welcomeWindow, "geometry", this);
+    showWelcomeWindow->setEasingCurve(QEasingCurve::OutCubic);
+
+    hideWelcomeWindow=new QPropertyAnimation(welcomeWindow, "geometry", this);
+    hideWelcomeWindow->setEasingCurve(QEasingCurve::OutCubic);
+
+    connect(hideWelcomeWindow, &QPropertyAnimation::finished, welcomeWindow, &KCWelcomeWindow::hide);
+    connect(tabManager, &KCTabManager::tabNonClear, this, &MainWindow::animateHideWelcomeWindow);
+    connect(tabManager, &KCTabManager::tabClear, this, &MainWindow::animateShowWelcomeWindow);
+}
+
+void MainWindow::showEvent(QShowEvent *e)
+{
+    KCMainWindow::showEvent(e);
+    welcomeWindow->setGeometry(width()/8,
+                               height()/8,
+                               width()/4*3,
+                               height()/4*3);
+}
+
+
+void MainWindow::animateShowWelcomeWindow()
+{
+    hideWelcomeWindow->stop();
+    welcomeWindow->show();
+    QRect endValue=QRect(width()/8,
+                         height()/8,
+                         width()/4*3,
+                         height()/4*3);
+    showWelcomeWindow->setStartValue(welcomeWindow->geometry());
+    showWelcomeWindow->setEndValue(endValue);
+    showWelcomeWindow->start();
+}
+
+void MainWindow::animateHideWelcomeWindow()
+{
+    showWelcomeWindow->stop();
+    QRect endValue=QRect(width()/8,
+                         -height(),
+                         width()/4*3,
+                         height()/4*3);
+    hideWelcomeWindow->setStartValue(welcomeWindow->geometry());
+    hideWelcomeWindow->setEndValue(endValue);
+    hideWelcomeWindow->start();
 }
 
 void MainWindow::createActions()
@@ -746,6 +793,40 @@ void MainWindow::restoreSettings()
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     KCMainWindow::resizeEvent(e);
+    if(showWelcomeWindow->state()==QPropertyAnimation::Running)
+    {
+        welcomeWindow->setGeometry(width()/8,
+                                   welcomeWindow->y(),
+                                   width()/4*3,
+                                   height()/4*3);
+        showWelcomeWindow->stop();
+        animateShowWelcomeWindow();
+        return;
+    }
+    if(hideWelcomeWindow->state()==QPropertyAnimation::Running)
+    {
+        welcomeWindow->setGeometry(width()/8,
+                                   welcomeWindow->y(),
+                                   width()/4*3,
+                                   height()/4*3);
+        hideWelcomeWindow->stop();
+        animateHideWelcomeWindow();
+        return;
+    }
+    if(welcomeWindow->isVisible())
+    {
+        welcomeWindow->setGeometry(width()/8,
+                                   height()/8,
+                                   width()/4*3,
+                                   height()/4*3);
+    }
+    else
+    {
+        welcomeWindow->setGeometry(width()/8,
+                                   -height(),
+                                   width()/4*3,
+                                   height()/4*3);
+    }
     if(this->isMaximized())
     {
         lastPositionHeight=e->oldSize().height();
@@ -914,6 +995,7 @@ void MainWindow::onActionSearchOnline()
 void MainWindow::changeSidebarVisibleState()
 {
     sideBar->setUnlockState(!sideBar->getUnlockState());
+    actionMainWindowItem[actionViewSidebar]->setText(sideBar->getUnlockState()?sidebarStateString[sidebarLock]:sidebarStateString[sidebarUnlock]);
 }
 
 void MainWindow::changeCompileDockVisibleState()
@@ -954,6 +1036,9 @@ void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
 
 void MainWindow::retranslateAndSet()
 {
+    sidebarStateString[sidebarLock]=tr("Lock Sidebar");
+    sidebarStateString[sidebarUnlock]=tr("Unlock sidebar");
+
     menuMainWindowText[menuFile]=tr("File");
     menuMainWindowText[menuEdit]=tr("Edit");
     menuMainWindowText[menuView]=tr("View");
@@ -979,7 +1064,7 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionEditCopy]=tr("Copy the selection to the Clipboard.");
     actionStatusTips[actionEditPaste]=tr("Insert Clipboard contents.");
     actionStatusTips[actionEditSelectAll]=tr("Select the entire document.");
-    actionStatusTips[actionViewSidebar]=tr("Show or hide the Sidebar.");
+    actionStatusTips[actionViewSidebar]=tr("Lock or unlock the sidebar.");
     actionStatusTips[actionViewCompileDock]=tr("Show or hide the Compile Dock.");
     actionStatusTips[actionViewDebugControls]=tr("Show or hide the Debug Controls.");
     actionStatusTips[actionViewDebugCommandIO]=tr("Show or hide the Debug Command Input/Output Dock.");
@@ -995,7 +1080,7 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionExecuteCompile]=tr("Compile the active file.");
     actionStatusTips[actionExecuteRun]=tr("Run the compiled execution.");
     actionStatusTips[actionDebugStart]=tr("Start GNU Debugger to debug your program.");
-    actionStatusTips[actionDebugStop]=tr("Stop debugging");
+    actionStatusTips[actionDebugStop]=tr("Stop debugging.");
     actionStatusTips[actionDebugRunToCursor]=tr("Run to the current cursor line.");
     actionStatusTips[actionDebugNext]=tr("Continue to the next source line in the current (innermost) stack frame.");
     actionStatusTips[actionDebugContinue]=tr("Resume program execution, at the address where your program last stopped; any breakpoints set at that address are bypassed. ");
@@ -1027,7 +1112,7 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionEditCopy]=tr("Copy");
     actionMainWindowText[actionEditPaste]=tr("Paste");
     actionMainWindowText[actionEditSelectAll]=tr("Select All");
-    actionMainWindowText[actionViewSidebar]=tr("Sidebar");
+    actionMainWindowText[actionViewSidebar]=sideBar->getUnlockState()?sidebarStateString[sidebarLock]:sidebarStateString[sidebarUnlock];
     actionMainWindowText[actionViewCompileDock]=tr("Compiler Dock");
     actionMainWindowText[actionViewDebugControls]=tr("Debug Controls");
     actionMainWindowText[actionViewDebugCommandIO]=tr("Debug Command Dock");
