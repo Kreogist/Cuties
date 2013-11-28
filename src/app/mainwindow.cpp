@@ -405,11 +405,16 @@ void MainWindow::createDocks()
 
     //Sidebar Dock
     sideBar=new KCSideBar(this);
+    sideBar->hide();
     addDockWidget(Qt::LeftDockWidgetArea,sideBar);
     connect(sideBar, SIGNAL(historyRequiredOpenFiles(QString)),
             tabManager, SLOT(openAndJumpTo(QString)));
     connect(sideBar, SIGNAL(clipboardRequiredInsertText(QString)),
             tabManager, SLOT(insertToCurrentEditor(QString)));
+    connect(tabManager, &KCTabManager::tabNonClear,
+            sideBar, &KCSideBar::show);
+    connect(tabManager, &KCTabManager::tabClear,
+            sideBar, &KCSideBar::hide);
 
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
@@ -703,11 +708,15 @@ void MainWindow::setDocOpenMenuState(bool state)
     menuMainWindowItem[menuEdit]->menuAction()->setVisible(state);
 
     //View Menu
-    for(i=actionViewCompileDock;i<=actionViewDebugWatch;i++)
+    for(i=actionViewSidebar;i<=actionViewDebugWatch;i++)
     {
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
     }
+#ifndef Q_OS_MACX
+    menuMainWindowItem[menuView]->menuAction()->setEnabled(state);
+    menuMainWindowItem[menuView]->menuAction()->setVisible(state);
+#endif
 
     //Search Menu
     for(i=actionSearchFind; i<=actionSearchGoto; i++)

@@ -18,6 +18,7 @@
  */
 
 #include <QToolButton>
+#include <QApplication>
 
 #include "kctabmanager.h"
 
@@ -129,6 +130,12 @@ void KCTabManager::openAndJumpTo(const QString &filePath)
 void KCTabManager::open()
 {
     QStringList fileNameList;
+    QString historyDirPath=KCHistoryConfigure::getInstance()->getHistoryDir();
+    QFileInfo historyDirDetect(historyDirPath);
+    if(!historyDirDetect.exists())
+    {
+        historyDirPath=qApp->applicationDirPath();
+    }
     if(KCGeneralConfigure::getInstance()->getUseDefaultLanguageWhenOpen())
     {
         QString defaultSelectFilter;
@@ -148,7 +155,7 @@ void KCTabManager::open()
         }
         fileNameList=QFileDialog::getOpenFileNames(this,
                        tr("Open File"),
-                       KCHistoryConfigure::getInstance()->getHistoryDir(),
+                       historyDirPath,
                        KCGeneralConfigure::getInstance()->getStrFileFilter(),
                        &defaultSelectFilter);
     }
@@ -156,7 +163,7 @@ void KCTabManager::open()
     {
         fileNameList=QFileDialog::getOpenFileNames(this,
                        tr("Open File"),
-                       KCHistoryConfigure::getInstance()->getHistoryDir(),
+                       historyDirPath,
                        KCGeneralConfigure::getInstance()->getStrFileFilter());
     }
 
