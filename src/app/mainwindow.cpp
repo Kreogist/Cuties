@@ -28,8 +28,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setObjectName("MainWindow");
     //Set MainWindow title.
     setWindowTitle(tr(trWindowTitle.toLatin1()));
-    //Minimum Window Size.
-    setMinimumSize(500,450);
 
     //Set Palette.
     QPalette pal = palette();
@@ -67,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(hideWelcomeWindow, &QPropertyAnimation::finished, welcomeWindow, &KCWelcomeWindow::hide);
     connect(tabManager, &KCTabManager::tabNonClear, this, &MainWindow::animateHideWelcomeWindow);
     connect(tabManager, &KCTabManager::tabClear, this, &MainWindow::animateShowWelcomeWindow);
+    connect(welcomeWindow, &KCWelcomeWindow::requiredNewFile,
+            tabManager, &KCTabManager::newFileWithHighlight);
 }
 
 void MainWindow::showEvent(QShowEvent *e)

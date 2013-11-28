@@ -29,6 +29,8 @@ private slots:
 protected:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
     QColor backgroundColor;
@@ -43,6 +45,9 @@ class KCWelcomeWindowNewFile : public QWidget
     Q_OBJECT
 public:
     explicit KCWelcomeWindowNewFile(QWidget *parent = 0);
+
+signals:
+    void requiredNewFile(QString fileSuffix);
 
 public slots:
     void retranslate();
@@ -98,6 +103,7 @@ public:
     ~KCWelcomeWindow();
 
 signals:
+    void requiredNewFile(QString fileSuffix);
 
 public slots:
     void retranslate();

@@ -24,6 +24,8 @@ KCWelcomeWindowNewFileButton::KCWelcomeWindowNewFileButton(QWidget *parent) :
     buttonLayout->addSpacing(20);
 
     imageLabel=new QLabel(this);
+    imageLabel->setFixedSize(32,32);
+    imageLabel->setScaledContents(true);
     buttonLayout->addWidget(imageLabel);
 
     textLabel=new QLabel(this);
@@ -64,6 +66,19 @@ void KCWelcomeWindowNewFileButton::leaveEvent(QEvent *e)
     setBackgroundAlpha(0);
 }
 
+void KCWelcomeWindowNewFileButton::mousePressEvent(QMouseEvent *e)
+{
+    setBackgroundAlpha(100);
+    QWidget::mousePressEvent(e);
+}
+
+void KCWelcomeWindowNewFileButton::mouseReleaseEvent(QMouseEvent *e)
+{
+    setBackgroundAlpha(255);
+    QWidget::mouseReleaseEvent(e);
+    emit requiredNewFile(emitFileSuffix);
+}
+
 void KCWelcomeWindowNewFileButton::setBackgroundColor(const QColor &value)
 {
     backgroundColor = value;
@@ -82,7 +97,7 @@ KCWelcomeWindowNewFile::KCWelcomeWindowNewFile(QWidget *parent) :
     retranslate();
     setContentsMargins(0,0,0,0);
 
-    setFixedWidth(400);
+    setFixedWidth(300);
 
     QFont titleFont=font();
     titleFont.setBold(true);
@@ -143,6 +158,8 @@ KCWelcomeWindowNewFile::KCWelcomeWindowNewFile(QWidget *parent) :
         newFileButtons[i]->setFileSuffix(fileSuffixs[i]);
         newFileButtons[i]->setFont(labelFont);
         newFileButtons[i]->setImage(fileIcons[i]);
+        connect(newFileButtons[i], &KCWelcomeWindowNewFileButton::requiredNewFile,
+                this, &KCWelcomeWindowNewFile::requiredNewFile);
         newFileListWidgetLayout->addWidget(newFileButtons[i]);
     }
     newFileListWidgetLayout->addStretch();
@@ -153,10 +170,10 @@ void KCWelcomeWindowNewFile::retranslate()
 {
     newFileTitleCaption=tr("New Source File");
 
-    newFileButtonCaption[plainTextType]="New Plain Text File";
-    newFileButtonCaption[cppType]="New C++ Source Code File";
-    newFileButtonCaption[cType]="New C Source Code File";
-    newFileButtonCaption[pascalType]="New Pascal Source Code File";
+    newFileButtonCaption[plainTextType]=tr("New Plain Text File");
+    newFileButtonCaption[cppType]=tr("New C++ Source Code File");
+    newFileButtonCaption[cType]=tr("New C Source Code File");
+    newFileButtonCaption[pascalType]=tr("New Pascal Source Code File");
 }
 
 void KCWelcomeWindowNewFile::retranslateAndSet()
@@ -256,7 +273,7 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     QWidget *welcomeBanner=new QWidget(this);
     welcomeBanner->setAutoFillBackground(true);
     welcomeBanner->setContentsMargins(15,0,15,0);
-    welcomeBanner->setFixedHeight(125);
+    welcomeBanner->setFixedHeight(100);
 
     bannerBackground=new QLabel(welcomeBanner);
     bannerBackground->setFixedHeight(125);
@@ -270,7 +287,7 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
 
     QLabel *cutiesLogo=new QLabel(welcomeBanner);
     cutiesLogo->setContentsMargins(0,0,0,0);
-    cutiesLogo->setFixedSize(100,100);
+    cutiesLogo->setFixedSize(90, 90);
     cutiesLogo->setScaledContents(true);
     cutiesLogo->setPixmap(QPixmap(":/mainicon/image/Cuties.png"));
     bannerLayout->addWidget(cutiesLogo);
@@ -301,6 +318,9 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     contentsLayout->addWidget(openFileContentWidget);
 
     welcomeLayout->addLayout(contentsLayout,1);
+
+    connect(newFileContentWidget, &KCWelcomeWindowNewFile::requiredNewFile,
+            this, &KCWelcomeWindow::requiredNewFile);
 }
 
 KCWelcomeWindow::~KCWelcomeWindow()
