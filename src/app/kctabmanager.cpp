@@ -108,7 +108,7 @@ int KCTabManager::open(const QString &filePath)
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
         connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
         emit tabAdded();
-        if(count()==1)
+        if(count()==0)  //before the tab be added, count() == 0
         {
             emit tabNonClear();
         }
@@ -195,7 +195,7 @@ bool KCTabManager::newFile()
         currentTextCursorChanged();
 
         emit tabAdded();
-        if(count()==1)
+        if(count()==0)  //before the tab be added, count() == 0
         {
             emit tabNonClear();
         }

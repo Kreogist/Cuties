@@ -19,6 +19,7 @@
 #include "mainwindow.h"
 #include "kcfontconfigure.h"
 #include "kclanguageconfigure.h"
+#include "kchistoryconfigure.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
@@ -1242,6 +1243,8 @@ void MainWindow::connectDebugDockWithCurrEditor()
     {
         debugCommandIO->setGdbInstance(gdbControllerInstance);
         debugControl->setGdbController(gdbControllerInstance);
+        debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getLocalVarModel());
+        debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
     }
 }
 
