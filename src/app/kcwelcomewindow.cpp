@@ -10,6 +10,7 @@
 
 #include "kcwelcomewindow.h"
 #include "kchistoryconfigure.h"
+#include "kclanguageconfigure.h"
 
 KCWelcomeWindowNewFileButton::KCWelcomeWindowNewFileButton(QWidget *parent) :
     QWidget(parent)
@@ -182,6 +183,10 @@ void KCWelcomeWindowNewFile::retranslateAndSet()
 {
     retranslate();
     newFileCaption->setText(newFileTitleCaption);
+    for(int i=plainTextType; i<NewFileSuffixCount; i++)
+    {
+        newFileButtons[i]->setText(newFileButtonCaption[i]);
+    }
 }
 
 KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
@@ -218,12 +223,13 @@ KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
 
 void KCWelcomeWindowOpenFile::retranslate()
 {
-    openFileTitleCaption=tr("Open Source File");
+    openFileTitleCaption=tr("Open an Exsisting Source File");
 }
 
 void KCWelcomeWindowOpenFile::retranslateAndSet()
 {
     retranslate();
+    openFileCaption->setText(openFileTitleCaption);
 }
 
 void KCWelcomeWindowOpenFile::setBackgroundAlpha(int newAlpha)
@@ -274,7 +280,7 @@ KCWelcomeWindowHistoryList::KCWelcomeWindowHistoryList(QWidget *parent) :
     recentLayout->setSpacing(0);
     setLayout(recentLayout);
 
-    KCWelcomeWindowOpenFile *openFileBanner=new KCWelcomeWindowOpenFile(this);
+    openFileBanner=new KCWelcomeWindowOpenFile(this);
     recentLayout->addWidget(openFileBanner);
     connect(openFileBanner, &KCWelcomeWindowOpenFile::requiredOpenFile,
             this, &KCWelcomeWindowHistoryList::requiredOpenFile);
@@ -285,7 +291,7 @@ KCWelcomeWindowHistoryList::KCWelcomeWindowHistoryList(QWidget *parent) :
     recentWidgetLayout->setContentsMargins(5,0,15,15);
     recentWidgetLayout->setSpacing(0);
 
-    QLabel *recentCaption=new QLabel(this);
+    recentCaption=new QLabel(this);
     recentCaption->setText(recentTitle);
     recentWidgetLayout->addWidget(recentCaption);
 
@@ -311,6 +317,8 @@ void KCWelcomeWindowHistoryList::retranslate()
 void KCWelcomeWindowHistoryList::retranslateAndSet()
 {
     retranslate();
+    openFileBanner->retranslateAndSet();
+    recentCaption->setText(recentTitle);
 }
 
 void KCWelcomeWindowHistoryList::dblClickHistoryItems(QModelIndex itemIndex)
@@ -321,9 +329,6 @@ void KCWelcomeWindowHistoryList::dblClickHistoryItems(QModelIndex itemIndex)
 KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     QWidget(parent)
 {
-    //Get translate
-    retranslate();
-
     //Set properties
     setAutoFillBackground(true);
 
@@ -360,16 +365,31 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     bannerLayout->addWidget(cutiesLogo);
 
     QFont titleFont=font();
-    titleFont.setBold(true);
-    titleFont.setPixelSize(30);
+    titleFont.setPixelSize(15);
 
+    captionLayout=new QVBoxLayout();
+    captionLayout->setContentsMargins(0,0,0,0);
+    captionLayout->setSpacing(0);
+
+    QLabel *kreogistCaption=new QLabel(this);
+    titleFont.setBold(true);
+    kreogistCaption->setFont(titleFont);
+    kreogistCaption->setText("Kreogist Cuties " + qApp->applicationVersion());
+    pal=kreogistCaption->palette();
+    pal.setColor(QPalette::WindowText, QColor(255,255,255));
+    kreogistCaption->setPalette(pal);
     QLabel *cutiesCaption=new QLabel(this);
+    titleFont.setPixelSize(30);
     cutiesCaption->setFont(titleFont);
     cutiesCaption->setText("Cuties");
-    pal=cutiesCaption->palette();
-    pal.setColor(QPalette::WindowText, QColor(255,255,255));
     cutiesCaption->setPalette(pal);
-    bannerLayout->addWidget(cutiesCaption);
+
+    captionLayout->addStretch();
+    captionLayout->addWidget(cutiesCaption);
+    captionLayout->addWidget(kreogistCaption);
+    captionLayout->addStretch();
+
+    bannerLayout->addLayout(captionLayout);
     bannerLayout->addStretch();
 
     welcomeLayout->addWidget(welcomeBanner);
@@ -378,10 +398,10 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     contentsLayout->setContentsMargins(0,0,0,0);
     contentsLayout->setSpacing(0);
 
-    KCWelcomeWindowNewFile *newFileContentWidget=new KCWelcomeWindowNewFile(this);
+    newFileContentWidget=new KCWelcomeWindowNewFile(this);
     contentsLayout->addWidget(newFileContentWidget);
 
-    KCWelcomeWindowHistoryList *openFileContentWidget=new KCWelcomeWindowHistoryList(this);
+    openFileContentWidget=new KCWelcomeWindowHistoryList(this);
     contentsLayout->addWidget(openFileContentWidget);
 
     welcomeLayout->addLayout(contentsLayout,1);
@@ -392,21 +412,20 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
             this, &KCWelcomeWindow::requiredOpenFile);
     connect(openFileContentWidget, &KCWelcomeWindowHistoryList::requiredOpenRecentFile,
             this, &KCWelcomeWindow::requiredOpenRecentFile);
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCWelcomeWindow::retranslateAndSet);
 }
 
 KCWelcomeWindow::~KCWelcomeWindow()
 {
     contentsLayout->deleteLater();
-}
-
-void KCWelcomeWindow::retranslate()
-{
-
+    captionLayout->deleteLater();
 }
 
 void KCWelcomeWindow::retranslateAndSet()
 {
-    retranslate();
+    newFileContentWidget->retranslateAndSet();
+    openFileContentWidget->retranslateAndSet();
 }
 
 void KCWelcomeWindow::resizeEvent(QResizeEvent *e)

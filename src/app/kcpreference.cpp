@@ -20,7 +20,7 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     setAutoFillBackground(true);
 
     //Set Palette
-    QPalette pal=this->palette();
+    QPalette pal=palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
@@ -411,6 +411,9 @@ KCPreference::KCPreference(QWidget *parent) :
     connect(languageSelector, &KCPreferenceEmbeddedLanguage::requiredHideLanguageSelector,
             this, &KCPreference::hideLanguageSelector);
 
+    connect(languageSelectorHide, &QPropertyAnimation::finished,
+            languageSelector, &KCPreferenceEmbeddedLanguage::hide);
+
     connect(commander, &KCPreferenceCommander::requireYes,
             this, &KCPreference::yesAction);
     connect(commander, &KCPreferenceCommander::requireCancel,
@@ -460,7 +463,7 @@ void KCPreference::hideLanguageSelector()
 {
     languageSelectorShow->stop();
     QRect endValue=QRect(width()/4,
-                         -height()/2 - 50,
+                         -height()-50,
                          width()/2,
                          height()/2);
     languageSelectorHide->setStartValue(languageSelector->geometry());
@@ -471,6 +474,7 @@ void KCPreference::hideLanguageSelector()
 void KCPreference::showLanguageSelector()
 {
     languageSelectorHide->stop();
+    languageSelector->show();
     QRect endValue=QRect(width()/4,
                          0,
                          width()/2,

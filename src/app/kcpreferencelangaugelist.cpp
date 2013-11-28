@@ -1,5 +1,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QScrollBar>
 #include <QSignalMapper>
 
 #include "kcpreferencelangaugelist.h"
@@ -78,6 +79,10 @@ KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
     //Set signal mapper
     QSignalMapper *languageChangeMapper=new QSignalMapper(this);
 
+    QPalette pal=palette();
+    pal.setColor(QPalette::Window, QColor(255,255,255));
+    setPalette(pal);
+
     //Set content widget
     languageContents=new QWidget(this);
     languageContents->setContentsMargins(0,0,0,0);
@@ -113,4 +118,17 @@ KCPreferenceLangaugeListItem *KCPreferenceLangaugeList::addLanguageItem(const QS
     newLanguageItem->setLanguageName(languageName);
     newLanguageItem->setLanguageIcon(languageIcon);
     return newLanguageItem;
+}
+
+void KCPreferenceLangaugeList::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    if(verticalScrollBar()->isVisible())
+    {
+        languageContents->setFixedWidth(width() - verticalScrollBar()->width()-2);
+    }
+    else
+    {
+        languageContents->setFixedWidth(width()-2);
+    }
 }

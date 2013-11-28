@@ -46,6 +46,8 @@ signals:
 
 public slots:
 
+protected:
+    void resizeEvent(QResizeEvent *e);
 
 private:
     KCLanguageConfigure *instance;

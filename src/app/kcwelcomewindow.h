@@ -124,6 +124,8 @@ private:
     QListView *recentListWidget;
     QString recentTitle;
     QVBoxLayout *recentWidgetLayout;
+    KCWelcomeWindowOpenFile *openFileBanner;
+    QLabel *recentCaption;
 };
 
 class KCWelcomeWindow : public QWidget
@@ -139,7 +141,6 @@ signals:
     void requiredOpenRecentFile(QString fileName);
 
 public slots:
-    void retranslate();
     void retranslateAndSet();
 
 protected:
@@ -147,7 +148,11 @@ protected:
 
 private:
     QHBoxLayout *contentsLayout;
+    QVBoxLayout *captionLayout;
     QLabel *bannerBackground;
+
+    KCWelcomeWindowNewFile *newFileContentWidget;
+    KCWelcomeWindowHistoryList *openFileContentWidget;
 };
 
 #endif // KCWELCOMEWINDOW_H
