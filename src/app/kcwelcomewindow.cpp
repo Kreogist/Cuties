@@ -100,7 +100,7 @@ KCWelcomeWindowNewFile::KCWelcomeWindowNewFile(QWidget *parent) :
     retranslate();
     setContentsMargins(0,0,0,0);
 
-    setFixedWidth(300);
+    setFixedWidth(350);
 
     QFont titleFont=font();
     titleFont.setBold(true);
