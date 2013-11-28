@@ -523,7 +523,7 @@ void MainWindow::createMenu()
 #ifdef Q_OS_MACX
         switch(i)
         {
-        case actionViewDebugCommandIO:
+        case actionViewDebugWatch:
             menuMainWindowItem[menuView]->addSeparator();
         }
 
