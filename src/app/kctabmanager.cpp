@@ -180,7 +180,7 @@ void KCTabManager::open()
     currentTextCursorChanged();
 }
 
-void KCTabManager::newFile()
+bool KCTabManager::newFile()
 {
     KCCodeEditor *tmp=new KCCodeEditor(this);
     if(tmp!=NULL)
@@ -199,14 +199,25 @@ void KCTabManager::newFile()
         {
             emit tabNonClear();
         }
+        return true;
     }
-    else
+    QErrorMessage error(this);
+    error.showMessage(tr("out of memmory!"));
+    error.exec();
+    return false;
+}
+
+bool KCTabManager::newFileWithHighlight(const QString &fileSuffix)
+{
+    if(newFile() && Q_LIKELY(currentEditor!=NULL))
     {
-        QErrorMessage error(this);
-        error.showMessage(tr("out of memmory!"));
-        error.exec();
+        KCLanguageMode *newFileLanguageMode=currentEditor->langMode();
+        newFileLanguageMode->setFileSuffix(fileSuffix);
+        currentEditor->setLanguageMode(newFileLanguageMode);
     }
 }
+
+
 
 void KCTabManager::switchNextTab()
 {

@@ -62,6 +62,7 @@ public:
     bool isModified();
     QTextDocument *document();
     KCLanguageMode *langMode() const;
+    void setLanguageMode(KCLanguageMode *value);
     bool getOverwriteMode();
 
     void insertTextAtCursor(QString insertText);

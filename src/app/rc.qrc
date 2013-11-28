@@ -15,6 +15,7 @@
         <file>image/ToolMenuIcon.png</file>
         <file>image/BreakPoint.png</file>
         <file>image/Splash.png</file>
+        <file>image/Banner.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>
@@ -109,4 +110,13 @@
         <file>image/Buttons/ok_hover.png</file>
         <file>image/Buttons/ok_normal.png</file>
     </qresource>
+    <qresource prefix="/WelcomeWindow">
+        <file>image/Welcome/CreateNewFile.png</file>
+        <file>image/Welcome/OpenFile.png</file>
+        <file>image/FileAssociate/C/C_64x64.png</file>
+        <file>image/FileAssociate/Cpp/Cpp_64x64.png</file>
+        <file>image/FileAssociate/Pas/Pas_64x64.png</file>
+        <file>image/FileAssociate/PlainText/PlainText_64x64.png</file>
+    </qresource>
+    <qresource prefix="/FileAssociation"/>
 </RCC>

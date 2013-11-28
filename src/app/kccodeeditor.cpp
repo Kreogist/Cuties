@@ -153,13 +153,18 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
                                  editor, &KCTextEditor::showPreviousSearchResult);
 }
 
+void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
+{
+    languageMode = value;
+}
+
 void KCCodeEditor::showCompileBar()
 {
     /*if(!currentCompileProgress->isVisible())
     {*/
-        currentCompileProgress->setFixedWidth(width()/3);
+    currentCompileProgress->setFixedWidth(width()/3);
 
-        QPropertyAnimation *compileAnime=new QPropertyAnimation(currentCompileProgress,"geometry");
+    QPropertyAnimation *compileAnime=new QPropertyAnimation(currentCompileProgress,"geometry");
         QRect animeEndPos=currentCompileProgress->geometry();
         animeEndPos.setLeft(editor->width()/2-currentCompileProgress->width()/2);
         animeEndPos.setTop(0);
