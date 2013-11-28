@@ -67,6 +67,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tabManager, &KCTabManager::tabClear, this, &MainWindow::animateShowWelcomeWindow);
     connect(welcomeWindow, &KCWelcomeWindow::requiredNewFile,
             tabManager, &KCTabManager::newFileWithHighlight);
+    connect(welcomeWindow, SIGNAL(requiredOpenFile()),
+            tabManager, SLOT(open()));
+    connect(welcomeWindow, SIGNAL(requiredOpenRecentFile(QString)),
+            tabManager, SLOT(openAndJumpTo(QString)));
 }
 
 void MainWindow::showEvent(QShowEvent *e)

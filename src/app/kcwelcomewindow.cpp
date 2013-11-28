@@ -6,8 +6,10 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QResizeEvent>
+#include <QListView>
 
 #include "kcwelcomewindow.h"
+#include "kchistoryconfigure.h"
 
 KCWelcomeWindowNewFileButton::KCWelcomeWindowNewFileButton(QWidget *parent) :
     QWidget(parent)
@@ -182,7 +184,6 @@ void KCWelcomeWindowNewFile::retranslateAndSet()
     newFileCaption->setText(newFileTitleCaption);
 }
 
-
 KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
     QWidget(parent)
 {
@@ -194,7 +195,6 @@ KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
     backgroundColor=QColor(0xf7,0xcf,0x3d);
 
     QHBoxLayout *openFileLayout=new QHBoxLayout(this);
-    openFileLayout->setContentsMargins(0,0,0,0);
     openFileLayout->setSpacing(0);
     setLayout(openFileLayout);
 
@@ -202,7 +202,6 @@ KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
     titleFont.setBold(true);
     titleFont.setPixelSize(16);
 
-    openFileLayout->addStretch();
     QLabel *openFileIcon=new QLabel(this);
     openFileIcon->setFixedSize(64,64);
     openFileIcon->setScaledContents(true);
@@ -219,7 +218,7 @@ KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
 
 void KCWelcomeWindowOpenFile::retranslate()
 {
-    openFileTitleCaption="Open Source File";
+    openFileTitleCaption=tr("Open Source File");
 }
 
 void KCWelcomeWindowOpenFile::retranslateAndSet()
@@ -246,9 +245,77 @@ void KCWelcomeWindowOpenFile::leaveEvent(QEvent *e)
     setBackgroundAlpha(0);
 }
 
+void KCWelcomeWindowOpenFile::mousePressEvent(QMouseEvent *e)
+{
+    setBackgroundAlpha(100);
+    QWidget::mousePressEvent(e);
+}
+
+void KCWelcomeWindowOpenFile::mouseReleaseEvent(QMouseEvent *e)
+{
+    setBackgroundAlpha(255);
+    QWidget::mouseReleaseEvent(e);
+    emit requiredOpenFile();
+}
+
 void KCWelcomeWindowOpenFile::setBackgroundColor(const QColor &value)
 {
     backgroundColor = value;
+}
+
+KCWelcomeWindowHistoryList::KCWelcomeWindowHistoryList(QWidget *parent) :
+    QWidget(parent)
+{
+    //Get translation
+    retranslate();
+
+    QVBoxLayout *recentLayout=new QVBoxLayout(this);
+    recentLayout->setContentsMargins(0,0,0,0);
+    recentLayout->setSpacing(0);
+    setLayout(recentLayout);
+
+    KCWelcomeWindowOpenFile *openFileBanner=new KCWelcomeWindowOpenFile(this);
+    recentLayout->addWidget(openFileBanner);
+    connect(openFileBanner, &KCWelcomeWindowOpenFile::requiredOpenFile,
+            this, &KCWelcomeWindowHistoryList::requiredOpenFile);
+
+    recentLayout->addSpacing(5);
+
+    recentWidgetLayout=new QVBoxLayout();
+    recentWidgetLayout->setContentsMargins(5,0,15,15);
+    recentWidgetLayout->setSpacing(0);
+
+    QLabel *recentCaption=new QLabel(this);
+    recentCaption->setText(recentTitle);
+    recentWidgetLayout->addWidget(recentCaption);
+
+    recentListWidget=new QListView(this);
+    recentListWidget->setModel(KCHistoryConfigure::getInstance()->getRecentOpenedFileModel());
+    connect(recentListWidget, &QListView::activated,
+            this, &KCWelcomeWindowHistoryList::dblClickHistoryItems);
+
+    recentWidgetLayout->addWidget(recentListWidget);
+    recentLayout->addLayout(recentWidgetLayout);
+}
+
+KCWelcomeWindowHistoryList::~KCWelcomeWindowHistoryList()
+{
+    recentWidgetLayout->deleteLater();
+}
+
+void KCWelcomeWindowHistoryList::retranslate()
+{
+    recentTitle=tr("Recent Opened Files:");
+}
+
+void KCWelcomeWindowHistoryList::retranslateAndSet()
+{
+    retranslate();
+}
+
+void KCWelcomeWindowHistoryList::dblClickHistoryItems(QModelIndex itemIndex)
+{
+    emit requiredOpenRecentFile(KCHistoryConfigure::getInstance()->getRecentFileList().at(itemIndex.row()).fileFullPath);
 }
 
 KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
@@ -314,13 +381,17 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     KCWelcomeWindowNewFile *newFileContentWidget=new KCWelcomeWindowNewFile(this);
     contentsLayout->addWidget(newFileContentWidget);
 
-    KCWelcomeWindowOpenFile *openFileContentWidget=new KCWelcomeWindowOpenFile(this);
+    KCWelcomeWindowHistoryList *openFileContentWidget=new KCWelcomeWindowHistoryList(this);
     contentsLayout->addWidget(openFileContentWidget);
 
     welcomeLayout->addLayout(contentsLayout,1);
 
     connect(newFileContentWidget, &KCWelcomeWindowNewFile::requiredNewFile,
             this, &KCWelcomeWindow::requiredNewFile);
+    connect(openFileContentWidget, &KCWelcomeWindowHistoryList::requiredOpenFile,
+            this, &KCWelcomeWindow::requiredOpenFile);
+    connect(openFileContentWidget, &KCWelcomeWindowHistoryList::requiredOpenRecentFile,
+            this, &KCWelcomeWindow::requiredOpenRecentFile);
 }
 
 KCWelcomeWindow::~KCWelcomeWindow()

@@ -2,12 +2,14 @@
 #define KCWELCOMEWINDOW_H
 
 #include <QStackedWidget>
+#include <QModelIndex>
 #include <QWidget>
 
 class QHBoxLayout;
 class QVBoxLayout;
 class QLabel;
 class QToolButton;
+class QListView;
 
 class KCWelcomeWindowNewFileButton : public QWidget
 {
@@ -76,6 +78,9 @@ public:
     explicit KCWelcomeWindowOpenFile(QWidget *parent = 0);
     void setBackgroundColor(const QColor &value);
 
+signals:
+    void requiredOpenFile();
+
 public slots:
     void retranslate();
     void retranslateAndSet();
@@ -86,6 +91,8 @@ private slots:
 protected:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
     QLabel *openFileCaption;
@@ -93,6 +100,30 @@ private:
     QPalette pal;
 
     QColor backgroundColor;
+};
+
+class KCWelcomeWindowHistoryList : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCWelcomeWindowHistoryList(QWidget *parent = 0);
+    ~KCWelcomeWindowHistoryList();
+
+signals:
+    void requiredOpenFile();
+    void requiredOpenRecentFile(QString filePath);
+
+public slots:
+    void retranslate();
+    void retranslateAndSet();
+
+private slots:
+    void dblClickHistoryItems(QModelIndex itemIndex);
+
+private:
+    QListView *recentListWidget;
+    QString recentTitle;
+    QVBoxLayout *recentWidgetLayout;
 };
 
 class KCWelcomeWindow : public QWidget
@@ -104,6 +135,8 @@ public:
 
 signals:
     void requiredNewFile(QString fileSuffix);
+    void requiredOpenFile();
+    void requiredOpenRecentFile(QString fileName);
 
 public slots:
     void retranslate();

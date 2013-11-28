@@ -4,7 +4,7 @@
 KCClipboardHistoryStack::KCClipboardHistoryStack(QWidget *parent) :
     QListView(parent)
 {
-    QPalette pal=this->palette();
+    QPalette pal=palette();
     pal.setColor(QPalette::Window, QColor(69,69,69));
     setPalette(pal);
 
@@ -21,7 +21,7 @@ void KCClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
 KCHistoryStack::KCHistoryStack(QWidget *parent) :
     QListView(parent)
 {
-    QPalette pal=this->palette();
+    QPalette pal=palette();
     pal.setColor(QPalette::Window, QColor(69,69,69));
     setPalette(pal);
 
