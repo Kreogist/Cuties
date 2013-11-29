@@ -157,14 +157,13 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
 void KCMessageBox::show()
 {
     //Start width expand animation
-    int originalX=parentWidget()->x()+parentWidget()->width()/2-width()/2;
-    QRect startRect=QRect(originalX,
+    QRect startRect=QRect(parentWidget()->x()+parentWidget()->width()/2-width()/2,
                           parentWidget()->y()+parentWidget()->height()/2-63,
                           width(),
                           127);
     QRect endRect=startRect;
-    endRect.setX(originalX - 150);
     endRect.setWidth(300);
+    endRect.setX(parentWidget()->x()+parentWidget()->width()/2-width()/2 - endRect.width());
     widthExpand->setStartValue(startRect);
     widthExpand->setEndValue(endRect);
     QWidget::show();

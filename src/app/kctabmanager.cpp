@@ -95,7 +95,7 @@ int KCTabManager::open(const QString &filePath)
         KCCodeEditor *judgeEditor=qobject_cast<KCCodeEditor *>(widget(i));
         if(judgeEditor!=NULL)
         {
-            if(judgeEditor->getDocumentTitle() == name)
+            if(judgeEditor->getFilePath() == filePath)
             {
                 return i;
             }
