@@ -78,7 +78,6 @@ private slots:
 
 private:
     QVBoxLayout *mainLayout;
-    QPropertyAnimation *widthExpand;
 
     //Basic widgets
     KCMessageBoxTitle *titleWidget;

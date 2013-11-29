@@ -148,27 +148,25 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     //Set panel widget
     panelWidget=new KCMessageBoxPanel(this);
     mainLayout->addWidget(panelWidget);
-
-    //Set animation variable
-    widthExpand=new QPropertyAnimation(this, "geometry", this);
-    widthExpand->setDuration(300);
 }
 
 void KCMessageBox::show()
 {
     //Start width expand animation
-    QRect startRect=QRect(parentWidget()->x()+parentWidget()->width()/2-width()/2,
+    QPropertyAnimation *widthExpand=new QPropertyAnimation(this, "geometry");
+    widthExpand->setDuration(300);
+    QRect startRect=QRect(parentWidget()->x()+parentWidget()->width()/2,
                           parentWidget()->y()+parentWidget()->height()/2-63,
-                          width(),
+                          0,
                           127);
     QRect endRect=startRect;
     endRect.setWidth(300);
-    endRect.setX(parentWidget()->x()+parentWidget()->width()/2-width()/2 - endRect.width());
+    endRect.setX(endRect.x() - endRect.width()/2);
     widthExpand->setStartValue(startRect);
     widthExpand->setEndValue(endRect);
     QWidget::show();
-    widthExpand->start();
-    qDebug()<<endRect.left()<<startRect.left();
+    widthExpand->start(QAbstractAnimation::DeleteWhenStopped);
+    qDebug()<<startRect.left()<<endRect.left()<<endRect.width();
 }
 
 void KCMessageBox::addText(QString displayText)
