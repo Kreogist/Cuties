@@ -858,7 +858,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::saveSettings()
 {
-    QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
+    /*QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     if(!(isMaximized() || isFullScreen()))
     {
@@ -896,7 +896,7 @@ void MainWindow::saveSettings()
     }
     settings.setValue("state",lastPositionWindowState);
 #endif
-    settings.endGroup();
+    settings.endGroup();*/
 
     KCColorConfigure::getInstance()->writeConfigure();
 }
@@ -922,6 +922,10 @@ void MainWindow::show()
     if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile())
     {
         tabManager->restoreUnclosedFiles();
+        if(tabManager->count()>0)
+        {
+            welcomeWindow->hide();
+        }
     }
 }
 

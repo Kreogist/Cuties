@@ -29,6 +29,12 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
 
+    QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
+    wndShadow->setBlurRadius(15.0);
+    wndShadow->setColor(QColor(0, 0, 0, 200));
+    wndShadow->setOffset(0);
+    setGraphicsEffect(wndShadow);
+
     QVBoxLayout *compileProgressLayout=new QVBoxLayout(this);
     compileProgressLayout->setContentsMargins(0,0,0,0);
     compileProgressLayout->setSpacing(0);
@@ -37,9 +43,4 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     compileProgressDisplay=new QProgressBar(this);
     compileProgressLayout->addWidget(compileProgressDisplay);
 
-    QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
-    wndShadow->setBlurRadius(15.0);
-    wndShadow->setColor(QColor(0, 0, 0, 200));
-    wndShadow->setOffset(0);
-    setGraphicsEffect(wndShadow);
 }

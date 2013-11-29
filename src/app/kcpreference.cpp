@@ -482,7 +482,7 @@ void KCPreference::hideLanguageSelector()
 {
     languageSelectorShow->stop();
     QRect endValue=QRect(width()/4,
-                         -height()-50,
+                         -height()-10,
                          width()/2,
                          height()/2);
     languageSelectorHide->setStartValue(languageSelector->geometry());
