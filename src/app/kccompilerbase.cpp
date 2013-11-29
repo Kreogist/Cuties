@@ -17,6 +17,9 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QFileInfo>
+#include <QMessageBox>
+
 #include "kccompilerbase.h"
 
 KCCompilerBase::KCCompilerBase(QObject *parent) :
@@ -53,6 +56,7 @@ void KCCompilerBase::startCompile(const QString &filePath)
 {
     QStringList arg=getCompileArg(filePath);
     QString compilerPath=this->compilerPath();
+
     /*
      * Note: path() shouldn't be called before getCompileArg(), because
      * some subclass may need filePath to select the right compiler. For

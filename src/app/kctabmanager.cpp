@@ -198,14 +198,13 @@ bool KCTabManager::newFile()
         QString newFileTitle=
             tr("Untitled")+ " " +QString::number(newFileCount++);
         tmp->setDocumentTitle(newFileTitle);
-        setCurrentIndex(addTab(tmp,newFileTitle));
-        currentTextCursorChanged();
-
         emit tabAdded();
-        if(count()==1)  //before the tab be added, count() == 0
+        if(count()==0)  //before the tab be added, count() == 1
         {
             emit tabNonClear();
         }
+        setCurrentIndex(addTab(tmp,newFileTitle));
+        currentTextCursorChanged();
         return true;
     }
     QErrorMessage error(this);

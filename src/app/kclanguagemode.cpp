@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QMessageBox>
+
 //cpp
 #include "gcc.h"
 #include "kccpphighlighter.h"
@@ -59,11 +61,19 @@ void KCLanguageMode::compile()
         qDebug()<<"compiler is NULL";
         return ;
     }
-
     if(compilerReceiver==NULL)
     {
         compilerReceiver=new KCCompileOutputReceiver(this);
         connectCompilerAndOutputReceiver();
+    }
+
+    //Fixed compiler unfind bug.
+    if(!compiler->checkCompilerPath(compiler->compilerPath()))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Can't find compiler.");
+        msgBox.exec();
+        return ;
     }
 
     if(checkIfIsCompiling())
