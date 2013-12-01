@@ -38,11 +38,12 @@
 #include "kcsplashscreen.h"
 #include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
+#include "kcstatusrecorder.h"
 
 static inline void setApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.2.4.6"));
+    QApplication::setApplicationVersion(QString("0.2.4.7"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
@@ -51,6 +52,7 @@ static inline void setApplicationInfo()
 
 static inline void initApplicationSettings()
 {
+    KCStatusRecorder::getInstance()->readRecord();
     KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
     KCGlobalInstance->readSettings();
 }
@@ -188,7 +190,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
  */
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(KCMessageHandler);
+    //qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
     setApplicationInfo();

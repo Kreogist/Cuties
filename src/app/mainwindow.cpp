@@ -21,6 +21,7 @@
 #include "kcfontconfigure.h"
 #include "kclanguageconfigure.h"
 #include "kchistoryconfigure.h"
+#include "kcstatusrecorder.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
@@ -307,12 +308,12 @@ void MainWindow::createActions()
 
 void MainWindow::aboutCuties()
 {
-    /*QMessageBox::about(this,tr("About Cuties"),
-                       tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));*/
-    KCMessageBox *test=new KCMessageBox(this);
+    QMessageBox::about(this,tr("About Cuties"),
+                       tr("Kreogist Cuties is an light IDE which is designed for ACMer/OIer"));
+    /*KCMessageBox *test=new KCMessageBox(this);
     test->setTitle("About");
     test->addText(tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
-    test->show();
+    test->show();*/
 }
 
 void MainWindow::aboutQt()
@@ -768,7 +769,9 @@ void MainWindow::setDocOpenMenuEnabled()
 
 void MainWindow::restoreSettings()
 {
-    QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
+    setGeometry(KCStatusRecorder::getInstance()->getWidgetRect(objectName()));
+    setWindowState(KCStatusRecorder::getInstance()->getWidgetState(objectName()));
+   /* QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
 
     settings.beginGroup("MainWindow");
 
@@ -802,12 +805,15 @@ void MainWindow::restoreSettings()
         setWindowState(Qt::WindowMaximized);
     }
 #endif
-    settings.endGroup();
+    settings.endGroup();*/
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     KCMainWindow::resizeEvent(e);
+    /*KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
+                                                       geometry(),
+                                                       windowState());*/
     if(showWelcomeWindow->state()==QPropertyAnimation::Running)
     {
         welcomeWindow->setGeometry(width()/8,
@@ -841,18 +847,6 @@ void MainWindow::resizeEvent(QResizeEvent *e)
                                    -height(),
                                    width()/4*3,
                                    height()/4*3);
-    }
-    if(this->isMaximized())
-    {
-        lastPositionHeight=e->oldSize().height();
-        lastPostionWidth=e->oldSize().width();
-    }
-    else
-    {
-        lastPositionX=x();
-        lastPostionY=y();
-        lastPositionHeight=height();
-        lastPostionWidth=width();
     }
 }
 
@@ -897,7 +891,10 @@ void MainWindow::saveSettings()
     settings.setValue("state",lastPositionWindowState);
 #endif
     settings.endGroup();*/
-
+    KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
+                                                       geometry(),
+                                                       windowState());
+    KCStatusRecorder::getInstance()->writeRecord();
     KCColorConfigure::getInstance()->writeConfigure();
 }
 

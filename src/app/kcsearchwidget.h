@@ -28,11 +28,26 @@
 #include <QResizeEvent>
 #include <QMenu>
 
+class KCSearchTextBox : public QLineEdit
+{
+    Q_OBJECT
+public:
+    explicit KCSearchTextBox(QWidget *parent = 0);
+
+signals:
+    void requireNextButtonFocus();
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
+
+private:
+};
+
 class KCSearchWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KCSearchWidget(QWidget *parent);
+    explicit KCSearchWidget(QWidget *parent = 0);
     void setTextFocus();
     void setText(const QString &text);
     QString text() const;
@@ -70,7 +85,7 @@ private:
     QGridLayout *searchLayout;
     QToolButton *upButton, *downButton;
     QWidget *searchText;
-    QLineEdit *searchTexts;
+    KCSearchTextBox *searchTexts;
     QHBoxLayout *mainLayout;
     QPushButton *searchIcon;
     QMenu *menu;

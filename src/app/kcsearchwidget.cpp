@@ -23,6 +23,26 @@
 
 const int KCSearchWidget::searchTextPartWidth=3;
 
+
+KCSearchTextBox::KCSearchTextBox(QWidget *parent) :
+    QLineEdit(parent)
+{
+    ;
+}
+
+void KCSearchTextBox::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        emit requireNextButtonFocus();
+        break;
+    default:
+        QLineEdit::keyPressEvent(e);
+    }
+}
+
 KCSearchWidget::KCSearchWidget(QWidget *parent) :
     QWidget(parent)
 {
@@ -54,10 +74,10 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     searchIcon->setFlat(true);
     mainLayout->addWidget(searchIcon);
 
-    searchTexts=new QLineEdit(searchText);
+    searchTexts=new KCSearchTextBox(searchText);
     searchTexts->setFrame(false);
     searchTexts->setPlaceholderText(QString(tr("Search")));
-    connect(searchTexts, &QLineEdit::textChanged,
+    connect(searchTexts, &KCSearchTextBox::textChanged,
             this, &KCSearchWidget::onTextChanged);
 
     //Init menu
@@ -105,6 +125,8 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,downButton->objectName());
     downButton->setPalette(pal);
     searchLayout->addWidget(downButton,0,4);
+    connect(searchTexts, SIGNAL(requireNextButtonFocus()),
+            downButton, SLOT(setFocus()));
     connect(downButton, &QToolButton::clicked,
             this, &KCSearchWidget::requireShowNextResult);
 }
