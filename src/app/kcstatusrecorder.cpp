@@ -89,10 +89,10 @@ void KCStatusRecorder::setWidgetGeometry(const int &widgetIndex,
         currentGeometry.Top=widgetGeometry.top();
         currentGeometry.Height=widgetGeometry.height();
         currentGeometry.Width=widgetGeometry.width();
-        currentGeometry.x=startStatus.desktopWidth/currentGeometry.Left;
-        currentGeometry.y=startStatus.desktopHeight/currentGeometry.Top;
-        currentGeometry.w=startStatus.desktopWidth/currentGeometry.Width;
-        currentGeometry.h=startStatus.desktopHeight/currentGeometry.Height;
+        currentGeometry.x=currentGeometry.Left/startStatus.desktopWidth;
+        currentGeometry.y=currentGeometry.Top/startStatus.desktopHeight;
+        currentGeometry.w=currentGeometry.Width/startStatus.desktopWidth;
+        currentGeometry.h=currentGeometry.Height/startStatus.desktopHeight;
     }
     widgetGeometries.removeAt(widgetIndex);
     widgetGeometries.insert(widgetIndex, currentGeometry);
