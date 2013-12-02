@@ -71,7 +71,7 @@ QRect KCStatusRecorder::getWidgetRect(const QString &currentWidgetName)
 
 void KCStatusRecorder::setWidgetGeometry(const QString &widgetName,
                                          const QRect &widgetGeometry,
-                                         Qt::WindowStates windowState)
+                                         int windowState)
 {
     int widgetIndex=widgetNames.indexOf(widgetName);
     setWidgetGeometry(widgetIndex, widgetGeometry, windowState);
@@ -79,10 +79,10 @@ void KCStatusRecorder::setWidgetGeometry(const QString &widgetName,
 
 void KCStatusRecorder::setWidgetGeometry(const int &widgetIndex,
                                          const QRect &widgetGeometry,
-                                         Qt::WindowStates windowState)
+                                         int windowState)
 {
     KCGeometry currentGeometry=widgetGeometries.at(widgetIndex);
-    currentGeometry.WindowState=windowStateToInt(windowState);
+    currentGeometry.WindowState=windowState;
     if(currentGeometry.WindowState<2)
     {
         currentGeometry.Left=widgetGeometry.left();
@@ -112,24 +112,6 @@ Qt::WindowStates KCStatusRecorder::getWidgetState(const QString &currentWidgetNa
     default:
         return Qt::WindowNoState;
     }
-}
-
-int KCStatusRecorder::windowStateToInt(Qt::WindowStates windowState)
-{
-    if(windowState==Qt::WindowMinimized)
-    {
-        return 1;
-    }
-    qDebug()<<(windowState==Qt::WindowMaximized)<<"alive";
-    if(windowState==Qt::WindowMaximized)
-    {
-        return 2;
-    }
-    if(windowState==Qt::WindowFullScreen)
-    {
-        return 3;
-    }
-    return 0;
 }
 
 QRect KCStatusRecorder::getGeometry(const int &widgetIndex)

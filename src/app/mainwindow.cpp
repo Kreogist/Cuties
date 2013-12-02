@@ -308,7 +308,7 @@ void MainWindow::createActions()
 
 void MainWindow::aboutCuties()
 {
-    QMessageBox::about(this,tr("About Cuties"),
+    QMessageBox::about(this, tr("About Cuties"),
                        tr("Kreogist Cuties is an light IDE which is designed for ACMer/OIer"));
     /*KCMessageBox *test=new KCMessageBox(this);
     test->setTitle("About");
@@ -811,9 +811,10 @@ void MainWindow::restoreSettings()
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     KCMainWindow::resizeEvent(e);
-    /*KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
+
+    KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
                                                        geometry(),
-                                                       windowState());*/
+                                                       currentWindowState());
     if(showWelcomeWindow->state()==QPropertyAnimation::Running)
     {
         welcomeWindow->setGeometry(width()/8,
@@ -893,7 +894,7 @@ void MainWindow::saveSettings()
     settings.endGroup();*/
     KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
                                                        geometry(),
-                                                       windowState());
+                                                       currentWindowState());
     KCStatusRecorder::getInstance()->writeRecord();
     KCColorConfigure::getInstance()->writeConfigure();
 }
@@ -1259,6 +1260,23 @@ void MainWindow::connectDebugDockWithCurrEditor()
         debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getLocalVarModel());
         debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
     }
+}
+
+int MainWindow::currentWindowState()
+{
+    if(isMinimized())
+    {
+        return 1;
+    }
+    if(isFullScreen())
+    {
+        return 3;
+    }
+    if(isMaximized())
+    {
+        return 2;
+    }
+    return 0;
 }
 
 #ifdef Q_OS_MACX

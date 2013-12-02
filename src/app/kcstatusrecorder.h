@@ -52,17 +52,17 @@ public:
     QRect getWidgetRect(const QString &currentWidgetName);
     void setWidgetGeometry(const int &widgetIndex,
                            const QRect &widgetGeometry,
-                           Qt::WindowStates windowState);
+                           int windowState);
     void setWidgetGeometry(const QString &widgetName,
                            const QRect &widgetGeometry,
-                           Qt::WindowStates windowState);
+                           int windowState);
     Qt::WindowStates getWidgetState(const QString &currentWidgetName);
+
 signals:
 
 public slots:
 
 private:
-    int windowStateToInt(Qt::WindowStates windowState);
     QRect getGeometry(const int &widgetIndex);
     QRect getAbsoluteGeometry(const int &widgetIndex);
     QRect appendList(const QString &newWidgetName);

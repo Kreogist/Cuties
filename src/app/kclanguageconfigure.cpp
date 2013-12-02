@@ -61,7 +61,10 @@ void KCLanguageConfigure::writeConfigure()
 void KCLanguageConfigure::setLanguage(const QString &newLanguageName)
 {
     int newLanguageIndex=languageName.indexOf(newLanguageName);
-    newLanguageIndex=newLanguageIndex==-1?0:newLanguageIndex;
+    if(newLanguageIndex==-1)
+    {
+        return;
+    }
     setLanguageIndex(newLanguageIndex);
 }
 

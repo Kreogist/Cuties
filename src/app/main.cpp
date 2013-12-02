@@ -43,7 +43,7 @@
 static inline void setApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.2.4.7"));
+    QApplication::setApplicationVersion(QString("0.2.4.8"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
@@ -195,7 +195,12 @@ int main(int argc, char *argv[])
     QApplication app(argc,argv);
     setApplicationInfo();
     processArg();
-    qDebug()<<qApp->applicationDirPath();
+
+    app.setEffectEnabled(Qt::UI_AnimateCombo, true);
+    app.setEffectEnabled(Qt::UI_FadeMenu, true);
+    app.setEffectEnabled(Qt::UI_AnimateToolBox, true);
+    app.setEffectEnabled(Qt::UI_AnimateTooltip, true);
+    app.setEffectEnabled(Qt::UI_FadeTooltip, true);
 
     //Load Splash Screen
     KCSplashScreen *splash=new KCSplashScreen;

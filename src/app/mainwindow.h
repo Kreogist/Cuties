@@ -264,6 +264,8 @@ private:
 
     void showDebugDocks();
     void connectDebugDockWithCurrEditor();
+
+    int currentWindowState();
 };
 
 #endif // MAINWINDOW_H
