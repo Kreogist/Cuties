@@ -811,7 +811,6 @@ void MainWindow::restoreSettings()
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     KCMainWindow::resizeEvent(e);
-
     KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
                                                        geometry(),
                                                        currentWindowState());

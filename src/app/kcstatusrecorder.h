@@ -57,6 +57,7 @@ public:
                            const QRect &widgetGeometry,
                            int windowState);
     Qt::WindowStates getWidgetState(const QString &currentWidgetName);
+    int windowStateToInt(Qt::WindowStates windowState);
 
 signals:
 
