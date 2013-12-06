@@ -66,6 +66,8 @@ public:
     bool getOverwriteMode();
 
     void insertTextAtCursor(QString insertText);
+    bool getCacheNewFileMode() const;
+    void setCacheNewFileMode(bool value);
 
 signals:
     void filenameChanged(QString newName);
@@ -73,10 +75,12 @@ signals:
     void rewriteStateChanged(bool nowValue);
 
 public slots:
-    bool open(const QString &fileName);
+    bool open(const QString &fileName,
+              bool cacheMode=false);
     bool save();
     bool saveAs();
-    bool saveAs(const QString &fileName);
+    bool saveAs(const QString &fileName,
+                bool cacheMode=false);
     void redo();
     void undo();
     void copy();
@@ -130,6 +134,7 @@ private:
     KCConnectionHandler searcherConnections;
 
     friend class KCLanguageMode;
+    bool cacheNewFileMode=false;
 };
 
 #endif // TEXTEDITOR_H

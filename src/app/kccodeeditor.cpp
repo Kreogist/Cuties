@@ -152,6 +152,16 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
 }
+bool KCCodeEditor::getCacheNewFileMode() const
+{
+    return cacheNewFileMode;
+}
+
+void KCCodeEditor::setCacheNewFileMode(bool value)
+{
+    cacheNewFileMode = value;
+}
+
 
 void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
 {
@@ -267,19 +277,28 @@ void KCCodeEditor::showReplaceBar()
     replaceBar->setTextFocus();
 }
 
-bool KCCodeEditor::open(const QString &fileName)
+bool KCCodeEditor::open(const QString &fileName, bool cacheMode)
 {
     QFile _file(fileName);
 
     if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
     {
         QTextStream _textIn(&_file);
+        QString titleText=editor->documentTitle();
 
         editor->clear();
         editor->setPlainText(QString(_textIn.readAll()));
 
-        fileInfoChanged(_file);
-        KCHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
+        if(cacheMode)
+        {
+            setDocumentTitle(titleText);
+            editor->document()->setModified(true);
+        }
+        else
+        {
+            fileInfoChanged(_file);
+            KCHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
+        }
         return true;
     }
     fileError=_file.error();
@@ -288,20 +307,7 @@ bool KCCodeEditor::open(const QString &fileName)
 
 bool KCCodeEditor::readCacheFile(const QString &cachedfilePath)
 {
-    QFile _file(cachedfilePath);
-
-    if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
-    {
-        QTextStream _textIn(&_file);
-        QString title=editor->documentTitle();
-        editor->clear();
-        editor->setPlainText(QString(_textIn.readAll()));
-        setDocumentTitle(title);
-        editor->document()->setModified(true);
-        return true;
-    }
-    fileError=_file.error();
-    return false;
+    return open(cachedfilePath, true);
 }
 
 QFileDevice::FileError KCCodeEditor::error()
@@ -387,7 +393,8 @@ bool KCCodeEditor::requireSaveAs(const QString &Caption)
     }
 }
 
-bool KCCodeEditor::saveAs(const QString &fileName)
+bool KCCodeEditor::saveAs(const QString &fileName,
+                          bool cacheMode)
 {
     QFile _file(fileName);
 
@@ -395,7 +402,10 @@ bool KCCodeEditor::saveAs(const QString &fileName)
     {
         QTextStream _textOut(&_file);
         _textOut<<editor->toPlainText()<<flush;
-        fileInfoChanged(_file);
+        if(!cacheMode)
+        {
+            fileInfoChanged(_file);
+        }
         return true;
     }
     fileError=_file.error();
@@ -404,21 +414,12 @@ bool KCCodeEditor::saveAs(const QString &fileName)
 
 bool KCCodeEditor::writeCacheFile(const QString &filePath)
 {
-    QFile _file(filePath);
-
-    if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
-    {
-        QTextStream _textOut(&_file);
-        _textOut<<editor->toPlainText()<<flush;
-        return true;
-    }
-    fileError=_file.error();
-    return false;
+    return saveAs(filePath, true);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
-    if(!filePath.isEmpty() && editor->document()->isModified())
+    if(!cacheNewFileMode && editor->document()->isModified())
     {
         QMessageBox msgbox(this);
         QString strDisplayFileName;
