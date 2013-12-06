@@ -58,11 +58,13 @@ KCPreferenceItemCombo::~KCPreferenceItemCombo()
 
 void KCPreferenceItemCombo::refreshComboText()
 {
+    int backupItemChoose=getUserNewValue().toInt();
     comboData->clear();
     for(int i=0; i<comboTextList.count(); i++)
     {
         comboData->addItem(comboTextList.at(i));
     }
+    comboData->setCurrentIndex(backupItemChoose);
 }
 
 QList<QString> KCPreferenceItemCombo::getComboTextList() const

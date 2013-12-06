@@ -180,6 +180,9 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
                                                    100,
                                                    5);
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedEditor::retranslate()
@@ -293,6 +296,9 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
                     instance->getFpcPath(),
                     pathItemTitleCaption[pathFPCCompiler]);
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedCompiler::retranslate()
