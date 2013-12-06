@@ -15,8 +15,7 @@ KCStatusRecorder *KCStatusRecorder::getInstance()
     return instance==nullptr?instance=new KCStatusRecorder:instance;
 }
 
-KCStatusRecorder::KCStatusRecorder(QObject *parent) :
-    QObject(parent)
+KCStatusRecorder::KCStatusRecorder()
 {
     setRecordFileName("Settings/Record.db");
 

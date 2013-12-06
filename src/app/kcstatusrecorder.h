@@ -32,7 +32,6 @@ class KCStatusRecorder : public QObject
 {
     Q_OBJECT
 public:
-    explicit KCStatusRecorder(QObject *parent = 0);
     static KCStatusRecorder *getInstance();
     static QString getRecordFileName();
     static void setRecordFileName(const QString &value);
@@ -59,6 +58,7 @@ signals:
 public slots:
 
 private:
+    KCStatusRecorder();
     QRect getGeometry(const int &widgetIndex);
     int appendList(const QString &newWidgetName);
 

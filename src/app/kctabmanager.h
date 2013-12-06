@@ -62,7 +62,7 @@ public slots:
     void openAndJumpTo(const QString &filePath);
     int open(const QString &filePath);
     void open();
-    bool newFile();
+    int newFile();
     bool newFileWithHighlight(const QString &fileSuffix);
     void save();
     void saveAs();

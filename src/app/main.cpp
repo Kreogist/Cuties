@@ -39,6 +39,7 @@
 #include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 #include "kcstatusrecorder.h"
+#include "kcdocumentrecorder.h"
 
 static inline void setApplicationInfo()
 {
@@ -53,6 +54,7 @@ static inline void setApplicationInfo()
 static inline void initApplicationSettings()
 {
     KCStatusRecorder::getInstance()->readRecord();
+    KCDocumentRecorder::getInstance()->readSettings();
     KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
     KCGlobalInstance->readSettings();
 }

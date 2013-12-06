@@ -282,11 +282,26 @@ bool KCCodeEditor::open(const QString &fileName)
         KCHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
         return true;
     }
-    else
+    fileError=_file.error();
+    return false;
+}
+
+bool KCCodeEditor::readCacheFile(const QString &cachedfilePath)
+{
+    QFile _file(cachedfilePath);
+
+    if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
     {
-        fileError=_file.error();
-        return false;
+        QTextStream _textIn(&_file);
+        QString title=editor->documentTitle();
+        editor->clear();
+        editor->setPlainText(QString(_textIn.readAll()));
+        setDocumentTitle(title);
+        editor->document()->setModified(true);
+        return true;
     }
+    fileError=_file.error();
+    return false;
 }
 
 QFileDevice::FileError KCCodeEditor::error()
@@ -374,7 +389,6 @@ bool KCCodeEditor::requireSaveAs(const QString &Caption)
 
 bool KCCodeEditor::saveAs(const QString &fileName)
 {
-
     QFile _file(fileName);
 
     if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
@@ -384,16 +398,27 @@ bool KCCodeEditor::saveAs(const QString &fileName)
         fileInfoChanged(_file);
         return true;
     }
-    else
+    fileError=_file.error();
+    return false;
+}
+
+bool KCCodeEditor::writeCacheFile(const QString &filePath)
+{
+    QFile _file(filePath);
+
+    if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
     {
-        fileError=_file.error();
-        return false;
+        QTextStream _textOut(&_file);
+        _textOut<<editor->toPlainText()<<flush;
+        return true;
     }
+    fileError=_file.error();
+    return false;
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
-    if(editor->document()->isModified())
+    if(!filePath.isEmpty() && editor->document()->isModified())
     {
         QMessageBox msgbox(this);
         QString strDisplayFileName;

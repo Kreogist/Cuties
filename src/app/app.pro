@@ -98,7 +98,8 @@ SOURCES += \
     kreogistcutestyle.cpp \
     mainwindow.cpp \
     textcharformatmap.cpp \ 
-    kcstatusrecorder.cpp
+    kcstatusrecorder.cpp \
+    kcdocumentrecorder.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -173,7 +174,8 @@ HEADERS += \
     kreogistcutestyle.h \
     mainwindow.h \
     textcharformatmap.h \ 
-    kcstatusrecorder.h
+    kcstatusrecorder.h \
+    kcdocumentrecorder.h
 
 
 # Enable C++11

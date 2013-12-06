@@ -21,6 +21,7 @@
 #include <QApplication>
 
 #include "kctabmanager.h"
+#include "kcdocumentrecorder.h"
 
 KCTabManager::KCTabManager(QWidget *parent) :
     QTabWidget(parent)
@@ -56,23 +57,34 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
 void KCTabManager::restoreUnclosedFiles()
 {
-    QList<QString> lastTimeUnClosedFiles=KCHistoryConfigure::getInstance()->getAllUnClosedFilePaths();
-    QList<int> lastTimeUnClosedHs=KCHistoryConfigure::getInstance()->getAllUnClosedFileHs();
-    QList<int> lastTimeUnClosedVs=KCHistoryConfigure::getInstance()->getAllUnClosedFileVs();
-    int unClosedItem;
-    for(int i=0; i<lastTimeUnClosedFiles.size(); i++)
+    int unclosedFileNum=KCDocumentRecorder::getInstance()->getUnclosedFileCount(),
+        currentUnclosedFileIndex=KCDocumentRecorder::getInstance()->getUnclosedCurrentIndex(),
+        unclosedFileItem;
+    for(int i=0; i<unclosedFileNum; i++)
     {
-        unClosedItem=open(lastTimeUnClosedFiles.at(i));
-        if(unClosedItem>0)
+        UnclosedFileStatus currentFileStatus=KCDocumentRecorder::getInstance()->getUnclosedFileStatus(i);
+        KCCodeEditor *editor;
+        if(currentFileStatus.untitled)
         {
-            KCCodeEditor *editor = qobject_cast<KCCodeEditor *>(widget(unClosedItem));
-            editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
+            //New file and cache it.
+            unclosedFileItem=newFile();
+            editor=qobject_cast<KCCodeEditor *>(widget(unclosedFileItem));
+            editor->readCacheFile(currentFileStatus.filePath);
         }
+        else
+        {
+            //Open file
+            unclosedFileItem=open(currentFileStatus.filePath);
+            editor=qobject_cast<KCCodeEditor *>(widget(unclosedFileItem));
+        }
+        editor->setDocumentCursor(currentFileStatus.horizontalCursorPosition,
+                                  currentFileStatus.verticalCursorPosition);
     }
-    if(KCHistoryConfigure::getInstance()->getUnClosedCurrent()>-1)
+    if(currentUnclosedFileIndex<count() && currentUnclosedFileIndex>-1)
     {
-        setCurrentIndex(KCHistoryConfigure::getInstance()->getUnClosedCurrent());
+        setCurrentIndex(currentUnclosedFileIndex);
     }
+    KCDocumentRecorder::getInstance()->clear();
 }
 
 KCCodeEditor *KCTabManager::getCurrentEditor() const
@@ -187,7 +199,7 @@ void KCTabManager::open()
     currentTextCursorChanged();
 }
 
-bool KCTabManager::newFile()
+int KCTabManager::newFile()
 {
     KCCodeEditor *tmp=new KCCodeEditor(this);
     if(tmp!=NULL)
@@ -203,27 +215,26 @@ bool KCTabManager::newFile()
         {
             emit tabNonClear();
         }
-        setCurrentIndex(addTab(tmp,newFileTitle));
+        int newTabIndex=addTab(tmp,newFileTitle);
+        setCurrentIndex(newTabIndex);
         currentTextCursorChanged();
-        return true;
+        return newTabIndex;
     }
     QErrorMessage error(this);
     error.showMessage(tr("out of memmory!"));
     error.exec();
-    return false;
+    return -1;
 }
 
 bool KCTabManager::newFileWithHighlight(const QString &fileSuffix)
 {
-    if(newFile() && Q_LIKELY(currentEditor!=NULL))
+    if(newFile()>-1 && Q_LIKELY(currentEditor!=NULL))
     {
         KCLanguageMode *newFileLanguageMode=currentEditor->langMode();
         newFileLanguageMode->setFileSuffix(fileSuffix);
         currentEditor->setLanguageMode(newFileLanguageMode);
     }
 }
-
-
 
 void KCTabManager::switchNextTab()
 {
@@ -396,7 +407,9 @@ void KCTabManager::closeEvent(QCloseEvent *e)
 
     //Cleae the last UnClosed File Paths.
     KCHistoryConfigure::getInstance()->clearAllUnClosedFilePaths();
-    int i=count(), cIndex=currentIndex();
+    int i=count();
+    KCDocumentRecorder::getInstance()->clear();
+    KCDocumentRecorder::getInstance()->setUnclosedCurrentIndex(currentIndex());
     while(i--)
     {
         QWidget *page=widget(i);
@@ -407,34 +420,30 @@ void KCTabManager::closeEvent(QCloseEvent *e)
         {
             if(editor!=NULL)
             {
-                if(editor->getFilePath().length()>0)
+                if(editor->getFilePath().isEmpty())
                 {
-                    KCHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
-                                                                           editor->getTextCursor().blockNumber(),
-                                                                           editor->getTextCursor().columnNumber());
-
+                    KCDocumentRecorder::getInstance()->appendRecord(editor);
                 }
                 else
                 {
-                    if(i<cIndex)
-                    {
-                        cIndex--;
-                    }
+                    KCDocumentRecorder::getInstance()->appendRecord(editor->getFilePath(),
+                                                                    editor->getTextCursor());
                 }
             }
         }
+        page->close();
 
-        if(!page->close())
+        /*if(!page->close())
         {
-            e->ignore();//clean the accept flag
+            e->ignore();
             break;
         }
         else
-        {
+        {*/
             removeTab(i);
-        }
+        //}
     }
-    KCHistoryConfigure::getInstance()->setUnClosedCurrent(cIndex);
+    KCDocumentRecorder::getInstance()->writeSettings();
     KCHistoryConfigure::getInstance()->writeConfigure();
 }
 

@@ -90,6 +90,8 @@ public slots:
     void showCompileBar();
     void hideSearchBar();
     void setOverwriteMode(bool newValue);
+    bool readCacheFile(const QString &cachedfilePath);
+    bool writeCacheFile(const QString &filePath);
 
 private slots:
     void onModificationChanged(bool changed);
