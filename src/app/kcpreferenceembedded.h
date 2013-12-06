@@ -233,6 +233,8 @@ public:
 
 public slots:
     void applyPreference();
+    void retranslate();
+    void retranslateAndSet();
 
 private:
 

@@ -357,6 +357,9 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
                                                    pathItemTitleCaption[pathGDBDebugger]);
 
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedDebugger::retranslate()
@@ -390,18 +393,31 @@ void KCPreferenceEmbeddedDebugger::retranslateAndSet()
 
 void KCPreferenceEmbeddedDebugger::applyPreference()
 {
-
+    ;
 }
 
 KCPreferenceEmbeddedFileAssociation::KCPreferenceEmbeddedFileAssociation(QWidget *parent) :
     KCPreferenceSuperList(parent)
 {
     ;
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedFileAssociation::applyPreference()
 {
+    ;
+}
 
+void KCPreferenceEmbeddedFileAssociation::retranslate()
+{
+    ;
+}
+
+void KCPreferenceEmbeddedFileAssociation::retranslateAndSet()
+{
+    retranslate();
 }
 
 
