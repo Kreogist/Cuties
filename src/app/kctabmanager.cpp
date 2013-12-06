@@ -410,8 +410,8 @@ void KCTabManager::closeEvent(QCloseEvent *e)
                 if(editor->getFilePath().length()>0)
                 {
                     KCHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
-                            editor->getTextCursor().blockNumber(),
-                            editor->getTextCursor().columnNumber());
+                                                                           editor->getTextCursor().blockNumber(),
+                                                                           editor->getTextCursor().columnNumber());
 
                 }
                 else

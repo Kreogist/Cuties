@@ -2,6 +2,7 @@
 #define KCSTATUSRECORDER_H
 
 #include <QList>
+#include <QRect>
 #include <QObject>
 
 struct KCEnvironmentVariables
@@ -13,14 +14,6 @@ struct KCEnvironmentVariables
 
 struct KCGeometry
 {
-    float x;
-    float y;
-    float w;
-    float h;
-    int Left;
-    int Top;
-    int Width;
-    int Height;
     int WindowState;
     /*
      * Window State Explaination
@@ -31,6 +24,8 @@ struct KCGeometry
      *   2 = WindowMaximized
      *   3 = WindowFullScreen
      */
+    QRect previousGeometry;
+    QRect currentGeometry;
 };
 
 class KCStatusRecorder : public QObject
@@ -52,10 +47,10 @@ public:
     QRect getWidgetRect(const QString &currentWidgetName);
     void setWidgetGeometry(const int &widgetIndex,
                            const QRect &widgetGeometry,
-                           int windowState);
+                           Qt::WindowStates windowState);
     void setWidgetGeometry(const QString &widgetName,
                            const QRect &widgetGeometry,
-                           int windowState);
+                           Qt::WindowStates windowState);
     Qt::WindowStates getWidgetState(const QString &currentWidgetName);
     int windowStateToInt(Qt::WindowStates windowState);
 
@@ -65,9 +60,11 @@ public slots:
 
 private:
     QRect getGeometry(const int &widgetIndex);
-    QRect getAbsoluteGeometry(const int &widgetIndex);
-    QRect appendList(const QString &newWidgetName);
+    int appendList(const QString &newWidgetName);
+
     KCEnvironmentVariables getCurrentStatus();
+
+    QRect defaultGeometry;
     bool useRelative;
     static KCStatusRecorder *instance;
     static QString recordFileName;

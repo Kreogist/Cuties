@@ -98,7 +98,7 @@ void KCHistoryConfigure::readConfigure()
         QFile *historyFileItem=new QFile(filePath);
         if(historyFileItem->exists())
         {
-            createRecentFileInfo(filePath);
+            appendRecentFileInfo(filePath);
         }
     }
     refreshHistoryModel();
@@ -232,7 +232,17 @@ void KCHistoryConfigure::clearAllRecentFilesRecord()
     recentOpenedFileModel->clear();
 }
 
-void KCHistoryConfigure::createRecentFileInfo(const QString &path)
+void KCHistoryConfigure::appendRecentFileInfo(const QString &path)
+{
+    recentFileList.append(createRecentFileInfo(path));
+}
+
+void KCHistoryConfigure::prependRecentFileInfo(const QString &path)
+{
+    recentFileList.prepend(createRecentFileInfo(path));
+}
+
+recentFileInfo KCHistoryConfigure::createRecentFileInfo(const QString &path)
 {
     recentFileInfo historyFileItem;
     historyFileItem.fileFullPath=path;
@@ -257,7 +267,7 @@ void KCHistoryConfigure::createRecentFileInfo(const QString &path)
     {
         historyFileItem.fileType=otherSourceFile;
     }
-    recentFileList.prepend(historyFileItem);
+    return historyFileItem;
 }
 
 QStandardItem *KCHistoryConfigure::createRecentFileItem(const int &recentFileItemIndex)
@@ -292,7 +302,7 @@ void KCHistoryConfigure::addRecentFileRecord(const QString &path)
             recentOpenedFileModel->removeRow((*i)->row());
         }
     }
-    createRecentFileInfo(path);
+    prependRecentFileInfo(path);
     recentOpenedFileModel->insertRow(0, createRecentFileItem(0));
     while(recentFileList.count() > maxRecentFilesSize)
     {

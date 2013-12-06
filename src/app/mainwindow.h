@@ -101,9 +101,7 @@ private slots:
     void changeDebugWatchVisibleState();
     void changeJudgeDockVisibleState();
     void showPreference();
-#ifdef Q_OS_MACX
     void setFullScreen();
-#endif
 
 protected:
     void showEvent(QShowEvent *e);
@@ -159,10 +157,7 @@ private:
         actionViewDebugCommandIO,
         actionViewDebugWatch,
         //mnuViewJudgeDock,
-#ifdef Q_OS_MACX
         actionViewFullscreen,
-#endif
-        actionViewEnd,
         actionSearchFind,
         //mnuSearchFindInFiles,
         actionSearchReplace,
@@ -230,8 +225,13 @@ private:
     };
     QString sidebarStateString[SidebarStateCount];
 
-    //Define MainWindow last time opened position.
-    int lastPositionX, lastPostionY, lastPositionHeight, lastPostionWidth;
+    enum fullScreenState
+    {
+        fullScreen,
+        normalScreen,
+        FullScreenStateCount
+    };
+    QString fullScreenStateString[FullScreenStateCount];
 
     //All the names we need to translate.
     QString trWindowTitle="Cuties";

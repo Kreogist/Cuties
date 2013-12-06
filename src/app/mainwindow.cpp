@@ -514,7 +514,7 @@ void MainWindow::createMenu()
     MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
     menuMainWindowItem[menuView]->setIcon(*MenuIconAddor);
 #endif
-    for(i=actionViewSidebar; i<actionViewEnd; i++)
+    for(i=actionViewSidebar; i<=actionViewFullscreen; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -715,10 +715,6 @@ void MainWindow::setDocOpenMenuState(bool state)
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
     }
-#ifndef Q_OS_MACX
-    menuMainWindowItem[menuView]->menuAction()->setEnabled(state);
-    menuMainWindowItem[menuView]->menuAction()->setVisible(state);
-#endif
 
     //Search Menu
     for(i=actionSearchFind; i<=actionSearchGoto; i++)
@@ -771,49 +767,18 @@ void MainWindow::restoreSettings()
 {
     setGeometry(KCStatusRecorder::getInstance()->getWidgetRect(objectName()));
     setWindowState(KCStatusRecorder::getInstance()->getWidgetState(objectName()));
-   /* QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
-
-    settings.beginGroup("MainWindow");
-
-#ifndef Q_OS_MACX
-    int n_WindowState;
-#endif
-    float n_X, n_Y, n_width, n_height;
-
-    float deskWidth=float(QApplication::desktop()->width()),
-          deskHeight=float(QApplication::desktop()->height());
-    n_X     = settings.value("x", 0.1).toFloat();
-    n_X     = (n_X>1 || n_X<0)?0.1*deskWidth:n_X*deskWidth;
-    n_Y     = settings.value("y", 0.1).toFloat();
-    n_Y     = (n_Y>1 || n_Y<0)?0.1*deskHeight:n_Y*deskHeight;
-    n_width = settings.value("width", 0.8).toFloat();
-    n_width = (n_width>1||n_width<0)?0.8*deskWidth:n_width*deskWidth;
-    n_height= settings.value("height", 0.8).toFloat();
-    n_height= (n_height>1||n_height<0)?0.8*deskHeight:n_height*deskHeight;
-
-    this->setGeometry(static_cast<int>(n_X),
-                      static_cast<int>(n_Y),
-                      static_cast<int>(n_width),
-                      static_cast<int>(n_height));
-#ifndef Q_OS_MACX
-    n_WindowState=settings.value("state").toInt();
-    switch(n_WindowState)
-    {
-    case 1:
-        setWindowState(Qt::WindowMinimized);
-    case 2:
-        setWindowState(Qt::WindowMaximized);
-    }
-#endif
-    settings.endGroup();*/
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     KCMainWindow::resizeEvent(e);
+
+    //Recording window state
     KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
                                                        geometry(),
-                                                       currentWindowState());
+                                                       windowState());
+
+    //Welcome window state sets.
     if(showWelcomeWindow->state()==QPropertyAnimation::Running)
     {
         welcomeWindow->setGeometry(width()/8,
@@ -852,48 +817,9 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::saveSettings()
 {
-    /*QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
-
-    if(!(isMaximized() || isFullScreen()))
-    {
-        lastPositionX=x();
-        lastPostionY=y();
-        lastPositionHeight=height();
-        lastPostionWidth=width();
-    }
-#ifndef Q_OS_MACX
-    int lastPositionWindowState;
-#endif
-
-    //Save ALL settings.
-    float deskWidth=float(QApplication::desktop()->width()),
-          deskHeight=float(QApplication::desktop()->height());
-
-    settings.beginGroup("MainWindow");
-    settings.setValue("x",float(lastPositionX)/deskWidth);
-    settings.setValue("y",float(lastPostionY)/deskHeight);
-    settings.setValue("width",float(lastPostionWidth)/deskWidth);
-    settings.setValue("height",float(lastPositionHeight)/deskHeight);
-
-#ifndef Q_OS_MACX
-    switch(windowState())
-    {
-    case Qt::WindowMinimized:
-        lastPositionWindowState=1;
-        break;
-    case Qt::WindowMaximized:
-        lastPositionWindowState=2;
-        break;
-    default:
-        lastPositionWindowState=0;
-        break;
-    }
-    settings.setValue("state",lastPositionWindowState);
-#endif
-    settings.endGroup();*/
     KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
                                                        geometry(),
-                                                       currentWindowState());
+                                                       windowState());
     KCStatusRecorder::getInstance()->writeRecord();
     KCColorConfigure::getInstance()->writeConfigure();
 }
@@ -1054,6 +980,8 @@ void MainWindow::retranslateAndSet()
 {
     sidebarStateString[sidebarLock]=tr("Lock Sidebar");
     sidebarStateString[sidebarUnlock]=tr("Unlock sidebar");
+    fullScreenStateString[fullScreen]=tr("Enter Full Screen");
+    fullScreenStateString[normalScreen]=tr("Exit Full Screen");
 
     menuMainWindowText[menuFile]=tr("File");
     menuMainWindowText[menuEdit]=tr("Edit");
@@ -1085,9 +1013,7 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionViewDebugControls]=tr("Show or hide the Debug Controls.");
     actionStatusTips[actionViewDebugCommandIO]=tr("Show or hide the Debug Command Input/Output Dock.");
     actionStatusTips[actionViewDebugWatch]=tr("Show or hide the Debug Watch dock.");
-    #ifdef Q_OS_MACX
-    actionStatusTips[actionViewFullscreen]=tr("Show or hide fullscreen mode of Cuties.");
-    #endif
+    actionStatusTips[actionViewFullscreen]=tr("Show or exit full screen mode.");
     actionStatusTips[actionSearchFind]=tr("Search for text in the active document.");
     actionStatusTips[actionSearchReplace]=tr("Replace occurrences of search string.");
     actionStatusTips[actionSearchSearchOnline]=tr("Search the text via online search engine.");
@@ -1133,9 +1059,7 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionViewDebugControls]=tr("Debug Controls");
     actionMainWindowText[actionViewDebugCommandIO]=tr("Debug Command Dock");
     actionMainWindowText[actionViewDebugWatch]=tr("Debug Watch Dock");
-#ifdef Q_OS_MACX
-    actionMainWindowText[actionViewFullscreen]=tr("Enter Full Screen");
-#endif
+    actionMainWindowText[actionViewFullscreen]=isFullScreen()?fullScreenStateString[normalScreen]:fullScreenStateString[fullScreen];
     actionMainWindowText[actionSearchFind]=tr("Find");
     actionMainWindowText[actionSearchReplace]=tr("Replace");
     actionMainWindowText[actionSearchSearchOnline]=tr("Search Online");
@@ -1261,36 +1185,16 @@ void MainWindow::connectDebugDockWithCurrEditor()
     }
 }
 
-int MainWindow::currentWindowState()
-{
-    if(isMinimized())
-    {
-        return 1;
-    }
-    if(isFullScreen())
-    {
-        return 3;
-    }
-    if(isMaximized())
-    {
-        return 2;
-    }
-    return 0;
-}
-
-#ifdef Q_OS_MACX
 void MainWindow::setFullScreen()
 {
-    if(this->isFullScreen())
+    if(isFullScreen())
     {
-        //TODO: The title of the menu can be replaced by a QString.
-        actionMainWindowItem[actionViewFullscreen]->setText(tr("Enter Full Screen"));
-        this->showNormal();
+        actionMainWindowItem[actionViewFullscreen]->setText(fullScreenStateString[fullScreen]);
+        showNormal();
     }
     else
     {
-        actionMainWindowItem[actionViewFullscreen]->setText(tr("Exit Full Screen"));
-        this->showFullScreen();
+        actionMainWindowItem[actionViewFullscreen]->setText(fullScreenStateString[normalScreen]);
+        showFullScreen();
     }
 }
-#endif

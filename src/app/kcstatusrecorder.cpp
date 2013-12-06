@@ -34,6 +34,11 @@ KCStatusRecorder::KCStatusRecorder(QObject *parent) :
     defaultTop=startStatus.desktopHeight*defaultY;
     defaultWidth=startStatus.desktopWidth*defaultW;
     defaultHeight=startStatus.desktopHeight*defaultH;
+
+    defaultGeometry=QRect(defaultLeft,
+                          defaultTop,
+                          defaultWidth,
+                          defaultHeight);
 }
 
 void KCStatusRecorder::clearRecordWidgets()
@@ -48,30 +53,19 @@ int KCStatusRecorder::getWidgetIndex(const QString &currentWidgetName)
     if(widgetIndex==-1)
     {
         //There's no widget name in the name list, append list.
-        widgetIndex=widgetNames.count();
-        widgetNames.append(currentWidgetName);
+        return appendList(currentWidgetName);
     }
     return widgetIndex;
 }
 
 QRect KCStatusRecorder::getWidgetRect(const QString &currentWidgetName)
 {
-    int widgetIndex=widgetNames.indexOf(currentWidgetName);
-    if(widgetIndex==-1)
-    {
-        //There's no widget name in the name list, append list.
-        return appendList(currentWidgetName);
-    }
-    if(useRelative)
-    {
-        return getAbsoluteGeometry(widgetIndex);
-    }
-    return getGeometry(widgetIndex);
+    return getGeometry(getWidgetIndex(currentWidgetName));
 }
 
 void KCStatusRecorder::setWidgetGeometry(const QString &widgetName,
                                          const QRect &widgetGeometry,
-                                         int windowState)
+                                         Qt::WindowStates windowState)
 {
     int widgetIndex=widgetNames.indexOf(widgetName);
     setWidgetGeometry(widgetIndex, widgetGeometry, windowState);
@@ -79,36 +73,21 @@ void KCStatusRecorder::setWidgetGeometry(const QString &widgetName,
 
 void KCStatusRecorder::setWidgetGeometry(const int &widgetIndex,
                                          const QRect &widgetGeometry,
-                                         int windowState)
+                                         Qt::WindowStates windowState)
 {
-    KCGeometry currentGeometry=widgetGeometries.at(widgetIndex);
-    currentGeometry.WindowState=windowState;
-#ifdef Q_OS_MACX
-    if(widgetGeometry.left()==0 && widgetGeometry.top()==0 &&
-       widgetGeometry.width()==startStatus.desktopWidth &&
-       widgetGeometry.height()==startStatus.desktopHeight)
+    KCGeometry currentWidgetGeometry=widgetGeometries.at(widgetIndex);
+    currentWidgetGeometry.WindowState=windowStateToInt(windowState);
+    if(currentWidgetGeometry.WindowState>2)
     {
-        ;
+        currentWidgetGeometry.currentGeometry=currentWidgetGeometry.previousGeometry;
     }
     else
     {
-#endif
-    if(currentGeometry.WindowState<2)
-    {
-        currentGeometry.Left=widgetGeometry.left();
-        currentGeometry.Top=widgetGeometry.top();
-        currentGeometry.Height=widgetGeometry.height();
-        currentGeometry.Width=widgetGeometry.width();
-        currentGeometry.x=currentGeometry.Left/startStatus.desktopWidth;
-        currentGeometry.y=currentGeometry.Top/startStatus.desktopHeight;
-        currentGeometry.w=currentGeometry.Width/startStatus.desktopWidth;
-        currentGeometry.h=currentGeometry.Height/startStatus.desktopHeight;
+        currentWidgetGeometry.previousGeometry=currentWidgetGeometry.currentGeometry;
+        currentWidgetGeometry.currentGeometry=widgetGeometry;
     }
-#ifdef Q_OS_MACX
-    }
-#endif
     widgetGeometries.removeAt(widgetIndex);
-    widgetGeometries.insert(widgetIndex, currentGeometry);
+    widgetGeometries.insert(widgetIndex, currentWidgetGeometry);
 }
 
 Qt::WindowStates KCStatusRecorder::getWidgetState(const QString &currentWidgetName)
@@ -146,35 +125,25 @@ int KCStatusRecorder::windowStateToInt(Qt::WindowStates windowState)
 
 QRect KCStatusRecorder::getGeometry(const int &widgetIndex)
 {
-    return QRect(widgetGeometries.at(widgetIndex).x * startStatus.desktopWidth,
-                 widgetGeometries.at(widgetIndex).y * startStatus.desktopHeight,
-                 widgetGeometries.at(widgetIndex).w * startStatus.desktopWidth,
-                 widgetGeometries.at(widgetIndex).h * startStatus.desktopHeight);
+    return widgetGeometries.at(widgetIndex).currentGeometry;
 }
 
-QRect KCStatusRecorder::getAbsoluteGeometry(const int &widgetIndex)
+int KCStatusRecorder::appendList(const QString &newWidgetName)
 {
-    return QRect(widgetGeometries.at(widgetIndex).Left,
-                 widgetGeometries.at(widgetIndex).Top,
-                 widgetGeometries.at(widgetIndex).Width,
-                 widgetGeometries.at(widgetIndex).Height);
-}
-
-QRect KCStatusRecorder::appendList(const QString &newWidgetName)
-{
-    int currentIndex=getWidgetIndex(newWidgetName);
+    //Name list append
+    int widgetIndex=widgetNames.count();
+    widgetNames.append(newWidgetName);
+    //Geometry list append
     KCGeometry newWidgetGeometry;
-    newWidgetGeometry.x=defaultX;
-    newWidgetGeometry.y=defaultY;
-    newWidgetGeometry.h=defaultH;
-    newWidgetGeometry.w=defaultW;
-    newWidgetGeometry.Left=defaultLeft;
-    newWidgetGeometry.Top=defaultTop;
-    newWidgetGeometry.Height=defaultHeight;
-    newWidgetGeometry.Width=defaultWidth;
+    QRect newGeometry=QRect(defaultLeft,
+                            defaultTop,
+                            defaultHeight,
+                            defaultWidth);
+    newWidgetGeometry.currentGeometry=newGeometry;
+    newWidgetGeometry.previousGeometry=newGeometry;
     newWidgetGeometry.WindowState=0;
     widgetGeometries.append(newWidgetGeometry);
-    return getAbsoluteGeometry(currentIndex);
+    return widgetIndex;
 }
 
 KCEnvironmentVariables KCStatusRecorder::getCurrentStatus()
@@ -215,19 +184,28 @@ void KCStatusRecorder::readRecord()
     //Read widget status
     settings.beginGroup("WidgetStatus");
     int widgetNum=settings.beginReadArray("Widgets");
+    QRect itemGeometry;
     for(int i=0;i<widgetNum;i++)
     {
         settings.setArrayIndex(i);
         widgetNames.append(settings.value("ObjectName", "NoName" + QString::number(i)).toString());
         KCGeometry recordGeometry;
-        recordGeometry.x=settings.value("x", 0.1).toFloat();
-        recordGeometry.y=settings.value("y", 0.1).toFloat();
-        recordGeometry.w=settings.value("w", 0.8).toFloat();
-        recordGeometry.h=settings.value("h", 0.8).toFloat();
-        recordGeometry.Left=settings.value("Left", defaultLeft).toInt(),
-        recordGeometry.Top=settings.value("Top", defaultTop).toInt(),
-        recordGeometry.Width=settings.value("Width", defaultWidth).toInt(),
-        recordGeometry.Height=settings.value("Height", defaultHeight).toInt();
+        if(useRelative)
+        {
+            itemGeometry=QRect(settings.value("x", 0.1).toFloat() * startStatus.desktopWidth,
+                               settings.value("y", 0.1).toFloat() * startStatus.desktopHeight,
+                               settings.value("w", 0.8).toFloat() * startStatus.desktopWidth,
+                               settings.value("h", 0.8).toFloat() * startStatus.desktopHeight);
+        }
+        else
+        {
+            itemGeometry=QRect(settings.value("Left", defaultLeft).toInt(),
+                               settings.value("Top", defaultTop).toInt(),
+                               settings.value("Width", defaultWidth).toInt(),
+                               settings.value("Height", defaultHeight).toInt());
+        }
+        recordGeometry.currentGeometry=itemGeometry;
+        recordGeometry.previousGeometry=itemGeometry;
         recordGeometry.WindowState=settings.value("WindowState", 0).toInt();
         widgetGeometries.append(recordGeometry);
     }
@@ -252,14 +230,21 @@ void KCStatusRecorder::writeRecord()
     {
         settings.setArrayIndex(i);
         settings.setValue("ObjectName", widgetNames.at(i));
-        settings.setValue("x", widgetGeometries.at(i).x);
-        settings.setValue("y", widgetGeometries.at(i).y);
-        settings.setValue("h", widgetGeometries.at(i).h);
-        settings.setValue("w", widgetGeometries.at(i).w);
-        settings.setValue("Left", widgetGeometries.at(i).Left);
-        settings.setValue("Top", widgetGeometries.at(i).Top);
-        settings.setValue("Width", widgetGeometries.at(i).Width);
-        settings.setValue("Height", widgetGeometries.at(i).Height);
+
+        //Output relative geometry
+        QRect itemGeometry=widgetGeometries.at(i).currentGeometry;
+        settings.setValue("x", float(itemGeometry.x()) / startStatus.desktopWidth);
+        settings.setValue("y", float(itemGeometry.y()) / startStatus.desktopHeight);
+        settings.setValue("h", float(itemGeometry.height())/ startStatus.desktopHeight);
+        settings.setValue("w", float(itemGeometry.width())/startStatus.desktopWidth);
+
+        //Output absolute geometry
+        settings.setValue("Left", itemGeometry.x());
+        settings.setValue("Top", itemGeometry.y());
+        settings.setValue("Width", itemGeometry.width());
+        settings.setValue("Height", itemGeometry.height());
+
+        //Output window state
         settings.setValue("WindowState", widgetGeometries.at(i).WindowState);
     }
     settings.endArray();

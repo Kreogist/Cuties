@@ -105,7 +105,9 @@ private:
 
     QString fileTypes[sourceFileTypeCount];
 
-    void createRecentFileInfo(const QString &path);
+    void appendRecentFileInfo(const QString &path);
+    void prependRecentFileInfo(const QString &path);
+    recentFileInfo createRecentFileInfo(const QString &path);
     QStandardItem *createRecentFileItem(const int &recentFileItemIndex);
 
     QStandardItemModel *recentOpenedFileModel;

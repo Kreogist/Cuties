@@ -28,7 +28,6 @@ textCharFormatMap::textCharFormatMap(QObject *parent) :
     /*--------------Solve the very exotic problem.----------------*/
     //QFile file("default.style");
     QFile file(qApp->applicationDirPath() + "/default.style");
-    qDebug()<<qApp->applicationDirPath() + "/default.style";
 
 
     if(file.open(QFile::ReadOnly| QFile::Text))
