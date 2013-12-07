@@ -63,6 +63,7 @@ void KCCompilerBase::startCompile(const QString &filePath)
      * example, gcc class use gcc(program name) to compile c files and use
      * g++ to compile cpp files.
      */
+
     emitCompileCommand(compilerPath, arg);
 
     compiler.reset(new QProcess(this));

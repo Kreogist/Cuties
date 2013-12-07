@@ -416,9 +416,9 @@ void KCTabManager::closeEvent(QCloseEvent *e)
 
         //Save the current opened file.
         KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(page);
-        editor->setCacheNewFileMode(true);
         if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile() && editor!=NULL)
         {
+            editor->setCacheNewFileMode(true);
             if(editor->getFilePath().isEmpty())
             {
                 if(editor->isModified())
@@ -432,17 +432,15 @@ void KCTabManager::closeEvent(QCloseEvent *e)
                                                                 editor->getTextCursor());
             }
         }
-        page->close();
-
-        /*if(!page->close())
+        if(!page->close())
         {
             e->ignore();
             break;
         }
         else
-        {*/
+        {
             removeTab(i);
-        //}
+        }
     }
     KCDocumentRecorder::getInstance()->writeSettings();
     KCHistoryConfigure::getInstance()->writeConfigure();
