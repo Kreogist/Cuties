@@ -416,6 +416,7 @@ void KCTabManager::closeEvent(QCloseEvent *e)
 
         //Save the current opened file.
         KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(page);
+        editor->setCacheNewFileMode(true);
         if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile() && editor!=NULL)
         {
             if(editor->getFilePath().isEmpty())

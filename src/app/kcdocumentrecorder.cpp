@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <QDir>
+#include <QFileInfoList>
 #include <QDebug>
 
 #include "kcdocumentrecorder.h"
@@ -62,6 +63,20 @@ void KCDocumentRecorder::clear()
 {
     clearCache();
 
+    QDir cacheDir(unclosedUntitledFileDir);
+    QFileInfoList cacheFileList=cacheDir.entryInfoList();
+    int cacheFileListCount=cacheFileList.count();
+    if(cacheFileListCount>2)
+    {
+        for(int i=0; i<cacheFileListCount; i++)
+        {
+            if(cacheFileList.at(i).isFile())
+            {
+                cacheDir.remove(cacheFileList.at(i).fileName());
+            }
+        }
+    }
+
     QSettings settings(unclosedSettingFile,
                        QSettings::IniFormat);
     settings.beginGroup("UnclosedFile");
@@ -73,7 +88,6 @@ void KCDocumentRecorder::clearCache()
 {
     unclosedFileInfos.clear();
     cacheCount=0;
-    //!TODO: Remove cached file.
 }
 
 void KCDocumentRecorder::readSettings()
