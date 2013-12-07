@@ -44,7 +44,7 @@
 static inline void setApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.2.5.1"));
+    QApplication::setApplicationVersion(QString("0.2.5.4"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
