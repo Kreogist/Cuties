@@ -58,7 +58,7 @@ KCFontConfigure::KCFontConfigure()
     menuFont.setStyleStrategy(QFont::PreferAntialias);
 #endif
 #ifdef Q_OS_WIN32
-    menuFont=QFont("");
+    menuFont=applicationFont;
 #else
 #ifdef Q_OS_UNIX
     menuFont=QFont("sao");

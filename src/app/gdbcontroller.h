@@ -20,7 +20,6 @@
 #ifndef GDBCONTROLLER_H
 #define GDBCONTROLLER_H
 
-
 #include <QProcess>
 #include <QFileInfo>
 #include <QString>
@@ -29,7 +28,10 @@
 #include <QVector>
 #include <QScopedPointer>
 #include <QSharedPointer>
+#include <QLocalServer>
+#include <QLocalSocket>
 #include <QDebug>
+#include <QTextCodec>
 
 #include "gdbmivalue.h"
 #include "dbgoutputreceiver.h"
@@ -61,6 +63,8 @@ public:
     static bool checkGDB();
     static void isGDBPathRight();
 
+    bool startListen();
+
     bool runGDB(const QString &filePath);
     void quitGDB();
 
@@ -68,7 +72,15 @@ public:
 
     QSharedPointer<dbgOutputReceiver> getDbgOutputs();
 
+signals:
+    void byteDelivery(const QByteArray &data);
+
 public slots:
+#ifdef Q_OS_WIN
+    void newConnectionAvailable();
+#endif
+    void readDebugeeOutput(const QByteArray &data);
+    void bytesAvailable();
     void readGdbStandardError();
     void readGdbStandardOutput();
 
@@ -104,6 +116,7 @@ public slots:
     void execGdbCommand(const QString &command);
 
 private:
+    QString getServerName();
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin,const QChar *end);
     void parseLine(const QString &_msg);
@@ -114,6 +127,13 @@ private:
 
     QScopedPointer<QProcess> gdbProcess;
     QSharedPointer<dbgOutputReceiver> dbgOutputs;
+    QTextCodec *debugCodec;
+    QTextCodec::ConverterState debugCodecState;
+
+#ifdef Q_OS_WIN32
+    QLocalServer *debugServer;
+    QLocalSocket *debugSocket;
+#endif
 
     KCDebuggerConfigure *instance;
 };

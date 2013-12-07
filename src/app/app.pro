@@ -23,7 +23,8 @@ TEMPLATE = app
 
 QT  += core\
     gui\
-    widgets
+    widgets\
+    network
 
 SOURCES += \
     main.cpp \
@@ -175,7 +176,8 @@ HEADERS += \
     mainwindow.h \
     textcharformatmap.h \ 
     kcstatusrecorder.h \
-    kcdocumentrecorder.h
+    kcdocumentrecorder.h \
+    qmljs_global.h
 
 
 # Enable C++11

@@ -29,6 +29,7 @@ KCLanguageConfigure *KCLanguageConfigure::getInstance()
 KCLanguageConfigure::KCLanguageConfigure()
 {
     //Set default settings.
+    currentLanguageIndex=-1;
     localeFileDir=qApp->applicationDirPath() + "/Locale/";
     localeTranslation=localeFileDir+"Locale.db";
     //Load Language File List.

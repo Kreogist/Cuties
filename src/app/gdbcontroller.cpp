@@ -41,6 +41,12 @@ GdbController::GdbController(QObject *parent) :
     setGDBPath(instance->getGdbPath());
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
+
+    debugServer = 0;
+    debugSocket = 0;
+    debugCodec=QTextCodec::codecForLocale();
+    connect(this, SIGNAL(byteDelivery(QByteArray)),
+           this, SLOT(readDebugeeOutput(QByteArray)));
 }
 
 void GdbController::readGdbStandardOutput()
@@ -268,13 +274,64 @@ bool GdbController::checkGDB()
     return checkResult=_fileInfo.exists() && _fileInfo.isExecutable();
 }
 
+bool GdbController::startListen()
+{
+#ifdef Q_OS_WIN
+    /*if(debugServer)
+        return debugServer->isListening();*/
+    debugServer = new QLocalServer(this);
+    connect(debugServer, SIGNAL(newConnection()), SLOT(newConnectionAvailable()));
+    return debugServer->listen(QString::fromLatin1("cuties-%1-%2")
+                               .arg(rand()));
+#endif
+}
+
+void GdbController::readDebugeeOutput(const QByteArray &data)
+{
+    QString msg = debugCodec->toUnicode(data.constData(), data.length(),
+        &debugCodecState);
+    /*! Fixed me:
+     *      Here we have to showMessage(msg) to Console Window,
+     *  but I can't solve it. Please Fixed this ASAP.
+     */
+    qDebug()<<msg;
+}
+
+#ifdef Q_OS_WIN
+void GdbController::newConnectionAvailable()
+{
+    if (debugSocket)
+        return;
+    debugSocket = debugServer->nextPendingConnection();
+    connect(debugSocket, SIGNAL(readyRead()), SLOT(bytesAvailable()));
+}
+#endif
+
+void GdbController::bytesAvailable()
+{
+#ifdef Q_OS_WIN
+    emit byteDelivery(debugSocket->readAll());
+/*#else
+    size_t nbytes = 0;
+    if (::ioctl(m_serverFd, FIONREAD, (char *) &nbytes) < 0)
+        return;
+    QVarLengthArray<char, 8192> buff(nbytes);
+    if (::read(m_serverFd, buff.data(), nbytes) != (int)nbytes)
+        return;
+    if (nbytes) // Skip EOF notifications
+        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));*/
+#endif
+}
+
 bool GdbController::runGDB(const QString &filePath)
 {
     if(checkResult)
     {
+        startListen();
         gdbProcess.reset(new QProcess(this));
         QStringList _arg;
-        _arg<<filePath<<"--interpreter"<<"mi";
+        _arg<<filePath<<"--interpreter"<<"mi"
+           <<QString("--tty=" + getServerName());
 
 
         connect(gdbProcess.data(),
@@ -459,8 +516,14 @@ void GdbController::execGdbCommand(const QString &command)
     gdbProcess->write(qPrintable(command));
 }
 
+QString GdbController::getServerName()
+{
+#ifdef Q_OS_WIN
+    return debugServer->fullServerName();
+#endif
+}
+
 QSharedPointer<dbgOutputReceiver> GdbController::getDbgOutputs()
 {
     return dbgOutputs;
 }
-

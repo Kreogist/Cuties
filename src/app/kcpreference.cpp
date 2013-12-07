@@ -79,6 +79,7 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
             this, SIGNAL(requiredChangeLanguage()));
 
     instance=KCLanguageConfigure::getInstance();
+
     connect(instance, &KCLanguageConfigure::newLanguageSet,
             this, &KCPreferenceBannerWidget::refreshLanguageInfo);
     refreshLanguageInfo();
@@ -86,8 +87,15 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
 
 void KCPreferenceBannerWidget::refreshLanguageInfo()
 {
-    localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
-    localeSettings->setText(instance->getLanguageCaption().at(instance->getCurrentLanguageIndex()));
+    if(instance->getCurrentLanguageIndex()<0)
+    {
+        localeSettings->setText("No langauge files.");
+    }
+    else
+    {
+        localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
+        localeSettings->setText(instance->getLanguageCaption().at(instance->getCurrentLanguageIndex()));
+    }
 }
 
 void KCPreferenceBannerWidget::retranslate()

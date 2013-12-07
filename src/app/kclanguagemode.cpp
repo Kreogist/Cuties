@@ -153,6 +153,7 @@ GdbController *KCLanguageMode::startDebug()
         gdbControllerInstance=new GdbController(this);
     }
 
+
     gdbControllerInstance->runGDB(m_parent->execFileName);
     gdbControllerInstance->execRun();
 

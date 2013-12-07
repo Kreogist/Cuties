@@ -115,17 +115,20 @@ KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
 
     instance=KCLanguageConfigure::getInstance();
     int languageCount=instance->getLanguageList().count();
-    for(int i=0;i<languageCount;i++)
+    if(languageCount>0)
     {
-        languageItems.append(addLanguageItem(instance->getLanguageCaption().at(i),
-                                             instance->getLanguageFileIcon().at(i)));
-        connect(languageItems.at(i), SIGNAL(requireChangeLanguage()),
-                languageChangeMapper, SLOT(map()));
-        languageChangeMapper->setMapping(languageItems.at(i), i);
-        languageListLayout->addWidget(languageItems.at(i));
+        for(int i=0;i<languageCount;i++)
+        {
+            languageItems.append(addLanguageItem(instance->getLanguageCaption().at(i),
+                                                 instance->getLanguageFileIcon().at(i)));
+            connect(languageItems.at(i), SIGNAL(requireChangeLanguage()),
+                    languageChangeMapper, SLOT(map()));
+            languageChangeMapper->setMapping(languageItems.at(i), i);
+            languageListLayout->addWidget(languageItems.at(i));
+        }
+        connect(languageChangeMapper, SIGNAL(mapped(int)),
+                this, SIGNAL(requireChangeLanguage(int)));
     }
-    connect(languageChangeMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(requireChangeLanguage(int)));
     languageListLayout->addStretch();
     languageContents->setFixedSize(languageContents->sizeHint());
 }
