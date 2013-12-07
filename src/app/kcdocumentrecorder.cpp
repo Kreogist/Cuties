@@ -29,8 +29,7 @@ void KCDocumentRecorder::appendRecord(KCCodeEditor *textEditor)
 {
     //This will treat as a untitled file.
     QString cacheFilePath=QString(unclosedUntitledFileDir +
-                                  QString::number(cacheCount++) +
-                                  ".txt");
+                                  QString::number(cacheCount++));
 
     //Save the file as a cache file
     textEditor->writeCacheFile(cacheFilePath);
@@ -61,8 +60,20 @@ void KCDocumentRecorder::setUnclosedSettingFile(const QString &filePath)
 
 void KCDocumentRecorder::clear()
 {
+    clearCache();
+
+    QSettings settings(unclosedSettingFile,
+                       QSettings::IniFormat);
+    settings.beginGroup("UnclosedFile");
+    settings.remove("");
+    settings.endGroup();
+}
+
+void KCDocumentRecorder::clearCache()
+{
     unclosedFileInfos.clear();
     cacheCount=0;
+    //!TODO: Remove cached file.
 }
 
 void KCDocumentRecorder::readSettings()
@@ -71,7 +82,7 @@ void KCDocumentRecorder::readSettings()
                        QSettings::IniFormat);
 
     //Clear cache first
-    clear();
+    clearCache();
 
     settings.beginGroup("UnclosedFile");
     int unclosedFileCounts=settings.value("UnclosedFileNum", 0).toInt();
@@ -83,7 +94,6 @@ void KCDocumentRecorder::readSettings()
         UnclosedFileStatus currentStatus;
         currentStatus.untitled=settings.value("Untitled", false).toBool();
         currentStatus.filePath=settings.value("FilePath", QString("")).toString();
-        qDebug()<<currentStatus.filePath;
         currentStatus.horizontalCursorPosition=settings.value("HorizontalPosition", 0).toInt();
         currentStatus.verticalCursorPosition=settings.value("VerticalPosition", 0).toInt();
         unclosedFileInfos.append(currentStatus);

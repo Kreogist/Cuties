@@ -152,6 +152,7 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
 }
+
 bool KCCodeEditor::getCacheNewFileMode() const
 {
     return cacheNewFileMode;
@@ -161,7 +162,6 @@ void KCCodeEditor::setCacheNewFileMode(bool value)
 {
     cacheNewFileMode = value;
 }
-
 
 void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
 {
@@ -277,7 +277,8 @@ void KCCodeEditor::showReplaceBar()
     replaceBar->setTextFocus();
 }
 
-bool KCCodeEditor::open(const QString &fileName, bool cacheMode)
+bool KCCodeEditor::open(const QString &fileName,
+                        bool cacheMode)
 {
     QFile _file(fileName);
 

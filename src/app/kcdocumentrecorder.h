@@ -28,6 +28,7 @@ public:
     bool setUnclosedUntitledFileDir(const QString &dirPath);
     void setUnclosedSettingFile(const QString &filePath);
     void clear();
+    void clearCache();
     void readSettings();
     void writeSettings();
     int getUnclosedCurrentIndex() const;
