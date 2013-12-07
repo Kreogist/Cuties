@@ -24,7 +24,7 @@ QString GdbController::gdbPath="/usr/bin/gdb";
 #endif
 
 #ifdef Q_OS_WIN32
-QString GdbController::gdbPath="c:\\MinGW\\bin\\gdb";
+QString GdbController::gdbPath="C:/MinGW/bin/gdb.exe";
 #endif
 
 bool GdbController::checkResult=false;
@@ -37,6 +37,8 @@ static bool isAnsycChar(const char &c)
 GdbController::GdbController(QObject *parent) :
     QObject(parent)
 {
+    instance=KCDebuggerConfigure::getInstance();
+    setGDBPath(instance->getGdbPath());
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 }

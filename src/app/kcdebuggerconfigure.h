@@ -29,9 +29,14 @@ public:
     void writeConfigure();
     static KCDebuggerConfigure *getInstance();
 
+    QString getGdbPath() const;
+    void setGdbPath(const QString &value);
+
 private:
     KCDebuggerConfigure();
     static KCDebuggerConfigure *instance;
+
+    QString gdbPath;
 };
 
 #endif // KCDEBUGGERCONFIGURE_H

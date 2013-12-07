@@ -33,6 +33,7 @@
 
 #include "gdbmivalue.h"
 #include "dbgoutputreceiver.h"
+#include "kcdebuggerconfigure.h"
 
 struct bkpt_struct
 {
@@ -113,6 +114,8 @@ private:
 
     QScopedPointer<QProcess> gdbProcess;
     QSharedPointer<dbgOutputReceiver> dbgOutputs;
+
+    KCDebuggerConfigure *instance;
 };
 
 #endif // GDBCONTROLLER_H

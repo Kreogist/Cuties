@@ -28,14 +28,37 @@ KCDebuggerConfigure *KCDebuggerConfigure::getInstance()
 
 KCDebuggerConfigure::KCDebuggerConfigure()
 {
+#ifdef Q_OS_UNIX
+    gdbPath="/usr/bin/gdb";
+#endif
+
+#ifdef Q_OS_WIN32
+    gdbPath="C:/MinGW/bin/gdb.exe";
+#endif
+}
+
+QString KCDebuggerConfigure::getGdbPath() const
+{
+    return gdbPath;
+}
+
+void KCDebuggerConfigure::setGdbPath(const QString &value)
+{
+    gdbPath = value;
 }
 
 void KCDebuggerConfigure::readConfigure()
 {
-
+    QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
+    cfgOperator.beginGroup("Debugger");
+    gdbPath=cfgOperator.value("GDBPath", gdbPath).toString();
+    cfgOperator.endGroup();
 }
 
 void KCDebuggerConfigure::writeConfigure()
 {
-
+    QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
+    cfgOperator.beginGroup("Debugger");
+    cfgOperator.setValue("GDBPath", gdbPath);
+    cfgOperator.endGroup();
 }

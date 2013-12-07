@@ -353,7 +353,7 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
     debuggerTitles[titleGDBSettings]=addTitle(debuggerTitleText[titleGDBSettings]);
 
     debuggerPathItems[pathGDBDebugger]=addItemPath(pathItemCaption[pathGDBDebugger],
-                                                   "",
+                                                   instance->getGdbPath(),
                                                    pathItemTitleCaption[pathGDBDebugger]);
 
     addStretch();
@@ -393,7 +393,7 @@ void KCPreferenceEmbeddedDebugger::retranslateAndSet()
 
 void KCPreferenceEmbeddedDebugger::applyPreference()
 {
-    ;
+    instance->setGdbPath(debuggerPathItems[pathGDBDebugger]->getCurrentValue().toString());
 }
 
 KCPreferenceEmbeddedFileAssociation::KCPreferenceEmbeddedFileAssociation(QWidget *parent) :

@@ -438,6 +438,7 @@ void MainWindow::createDocks()
 
 void MainWindow::showDebugDocks()
 {
+    qDebug()<<"WTF?!";
     debugControl->show();
     debugCommandIO->show();
 }
