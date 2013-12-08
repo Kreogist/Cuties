@@ -30,6 +30,7 @@
 #include <QSharedPointer>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QSocketNotifier>
 #include <QDebug>
 #include <QTextCodec>
 
@@ -133,6 +134,11 @@ private:
 #ifdef Q_OS_WIN32
     QLocalServer *debugServer;
     QLocalSocket *debugSocket;
+#else
+    QString m_serverPath;
+    int m_serverFd;
+    QSocketNotifier *m_serverNotifier;
+    QString m_errorString;
 #endif
 
     KCDebuggerConfigure *instance;

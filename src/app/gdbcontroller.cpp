@@ -17,6 +17,25 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef Q_OS_WIN
+
+#include <QSocketNotifier>
+#include <QTemporaryFile>
+#include <QVarLengthArray>
+
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#ifdef Q_OS_SOLARIS
+# include <sys/filio.h> // FIONREAD
+#endif
+#include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+
+#endif
+
 #include "gdbcontroller.h"
 
 #ifdef Q_OS_UNIX
@@ -42,8 +61,10 @@ GdbController::GdbController(QObject *parent) :
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 
+#ifdef Q_OS_WIN
     debugServer = 0;
     debugSocket = 0;
+#endif
     debugCodec=QTextCodec::codecForLocale();
     connect(this, SIGNAL(byteDelivery(QByteArray)),
            this, SLOT(readDebugeeOutput(QByteArray)));
@@ -283,6 +304,40 @@ bool GdbController::startListen()
     connect(debugServer, SIGNAL(newConnection()), SLOT(newConnectionAvailable()));
     return debugServer->listen(QString::fromLatin1("cuties-%1-%2")
                                .arg(rand()));
+#else
+    if (!m_serverPath.isEmpty())
+        return true;
+    QByteArray codedServerPath;
+    forever {
+        {
+            QTemporaryFile tf;
+            if (!tf.open()) {
+                m_errorString = tr("Cannot create temporary file: %1").arg(tf.errorString());
+                m_serverPath.clear();
+                return false;
+            }
+            m_serverPath = tf.fileName();
+        }
+        // By now the temp file was deleted again
+        codedServerPath = QFile::encodeName(m_serverPath);
+        if (!::mkfifo(codedServerPath.constData(), 0600))
+            break;
+        if (errno != EEXIST) {
+            m_errorString = tr("Cannot create FiFo %1: %2").
+                            arg(m_serverPath, QString::fromLocal8Bit(strerror(errno)));
+            m_serverPath.clear();
+            return false;
+        }
+    }
+    if ((m_serverFd = ::open(codedServerPath.constData(), O_RDONLY|O_NONBLOCK)) < 0) {
+        m_errorString = tr("Cannot open FiFo %1: %2").
+                        arg(m_serverPath, QString::fromLocal8Bit(strerror(errno)));
+        m_serverPath.clear();
+        return false;
+    }
+    m_serverNotifier = new QSocketNotifier(m_serverFd, QSocketNotifier::Read, this);
+    connect(m_serverNotifier, SIGNAL(activated(int)), SLOT(bytesAvailable()));
+    return true;
 #endif
 }
 
@@ -311,7 +366,7 @@ void GdbController::bytesAvailable()
 {
 #ifdef Q_OS_WIN
     emit byteDelivery(debugSocket->readAll());
-/*#else
+#else
     size_t nbytes = 0;
     if (::ioctl(m_serverFd, FIONREAD, (char *) &nbytes) < 0)
         return;
@@ -319,7 +374,7 @@ void GdbController::bytesAvailable()
     if (::read(m_serverFd, buff.data(), nbytes) != (int)nbytes)
         return;
     if (nbytes) // Skip EOF notifications
-        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));*/
+        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));
 #endif
 }
 
