@@ -1,3 +1,4 @@
+
 @font-face
 	{
 	font-family:sao;
@@ -5,28 +6,42 @@
 	url('sao.otf'); /* IE9 */
 	}
 body{
-    background-color:#444;
+    background-color:#434343;
     font-size:18px;
-    font-family:"sao";
+    font-family:"sao", "华文细黑";
     min-width:980px;
 }
 
+a {
+  text-decoration: none;
+  color: #007edf;
+  text-shadow: none;
 
-a:link{
-    text-decoration:none;
+  transition: color 0.5s ease;
+  transition: text-shadow 0.5s ease;
+  -webkit-transition: color 0.5s ease;
+  -webkit-transition: text-shadow 0.5s ease;
+  -moz-transition: color 0.5s ease;
+  -moz-transition: text-shadow 0.5s ease;
+  -o-transition: color 0.5s ease;
+  -o-transition: text-shadow 0.5s ease;
+  -ms-transition: color 0.5s ease;
+  -ms-transition: text-shadow 0.5s ease;
 }
-a:visited{
-    text-decoration:none;
+
+a:hover {
+  color: #0069ba;
+  text-shadow: #0090ff 0px 0px 2px;
 }
-a:hover{
-    text-decoration:none;
+
+footer a:hover {
+  color: #43adff;
+  text-shadow: #0090ff 0px 0px 2px;
 }
-a:active{
-    text-decoration:none;
-}
+
 p{margin-top:2em;}
 /*==>common class<==*/
-.normal-font{font-family:"Lucida Grande", "Arial", "微软雅黑", "SimHei";font-weight:400;}
+.normal-font{font-family:"Lucida Grande", "Arial", "华文细黑", "SimHei";font-weight:400;}
 .center-text{text-align:center;}
 .large-text{font-size:2em;}
 .larger-text{font-size:3em;}
@@ -263,6 +278,50 @@ p{margin-top:2em;}
 #help-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_support_hover.png")}
 #help-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_support_press.png")}
 
+.main-features{
+    /* Internet Explorer 10 */
+    display:-ms-flex;
+    /* Firefox */
+	display:-moz-box;
+	-moz-box-flex:2;
+	-moz-box-orient:horizontal;
+	/* Safari, Opera, and Chrome */
+	display:-webkit-box;
+	-webkit-box-flex:2;
+	-webkit-box-orient:horizontal;
+    /* W3C */
+    display:box;
+	box-flex:2;
+	box-orient:horizontal;
+    
+	padding-top:0px;
+	padding-left:0px;
+	padding-right:0px;
+	padding-bottom:0px;
+    width:100%;
+}
+.main-div{
+	/* Internet Explorer 10 */
+    display:-ms-flex;
+ 	/* Firefox */
+	display:-moz-box;
+	-moz-box-flex:1;
+	-moz-box-orient:vertical;
+	/* Safari, Opera, and Chrome */
+	display:-webkit-box;
+	-webkit-box-flex:1;
+	-webkit-box-orient:vertical;
+    /* W3C */
+    display:box;
+	box-flex:1;
+	box-orient:vertical;
+	
+	padding-top:0px;
+	padding-left:35px;
+	padding-right:35px;
+	padding-bottom:0px;
+	width:50%;
+}
 .context-container{
     z-index:1;
     width:80%;
@@ -273,7 +332,8 @@ p{margin-top:2em;}
     padding-right:40px;
 	padding-bottom:1em;
 	padding-top:1em;
-    background:rgba(255,255,255,0.4);
+	font-size:1em;
+    background:rgba(255,255,255,0.8);
     box-shadow:0 0 10px rgba(0,0,0,0.8);
 }
 .title{
@@ -287,7 +347,7 @@ p{margin-top:2em;}
     margin-top:3px;
     height:1px;
     width:auto;
-    background-color:#999;
+    background-color:#ccc;
     content:"";
     box-shadow:2px 2px 2px black;
     }
