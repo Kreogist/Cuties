@@ -18,7 +18,6 @@
  */
 
 #ifndef Q_OS_WIN
-
 #include <QSocketNotifier>
 #include <QTemporaryFile>
 #include <QVarLengthArray>
@@ -33,7 +32,6 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
-
 #endif
 
 #include "gdbcontroller.h"
@@ -305,38 +303,38 @@ bool GdbController::startListen()
     return debugServer->listen(QString::fromLatin1("cuties-%1-%2")
                                .arg(rand()));
 #else
-    if (!m_serverPath.isEmpty())
+    if (!debugServerPath.isEmpty())
         return true;
     QByteArray codedServerPath;
     forever {
         {
             QTemporaryFile tf;
             if (!tf.open()) {
-                m_errorString = tr("Cannot create temporary file: %1").arg(tf.errorString());
-                m_serverPath.clear();
+                debugErrorString = tr("Cannot create temporary file: %1").arg(tf.errorString());
+                debugServerPath.clear();
                 return false;
             }
-            m_serverPath = tf.fileName();
+            debugServerPath = tf.fileName();
         }
         // By now the temp file was deleted again
-        codedServerPath = QFile::encodeName(m_serverPath);
+        codedServerPath = QFile::encodeName(debugServerPath);
         if (!::mkfifo(codedServerPath.constData(), 0600))
             break;
         if (errno != EEXIST) {
-            m_errorString = tr("Cannot create FiFo %1: %2").
-                            arg(m_serverPath, QString::fromLocal8Bit(strerror(errno)));
-            m_serverPath.clear();
+            debugErrorString = tr("Cannot create FiFo %1: %2").
+                            arg(debugServerPath, QString::fromLocal8Bit(strerror(errno)));
+            debugServerPath.clear();
             return false;
         }
     }
-    if ((m_serverFd = ::open(codedServerPath.constData(), O_RDONLY|O_NONBLOCK)) < 0) {
-        m_errorString = tr("Cannot open FiFo %1: %2").
-                        arg(m_serverPath, QString::fromLocal8Bit(strerror(errno)));
-        m_serverPath.clear();
+    if ((debugServerFd = ::open(codedServerPath.constData(), O_RDONLY|O_NONBLOCK)) < 0) {
+        debugErrorString = tr("Cannot open FiFo %1: %2").
+                        arg(debugServerPath, QString::fromLocal8Bit(strerror(errno)));
+        debugServerPath.clear();
         return false;
     }
-    m_serverNotifier = new QSocketNotifier(m_serverFd, QSocketNotifier::Read, this);
-    connect(m_serverNotifier, SIGNAL(activated(int)), SLOT(bytesAvailable()));
+    debugServerNotifier = new QSocketNotifier(debugServerFd, QSocketNotifier::Read, this);
+    connect(debugServerNotifier, SIGNAL(activated(int)), SLOT(bytesAvailable()));
     return true;
 #endif
 }
@@ -368,10 +366,10 @@ void GdbController::bytesAvailable()
     emit byteDelivery(debugSocket->readAll());
 #else
     size_t nbytes = 0;
-    if (::ioctl(m_serverFd, FIONREAD, (char *) &nbytes) < 0)
+    if (::ioctl(debugServerFd, FIONREAD, (char *) &nbytes) < 0)
         return;
     QVarLengthArray<char, 8192> buff(nbytes);
-    if (::read(m_serverFd, buff.data(), nbytes) != (int)nbytes)
+    if (::read(debugServerFd, buff.data(), nbytes) != (int)nbytes)
         return;
     if (nbytes) // Skip EOF notifications
         emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));
@@ -575,6 +573,8 @@ QString GdbController::getServerName()
 {
 #ifdef Q_OS_WIN
     return debugServer->fullServerName();
+#else
+    return debugServerPath;
 #endif
 }
 

@@ -135,10 +135,10 @@ private:
     QLocalServer *debugServer;
     QLocalSocket *debugSocket;
 #else
-    QString m_serverPath;
-    int m_serverFd;
-    QSocketNotifier *m_serverNotifier;
-    QString m_errorString;
+    QString debugServerPath;
+    int debugServerFd;
+    QSocketNotifier *debugServerNotifier;
+    QString debugErrorString;
 #endif
 
     KCDebuggerConfigure *instance;
