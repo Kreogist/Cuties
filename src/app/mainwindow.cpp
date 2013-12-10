@@ -22,6 +22,7 @@
 #include "kclanguageconfigure.h"
 #include "kchistoryconfigure.h"
 #include "kcstatusrecorder.h"
+#include "kcmailreports.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
@@ -335,6 +336,12 @@ void MainWindow::createActions()
     //Help -> About Qt
     actionMainWindowItem[actionHelpAboutQt]->setMenuRole(QAction::AboutQtRole);
     connect(actionMainWindowItem[actionHelpAboutQt],SIGNAL(triggered()),this,SLOT(aboutQt()));
+
+    //Help -> Report a bug
+    connect(actionMainWindowItem[actionHelpBugReport],SIGNAL(triggered()),this,SLOT(onActionBugReport()));
+
+    //Help -> Send feedbacks
+    connect(actionMainWindowItem[actionHelpSendFeedbacks],SIGNAL(triggered()),this,SLOT(onActionSendFeedbacks()));
 }
 
 void MainWindow::aboutCuties()
@@ -673,7 +680,7 @@ void MainWindow::createMenu()
     menuMainWindowItem[menuHelp]->setIcon(*MenuIconAddor);
 #endif
     //from about to about_qt add into help menu
-    for(i=actionHelpAbout; i<=actionHelpAboutQt; i++)
+    for(i=actionHelpAbout; i<=actionHelpSendFeedbacks; i++)
     {
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -996,6 +1003,20 @@ void MainWindow::changeJudgeDockVisibleState()
     judgeDock->setVisible(!judgeDock->isVisible());
 }
 
+void MainWindow::onActionBugReport()
+{
+    KCMailReports *bugReport=new KCMailReports(this);
+    bugReport->setMode(KCMailReports::BugReportMode);
+    bugReport->exec();
+}
+
+void MainWindow::onActionSendFeedbacks()
+{
+    KCMailReports *feedbackReport=new KCMailReports(this);
+    feedbackReport->setMode(KCMailReports::FeedbackReportMode);
+    feedbackReport->exec();
+}
+
 void MainWindow::statusShowGoto()
 {
     statusBar->showGotoBar(tabManager->getCurrentLineNum(),
@@ -1069,6 +1090,8 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionWindowPrev]=tr("Switch to the previous tab.");
     actionStatusTips[actionHelpAbout]=tr("Display the Kreogist Cuties information.");
     actionStatusTips[actionHelpAboutQt]=tr("Display the Qt information, version number and copyright.");
+    actionStatusTips[actionHelpBugReport]=tr("Report a bug of Cuties to Kreogist Dev Team.");
+    actionStatusTips[actionHelpSendFeedbacks]=tr("Send a feedback to Kreogist Dev Team. Thanks a lot!");
 
     actionMainWindowText[actionFileNewFile]=tr("New Source File");
     actionMainWindowText[actionFileOpen]=tr("Open");
@@ -1115,6 +1138,8 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionWindowPrev]=tr("Previous");
     actionMainWindowText[actionHelpAbout]=tr("About");
     actionMainWindowText[actionHelpAboutQt]=tr("About Qt");
+    actionMainWindowText[actionHelpBugReport]=tr("Report a bug");
+    actionMainWindowText[actionHelpSendFeedbacks]=tr("Send a feedback");
 
     toolButtonTips[toolButtonNewFile]=actionMainWindowText[actionFileNewFile]+"\n"+actionStatusTips[actionFileNewFile];
     toolButtonTips[toolButtonOpenFile]=actionMainWindowText[actionFileOpen]+"\n"+actionStatusTips[actionFileOpen];

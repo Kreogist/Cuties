@@ -101,7 +101,9 @@ SOURCES += \
     textcharformatmap.cpp \ 
     kcstatusrecorder.cpp \
     kcdocumentrecorder.cpp \
-    kcsmartpanel.cpp
+    kcsmartpanel.cpp \
+    kcmailreports.cpp \
+    kcmailprocessobject.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -179,7 +181,9 @@ HEADERS += \
     kcstatusrecorder.h \
     kcdocumentrecorder.h \
     qmljs_global.h \
-    kcsmartpanel.h
+    kcsmartpanel.h \
+    kcmailreports.h \
+    kcmailprocessobject.h
 
 
 # Enable C++11

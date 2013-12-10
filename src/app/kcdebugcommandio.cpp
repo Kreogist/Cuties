@@ -21,6 +21,7 @@
 #include <QComboBox>
 #include <QStyleFactory>
 #include <QTextDocument>
+#include <QLineEdit>
 
 #include "kcplaintextbrowser.h"
 #include "gdbcontroller.h"
@@ -97,6 +98,6 @@ void KCDebugCommandIO::retranslateAndSet()
 void KCDebugCommandIO::onCurrentIndexChanged(QString command)
 {
     instance->execGdbCommand(qPrintable(command+'\n'));
-    debugInput->clear();
+    debugInput->lineEdit()->selectAll();
 }
 
