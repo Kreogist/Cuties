@@ -42,8 +42,8 @@ signals:
 public slots:
     void retranslate();
     void retranslateAndSet();
-
-private slots:
+    void onDebugStartClicked();
+    void onDebugStopClicked();
     void onRunToCursorClicked();
     void onDebugNextClicked();
     void onDebugContinueClicked();
@@ -51,6 +51,8 @@ private slots:
     void onDebugNextiClicked();
     void onDebugStepiClicked();
     void onDebugReturnClicked();
+
+private slots:
 
 private:
     enum debugContolButtons

@@ -17,49 +17,34 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_H
-#define PANEL_H
+#ifndef KCSMARTPANEL_H
+#define KCSMARTPANEL_H
 
-#include <QWidget>
-#include <QTextBlock>
-#include <QPainter>
+#include <QFont>
+#include <QColor>
 
-#include "kcconnectionhandler.h"
-class KCTextEditor;
+#include "kcpanel.h"
 
-class KCPanel : public QWidget
+class KCSmartPanel : public KCPanel
 {
     Q_OBJECT
 public:
-    explicit KCPanel(QWidget *parent = 0);
-    void setTextEditor(KCTextEditor *editor);
-    void setAutoAdaptWidth(bool newValue);
-    bool autoAdaptWidth();
+    explicit KCSmartPanel(QWidget *parent = 0);
 
 signals:
 
 public slots:
 
 protected:
-    QTextBlock getFirstVisiableBlock();
-    QTextBlock getLastVisiableBlock();
-    int getFirstVisiableBlockNumber();
-    int getLastVisiableBlockNumber();
     void paintEvent(QPaintEvent *event);
-    virtual void draw(QPainter *painter, QTextBlock *block ,
-                      int x, int y, int w, int h,
-                      bool isCurrentLine) = 0;
-    int lineHeight;
+    void draw(QPainter *painter, QTextBlock *block,
+              int x, int y, int w, int h,
+              bool isCurrentLine);
 
 private:
-    int getRealLineCount(const QTextBlock &block, const int &offset);
-    KCTextEditor *e;
-
-    int first,last;
-
-    bool autoWidth;
-
-    KCConnectionHandler connectionHandles;
+    QColor textColor;
+    bool startRedraw;
+    int previousLevel;
 };
 
-#endif // PANEL_H
+#endif // KCSMARTPANEL_H

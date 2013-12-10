@@ -43,12 +43,12 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(tabManager);
 
     //Create All Window Contents
-    createActions();
     createDocks();
     createTitlebar();
-    createMenu();
     createToolBar();
     createStatusbar();
+    createActions();
+    createMenu();
 
     //Restore the last time running states
     restoreSettings();
@@ -278,6 +278,37 @@ void MainWindow::createActions()
         actStatusTips[mnuExecuteSetInputRunShowOutput]=
                 QString(tr("Set the input file, compile and run the document, and show output file."));
     */
+
+    //Debug -> Start Debug
+    connect(actionMainWindowItem[actionDebugStart], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugStartClicked()));
+
+    //Debug -> Stop Debug
+    connect(actionMainWindowItem[actionDebugStop], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugStopClicked()));
+
+    //Debug -> Run to Cursor
+    connect(actionMainWindowItem[actionDebugRunToCursor], SIGNAL(triggered()),
+            debugControl, SLOT(onRunToCursorClicked()));
+
+    //Debug
+    connect(actionMainWindowItem[actionDebugNext], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugNextClicked()));
+
+    connect(actionMainWindowItem[actionDebugContinue], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugContinueClicked()));
+
+    connect(actionMainWindowItem[actionDebugStep], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugStepClicked()));
+
+    connect(actionMainWindowItem[actionDebugNexti], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugNextiClicked()));
+
+    connect(actionMainWindowItem[actionDebugStepi], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugStepiClicked()));
+
+    connect(actionMainWindowItem[actionDebugReturn], SIGNAL(triggered()),
+            debugControl, SLOT(onDebugReturnClicked()));
 
     //Tools -> Preferences
     actionMainWindowItem[actionToolsPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));

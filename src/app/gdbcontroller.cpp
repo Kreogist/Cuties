@@ -17,6 +17,11 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QCoreApplication>
+
+#include <stdlib.h>
+#include <stdio.h>
+
 #ifndef Q_OS_WIN
 #include <QSocketNotifier>
 #include <QTemporaryFile>
@@ -347,6 +352,11 @@ void GdbController::readDebugeeOutput(const QByteArray &data)
      *      Here we have to showMessage(msg) to Console Window,
      *  but I can't solve it. Please Fixed this ASAP.
      */
+    showMessage(msg);
+}
+
+void GdbController::showMessage(const QString &msg)
+{
     qDebug()<<msg;
 }
 
@@ -384,7 +394,7 @@ bool GdbController::runGDB(const QString &filePath)
         gdbProcess.reset(new QProcess(this));
         QStringList _arg;
         _arg<<filePath<<"--interpreter"<<"mi"
-           <<QString("--tty=" + getServerName());
+            <<QString("--tty=" + getServerName());
 
 
         connect(gdbProcess.data(),

@@ -39,6 +39,7 @@ class KCReplaceWindow;
 class KCLanguageMode;
 class KCTextEditor;
 class KCMarkPanel;
+class KCSmartPanel;
 class KCLinenumPanel;
 class KCSearchWidget;
 
@@ -122,6 +123,7 @@ private:
     KCTextEditor *editor;
     KCLinenumPanel *linePanel;
     KCMarkPanel *markPanel;
+    KCSmartPanel *smartPanel;
 
     QString filePath;
     QString execFileName;

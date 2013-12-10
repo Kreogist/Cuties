@@ -100,7 +100,8 @@ SOURCES += \
     mainwindow.cpp \
     textcharformatmap.cpp \ 
     kcstatusrecorder.cpp \
-    kcdocumentrecorder.cpp
+    kcdocumentrecorder.cpp \
+    kcsmartpanel.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -177,11 +178,13 @@ HEADERS += \
     textcharformatmap.h \ 
     kcstatusrecorder.h \
     kcdocumentrecorder.h \
-    qmljs_global.h
+    qmljs_global.h \
+    kcsmartpanel.h
 
 
 # Enable C++11
-CONFIG += c++11
+CONFIG += c++11 \
+          console
 
 RESOURCES += \
     rc.qrc

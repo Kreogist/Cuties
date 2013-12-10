@@ -70,6 +70,8 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     mainLayout->addWidget(debugOutputTextBrowser,1);
     connect(debugInput,SIGNAL(currentIndexChanged(QString)),
             this,SLOT(onCurrentIndexChanged(QString)));
+    /*connect(debugInput, SIGNAL(activated(QString)),
+            this, SLOT(onCurrentIndexChanged(QString)));*/
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugCommandIO::retranslateAndSet);
@@ -95,5 +97,6 @@ void KCDebugCommandIO::retranslateAndSet()
 void KCDebugCommandIO::onCurrentIndexChanged(QString command)
 {
     instance->execGdbCommand(qPrintable(command+'\n'));
+    debugInput->clear();
 }
 

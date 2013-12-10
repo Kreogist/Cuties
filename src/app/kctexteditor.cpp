@@ -438,7 +438,7 @@ void KCTextEditor::autoIndent()
     }
 }
 
-void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
+void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount, bool forceInsert)
 {
     if(tabCount>0)
     {
@@ -446,7 +446,14 @@ void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
         QString spaceChar=configureInstance->usingBlankInsteadTab()?
                           QString(" ").repeated(configureInstance->getSpacePerTab()):
                           "\t";
-        insertTabCursor.insertText(spaceChar.repeated(tabCount));
+        if(insertTabCursor.document()->characterAt(insertTabCursor.position())=='}' && !forceInsert)
+        {
+            insertTabCursor.insertText(spaceChar.repeated(tabCount-1));
+        }
+        else
+        {
+            insertTabCursor.insertText(spaceChar.repeated(tabCount));
+        }
     }
 }
 
@@ -504,7 +511,7 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
 {
     if(tabPressCursor.selectedText().isEmpty())
     {
-        insertTab(tabPressCursor);
+        insertTab(tabPressCursor, 1, true);
     }
     else
     {
@@ -1014,7 +1021,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 nextData->setCodeLevel(prevData->getCodeLevel() + 1);
                 _textCursor.setPosition(nextBlock.position());
                 setTextCursor(_textCursor);
-                insertTab(_textCursor, prevData->getCodeLevel());
+                insertTab(_textCursor, prevData->getCodeLevel() + 1);
                 _textCursor.movePosition(QTextCursor::PreviousBlock);
                 setTextCursor(_textCursor);
                 insertTab(_textCursor, prevData->getCodeLevel() + 1);
