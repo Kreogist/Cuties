@@ -38,6 +38,7 @@ private:
     KCMailProcessObject *instance;
 
     QString titlePlaceHolderText[ModeCount];
+    QString senderCaptions[ModeCount];
     QString buttonText[ModeCount];
     QString windowTitleString[ModeCount];
     QString titlePrefix[ModeCount];

@@ -37,7 +37,6 @@ KCMailProcessObject::KCMailProcessObject()
 void KCMailProcessObject::sendMail()
 {
     socket.connectToHost(hostNameAddress, hostPort);
-
     if (socket.waitForConnected(timeoutCount))
     {
         qDebug()<<"Smtp Server Connected Success.";
@@ -77,7 +76,7 @@ void KCMailProcessObject::smtpCommunication()
         communication("mail from: <"+mailSender.toLatin1()+">\r\n");
         communication("rcpt to: <"+mailReceiver.toLatin1()+">\r\n");
         communication("data\r\n");
-        communication(mailPackage.toLatin1().data());
+        communication(mailPackage.toLocal8Bit().data());
         communication("quit\r\n");
 
         qDebug() << "send email ok." << endl;
@@ -89,7 +88,7 @@ void KCMailProcessObject::createMail()
                 "\r\nTo: " + mailReceiverCaption + "\r\n" +
                 "Subject: " + mailTitle + "\r\n\r\n" +
                 mailContent +
-            "\r\n.\r\n";
+                "\r\n.\r\n";
 }
 
 void KCMailProcessObject::setMailReceiverCaption(const QString &value)

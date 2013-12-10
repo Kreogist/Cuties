@@ -38,6 +38,9 @@ void KCMailReports::setMode(SendingMode value)
 
 void KCMailReports::retranslate()
 {
+    senderCaptions[BugReportMode]=tr("BugReporter");
+    senderCaptions[FeedbackReportMode]=tr("Feedback");
+
     windowTitleString[BugReportMode]=tr("Bug Report");
     windowTitleString[FeedbackReportMode]=tr("Feedback");
 
@@ -56,7 +59,7 @@ void KCMailReports::sendReports()
     instance->setMailReceiverCaption("Kreogist Dev Team");
     instance->setMailSender("kreogist@126.com");
     instance->setMailSenderPassword("moc.621@tsigoerk");
-    instance->setMailSenderCaption("BugReporter");
+    instance->setMailSenderCaption(senderCaptions[mode]);
     instance->setMailTitle(titlePrefix[mode] + mailTitle->text());
     QString reportContent;
     reportContent.clear();
@@ -64,7 +67,7 @@ void KCMailReports::sendReports()
                    textBlock!=mailContent->document()->end();
                    textBlock=textBlock.next() )
     {
-        reportContent+=textBlock.text();
+        reportContent+=textBlock.text()+"\n";
     }
     instance->setMailContent(reportContent);
     instance->sendMail();
