@@ -1,10 +1,22 @@
 
 @font-face
-	{
-	font-family:sao;
-	src: url('sao.otf'),
-	url('sao.otf'); /* IE9 */
-	}
+{
+	font-family: "sao";
+	src: url('fonts/sao.otf') format('OpenType');
+}
+	
+@font-face
+{
+	font-family: "SourceSansPro-ExtraLight";
+	src: url('fonts/SourceSansPro-ExtraLight.otf') format('OpenType');
+}
+	
+@font-face
+{
+	font-family: "SourceSansPro-Regular";
+	src: url('fonts/SourceSansPro-Regular.otf') format('OpenType');
+}
+	
 body{
     background-color:#434343;
     font-size:18px;
@@ -42,6 +54,8 @@ footer a:hover {
 p{margin-top:2em;}
 /*==>common class<==*/
 .normal-font{font-family:"Lucida Grande", "Arial", "华文细黑", "SimHei";font-weight:400;}
+.light-font{font-family:"SourceSansPro-Regular", "华文细黑";}
+.exlight-font{font-family:"SourceSansPro-ExtraLight", "华文细黑";}
 .center-text{text-align:center;}
 .large-text{font-size:2em;}
 .larger-text{font-size:3em;}
@@ -87,7 +101,22 @@ p{margin-top:2em;}
     transition-delay:0.2s;
 }
 /*==>common class<==*/
+#footer_wrap {
+	margin-top: 0px;
+	color: #FFFFFF;
+}
 
+.outer {
+  width: 100%;
+  color: #FFFFFF;
+}
+
+.inner {
+	color: #FFFFFF;
+	position: relative;
+	max-width: 80%;
+  margin: 0 auto;
+}
 #head-banner{
     z-index:9999;
     position:fixed;
@@ -305,8 +334,9 @@ p{margin-top:2em;}
     display:-ms-flex;
  	/* Firefox */
 	display:-moz-box;
-	-moz-box-flex:1;
+	-moz-box-flex:2;
 	-moz-box-orient:vertical;
+	
 	/* Safari, Opera, and Chrome */
 	display:-webkit-box;
 	-webkit-box-flex:1;
@@ -317,10 +347,10 @@ p{margin-top:2em;}
 	box-orient:vertical;
 	
 	padding-top:0px;
-	padding-left:35px;
-	padding-right:35px;
+	padding-left:20px;
+	padding-right:20px;
 	padding-bottom:0px;
-	width:50%;
+	width:1px;
 }
 .context-container{
     z-index:1;
