@@ -212,10 +212,10 @@ p{margin-top:2em;}
     align-items: center;
     position:absolute;
     top:70px;
-    left:15px;
+    left:105px;
     margin:0;
     padding:0;
-    width:200px;
+    width:20px;
     list-style:none;
     outline:none;
 }
@@ -245,7 +245,6 @@ p{margin-top:2em;}
     -webkit-animation:tooltip-Animation 0.2s ease-in-out;
     animation:tooltip-Animation 0.2s ease-in-out;
 }
-
 .left-btn span:before{
     width:0px;
     height:0px;
@@ -273,6 +272,9 @@ p{margin-top:2em;}
     -webkit-animation:tooltip-after-Animation 0.2s ease-in-out;
     animation:tooltip-after-Animation 0.2s ease-in-out;
     }
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	#left-box{left: 82px;}
+}
 #left-logo{
     width: 130px;
     height:130px;
@@ -468,7 +470,6 @@ p{margin-top:2em;}
     transition:all 0.2s ease-in-out;
     }
 
-
 @-moz-keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
@@ -476,11 +477,6 @@ p{margin-top:2em;}
 }
 @-webkit-keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;}
-    40% {opacity:1;left:125px;height:0;font-size:0;}
-    100% {height:1.5em;line-height:1.5em;color:#222;}
-}
-@-webkit-min-device-pixel-ratio tooltip-Animation{
-    0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
     100% {height:1.5em;line-height:1.5em;color:#222;}
 }
