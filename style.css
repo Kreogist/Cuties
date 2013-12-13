@@ -1,10 +1,22 @@
 
 @font-face
-	{
-	font-family:sao;
-	src: url('sao.otf'),
-	url('sao.otf'); /* IE9 */
-	}
+{
+	font-family: "sao";
+	src: url('fonts/sao.otf') format('OpenType');
+}
+	
+@font-face
+{
+	font-family: "SourceSansPro-ExtraLight";
+	src: url('fonts/SourceSansPro-ExtraLight.otf') format('OpenType');
+}
+	
+@font-face
+{
+	font-family: "SourceSansPro-Regular";
+	src: url('fonts/SourceSansPro-Regular.otf') format('OpenType');
+}
+	
 body{
     background-color:#434343;
     font-size:18px;
@@ -42,6 +54,8 @@ footer a:hover {
 p{margin-top:2em;}
 /*==>common class<==*/
 .normal-font{font-family:"Lucida Grande", "Arial", "华文细黑", "SimHei";font-weight:400;}
+.light-font{font-family:"SourceSansPro-Regular", "华文细黑";}
+.exlight-font{font-family:"SourceSansPro-ExtraLight", "华文细黑";}
 .center-text{text-align:center;}
 .large-text{font-size:2em;}
 .larger-text{font-size:3em;}
@@ -87,7 +101,22 @@ p{margin-top:2em;}
     transition-delay:0.2s;
 }
 /*==>common class<==*/
+#footer_wrap {
+	margin-top: 0px;
+	color: #FFFFFF;
+}
 
+.outer {
+  width: 100%;
+  color: #FFFFFF;
+}
+
+.inner {
+	color: #FFFFFF;
+	position: relative;
+	max-width: 80%;
+  margin: 0 auto;
+}
 #head-banner{
     z-index:9999;
     position:fixed;
@@ -183,10 +212,10 @@ p{margin-top:2em;}
     align-items: center;
     position:absolute;
     top:70px;
-    left:15px;
+    left:105px;
     margin:0;
     padding:0;
-    width:200px;
+    width:20px;
     list-style:none;
     outline:none;
 }
@@ -216,7 +245,6 @@ p{margin-top:2em;}
     -webkit-animation:tooltip-Animation 0.2s ease-in-out;
     animation:tooltip-Animation 0.2s ease-in-out;
 }
-
 .left-btn span:before{
     width:0px;
     height:0px;
@@ -244,6 +272,11 @@ p{margin-top:2em;}
     -webkit-animation:tooltip-after-Animation 0.2s ease-in-out;
     animation:tooltip-after-Animation 0.2s ease-in-out;
     }
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	#left-box{left: 82px;}
+	.left-btn:hover span{left: 85px;
+						 top: 10px;}
+}
 #left-logo{
     width: 130px;
     height:130px;
@@ -258,25 +291,25 @@ p{margin-top:2em;}
     height:64px;
 }
 
-#home-btn{background-image:url("http://kreogist.github.io/Cuties/btn_home_normal.png")}
-#home-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_home_hover.png")}
-#home-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_home_press.png")}
+#home-btn{background-image:url("btn_home_normal.png")}
+#home-btn:hover{background-image:url("btn_home_hover.png")}
+#home-btn:active{background-image:url("btn_home_press.png")}
 
-#features-btn{background-image:url("http://kreogist.github.io/Cuties/btn_features_normal.png")}
-#features-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_features_hover.png")}
-#features-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_features_press.png")}
+#features-btn{background-image:url("btn_features_normal.png")}
+#features-btn:hover{background-image:url("btn_features_hover.png")}
+#features-btn:active{background-image:url("btn_features_press.png")}
 
-#download-btn{background-image:url("http://kreogist.github.io/Cuties/btn_download_normal.png")}
-#download-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_download_hover.png")}
-#download-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_download_press.png")}
+#download-btn{background-image:url("btn_download_normal.png")}
+#download-btn:hover{background-image:url("btn_download_hover.png")}
+#download-btn:active{background-image:url("btn_download_press.png")}
 
-#faq-btn{background-image:url("http://kreogist.github.io/Cuties/btn_faq_normal.png")}
-#faq-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_faq_hover.png")}
-#faq-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_faq_press.png")}
+#faq-btn{background-image:url("btn_faq_normal.png")}
+#faq-btn:hover{background-image:url("btn_faq_hover.png")}
+#faq-btn:active{background-image:url("btn_faq_press.png")}
 
-#help-btn{background-image:url("http://kreogist.github.io/Cuties/btn_support_normal.png")}
-#help-btn:hover{background-image:url("http://kreogist.github.io/Cuties/btn_support_hover.png")}
-#help-btn:active{background-image:url("http://kreogist.github.io/Cuties/btn_support_press.png")}
+#help-btn{background-image:url("btn_support_normal.png")}
+#help-btn:hover{background-image:url("btn_support_hover.png")}
+#help-btn:active{background-image:url("btn_support_press.png")}
 
 .main-features{
     /* Internet Explorer 10 */
@@ -305,8 +338,9 @@ p{margin-top:2em;}
     display:-ms-flex;
  	/* Firefox */
 	display:-moz-box;
-	-moz-box-flex:1;
+	-moz-box-flex:2;
 	-moz-box-orient:vertical;
+	
 	/* Safari, Opera, and Chrome */
 	display:-webkit-box;
 	-webkit-box-flex:1;
@@ -317,10 +351,10 @@ p{margin-top:2em;}
 	box-orient:vertical;
 	
 	padding-top:0px;
-	padding-left:35px;
-	padding-right:35px;
+	padding-left:20px;
+	padding-right:20px;
 	padding-bottom:0px;
-	width:50%;
+	width:1px;
 }
 .context-container{
     z-index:1;
@@ -438,7 +472,6 @@ p{margin-top:2em;}
     transition:all 0.2s ease-in-out;
     }
 
-
 @-moz-keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;}
     40% {opacity:1;left:125px;height:0;font-size:0;}
@@ -446,12 +479,7 @@ p{margin-top:2em;}
 }
 @-webkit-keyframes tooltip-Animation {
     0% {opacity:0;left:0;height:0;font-size:0;}
-    40% {opacity:1;left:125px;height:0;font-size:0;}
-    100% {height:1.5em;line-height:1.5em;color:#222;}
-}
-@-webkit-min-device-pixel-ratio tooltip-Animation{
-    0% {opacity:0;left:0;height:0;font-size:0;padding-top:-1.5em;}
-    40% {opacity:1;left:125px;height:0;font-size:0;}
+    40% {opacity:1;left:90px;height:0;font-size:0;}
     100% {height:1.5em;line-height:1.5em;color:#222;}
 }
 @keyframes tooltip-Animation {
