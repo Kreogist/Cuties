@@ -59,7 +59,7 @@ KCSearchWindow::KCSearchWindow(QWidget *parent) :
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton, SIGNAL(clicked()),
-            this, SIGNAL(requireHide()));
+            this, SLOT(animeHide()));
 }
 
 void KCSearchWindow::updateGeometry()

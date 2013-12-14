@@ -103,6 +103,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
+    searchUseLastCursor=false;
 
     languageMode=new KCLanguageMode(this);
 
@@ -151,12 +152,31 @@ void KCCodeEditor::computeExecFileName()
 
 void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
 {
+    currentSearchWidget=widget;
     searcherConnections+=connect(widget, &KCSearchWidget::requireSearch,
-                                 editor, &KCTextEditor::searchString);
+                                 this, &KCCodeEditor::onSearchNext);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowNextResult,
-                                 editor, &KCTextEditor::showNextSearchResult);
+                                 this, &KCCodeEditor::onShowNextSearchResult);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
+}
+
+void KCCodeEditor::onShowNextSearchResult()
+{
+    editor->showNextSearchResult();
+    currentSearchWidget->setTextFocus();
+}
+
+void KCCodeEditor::onSearchNext(QString searchTextSets,
+                                bool regularExpressionSets,
+                                bool caseSensitivelySets,
+                                bool wholeWordSets)
+{
+    editor->searchString(searchTextSets,
+                         regularExpressionSets,
+                         caseSensitivelySets,
+                         wholeWordSets);
+    currentSearchWidget->setTextFocus();
 }
 
 bool KCCodeEditor::getCacheNewFileMode() const
@@ -195,8 +215,8 @@ void KCCodeEditor::showSearchBar()
     {
         editor->backupSearchTextCursor();
         searchBar->animeShow();
-        searcherConnections+=connect(searchBar, &KCSearchWidget::requireHide,
-                                     this, &KCCodeEditor::hideSearchBar);
+        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                     editor, SLOT(setFocus()));
         connectSearchWidgetWithEditor(searchBar);
     }
 
@@ -230,7 +250,8 @@ void KCCodeEditor::showReplaceBar()
         replaceBar->showAnime();
 
         connectSearchWidgetWithEditor(replaceBar);
-
+        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                     editor, SLOT(setFocus()));
         searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
                                      editor,&KCTextEditor::replace);
         searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
@@ -531,13 +552,13 @@ QString KCCodeEditor::getSelectedText()
 
 void KCCodeEditor::cursorChanged()
 {
-    fileTextCursor=editor->textCursor();
+    searchUseLastCursor=false;
     emit fileTextCursorChanged();
 }
 
 QTextCursor KCCodeEditor::getTextCursor()
 {
-    return fileTextCursor;
+    return editor->textCursor();
 }
 
 int KCCodeEditor::getTextLines()

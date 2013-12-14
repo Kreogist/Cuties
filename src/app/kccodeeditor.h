@@ -102,12 +102,18 @@ public slots:
 private slots:
     void onModificationChanged(bool changed);
     void onHideOtherWidgets();
+    void onSearchNext(QString searchTextSets,
+                      bool regularExpressionSets,
+                      bool caseSensitivelySets,
+                      bool wholeWordSets);
+    void onShowNextSearchResult();
 
 protected:
     void closeEvent(QCloseEvent *e);
     void resizeEvent(QResizeEvent *e);
 
 private:
+    bool searchUseLastCursor;
     bool processSaveAsAction(const QString &dialogCaption);
     bool requireSaveAs(const QString &Caption);
     void computeExecFileName();
@@ -132,6 +138,7 @@ private:
     QFileDevice::FileError fileError;
     QTextCursor fileTextCursor;
 
+    KCSearchWidget *currentSearchWidget;
     KCSearchWindow *searchBar;
     KCReplaceWindow *replaceBar;
 

@@ -35,7 +35,8 @@ public:
     explicit KCSearchTextBox(QWidget *parent = 0);
 
 signals:
-    void requireNextButtonFocus();
+    void requireSearchNext();
+    void requireLostFocus();
 
 protected:
     void keyPressEvent(QKeyEvent *e);
@@ -55,13 +56,13 @@ public:
     void restoreLastSearchText();
 
 signals:
-    void requireHide();
     void requireShowPreviousResult();
     void requireShowNextResult();
     void requireSearch(QString text,
                        bool regularExpression,
                        bool caseSensitively,
                        bool wholeWorld);
+    void requireLostFocus();
 
 public slots:
     void onTextChanged(const QString &text);
@@ -69,7 +70,6 @@ public slots:
 
 protected:
     void resizeEvent(QResizeEvent *event);
-    void keyPressEvent(QKeyEvent *event);
 
 private:
     enum menuItem

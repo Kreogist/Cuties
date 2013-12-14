@@ -36,11 +36,13 @@ void KCSearchTextBox::keyPressEvent(QKeyEvent *e)
     {
     case Qt::Key_Enter:
     case Qt::Key_Return:
-        emit requireNextButtonFocus();
-        break;
-    default:
-        QLineEdit::keyPressEvent(e);
+        emit requireSearchNext();
+        return;
+    case Qt::Key_Escape:
+        emit requireLostFocus();
+        return;
     }
+    QLineEdit::keyPressEvent(e);
 }
 
 KCSearchWidget::KCSearchWidget(QWidget *parent) :
@@ -121,10 +123,12 @@ KCSearchWidget::KCSearchWidget(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,nextResult->objectName());
     nextResult->setPalette(pal);
     searchLayout->addWidget(nextResult,0,4);
-    connect(searchText, SIGNAL(requireNextButtonFocus()),
-            nextResult, SLOT(setFocus()));
+    connect(searchText, &KCSearchTextBox::requireSearchNext,
+            this, &KCSearchWidget::requireShowNextResult);
     connect(nextResult, &QToolButton::clicked,
             this, &KCSearchWidget::requireShowNextResult);
+    connect(searchText, &KCSearchTextBox::requireLostFocus,
+            this, &KCSearchWidget::requireLostFocus);
 }
 
 QString KCSearchWidget::text() const
@@ -163,17 +167,4 @@ void KCSearchWidget::setTextFocus()
 void KCSearchWidget::resizeEvent(QResizeEvent *event)
 {
     searchText->setFixedWidth(event->size().width());
-}
-
-void KCSearchWidget::keyPressEvent(QKeyEvent *event)
-{
-    switch(event->key())
-    {
-    case Qt::Key_Escape:
-        lastSearchText=searchText->text();
-        searchText->setText("");
-        emit requireHide();
-    default:
-        QWidget::keyPressEvent(event);
-    }
 }

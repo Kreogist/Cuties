@@ -89,8 +89,6 @@ KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
     //Set Button Action
     connect(closeButton, &QToolButton::clicked,
             this, &KCReplaceWindow::hideAnime);
-    connect(this, &KCReplaceWindow::requireHide,
-            this, &KCReplaceWindow::hideAnime);
 
     //Set Original Height.
     setFixedHeight(0);
