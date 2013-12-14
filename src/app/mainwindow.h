@@ -57,6 +57,8 @@
 #include "kcdebugcommandio.h"
 #include "kcdebugwatch.h"
 #include "kcmailreports.h"
+#include "kcmainmenu.h"
+#include "kcsubmenu.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -134,7 +136,7 @@ private:
         menuMainItemsCount  //the number of menus
     };
     //Define MainWindow menu items
-    QMenu *menuMainWindowItem[menuMainItemsCount];
+    KCSubMenu *menuMainWindowItem[menuMainItemsCount];
     QString menuMainWindowText[menuMainItemsCount];
 
     //Enumerate MainWindow menu action items

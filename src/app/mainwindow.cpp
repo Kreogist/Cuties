@@ -484,11 +484,11 @@ void MainWindow::showDebugDocks()
 void MainWindow::createMenu()
 {
     int i;
-
 #ifdef Q_OS_MACX
     QMenuBar *_mainMenu=new QMenuBar(0);
 #else
-    QMenu *_mainMenu=new QMenu(this);
+    KCMainMenu *_mainMenu=new KCMainMenu(this);
+
     QIcon *MenuIconAddor=new QIcon;
 
     QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
@@ -496,13 +496,16 @@ void MainWindow::createMenu()
 #endif
     for(i=menuFile; i<menuMainItemsCount; i++)
     {
-        menuMainWindowItem[i]= _mainMenu->addMenu(tr(menuMainWindowText[i].toLatin1()));
+        menuMainWindowItem[i]=new KCSubMenu(this);
+        menuMainWindowItem[i]->setTitle(menuMainWindowText[i]);
+        _mainMenu->addMenu(menuMainWindowItem[i]);
     }
 
     //Create File Menu
 #ifndef Q_OS_MACX
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menuMainWindowItem[menuFile]->setIcon(*MenuIconAddor);
+    //KCSubMenu *subMenuFile=new KCSubMenu(this);
 #endif
     for(i=actionFileNewFile; i<=actionFileExit; i++)
     {

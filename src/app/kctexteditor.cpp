@@ -970,7 +970,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
         if(previousChar==QChar('\"') &&
            currentChar==QChar('\"') &&
-           currData->getQuotationStatus()!=-1)
+           currData->getQuotationStatus()!=0)
         {
             _textCursor.deleteChar();
             QPlainTextEdit::keyPressEvent(e);
