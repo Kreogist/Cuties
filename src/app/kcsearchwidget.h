@@ -83,9 +83,9 @@ private:
     int currResultNum;
 
     QGridLayout *searchLayout;
-    QToolButton *upButton, *downButton;
-    QWidget *searchText;
-    KCSearchTextBox *searchTexts;
+    QToolButton *prevResult, *nextResult;
+    QWidget *searchTextWidget;
+    KCSearchTextBox *searchText;
     QHBoxLayout *mainLayout;
     QPushButton *searchIcon;
     QMenu *menu;

@@ -45,8 +45,6 @@
 
 #include "kccodeeditor.h"
 
-static const int SearchBarOffset = 20;
-
 KCCodeEditor::KCCodeEditor(QWidget *parent) :
     QWidget(parent)
 {
@@ -99,6 +97,9 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             this, &KCCodeEditor::rewriteStateChanged);
     connect(configureInstance, &KCEditorConfigure::lineNumPanelVisibleChanged,
             linePanel, &KCLinenumPanel::setVisible);
+
+    connect(editor, &KCTextEditor::requireHideOthers,
+            this, &KCCodeEditor::onHideOtherWidgets);
 
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
@@ -177,21 +178,8 @@ void KCCodeEditor::showCompileBar()
 {
     /*if(!currentCompileProgress->isVisible())
     {*/
-    currentCompileProgress->setFixedWidth(width()/3);
-
-    QPropertyAnimation *compileAnime=new QPropertyAnimation(currentCompileProgress,"geometry");
-        QRect animeEndPos=currentCompileProgress->geometry();
-        animeEndPos.setLeft(editor->width()/2-currentCompileProgress->width()/2);
-        animeEndPos.setTop(0);
-        QRect animeStartPos=animeEndPos;
-        animeStartPos.setTop(-100);
-        compileAnime->setStartValue(animeStartPos);
-        compileAnime->setDuration(1000);
-        compileAnime->setEndValue(animeEndPos);
-        compileAnime->setEasingCurve(QEasingCurve::OutCubic);
-        currentCompileProgress->setGeometry(animeStartPos);
-        currentCompileProgress->show();
-        compileAnime->start(QPropertyAnimation::DeleteWhenStopped);
+        currentCompileProgress->animeShow();
+        qDebug()<<"Do this";
     //}
 }
 
@@ -205,20 +193,8 @@ void KCCodeEditor::showSearchBar()
 
     if(!searchBar->isVisible())
     {
-        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-        QRect animeEndPos=searchBar->rect();
-        animeEndPos.setX(editor->width()-searchBar->width()-SearchBarOffset);
-        QRect animeStartPos=animeEndPos;
-        animeStartPos.setTop(-animeStartPos.height());
-        searchAnime->setStartValue(animeStartPos);
-        searchAnime->setDuration(300);
-        searchAnime->setEndValue(animeEndPos);
-        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
         editor->backupSearchTextCursor();
-        searchBar->show();
-        searchBar->restoreLastSearchText();
-        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
-
+        searchBar->animeShow();
         searcherConnections+=connect(searchBar, &KCSearchWidget::requireHide,
                                      this, &KCCodeEditor::hideSearchBar);
         connectSearchWidgetWithEditor(searchBar);
@@ -236,19 +212,8 @@ void KCCodeEditor::hideSearchBar()
 {
     if(searchBar->isVisible())
     {
-        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-        QRect animeStartPos=searchBar->geometry();
-        QRect animeEndPos=animeStartPos;
-        animeEndPos.setTop(-animeStartPos.height() - 20);
-        searchAnime->setStartValue(animeStartPos);
-        searchAnime->setDuration(300);
-        searchAnime->setEndValue(animeEndPos);
-        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
-        connect(searchAnime, SIGNAL(finished()),
-                searchBar, SLOT(hide()));
-        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
+        searchBar->animeHide();
     }
-
     editor->setFocus();
 }
 
@@ -547,6 +512,12 @@ void KCCodeEditor::onModificationChanged(bool changed)
     }
 }
 
+void KCCodeEditor::onHideOtherWidgets()
+{
+    hideSearchBar();
+    replaceBar->hideAnime();
+}
+
 QString KCCodeEditor::getFilePath()
 {
     return filePath;
@@ -581,11 +552,7 @@ void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
 void KCCodeEditor::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
-
-    searchBar->setGeometry(editor->width()-searchBar->width()-SearchBarOffset,
-                           0,
-                           searchBar->width(),
-                           searchBar->height());
+    searchBar->updateGeometry();
 }
 
 void KCCodeEditor::fileInfoChanged(const QFile &file)

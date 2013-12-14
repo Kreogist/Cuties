@@ -28,6 +28,11 @@ class KCSearchWindow : public KCSearchWidget
 
 public:
     explicit KCSearchWindow(QWidget *parent);
+    void updateGeometry();
+
+public slots:
+    void animeShow();
+    void animeHide();
 
 private:
     QToolButton *closeButton;

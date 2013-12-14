@@ -825,6 +825,12 @@ QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
 
 void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
+    if(e->key()==Qt::Key_Escape)
+    {
+        QPlainTextEdit::keyPressEvent(e);
+        emit requireHideOthers();
+        return;
+    }
     QTextCursor _textCursor=textCursor();
     QString pairParethesesChar;
     pairParethesesChar=parenthesesPair(e->text());

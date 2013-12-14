@@ -46,6 +46,7 @@ public:
     QRectF blockRect(const QTextBlock &block);
 
 signals:
+    void requireHideOthers();
     void updated();
     void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);

@@ -22,12 +22,15 @@
 
 #include "kccodecompileprogress.h"
 
+static const int compileProgressHeight=20;
+
 KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     QWidget(parent)
 {
     setObjectName("KCCodeCompileProgress");
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
+    setFixedHeight(compileProgressHeight);
 
     QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
     wndShadow->setBlurRadius(15.0);
@@ -42,5 +45,26 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
 
     compileProgressDisplay=new QProgressBar(this);
     compileProgressLayout->addWidget(compileProgressDisplay);
+}
 
+void KCCodeCompileProgress::animeShow()
+{
+    QPropertyAnimation *showAnimation=new QPropertyAnimation(this, "geometry");
+    int parentWidgetWidth=parentWidget()->width();
+    QRect startGeometry=QRect(parentWidgetWidth/6,
+                              -compileProgressHeight,
+                              parentWidgetWidth/3,
+                              compileProgressHeight);
+    QRect endGeometry=startGeometry;
+    endGeometry.setTop(0);
+    showAnimation->setStartValue(startGeometry);
+    showAnimation->setEndValue(endGeometry);
+    showAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    show();
+    showAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void KCCodeCompileProgress::animeHide()
+{
+    ;
 }

@@ -100,6 +100,7 @@ public slots:
 
 private slots:
     void onModificationChanged(bool changed);
+    void onHideOtherWidgets();
 
 protected:
     void closeEvent(QCloseEvent *e);

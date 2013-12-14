@@ -1,6 +1,7 @@
 #ifndef KCCODECOMPILEPROGRESS_H
 #define KCCODECOMPILEPROGRESS_H
 
+#include <QPropertyAnimation>
 #include <QProgressBar>
 #include <QWidget>
 
@@ -13,6 +14,8 @@ public:
 signals:
 
 public slots:
+    void animeShow();
+    void animeHide();
 
 private:
     QProgressBar *compileProgressDisplay;

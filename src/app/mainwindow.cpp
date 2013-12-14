@@ -898,7 +898,7 @@ void MainWindow::onActionCompile()
 void MainWindow::compileProgram()
 {
     KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
-//    currentEditor->showCompileBar ();
+    currentEditor->showCompileBar();
  //   return;
 
     //Check Tab Status.
