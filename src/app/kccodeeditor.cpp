@@ -39,6 +39,7 @@
 #include "kctexteditor.h"
 #include "kclinenumpanel.h"
 #include "kcmarkpanel.h"
+#include "kcsmartpanel.h"
 #include "kcsearchwindow.h"
 #include "kcreplacewindow.h"
 
@@ -71,9 +72,13 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     linePanel->setVisible(configureInstance->getLineNumVisible());
     mainLayout->addWidget(linePanel);
 
+    smartPanel=new KCSmartPanel(this);
+    mainLayout->addWidget(smartPanel);
+
     editor=new KCTextEditor(this);
     markPanel->setTextEditor(editor);
     linePanel->setTextEditor(editor);
+    smartPanel->setTextEditor(editor);
 
     mainLayout->addWidget(editor);
     replaceLayout->addLayout(mainLayout);

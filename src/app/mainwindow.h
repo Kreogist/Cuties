@@ -56,6 +56,7 @@
 #include "kcdebugcontrolpanel.h"
 #include "kcdebugcommandio.h"
 #include "kcdebugwatch.h"
+#include "kcmailreports.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -100,6 +101,8 @@ private slots:
     void changeDebugCommandIOVisibleState();
     void changeDebugWatchVisibleState();
     void changeJudgeDockVisibleState();
+    void onActionBugReport();
+    void onActionSendFeedbacks();
     void showPreference();
     void setFullScreen();
 
@@ -189,6 +192,8 @@ private:
         actionWindowNext,
         actionHelpAbout,
         actionHelpAboutQt,
+        actionHelpBugReport,
+        actionHelpSendFeedbacks,
         actionMainWindowCount   //The number of Main Menu Actions.
     };
     //Define MainWindow menu actions

@@ -100,7 +100,10 @@ SOURCES += \
     mainwindow.cpp \
     textcharformatmap.cpp \ 
     kcstatusrecorder.cpp \
-    kcdocumentrecorder.cpp
+    kcdocumentrecorder.cpp \
+    kcsmartpanel.cpp \
+    kcmailreports.cpp \
+    kcmailprocessobject.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -176,11 +179,15 @@ HEADERS += \
     mainwindow.h \
     textcharformatmap.h \ 
     kcstatusrecorder.h \
-    kcdocumentrecorder.h
+    kcdocumentrecorder.h \
+    kcsmartpanel.h \
+    kcmailreports.h \
+    kcmailprocessobject.h
 
 
 # Enable C++11
-CONFIG += c++11
+CONFIG += c++11 \
+          console
 
 RESOURCES += \
     rc.qrc

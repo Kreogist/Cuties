@@ -141,9 +141,9 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     }
 
     connect(debugControlButton[debugStart],SIGNAL(clicked()),
-            this,SIGNAL(debugStarted()));
+            this,SLOT(onDebugStartClicked()));
     connect(debugControlButton[debugStop],SIGNAL(clicked()),
-            this,SIGNAL(debugStopped()));
+            this,SLOT(onDebugStopClicked()));
     connect(debugControlButton[debugRunToCursor], SIGNAL(clicked()),
             this, SLOT(onRunToCursorClicked()));
     connect(debugCursorControlButton[debugNext], SIGNAL(clicked()),
@@ -228,6 +228,17 @@ void KCDebugControlPanel::retranslateAndSet()
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
 }
+
+void KCDebugControlPanel::onDebugStartClicked()
+{
+    emit debugStarted();
+}
+
+void KCDebugControlPanel::onDebugStopClicked()
+{
+    emit debugStopped();
+}
+
 /*!
  * \brief KCDebugControlPanel::setGdbController sets the pointer of GdbController.
  * \param controller

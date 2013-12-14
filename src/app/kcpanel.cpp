@@ -94,15 +94,8 @@ void KCPanel::paintEvent(QPaintEvent *event)
     painter.fillRect(this->rect(),QColor(0x53,0x53,0x53));
 
     QFontMetrics fm=e->fontMetrics();
-
-    /*
-     *FIXME: It's so ugly. But I can't solve it.I try to find the text layout's
-     *       position. But the position of the layout of the QTextBlock is
-     *       always be (0,0).
-     */
-
-    int lineHeight = fm.lineSpacing(),
-        currentLineNum=e->textCursor().block().blockNumber(),
+    lineHeight = fm.lineSpacing();
+    int currentLineNum=e->textCursor().block().blockNumber(),
         top=e->verticalScrollBar()->value();
     int bottom=e->height()/lineHeight;
 

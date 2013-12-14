@@ -17,6 +17,28 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QCoreApplication>
+
+#include <stdlib.h>
+#include <stdio.h>
+
+#ifndef Q_OS_WIN
+#include <QSocketNotifier>
+#include <QTemporaryFile>
+#include <QVarLengthArray>
+
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#ifdef Q_OS_SOLARIS
+# include <sys/filio.h> // FIONREAD
+#endif
+#include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
+#endif
+
 #include "gdbcontroller.h"
 
 #ifdef Q_OS_UNIX
@@ -42,8 +64,10 @@ GdbController::GdbController(QObject *parent) :
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 
+#ifdef Q_OS_WIN
     debugServer = 0;
     debugSocket = 0;
+#endif
     debugCodec=QTextCodec::codecForLocale();
     connect(this, SIGNAL(byteDelivery(QByteArray)),
            this, SLOT(readDebugeeOutput(QByteArray)));
@@ -283,6 +307,40 @@ bool GdbController::startListen()
     connect(debugServer, SIGNAL(newConnection()), SLOT(newConnectionAvailable()));
     return debugServer->listen(QString::fromLatin1("cuties-%1-%2")
                                .arg(rand()));
+#else
+    if (!debugServerPath.isEmpty())
+        return true;
+    QByteArray codedServerPath;
+    forever {
+        {
+            QTemporaryFile tf;
+            if (!tf.open()) {
+                debugErrorString = tr("Cannot create temporary file: %1").arg(tf.errorString());
+                debugServerPath.clear();
+                return false;
+            }
+            debugServerPath = tf.fileName();
+        }
+        // By now the temp file was deleted again
+        codedServerPath = QFile::encodeName(debugServerPath);
+        if (!::mkfifo(codedServerPath.constData(), 0600))
+            break;
+        if (errno != EEXIST) {
+            debugErrorString = tr("Cannot create FiFo %1: %2").
+                            arg(debugServerPath, QString::fromLocal8Bit(strerror(errno)));
+            debugServerPath.clear();
+            return false;
+        }
+    }
+    if ((debugServerFd = ::open(codedServerPath.constData(), O_RDONLY|O_NONBLOCK)) < 0) {
+        debugErrorString = tr("Cannot open FiFo %1: %2").
+                        arg(debugServerPath, QString::fromLocal8Bit(strerror(errno)));
+        debugServerPath.clear();
+        return false;
+    }
+    debugServerNotifier = new QSocketNotifier(debugServerFd, QSocketNotifier::Read, this);
+    connect(debugServerNotifier, SIGNAL(activated(int)), SLOT(bytesAvailable()));
+    return true;
 #endif
 }
 
@@ -294,6 +352,11 @@ void GdbController::readDebugeeOutput(const QByteArray &data)
      *      Here we have to showMessage(msg) to Console Window,
      *  but I can't solve it. Please Fixed this ASAP.
      */
+    showMessage(msg);
+}
+
+void GdbController::showMessage(const QString &msg)
+{
     qDebug()<<msg;
 }
 
@@ -311,15 +374,15 @@ void GdbController::bytesAvailable()
 {
 #ifdef Q_OS_WIN
     emit byteDelivery(debugSocket->readAll());
-/*#else
+#else
     size_t nbytes = 0;
-    if (::ioctl(m_serverFd, FIONREAD, (char *) &nbytes) < 0)
+    if (::ioctl(debugServerFd, FIONREAD, (char *) &nbytes) < 0)
         return;
     QVarLengthArray<char, 8192> buff(nbytes);
-    if (::read(m_serverFd, buff.data(), nbytes) != (int)nbytes)
+    if (::read(debugServerFd, buff.data(), nbytes) != (int)nbytes)
         return;
     if (nbytes) // Skip EOF notifications
-        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));*/
+        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));
 #endif
 }
 
@@ -331,7 +394,7 @@ bool GdbController::runGDB(const QString &filePath)
         gdbProcess.reset(new QProcess(this));
         QStringList _arg;
         _arg<<filePath<<"--interpreter"<<"mi"
-           <<QString("--tty=" + getServerName());
+            <<QString("--tty=" + getServerName());
 
 
         connect(gdbProcess.data(),
@@ -520,6 +583,8 @@ QString GdbController::getServerName()
 {
 #ifdef Q_OS_WIN
     return debugServer->fullServerName();
+#else
+    return debugServerPath;
 #endif
 }
 

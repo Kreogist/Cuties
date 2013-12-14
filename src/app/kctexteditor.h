@@ -100,7 +100,7 @@ private:
                          QTextBlock block,
                          bool forward);
     int findFirstCharacter(const QTextBlock &block);
-    void insertTab(QTextCursor insertTabCursor, int tabCount = 1);
+    void insertTab(QTextCursor insertTabCursor, int tabCount = 1, bool forceInsert = false);
     void removeTab(QTextCursor removeTabCursor, int tabCount = 1);
     void tabPressEvent(QTextCursor tabPressCursor);
 

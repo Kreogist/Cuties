@@ -30,6 +30,7 @@
 #include <QSharedPointer>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QSocketNotifier>
 #include <QDebug>
 #include <QTextCodec>
 
@@ -116,6 +117,8 @@ public slots:
     void execGdbCommand(const QString &command);
 
 private:
+    void showMessage(const QString &msg);
+
     QString getServerName();
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin,const QChar *end);
@@ -133,6 +136,11 @@ private:
 #ifdef Q_OS_WIN32
     QLocalServer *debugServer;
     QLocalSocket *debugSocket;
+#else
+    QString debugServerPath;
+    int debugServerFd;
+    QSocketNotifier *debugServerNotifier;
+    QString debugErrorString;
 #endif
 
     KCDebuggerConfigure *instance;
