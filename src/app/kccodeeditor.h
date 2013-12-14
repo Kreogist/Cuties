@@ -94,7 +94,6 @@ public slots:
     void showSearchBar();
     void showReplaceBar();
     void showCompileBar();
-    void hideSearchBar();
     void setOverwriteMode(bool newValue);
     bool readCacheFile(const QString &cachedfilePath);
     bool writeCacheFile(const QString &filePath);
@@ -107,6 +106,7 @@ private slots:
                       bool caseSensitivelySets,
                       bool wholeWordSets);
     void onShowNextSearchResult();
+    void setUseLastCuror();
 
 protected:
     void closeEvent(QCloseEvent *e);

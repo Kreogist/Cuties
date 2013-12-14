@@ -98,5 +98,6 @@ void KCSearchWindow::animeHide()
     searchAnime->setEasingCurve(QEasingCurve::OutCubic);
     connect(searchAnime, SIGNAL(finished()),
             this, SLOT(hide()));
+    emit requireLostFocus();
     searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
 }

@@ -121,6 +121,7 @@ void KCReplaceWindow::hideAnime()
             this, SLOT(resizeDock(int)));
     connect(hideAnimation, &QTimeLine::finished,
             this, &KCReplaceWindow::hide);
+    emit requireLostFocus();
     hideAnimation->start();
 }
 

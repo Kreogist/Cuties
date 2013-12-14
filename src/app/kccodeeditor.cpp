@@ -213,10 +213,15 @@ void KCCodeEditor::showSearchBar()
 
     if(!searchBar->isVisible())
     {
-        editor->backupSearchTextCursor();
+        if(!searchUseLastCursor)
+        {
+            editor->backupSearchTextCursor();
+        }
         searchBar->animeShow();
         searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
                                      editor, SLOT(setFocus()));
+        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                     this, SLOT(setUseLastCuror()));
         connectSearchWidgetWithEditor(searchBar);
     }
 
@@ -228,20 +233,16 @@ void KCCodeEditor::showSearchBar()
     searchBar->setTextFocus();
 }
 
-void KCCodeEditor::hideSearchBar()
+void KCCodeEditor::setUseLastCuror()
 {
-    if(searchBar->isVisible())
-    {
-        searchBar->animeHide();
-    }
-    editor->setFocus();
+    searchUseLastCursor=true;
 }
 
 void KCCodeEditor::showReplaceBar()
 {
     if(searchBar->isVisible())
     {
-        hideSearchBar();
+        searchBar->animeHide();
         searcherConnections.disConnectAll();
     }
 
@@ -252,6 +253,8 @@ void KCCodeEditor::showReplaceBar()
         connectSearchWidgetWithEditor(replaceBar);
         searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
                                      editor, SLOT(setFocus()));
+        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                     this, SLOT(setUseLastCuror()));
         searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
                                      editor,&KCTextEditor::replace);
         searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
@@ -536,7 +539,7 @@ void KCCodeEditor::onModificationChanged(bool changed)
 
 void KCCodeEditor::onHideOtherWidgets()
 {
-    hideSearchBar();
+    searchBar->animeHide();
     replaceBar->hideAnime();
     emit requiredHideDocks();
 }

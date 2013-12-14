@@ -1,3 +1,38 @@
+0.2.5.15
+Bug Fixed:
+1. Fixed replace function didn't work bug.
+2. Update cursor get policy
+3. Update search process policy.
+
+0.2.5.14
+New Features:
+1. Escape policy init support.
+2. Zoom in/Zoom out init support.
+3. Compile progress basic init.
+
+Updates:
+1. New search window show and hide policy.
+
+0.2.5.13
+Updates:
+1. Full language support in Feedback and Bug report.
+
+Bug Fixed:
+1. Fixed all the text will be the same line in bug report bug.
+
+0.2.5.12
+New Features:
+1. Bug Report send added.
+2. Feedback report send added.
+
+0.2.5.11
+New Features:
+1. Add SmartPanel widget for code foding and error display.
+
+Updates:
+1. Connect debug menu actions to control items.
+2. Update {} autoIndent policy.
+
 0.2.5.10
 Bug Fixed:
 1. Fixed crashed bug caused by return null in function getServerName function.

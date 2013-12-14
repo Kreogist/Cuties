@@ -84,7 +84,6 @@ void KCTabManager::restoreUnclosedFiles()
     {
         setCurrentIndex(currentUnclosedFileIndex);
     }
-    KCDocumentRecorder::getInstance()->clear();
 }
 
 KCCodeEditor *KCTabManager::getCurrentEditor() const
