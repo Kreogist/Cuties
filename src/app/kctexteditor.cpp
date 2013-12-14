@@ -825,10 +825,14 @@ QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
 
 void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key()==Qt::Key_Escape)
-    {
+    switch (e->key()) {
+    case Qt::Key_Escape:
         QPlainTextEdit::keyPressEvent(e);
         emit requireHideOthers();
+        return;
+    case Qt::Key_Control:
+        QPlainTextEdit::keyPressEvent(e);
+        controlKeyDown=true;
         return;
     }
     QTextCursor _textCursor=textCursor();
@@ -1085,6 +1089,16 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void KCTextEditor::keyReleaseEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Control:
+        controlKeyDown=false;
+    }
+    QPlainTextEdit::keyReleaseEvent(e);
+}
+
 void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
     QPlainTextEdit::mouseReleaseEvent(e);
@@ -1103,6 +1117,22 @@ void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
                                       textFloatToolBar->height());
         textFloatToolBar->show();
     }*/
+}
+
+void KCTextEditor::wheelEvent(QWheelEvent *e)
+{
+    if(controlKeyDown)
+    {
+        if(e->angleDelta().y()>0)
+        {
+            zoomIn(2);
+        }
+        else
+        {
+            zoomOut(2);
+        }
+    }
+    QPlainTextEdit::wheelEvent(e);
 }
 
 void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)

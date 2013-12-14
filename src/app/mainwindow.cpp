@@ -74,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent) :
             tabManager, SLOT(open()));
     connect(welcomeWindow, SIGNAL(requiredOpenRecentFile(QString)),
             tabManager, SLOT(openAndJumpTo(QString)));
+    connect(tabManager, SIGNAL(requiredHideDocks()),
+            this, SLOT(hideAllDocks()));
 }
 
 void MainWindow::showEvent(QShowEvent *e)
@@ -1014,6 +1016,14 @@ void MainWindow::onActionSendFeedbacks()
     KCMailReports *feedbackReport=new KCMailReports(this);
     feedbackReport->setMode(KCMailReports::FeedbackReportMode);
     feedbackReport->exec();
+}
+
+void MainWindow::hideAllDocks()
+{
+    compileDock->setVisible(false);
+    debugControl->setVisible(false);
+    debugCommandIO->setVisible(false);
+    debugWatch->setVisible(false);
 }
 
 void MainWindow::statusShowGoto()

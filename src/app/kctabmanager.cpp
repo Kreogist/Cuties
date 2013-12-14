@@ -120,6 +120,7 @@ int KCTabManager::open(const QString &filePath)
         tmp->setDocumentTitle(name);
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
         connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
+        connect(tmp,SIGNAL(requiredHideDocks()),this,SIGNAL(requiredHideDocks()));
         emit tabAdded();
         if(count()==0)  //before the tab be added, count() == 0
         {
@@ -210,6 +211,7 @@ int KCTabManager::newFile()
         QString newFileTitle=
             tr("Untitled")+ " " +QString::number(newFileCount++);
         tmp->setDocumentTitle(newFileTitle);
+        connect(tmp,SIGNAL(requiredHideDocks()),this,SIGNAL(requiredHideDocks()));
         emit tabAdded();
         if(count()==0)  //before the tab be added, count() == 1
         {

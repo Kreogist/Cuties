@@ -22,7 +22,7 @@
 
 #include "kccodecompileprogress.h"
 
-static const int compileProgressHeight=20;
+static const int compileProgressHeight=60;
 
 KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     QWidget(parent)
@@ -32,28 +32,44 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     setFixedHeight(compileProgressHeight);
 
-    QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
-    wndShadow->setBlurRadius(15.0);
-    wndShadow->setColor(QColor(0, 0, 0, 200));
-    wndShadow->setOffset(0);
-    setGraphicsEffect(wndShadow);
+    QGraphicsDropShadowEffect *shadowEffect=new QGraphicsDropShadowEffect(this);
+    shadowEffect->setBlurRadius(15.0);
+    shadowEffect->setColor(QColor(0, 0, 0, 200));
+    shadowEffect->setOffset(0);
+    setGraphicsEffect(shadowEffect);
 
     QVBoxLayout *compileProgressLayout=new QVBoxLayout(this);
-    compileProgressLayout->setContentsMargins(0,0,0,0);
-    compileProgressLayout->setSpacing(0);
+    compileProgressLayout->setContentsMargins(7,7,7,7);
+    compileProgressLayout->setSpacing(7);
     setLayout(compileProgressLayout);
 
+    compileProgressText=new QLabel(this);
+    compileProgressText->setAlignment(Qt::AlignHCenter);
+    compileProgressLayout->addWidget(compileProgressText);
+
     compileProgressDisplay=new QProgressBar(this);
+    compileProgressDisplay->setMinimum(0);
+    compileProgressDisplay->setMaximum(100);
     compileProgressLayout->addWidget(compileProgressDisplay);
+}
+
+void KCCodeCompileProgress::setText(const QString &text)
+{
+    compileProgressText->setText(text);
+}
+
+void KCCodeCompileProgress::setValue(const int &value)
+{
+    compileProgressDisplay->setValue(value);
 }
 
 void KCCodeCompileProgress::animeShow()
 {
     QPropertyAnimation *showAnimation=new QPropertyAnimation(this, "geometry");
-    int parentWidgetWidth=parentWidget()->width();
-    QRect startGeometry=QRect(parentWidgetWidth/6,
+    int geometryArg=parentWidget()->width()/3;
+    QRect startGeometry=QRect(geometryArg,
                               -compileProgressHeight,
-                              parentWidgetWidth/3,
+                              geometryArg,
                               compileProgressHeight);
     QRect endGeometry=startGeometry;
     endGeometry.setTop(0);

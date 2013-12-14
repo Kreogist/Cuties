@@ -57,6 +57,7 @@ signals:
     void tabAdded();
     void tabNonClear();
     void tabClear();
+    void requiredHideDocks();
 
 public slots:
     void openAndJumpTo(const QString &filePath);

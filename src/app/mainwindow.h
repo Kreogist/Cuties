@@ -103,6 +103,7 @@ private slots:
     void changeJudgeDockVisibleState();
     void onActionBugReport();
     void onActionSendFeedbacks();
+    void hideAllDocks();
     void showPreference();
     void setFullScreen();
 

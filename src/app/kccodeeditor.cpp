@@ -176,11 +176,11 @@ void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
 
 void KCCodeEditor::showCompileBar()
 {
-    /*if(!currentCompileProgress->isVisible())
-    {*/
+    return;
+    if(!currentCompileProgress->isVisible())
+    {
         currentCompileProgress->animeShow();
-        qDebug()<<"Do this";
-    //}
+    }
 }
 
 void KCCodeEditor::showSearchBar()
@@ -516,6 +516,7 @@ void KCCodeEditor::onHideOtherWidgets()
 {
     hideSearchBar();
     replaceBar->hideAnime();
+    emit requiredHideDocks();
 }
 
 QString KCCodeEditor::getFilePath()

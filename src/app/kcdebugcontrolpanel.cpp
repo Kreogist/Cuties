@@ -40,7 +40,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     setObjectName("DebugPanel");
     setAllowedAreas(Qt::RightDockWidgetArea |
                     Qt::BottomDockWidgetArea);
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     //Set compile dock palette
     QPalette pal=palette();

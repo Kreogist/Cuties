@@ -74,6 +74,7 @@ signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
     void rewriteStateChanged(bool nowValue);
+    void requiredHideDocks();
 
 public slots:
     bool open(const QString &fileName,

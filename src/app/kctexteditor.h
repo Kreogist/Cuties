@@ -75,7 +75,9 @@ protected:
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
@@ -118,6 +120,7 @@ private:
     bool searchRegularExpression;
     bool searchCaseSensitively;
     bool searchWholeWord;
+    bool controlKeyDown=false;
     unsigned long long int searchCode;
     QScopedPointer<KCTextSearcher> searcherForPrev,searcherForNext;
     QFuture<void> threadPrev,threadNext;
