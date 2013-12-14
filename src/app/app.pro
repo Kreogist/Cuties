@@ -176,8 +176,7 @@ HEADERS += \
     mainwindow.h \
     textcharformatmap.h \ 
     kcstatusrecorder.h \
-    kcdocumentrecorder.h \
-    qmljs_global.h
+    kcdocumentrecorder.h
 
 
 # Enable C++11

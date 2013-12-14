@@ -155,7 +155,6 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionFileCloseAllExceptThis],SIGNAL(triggered()),tabManager,SLOT(closeAllOtherTab()));
 
     //File -> Exit
-    actionMainWindowItem[actionFileExit]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Q));
     actionMainWindowItem[actionFileExit]->setMenuRole(QAction::QuitRole);
     stringActionIconPath[actionFileExit]=QString(":/menuicon/image/MenuIcons/mnuFileExit.png");
     connect(actionMainWindowItem[actionFileExit],SIGNAL(triggered()),this,SLOT(close()));
