@@ -211,12 +211,10 @@ void MainWindow::createActions()
     actStatusTips[mnuViewJudgeDock]=QString(tr("Show Judge Dock."));
     connect(act[mnuViewJudgeDock],SIGNAL(triggered()),this,SLOT(diffVisibleJudgeDock()));*/
 
-#ifdef Q_OS_MACX
     //View -> Fullscreen
     actionMainWindowItem[actionViewFullscreen]->setShortcut(Qt::CTRL+Qt::META+Qt::Key_F);
     connect(actionMainWindowItem[actionViewFullscreen], SIGNAL(triggered()),
             this, SLOT(setFullScreen()));
-#endif
 
     //Search -> Search
     actionMainWindowItem[actionSearchFind]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_F));
