@@ -5,6 +5,9 @@
 #include <QLineEdit>
 #include <QPlainTextEdit>
 #include <QPushButton>
+#include <QToolButton>
+#include <QLabel>
+#include <QProgressBar>
 
 #include "kcmailprocessobject.h"
 
@@ -14,7 +17,14 @@ class KCMailSendingStatus : public QWidget
 public:
     explicit KCMailSendingStatus(QWidget *parent = 0);
 
+public slots:
+    void setText(const QString &text);
+    void setValue(const int &value);
+
 private:
+    QLabel *reportStatus;
+    QProgressBar *mailProgress;
+    QToolButton *cancelSending;
 };
 
 class KCMailReports : public QDialog
@@ -37,6 +47,7 @@ public slots:
 
 private slots:
     void sendReports();
+    void refreshStatus(KCMailProcessObject::SendingStatus status);
 
 private:
     SendingMode mode;
@@ -45,6 +56,8 @@ private:
     QPushButton *sendReport;
 
     KCMailProcessObject *instance;
+
+    KCMailSendingStatus *reportStatus;
 
     QString titlePlaceHolderText[ModeCount];
     QString senderCaptions[ModeCount];

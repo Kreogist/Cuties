@@ -48,7 +48,7 @@ void KCMailProcessObject::sendMail()
     }
     else
     {
-        qDebug() << "connection failed.";
+        statusChanged(ConnectionFailed);
     }
 }
 

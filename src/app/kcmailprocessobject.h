@@ -23,8 +23,15 @@ public:
     void setMailSenderCaption(const QString &value);
     void setMailReceiver(const QString &value);
     void setMailReceiverCaption(const QString &value);
+    enum SendingStatus
+    {
+        Preparing,
+        ConnectionFailed,
+        SendSuccess
+    };
 
 signals:
+    void statusChanged(KCMailProcessObject::SendingStatus value);
 
 public slots:
 
