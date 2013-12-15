@@ -32,6 +32,7 @@ KCMailProcessObject::KCMailProcessObject()
 {
     hostNameAddress="smtp.126.com";
     hostPort=25;
+    timeoutCount=500;
 }
 
 void KCMailProcessObject::sendMail()
