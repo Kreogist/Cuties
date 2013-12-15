@@ -8,6 +8,15 @@
 
 #include "kcmailprocessobject.h"
 
+class KCMailSendingStatus : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCMailSendingStatus(QWidget *parent = 0);
+
+private:
+};
+
 class KCMailReports : public QDialog
 {
     Q_OBJECT
