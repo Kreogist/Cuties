@@ -85,7 +85,7 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
 
 void dbgOutputReceiver::addExprValue(QString value)
 {
-
+    ;
 }
 
 void dbgOutputReceiver::addText(const QString &text)
