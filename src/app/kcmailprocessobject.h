@@ -26,7 +26,19 @@ public:
     enum SendingStatus
     {
         Preparing,
+        ConnectingServer,
+        ReadingWelcome,
+        CreateLetter,
+        HeloServer,
+        StartLogin,
+        Logingin,
+        SettingAddress,
+        RequireSendingData,
+        SendingData,
+        Logingout,
         ConnectionFailed,
+        WelcomeReadFailed,
+        SocketWriteFailed,
         SendSuccess
     };
 

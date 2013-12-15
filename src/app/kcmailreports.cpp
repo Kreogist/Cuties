@@ -1,6 +1,5 @@
 
 #include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QGraphicsDropShadowEffect>
 #include <QTextBlock>
 
@@ -11,7 +10,7 @@ KCMailSendingStatus::KCMailSendingStatus(QWidget *parent) :
 {
     setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
-    setFixedHeight(100);
+    setMinimumHeight(100);
 
     QVBoxLayout *mainLayout=new QVBoxLayout(this);
     mainLayout->setContentsMargins(7,7,7,7);
@@ -26,27 +25,48 @@ KCMailSendingStatus::KCMailSendingStatus(QWidget *parent) :
     cancelSending=new QToolButton(this);
     cancelSending->setText(tr("Cancel"));
     mainLayout->addWidget(cancelSending);
+    mainLayout->setAlignment(cancelSending, Qt::AlignCenter);
 
     QGraphicsDropShadowEffect *wndShadow = new QGraphicsDropShadowEffect(this);
     wndShadow->setBlurRadius(15.0);
     wndShadow->setColor(QColor(0, 0, 0, 200));
     wndShadow->setOffset(0);
     setGraphicsEffect(wndShadow);
+
+    pal=mailProgress->palette();
 }
 
-void KCMailSendingStatus::setText(const QString &text)
+void KCMailSendingStatus::resetStatus()
 {
-    reportStatus->setText(text);
+    ;
 }
 
-void KCMailSendingStatus::setValue(const int &value)
+void KCMailSendingStatus::setStatus(const QString &text, const int &value)
 {
-    mailProgress->setValue(value);
+    if(text.length()>0)
+    {
+        reportStatus->setText(text);
+    }
+    if(value>-1)
+    {
+        mailProgress->setValue(value);
+    }
+}
+
+QString KCMailSendingStatus::currentText()
+{
+    return reportStatus->text();
+}
+
+int KCMailSendingStatus::currentValue()
+{
+    return mailProgress->value();
 }
 
 KCMailReports::KCMailReports(QWidget *parent) :
     QDialog(parent)
 {   
+    setMinimumSize(480,320);
     mode=BugReportMode;
     titlePrefix[BugReportMode]="Bug: ";
     titlePrefix[FeedbackReportMode]="Feedback: ";
@@ -58,8 +78,21 @@ KCMailReports::KCMailReports(QWidget *parent) :
     mainLayout->addWidget(mailTitle);
     mailContent=new QPlainTextEdit(this);
     mainLayout->addWidget(mailContent, 1);
+
+    buttonLayout=new QHBoxLayout();
+
     sendReport=new QPushButton(this);
-    mainLayout->addWidget(sendReport);
+    sendReport->setFixedHeight(30);
+    QPalette pal=sendReport->palette();
+    pal.setColor(QPalette::Button, QColor(65,99,216));
+    pal.setColor(QPalette::ButtonText, QColor(255,255,255));
+    sendReport->setPalette(pal);
+    buttonLayout->addWidget(sendReport);
+    cancelSending=new QPushButton(this);
+    cancelSending->setFixedHeight(30);
+    cancelSending->setText(tr("Cancel"));
+    buttonLayout->addWidget(cancelSending);
+    mainLayout->addLayout(buttonLayout);
 
     setMode(mode);
     instance=KCMailProcessObject::getInstance();
@@ -69,6 +102,11 @@ KCMailReports::KCMailReports(QWidget *parent) :
             this, SLOT(refreshStatus(KCMailProcessObject::SendingStatus)));
 
     reportStatus=new KCMailSendingStatus(this);
+}
+
+KCMailReports::~KCMailReports()
+{
+    buttonLayout->deleteLater();
 }
 
 void KCMailReports::setMode(SendingMode value)
@@ -122,12 +160,70 @@ void KCMailReports::refreshStatus(KCMailProcessObject::SendingStatus status)
     switch(status)
     {
     case KCMailProcessObject::Preparing:
-        reportStatus->setText(tr("Configuring Mail Service"));
-        reportStatus->setValue(5);
+        reportStatus->setStatus(tr("Configuring mail service"),
+                                5);
+        break;
+    case KCMailProcessObject::ConnectingServer:
+        reportStatus->setStatus(tr("Connecting mail server"),
+                                5);
+        break;
+    case KCMailProcessObject::ReadingWelcome:
+        reportStatus->setStatus(tr("Do HELO checking"),
+                                5);
+        break;
+    case KCMailProcessObject::StartLogin:
+        reportStatus->setStatus(tr("Preparing login"),
+                                5);
+        break;
+    case KCMailProcessObject::Logingin:
+        reportStatus->setStatus(tr("Loging in"),
+                                5);
+        break;
+    case KCMailProcessObject::SettingAddress:
+        reportStatus->setStatus(tr("Setting receiver"),
+                                5);
+        break;
+    case KCMailProcessObject::RequireSendingData:
+        reportStatus->setStatus(tr("Request sending data"),
+                                5);
+        break;
+    case KCMailProcessObject::SendingData:
+        reportStatus->setStatus(tr("Sending data"),
+                                5);
+        break;
+    case KCMailProcessObject::Logingout:
+        reportStatus->setStatus(tr("Loging out"),
+                                5);
         break;
     case KCMailProcessObject::ConnectionFailed:
-        reportStatus->setText(tr("Connection Failed"));
-        reportStatus->setValue(5);
+        reportStatus->setStatus(tr("Server connection failed"),
+                                100);
+        break;
+    case KCMailProcessObject::WelcomeReadFailed:
+        reportStatus->setStatus(tr("No response from the server"),
+                                100);
+        break;
+    case KCMailProcessObject::SocketWriteFailed:
+        reportStatus->setStatus(tr("Unable to communicate with the server"),
+                                100);
+        break;
+    case KCMailProcessObject::SendSuccess:
+        reportStatus->setStatus(tr("Report send success"),
+                                100);
+        break;
+    default:
+        //Here should never be come
+        reportStatus->setStatus(tr("Unknown Status"),
+                                -1);
         break;
     }
+}
+
+void KCMailReports::resizeEvent(QResizeEvent *e)
+{
+    reportStatus->setGeometry(width()/4,
+                              reportStatus->y(),
+                              width()/2,
+                              reportStatus->height());
+    QWidget::resizeEvent(e);
 }

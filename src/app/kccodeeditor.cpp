@@ -414,8 +414,9 @@ bool KCCodeEditor::writeCacheFile(const QString &filePath)
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
-    if((filePath.isEmpty() && !cacheNewFileMode) ||
-       (!filePath.isEmpty() && editor->document()->isModified()))
+    if(editor->document()->isModified() &&
+       ((filePath.isEmpty() && !cacheNewFileMode) ||
+        !filePath.isEmpty()))
     {
         QMessageBox msgbox(this);
         QString strDisplayFileName;

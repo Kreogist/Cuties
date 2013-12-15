@@ -38,9 +38,9 @@ KCMailProcessObject::KCMailProcessObject()
 void KCMailProcessObject::sendMail()
 {
     socket.connectToHost(hostNameAddress, hostPort);
+    emit statusChanged(ConnectingServer);
     if (socket.waitForConnected(timeoutCount))
     {
-        qDebug()<<"Smtp Server Connected Success.";
         readWelcome();
         createMail();
         smtpCommunication();
@@ -48,43 +48,49 @@ void KCMailProcessObject::sendMail()
     }
     else
     {
-        statusChanged(ConnectionFailed);
+        emit statusChanged(ConnectionFailed);
     }
 }
 
 void KCMailProcessObject::communication(const char *msg)
 {
-        char data[1024];
-
-        if (socket.write(msg, qstrlen(msg)) == -1)
-                qDebug() << "@@@@@@@@@@@@@@ socket.write failed";
-        socket.flush();
-
-        if (socket.waitForReadyRead(-1) == true)
-        {
-            memset(data, '\0', sizeof(data));
-            socket.readLine(data, 1024);
-            qDebug() << data;
-        }
+    char data[1024];
+    if(socket.write(msg, qstrlen(msg))==-1)
+    {
+        emit statusChanged(SocketWriteFailed);
+    }
+    socket.flush();
+    if(socket.waitForReadyRead(-1)==true)
+    {
+        memset(data, '\0', sizeof(data));
+        socket.readLine(data, 1024);
+    }
 }
 
 void KCMailProcessObject::smtpCommunication()
 {
-        communication("helo 126.com\r\n");
-        communication("auth login\r\n");
-        communication(mailSender.toLatin1().toBase64()+"\r\n");
-        communication(mailSenderPassword.toLatin1().toBase64()+"\r\n");
-        communication("mail from: <"+mailSender.toLatin1()+">\r\n");
-        communication("rcpt to: <"+mailReceiver.toLatin1()+">\r\n");
-        communication("data\r\n");
-        communication(mailPackage.toLocal8Bit().data());
-        communication("quit\r\n");
-
-        qDebug() << "send email ok." << endl;
+    emit statusChanged(HeloServer);
+    communication("helo 126.com\r\n");
+    emit statusChanged(StartLogin);
+    communication("auth login\r\n");
+    emit statusChanged(Logingin);
+    communication(mailSender.toLatin1().toBase64()+"\r\n");
+    communication(mailSenderPassword.toLatin1().toBase64()+"\r\n");
+    emit statusChanged(SettingAddress);
+    communication("mail from: <"+mailSender.toLatin1()+">\r\n");
+    communication("rcpt to: <"+mailReceiver.toLatin1()+">\r\n");
+    emit statusChanged(RequireSendingData);
+    communication("data\r\n");
+    emit statusChanged(SendingData);
+    communication(mailPackage.toLocal8Bit().data());
+    emit statusChanged(Logingout);
+    communication("quit\r\n");
+    emit statusChanged(SendSuccess);
 }
 
 void KCMailProcessObject::createMail()
 {
+    emit statusChanged(CreateLetter);
     mailPackage="From: " + mailSenderCaption +
                 "\r\nTo: " + mailReceiverCaption + "\r\n" +
                 "Subject: " + mailTitle + "\r\n\r\n" +
@@ -131,12 +137,14 @@ void KCMailProcessObject::readWelcome()
 {
     char data[1024];
     int len;
-
-    if (socket.waitForReadyRead(-1) == true)
+    emit statusChanged(ReadingWelcome);
+    if(socket.waitForReadyRead(-1) == true)
     {
         memset(data, '\0', sizeof(data));
-            len = socket.readLine(data, 1024);
-            qDebug() << data << endl;;
-        }
-        qDebug()<<"Read Welcome!!";
+        len=socket.readLine(data, 1024);
+    }
+    else
+    {
+        emit statusChanged(WelcomeReadFailed);
+    }
 }
