@@ -17,12 +17,14 @@
  *  Kreogist Nerve. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "kcmainmenu.h"
 
 KCMainMenu::KCMainMenu(QWidget *parent) :
     QMenu(parent)
 {
-    //setFixedWidth(160);
+    setFixedWidth(160);
     showAnimation=new QPropertyAnimation(this, "geometry", this);
     showAnimation->setEasingCurve(QEasingCurve::OutCubic);
 }

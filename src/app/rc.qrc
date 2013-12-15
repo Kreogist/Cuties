@@ -16,6 +16,7 @@
         <file>image/BreakPoint.png</file>
         <file>image/Splash.png</file>
         <file>image/Banner.png</file>
+        <file>image/indicator.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>

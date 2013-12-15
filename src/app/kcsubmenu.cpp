@@ -16,14 +16,60 @@
  *  You should have received a copy of the GNU General Public License along with
  *  Kreogist Nerve. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QDebug>
+#include <QPainter>
+#include <QHBoxLayout>
+#include <QBitmap>
 
 #include "kcsubmenu.h"
+
+KCMenuIndicator::KCMenuIndicator(QWidget *parent) :
+    QWidget(parent)
+{
+    //Set properties
+    setAutoFillBackground(true);
+    setWindowFlags(Qt::ToolTip |
+                   Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_NoBackground, true);
+    setAttribute(Qt::WA_TranslucentBackground, true);
+
+    indicatorPixmap=QPixmap(":/img/image/indicator.png");
+    QPalette pal=palette();
+    pal.setColor(QPalette::Base, QColor(0,0,0,0));
+    pal.setColor(QPalette::Window, QColor(0,0,0,0));
+    pal.setColor(QPalette::WindowText, QColor(0,0,0,0));
+    pal.setColor(QPalette::AlternateBase, QColor(0,0,0,0));
+    pal.setColor(QPalette::ToolTipBase, QColor(255,255,255,0));
+    pal.setColor(QPalette::ToolTipText, QColor(255,255,255,0));
+    pal.setColor(QPalette::Button, QColor(255,255,255,0));
+    pal.setColor(QPalette::ButtonText, QColor(255,255,255,0));
+    setPalette(pal);
+
+    QLabel *indicatorIcon=new QLabel(this);
+    indicatorIcon->setPixmap(indicatorPixmap);
+
+    setMask(indicatorPixmap.mask());
+    setFixedSize(28,230);
+}
 
 KCSubMenu::KCSubMenu(QWidget *parent) :
     QMenu(parent)
 {
     showAnimation=new QPropertyAnimation(this, "geometry", this);
     showAnimation->setEasingCurve(QEasingCurve::OutCubic);
+
+    indicator=new KCMenuIndicator();
+}
+
+KCSubMenu::~KCSubMenu()
+{
+    indicator->deleteLater();
+}
+
+void KCSubMenu::hideEvent(QHideEvent *e)
+{
+    indicator->hide();
+    QMenu::hideEvent(e);
 }
 
 void KCSubMenu::showEvent(QShowEvent *e)
@@ -31,7 +77,8 @@ void KCSubMenu::showEvent(QShowEvent *e)
     QRect endPosition=geometry();
     QRect startPostion=endPosition;
     startPostion.setHeight(0);
-    startPostion.setTop(startPostion.top()+21);
+    int newIndicatorPosition=startPostion.top()+21;
+    startPostion.setTop(newIndicatorPosition);
     int endPositionHeight=endPosition.height();
     int endPositionTop=endPosition.top()-endPosition.height()/2+21;
     if(endPositionTop<0)
@@ -42,6 +89,16 @@ void KCSubMenu::showEvent(QShowEvent *e)
     endPosition.setHeight(endPositionHeight);
     showAnimation->setStartValue(startPostion);
     showAnimation->setEndValue(endPosition);
+    indicator->setGeometry(startPostion.left()-28,
+                           newIndicatorPosition-115,
+                           28,
+                           230);
+    indicator->show();
     showAnimation->start();
     QMenu::showEvent(e);
+}
+
+void KCSubMenu::paintEvent(QPaintEvent *e)
+{
+    QMenu::paintEvent(e);
 }

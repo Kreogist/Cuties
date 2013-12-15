@@ -22,23 +22,45 @@
 
 #include <QPropertyAnimation>
 #include <QShowEvent>
+#include <QEvent>
+#include <QLabel>
 #include <QMenu>
+#include <QPicture>
+#include <QPixmap>
+#include <QPaintEvent>
+
+class KCMenuIndicator : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCMenuIndicator(QWidget *parent = 0);
+
+protected:
+
+private:
+    QPixmap indicatorPixmap;
+};
 
 class KCSubMenu : public QMenu
 {
     Q_OBJECT
 public:
     explicit KCSubMenu(QWidget *parent = 0);
+    ~KCSubMenu();
 
 signals:
+    void moveIndicator();
 
 public slots:
 
 protected:
+    void hideEvent(QHideEvent *e);
     void showEvent(QShowEvent *e);
+    void paintEvent(QPaintEvent *e);
 
 private:
     QPropertyAnimation *showAnimation;
+    KCMenuIndicator *indicator;
 };
 
 #endif // KCSUBMAINMENU_H

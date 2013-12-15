@@ -23,6 +23,11 @@
 #include <QPropertyAnimation>
 #include <QShowEvent>
 #include <QMenu>
+#include <QLabel>
+#include <QSignalMapper>
+#include <QList>
+
+#include "kcsubmenu.h"
 
 class KCMainMenu : public QMenu
 {
@@ -41,7 +46,6 @@ protected:
 
 private:
     QPropertyAnimation *showAnimation;
-
 };
 
 #endif // KCMAINMENU_H
