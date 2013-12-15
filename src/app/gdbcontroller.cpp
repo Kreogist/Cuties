@@ -17,8 +17,6 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QCoreApplication>
-
 #include <stdlib.h>
 #include <stdio.h>
 

@@ -154,7 +154,7 @@ void KCRunner::run()
                 <<"start"<<terminal.terminal_name<<terminal.arg
 #endif
                 <<qApp->applicationDirPath()+'/'+consoleRunnerPath<<argExecuteFilePath;
-
+        qDebug()<<qApp->applicationDirPath()+'/'+consoleRunnerPath;
         connect(executeProcess,SIGNAL(finished(int)),
                 this,SLOT(quit()));
         connect(this,SIGNAL(finished()),
