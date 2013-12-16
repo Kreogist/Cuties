@@ -52,6 +52,7 @@ public:
     virtual QString compilerPath()=0;
     virtual bool checkCompilerPath(const QString &compilerPath);
     virtual QString compilerName()=0;
+    bool compilerExsist();
 
 signals:
     void compileCommandLine(QString compileCommand);

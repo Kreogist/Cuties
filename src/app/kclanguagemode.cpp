@@ -64,29 +64,27 @@ void KCLanguageMode::compile()
     if(compilerReceiver==NULL)
     {
         compilerReceiver=new KCCompileOutputReceiver(this);
-        connectCompilerAndOutputReceiver();
     }
-
-    //Fixed compiler unfind bug.
-    if(!compiler->checkCompilerPath(compiler->compilerPath()))
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Can't find compiler.");
-        msgBox.exec();
-        return ;
-    }
+    connectCompilerAndOutputReceiver();
 
     if(checkIfIsCompiling())
     {
         return ;
     }
-
     setCompileState(compiling);
 
     compilerReceiver->addBeginCompileText();
 
     compilerFinishedConnection=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        this,&KCLanguageMode::onCompileFinished);
+    if(!compiler->compilerExsist())
+    {
+        setCompileState(uncompiled);
+        QMessageBox msgBox;
+        msgBox.setText("Can't find compiler.");
+        msgBox.exec();
+        return;
+    }
     compiler->startCompile(m_parent->filePath);
 }
 

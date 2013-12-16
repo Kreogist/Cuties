@@ -94,6 +94,11 @@ bool KCCompilerBase::checkCompilerPath(const QString &compilerPath)
     return false;
 }
 
+bool KCCompilerBase::compilerExsist()
+{
+    return !checkCompilerPath(compilerPath());
+}
+
 void KCCompilerBase::onFinished(int exitNum)
 {
     connectionHandles.disConnectAll();
