@@ -76,14 +76,9 @@ void KCStatusRecorder::setWidgetGeometry(const int &widgetIndex,
 {
     KCGeometry currentWidgetGeometry=widgetGeometries.at(widgetIndex);
     currentWidgetGeometry.WindowState=windowStateToInt(windowState);
-    if(currentWidgetGeometry.WindowState==2)
+    if(currentWidgetGeometry.WindowState>1)
     {
         //Means previous is maximum
-        currentWidgetGeometry.currentGeometry=currentWidgetGeometry.previousGeometry;
-    }
-    else if(currentWidgetGeometry.WindowState==3)
-    {
-        //Means current is fullscreen state, I don't know why.
         currentWidgetGeometry.currentGeometry=currentWidgetGeometry.previousGeometry;
     }
     else
@@ -105,11 +100,7 @@ Qt::WindowStates KCStatusRecorder::getWidgetState(const QString &currentWidgetNa
     case 2:
         return Qt::WindowMaximized;
     case 3:
-#ifdef Q_OS_WIN32
-        return Qt::WindowMaximized;
-#else
         return Qt::WindowFullScreen;
-#endif
     }
     return Qt::WindowNoState;
 }

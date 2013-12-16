@@ -52,7 +52,6 @@ MainWindow::MainWindow(QWidget *parent) :
     createMenu();
 
     //Restore the last time running states
-    restoreSettings();
     retranslateAndSet();
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &MainWindow::retranslateAndSet);
@@ -76,6 +75,8 @@ MainWindow::MainWindow(QWidget *parent) :
             tabManager, SLOT(openAndJumpTo(QString)));
     connect(tabManager, SIGNAL(requiredHideDocks()),
             this, SLOT(hideAllDocks()));
+
+    restoreSettings();
 }
 
 void MainWindow::showEvent(QShowEvent *e)
@@ -806,7 +807,15 @@ void MainWindow::setDocOpenMenuEnabled()
 void MainWindow::restoreSettings()
 {
     setGeometry(KCStatusRecorder::getInstance()->getWidgetRect(objectName()));
-    setWindowState(KCStatusRecorder::getInstance()->getWidgetState(objectName()));
+    Qt::WindowStates mainWindowState=KCStatusRecorder::getInstance()->getWidgetState(objectName());
+    if(mainWindowState==Qt::WindowFullScreen)
+    {
+        setFullScreen();
+    }
+    else
+    {
+        setWindowState(mainWindowState);
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -1118,12 +1127,16 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionEditCopy]=tr("Copy");
     actionMainWindowText[actionEditPaste]=tr("Paste");
     actionMainWindowText[actionEditSelectAll]=tr("Select All");
-    actionMainWindowText[actionViewSidebar]=sideBar->getUnlockState()?sidebarStateString[sidebarLock]:sidebarStateString[sidebarUnlock];
+    actionMainWindowText[actionViewSidebar]=sideBar->getUnlockState()?
+                                            sidebarStateString[sidebarLock]:
+                                            sidebarStateString[sidebarUnlock];
     actionMainWindowText[actionViewCompileDock]=tr("Compiler Dock");
     actionMainWindowText[actionViewDebugControls]=tr("Debug Controls");
     actionMainWindowText[actionViewDebugCommandIO]=tr("Debug Command Dock");
     actionMainWindowText[actionViewDebugWatch]=tr("Debug Watch Dock");
-    actionMainWindowText[actionViewFullscreen]=isFullScreen()?fullScreenStateString[normalScreen]:fullScreenStateString[fullScreen];
+    actionMainWindowText[actionViewFullscreen]=isFullScreen()?
+                                               fullScreenStateString[normalScreen]:
+                                               fullScreenStateString[fullScreen];
     actionMainWindowText[actionSearchFind]=tr("Find");
     actionMainWindowText[actionSearchReplace]=tr("Replace");
     actionMainWindowText[actionSearchSearchOnline]=tr("Search Online");
