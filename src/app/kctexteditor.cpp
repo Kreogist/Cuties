@@ -396,7 +396,7 @@ bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
 }
 
 void KCTextEditor::autoIndent()
-{
+{   
     QTextCursor _textCursor=textCursor();
     QTextBlock currBlock=_textCursor.block();
     QTextBlock prevBlock=currBlock.previous();
@@ -509,14 +509,43 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
 
 void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
 {
-    if(tabPressCursor.selectedText().isEmpty())
-    {
-        insertTab(tabPressCursor, 1, true);
+    tabPressCursor.beginEditBlock();
+
+    if (tabPressCursor.hasSelection()) {
+        // Indent or unindent the selected lines
+        int pos = tabPressCursor.position();
+        int anchor = tabPressCursor.anchor();
+        int start = qMin(anchor, pos);
+        int end = qMax(anchor, pos);
+
+        QTextDocument *doc = document();
+        QTextBlock startBlock = doc->findBlock(start);
+        QTextBlock endBlock = doc->findBlock(end-1).next();
+
+        if (startBlock.next() == endBlock
+                && (start > startBlock.position() || end < endBlock.position() - 1)) {
+            // Only one line partially selected.
+            tabPressCursor.removeSelectedText();
+        } else {
+            QString spaceChar=configureInstance->usingBlankInsteadTab()?
+                              QString(" ").repeated(configureInstance->getSpacePerTab()):
+                              "\t";
+            for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+                int indentPosition = findFirstCharacter(block);
+                if(indentPosition<0)
+                {
+                    //Current link is blank or full of space
+                    indentPosition=block.text().length();
+                }
+                tabPressCursor.setPosition(block.position() + indentPosition);
+                tabPressCursor.insertText(spaceChar);
+            }
+            tabPressCursor.endEditBlock();
+            return;
+        }
     }
-    else
-    {
-        ;
-    }
+    insertTab(tabPressCursor, 1, true);
+    tabPressCursor.endEditBlock();
 }
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
