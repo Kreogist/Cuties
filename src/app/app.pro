@@ -105,7 +105,8 @@ SOURCES += \
     kcmailreports.cpp \
     kcmailprocessobject.cpp \
     kcmainmenu.cpp \
-    kcsubmenu.cpp
+    kcsubmenu.cpp \
+    kcoptionbutton.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -186,7 +187,8 @@ HEADERS += \
     kcmailreports.h \
     kcmailprocessobject.h \
     kcmainmenu.h \
-    kcsubmenu.h
+    kcsubmenu.h \
+    kcoptionbutton.h
 
 
 # Enable C++11

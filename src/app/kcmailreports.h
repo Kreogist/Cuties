@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QHBoxLayout>
+#include <QPropertyAnimation>
 
 #include "kcmailprocessobject.h"
 
@@ -18,18 +19,36 @@ class KCMailSendingStatus : public QWidget
 public:
     explicit KCMailSendingStatus(QWidget *parent = 0);
     void resetStatus();
+    enum StatusEnum
+    {
+        Connecting,
+        Sending,
+        ConnectFailed,
+        Success
+    };
+    void setProgressStatus(StatusEnum progressStatus);
 
 public slots:
     void setStatus(const QString &text=QString(""),
                    const int &value=-1);
     QString currentText();
     int currentValue();
+    void showStatus();
+    void hideStatus();
+    void delayHide();
+
+protected:
+    void resizeEvent(QResizeEvent *e);
 
 private:
+    void startAnimation();
+    void setProgressPalette(QColor progressColor);
     QLabel *reportStatus;
     QProgressBar *mailProgress;
-    QToolButton *cancelSending;
     QPalette pal;
+
+    QPropertyAnimation *statusAnime;
+    int destinationTop;
 };
 
 class KCMailReports : public QDialog
@@ -52,6 +71,12 @@ public slots:
     void retranslate();
 
 private slots:
+    void buttonStatusSet();
+    void enabledButtonState();
+    void disabledButtonState();
+    void setSendButtonState(bool enabled,
+                            QColor button,
+                            QColor buttonText);
     void sendReports();
     void refreshStatus(KCMailProcessObject::SendingStatus status);
 
@@ -75,6 +100,7 @@ private:
     QString buttonText[ModeCount];
     QString windowTitleString[ModeCount];
     QString titlePrefix[ModeCount];
+    QPalette pal;
 };
 
 #endif // KCMAILREPORTS_H
