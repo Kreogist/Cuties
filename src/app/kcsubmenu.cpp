@@ -74,7 +74,11 @@ void KCSubMenu::hideEvent(QHideEvent *e)
 
 void KCSubMenu::showEvent(QShowEvent *e)
 {
+    QRect parentGeometry=parentWidget()->geometry();
     QRect endPosition=geometry();
+    int endWidth=endPosition.width();
+    endPosition.setX(parentGeometry.x()+parentGeometry.width()+16);
+    endPosition.setWidth(endWidth);
     QRect startPostion=endPosition;
     startPostion.setHeight(0);
     int newIndicatorPosition=startPostion.top()+21;

@@ -24,6 +24,7 @@
 #include <QList>
 
 #include "kcconfigure.h"
+#include "kclanguageconfigure.h"
 
 struct searchEngine
 {
@@ -81,6 +82,11 @@ public:
     QList<searchEngine> getSearchEngineList() const;
     void setSearchEngineList(const QList<searchEngine> &value);
 
+
+public slots:
+    void retranslate();
+    void retranslateAndSet();
+
 private:
     KCGeneralConfigure();
     int defaultLanguageMode;
@@ -93,5 +99,14 @@ private:
 
     QString strFileFilter;
     QString asfFilter, ptfFilter, hfFilter, cfFilter, cppfFilter, pasfFilter, afFilter;
+    enum embeddedOnlineSearch
+    {
+        Google,
+        Yahoo,
+        Bing,
+        Baidu,
+        SearchEngineCount
+    };
+    QString defaultSearchEngine[SearchEngineCount];
 };
 #endif // KCGENERALCONFIGURE_H

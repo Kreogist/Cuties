@@ -28,45 +28,30 @@ KCGeneralConfigure *KCGeneralConfigure::getInstance()
 
 KCGeneralConfigure::KCGeneralConfigure()
 {
-    asfFilter = tr("All Support Files")+
-                "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas)";
-    ptfFilter = tr("Plain Text Files")+"(*.txt)";
-    hfFilter = tr("Hearder Files")+"(*.h *.hpp *.rh *.hh)";
-    cfFilter = tr("C Source Files")+"(*.c)";
-    cppfFilter = tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp)";
-    pasfFilter = tr("Pascal Source Files")+"(*.pas)";
-    afFilter = tr("All Files")+"(*.*)";
-
-    strFileFilter = asfFilter + ";;" +
-                    ptfFilter + ";;" +
-                    hfFilter + ";;" +
-                    cfFilter + ";;" +
-                    cppfFilter + ";;" +
-                    pasfFilter + ";;" +
-                    afFilter;
-
     defaultLanguageMode=1;
     rememberUnclosedFile=true;
     useDefaultLanguageWhenOpen=false;
     useDefaultLanguageWhenSave=true;
 
-    searchEngine defaultEngineGoogleAddor;
-    defaultEngineGoogleAddor.name=tr("Google");
-    defaultEngineGoogleAddor.engineURL="https://www.google.com.hk/#newwindow=1&safe=strict&q=";
-    searchEngineList.append(defaultEngineGoogleAddor);
-    searchEngine defaultEngineYahooAddor;
-    defaultEngineYahooAddor.name=tr("Yahoo!");
-    defaultEngineYahooAddor.engineURL="http://search.yahoo.com/search?toggle=1&cop=mss&ei=UTF-8&fr=yfp-t-900&p=";
-    searchEngineList.append(defaultEngineYahooAddor);
-    searchEngine defaultEngineBingAddor;
-    defaultEngineBingAddor.name=tr("Bing");
-    defaultEngineBingAddor.engineURL="http://cn.bing.com/search?form=MXBTDF&pc=MXBR&q=";
-    searchEngineList.append(defaultEngineBingAddor);
-    searchEngine defaultEngineBaiduAddor;
-    defaultEngineBaiduAddor.name=tr("Baidu");
-    defaultEngineBaiduAddor.engineURL="http://www.baidu.com/s?wd=";
-    searchEngineList.append(defaultEngineBaiduAddor);
+    retranslate();
+
+    QString defaultSearchEngineURL[SearchEngineCount];
+    defaultSearchEngineURL[Google]="https://www.google.com.hk/#newwindow=1&safe=strict&q=";
+    defaultSearchEngineURL[Yahoo]="http://search.yahoo.com/search?toggle=1&cop=mss&ei=UTF-8&fr=yfp-t-900&p=";
+    defaultSearchEngineURL[Bing]="http://cn.bing.com/search?form=MXBTDF&pc=MXBR&q=";
+    defaultSearchEngineURL[Baidu]="http://www.baidu.com/s?wd=";
+
+    for(int i=0; i<SearchEngineCount; i++)
+    {
+        searchEngine defaultEngineAddor;
+        defaultEngineAddor.name=defaultSearchEngine[i];
+        defaultEngineAddor.engineURL=defaultSearchEngineURL[i];
+        searchEngineList.append(defaultEngineAddor);
+    }
     searchEngineIndex=0;
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCGeneralConfigure::retranslateAndSet);
 }
 
 void KCGeneralConfigure::readConfigure()
@@ -265,6 +250,44 @@ QList<searchEngine> KCGeneralConfigure::getSearchEngineList() const
 }
 
 void KCGeneralConfigure::setSearchEngineList(const QList<searchEngine> &value)
+
 {
     searchEngineList = value;
+}
+
+void KCGeneralConfigure::retranslate()
+{
+    asfFilter = tr("All Support Files")+
+                "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas)";
+    ptfFilter = tr("Plain Text Files")+"(*.txt)";
+    hfFilter = tr("Hearder Files")+"(*.h *.hpp *.rh *.hh)";
+    cfFilter = tr("C Source Files")+"(*.c)";
+    cppfFilter = tr("C++ Source Files")+"(*.cpp *.cc *.cxx *.c++ *.cp)";
+    pasfFilter = tr("Pascal Source Files")+"(*.pas)";
+    afFilter = tr("All Files")+"(*.*)";
+
+    strFileFilter = asfFilter + ";;" +
+                    ptfFilter + ";;" +
+                    hfFilter + ";;" +
+                    cfFilter + ";;" +
+                    cppfFilter + ";;" +
+                    pasfFilter + ";;" +
+                    afFilter;
+
+    defaultSearchEngine[Google]=tr("Google");
+    defaultSearchEngine[Yahoo]=tr("Yahoo!");
+    defaultSearchEngine[Bing]=tr("Bing");
+    defaultSearchEngine[Baidu]=tr("Baidu");
+}
+
+void KCGeneralConfigure::retranslateAndSet()
+{
+    retranslate();
+    for(int i=0;i<SearchEngineCount;i++)
+    {
+        searchEngine translateEngine=searchEngineList.at(i);
+        translateEngine.name=defaultSearchEngine[i];
+        searchEngineList.removeAt(i);
+        searchEngineList.insert(i, translateEngine);
+    }
 }

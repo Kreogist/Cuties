@@ -48,8 +48,17 @@ MainWindow::MainWindow(QWidget *parent) :
     createTitlebar();
     createToolBar();
     createStatusbar();
-    createActions();
     createMenu();
+    createActions();
+
+    connect(tabManager,SIGNAL(tabAdded()),
+            this,SLOT(setDocOpenMenuEnabled()));
+    connect(tabManager,SIGNAL(tabAdded()),
+            titlebar,SLOT(showToolBar()));
+    connect(tabManager,SIGNAL(tabClear()),
+            this,SLOT(setNoDocOpenMenuEnabled()));
+    connect(tabManager,SIGNAL(tabClear()),
+            titlebar,SLOT(hideToolBar()));
 
     //Restore the last time running states
     retranslateAndSet();
@@ -116,12 +125,223 @@ void MainWindow::animateHideWelcomeWindow()
 
 void MainWindow::createActions()
 {
+    int i;
+    QIcon *MenuIconAddor=new QIcon;
+    QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
+    //Create File Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
+    menuMainWindowItem[menuFile]->setIcon(*MenuIconAddor);
+    //KCSubMenu *subMenuFile=new KCSubMenu(this);
+#endif
+    for(i=actionFileNewFile; i<=actionFileExit; i++)
+    {
+#ifndef Q_OS_MACX
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuFile]);
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuFile]->addAction(actionMainWindowItem[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case actionFileOpen:
+        case actionFileSaveAll:
+        case actionFileCloseAllExceptThis:
+            menuMainWindowItem[menuFile]->addSeparator();
+            break;
+        }
+#endif
+    }
+
+    //Create Edit Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
+    menuMainWindowItem[menuEdit]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionEditUndo; i<=actionEditSelectAll; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuEdit]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuEdit]->addAction(actionMainWindowItem[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case actionEditRedo:
+        case actionEditPaste:
+            menuMainWindowItem[menuEdit]->addSeparator();
+            break;
+        }
+#endif
+    }
+
+    //Create View Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
+    menuMainWindowItem[menuView]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionViewSidebar; i<=actionViewFullscreen; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuView]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuView]->addAction(actionMainWindowItem[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case actionViewDebugWatch:
+            menuMainWindowItem[menuView]->addSeparator();
+        }
+
+#endif
+    }
+
+    //Create Search Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
+    menuMainWindowItem[menuSearch]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionSearchFind; i<=actionSearchGoto; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuSearch]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuSearch]->addAction(actionMainWindowItem[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case actionSearchFind:
+        case actionSearchReplace:
+        case actionSearchSearchOnline:
+            menuMainWindowItem[menuSearch]->addSeparator();
+            break;
+        }
+
+#endif
+    }
+
+    //Create Execute Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
+    menuMainWindowItem[menuExecute]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionExecuteCompileAndRun; i<=actionExecuteRun/*mnuExecuteSetInputRunShowOutput*/; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuExecute]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuExecute]->addAction(actionMainWindowItem[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case actionExecuteRun:
+            //case mnuExecuteParameters:
+            menuMainWindowItem[menuExecute]->addSeparator();
+            break;
+        }
+#endif
+    }
+
+    //Create Debug Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
+    menuMainWindowItem[menuDebug]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionDebugStart; i<=actionDebugRemoveWatch/*mnuExecuteSetInputRunShowOutput*/; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuDebug]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuDebug]->addAction(actionMainWindowItem[i]);
+#ifdef Q_OS_MACX
+        switch(i)
+        {
+        case actionDebugRunToCursor:
+        case actionDebugReturn:
+            menuMainWindowItem[menuDebug]->addSeparator();
+            break;
+        }
+#endif
+    }
+
+    //Create Tool Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
+    menuMainWindowItem[menuTools]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionToolsPreferences; i<=actionToolsPreferences; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuTools]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuTools]->addAction(actionMainWindowItem[i]);
+    }
+
+    //Create Window Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
+    menuMainWindowItem[menuWindow]->setIcon(*MenuIconAddor);
+#endif
+    for(i=actionWindowPrev; i<=actionWindowNext; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuWindow]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuWindow]->addAction(actionMainWindowItem[i]);
+    }
+
+    //Create Help Menu
+#ifndef Q_OS_MACX
+    MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
+    menuMainWindowItem[menuHelp]->setIcon(*MenuIconAddor);
+#endif
+    //from about to about_qt add into help menu
+    for(i=actionHelpAbout; i<=actionHelpSendFeedbacks; i++)
+    {
+        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+                                            menuMainWindowItem[menuHelp]);
+#ifndef Q_OS_MACX
+        MenuIconAddor->addFile(stringActionIconPath[i]);
+        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
+        actionMainWindowItem[i]->setFont(menuFont);
+#endif
+        menuMainWindowItem[menuHelp]->addAction(actionMainWindowItem[i]);
+    }
+
+    setNoDocOpenMenuEnabled();
 
     //File -> New
-    for(int i=actionFileNewFile; i<actionMainWindowCount; i++)
-    {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),this);
-    }
     actionMainWindowItem[actionFileNewFile]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_N));
     stringActionIconPath[actionFileNewFile]=QString(":/menuicon/image/MenuIcons/mnuFileNew.png");
     connect(actionMainWindowItem[actionFileNewFile],SIGNAL(triggered()),tabManager,SLOT(newFile()));
@@ -495,219 +715,14 @@ void MainWindow::createMenu()
 #endif
     for(i=menuFile; i<menuMainItemsCount; i++)
     {
-        menuMainWindowItem[i]=new KCSubMenu(this);
+        menuMainWindowItem[i]=new KCSubMenu(_mainMenu);
         menuMainWindowItem[i]->setTitle(menuMainWindowText[i]);
         _mainMenu->addMenu(menuMainWindowItem[i]);
     }
 
-    //Create File Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
-    menuMainWindowItem[menuFile]->setIcon(*MenuIconAddor);
-    //KCSubMenu *subMenuFile=new KCSubMenu(this);
-#endif
-    for(i=actionFileNewFile; i<=actionFileExit; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuFile]->addAction(actionMainWindowItem[i]);
-#ifdef Q_OS_MACX
-        switch(i)
-        {
-        case actionFileOpen:
-        case actionFileSaveAll:
-        case actionFileCloseAllExceptThis:
-            menuMainWindowItem[menuFile]->addSeparator();
-            break;
-        }
-#endif
-    }
-
-    //Create Edit Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/EditMenuIcon.png"));
-    menuMainWindowItem[menuEdit]->setIcon(*MenuIconAddor);
-#endif
-    for(i=actionEditUndo; i<=actionEditSelectAll; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuEdit]->addAction(actionMainWindowItem[i]);
-#ifdef Q_OS_MACX
-        switch(i)
-        {
-        case actionEditRedo:
-        case actionEditPaste:
-            menuMainWindowItem[menuEdit]->addSeparator();
-            break;
-        }
-#endif
-    }
-
-    //Create View Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/ViewMenuIcon.png"));
-    menuMainWindowItem[menuView]->setIcon(*MenuIconAddor);
-#endif
-    for(i=actionViewSidebar; i<=actionViewFullscreen; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuView]->addAction(actionMainWindowItem[i]);
-#ifdef Q_OS_MACX
-        switch(i)
-        {
-        case actionViewDebugWatch:
-            menuMainWindowItem[menuView]->addSeparator();
-        }
-
-#endif
-    }
-
-    //Create Search Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/SearchMenuIcon.png"));
-    menuMainWindowItem[menuSearch]->setIcon(*MenuIconAddor);
-#endif
-    for(i=actionSearchFind; i<=actionSearchGoto; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuSearch]->addAction(actionMainWindowItem[i]);
-#ifdef Q_OS_MACX
-        switch(i)
-        {
-        case actionSearchFind:
-        case actionSearchReplace:
-        case actionSearchSearchOnline:
-            menuMainWindowItem[menuSearch]->addSeparator();
-            break;
-        }
-
-#endif
-    }
-
-    //Create Execute Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/RunMenuIcon.png"));
-    menuMainWindowItem[menuExecute]->setIcon(*MenuIconAddor);
-#endif
-    for(i=actionExecuteCompileAndRun; i<=actionExecuteRun/*mnuExecuteSetInputRunShowOutput*/; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuExecute]->addAction(actionMainWindowItem[i]);
-#ifdef Q_OS_MACX
-        switch(i)
-        {
-        case actionExecuteRun:
-            //case mnuExecuteParameters:
-            menuMainWindowItem[menuExecute]->addSeparator();
-            break;
-        }
-#endif
-    }
-
-    //Create Debug Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/DebugMenuIcon.png"));
-    menuMainWindowItem[menuDebug]->setIcon(*MenuIconAddor);
-#endif
-    for(i=actionDebugStart; i<=actionDebugRemoveWatch/*mnuExecuteSetInputRunShowOutput*/; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuDebug]->addAction(actionMainWindowItem[i]);
-#ifdef Q_OS_MACX
-        switch(i)
-        {
-        case actionDebugRunToCursor:
-        case actionDebugReturn:
-            menuMainWindowItem[menuDebug]->addSeparator();
-            break;
-        }
-#endif
-    }
-
-    //Create Tool Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/ToolMenuIcon.png"));
-    menuMainWindowItem[menuTools]->setIcon(*MenuIconAddor);
-#endif
-    for(i=actionToolsPreferences; i<=actionToolsPreferences; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuTools]->addAction(actionMainWindowItem[i]);
-    }
-
-    //Create Window Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/WindowMenuItem.png"));
-    menuMainWindowItem[menuWindow]->setIcon(*MenuIconAddor);
-#endif
-    for(i=actionWindowPrev; i<=actionWindowNext; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuWindow]->addAction(actionMainWindowItem[i]);
-    }
-
-    //Create Help Menu
-#ifndef Q_OS_MACX
-    MenuIconAddor->addFile(QString(":/img/image/HelpMenuIcon.png"));
-    menuMainWindowItem[menuHelp]->setIcon(*MenuIconAddor);
-#endif
-    //from about to about_qt add into help menu
-    for(i=actionHelpAbout; i<=actionHelpSendFeedbacks; i++)
-    {
-#ifndef Q_OS_MACX
-        MenuIconAddor->addFile(stringActionIconPath[i]);
-        actionMainWindowItem[i]->setIcon(*MenuIconAddor);
-        actionMainWindowItem[i]->setFont(menuFont);
-#endif
-        menuMainWindowItem[menuHelp]->addAction(actionMainWindowItem[i]);
-    }
-
-#ifndef Q_OS_MACX
-    titlebar->setMenu(_mainMenu);
-#endif
-
-    setNoDocOpenMenuEnabled();
-    connect(tabManager,SIGNAL(tabAdded()),
-            this,SLOT(setDocOpenMenuEnabled()));
-    connect(tabManager,SIGNAL(tabAdded()),
-            titlebar,SLOT(showToolBar()));
-    connect(tabManager,SIGNAL(tabClear()),
-            this,SLOT(setNoDocOpenMenuEnabled()));
-    connect(tabManager,SIGNAL(tabClear()),
-            titlebar,SLOT(hideToolBar()));
 #ifndef Q_OS_MACX
     delete MenuIconAddor;
+    titlebar->setMenu(_mainMenu);
 #endif
 }
 
@@ -1100,8 +1115,8 @@ void MainWindow::retranslateAndSet()
     actionStatusTips[actionDebugStepi]=tr("Execute one machine instruction, then stop and return to the debugger.");
     actionStatusTips[actionDebugReturn]=tr("Cancel execution of a function call.");
     actionStatusTips[actionDebugAddWatch]=tr("Add a new variable or expression to watch.");
-    actionStatusTips[actionDebugModifiedWatch]=tr("Modified a variable or expression in watching");
-    actionStatusTips[actionDebugRemoveWatch]=tr("Remove a variable or expression from watching");
+    actionStatusTips[actionDebugModifiedWatch]=tr("Modified a variable or expression in watching.");
+    actionStatusTips[actionDebugRemoveWatch]=tr("Remove a variable or expression from watching.");
     actionStatusTips[actionToolsPreferences]=tr("Customize your Cuties.");
     actionStatusTips[actionWindowNext]=tr("Switch to the next tab.");
     actionStatusTips[actionWindowPrev]=tr("Switch to the previous tab.");
