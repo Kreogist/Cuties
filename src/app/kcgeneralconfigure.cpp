@@ -28,12 +28,12 @@ KCGeneralConfigure *KCGeneralConfigure::getInstance()
 
 KCGeneralConfigure::KCGeneralConfigure()
 {
+    retranslate();
+
     defaultLanguageMode=1;
     rememberUnclosedFile=true;
     useDefaultLanguageWhenOpen=false;
     useDefaultLanguageWhenSave=true;
-
-    retranslate();
 
     QString defaultSearchEngineURL[SearchEngineCount];
     defaultSearchEngineURL[Google]="https://www.google.com.hk/#newwindow=1&safe=strict&q=";

@@ -227,8 +227,8 @@ int main(int argc, char *argv[])
 
     //Initalize and show Application MainWindow.
     MainWindow mainWindow;
-    splash->finish(&mainWindow);
     mainWindow.show();
+    splash->finish(&mainWindow);
 
     return app.exec();
 }

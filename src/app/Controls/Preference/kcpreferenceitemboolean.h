@@ -24,6 +24,7 @@
 #include <QCheckBox>
 
 #include "kcpreferenceitembase.h"
+#include "kclanguageconfigure.h"
 
 class KCPreferenceItemBoolean : public KCPreferenceItemBase
 {

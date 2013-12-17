@@ -61,6 +61,9 @@ KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
             this, SLOT(getFilePath()));
 
     setExpandFinishedHeight(70);
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCPreferenceItemPath::retranslateAndSet);
 }
 
 KCPreferenceItemPath::~KCPreferenceItemPath()

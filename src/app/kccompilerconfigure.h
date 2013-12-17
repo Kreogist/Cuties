@@ -28,6 +28,7 @@
 
 class KCCompilerConfigure : public KCConfigure
 {
+    Q_OBJECT
 public:
     void readConfigure();
     void writeConfigure();

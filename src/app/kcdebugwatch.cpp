@@ -27,6 +27,7 @@
 #include <QStandardItemModel>
 
 #include "kcdebugwatch.h"
+#include "kclanguageconfigure.h"
 
 KCDebugWatch::KCDebugWatch(QWidget *parent) :
     QDockWidget(parent)
@@ -85,13 +86,16 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     customWatchControl=new QToolBar(watchDockContainer);
 
     customWatchCommands[customWatchAdd]=new QToolButton(watchDockContainer);
+    customWatchCommands[customWatchAdd]->setToolTip(customWatchCommandTitle[customWatchAdd]);
     customWatchCommands[customWatchAdd]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/AddWatch.png"));
     customWatchControl->addWidget(customWatchCommands[customWatchAdd]);
     customWatchCommands[customWatchEdit]=new QToolButton(watchDockContainer);
+    customWatchCommands[customWatchEdit]->setToolTip(customWatchCommandTitle[customWatchEdit]);
     customWatchCommands[customWatchEdit]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/ModifyWatch.png"));
     customWatchControl->addWidget(customWatchCommands[customWatchEdit]);
     customWatchControl->addSeparator();
     customWatchCommands[customWatchRemove]=new QToolButton(watchDockContainer);
+    customWatchCommands[customWatchRemove]->setToolTip(customWatchCommandTitle[customWatchRemove]);
     customWatchCommands[customWatchRemove]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/RemoveWatch.png"));
     customWatchControl->addWidget(customWatchCommands[customWatchRemove]);
 
@@ -103,6 +107,9 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     watchDockContainer->addWidget(customWatchCombine);
 
     setWidget(watchDockContainer);
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCDebugWatch::retranslateAndSet);
 }
 
 KCDebugWatch::~KCDebugWatch()
@@ -134,4 +141,10 @@ void KCDebugWatch::retranslate()
 void KCDebugWatch::retranslateAndSet()
 {
     retranslate();
+    setWindowTitle(windowTitleString);
+    localWatchCaption->setText(localWatchTitle);
+    customWatchCaption->setText(customWatchTitle);
+    customWatchCommands[customWatchAdd]->setToolTip(customWatchCommandTitle[customWatchAdd]);
+    customWatchCommands[customWatchEdit]->setToolTip(customWatchCommandTitle[customWatchEdit]);
+    customWatchCommands[customWatchRemove]->setToolTip(customWatchCommandTitle[customWatchRemove]);
 }

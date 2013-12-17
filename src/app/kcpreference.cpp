@@ -298,6 +298,10 @@ void KCPreferenceCategoryList::retranslate()
 void KCPreferenceCategoryList::retranslateAndSet()
 {
     retranslate();
+    for(int i=KCPreferenceGeneral; i<KCCategoryCount; i++)
+    {
+        categoryButton[i]->setCategoryTitle(categoryCaptions[i]);
+    }
 }
 
 KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
@@ -373,6 +377,19 @@ void KCPreferenceCommander::retranslate()
 void KCPreferenceCommander::retranslateAndSet()
 {
     retranslate();
+    int maxButtonWidth=0;
+    for(int i=commanderYes; i<commanderCount; i++)
+    {
+        commanderControls[i]->setText(commanderTitle[i]);
+        if(commanderControls[i]->sizeHint().width()>maxButtonWidth)
+        {
+            maxButtonWidth=commanderControls[i]->sizeHint().width();
+        }
+    }
+    for(int i=commanderYes; i<=commanderApply; i++)
+    {
+        commanderControls[i]->setFixedWidth(maxButtonWidth);
+    }
 }
 
 KCPreference::KCPreference(QWidget *parent) :
@@ -466,6 +483,8 @@ void KCPreference::retranslateAndSet()
 {
     //Retranslate All Widget
     bannerWidget->retranslateAndSet();
+    commander->retranslateAndSet();
+    categoryList->retranslateAndSet();
     retranslate();
     setWindowTitle(titleText);
 }

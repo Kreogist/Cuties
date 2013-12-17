@@ -57,6 +57,9 @@ KCPreferenceItemBoolean::KCPreferenceItemBoolean(QWidget *parent) :
     editLayout->addStretch();
 
     setExpandFinishedHeight(45);
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCPreferenceItemBoolean::retranslateAndSet);
 }
 
 KCPreferenceItemBoolean::~KCPreferenceItemBoolean()
@@ -107,6 +110,7 @@ void KCPreferenceItemBoolean::retranslateAndSet()
 {
     retranslate();
     booleanData->setText(booleanDataText);
+    refreshValueDisplay();
 }
 
 void KCPreferenceItemBoolean::setEditWidgetStatus(bool states)

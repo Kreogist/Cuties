@@ -26,6 +26,7 @@
 #include <QFileDialog>
 
 #include "kcpreferenceitembase.h"
+#include "kclanguageconfigure.h"
 
 class KCPreferenceItemPath : public KCPreferenceItemBase
 {
