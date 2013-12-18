@@ -41,7 +41,7 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     setContentsMargins(0,0,0,0);
 
     //Set palette.
-    QPalette pal=this->palette();
+    QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
     pal.setColor(QPalette::Window, QColor(0x35, 0x35, 0x35));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));

@@ -3,4 +3,5 @@
 KCOptionButton::KCOptionButton(QWidget *parent) :
     QWidget(parent)
 {
+    ;
 }
