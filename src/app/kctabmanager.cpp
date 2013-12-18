@@ -53,6 +53,7 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     newFileCount=1;
     currentEditor=NULL;
+    debuggingState=false;
 }
 
 void KCTabManager::restoreUnclosedFiles()
@@ -367,6 +368,15 @@ void KCTabManager::onTabCloseRequested(int index)
 
     if(tab!=NULL)
     {
+        //Check this tab is on debugging or not
+        if(debuggingState)
+        {
+            if(debuggingEditor==tab)
+            {
+                qDebug()<<"Catch bug!";
+                return;
+            }
+        }
         tab->setAttribute(Qt::WA_DeleteOnClose, true);
         if(tab->close())
         {
@@ -563,4 +573,20 @@ void KCTabManager::insertToCurrentEditor(QString insertText)
 void KCTabManager::setTabCloseable(bool newValue)
 {
     setTabsClosable(newValue);
+}
+
+KCCodeEditor *KCTabManager::getDebuggingEditor() const
+{
+    return debuggingEditor;
+}
+
+void KCTabManager::setDebuggingEditor(KCCodeEditor *value)
+{
+    debuggingState=(value!=NULL);
+    if(!debuggingState)
+    {
+        //Disconnect debugging Editor
+        emit requireDisconnectDebug();
+    }
+    debuggingEditor = value;
 }

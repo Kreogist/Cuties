@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QTimer>
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -59,13 +61,16 @@ GdbController::GdbController(QObject *parent) :
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 
-#ifdef Q_OS_WIN
-    debugServer = 0;
-    debugSocket = 0;
-#endif
     debugCodec=QTextCodec::codecForLocale();
+#ifndef Q_OS_WIN32
     connect(this, SIGNAL(byteDelivery(QByteArray)),
-           this, SLOT(readDebugeeOutput(QByteArray)));
+            this, SLOT(readDebugeeOutput(QByteArray)));
+#endif
+}
+
+GdbController::~GdbController()
+{
+    quitGDB();
 }
 
 void GdbController::readGdbStandardOutput()
@@ -293,16 +298,9 @@ bool GdbController::checkGDB()
     return checkResult=_fileInfo.exists() && _fileInfo.isExecutable();
 }
 
+#ifndef Q_OS_WIN32
 bool GdbController::startListen()
 {
-#ifdef Q_OS_WIN
-    /*if(debugServer)
-        return debugServer->isListening();*/
-    debugServer = new QLocalServer(this);
-    connect(debugServer, SIGNAL(newConnection()), SLOT(newConnectionAvailable()));
-    return debugServer->listen(QString::fromLatin1("cuties-%1-%2")
-                               .arg(rand()));
-#else
     if (!debugServerPath.isEmpty())
         return true;
     QByteArray codedServerPath;
@@ -336,7 +334,23 @@ bool GdbController::startListen()
     debugServerNotifier = new QSocketNotifier(debugServerFd, QSocketNotifier::Read, this);
     connect(debugServerNotifier, SIGNAL(activated(int)), SLOT(bytesAvailable()));
     return true;
-#endif
+}
+
+void GdbController::bytesAvailable()
+{
+    size_t nbytes = 0;
+    if (::ioctl(debugServerFd, FIONREAD, (char *) &nbytes) < 0)
+        return;
+    QVarLengthArray<char, 8192> buff(nbytes);
+    if (::read(debugServerFd, buff.data(), nbytes) != (int)nbytes)
+        return;
+    if (nbytes) // Skip EOF notifications
+        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));
+}
+
+QString GdbController::getServerName()
+{
+    return debugServerPath;
 }
 
 void GdbController::readDebugeeOutput(const QByteArray &data)
@@ -349,79 +363,60 @@ void GdbController::readDebugeeOutput(const QByteArray &data)
      */
     showMessage(msg);
 }
+#endif
 
 void GdbController::showMessage(const QString &msg)
 {
     qDebug()<<msg;
 }
 
-#ifdef Q_OS_WIN
-void GdbController::newConnectionAvailable()
-{
-    if (debugSocket)
-        return;
-    debugSocket = debugServer->nextPendingConnection();
-    connect(debugSocket, SIGNAL(readyRead()), SLOT(bytesAvailable()));
-}
-#endif
-
-void GdbController::bytesAvailable()
-{
-#ifdef Q_OS_WIN
-    emit byteDelivery(debugSocket->readAll());
-#else
-    size_t nbytes = 0;
-    if (::ioctl(debugServerFd, FIONREAD, (char *) &nbytes) < 0)
-        return;
-    QVarLengthArray<char, 8192> buff(nbytes);
-    if (::read(debugServerFd, buff.data(), nbytes) != (int)nbytes)
-        return;
-    if (nbytes) // Skip EOF notifications
-        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));
-#endif
-}
-
 bool GdbController::runGDB(const QString &filePath)
 {
     if(checkResult)
     {
-        startListen();
+        readProcessData.disConnectAll();
         gdbProcess.reset(new QProcess(this));
         QStringList _arg;
         _arg<<filePath<<"--interpreter"<<"mi"
+#ifdef Q_OS_WIN32
+              ;
+#else
             <<QString("--tty=" + getServerName());
-
-
-        connect(gdbProcess.data(),
-                SIGNAL(readyReadStandardOutput()),
-                this,
-                SLOT(readGdbStandardOutput()));
-        connect(gdbProcess.data(),
-                SIGNAL(readyReadStandardError()),
-                this,
-                SLOT(readGdbStandardError()));
-
+        startListen();
+#endif
+        readProcessData+=connect(gdbProcess.data(),
+                                 SIGNAL(readyReadStandardOutput()),
+                                 this,
+                                 SLOT(readGdbStandardOutput()));
+        readProcessData+=connect(gdbProcess.data(),
+                                 SIGNAL(readyReadStandardError()),
+                                 this,
+                                 SLOT(readGdbStandardError()));
         gdbProcess->start(gdbPath,_arg);
-
+        configureGDB();
         return true;
     }
-    else
-    {
-        return false;
-    }
+    return false;
 }
 
 void GdbController::quitGDB()
 {
-    gdbProcess->write(qPrintable(QString("-gdb-exit\n")));
-    //! TODO: too long waitting time if gdb doesn't quit.
-    gdbProcess->waitForFinished();
+    if(gdbProcess->state()==QProcess::NotRunning)
+    {
+        return;
+    }
+    int timeout=500; //Timeout to kill;
+    gdbProcess->write(qPrintable(QString("q\n")));
+    qDebug()<<"Key1";
 
-    if(gdbProcess->state() == QProcess::Running)
+    //Read wait for finished document, this is the right way.
+    if(!gdbProcess->waitForFinished(timeout))
     {
         //gdb doesn't quit till now, so we have to kill it.
         gdbProcess->kill();
+        parseLine("Cuties: GDB process was stop by force.");
     }
+    //emit requireDisconnectDebug();
 }
 
 void GdbController::readGdbStandardError()
@@ -574,13 +569,10 @@ void GdbController::execGdbCommand(const QString &command)
     gdbProcess->write(qPrintable(command));
 }
 
-QString GdbController::getServerName()
+void GdbController::configureGDB()
 {
-#ifdef Q_OS_WIN
-    return debugServer->fullServerName();
-#else
-    return debugServerPath;
-#endif
+    gdbProcess->write(qPrintable(QString("set new-console on\n")));
+    gdbProcess->write(qPrintable(QString("show new-console\n")));
 }
 
 QSharedPointer<dbgOutputReceiver> GdbController::getDbgOutputs()

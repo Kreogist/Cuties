@@ -84,6 +84,8 @@ MainWindow::MainWindow(QWidget *parent) :
             tabManager, SLOT(openAndJumpTo(QString)));
     connect(tabManager, SIGNAL(requiredHideDocks()),
             this, SLOT(hideAllDocks()));
+    connect(tabManager, SIGNAL(requireDisconnectDebug()),
+            this, SLOT(disconnectDebugDock()));
 
     restoreSettings();
 }
@@ -681,8 +683,10 @@ void MainWindow::createDocks()
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
-    connect(debugControl,&KCDebugControlPanel::debugStarted,
-            this,&MainWindow::startDebug);
+    connect(debugControl, &KCDebugControlPanel::debugStarted,
+            this, &MainWindow::startDebug);
+    connect(debugControl, &KCDebugControlPanel::debugStopped,
+            this, &MainWindow::stopDebug);
     debugControl->hide();
 
     //Debug Command IO
@@ -1256,27 +1260,75 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    qDebug()<<"start SLOT 1";
+    if(tabManager->getDebuggingEditor()!=NULL)
+    {
+        //Debugging!
+        return;
+    }
+    qDebug()<<"start SLOT 2";
+    tabManager->setDebuggingEditor(tabManager->getCurrentEditor());
+    KCCodeEditor *currEditor=tabManager->getDebuggingEditor();
+    qDebug()<<"start SLOT 3";
     KCLanguageMode *currLangMode=currEditor->langMode();
+    qDebug()<<"start SLOT 4";
     currLangMode->startDebug();
+    qDebug()<<"start SLOT 5";
 
     connectDebugDockWithCurrEditor();
+    qDebug()<<"start SLOT 6";
     showDebugDocks();
+    qDebug()<<"start SLOT 7";
+}
+
+void MainWindow::stopDebug()
+{
+    qDebug()<<"SLOT 0";
+    KCCodeEditor *currEditor=tabManager->getDebuggingEditor();
+    if(currEditor==NULL)
+    {
+        return;
+    }
+    KCLanguageMode *currLangMode=currEditor->langMode();
+    qDebug()<<"SLOT 1";
+    if(currLangMode!=NULL)
+    {
+        qDebug()<<"SLOT 2";
+        currLangMode->stopDebug();
+        qDebug()<<"SLOT 3";
+    }
+    qDebug()<<"SLOT 4";
+    disconnectDebugDock();
+    qDebug()<<"SLOT 5";
+    tabManager->setDebuggingEditor(NULL);
+    qDebug()<<"SLOT 6";
 }
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
     KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
-
     GdbController *gdbControllerInstance=currLangMode->getGdbController();
 
     if(gdbControllerInstance!=NULL)
     {
-        debugCommandIO->setGdbInstance(gdbControllerInstance);
         debugControl->setGdbController(gdbControllerInstance);
+        debugCommandIO->setGdbInstance(gdbControllerInstance);
         debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getLocalVarModel());
-        debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
+        debugWatch->setCustomWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
     }
+}
+
+void MainWindow::disconnectDebugDock()
+{
+    qDebug()<<"Disconnect Flag1";
+    debugCommandIO->clearInstance();
+    qDebug()<<"Disconnect Flag2";
+    debugControl->clearGdbController();
+    qDebug()<<"Disconnect Flag3";
+    debugWatch->clearLocalWatchModel();
+    qDebug()<<"Disconnect Flag4";
+    debugWatch->clearCustomWatchModel();
+    qDebug()<<"Disconnect Flag5";
 }
 
 void MainWindow::setFullScreen()

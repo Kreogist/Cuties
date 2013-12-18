@@ -159,7 +159,6 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     connect(debugCursorControlButton[debugReturn], SIGNAL(clicked()),
             this, SLOT(onDebugReturnClicked()));
 
-
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugControlPanel::retranslateAndSet);
 
@@ -246,6 +245,11 @@ void KCDebugControlPanel::onDebugStopClicked()
 void KCDebugControlPanel::setGdbController(GdbController* controller)
 {
     gdbController=controller;
+}
+
+void KCDebugControlPanel::clearGdbController()
+{
+    gdbController=NULL;
 }
 
 void KCDebugControlPanel::onRunToCursorClicked()

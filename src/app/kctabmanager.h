@@ -49,6 +49,8 @@ public:
     int getCurrentLineNum() const;
     void restoreUnclosedFiles();
     KCCodeEditor *getCurrentEditor() const;
+    void setDebuggingEditor(KCCodeEditor *value);
+    KCCodeEditor *getDebuggingEditor() const;
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -58,6 +60,7 @@ signals:
     void tabNonClear();
     void tabClear();
     void requiredHideDocks();
+    void requireDisconnectDebug();
 
 public slots:
     void openAndJumpTo(const QString &filePath);
@@ -103,7 +106,8 @@ private:
     KCCodeEditor *currentEditor;
     KCEditorConfigure *editorConfigureInstance;
     QTabBar *tabBarControl;
-
+    KCCodeEditor *debuggingEditor;
+    bool debuggingState;
 };
 
 #endif // KCTABMANAGER_H
