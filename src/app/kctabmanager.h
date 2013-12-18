@@ -100,7 +100,6 @@ private slots:
 
 private:
     int newFileCount;
-    QTextCursor currentTextCursor;
     KCCodeEditor *currentEditor;
     KCEditorConfigure *editorConfigureInstance;
     QTabBar *tabBarControl;

@@ -473,9 +473,8 @@ void KCTabManager::currentTextCursorChanged()
 {
     if(currentEditor!=NULL)
     {
-        currentTextCursor=currentEditor->getTextCursor();
-        emit cursorDataChanged(currentTextCursor.blockNumber()+1,
-                               currentTextCursor.columnNumber());
+        emit cursorDataChanged(currentEditor->getTextCursor().blockNumber(),
+                               currentEditor->getTextCursor().columnNumber());
     }
     else
     {

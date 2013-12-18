@@ -141,19 +141,19 @@ void MainWindow::createActions()
     stringActionIconPath[actionToolsPreferences]=QString(":/menuicon/image/MenuIcons/mnuEditPerformance.png");
 
     int i;
-    QIcon *MenuIconAddor=new QIcon;
-    QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
     //Create File Menu
 #ifndef Q_OS_MACX
+    QIcon *MenuIconAddor=new QIcon;
+    QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menuMainWindowItem[menuFile]->setIcon(*MenuIconAddor);
     //KCSubMenu *subMenuFile=new KCSubMenu(this);
 #endif
     for(i=actionFileNewFile; i<=actionFileExit; i++)
     {
-#ifndef Q_OS_MACX
         actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
                                             menuMainWindowItem[menuFile]);
+#ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
         actionMainWindowItem[i]->setIcon(*MenuIconAddor);
         actionMainWindowItem[i]->setFont(menuFont);
