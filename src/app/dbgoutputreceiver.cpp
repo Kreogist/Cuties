@@ -106,6 +106,14 @@ QTextDocument *dbgOutputReceiver::getTextStreamOutput() const
     return textStreamOutput;
 }
 
+void dbgOutputReceiver::clearOutput()
+{
+    textStreamOutput->clear();
+    stackInfoModel->clear();
+    localVarModel->clear();
+    watchModel->clear();
+}
+
 QStandardItemModel *dbgOutputReceiver::getWatchModel() const
 {
     return watchModel;

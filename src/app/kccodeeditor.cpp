@@ -113,6 +113,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     filePath.clear();
     fileError=QFileDevice::NoError;
+
+    cacheNewFileMode=false;
 }
 
 KCCodeEditor::~KCCodeEditor()
@@ -414,6 +416,8 @@ bool KCCodeEditor::writeCacheFile(const QString &filePath)
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
+    qDebug()<<"alive slot 1";
+
     if(editor->document()->isModified() &&
        ((filePath.isEmpty() && !cacheNewFileMode) ||
         !filePath.isEmpty()))
@@ -471,10 +475,12 @@ void KCCodeEditor::closeEvent(QCloseEvent *e)
             qWarning("codeeditor.cpp: switch(ret) reached an unexcepted line!");
             break;
         }
+        return ;
     }
     else
     {
         e->accept();
+        QWidget::closeEvent(e);
     }
 
     return ;

@@ -145,7 +145,7 @@ private:
     KCConnectionHandler searcherConnections;
 
     friend class KCLanguageMode;
-    bool cacheNewFileMode=false;
+    bool cacheNewFileMode;
 };
 
 #endif // TEXTEDITOR_H

@@ -77,14 +77,14 @@ void KCLanguageMode::compile()
 
     compilerFinishedConnection=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        this,&KCLanguageMode::onCompileFinished);
-    if(!compiler->compilerExsist())
+    /*if(!compiler->compilerExsist())
     {
         setCompileState(uncompiled);
         QMessageBox msgBox;
         msgBox.setText("Can't find compiler.");
         msgBox.exec();
         return;
-    }
+    }*/
     compiler->startCompile(m_parent->filePath);
 }
 
@@ -149,13 +149,23 @@ GdbController *KCLanguageMode::startDebug()
     if(gdbControllerInstance == NULL)
     {
         gdbControllerInstance=new GdbController(this);
+        connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
+                this, SIGNAL(requireDisconnectDebug()));
     }
-
 
     gdbControllerInstance->runGDB(m_parent->execFileName);
     gdbControllerInstance->execRun();
 
     return gdbControllerInstance;
+}
+
+void KCLanguageMode::stopDebug()
+{
+    if(gdbControllerInstance!=NULL)
+    {
+        gdbControllerInstance->quitGDB();
+    }
+    compilerConnectionHandles.disConnectAll();
 }
 
 void KCLanguageMode::onCompileFinished(bool hasError)

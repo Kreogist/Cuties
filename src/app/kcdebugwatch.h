@@ -38,7 +38,8 @@ class KCDebugWatch : public QDockWidget
 public:
     explicit KCDebugWatch(QWidget *parent = 0);
     ~KCDebugWatch();
-
+    void clearLocalWatchModel();
+    void clearCustomWatchModel();
     void setLocalWatchModel(QStandardItemModel* model);
     void setCustomWatchModel(QStandardItemModel* model);
 

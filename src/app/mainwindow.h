@@ -81,6 +81,7 @@ signals:
 public slots:
     void show();
     void startDebug();
+    void stopDebug();
     void onActionCompileAndRun();
     void onActionRun();
     void onActionCompile();
@@ -108,6 +109,7 @@ private slots:
     void hideAllDocks();
     void showPreference();
     void setFullScreen();
+    void disconnectDebugDock();
 
 protected:
     void showEvent(QShowEvent *e);
@@ -117,7 +119,6 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private:
-
     KCWelcomeWindow *welcomeWindow;
     QPropertyAnimation *showWelcomeWindow, *hideWelcomeWindow;
 

@@ -34,6 +34,7 @@ class KCDebugControlPanel : public QDockWidget
 public:
     explicit KCDebugControlPanel(QWidget *parent = 0);
     void setGdbController(GdbController *controller);
+    void clearGdbController();
 
 signals:
     void debugStarted();

@@ -38,6 +38,8 @@ public:
     QStandardItemModel *getWatchModel() const;
     QTextDocument *getTextStreamOutput() const;
 
+    void clearOutput();
+
     void addConsoleOutput(QString text);
     void addTargetOutput(QString text);
     void addLogOutput(QString text);

@@ -117,6 +117,16 @@ KCDebugWatch::~KCDebugWatch()
     customWatchControlLayout->deleteLater();
 }
 
+void KCDebugWatch::clearLocalWatchModel()
+{
+    localWatch->setModel(NULL);
+}
+
+void KCDebugWatch::clearCustomWatchModel()
+{
+    customWatch->setModel(NULL);
+}
+
 void KCDebugWatch::setLocalWatchModel(QStandardItemModel *model)
 {
     localWatch->setModel(model);

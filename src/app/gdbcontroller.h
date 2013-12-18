@@ -37,6 +37,7 @@
 #include "gdbmivalue.h"
 #include "dbgoutputreceiver.h"
 #include "kcdebuggerconfigure.h"
+#include "kcconnectionhandler.h"
 
 struct bkpt_struct
 {
@@ -59,12 +60,11 @@ class GdbController : public QObject
     Q_OBJECT
 public:
     explicit GdbController(QObject *parent = 0);
+    ~GdbController();
 
     static void setGDBPath(const QString &path);
     static bool checkGDB();
     static void isGDBPathRight();
-
-    bool startListen();
 
     bool runGDB(const QString &filePath);
     void quitGDB();
@@ -74,14 +74,17 @@ public:
     QSharedPointer<dbgOutputReceiver> getDbgOutputs();
 
 signals:
+#ifndef Q_OS_WIN32
     void byteDelivery(const QByteArray &data);
+#endif
+    void requireDisconnectDebug();
 
 public slots:
-#ifdef Q_OS_WIN
-    void newConnectionAvailable();
-#endif
-    void readDebugeeOutput(const QByteArray &data);
+#ifndef Q_OS_WIN32
+    bool startListen();
     void bytesAvailable();
+    void readDebugeeOutput(const QByteArray &data);
+#endif
     void readGdbStandardError();
     void readGdbStandardOutput();
 
@@ -117,9 +120,17 @@ public slots:
     void execGdbCommand(const QString &command);
 
 private:
+#ifndef Q_OS_WIN32
+    QString debugServerPath;
+    int debugServerFd;
+    QSocketNotifier *debugServerNotifier;
+    QString debugErrorString;
+    QString getServerName();
+#endif
+
+    void configureGDB();
     void showMessage(const QString &msg);
 
-    QString getServerName();
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin,const QChar *end);
     void parseLine(const QString &_msg);
@@ -132,18 +143,8 @@ private:
     QSharedPointer<dbgOutputReceiver> dbgOutputs;
     QTextCodec *debugCodec;
     QTextCodec::ConverterState debugCodecState;
-
-#ifdef Q_OS_WIN32
-    QLocalServer *debugServer;
-    QLocalSocket *debugSocket;
-#else
-    QString debugServerPath;
-    int debugServerFd;
-    QSocketNotifier *debugServerNotifier;
-    QString debugErrorString;
-#endif
-
     KCDebuggerConfigure *instance;
+    KCConnectionHandler readProcessData;
 };
 
 #endif // GDBCONTROLLER_H
