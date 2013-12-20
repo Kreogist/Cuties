@@ -1260,48 +1260,38 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    qDebug()<<"start SLOT 1";
-    if(tabManager->getDebuggingEditor()!=NULL)
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    if(currEditor->getDebugging())
     {
-        //Debugging!
+        //Current File is debugging
         return;
     }
-    qDebug()<<"start SLOT 2";
-    tabManager->setDebuggingEditor(tabManager->getCurrentEditor());
-    KCCodeEditor *currEditor=tabManager->getDebuggingEditor();
-    qDebug()<<"start SLOT 3";
     KCLanguageMode *currLangMode=currEditor->langMode();
-    qDebug()<<"start SLOT 4";
+    currEditor->setDebugging(true);
     currLangMode->startDebug();
-    qDebug()<<"start SLOT 5";
 
     connectDebugDockWithCurrEditor();
-    qDebug()<<"start SLOT 6";
     showDebugDocks();
-    qDebug()<<"start SLOT 7";
 }
 
 void MainWindow::stopDebug()
 {
-    qDebug()<<"SLOT 0";
-    KCCodeEditor *currEditor=tabManager->getDebuggingEditor();
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
     if(currEditor==NULL)
     {
         return;
     }
+    if(!currEditor->getDebugging())
+    {
+        return;
+    }
     KCLanguageMode *currLangMode=currEditor->langMode();
-    qDebug()<<"SLOT 1";
     if(currLangMode!=NULL)
     {
-        qDebug()<<"SLOT 2";
         currLangMode->stopDebug();
-        qDebug()<<"SLOT 3";
+        currEditor->setDebugging(false);
     }
-    qDebug()<<"SLOT 4";
     disconnectDebugDock();
-    qDebug()<<"SLOT 5";
-    tabManager->setDebuggingEditor(NULL);
-    qDebug()<<"SLOT 6";
 }
 
 void MainWindow::connectDebugDockWithCurrEditor()
@@ -1316,19 +1306,18 @@ void MainWindow::connectDebugDockWithCurrEditor()
         debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getLocalVarModel());
         debugWatch->setCustomWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
     }
+    else
+    {
+        disconnectDebugDock();
+    }
 }
 
 void MainWindow::disconnectDebugDock()
 {
-    qDebug()<<"Disconnect Flag1";
     debugCommandIO->clearInstance();
-    qDebug()<<"Disconnect Flag2";
     debugControl->clearGdbController();
-    qDebug()<<"Disconnect Flag3";
     debugWatch->clearLocalWatchModel();
-    qDebug()<<"Disconnect Flag4";
     debugWatch->clearCustomWatchModel();
-    qDebug()<<"Disconnect Flag5";
 }
 
 void MainWindow::setFullScreen()

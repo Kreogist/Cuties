@@ -91,9 +91,7 @@ void KCDebugCommandIO::clearInstance()
 {
     instance=NULL;
     resetBackup->clear();
-    qDebug()<<"Find?";
     debugOutputTextBrowser->setDocument(resetBackup->document());
-    qDebug()<<"Find?";
 }
 
 void KCDebugCommandIO::retranslate()

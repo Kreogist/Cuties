@@ -23,9 +23,6 @@
 #include <QPropertyAnimation>
 #include <QShowEvent>
 #include <QMenu>
-#include <QLabel>
-#include <QSignalMapper>
-#include <QList>
 
 #include "kcsubmenu.h"
 

@@ -31,13 +31,6 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     editorConfigureInstance=KCEditorConfigure::getInstance();
 
-    tabBarControl = this->tabBar();
-    QPalette pal=tabBarControl->palette();
-    KCColorConfigure::getInstance()->getPalette(pal,objectName());
-    tabBarControl->setPalette(pal);
-    tabBarControl->setMinimumHeight(0);
-    tabBarControl->setContentsMargins(0,0,0,0);
-
     setAcceptDrops(true);
     setDocumentMode(true);
     setContentsMargins(0,0,0,0);
@@ -46,6 +39,18 @@ KCTabManager::KCTabManager(QWidget *parent) :
     setElideMode(Qt::ElideRight);
     setTabPosition(QTabWidget::South);
 
+    createTabMenu();
+
+    tabBarControl = this->tabBar();
+    QPalette pal=tabBarControl->palette();
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
+    tabBarControl->setPalette(pal);
+    tabBarControl->setMinimumHeight(0);
+    tabBarControl->setContentsMargins(0,0,0,0);
+    tabBarControl->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(tabBarControl, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(popupTabMenu(QPoint)));
+
     connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(onTabCloseRequested(int)));
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(onCurrentTabChange(int)));
     connect(editorConfigureInstance, SIGNAL(tabMoveableChanged(bool)),this,SLOT(setTabMoveableValue(bool)));
@@ -53,7 +58,6 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     newFileCount=1;
     currentEditor=NULL;
-    debuggingState=false;
 }
 
 void KCTabManager::restoreUnclosedFiles()
@@ -364,18 +368,14 @@ void KCTabManager::selectAll()
 
 void KCTabManager::onTabCloseRequested(int index)
 {
-    QWidget *tab=widget(index);
+    KCCodeEditor *tab=qobject_cast<KCCodeEditor *>(widget(index));
 
     if(tab!=NULL)
     {
         //Check this tab is on debugging or not
-        if(debuggingState)
+        if(tab->getDebugging())
         {
-            if(debuggingEditor==tab)
-            {
-                qDebug()<<"Catch bug!";
-                return;
-            }
+            return;
         }
         tab->setAttribute(Qt::WA_DeleteOnClose, true);
         if(tab->close())
@@ -576,18 +576,25 @@ void KCTabManager::setTabCloseable(bool newValue)
     setTabsClosable(newValue);
 }
 
-KCCodeEditor *KCTabManager::getDebuggingEditor() const
+void KCTabManager::popupTabMenu(const QPoint &point)
 {
-    return debuggingEditor;
+    if(point.isNull())
+    {
+        return;
+    }
+    int tabIndex = tabBar()->tabAt(point);
+    if(tabIndex>-1)
+    {
+        tabMenu->exec(tabBar()->mapToGlobal(point));
+    }
 }
 
-void KCTabManager::setDebuggingEditor(KCCodeEditor *value)
+void KCTabManager::createTabMenu()
 {
-    debuggingState=(value!=NULL);
-    if(!debuggingState)
+    tabMenu=new KCNormalContentMenu(this);
+    for(int i=closeTab; i<TabMenuActionCount; i++)
     {
-        //Disconnect debugging Editor
-        emit requireDisconnectDebug();
+        tabMenuActionItem[TabMenuActionCount]=new QAction(this);
+        tabMenu->addAction(tabMenuActionItem[TabMenuActionCount]);
     }
-    debuggingEditor = value;
 }

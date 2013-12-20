@@ -1160,6 +1160,8 @@ void KCTextEditor::wheelEvent(QWheelEvent *e)
         {
             zoomOut(2);
         }
+        e->ignore();
+        return;
     }
     QPlainTextEdit::wheelEvent(e);
 }

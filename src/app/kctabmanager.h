@@ -39,6 +39,7 @@
 #include "kccolorconfigure.h"
 #include "kcsearchwindow.h"
 #include "kccodeeditor.h"
+#include "kcnormalcontentmenu.h"
 
 class KCTabManager : public QTabWidget
 {
@@ -49,8 +50,6 @@ public:
     int getCurrentLineNum() const;
     void restoreUnclosedFiles();
     KCCodeEditor *getCurrentEditor() const;
-    void setDebuggingEditor(KCCodeEditor *value);
-    KCCodeEditor *getDebuggingEditor() const;
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -100,15 +99,24 @@ protected:
 private slots:
     void setTabMoveableValue(bool newValue);
     void setTabCloseable(bool newValue);
+    void popupTabMenu(const QPoint &point);
 
 private:
+    void createTabMenu();
     int newFileCount;
     QTextCursor currentTextCursor;
     KCCodeEditor *currentEditor;
     KCEditorConfigure *editorConfigureInstance;
     QTabBar *tabBarControl;
-    KCCodeEditor *debuggingEditor;
-    bool debuggingState;
+    enum tabMenuActions
+    {
+        closeTab,
+        closeOtherTab,
+        browseFile,
+        TabMenuActionCount
+    };
+    KCNormalContentMenu *tabMenu;
+    QAction *tabMenuActionItem[TabMenuActionCount];
 };
 
 #endif // KCTABMANAGER_H

@@ -115,6 +115,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     fileError=QFileDevice::NoError;
 
     cacheNewFileMode=false;
+    debugging=false;
 }
 
 KCCodeEditor::~KCCodeEditor()
@@ -162,6 +163,16 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
 }
+bool KCCodeEditor::getDebugging() const
+{
+    return debugging;
+}
+
+void KCCodeEditor::setDebugging(bool value)
+{
+    debugging = value;
+}
+
 
 void KCCodeEditor::onShowNextSearchResult()
 {
@@ -416,8 +427,6 @@ bool KCCodeEditor::writeCacheFile(const QString &filePath)
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
-    qDebug()<<"alive slot 1";
-
     if(editor->document()->isModified() &&
        ((filePath.isEmpty() && !cacheNewFileMode) ||
         !filePath.isEmpty()))

@@ -407,7 +407,6 @@ void GdbController::quitGDB()
     }
     int timeout=500; //Timeout to kill;
     gdbProcess->write(qPrintable(QString("q\n")));
-    qDebug()<<"Key1";
 
     //Read wait for finished document, this is the right way.
     if(!gdbProcess->waitForFinished(timeout))

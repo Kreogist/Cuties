@@ -69,6 +69,8 @@ public:
     void insertTextAtCursor(QString insertText);
     bool getCacheNewFileMode() const;
     void setCacheNewFileMode(bool value);
+    bool getDebugging() const;
+    void setDebugging(bool value);
 
 signals:
     void filenameChanged(QString newName);
@@ -146,6 +148,7 @@ private:
 
     friend class KCLanguageMode;
     bool cacheNewFileMode;
+    bool debugging;
 };
 
 #endif // TEXTEDITOR_H
