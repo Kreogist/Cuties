@@ -27,6 +27,7 @@
 #include "kcgeneralconfigure.h"
 
 #include "kclanguagemode.h"
+#include "kcmarkpanel.h"
 
 KCLanguageMode::KCLanguageMode(QWidget *parent) :
     QObject(parent)
@@ -146,7 +147,15 @@ GdbController *KCLanguageMode::startDebug()
     gdbControllerInstance->runGDB(m_parent->execFileName);
     gdbControllerInstance->execRun();
 
+    connect(m_parent->markPanel,&KCMarkPanel::markSetted,
+            this,&KCLanguageMode::setBreakPointAtLine);
+
     return gdbControllerInstance;
+}
+
+void KCLanguageMode::setBreakPointAtLine(int line)
+{
+    gdbControllerInstance->setBreakPoint(line,1);
 }
 
 void KCLanguageMode::onCompileFinished(bool hasError)

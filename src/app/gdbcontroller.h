@@ -72,8 +72,7 @@ public slots:
     void readGdbStandardOutput();
 
     //breakpoint
-    void setBreakPoint(const QString &fileName,
-                       const int &lineNum,
+    void setBreakPoint(const int &lineNum,
                        const int &count);
     void setBreakPoint(const QString &functionName);
     void setBreakCondition(const int &number, const QString &expr);
@@ -106,6 +105,7 @@ private:
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin,const QChar *end);
     void parseLine(const QString &_msg);
+    void configGdb();
 
     static QString gdbPath;
     static bool checkResult;

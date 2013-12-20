@@ -34,6 +34,9 @@ public:
     QPixmap getMarkPix() const;
     void setMarkPix(const QPixmap &value);
 
+signals:
+    void markSetted(int blockNumber);
+
 public slots:
 
 protected:

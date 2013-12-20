@@ -221,7 +221,10 @@ bool KCTabManager::newFileWithHighlight(const QString &fileSuffix)
         KCLanguageMode *newFileLanguageMode=currentEditor->langMode();
         newFileLanguageMode->setFileSuffix(fileSuffix);
         currentEditor->setLanguageMode(newFileLanguageMode);
+        return true;
     }
+
+    return false;
 }
 
 

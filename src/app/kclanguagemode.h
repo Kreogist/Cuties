@@ -66,6 +66,7 @@ signals:
 
 public slots:
     void onCompileFinished(bool hasError);
+    void setBreakPointAtLine(int line);
 
 private:
     void resetCompilerAndHighlighter();

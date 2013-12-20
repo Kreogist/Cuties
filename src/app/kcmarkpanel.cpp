@@ -100,6 +100,7 @@ void KCMarkPanel::mouseReleaseEvent(QMouseEvent *e)
                         _markInfo.marked^=1;   //exchange the state
                         data->setMarkInfo(_markInfo);
                         update();
+                        emit markSetted(block.blockNumber());
                     }
 
                     break;  //mouse press in a rect and release in another rect

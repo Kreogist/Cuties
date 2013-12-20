@@ -98,7 +98,8 @@ SOURCES += \
     kcwelcomewindow.cpp \
     kreogistcutestyle.cpp \
     mainwindow.cpp \
-    textcharformatmap.cpp 
+    textcharformatmap.cpp \ 
+    kcbreakpointmanager.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -173,7 +174,8 @@ HEADERS += \
     kcwelcomewindow.h \
     kreogistcutestyle.h \
     mainwindow.h \
-    textcharformatmap.h 
+    textcharformatmap.h \ 
+    kcbreakpointmanager.h
 
 
 # Enable C++11

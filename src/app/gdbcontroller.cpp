@@ -55,6 +55,7 @@ void GdbController::readGdbStandardOutput()
 
 void GdbController::parseLine(const QString &_msg)
 {
+    qDebug()<<_msg;
     if(_msg.isEmpty() || _msg.contains("(gdb)"))
     {
         return ;
@@ -285,6 +286,7 @@ bool GdbController::runGDB(const QString &filePath)
                 SLOT(readGdbStandardError()));
 
         gdbProcess->start(gdbPath,_arg);
+        configGdb();
 
         return true;
     }
@@ -292,6 +294,11 @@ bool GdbController::runGDB(const QString &filePath)
     {
         return false;
     }
+}
+
+void GdbController::configGdb()
+{
+    gdbProcess->write(qPrintable(QString("set exec-wrapper \"gnome-terminal -x\"\n")));
 }
 
 void GdbController::quitGDB()
@@ -319,14 +326,15 @@ void GdbController::readGdbStandardError()
  *!
  *!The breakpoint number is not in effect until it has been hit count times.
  *! */
-void GdbController::setBreakPoint(const QString &fileName,
-                        const int &lineNum,
+void GdbController::setBreakPoint(const int &lineNum,
                         const int &count)
 {
+    qDebug()<<qPrintable(QString("-break-insert ")+
+                         " -i "+
+                         QString::number(count)+" "+QString::number(lineNum)+"\n");
     gdbProcess->write(qPrintable(QString("-break-insert ")+
-                     fileName+":"+
-                     QString::number(lineNum)+" "+
-                     QString::number(count)+"\n"));
+                      " -i "+
+                      QString::number(count)+" "+QString::number(lineNum)+"\n"));
 }
 
 /*!

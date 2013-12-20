@@ -99,6 +99,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     editor->setOverwriteMode(false);
 
     languageMode=new KCLanguageMode(this);
+    languageMode->getGdbController();
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
