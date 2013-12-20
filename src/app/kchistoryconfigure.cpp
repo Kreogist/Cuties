@@ -56,11 +56,14 @@ void KCHistoryConfigure::readConfigure()
     QSettings settings(getHistoryFileName(),
                        QSettings::IniFormat);
 
-    settings.beginGroup("History");
-    historyDirPath=settings.value("historyDir").toString();
+    settings.beginGroup("Environments");
+    historyDirPath=settings.value("HistoryDir").toString();
+    settings.endGroup();
 
-    unClosedCurrent=settings.value("CurrIndex", -1).toInt();
-    int unClosedFilePathsSize=settings.beginReadArray("unClosedFilePaths");
+    //Load last times unclosed file.
+    settings.beginGroup("AutoRemember");
+    unClosedCurrent=settings.value("LastUnclosedFileIndex", -1).toInt();
+    int unClosedFilePathsSize=settings.beginReadArray("UnclosedFilePaths");
 
     for(int i=0; i<unClosedFilePathsSize; i++)
     {
@@ -75,8 +78,10 @@ void KCHistoryConfigure::readConfigure()
         }
     }
     settings.endArray();
+    settings.endGroup();
 
     QString filePath;
+    settings.beginGroup("History");
     maxRecentFilesSize=settings.value("maxRecentFilesSize", 10).toInt();
     int recentOpenedFilesSize=settings.beginReadArray("recentOpenedFiles");
     if(recentOpenedFilesSize > maxRecentFilesSize)
@@ -93,7 +98,7 @@ void KCHistoryConfigure::readConfigure()
         QFile *historyFileItem=new QFile(filePath);
         if(historyFileItem->exists())
         {
-            createRecentFileInfo(filePath);
+            appendRecentFileInfo(filePath);
         }
     }
     refreshHistoryModel();
@@ -107,15 +112,17 @@ void KCHistoryConfigure::writeConfigure()
     QSettings settings(getHistoryFileName(),
                        QSettings::IniFormat);
 
-    settings.beginGroup("History");
     if(Q_UNLIKELY(cleanMark || !trackUserHistory))
     {
         settings.remove("");
     }
     else
     {
-        settings.setValue("historyDir",historyDirPath);
-        settings.setValue("CurrIndex", unClosedCurrent);
+        settings.beginGroup("Environments");
+        settings.setValue("HistoryDir",historyDirPath);
+        settings.endGroup();
+        settings.beginGroup("AutoRemember");
+        settings.setValue("LastUnclosedFileIndex", unClosedCurrent);
         settings.beginWriteArray("unClosedFilePaths");
 
         int unCloseCount=unClosedFilePaths.size()-1;
@@ -129,7 +136,9 @@ void KCHistoryConfigure::writeConfigure()
             settings.setValue("vPosition", unClosedFileV.at(itemCount));
         }
         settings.endArray();
+        settings.endGroup();
 
+        settings.beginGroup("History");
         settings.setValue("maxRecentFilesSize", maxRecentFilesSize);
         settings.beginWriteArray("recentOpenedFiles");
         for(int i=0; i<recentFileList.count(); i++)
@@ -138,8 +147,8 @@ void KCHistoryConfigure::writeConfigure()
             settings.setValue("filePath", recentFileList.at(i).fileFullPath);
         }
         settings.endArray();
+        settings.endGroup();
     }
-    settings.endGroup();
 }
 
 void KCHistoryConfigure::setHistoryDir(const QString &dirPath)
@@ -223,7 +232,17 @@ void KCHistoryConfigure::clearAllRecentFilesRecord()
     recentOpenedFileModel->clear();
 }
 
-void KCHistoryConfigure::createRecentFileInfo(const QString &path)
+void KCHistoryConfigure::appendRecentFileInfo(const QString &path)
+{
+    recentFileList.append(createRecentFileInfo(path));
+}
+
+void KCHistoryConfigure::prependRecentFileInfo(const QString &path)
+{
+    recentFileList.prepend(createRecentFileInfo(path));
+}
+
+recentFileInfo KCHistoryConfigure::createRecentFileInfo(const QString &path)
 {
     recentFileInfo historyFileItem;
     historyFileItem.fileFullPath=path;
@@ -248,7 +267,7 @@ void KCHistoryConfigure::createRecentFileInfo(const QString &path)
     {
         historyFileItem.fileType=otherSourceFile;
     }
-    recentFileList.prepend(historyFileItem);
+    return historyFileItem;
 }
 
 QStandardItem *KCHistoryConfigure::createRecentFileItem(const int &recentFileItemIndex)
@@ -283,7 +302,7 @@ void KCHistoryConfigure::addRecentFileRecord(const QString &path)
             recentOpenedFileModel->removeRow((*i)->row());
         }
     }
-    createRecentFileInfo(path);
+    prependRecentFileInfo(path);
     recentOpenedFileModel->insertRow(0, createRecentFileItem(0));
     while(recentFileList.count() > maxRecentFilesSize)
     {

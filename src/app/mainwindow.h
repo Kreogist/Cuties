@@ -56,6 +56,9 @@
 #include "kcdebugcontrolpanel.h"
 #include "kcdebugcommandio.h"
 #include "kcdebugwatch.h"
+#include "kcmailreports.h"
+#include "kcmainmenu.h"
+#include "kcsubmenu.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -78,6 +81,7 @@ signals:
 public slots:
     void show();
     void startDebug();
+    void stopDebug();
     void onActionCompileAndRun();
     void onActionRun();
     void onActionCompile();
@@ -100,10 +104,12 @@ private slots:
     void changeDebugCommandIOVisibleState();
     void changeDebugWatchVisibleState();
     void changeJudgeDockVisibleState();
+    void onActionBugReport();
+    void onActionSendFeedbacks();
+    void hideAllDocks();
     void showPreference();
-#ifdef Q_OS_MACX
     void setFullScreen();
-#endif
+    void disconnectDebugDock();
 
 protected:
     void showEvent(QShowEvent *e);
@@ -113,7 +119,6 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private:
-
     KCWelcomeWindow *welcomeWindow;
     QPropertyAnimation *showWelcomeWindow, *hideWelcomeWindow;
 
@@ -132,7 +137,7 @@ private:
         menuMainItemsCount  //the number of menus
     };
     //Define MainWindow menu items
-    QMenu *menuMainWindowItem[menuMainItemsCount];
+    KCSubMenu *menuMainWindowItem[menuMainItemsCount];
     QString menuMainWindowText[menuMainItemsCount];
 
     //Enumerate MainWindow menu action items
@@ -159,10 +164,7 @@ private:
         actionViewDebugCommandIO,
         actionViewDebugWatch,
         //mnuViewJudgeDock,
-#ifdef Q_OS_MACX
         actionViewFullscreen,
-#endif
-        actionViewEnd,
         actionSearchFind,
         //mnuSearchFindInFiles,
         actionSearchReplace,
@@ -194,6 +196,8 @@ private:
         actionWindowNext,
         actionHelpAbout,
         actionHelpAboutQt,
+        actionHelpBugReport,
+        actionHelpSendFeedbacks,
         actionMainWindowCount   //The number of Main Menu Actions.
     };
     //Define MainWindow menu actions
@@ -230,8 +234,13 @@ private:
     };
     QString sidebarStateString[SidebarStateCount];
 
-    //Define MainWindow last time opened position.
-    int lastPositionX, lastPostionY, lastPositionHeight, lastPostionWidth;
+    enum fullScreenState
+    {
+        fullScreen,
+        normalScreen,
+        FullScreenStateCount
+    };
+    QString fullScreenStateString[FullScreenStateCount];
 
     //All the names we need to translate.
     QString trWindowTitle="Cuties";
@@ -264,6 +273,8 @@ private:
 
     void showDebugDocks();
     void connectDebugDockWithCurrEditor();
+
+    int currentWindowState();
 };
 
 #endif // MAINWINDOW_H

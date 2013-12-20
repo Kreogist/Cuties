@@ -396,7 +396,7 @@ bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
 }
 
 void KCTextEditor::autoIndent()
-{
+{   
     QTextCursor _textCursor=textCursor();
     QTextBlock currBlock=_textCursor.block();
     QTextBlock prevBlock=currBlock.previous();
@@ -438,7 +438,7 @@ void KCTextEditor::autoIndent()
     }
 }
 
-void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
+void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount, bool forceInsert)
 {
     if(tabCount>0)
     {
@@ -446,7 +446,14 @@ void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
         QString spaceChar=configureInstance->usingBlankInsteadTab()?
                           QString(" ").repeated(configureInstance->getSpacePerTab()):
                           "\t";
-        insertTabCursor.insertText(spaceChar.repeated(tabCount));
+        if(insertTabCursor.document()->characterAt(insertTabCursor.position())=='}' && !forceInsert)
+        {
+            insertTabCursor.insertText(spaceChar.repeated(tabCount-1));
+        }
+        else
+        {
+            insertTabCursor.insertText(spaceChar.repeated(tabCount));
+        }
     }
 }
 
@@ -502,14 +509,43 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
 
 void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
 {
-    if(tabPressCursor.selectedText().isEmpty())
-    {
-        insertTab(tabPressCursor);
+    tabPressCursor.beginEditBlock();
+
+    if (tabPressCursor.hasSelection()) {
+        // Indent or unindent the selected lines
+        int pos = tabPressCursor.position();
+        int anchor = tabPressCursor.anchor();
+        int start = qMin(anchor, pos);
+        int end = qMax(anchor, pos);
+
+        QTextDocument *doc = document();
+        QTextBlock startBlock = doc->findBlock(start);
+        QTextBlock endBlock = doc->findBlock(end-1).next();
+
+        if (startBlock.next() == endBlock
+                && (start > startBlock.position() || end < endBlock.position() - 1)) {
+            // Only one line partially selected.
+            tabPressCursor.removeSelectedText();
+        } else {
+            QString spaceChar=configureInstance->usingBlankInsteadTab()?
+                              QString(" ").repeated(configureInstance->getSpacePerTab()):
+                              "\t";
+            for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+                int indentPosition = findFirstCharacter(block);
+                if(indentPosition<0)
+                {
+                    //Current link is blank or full of space
+                    indentPosition=block.text().length();
+                }
+                tabPressCursor.setPosition(block.position() + indentPosition);
+                tabPressCursor.insertText(spaceChar);
+            }
+            tabPressCursor.endEditBlock();
+            return;
+        }
     }
-    else
-    {
-        ;
-    }
+    insertTab(tabPressCursor, 1, true);
+    tabPressCursor.endEditBlock();
 }
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
@@ -818,6 +854,16 @@ QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
 
 void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
+    switch (e->key()) {
+    case Qt::Key_Escape:
+        QPlainTextEdit::keyPressEvent(e);
+        emit requireHideOthers();
+        return;
+    case Qt::Key_Control:
+        QPlainTextEdit::keyPressEvent(e);
+        controlKeyDown=true;
+        return;
+    }
     QTextCursor _textCursor=textCursor();
     QString pairParethesesChar;
     pairParethesesChar=parenthesesPair(e->text());
@@ -953,7 +999,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
         if(previousChar==QChar('\"') &&
            currentChar==QChar('\"') &&
-           currData->getQuotationStatus()!=-1)
+           currData->getQuotationStatus()!=0)
         {
             _textCursor.deleteChar();
             QPlainTextEdit::keyPressEvent(e);
@@ -1014,7 +1060,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 nextData->setCodeLevel(prevData->getCodeLevel() + 1);
                 _textCursor.setPosition(nextBlock.position());
                 setTextCursor(_textCursor);
-                insertTab(_textCursor, prevData->getCodeLevel());
+                insertTab(_textCursor, prevData->getCodeLevel() + 1);
                 _textCursor.movePosition(QTextCursor::PreviousBlock);
                 setTextCursor(_textCursor);
                 insertTab(_textCursor, prevData->getCodeLevel() + 1);
@@ -1072,6 +1118,16 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void KCTextEditor::keyReleaseEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Control:
+        controlKeyDown=false;
+    }
+    QPlainTextEdit::keyReleaseEvent(e);
+}
+
 void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
     QPlainTextEdit::mouseReleaseEvent(e);
@@ -1092,6 +1148,22 @@ void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
     }*/
 }
 
+void KCTextEditor::wheelEvent(QWheelEvent *e)
+{
+    if(controlKeyDown)
+    {
+        if(e->angleDelta().y()>0)
+        {
+            zoomIn(2);
+        }
+        else
+        {
+            zoomOut(2);
+        }
+    }
+    QPlainTextEdit::wheelEvent(e);
+}
+
 void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
 {
     setWordWrapMode(wrapMode);
@@ -1100,4 +1172,18 @@ void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
 void KCTextEditor::setTheCursorWidth(int width)
 {
     setCursorWidth(width);
+}
+void KCTextEditor::zoomIn(int range)
+{
+    QFont f = this->font();
+    const int newSize = f.pixelSize() + range;
+    if(newSize<=0)
+        return;
+    f.setPixelSize(newSize);
+    setFont(f);
+}
+
+void KCTextEditor::zoomOut(int range)
+{
+    zoomIn(-range);
 }

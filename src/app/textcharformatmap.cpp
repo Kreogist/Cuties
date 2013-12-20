@@ -29,7 +29,6 @@ textCharFormatMap::textCharFormatMap(QObject *parent) :
     //QFile file("default.style");
     QFile file(qApp->applicationDirPath() + "/default.style");
 
-
     if(file.open(QFile::ReadOnly| QFile::Text))
     {
         char str_line[100];

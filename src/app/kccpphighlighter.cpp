@@ -220,10 +220,10 @@ void KCCppHighlighter::stringHighlightBlock(const QString &text)
         i<l;
         i++)
     {
-        if(i->endPos == -1)
+        if(i->endPos == 0)
         {
             setFormat(i->beginPos,
-                      text.length()-i->beginPos,
+                      text.length() - i->beginPos,
                       instance->getTextCharFormat(QString("string")));
         }
         else

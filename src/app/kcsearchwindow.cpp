@@ -18,18 +18,20 @@
  */
 
 #include <QGraphicsDropShadowEffect>
+#include <QPropertyAnimation>
 #include "kccolorconfigure.h"
 
 #include "kcsearchwindow.h"
 
-static const int nFixedWidth=290;
+static const int searchWindowFixedWidth=290;
+static const int SearchBarOffset = 20;
 
 KCSearchWindow::KCSearchWindow(QWidget *parent) :
     KCSearchWidget(parent)
 {
     setObjectName("KCSearchWindow");
     //Set Search Details.
-    setFixedSize(nFixedWidth,38);
+    setFixedSize(searchWindowFixedWidth, 38);
 
     QPalette pal=palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -57,5 +59,45 @@ KCSearchWindow::KCSearchWindow(QWidget *parent) :
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton, SIGNAL(clicked()),
-            this, SIGNAL(requireHide()));
+            this, SLOT(animeHide()));
+}
+
+void KCSearchWindow::updateGeometry()
+{
+    setGeometry(parentWidget()->width()-width()-SearchBarOffset,
+                0,
+                width(),
+                height());
+}
+
+void KCSearchWindow::animeShow()
+{
+    QPropertyAnimation *searchAnime=new QPropertyAnimation(this,"geometry");
+    QRect animeEndPos=rect();
+    animeEndPos.setX(parentWidget()->width()-width()-SearchBarOffset);
+    QRect animeStartPos=animeEndPos;
+    animeStartPos.setTop(-animeStartPos.height());
+    searchAnime->setStartValue(animeStartPos);
+    searchAnime->setDuration(300);
+    searchAnime->setEndValue(animeEndPos);
+    searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+    show();
+    restoreLastSearchText();
+    searchAnime->start(QPropertyAnimation::DeleteWhenStopped);;
+}
+
+void KCSearchWindow::animeHide()
+{
+    QPropertyAnimation *searchAnime=new QPropertyAnimation(this,"geometry");
+    QRect animeStartPos=geometry();
+    QRect animeEndPos=animeStartPos;
+    animeEndPos.setTop(-animeStartPos.height() - 20);
+    searchAnime->setStartValue(animeStartPos);
+    searchAnime->setDuration(300);
+    searchAnime->setEndValue(animeEndPos);
+    searchAnime->setEasingCurve(QEasingCurve::OutCubic);
+    connect(searchAnime, SIGNAL(finished()),
+            this, SLOT(hide()));
+    emit requireLostFocus();
+    searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
 }

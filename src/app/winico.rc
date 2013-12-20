@@ -24,8 +24,8 @@ VS_VERSION_INFO VERSIONINFO
             BEGIN
                 VALUE "CompanyName", "Kreogist Dev Team\0"
                 VALUE "FileDescription", "Kreogist Cuties\0"
-                VALUE "FileVersion", "0.2.0.0\0"
-                VALUE "LegalCopyright", "© 2013 Kreogist Dev Team\0"
+                VALUE "FileVersion", "0.2.4.6\0"
+                VALUE "LegalCopyright", "© Kreogist Dev Team. \0"
                 VALUE "OriginalFilename", "Cuties.exe\0"
                 VALUE "ProductName", "Cuties\0"
             END

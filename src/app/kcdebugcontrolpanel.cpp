@@ -40,7 +40,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     setObjectName("DebugPanel");
     setAllowedAreas(Qt::RightDockWidgetArea |
                     Qt::BottomDockWidgetArea);
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     //Set compile dock palette
     QPalette pal=palette();
@@ -141,9 +141,9 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     }
 
     connect(debugControlButton[debugStart],SIGNAL(clicked()),
-            this,SIGNAL(debugStarted()));
+            this,SLOT(onDebugStartClicked()));
     connect(debugControlButton[debugStop],SIGNAL(clicked()),
-            this,SIGNAL(debugStopped()));
+            this,SLOT(onDebugStopClicked()));
     connect(debugControlButton[debugRunToCursor], SIGNAL(clicked()),
             this, SLOT(onRunToCursorClicked()));
     connect(debugCursorControlButton[debugNext], SIGNAL(clicked()),
@@ -158,7 +158,6 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
             this, SLOT(onDebugStepiClicked()));
     connect(debugCursorControlButton[debugReturn], SIGNAL(clicked()),
             this, SLOT(onDebugReturnClicked()));
-
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugControlPanel::retranslateAndSet);
@@ -228,6 +227,17 @@ void KCDebugControlPanel::retranslateAndSet()
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
 }
+
+void KCDebugControlPanel::onDebugStartClicked()
+{
+    emit debugStarted();
+}
+
+void KCDebugControlPanel::onDebugStopClicked()
+{
+    emit debugStopped();
+}
+
 /*!
  * \brief KCDebugControlPanel::setGdbController sets the pointer of GdbController.
  * \param controller
@@ -235,6 +245,11 @@ void KCDebugControlPanel::retranslateAndSet()
 void KCDebugControlPanel::setGdbController(GdbController* controller)
 {
     gdbController=controller;
+}
+
+void KCDebugControlPanel::clearGdbController()
+{
+    gdbController=NULL;
 }
 
 void KCDebugControlPanel::onRunToCursorClicked()

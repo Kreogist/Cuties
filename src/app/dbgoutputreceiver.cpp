@@ -85,7 +85,7 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
 
 void dbgOutputReceiver::addExprValue(QString value)
 {
-
+    ;
 }
 
 void dbgOutputReceiver::addText(const QString &text)
@@ -104,6 +104,14 @@ void dbgOutputReceiver::insertText(const QString &text,
 QTextDocument *dbgOutputReceiver::getTextStreamOutput() const
 {
     return textStreamOutput;
+}
+
+void dbgOutputReceiver::clearOutput()
+{
+    textStreamOutput->clear();
+    stackInfoModel->clear();
+    localVarModel->clear();
+    watchModel->clear();
 }
 
 QStandardItemModel *dbgOutputReceiver::getWatchModel() const

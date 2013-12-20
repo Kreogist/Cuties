@@ -46,6 +46,7 @@ public:
     QRectF blockRect(const QTextBlock &block);
 
 signals:
+    void requireHideOthers();
     void updated();
     void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);
@@ -74,7 +75,9 @@ protected:
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
@@ -100,9 +103,11 @@ private:
                          QTextBlock block,
                          bool forward);
     int findFirstCharacter(const QTextBlock &block);
-    void insertTab(QTextCursor insertTabCursor, int tabCount = 1);
+    void insertTab(QTextCursor insertTabCursor, int tabCount = 1, bool forceInsert = false);
     void removeTab(QTextCursor removeTabCursor, int tabCount = 1);
     void tabPressEvent(QTextCursor tabPressCursor);
+    void zoomIn(int range);
+    void zoomOut(int range);
 
     KCEditorConfigure *configureInstance;
     KCClipboard *clipboard;
@@ -117,6 +122,7 @@ private:
     bool searchRegularExpression;
     bool searchCaseSensitively;
     bool searchWholeWord;
+    bool controlKeyDown=false;
     unsigned long long int searchCode;
     QScopedPointer<KCTextSearcher> searcherForPrev,searcherForNext;
     QFuture<void> threadPrev,threadNext;

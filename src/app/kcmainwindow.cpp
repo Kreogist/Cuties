@@ -27,7 +27,7 @@ KCMainWindow::KCMainWindow(QWidget *parent) :
     setAcceptDrops(true);
     setContentsMargins(0,0,0,0);
     //Minimum Window Size.
-    setMinimumSize(863, 508);
+    setMinimumSize(950, 600);
 }
 
 KCTitleBar *KCMainWindow::getTitleBar() const

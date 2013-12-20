@@ -36,7 +36,6 @@ gcc::gcc(QObject *parent) :
 }
 
 QString gcc::compilerPath()
-
 {
     return isCompileCpp?
            instance->getGppPath():instance->getGccPath();

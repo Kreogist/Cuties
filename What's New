@@ -1,4 +1,77 @@
-﻿0.1.0.1
+0.2.5.15
+Bug Fixed:
+1. Fixed replace function didn't work bug.
+2. Update cursor get policy
+3. Update search process policy.
+
+0.2.5.14
+New Features:
+1. Escape policy init support.
+2. Zoom in/Zoom out init support.
+3. Compile progress basic init.
+
+Updates:
+1. New search window show and hide policy.
+
+0.2.5.13
+Updates:
+1. Full language support in Feedback and Bug report.
+
+Bug Fixed:
+1. Fixed all the text will be the same line in bug report bug.
+
+0.2.5.12
+New Features:
+1. Bug Report send added.
+2. Feedback report send added.
+
+0.2.5.11
+New Features:
+1. Add SmartPanel widget for code foding and error display.
+
+Updates:
+1. Connect debug menu actions to control items.
+2. Update {} autoIndent policy.
+
+0.2.5.10
+Bug Fixed:
+1. Fixed crashed bug caused by return null in function getServerName function.
+
+0.2.5.9
+New Features:
+1. Init support Debug input redirect in UNIX/Linux based OS.
+
+0.2.5.8
+New Features:
+1. Init support Debug input redirect in Windows OS.
+
+Bug Fixed:
+1. Totally solved langauge crashed bugs
+
+0.2.5.7
+New Features:
+1. Debug init support.
+2. Welcome screen.
+3. New Preference.
+4. File context auto remember module.
+5. Position remember module.
+6. Console parameters support.
+7. New Multi-language Selector.
+
+Updates:
+1. String Analysis to high light source code.
+2. New algorithm to set goto spin box size.
+3. Change Dock font to code font.
+4. Press quotation key can add quotations if there's a selected text.
+5. New delete removeTab Function.
+6. Changed the backspace policy.
+
+Bug Fixed:
+1. Fixed goto spin box size bug.
+2. Fixed parentheses auto complete bug.
+3. Fixed close the new create file won't hint to save bug.
+
+0.1.0.1
 New Features:
 1. New Cuties Icon.
 2. New menu font on Windows and Linux. Full Sword Art Online style support.

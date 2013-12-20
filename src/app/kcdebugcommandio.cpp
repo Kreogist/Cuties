@@ -21,6 +21,7 @@
 #include <QComboBox>
 #include <QStyleFactory>
 #include <QTextDocument>
+#include <QLineEdit>
 
 #include "kcplaintextbrowser.h"
 #include "gdbcontroller.h"
@@ -40,7 +41,7 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     setContentsMargins(0,0,0,0);
 
     //Set palette.
-    QPalette pal=this->palette();
+    QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
     pal.setColor(QPalette::Window, QColor(0x35, 0x35, 0x35));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
@@ -70,15 +71,29 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     mainLayout->addWidget(debugOutputTextBrowser,1);
     connect(debugInput,SIGNAL(currentIndexChanged(QString)),
             this,SLOT(onCurrentIndexChanged(QString)));
+    /*connect(debugInput, SIGNAL(activated(QString)),
+            this, SLOT(onCurrentIndexChanged(QString)));*/
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugCommandIO::retranslateAndSet);
+
+    resetBackup=new KCPlainTextBrowser(this);
+    resetBackup->setVisible(false);
 }
 
 void KCDebugCommandIO::setGdbInstance(GdbController *gdbInstance)
 {
     instance=gdbInstance;
     debugOutputTextBrowser->setDocument(gdbInstance->getDbgOutputs()->getTextStreamOutput());
+}
+
+void KCDebugCommandIO::clearInstance()
+{
+    instance=NULL;
+    resetBackup->clear();
+    qDebug()<<"Find?";
+    debugOutputTextBrowser->setDocument(resetBackup->document());
+    qDebug()<<"Find?";
 }
 
 void KCDebugCommandIO::retranslate()
@@ -95,5 +110,6 @@ void KCDebugCommandIO::retranslateAndSet()
 void KCDebugCommandIO::onCurrentIndexChanged(QString command)
 {
     instance->execGdbCommand(qPrintable(command+'\n'));
+    debugInput->lineEdit()->selectAll();
 }
 

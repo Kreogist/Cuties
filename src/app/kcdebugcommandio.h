@@ -37,6 +37,7 @@ public:
     explicit KCDebugCommandIO(QWidget *parent = 0);
     void setDocument(QTextDocument *document);
     void setGdbInstance(GdbController *gdbInstance);
+    void clearInstance();
 
 public slots:
     void retranslate();
@@ -51,6 +52,8 @@ private:
     KCPlainTextBrowser *debugOutputTextBrowser;
     QComboBox *debugInput;
     GdbController *instance;
+
+    KCPlainTextBrowser *resetBackup;
 };
 
 #endif // KCGDBCOMMANDIO_H

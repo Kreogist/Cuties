@@ -38,11 +38,13 @@
 #include "kcsplashscreen.h"
 #include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
+#include "kcstatusrecorder.h"
+#include "kcdocumentrecorder.h"
 
 static inline void setApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.2.4.5"));
+    QApplication::setApplicationVersion(QString("0.2.5.16"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
@@ -51,6 +53,8 @@ static inline void setApplicationInfo()
 
 static inline void initApplicationSettings()
 {
+    KCStatusRecorder::getInstance()->readRecord();
+    KCDocumentRecorder::getInstance()->readSettings();
     KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
     KCGlobalInstance->readSettings();
 }
@@ -194,6 +198,12 @@ int main(int argc, char *argv[])
     setApplicationInfo();
     processArg();
 
+    app.setEffectEnabled(Qt::UI_AnimateCombo, true);
+    app.setEffectEnabled(Qt::UI_FadeMenu, true);
+    app.setEffectEnabled(Qt::UI_AnimateToolBox, true);
+    app.setEffectEnabled(Qt::UI_AnimateTooltip, true);
+    app.setEffectEnabled(Qt::UI_FadeTooltip, true);
+
     //Load Splash Screen
     KCSplashScreen *splash=new KCSplashScreen;
     splash->setPixmap(QPixmap(":/img/image/Splash.png"));
@@ -217,8 +227,8 @@ int main(int argc, char *argv[])
 
     //Initalize and show Application MainWindow.
     MainWindow mainWindow;
-    splash->finish(&mainWindow);
     mainWindow.show();
+    splash->finish(&mainWindow);
 
     return app.exec();
 }

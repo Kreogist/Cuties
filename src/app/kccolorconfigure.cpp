@@ -17,6 +17,7 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QApplication>
 
 #include "kccolorconfigure.h"
 
@@ -279,7 +280,7 @@ bool KCColorConfigure::isValidColor(const Color &color)
 
 void KCColorConfigure::readConfigure()
 {
-    QSettings settings(colorConfigFilePath,QSettings::IniFormat);
+    QSettings settings(qApp->applicationDirPath() + "/" + colorConfigFilePath,QSettings::IniFormat);
 
     //ColorSheet part
     QStringList colorNames;

@@ -1,3 +1,22 @@
+/*
+ *  Copyright 2013 Kreogist Dev Team
+ *
+ *  This file is part of Kreogist-Cuties.
+ *
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 #include <QSignalMapper>
 #include <QIcon>
@@ -60,6 +79,7 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
             this, SIGNAL(requiredChangeLanguage()));
 
     instance=KCLanguageConfigure::getInstance();
+
     connect(instance, &KCLanguageConfigure::newLanguageSet,
             this, &KCPreferenceBannerWidget::refreshLanguageInfo);
     refreshLanguageInfo();
@@ -67,8 +87,15 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
 
 void KCPreferenceBannerWidget::refreshLanguageInfo()
 {
-    localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
-    localeSettings->setText(instance->getLanguageCaption().at(instance->getCurrentLanguageIndex()));
+    if(instance->getCurrentLanguageIndex()<0)
+    {
+        localeSettings->setText("No langauge files.");
+    }
+    else
+    {
+        localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
+        localeSettings->setText(instance->getLanguageCaption().at(instance->getCurrentLanguageIndex()));
+    }
 }
 
 void KCPreferenceBannerWidget::retranslate()
@@ -271,6 +298,10 @@ void KCPreferenceCategoryList::retranslate()
 void KCPreferenceCategoryList::retranslateAndSet()
 {
     retranslate();
+    for(int i=KCPreferenceGeneral; i<KCCategoryCount; i++)
+    {
+        categoryButton[i]->setCategoryTitle(categoryCaptions[i]);
+    }
 }
 
 KCPreferenceContents::KCPreferenceContents(QWidget *parent) :
@@ -346,6 +377,19 @@ void KCPreferenceCommander::retranslate()
 void KCPreferenceCommander::retranslateAndSet()
 {
     retranslate();
+    int maxButtonWidth=0;
+    for(int i=commanderYes; i<commanderCount; i++)
+    {
+        commanderControls[i]->setText(commanderTitle[i]);
+        if(commanderControls[i]->sizeHint().width()>maxButtonWidth)
+        {
+            maxButtonWidth=commanderControls[i]->sizeHint().width();
+        }
+    }
+    for(int i=commanderYes; i<=commanderApply; i++)
+    {
+        commanderControls[i]->setFixedWidth(maxButtonWidth);
+    }
 }
 
 KCPreference::KCPreference(QWidget *parent) :
@@ -439,6 +483,8 @@ void KCPreference::retranslateAndSet()
 {
     //Retranslate All Widget
     bannerWidget->retranslateAndSet();
+    commander->retranslateAndSet();
+    categoryList->retranslateAndSet();
     retranslate();
     setWindowTitle(titleText);
 }
@@ -463,7 +509,7 @@ void KCPreference::hideLanguageSelector()
 {
     languageSelectorShow->stop();
     QRect endValue=QRect(width()/4,
-                         -height()-50,
+                         -height()-10,
                          width()/2,
                          height()/2);
     languageSelectorHide->setStartValue(languageSelector->geometry());

@@ -49,6 +49,7 @@ protected:
     virtual void draw(QPainter *painter, QTextBlock *block ,
                       int x, int y, int w, int h,
                       bool isCurrentLine) = 0;
+    int lineHeight;
 
 private:
     int getRealLineCount(const QTextBlock &block, const int &offset);

@@ -34,6 +34,7 @@ class KCDebugControlPanel : public QDockWidget
 public:
     explicit KCDebugControlPanel(QWidget *parent = 0);
     void setGdbController(GdbController *controller);
+    void clearGdbController();
 
 signals:
     void debugStarted();
@@ -42,8 +43,8 @@ signals:
 public slots:
     void retranslate();
     void retranslateAndSet();
-
-private slots:
+    void onDebugStartClicked();
+    void onDebugStopClicked();
     void onRunToCursorClicked();
     void onDebugNextClicked();
     void onDebugContinueClicked();
@@ -51,6 +52,8 @@ private slots:
     void onDebugNextiClicked();
     void onDebugStepiClicked();
     void onDebugReturnClicked();
+
+private slots:
 
 private:
     enum debugContolButtons

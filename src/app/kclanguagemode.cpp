@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QMessageBox>
+
 //cpp
 #include "gcc.h"
 #include "kccpphighlighter.h"
@@ -60,24 +62,30 @@ void KCLanguageMode::compile()
         qDebug()<<"compiler is NULL";
         return ;
     }
-
     if(compilerReceiver==NULL)
     {
         compilerReceiver=new KCCompileOutputReceiver(this);
-        connectCompilerAndOutputReceiver();
     }
+    connectCompilerAndOutputReceiver();
 
     if(checkIfIsCompiling())
     {
         return ;
     }
-
     setCompileState(compiling);
 
     compilerReceiver->addBeginCompileText();
 
     compilerFinishedConnection=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        this,&KCLanguageMode::onCompileFinished);
+    /*if(!compiler->compilerExsist())
+    {
+        setCompileState(uncompiled);
+        QMessageBox msgBox;
+        msgBox.setText("Can't find compiler.");
+        msgBox.exec();
+        return;
+    }*/
     compiler->startCompile(m_parent->filePath);
 }
 
@@ -142,9 +150,12 @@ GdbController *KCLanguageMode::startDebug()
     if(gdbControllerInstance == NULL)
     {
         gdbControllerInstance=new GdbController(this);
+        connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
+                this, SIGNAL(requireDisconnectDebug()));
     }
 
     gdbControllerInstance->runGDB(m_parent->execFileName);
+    qDebug()<<"Do you?";
     gdbControllerInstance->execRun();
 
     connect(m_parent->markPanel,&KCMarkPanel::markSetted,
@@ -155,7 +166,16 @@ GdbController *KCLanguageMode::startDebug()
 
 void KCLanguageMode::setBreakPointAtLine(int line)
 {
-    gdbControllerInstance->setBreakPoint(line,1);
+
+}
+
+void KCLanguageMode::stopDebug()
+{
+    if(gdbControllerInstance!=NULL)
+    {
+        gdbControllerInstance->quitGDB();
+    }
+    compilerConnectionHandles.disConnectAll();
 }
 
 void KCLanguageMode::onCompileFinished(bool hasError)

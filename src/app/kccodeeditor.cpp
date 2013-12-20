@@ -39,12 +39,11 @@
 #include "kctexteditor.h"
 #include "kclinenumpanel.h"
 #include "kcmarkpanel.h"
+#include "kcsmartpanel.h"
 #include "kcsearchwindow.h"
 #include "kcreplacewindow.h"
 
 #include "kccodeeditor.h"
-
-static const int SearchBarOffset = 20;
 
 KCCodeEditor::KCCodeEditor(QWidget *parent) :
     QWidget(parent)
@@ -71,9 +70,13 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     linePanel->setVisible(configureInstance->getLineNumVisible());
     mainLayout->addWidget(linePanel);
 
+    smartPanel=new KCSmartPanel(this);
+    mainLayout->addWidget(smartPanel);
+
     editor=new KCTextEditor(this);
     markPanel->setTextEditor(editor);
     linePanel->setTextEditor(editor);
+    smartPanel->setTextEditor(editor);
 
     mainLayout->addWidget(editor);
     replaceLayout->addLayout(mainLayout);
@@ -95,8 +98,12 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     connect(configureInstance, &KCEditorConfigure::lineNumPanelVisibleChanged,
             linePanel, &KCLinenumPanel::setVisible);
 
+    connect(editor, &KCTextEditor::requireHideOthers,
+            this, &KCCodeEditor::onHideOtherWidgets);
+
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
+    searchUseLastCursor=false;
 
     languageMode=new KCLanguageMode(this);
     languageMode->getGdbController();
@@ -107,6 +114,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     filePath.clear();
     fileError=QFileDevice::NoError;
+
+    cacheNewFileMode=false;
 }
 
 KCCodeEditor::~KCCodeEditor()
@@ -146,12 +155,41 @@ void KCCodeEditor::computeExecFileName()
 
 void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
 {
+    currentSearchWidget=widget;
     searcherConnections+=connect(widget, &KCSearchWidget::requireSearch,
-                                 editor, &KCTextEditor::searchString);
+                                 this, &KCCodeEditor::onSearchNext);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowNextResult,
-                                 editor, &KCTextEditor::showNextSearchResult);
+                                 this, &KCCodeEditor::onShowNextSearchResult);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
+}
+
+void KCCodeEditor::onShowNextSearchResult()
+{
+    editor->showNextSearchResult();
+    currentSearchWidget->setTextFocus();
+}
+
+void KCCodeEditor::onSearchNext(QString searchTextSets,
+                                bool regularExpressionSets,
+                                bool caseSensitivelySets,
+                                bool wholeWordSets)
+{
+    editor->searchString(searchTextSets,
+                         regularExpressionSets,
+                         caseSensitivelySets,
+                         wholeWordSets);
+    currentSearchWidget->setTextFocus();
+}
+
+bool KCCodeEditor::getCacheNewFileMode() const
+{
+    return cacheNewFileMode;
+}
+
+void KCCodeEditor::setCacheNewFileMode(bool value)
+{
+    cacheNewFileMode = value;
 }
 
 void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
@@ -161,24 +199,11 @@ void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
 
 void KCCodeEditor::showCompileBar()
 {
-    /*if(!currentCompileProgress->isVisible())
-    {*/
-    currentCompileProgress->setFixedWidth(width()/3);
-
-    QPropertyAnimation *compileAnime=new QPropertyAnimation(currentCompileProgress,"geometry");
-        QRect animeEndPos=currentCompileProgress->geometry();
-        animeEndPos.setLeft(editor->width()/2-currentCompileProgress->width()/2);
-        animeEndPos.setTop(0);
-        QRect animeStartPos=animeEndPos;
-        animeStartPos.setTop(-100);
-        compileAnime->setStartValue(animeStartPos);
-        compileAnime->setDuration(1000);
-        compileAnime->setEndValue(animeEndPos);
-        compileAnime->setEasingCurve(QEasingCurve::OutCubic);
-        currentCompileProgress->setGeometry(animeStartPos);
-        currentCompileProgress->show();
-        compileAnime->start(QPropertyAnimation::DeleteWhenStopped);
-    //}
+    return;
+    if(!currentCompileProgress->isVisible())
+    {
+        currentCompileProgress->animeShow();
+    }
 }
 
 void KCCodeEditor::showSearchBar()
@@ -191,22 +216,15 @@ void KCCodeEditor::showSearchBar()
 
     if(!searchBar->isVisible())
     {
-        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-        QRect animeEndPos=searchBar->rect();
-        animeEndPos.setX(editor->width()-searchBar->width()-SearchBarOffset);
-        QRect animeStartPos=animeEndPos;
-        animeStartPos.setTop(-animeStartPos.height());
-        searchAnime->setStartValue(animeStartPos);
-        searchAnime->setDuration(300);
-        searchAnime->setEndValue(animeEndPos);
-        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
-        editor->backupSearchTextCursor();
-        searchBar->show();
-        searchBar->restoreLastSearchText();
-        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
-
-        searcherConnections+=connect(searchBar, &KCSearchWidget::requireHide,
-                                     this, &KCCodeEditor::hideSearchBar);
+        if(!searchUseLastCursor)
+        {
+            editor->backupSearchTextCursor();
+        }
+        searchBar->animeShow();
+        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                     editor, SLOT(setFocus()));
+        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                     this, SLOT(setUseLastCuror()));
         connectSearchWidgetWithEditor(searchBar);
     }
 
@@ -218,31 +236,16 @@ void KCCodeEditor::showSearchBar()
     searchBar->setTextFocus();
 }
 
-void KCCodeEditor::hideSearchBar()
+void KCCodeEditor::setUseLastCuror()
 {
-    if(searchBar->isVisible())
-    {
-        QPropertyAnimation *searchAnime=new QPropertyAnimation(searchBar,"geometry");
-        QRect animeStartPos=searchBar->geometry();
-        QRect animeEndPos=animeStartPos;
-        animeEndPos.setTop(-animeStartPos.height() - 20);
-        searchAnime->setStartValue(animeStartPos);
-        searchAnime->setDuration(300);
-        searchAnime->setEndValue(animeEndPos);
-        searchAnime->setEasingCurve(QEasingCurve::OutCubic);
-        connect(searchAnime, SIGNAL(finished()),
-                searchBar, SLOT(hide()));
-        searchAnime->start(QPropertyAnimation::DeleteWhenStopped);
-    }
-
-    editor->setFocus();
+    searchUseLastCursor=true;
 }
 
 void KCCodeEditor::showReplaceBar()
 {
     if(searchBar->isVisible())
     {
-        hideSearchBar();
+        searchBar->animeHide();
         searcherConnections.disConnectAll();
     }
 
@@ -251,7 +254,10 @@ void KCCodeEditor::showReplaceBar()
         replaceBar->showAnime();
 
         connectSearchWidgetWithEditor(replaceBar);
-
+        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                     editor, SLOT(setFocus()));
+        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                     this, SLOT(setUseLastCuror()));
         searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
                                      editor,&KCTextEditor::replace);
         searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
@@ -268,26 +274,38 @@ void KCCodeEditor::showReplaceBar()
     replaceBar->setTextFocus();
 }
 
-bool KCCodeEditor::open(const QString &fileName)
+bool KCCodeEditor::open(const QString &fileName,
+                        bool cacheMode)
 {
     QFile _file(fileName);
 
     if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
     {
         QTextStream _textIn(&_file);
+        QString titleText=editor->documentTitle();
 
         editor->clear();
         editor->setPlainText(QString(_textIn.readAll()));
 
-        fileInfoChanged(_file);
-        KCHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
+        if(cacheMode)
+        {
+            setDocumentTitle(titleText);
+            editor->document()->setModified(true);
+        }
+        else
+        {
+            fileInfoChanged(_file);
+            KCHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
+        }
         return true;
     }
-    else
-    {
-        fileError=_file.error();
-        return false;
-    }
+    fileError=_file.error();
+    return false;
+}
+
+bool KCCodeEditor::readCacheFile(const QString &cachedfilePath)
+{
+    return open(cachedfilePath, true);
 }
 
 QFileDevice::FileError KCCodeEditor::error()
@@ -373,28 +391,37 @@ bool KCCodeEditor::requireSaveAs(const QString &Caption)
     }
 }
 
-bool KCCodeEditor::saveAs(const QString &fileName)
+bool KCCodeEditor::saveAs(const QString &fileName,
+                          bool cacheMode)
 {
-
     QFile _file(fileName);
 
     if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
     {
         QTextStream _textOut(&_file);
         _textOut<<editor->toPlainText()<<flush;
-        fileInfoChanged(_file);
+        if(!cacheMode)
+        {
+            fileInfoChanged(_file);
+        }
         return true;
     }
-    else
-    {
-        fileError=_file.error();
-        return false;
-    }
+    fileError=_file.error();
+    return false;
+}
+
+bool KCCodeEditor::writeCacheFile(const QString &filePath)
+{
+    return saveAs(filePath, true);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
-    if(editor->document()->isModified())
+    qDebug()<<"alive slot 1";
+
+    if(editor->document()->isModified() &&
+       ((filePath.isEmpty() && !cacheNewFileMode) ||
+        !filePath.isEmpty()))
     {
         QMessageBox msgbox(this);
         QString strDisplayFileName;
@@ -449,10 +476,12 @@ void KCCodeEditor::closeEvent(QCloseEvent *e)
             qWarning("codeeditor.cpp: switch(ret) reached an unexcepted line!");
             break;
         }
+        return ;
     }
     else
     {
         e->accept();
+        QWidget::closeEvent(e);
     }
 
     return ;
@@ -516,6 +545,13 @@ void KCCodeEditor::onModificationChanged(bool changed)
     }
 }
 
+void KCCodeEditor::onHideOtherWidgets()
+{
+    searchBar->animeHide();
+    replaceBar->hideAnime();
+    emit requiredHideDocks();
+}
+
 QString KCCodeEditor::getFilePath()
 {
     return filePath;
@@ -528,13 +564,13 @@ QString KCCodeEditor::getSelectedText()
 
 void KCCodeEditor::cursorChanged()
 {
-    fileTextCursor=editor->textCursor();
+    searchUseLastCursor=false;
     emit fileTextCursorChanged();
 }
 
 QTextCursor KCCodeEditor::getTextCursor()
 {
-    return fileTextCursor;
+    return editor->textCursor();
 }
 
 int KCCodeEditor::getTextLines()
@@ -550,11 +586,7 @@ void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
 void KCCodeEditor::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
-
-    searchBar->setGeometry(editor->width()-searchBar->width()-SearchBarOffset,
-                           0,
-                           searchBar->width(),
-                           searchBar->height());
+    searchBar->updateGeometry();
 }
 
 void KCCodeEditor::fileInfoChanged(const QFile &file)

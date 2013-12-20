@@ -1,3 +1,22 @@
+/*
+ *  Copyright 2013 Kreogist Dev Team
+ *
+ *  This file is part of Kreogist-Cuties.
+ *
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QScrollBar>
@@ -96,17 +115,20 @@ KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
 
     instance=KCLanguageConfigure::getInstance();
     int languageCount=instance->getLanguageList().count();
-    for(int i=0;i<languageCount;i++)
+    if(languageCount>0)
     {
-        languageItems.append(addLanguageItem(instance->getLanguageCaption().at(i),
-                                             instance->getLanguageFileIcon().at(i)));
-        connect(languageItems.at(i), SIGNAL(requireChangeLanguage()),
-                languageChangeMapper, SLOT(map()));
-        languageChangeMapper->setMapping(languageItems.at(i), i);
-        languageListLayout->addWidget(languageItems.at(i));
+        for(int i=0;i<languageCount;i++)
+        {
+            languageItems.append(addLanguageItem(instance->getLanguageCaption().at(i),
+                                                 instance->getLanguageFileIcon().at(i)));
+            connect(languageItems.at(i), SIGNAL(requireChangeLanguage()),
+                    languageChangeMapper, SLOT(map()));
+            languageChangeMapper->setMapping(languageItems.at(i), i);
+            languageListLayout->addWidget(languageItems.at(i));
+        }
+        connect(languageChangeMapper, SIGNAL(mapped(int)),
+                this, SIGNAL(requireChangeLanguage(int)));
     }
-    connect(languageChangeMapper, SIGNAL(mapped(int)),
-            this, SIGNAL(requireChangeLanguage(int)));
     languageListLayout->addStretch();
     languageContents->setFixedSize(languageContents->sizeHint());
 }

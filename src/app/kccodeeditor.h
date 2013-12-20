@@ -39,6 +39,7 @@ class KCReplaceWindow;
 class KCLanguageMode;
 class KCTextEditor;
 class KCMarkPanel;
+class KCSmartPanel;
 class KCLinenumPanel;
 class KCSearchWidget;
 
@@ -66,17 +67,22 @@ public:
     bool getOverwriteMode();
 
     void insertTextAtCursor(QString insertText);
+    bool getCacheNewFileMode() const;
+    void setCacheNewFileMode(bool value);
 
 signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
     void rewriteStateChanged(bool nowValue);
+    void requiredHideDocks();
 
 public slots:
-    bool open(const QString &fileName);
+    bool open(const QString &fileName,
+              bool cacheMode=false);
     bool save();
     bool saveAs();
-    bool saveAs(const QString &fileName);
+    bool saveAs(const QString &fileName,
+                bool cacheMode=false);
     void redo();
     void undo();
     void copy();
@@ -88,17 +94,26 @@ public slots:
     void showSearchBar();
     void showReplaceBar();
     void showCompileBar();
-    void hideSearchBar();
     void setOverwriteMode(bool newValue);
+    bool readCacheFile(const QString &cachedfilePath);
+    bool writeCacheFile(const QString &filePath);
 
 private slots:
     void onModificationChanged(bool changed);
+    void onHideOtherWidgets();
+    void onSearchNext(QString searchTextSets,
+                      bool regularExpressionSets,
+                      bool caseSensitivelySets,
+                      bool wholeWordSets);
+    void onShowNextSearchResult();
+    void setUseLastCuror();
 
 protected:
     void closeEvent(QCloseEvent *e);
     void resizeEvent(QResizeEvent *e);
 
 private:
+    bool searchUseLastCursor;
     bool processSaveAsAction(const QString &dialogCaption);
     bool requireSaveAs(const QString &Caption);
     void computeExecFileName();
@@ -116,18 +131,21 @@ private:
     KCTextEditor *editor;
     KCLinenumPanel *linePanel;
     KCMarkPanel *markPanel;
+    KCSmartPanel *smartPanel;
 
     QString filePath;
     QString execFileName;
     QFileDevice::FileError fileError;
     QTextCursor fileTextCursor;
 
+    KCSearchWidget *currentSearchWidget;
     KCSearchWindow *searchBar;
     KCReplaceWindow *replaceBar;
 
     KCConnectionHandler searcherConnections;
 
     friend class KCLanguageMode;
+    bool cacheNewFileMode;
 };
 
 #endif // TEXTEDITOR_H

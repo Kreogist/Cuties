@@ -17,6 +17,7 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QString>
 
 #include "kreogistcutestyle.h"
 

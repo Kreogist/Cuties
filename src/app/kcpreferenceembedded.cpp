@@ -1,3 +1,22 @@
+/*
+ *  Copyright 2013 Kreogist Dev Team
+ *
+ *  This file is part of Kreogist-Cuties.
+ *
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 #include <QGraphicsDropShadowEffect>
 
@@ -161,6 +180,9 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
                                                    100,
                                                    5);
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedEditor::retranslate()
@@ -274,6 +296,9 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
                     instance->getFpcPath(),
                     pathItemTitleCaption[pathFPCCompiler]);
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedCompiler::retranslate()
@@ -328,10 +353,13 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
     debuggerTitles[titleGDBSettings]=addTitle(debuggerTitleText[titleGDBSettings]);
 
     debuggerPathItems[pathGDBDebugger]=addItemPath(pathItemCaption[pathGDBDebugger],
-                                                   "",
+                                                   instance->getGdbPath(),
                                                    pathItemTitleCaption[pathGDBDebugger]);
 
     addStretch();
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedDebugger::retranslate()
@@ -365,18 +393,31 @@ void KCPreferenceEmbeddedDebugger::retranslateAndSet()
 
 void KCPreferenceEmbeddedDebugger::applyPreference()
 {
-
+    instance->setGdbPath(debuggerPathItems[pathGDBDebugger]->getCurrentValue().toString());
 }
 
 KCPreferenceEmbeddedFileAssociation::KCPreferenceEmbeddedFileAssociation(QWidget *parent) :
     KCPreferenceSuperList(parent)
 {
     ;
+
+    connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
+            this, SLOT(retranslateAndSet()));
 }
 
 void KCPreferenceEmbeddedFileAssociation::applyPreference()
 {
+    ;
+}
 
+void KCPreferenceEmbeddedFileAssociation::retranslate()
+{
+    ;
+}
+
+void KCPreferenceEmbeddedFileAssociation::retranslateAndSet()
+{
+    retranslate();
 }
 
 

@@ -1,3 +1,22 @@
+/*
+ *  Copyright 2013 Kreogist Dev Team
+ *
+ *  This file is part of Kreogist-Cuties.
+ *
+ *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <QHBoxLayout>
 #include <QDebug>
 
@@ -129,28 +148,25 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     //Set panel widget
     panelWidget=new KCMessageBoxPanel(this);
     mainLayout->addWidget(panelWidget);
-
-    //Set animation variable
-    widthExpand=new QPropertyAnimation(this, "geometry", this);
-    widthExpand->setDuration(300);
 }
 
 void KCMessageBox::show()
 {
     //Start width expand animation
-    int originalX=parentWidget()->x()+parentWidget()->width()/2-width()/2;
-    QRect startRect=QRect(originalX,
+    QPropertyAnimation *widthExpand=new QPropertyAnimation(this, "geometry");
+    widthExpand->setDuration(300);
+    QRect startRect=QRect(parentWidget()->x()+parentWidget()->width()/2,
                           parentWidget()->y()+parentWidget()->height()/2-63,
-                          width(),
+                          0,
                           127);
     QRect endRect=startRect;
-    endRect.setX(originalX - 150);
     endRect.setWidth(300);
+    endRect.setX(endRect.x() - endRect.width()/2);
     widthExpand->setStartValue(startRect);
     widthExpand->setEndValue(endRect);
     QWidget::show();
-    widthExpand->start();
-    qDebug()<<endRect.left()<<startRect.left();
+    widthExpand->start(QAbstractAnimation::DeleteWhenStopped);
+    qDebug()<<startRect.left()<<endRect.left()<<endRect.width();
 }
 
 void KCMessageBox::addText(QString displayText)

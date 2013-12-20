@@ -81,13 +81,10 @@ public:
 
     void setCodeLevel(const int &level);
     int getCodeLevel() const;
-
     markUnit getMarkInfo() const;
     void setMarkInfo(const markUnit &value);
-
     int getLineCommentPos() const;
     void setLineCommentPos(int value);
-
     int getQuotationStatus() const;
     void setQuotationStatus(int value);
 

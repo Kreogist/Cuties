@@ -54,6 +54,7 @@ public:
     bool compilerIsNull();
     void compile();
     GdbController *startDebug();
+    void stopDebug();
     void setMode(const modeType &type);
     void setFileSuffix(const QString &suffix);
 
@@ -63,6 +64,7 @@ public:
 signals:
     void compileSuccessfully(QString execFileName);
     void requireHideCompileDock();
+    void requireDisconnectDebug();
 
 public slots:
     void onCompileFinished(bool hasError);

@@ -112,14 +112,14 @@ bool KCStatusCursorInfo::getGotoShowed()
 
 void KCStatusCursorInfo::refresh()
 {
-    if(lineNumString.length()>0)
+    if(!lineNumString.isEmpty())
     {
-        cursorPosition->setText(lineTextBegin+
+        cursorPosition->setText(QString(lineTextBegin+
                                 lineNumString+
                                 lineTextEnd+
                                 colTextBegin+
                                 columnNumString+
-                                colTextEnd);
+                                colTextEnd));
     }
     else
     {
@@ -131,6 +131,7 @@ void KCStatusCursorInfo::refresh()
 
 void KCStatusCursorInfo::updateCursorPosition(int newLineNum, int newColumnNum)
 {
+    newLineNum++;
     if(newLineNum>0)
     {
         lineNumString=QString::number(newLineNum);

@@ -9,14 +9,15 @@ KCFileAssociationConfigure *KCFileAssociationConfigure::getInstance()
 
 KCFileAssociationConfigure::KCFileAssociationConfigure()
 {
+    ;
 }
 
 void KCFileAssociationConfigure::readConfigure()
 {
-
+    ;
 }
 
 void KCFileAssociationConfigure::writeConfigure()
 {
-
+    ;
 }

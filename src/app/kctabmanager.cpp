@@ -21,6 +21,7 @@
 #include <QApplication>
 
 #include "kctabmanager.h"
+#include "kcdocumentrecorder.h"
 
 KCTabManager::KCTabManager(QWidget *parent) :
     QTabWidget(parent)
@@ -52,26 +53,37 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     newFileCount=1;
     currentEditor=NULL;
+    debuggingState=false;
 }
 
 void KCTabManager::restoreUnclosedFiles()
 {
-    QList<QString> lastTimeUnClosedFiles=KCHistoryConfigure::getInstance()->getAllUnClosedFilePaths();
-    QList<int> lastTimeUnClosedHs=KCHistoryConfigure::getInstance()->getAllUnClosedFileHs();
-    QList<int> lastTimeUnClosedVs=KCHistoryConfigure::getInstance()->getAllUnClosedFileVs();
-    int unClosedItem;
-    for(int i=0; i<lastTimeUnClosedFiles.size(); i++)
+    int unclosedFileNum=KCDocumentRecorder::getInstance()->getUnclosedFileCount(),
+        currentUnclosedFileIndex=KCDocumentRecorder::getInstance()->getUnclosedCurrentIndex(),
+        unclosedFileItem;
+    for(int i=0; i<unclosedFileNum; i++)
     {
-        unClosedItem=open(lastTimeUnClosedFiles.at(i));
-        if(unClosedItem>0)
+        UnclosedFileStatus currentFileStatus=KCDocumentRecorder::getInstance()->getUnclosedFileStatus(i);
+        KCCodeEditor *editor;
+        if(currentFileStatus.untitled)
         {
-            KCCodeEditor *editor = qobject_cast<KCCodeEditor *>(widget(unClosedItem));
-            editor->setDocumentCursor(lastTimeUnClosedHs.at(i), lastTimeUnClosedVs.at(i));
+            //New file and cache it.
+            unclosedFileItem=newFile();
+            editor=qobject_cast<KCCodeEditor *>(widget(unclosedFileItem));
+            editor->readCacheFile(currentFileStatus.filePath);
         }
+        else
+        {
+            //Open file
+            unclosedFileItem=open(currentFileStatus.filePath);
+            editor=qobject_cast<KCCodeEditor *>(widget(unclosedFileItem));
+        }
+        editor->setDocumentCursor(currentFileStatus.horizontalCursorPosition,
+                                  currentFileStatus.verticalCursorPosition);
     }
-    if(KCHistoryConfigure::getInstance()->getUnClosedCurrent()>-1)
+    if(currentUnclosedFileIndex<count() && currentUnclosedFileIndex>-1)
     {
-        setCurrentIndex(KCHistoryConfigure::getInstance()->getUnClosedCurrent());
+        setCurrentIndex(currentUnclosedFileIndex);
     }
 }
 
@@ -95,7 +107,7 @@ int KCTabManager::open(const QString &filePath)
         KCCodeEditor *judgeEditor=qobject_cast<KCCodeEditor *>(widget(i));
         if(judgeEditor!=NULL)
         {
-            if(judgeEditor->getDocumentTitle() == name)
+            if(judgeEditor->getFilePath() == filePath)
             {
                 return i;
             }
@@ -108,6 +120,7 @@ int KCTabManager::open(const QString &filePath)
         tmp->setDocumentTitle(name);
         connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
         connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
+        connect(tmp,SIGNAL(requiredHideDocks()),this,SIGNAL(requiredHideDocks()));
         emit tabAdded();
         if(count()==0)  //before the tab be added, count() == 0
         {
@@ -187,7 +200,7 @@ void KCTabManager::open()
     currentTextCursorChanged();
 }
 
-bool KCTabManager::newFile()
+int KCTabManager::newFile()
 {
     KCCodeEditor *tmp=new KCCodeEditor(this);
     if(tmp!=NULL)
@@ -198,25 +211,26 @@ bool KCTabManager::newFile()
         QString newFileTitle=
             tr("Untitled")+ " " +QString::number(newFileCount++);
         tmp->setDocumentTitle(newFileTitle);
-        setCurrentIndex(addTab(tmp,newFileTitle));
-        currentTextCursorChanged();
-
+        connect(tmp,SIGNAL(requiredHideDocks()),this,SIGNAL(requiredHideDocks()));
         emit tabAdded();
-        if(count()==1)  //before the tab be added, count() == 0
+        if(count()==0)  //before the tab be added, count() == 1
         {
             emit tabNonClear();
         }
-        return true;
+        int newTabIndex=addTab(tmp,newFileTitle);
+        setCurrentIndex(newTabIndex);
+        currentTextCursorChanged();
+        return newTabIndex;
     }
     QErrorMessage error(this);
     error.showMessage(tr("out of memmory!"));
     error.exec();
-    return false;
+    return -1;
 }
 
 bool KCTabManager::newFileWithHighlight(const QString &fileSuffix)
 {
-    if(newFile() && Q_LIKELY(currentEditor!=NULL))
+    if(newFile()>-1 && Q_LIKELY(currentEditor!=NULL))
     {
         KCLanguageMode *newFileLanguageMode=currentEditor->langMode();
         newFileLanguageMode->setFileSuffix(fileSuffix);
@@ -226,8 +240,6 @@ bool KCTabManager::newFileWithHighlight(const QString &fileSuffix)
 
     return false;
 }
-
-
 
 void KCTabManager::switchNextTab()
 {
@@ -359,6 +371,15 @@ void KCTabManager::onTabCloseRequested(int index)
 
     if(tab!=NULL)
     {
+        //Check this tab is on debugging or not
+        if(debuggingState)
+        {
+            if(debuggingEditor==tab)
+            {
+                qDebug()<<"Catch bug!";
+                return;
+            }
+        }
         tab->setAttribute(Qt::WA_DeleteOnClose, true);
         if(tab->close())
         {
@@ -400,37 +421,34 @@ void KCTabManager::closeEvent(QCloseEvent *e)
 
     //Cleae the last UnClosed File Paths.
     KCHistoryConfigure::getInstance()->clearAllUnClosedFilePaths();
-    int i=count(), cIndex=currentIndex();
+    int i=count();
+    KCDocumentRecorder::getInstance()->clear();
+    KCDocumentRecorder::getInstance()->setUnclosedCurrentIndex(currentIndex());
     while(i--)
     {
         QWidget *page=widget(i);
 
         //Save the current opened file.
         KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(page);
-        if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile())
+        if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile() && editor!=NULL)
         {
-            if(editor!=NULL)
+            editor->setCacheNewFileMode(true);
+            if(editor->getFilePath().isEmpty())
             {
-                if(editor->getFilePath().length()>0)
+                if(editor->isModified())
                 {
-                    KCHistoryConfigure::getInstance()->addUnClosedFilePath(editor->getFilePath(),
-                            editor->getTextCursor().blockNumber(),
-                            editor->getTextCursor().columnNumber());
-
-                }
-                else
-                {
-                    if(i<cIndex)
-                    {
-                        cIndex--;
-                    }
+                    KCDocumentRecorder::getInstance()->appendRecord(editor);
                 }
             }
+            else
+            {
+                KCDocumentRecorder::getInstance()->appendRecord(editor->getFilePath(),
+                                                                editor->getTextCursor());
+            }
         }
-
         if(!page->close())
         {
-            e->ignore();//clean the accept flag
+            e->ignore();
             break;
         }
         else
@@ -438,7 +456,7 @@ void KCTabManager::closeEvent(QCloseEvent *e)
             removeTab(i);
         }
     }
-    KCHistoryConfigure::getInstance()->setUnClosedCurrent(cIndex);
+    KCDocumentRecorder::getInstance()->writeSettings();
     KCHistoryConfigure::getInstance()->writeConfigure();
 }
 
@@ -468,9 +486,8 @@ void KCTabManager::currentTextCursorChanged()
 {
     if(currentEditor!=NULL)
     {
-        currentTextCursor=currentEditor->getTextCursor();
-        emit cursorDataChanged(currentTextCursor.blockNumber()+1,
-                               currentTextCursor.columnNumber());
+        emit cursorDataChanged(currentEditor->getTextCursor().blockNumber(),
+                               currentEditor->getTextCursor().columnNumber());
     }
     else
     {
@@ -559,4 +576,20 @@ void KCTabManager::insertToCurrentEditor(QString insertText)
 void KCTabManager::setTabCloseable(bool newValue)
 {
     setTabsClosable(newValue);
+}
+
+KCCodeEditor *KCTabManager::getDebuggingEditor() const
+{
+    return debuggingEditor;
+}
+
+void KCTabManager::setDebuggingEditor(KCCodeEditor *value)
+{
+    debuggingState=(value!=NULL);
+    if(!debuggingState)
+    {
+        //Disconnect debugging Editor
+        emit requireDisconnectDebug();
+    }
+    debuggingEditor = value;
 }

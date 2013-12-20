@@ -23,7 +23,8 @@ TEMPLATE = app
 
 QT  += core\
     gui\
-    widgets
+    widgets\
+    network
 
 SOURCES += \
     main.cpp \
@@ -69,7 +70,6 @@ SOURCES += \
     kclanguageconfigure.cpp \
     kclanguagemode.cpp \
     kclinenumpanel.cpp \
-    kclistbutton.cpp \
     kcmainwindow.cpp \
     kcmarkpanel.cpp \
     kcmessagebox.cpp \
@@ -98,8 +98,15 @@ SOURCES += \
     kcwelcomewindow.cpp \
     kreogistcutestyle.cpp \
     mainwindow.cpp \
-    textcharformatmap.cpp \ 
-    kcbreakpointmanager.cpp
+    textcharformatmap.cpp \
+    kcstatusrecorder.cpp \
+    kcdocumentrecorder.cpp \
+    kcsmartpanel.cpp \
+    kcmailreports.cpp \
+    kcmailprocessobject.cpp \
+    kcmainmenu.cpp \
+    kcsubmenu.cpp \
+    kcoptionbutton.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -145,7 +152,6 @@ HEADERS += \
     kclanguageconfigure.h \
     kclanguagemode.h \
     kclinenumpanel.h \
-    kclistbutton.h \
     kcmainwindow.h \
     kcmarkpanel.h \
     kcmessagebox.h \
@@ -174,8 +180,15 @@ HEADERS += \
     kcwelcomewindow.h \
     kreogistcutestyle.h \
     mainwindow.h \
-    textcharformatmap.h \ 
-    kcbreakpointmanager.h
+    textcharformatmap.h \
+    kcstatusrecorder.h \
+    kcdocumentrecorder.h \
+    kcsmartpanel.h \
+    kcmailreports.h \
+    kcmailprocessobject.h \
+    kcmainmenu.h \
+    kcsubmenu.h \
+    kcoptionbutton.h
 
 
 # Enable C++11

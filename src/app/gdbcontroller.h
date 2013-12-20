@@ -20,7 +20,6 @@
 #ifndef GDBCONTROLLER_H
 #define GDBCONTROLLER_H
 
-
 #include <QProcess>
 #include <QFileInfo>
 #include <QString>
@@ -29,10 +28,16 @@
 #include <QVector>
 #include <QScopedPointer>
 #include <QSharedPointer>
+#include <QLocalServer>
+#include <QLocalSocket>
+#include <QSocketNotifier>
 #include <QDebug>
+#include <QTextCodec>
 
 #include "gdbmivalue.h"
 #include "dbgoutputreceiver.h"
+#include "kcdebuggerconfigure.h"
+#include "kcconnectionhandler.h"
 
 struct bkpt_struct
 {
@@ -55,6 +60,7 @@ class GdbController : public QObject
     Q_OBJECT
 public:
     explicit GdbController(QObject *parent = 0);
+    ~GdbController();
 
     static void setGDBPath(const QString &path);
     static bool checkGDB();
@@ -67,7 +73,18 @@ public:
 
     QSharedPointer<dbgOutputReceiver> getDbgOutputs();
 
+signals:
+#ifndef Q_OS_WIN32
+    void byteDelivery(const QByteArray &data);
+#endif
+    void requireDisconnectDebug();
+
 public slots:
+#ifndef Q_OS_WIN32
+    bool startListen();
+    void bytesAvailable();
+    void readDebugeeOutput(const QByteArray &data);
+#endif
     void readGdbStandardError();
     void readGdbStandardOutput();
 
@@ -102,6 +119,17 @@ public slots:
     void execGdbCommand(const QString &command);
 
 private:
+#ifndef Q_OS_WIN32
+    QString debugServerPath;
+    int debugServerFd;
+    QSocketNotifier *debugServerNotifier;
+    QString debugErrorString;
+    QString getServerName();
+#endif
+
+    void configureGDB();
+    void showMessage(const QString &msg);
+
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin,const QChar *end);
     void parseLine(const QString &_msg);
@@ -113,6 +141,10 @@ private:
 
     QScopedPointer<QProcess> gdbProcess;
     QSharedPointer<dbgOutputReceiver> dbgOutputs;
+    QTextCodec *debugCodec;
+    QTextCodec::ConverterState debugCodecState;
+    KCDebuggerConfigure *instance;
+    KCConnectionHandler readProcessData;
 };
 
 #endif // GDBCONTROLLER_H

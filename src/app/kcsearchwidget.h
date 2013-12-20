@@ -28,11 +28,27 @@
 #include <QResizeEvent>
 #include <QMenu>
 
+class KCSearchTextBox : public QLineEdit
+{
+    Q_OBJECT
+public:
+    explicit KCSearchTextBox(QWidget *parent = 0);
+
+signals:
+    void requireSearchNext();
+    void requireLostFocus();
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
+
+private:
+};
+
 class KCSearchWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KCSearchWidget(QWidget *parent);
+    explicit KCSearchWidget(QWidget *parent = 0);
     void setTextFocus();
     void setText(const QString &text);
     QString text() const;
@@ -40,13 +56,13 @@ public:
     void restoreLastSearchText();
 
 signals:
-    void requireHide();
     void requireShowPreviousResult();
     void requireShowNextResult();
     void requireSearch(QString text,
                        bool regularExpression,
                        bool caseSensitively,
                        bool wholeWorld);
+    void requireLostFocus();
 
 public slots:
     void onTextChanged(const QString &text);
@@ -54,7 +70,6 @@ public slots:
 
 protected:
     void resizeEvent(QResizeEvent *event);
-    void keyPressEvent(QKeyEvent *event);
 
 private:
     enum menuItem
@@ -68,9 +83,9 @@ private:
     int currResultNum;
 
     QGridLayout *searchLayout;
-    QToolButton *upButton, *downButton;
-    QWidget *searchText;
-    QLineEdit *searchTexts;
+    QToolButton *prevResult, *nextResult;
+    QWidget *searchTextWidget;
+    KCSearchTextBox *searchText;
     QHBoxLayout *mainLayout;
     QPushButton *searchIcon;
     QMenu *menu;
