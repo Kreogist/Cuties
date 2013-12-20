@@ -44,6 +44,8 @@ public:
     void setDocumentCursor(int nLine, int linePos);
     void backupSearchTextCursor();
     QRectF blockRect(const QTextBlock &block);
+    void zoomIn(int range = 1);
+    void zoomOut(int range = 1);
 
 signals:
     void requireHideOthers();

@@ -46,6 +46,7 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     //Set compile dock palette
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Window, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));

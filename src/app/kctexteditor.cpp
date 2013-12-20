@@ -40,7 +40,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(false);
 
-    setFont(KCFontConfigure::getInstance()->getCodeFont());
+    QFont editorFont=KCFontConfigure::getInstance()->getCodeFont();
+    setFont(editorFont);
 
     configureInstance=KCEditorConfigure::getInstance();
 
@@ -1160,4 +1161,19 @@ void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
 void KCTextEditor::setTheCursorWidth(int width)
 {
     setCursorWidth(width);
+}
+
+void KCTextEditor::zoomIn(int range)
+{
+    QFont f = this->font();
+    const int newSize = f.pixelSize() + range;
+    if(newSize<=0)
+        return;
+    f.setPixelSize(newSize);
+    setFont(f);
+}
+
+void KCTextEditor::zoomOut(int range)
+{
+    zoomIn(-range);
 }

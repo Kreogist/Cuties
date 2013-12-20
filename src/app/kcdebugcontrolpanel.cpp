@@ -40,11 +40,12 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     setObjectName("DebugPanel");
     setAllowedAreas(Qt::RightDockWidgetArea |
                     Qt::BottomDockWidgetArea);
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     //Set compile dock palette
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Window, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
@@ -65,7 +66,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     QVBoxLayout *mainLayout=new QVBoxLayout(centralWidget);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    mainLayout->setSizeConstraint(QLayout::SetMaximumSize);
+    //mainLayout->setSizeConstraint(QLayout::SetMaximumSize);
     centralWidget->setLayout(mainLayout);
 
     setWidget(centralWidget);
@@ -139,6 +140,8 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     {
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
+    setFixedWidth(maxButtonSizeHint);
+    mainLayout->addStretch();
 
     connect(debugControlButton[debugStart],SIGNAL(clicked()),
             this,SLOT(onDebugStartClicked()));
