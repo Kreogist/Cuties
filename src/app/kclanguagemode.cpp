@@ -154,6 +154,7 @@ GdbController *KCLanguageMode::startDebug()
     }
 
     gdbControllerInstance->runGDB(m_parent->execFileName);
+    qDebug()<<"Do you?";
     gdbControllerInstance->execRun();
 
     return gdbControllerInstance;

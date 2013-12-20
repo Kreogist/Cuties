@@ -58,6 +58,7 @@ GdbController::GdbController(QObject *parent) :
 {
     instance=KCDebuggerConfigure::getInstance();
     setGDBPath(instance->getGdbPath());
+    qDebug()<<instance->getGdbPath();
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 
@@ -374,6 +375,10 @@ bool GdbController::runGDB(const QString &filePath)
 {
     if(checkResult)
     {
+#ifndef Q_OS_WIN
+        startListen();
+        qDebug()<<getServerName();
+#endif
         readProcessData.disConnectAll();
         gdbProcess.reset(new QProcess(this));
         QStringList _arg;
@@ -382,7 +387,6 @@ bool GdbController::runGDB(const QString &filePath)
               ;
 #else
             <<QString("--tty=" + getServerName());
-        startListen();
 #endif
         readProcessData+=connect(gdbProcess.data(),
                                  SIGNAL(readyReadStandardOutput()),
@@ -571,8 +575,10 @@ void GdbController::execGdbCommand(const QString &command)
 
 void GdbController::configureGDB()
 {
+#ifdef Q_OS_WIN32
     gdbProcess->write(qPrintable(QString("set new-console on\n")));
     gdbProcess->write(qPrintable(QString("show new-console\n")));
+#endif
 }
 
 QSharedPointer<dbgOutputReceiver> GdbController::getDbgOutputs()

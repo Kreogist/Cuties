@@ -149,11 +149,10 @@ void MainWindow::createActions()
     QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menuMainWindowItem[menuFile]->setIcon(*MenuIconAddor);
-    //KCSubMenu *subMenuFile=new KCSubMenu(this);
 #endif
     for(i=actionFileNewFile; i<=actionFileExit; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuFile]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -180,7 +179,7 @@ void MainWindow::createActions()
 #endif
     for(i=actionEditUndo; i<=actionEditSelectAll; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuEdit]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -206,7 +205,7 @@ void MainWindow::createActions()
 #endif
     for(i=actionViewSidebar; i<=actionViewFullscreen; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuView]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -231,7 +230,7 @@ void MainWindow::createActions()
 #endif
     for(i=actionSearchFind; i<=actionSearchGoto; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuSearch]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -259,7 +258,7 @@ void MainWindow::createActions()
 #endif
     for(i=actionExecuteCompileAndRun; i<=actionExecuteRun/*mnuExecuteSetInputRunShowOutput*/; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuExecute]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -285,7 +284,7 @@ void MainWindow::createActions()
 #endif
     for(i=actionDebugStart; i<=actionDebugRemoveWatch/*mnuExecuteSetInputRunShowOutput*/; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuDebug]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -311,7 +310,7 @@ void MainWindow::createActions()
 #endif
     for(i=actionToolsPreferences; i<=actionToolsPreferences; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuTools]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -328,7 +327,7 @@ void MainWindow::createActions()
 #endif
     for(i=actionWindowPrev; i<=actionWindowNext; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuWindow]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -346,7 +345,7 @@ void MainWindow::createActions()
     //from about to about_qt add into help menu
     for(i=actionHelpAbout; i<=actionHelpSendFeedbacks; i++)
     {
-        actionMainWindowItem[i]=new QAction(tr(actionMainWindowText[i].toLatin1()),
+        actionMainWindowItem[i]=new QAction(actionMainWindowText[i],
                                             menuMainWindowItem[menuHelp]);
 #ifndef Q_OS_MACX
         MenuIconAddor->addFile(stringActionIconPath[i]);
@@ -1261,11 +1260,11 @@ void MainWindow::onCurrentTabChanged()
 void MainWindow::startDebug()
 {
     qDebug()<<"start SLOT 1";
-    if(tabManager->getDebuggingEditor()!=NULL)
+    /*if(tabManager->getDebuggingEditor()!=NULL)
     {
         //Debugging!
         return;
-    }
+    }*/
     qDebug()<<"start SLOT 2";
     tabManager->setDebuggingEditor(tabManager->getCurrentEditor());
     KCCodeEditor *currEditor=tabManager->getDebuggingEditor();
