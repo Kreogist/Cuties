@@ -859,10 +859,6 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         QPlainTextEdit::keyPressEvent(e);
         emit requireHideOthers();
         return;
-    case Qt::Key_Control:
-        QPlainTextEdit::keyPressEvent(e);
-        controlKeyDown=true;
-        return;
     }
     QTextCursor _textCursor=textCursor();
     QString pairParethesesChar;
@@ -1118,16 +1114,6 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
 }
 
-void KCTextEditor::keyReleaseEvent(QKeyEvent *e)
-{
-    switch(e->key())
-    {
-    case Qt::Key_Control:
-        controlKeyDown=false;
-    }
-    QPlainTextEdit::keyReleaseEvent(e);
-}
-
 void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
 {
     QPlainTextEdit::mouseReleaseEvent(e);
@@ -1150,7 +1136,7 @@ void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
 
 void KCTextEditor::wheelEvent(QWheelEvent *e)
 {
-    if(controlKeyDown)
+    if(e->modifiers() & Qt::ControlModifier)
     {
         if(e->angleDelta().y()>0)
         {

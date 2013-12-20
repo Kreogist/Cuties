@@ -104,7 +104,6 @@ private slots:
 private:
     void createTabMenu();
     int newFileCount;
-    QTextCursor currentTextCursor;
     KCCodeEditor *currentEditor;
     KCEditorConfigure *editorConfigureInstance;
     QTabBar *tabBarControl;
