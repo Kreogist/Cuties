@@ -91,6 +91,8 @@ public slots:
     void switchCurrentToLine(int nLineNum, int nColNum);
     void insertToCurrentEditor(QString insertText);
     QString textNowSelect();
+    void retranslate();
+    void retranslateAndSet();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -116,6 +118,7 @@ private:
     };
     KCNormalContentMenu *tabMenu;
     QAction *tabMenuActionItem[TabMenuActionCount];
+    QString tabMenuActionCaption[TabMenuActionCount];
 };
 
 #endif // KCTABMANAGER_H

@@ -22,10 +22,12 @@
 
 #include "kctabmanager.h"
 #include "kcdocumentrecorder.h"
+#include "kclanguageconfigure.h"
 
 KCTabManager::KCTabManager(QWidget *parent) :
     QTabWidget(parent)
 {
+    retranslate();
     setObjectName("KCTabManager");
     clear();
 
@@ -55,6 +57,9 @@ KCTabManager::KCTabManager(QWidget *parent) :
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(onCurrentTabChange(int)));
     connect(editorConfigureInstance, SIGNAL(tabMoveableChanged(bool)),this,SLOT(setTabMoveableValue(bool)));
     connect(editorConfigureInstance, SIGNAL(tabCloseableChanged(bool)),this,SLOT(setTabCloseable(bool)));
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &KCTabManager::retranslateAndSet);
 
     newFileCount=1;
     currentEditor=NULL;
@@ -522,6 +527,18 @@ QString KCTabManager::textNowSelect()
     return QString("");
 }
 
+void KCTabManager::retranslate()
+{
+    tabMenuActionCaption[closeTab]=tr("Close Tab");
+    tabMenuActionCaption[closeOtherTab]=tr("Close Other Tabs");
+    tabMenuActionCaption[browseFile]=tr("Browse File");
+}
+
+void KCTabManager::retranslateAndSet()
+{
+    retranslate();
+}
+
 void KCTabManager::switchCurrentToLine(int nLineNum, int nColNum)
 {
     if(currentEditor!=NULL)
@@ -593,7 +610,8 @@ void KCTabManager::createTabMenu()
     tabMenu=new KCNormalContentMenu(this);
     for(int i=closeTab; i<TabMenuActionCount; i++)
     {
-        tabMenuActionItem[TabMenuActionCount]=new QAction(this);
-        tabMenu->addAction(tabMenuActionItem[TabMenuActionCount]);
+        tabMenuActionItem[i]=new QAction(this);
+        tabMenuActionItem[i]->setText(tabMenuActionCaption[i]);
+        tabMenu->addAction(tabMenuActionItem[i]);
     }
 }
