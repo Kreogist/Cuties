@@ -40,6 +40,7 @@
 #include "kcsearchwindow.h"
 #include "kccodeeditor.h"
 #include "kcnormalcontentmenu.h"
+#include "kcglobal.h"
 
 class KCTabManager : public QTabWidget
 {
@@ -66,7 +67,7 @@ public slots:
     int open(const QString &filePath);
     void open();
     int newFile();
-    bool newFileWithHighlight(const QString &fileSuffix);
+    int newFileWithHighlight(const QString &fileSuffix);
     void save();
     void saveAs();
     void saveAll();
@@ -102,6 +103,7 @@ private slots:
     void setTabMoveableValue(bool newValue);
     void setTabCloseable(bool newValue);
     void popupTabMenu(const QPoint &point);
+    void browseCurrentFile();
 
 private:
     void createTabMenu();
@@ -119,6 +121,8 @@ private:
     KCNormalContentMenu *tabMenu;
     QAction *tabMenuActionItem[TabMenuActionCount];
     QString tabMenuActionCaption[TabMenuActionCount];
+
+    KCGlobal *globalInstance;
 };
 
 #endif // KCTABMANAGER_H

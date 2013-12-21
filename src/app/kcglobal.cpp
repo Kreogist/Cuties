@@ -19,6 +19,7 @@
 
 #include <QSettings>
 #include <QStyle>
+#include <QProcess>
 #include <QDebug>
 
 #include "kcgeneralconfigure.h"
@@ -80,4 +81,14 @@ QString KCGlobal::getSettingsFileName() const
 KCGlobal *KCGlobal::getInstance()
 {
     return instance==nullptr?instance=new KCGlobal:instance;
+}
+
+
+void KCGlobal::showInGraphicalShell(const QString &filePath)
+{
+#ifdef Q_OS_WIN32
+    QProcess::startDetached("explorer.exe",
+                            QStringList(QString(QLatin1String("/select,") +
+                                        QDir::toNativeSeparators(filePath))));
+#endif
 }

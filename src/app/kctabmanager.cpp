@@ -19,6 +19,7 @@
 
 #include <QToolButton>
 #include <QApplication>
+#include <QMessageBox>
 
 #include "kctabmanager.h"
 #include "kcdocumentrecorder.h"
@@ -63,6 +64,7 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     newFileCount=1;
     currentEditor=NULL;
+    globalInstance=KCGlobal::getInstance();
 }
 
 void KCTabManager::restoreUnclosedFiles()
@@ -237,14 +239,16 @@ int KCTabManager::newFile()
     return -1;
 }
 
-bool KCTabManager::newFileWithHighlight(const QString &fileSuffix)
+int KCTabManager::newFileWithHighlight(const QString &fileSuffix)
 {
-    if(newFile()>-1 && Q_LIKELY(currentEditor!=NULL))
+    int newTabIndex=newFile();
+    if(newTabIndex>-1 && Q_LIKELY(currentEditor!=NULL))
     {
         KCLanguageMode *newFileLanguageMode=currentEditor->langMode();
         newFileLanguageMode->setFileSuffix(fileSuffix);
         currentEditor->setLanguageMode(newFileLanguageMode);
     }
+    return newTabIndex;
 }
 
 void KCTabManager::switchNextTab()
@@ -418,12 +422,24 @@ void KCTabManager::onCurrentTabChange(int index)
 
 void KCTabManager::closeEvent(QCloseEvent *e)
 {
+    int i,tabCounts=count();
+    //Check all tab states
+    for(i=0; i<tabCounts; i++)
+    {
+        KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(widget(i));
+        if(editor->getDebugging())
+        {
+            //This editor is debugging
+            QMessageBox msg;
+            msg.setText("File " + editor->getDocumentTitle() + " is debugging.");
+            msg.exec();
+            return;
+        }
+    }
     //set the accept flag
     e->accept();
-
     //Cleae the last UnClosed File Paths.
     KCHistoryConfigure::getInstance()->clearAllUnClosedFilePaths();
-    int i=count();
     KCDocumentRecorder::getInstance()->clear();
     KCDocumentRecorder::getInstance()->setUnclosedCurrentIndex(currentIndex());
     while(i--)
@@ -537,6 +553,10 @@ void KCTabManager::retranslate()
 void KCTabManager::retranslateAndSet()
 {
     retranslate();
+    for(int i=closeTab; i<TabMenuActionCount; i++)
+    {
+        tabMenuActionItem[i]->setText(tabMenuActionCaption[i]);
+    }
 }
 
 void KCTabManager::switchCurrentToLine(int nLineNum, int nColNum)
@@ -605,6 +625,11 @@ void KCTabManager::popupTabMenu(const QPoint &point)
     }
 }
 
+void KCTabManager::browseCurrentFile()
+{
+    globalInstance->showInGraphicalShell(currentEditor->getFilePath());
+}
+
 void KCTabManager::createTabMenu()
 {
     tabMenu=new KCNormalContentMenu(this);
@@ -614,4 +639,10 @@ void KCTabManager::createTabMenu()
         tabMenuActionItem[i]->setText(tabMenuActionCaption[i]);
         tabMenu->addAction(tabMenuActionItem[i]);
     }
+    connect(tabMenuActionItem[closeTab], SIGNAL(triggered()),
+            this, SLOT(closeCurrentTab()));
+    connect(tabMenuActionItem[closeOtherTab], SIGNAL(triggered()),
+            this, SLOT(closeAllOtherTab()));
+    connect(tabMenuActionItem[browseFile], SIGNAL(triggered()),
+            this, SLOT(browseCurrentFile()));
 }
