@@ -162,6 +162,10 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
                                  this, &KCCodeEditor::onShowNextSearchResult);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
+    searcherConnections+=connect(editor, &KCTextEditor::matchedResult,
+                                 widget, &KCSearchWidget::setResultMatchStyle);
+    searcherConnections+=connect(editor, &KCTextEditor::nomatchedResult,
+                                 widget, &KCSearchWidget::setResultUnmatchStyle);
 }
 bool KCCodeEditor::getDebugging() const
 {

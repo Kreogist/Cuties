@@ -67,6 +67,8 @@ signals:
 public slots:
     void onTextChanged(const QString &text);
     void onMenuClicked();
+    void setResultMatchStyle();
+    void setResultUnmatchStyle();
 
 protected:
     void resizeEvent(QResizeEvent *event);

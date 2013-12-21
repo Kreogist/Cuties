@@ -18,6 +18,7 @@
  */
 
 #include <climits>
+#include <QDebug>
 
 #include "kctextblockdata.h"
 

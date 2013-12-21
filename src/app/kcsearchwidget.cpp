@@ -154,6 +154,16 @@ void KCSearchWidget::onMenuClicked()
     onTextChanged(searchText->text());
 }
 
+void KCSearchWidget::setResultMatchStyle()
+{
+    ;
+}
+
+void KCSearchWidget::setResultUnmatchStyle()
+{
+    ;
+}
+
 void KCSearchWidget::setText(const QString &text)
 {
     searchText->setText(text);

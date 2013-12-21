@@ -52,6 +52,8 @@ signals:
     void updated();
     void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);
+    void matchedResult();
+    void nomatchedResult();
 
 public slots:
     void updateHighlights();
@@ -89,6 +91,12 @@ private:
                                    QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
     bool findString(bool forward);
+    bool findPreviousString(KCTextBlockData *blockData,
+                            QTextCursor currentCursor,
+                            bool forward);
+    bool findNextString(KCTextBlockData *blockData,
+                            QTextCursor currentCursor,
+                            bool forward);
     void generalSearch(const QTextBlock &block,
                        const int &lines,
                        const bool forward);
