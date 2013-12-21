@@ -28,12 +28,12 @@ class gcc : public KCCompilerBase
 {
     Q_OBJECT
 public:
-    explicit gcc(QObject *parent = 0);
+    explicit gcc(QObject *parent = 0, bool compileCpp = true);
     QString compilerPath();
     void setCompilerPath(const QString &compilerPath);
     QString compilerName()
     {
-        return "g++";
+        return isCompileCpp?"g++":"gcc";
     }
 
 protected:

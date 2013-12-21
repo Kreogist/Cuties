@@ -40,6 +40,7 @@ public:
         Invalid,
         PlainText,
         Cpp,
+        C,
         Pascal
     };
 
@@ -52,6 +53,7 @@ public:
 
     explicit KCLanguageMode(QWidget *parent = 0);
     bool compilerIsNull();
+    bool compilerIsExsist();
     void compile();
     GdbController *startDebug();
     void stopDebug();

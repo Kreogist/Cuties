@@ -59,6 +59,7 @@
 #include "kcmailreports.h"
 #include "kcmainmenu.h"
 #include "kcsubmenu.h"
+#include "kcvisiblerecorder.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -256,6 +257,8 @@ private:
     KCDebugControlPanel *debugControl;
     KCDebugCommandIO *debugCommandIO;
     KCDebugWatch *debugWatch;
+
+    KCVisibleRecorder *visibleRecorder;
 
     void compileProgram();
 

@@ -49,6 +49,11 @@ bool KCLanguageMode::compilerIsNull()
     return compiler.isNull();
 }
 
+bool KCLanguageMode::compilerIsExsist()
+{
+    return compiler->compilerExsist();
+}
+
 void KCLanguageMode::setMode(const modeType &type)
 {
     m_type=type;
@@ -90,18 +95,27 @@ void KCLanguageMode::compile()
 
 void KCLanguageMode::setFileSuffix(const QString &suffix)
 {
-    QRegularExpression _regexp_cpp("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)",
+    QRegularExpression _regexp_cpp("(h|hpp|rh|hh|cpp|cc|cxx|c++|cp)",
                                    QRegularExpression::CaseInsensitiveOption);
     QRegularExpression _regexp_pascal("pas",
                                       QRegularExpression::CaseInsensitiveOption);
 
-    if(suffix.contains(_regexp_cpp))
+    if(suffix=="c")
+    {
+        if(m_type==C) //file type doesn't change,so return.
+        {
+            return ;
+        }
+        m_type=C;
+        compiler.reset(new gcc(this,false));
+        m_highlighter.reset(new KCCppHighlighter(this));
+    }
+    else if(suffix.contains(_regexp_cpp))
     {
         if(m_type==Cpp) //file type doesn't change,so return.
         {
             return ;
         }
-
         m_type=Cpp;
         compiler.reset(new gcc(this));
         m_highlighter.reset(new KCCppHighlighter(this));
@@ -112,7 +126,6 @@ void KCLanguageMode::setFileSuffix(const QString &suffix)
         {
             return ;
         }
-
         m_type=Pascal;
         compiler.reset(new fpc(this));
         m_highlighter.reset(new KCPascalHighlighter(this));
@@ -154,7 +167,6 @@ GdbController *KCLanguageMode::startDebug()
     }
 
     gdbControllerInstance->runGDB(m_parent->execFileName);
-    qDebug()<<"Do you?";
     gdbControllerInstance->execRun();
 
     return gdbControllerInstance;

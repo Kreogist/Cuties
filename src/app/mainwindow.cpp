@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this,SLOT(onCurrentTabChanged()));
     setCentralWidget(tabManager);
 
+    visibleRecorder=KCVisibleRecorder::getInstance();
+
     //Create All Window Contents
     createDocks();
     createTitlebar();
@@ -102,6 +104,8 @@ void MainWindow::showEvent(QShowEvent *e)
 
 void MainWindow::animateShowWelcomeWindow()
 {
+    visibleRecorder->backupWidgetVisible();
+    visibleRecorder->hideAll();
     hideWelcomeWindow->stop();
     welcomeWindow->show();
     QRect endValue=QRect(width()/8,
@@ -116,6 +120,7 @@ void MainWindow::animateShowWelcomeWindow()
 void MainWindow::animateHideWelcomeWindow()
 {
     showWelcomeWindow->stop();
+    visibleRecorder->restoreWidgetVisible();
     QRect endValue=QRect(width()/8,
                          -height(),
                          width()/4*3,
@@ -665,6 +670,7 @@ void MainWindow::createDocks()
     addDockWidget(Qt::BottomDockWidgetArea,compileDock);
     //TODO: Configure Hide.
     compileDock->hide();
+    visibleRecorder->addWidget(compileDock);
 
     //Sidebar Dock
     sideBar=new KCSideBar(this);
@@ -687,16 +693,19 @@ void MainWindow::createDocks()
     connect(debugControl, &KCDebugControlPanel::debugStopped,
             this, &MainWindow::stopDebug);
     debugControl->hide();
+    visibleRecorder->addWidget(debugControl);
 
     //Debug Command IO
     debugCommandIO=new KCDebugCommandIO(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
     debugCommandIO->hide();
+    visibleRecorder->addWidget(debugCommandIO);
 
     //Debug Watch
     debugWatch=new KCDebugWatch(this);
     addDockWidget(Qt::RightDockWidgetArea, debugWatch, Qt::Vertical);
     debugWatch->hide();
+    visibleRecorder->addWidget(debugWatch);
 }
 
 void MainWindow::showDebugDocks()
@@ -948,6 +957,14 @@ void MainWindow::compileProgram()
         }
         if(!currentEditor->langMode()->compilerIsNull())
         {
+            if(currentEditor->langMode()->compilerIsExsist())
+            {
+                qDebug()<<currentEditor->langMode()->compilerIsExsist();
+                QMessageBox msg;
+                msg.setText("Compiler not find.");
+                msg.exec();
+                return;
+            }
             //Active Compile Dock.
             compileDock->setVisible(true);
             //Set To Compile Mode.

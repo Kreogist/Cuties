@@ -28,17 +28,17 @@
 
 #include "gcc.h"
 
-gcc::gcc(QObject *parent) :
+gcc::gcc(QObject *parent, bool compileCpp) :
     KCCompilerBase(parent)
 {
-    isCompileCpp=true;
+    isCompileCpp=compileCpp;
     instance=KCCompilerConfigure::getInstance();
 }
 
 QString gcc::compilerPath()
 {
     return isCompileCpp?
-           instance->getGppPath():instance->getGccPath();
+                instance->getGppPath():instance->getGccPath();
 }
 
 QStringList gcc::getVersionArg()
