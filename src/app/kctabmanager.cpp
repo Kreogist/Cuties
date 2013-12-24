@@ -619,7 +619,7 @@ void KCTabManager::popupTabMenu(const QPoint &point)
         return;
     }
     int tabIndex = tabBar()->tabAt(point);
-    if(tabIndex>-1)
+    if(tabIndex>-1 && tabIndex==currentIndex())
     {
         tabMenu->exec(tabBar()->mapToGlobal(point));
     }

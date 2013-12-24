@@ -150,25 +150,6 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     mainLayout->addWidget(panelWidget);
 }
 
-void KCMessageBox::show()
-{
-    //Start width expand animation
-    QPropertyAnimation *widthExpand=new QPropertyAnimation(this, "geometry");
-    widthExpand->setDuration(300);
-    QRect startRect=QRect(parentWidget()->x()+parentWidget()->width()/2,
-                          parentWidget()->y()+parentWidget()->height()/2-63,
-                          0,
-                          127);
-    QRect endRect=startRect;
-    endRect.setWidth(300);
-    endRect.setX(endRect.x() - endRect.width()/2);
-    widthExpand->setStartValue(startRect);
-    widthExpand->setEndValue(endRect);
-    QWidget::show();
-    widthExpand->start(QAbstractAnimation::DeleteWhenStopped);
-    qDebug()<<startRect.left()<<endRect.left()<<endRect.width();
-}
-
 void KCMessageBox::addText(QString displayText)
 {
     contentWidget->addText(displayText);

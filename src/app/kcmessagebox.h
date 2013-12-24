@@ -71,10 +71,10 @@ public:
 signals:
 
 public slots:
-    void show();
     void setTitle(QString messageBoxTitle);
 
-private slots:
+protected:
+
 
 private:
     QVBoxLayout *mainLayout;

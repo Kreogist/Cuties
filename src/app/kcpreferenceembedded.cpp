@@ -134,6 +134,7 @@ void KCPreferenceEmbeddedGeneral::applyPreference()
     instance->setUseDefaultLanguageWhenSave(generalBooleans[booleanUseDefaultLanguageOnSave]->getCurrentValue().toBool());
     //Set automatic remember
     instance->setRememberUnclosedFile(generalBooleans[booleanAutoOpenUnclosed]->getCurrentValue().toBool());
+    instance->setSearchEngineIndex(generalCombos[comboSearchEngine]->getCurrentValue().toInt());
     //Set history max
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(generalInts[intItemHistoryMax]->getCurrentValue().toInt());
 }

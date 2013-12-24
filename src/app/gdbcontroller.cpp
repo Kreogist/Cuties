@@ -482,6 +482,7 @@ void GdbController::setWatchPoint(const QString &var)
 void GdbController::execRun()
 {
     gdbProcess->write(qPrintable(QString("-exec-run\n")));
+    gdbProcess->write(qPrintable(QString("set breakpoint main\n")));
 }
 
 /*!
