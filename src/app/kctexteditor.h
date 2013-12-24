@@ -90,7 +90,6 @@ private:
                                    int matchedParentheses,
                                    QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
-    bool findString(bool forward);
     bool findForward();
     bool findBackward();
     bool findFirstSeachResult();

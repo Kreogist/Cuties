@@ -119,7 +119,7 @@ void KCTextEditor::checkWhetherBlockSearchedAndDealWith(
 
 bool KCTextEditor::showPreviousSearchResult()
 {
-    return findString(true);
+    return findForward();
 }
 
 bool KCTextEditor::showNextSearchResult()
@@ -132,7 +132,7 @@ void KCTextEditor::setTabWidth(int width)
     setTabStopWidth(fontMetrics().width(' ')*width);
 }
 
-bool KCTextEditor::findString(bool forward)
+bool KCTextEditor::findForward()
 {
     QTextCursor searchCursor;
 
@@ -142,15 +142,14 @@ bool KCTextEditor::findString(bool forward)
     //Backup current cursor
     searchCursor=textCursor();
     //Check search position
-    int currentCursorPostion=forward?searchCursor.selectionStart():
-                                     searchCursor.selectionEnd(),
+    int currentCursorPostion=searchCursor.selectionStart(),
         matchedCount;
     searchCursor.setPosition(currentCursorPostion);
     KCTextBlockData::matchedInfo currentMatch;
     //Search from current place to next place
     for(QTextBlock i=searchCursor.block();   //From current block
         i.isValid() && !hasMatch;           //to the destination block
-        i=(forward)?i.previous():i.next())  //If search forward, to previous
+        i=i.previous())  //If search forward, to previous
     {                                       //otherwise to the next.
         KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
 
@@ -161,123 +160,30 @@ bool KCTextEditor::findString(bool forward)
         {
             isCursorLine=i.blockNumber() == searchCursor.blockNumber();
             //If position is forward
-            if(forward)
+            matchedCount=blockData->matchedCount();
+            for(int j=matchedCount-1; j>=0; j--)
             {
-                matchedCount=blockData->matchedCount();
-                for(int j=matchedCount-1; j>=0; j--)
+                currentMatch=blockData->getMatchedInfo(j);
+                if((isCursorLine && currentMatch.pos<searchCursor.positionInBlock())
+                        || !isCursorLine)
                 {
-                    currentMatch=blockData->getMatchedInfo(j);
-                    if((isCursorLine && currentMatch.pos<searchCursor.positionInBlock())
-                       || !isCursorLine)
-                    {
-                        hasMatch=true;
-                        searchCursor.setPosition(i.position()+currentMatch.pos);
-                        searchCursor.movePosition(QTextCursor::NextCharacter,
-                                                 QTextCursor::KeepAnchor,
-                                                 currentMatch.matchedLength);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                matchedCount=blockData->matchedCount();
-                for(int j=0; j<matchedCount; j++)
-                {
-                    currentMatch=blockData->getMatchedInfo(j);
-                    if(currentMatch.pos>=(isCursorLine?searchCursor.positionInBlock():0))
-                    {
-                        hasMatch=true;
-                        searchCursor.setPosition(i.position()+currentMatch.pos);
-                        searchCursor.movePosition(QTextCursor::NextCharacter,
-                                                 QTextCursor::KeepAnchor,
-                                                 currentMatch.matchedLength);
-                        break;
-                    }
+                    hasMatch=true;
+                    searchCursor.setPosition(i.position()+currentMatch.pos);
+                    searchCursor.movePosition(QTextCursor::NextCharacter,
+                                              QTextCursor::KeepAnchor,
+                                              currentMatch.matchedLength);
+                    break;
                 }
             }
         }
         blockData->endUsingSearchDatas();
     }
-    //If there's not find, check loop
-    if(!hasMatch)
-    {
-        //Set the end block number, it will be the current block
-        int endBlockNumber=searchCursor.blockNumber();
-        //If search forward, to the last block, else to the first
-        for(QTextBlock i=(forward)?
-                          document()->lastBlock():
-                          document()->firstBlock();
-            //Here, we should check to the end block
-            i.isValid() &&
-            (forward?
-             i.blockNumber()>=endBlockNumber:
-             i.blockNumber()<=endBlockNumber) &&
-            !hasMatch;
-            //Continue to the next one
-            i=forward?i.previous():i.next())
-        {
-
-            KCTextBlockData *blockData=(KCTextBlockData *)i.userData();
-            checkWhetherBlockSearchedAndDealWith(i);
-
-            blockData->beginUsingSearchDatas();
-            if(blockData->hasMatched())
-            {
-                isCursorLine=i.blockNumber() == searchCursor.blockNumber();
-                //If we search to the forward, do the same things.
-                if(forward)
-                {
-                    matchedCount=blockData->matchedCount();
-                    for(int j=matchedCount-1; j>=0; j--)
-                    {
-                        currentMatch=blockData->getMatchedInfo(j);
-                        if((isCursorLine && currentMatch.pos<searchCursor.positionInBlock())
-                           || !isCursorLine)
-                        {
-                            hasMatch=true;
-                            searchCursor.setPosition(i.position()+currentMatch.pos);
-                            searchCursor.movePosition(QTextCursor::NextCharacter,
-                                                     QTextCursor::KeepAnchor,
-                                                     currentMatch.matchedLength);
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    //Search from the first to the end
-                    matchedCount=blockData->matchedCount();
-                    for(int j=0; j<matchedCount; j++)
-                    {
-                        currentMatch=blockData->getMatchedInfo(j);
-                        if(currentMatch.pos>=(isCursorLine?searchCursor.positionInBlock():0))
-                        {
-                            hasMatch=true;
-                            searchCursor.setPosition(i.position()+currentMatch.pos);
-                            searchCursor.movePosition(QTextCursor::NextCharacter,
-                                                     QTextCursor::KeepAnchor,
-                                                     currentMatch.matchedLength);
-                            break;
-                        }
-                    }
-                }
-            }
-            blockData->endUsingSearchDatas();
-        }
-    }
-
     if(hasMatch)
     {
         setTextCursor(searchCursor);
         return true;
     }
-    return false;
-}
-
-bool KCTextEditor::findForward()
-{
-    ;
+    return findLastSearchResult();
 }
 
 bool KCTextEditor::findBackward()
@@ -365,7 +271,41 @@ bool KCTextEditor::findFirstSeachResult()
 
 bool KCTextEditor::findLastSearchResult()
 {
-    ;
+    //Backup current cursor
+    QTextCursor searchCursor=textCursor();
+    //Simbol to match a string
+    bool hasMatch=false;
+    KCTextBlockData::matchedInfo currentMatch;
+    //Search from current place to next place
+    //Set the end block number, it will be the current block
+    //If search forward, to the last block, else to the first
+    for(QTextBlock i=document()->lastBlock();
+        //Here, we should check to the end block
+        i.isValid() && !hasMatch;
+        //Continue to the next one
+        i=i.previous())
+    {
+        KCTextBlockData *blockData=(KCTextBlockData *)i.userData();
+        checkWhetherBlockSearchedAndDealWith(i);
+
+        blockData->beginUsingSearchDatas();
+        if(blockData->hasMatched())
+        {
+            //If we search to the forward, do the same things.
+            currentMatch=blockData->getMatchedInfo(blockData->matchedCount()-1);
+            hasMatch=true;
+            searchCursor.setPosition(i.position()+currentMatch.pos);
+            searchCursor.movePosition(QTextCursor::NextCharacter,
+                                      QTextCursor::KeepAnchor,
+                                      currentMatch.matchedLength);
+        }
+        blockData->endUsingSearchDatas();
+    }
+    if(hasMatch)
+    {
+        setTextCursor(searchCursor);
+    }
+    return hasMatch;
 }
 
 void KCTextEditor::searchString(QString searchTextSets,
