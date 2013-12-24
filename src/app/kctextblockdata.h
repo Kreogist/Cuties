@@ -25,12 +25,6 @@
 #include <QString>
 #include <QMutex>
 
-struct matchedInfo
-{
-    int pos;
-    int matchedLength;
-};
-
 struct quotationInfo
 {
     int beginPos;
@@ -56,14 +50,21 @@ struct markUnit
 class KCTextBlockData : public QTextBlockUserData
 {
 public:
+    struct matchedInfo
+    {
+        int pos;
+        int matchedLength;
+    };
+
     KCTextBlockData();
     void beginUsingSearchDatas();
     void endUsingSearchDatas();
 
     void resetForSearch();
     void setSearchCode(const unsigned long long int &searchCode);
-    QList<matchedInfo>::iterator getFirstMatchedTextPosition();
-    QList<matchedInfo>::iterator getEndMatchedTextPosition();
+    matchedInfo getMatchedInfo(int index);
+    int matchedCount();
+
     void insertMatchedTextPositions(const int &pos, const int &matchedLen);
     bool isSearched(const unsigned long long int &searchCodeNow);
     bool hasMatched();

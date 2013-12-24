@@ -55,6 +55,9 @@ public:
     static const int searchTextPartWidth;
     void restoreLastSearchText();
 
+    bool getConnected() const;
+    void setConnected(bool value);
+
 signals:
     void requireShowPreviousResult();
     void requireShowNextResult();
@@ -83,6 +86,7 @@ private:
     };
 
     int currResultNum;
+    bool connected;
 
     QGridLayout *searchLayout;
     QToolButton *prevResult, *nextResult;

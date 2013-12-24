@@ -220,11 +220,17 @@ void KCCodeEditor::showCompileBar()
     }
 }
 
+void KCCodeEditor::setUseLastCuror()
+{
+    searchUseLastCursor=true;
+}
+
 void KCCodeEditor::showSearchBar()
 {
     if(replaceBar->isVisible())
     {
         searcherConnections.disConnectAll();
+        replaceBar->setConnected(false);
         replaceBar->hideAnime();
     }
 
@@ -235,11 +241,15 @@ void KCCodeEditor::showSearchBar()
             editor->backupSearchTextCursor();
         }
         searchBar->animeShow();
-        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
-                                     editor, SLOT(setFocus()));
-        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
-                                     this, SLOT(setUseLastCuror()));
-        connectSearchWidgetWithEditor(searchBar);
+        if(!searchBar->getConnected())
+        {
+            searchBar->setConnected(true);
+            connectSearchWidgetWithEditor(searchBar);
+            searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                         editor, SLOT(setFocus()));
+            searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                         this, SLOT(setUseLastCuror()));
+        }
     }
 
     QTextCursor _textCursor=editor->textCursor();
@@ -250,34 +260,37 @@ void KCCodeEditor::showSearchBar()
     searchBar->setTextFocus();
 }
 
-void KCCodeEditor::setUseLastCuror()
-{
-    searchUseLastCursor=true;
-}
-
 void KCCodeEditor::showReplaceBar()
 {
     if(searchBar->isVisible())
     {
-        searchBar->animeHide();
         searcherConnections.disConnectAll();
+        searchBar->setConnected(false);
+        searchBar->animeHide();
     }
 
     if(!replaceBar->isVisible())
     {
+        if(!searchUseLastCursor)
+        {
+            editor->backupSearchTextCursor();
+        }
         replaceBar->showAnime();
-
-        connectSearchWidgetWithEditor(replaceBar);
-        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
-                                     editor, SLOT(setFocus()));
-        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
-                                     this, SLOT(setUseLastCuror()));
-        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
-                                     editor,&KCTextEditor::replace);
-        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
-                                     editor,&KCTextEditor::replaceAndFind);
-        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAll,
-                                     editor,&KCTextEditor::replaceAll);
+        if(!replaceBar->getConnected())
+        {
+            replaceBar->setConnected(true);
+            connectSearchWidgetWithEditor(replaceBar);
+            searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                         editor, SLOT(setFocus()));
+            searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                         this, SLOT(setUseLastCuror()));
+            searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
+                                         editor,&KCTextEditor::replace);
+            searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
+                                         editor,&KCTextEditor::replaceAndFind);
+            searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAll,
+                                         editor,&KCTextEditor::replaceAll);
+        }
     }
 
     QTextCursor _textCursor=editor->textCursor();

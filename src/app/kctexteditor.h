@@ -91,12 +91,10 @@ private:
                                    QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
     bool findString(bool forward);
-    bool findPreviousString(KCTextBlockData *blockData,
-                            QTextCursor currentCursor,
-                            bool forward);
-    bool findNextString(KCTextBlockData *blockData,
-                            QTextCursor currentCursor,
-                            bool forward);
+    bool findForward();
+    bool findBackward();
+    bool findFirstSeachResult();
+    bool findLastSearchResult();
     void generalSearch(const QTextBlock &block,
                        const int &lines,
                        const bool forward);

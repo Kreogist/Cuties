@@ -33,20 +33,6 @@ void KCTextBlockData::resetForSearch()
 {
     needSearchAgain=false;
     matchedTextPositions.clear();
-    matchedInfo gmin,gmax;
-    gmin.pos=INT_MIN;
-    gmax.pos=INT_MAX;
-    matchedTextPositions<<gmin<<gmax; //two guard elements
-}
-
-QList<matchedInfo>::iterator KCTextBlockData::getFirstMatchedTextPosition()
-{
-    return matchedTextPositions.begin()+1;  //skip the guard elements
-}
-
-QList<matchedInfo>::iterator KCTextBlockData::getEndMatchedTextPosition()
-{
-    return matchedTextPositions.end()-1;  //skip the guard elements
 }
 
 void KCTextBlockData::setSearchCode(const unsigned long long &searchCode)
@@ -54,25 +40,50 @@ void KCTextBlockData::setSearchCode(const unsigned long long &searchCode)
     this->searchCode=searchCode;
 }
 
-void KCTextBlockData::insertMatchedTextPositions(const int &pos,
-        const int &matchedLen)
+KCTextBlockData::matchedInfo KCTextBlockData::getMatchedInfo(int index)
 {
-    auto i=matchedTextPositions.begin(),
-         l=matchedTextPositions.end();
-    while(i<l)
-    {
-        if(i->pos<=pos && pos <= (i+1)->pos)
-        {
-            break;
-        }
+    return matchedTextPositions.at(index);
+}
 
-        i++;
-    }
+int KCTextBlockData::matchedCount()
+{
+    return matchedTextPositions.count();
+}
 
+void KCTextBlockData::insertMatchedTextPositions(const int &pos,
+                                                 const int &matchedLen)
+{
     matchedInfo newElement;
     newElement.pos=pos;
     newElement.matchedLength=matchedLen;
-    matchedTextPositions.insert(i+1,newElement);
+    switch(matchedTextPositions.count())
+    {
+    case 0:
+        matchedTextPositions.append(newElement);
+        break;
+    case 1:
+        matchedTextPositions.insert(pos>matchedTextPositions.at(0).pos?1:0,
+                                    newElement);
+        break;
+    default:
+        int finalPosition=matchedTextPositions.count()-1;
+        bool insertFlag=false;
+        for(int i=0;i<finalPosition;i++)
+        {
+            if(matchedTextPositions.at(i).pos<=pos &&
+               matchedTextPositions.at(i+1).pos>=pos)
+            {
+                insertFlag=true;
+                matchedTextPositions.insert(i+1,newElement);
+                break;
+            }
+        }
+        if(!insertFlag)
+        {
+            matchedTextPositions.append(newElement);
+        }
+        break;
+    }
 }
 
 void KCTextBlockData::insertQuotationInfo(const int &beginPos, const int &endPos)
@@ -105,7 +116,7 @@ void KCTextBlockData::endUsingSearchDatas()
 
 bool KCTextBlockData::hasMatched()
 {
-    return matchedTextPositions.size()>2;
+    return !matchedTextPositions.isEmpty();
 }
 
 void KCTextBlockData::resetParentheseInfos()
