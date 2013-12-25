@@ -20,69 +20,95 @@
 #ifndef KCMESSAGEBOX_H
 #define KCMESSAGEBOX_H
 
-#include <QWidget>
-#include <QVBoxLayout>
 #include <QLabel>
-#include <QPixmap>
+#include <QVBoxLayout>
+#include <QDialog>
+#include <QResizeEvent>
 #include <QPropertyAnimation>
-#include <QTimerEvent>
+#include <QSequentialAnimationGroup>
+#include <QMouseEvent>
+#include <QAbstractButton>
 
-class KCMessageBoxTitle : public QWidget
+class KCMessageBoxTitle : public QLabel
 {
     Q_OBJECT
 public:
     explicit KCMessageBoxTitle(QWidget *parent = 0);
-    void setTitleText(QString newTitleText);
+    void setTitleText(const QString &text);
+    int getTitleWidthHint();
+
+protected:
+    void resizeEvent(QResizeEvent *e);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private:
+    bool hasPressed;
+    QPoint mousePosStart;
     QLabel *titleCaption;
+    int widthSizeHint;
 };
 
-class KCMessageBoxPanel : public QWidget
+class KCMessageBoxPanel : public QLabel
 {
     Q_OBJECT
 public:
     explicit KCMessageBoxPanel(QWidget *parent = 0);
 
 private:
-
 };
 
-class KCMessageBoxContent : public QWidget
+class KCMessageBoxContext : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KCMessageBoxContent(QWidget *parent = 0);
-    ~KCMessageBoxContent();
-    void addText(QString displayText);
+    explicit KCMessageBoxContext(QWidget *parent = 0);
+    void addWidget(QWidget *widget);
+    void addText(const QString &text);
+    void addImage(const QString &path);
+    int getHeightSizeHint() const;
+    int getWidthSizeHint() const;
+
+protected:
+    void resizeEvent(QResizeEvent *e);
 
 private:
-    QVBoxLayout *mainLayout;
-    QVBoxLayout *contentLayout;
+    QWidget *context;
+    QVBoxLayout *contextLayout;
+    int insertPlace;
+    int heightSizeHint=0, widthSizeHint=0;
 };
 
-class KCMessageBox : public QWidget
+class KCMessageBox : public QDialog
 {
     Q_OBJECT
 public:
     explicit KCMessageBox(QWidget *parent = 0);
-    void addText(QString displayText);
+    void setTitle(const QString &text);
+    void addText(const QString &text);
+    void addImage(const QString &path);
+    void addWidget(QWidget *widget);
 
 signals:
 
 public slots:
-    void setTitle(QString messageBoxTitle);
 
 protected:
-
+    void showEvent(QShowEvent *e);
 
 private:
     QVBoxLayout *mainLayout;
+    QPropertyAnimation *widthExpand, *heightExpand;
+    QSequentialAnimationGroup *showAnimation;
 
-    //Basic widgets
-    KCMessageBoxTitle *titleWidget;
-    KCMessageBoxPanel *panelWidget;
-    KCMessageBoxContent *contentWidget;
+    int expectedWidth, expectedHeight;
+
+    KCMessageBoxTitle *title;
+    KCMessageBoxPanel *panel;
+    KCMessageBoxContext *context;
+
+    QRect beginState, heightExState, finalState;
 };
 
 #endif // KCMESSAGEBOX_H

@@ -151,7 +151,6 @@ bool KCCompileOutputReceiver::getHasOutputHeader() const
     return hasOutputHeader;
 }
 
-
 //Fold the expanded error item, actually we just rewrite the contents of
 //the item to the description of the error.
 void KCCompileOutputReceiver::foldItem(QStandardItem *itemModelIndex)
