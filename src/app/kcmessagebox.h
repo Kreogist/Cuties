@@ -27,7 +27,10 @@
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
 #include <QMouseEvent>
+#include <QSignalMapper>
 #include <QAbstractButton>
+
+#include "Controls/GraphicButtons/kcgraphicbuttonok.h"
 
 class KCMessageBoxTitle : public QLabel
 {
@@ -55,8 +58,26 @@ class KCMessageBoxPanel : public QLabel
     Q_OBJECT
 public:
     explicit KCMessageBoxPanel(QWidget *parent = 0);
+    enum buttonState
+    {
+        none = 0,
+        buttonOK = 1,
+        buttonCancel = 2
+    };
+
+signals:
+    void requiredMessage(KCMessageBoxPanel::buttonState value);
+    void requiredExit();
+
+private slots:
+    void sendSignals(int buttonIndex);
+
+protected:
+    void resizeEvent(QResizeEvent *e);
 
 private:
+    KCGraphicButtonOK *okButton;
+    QSignalMapper *buttonMapper;
 };
 
 class KCMessageBoxContext : public QWidget
@@ -90,6 +111,8 @@ public:
     void addImage(const QString &path);
     void addWidget(QWidget *widget);
 
+    KCMessageBoxPanel::buttonState messageBoxState();
+
 signals:
 
 public slots:
@@ -97,7 +120,11 @@ public slots:
 protected:
     void showEvent(QShowEvent *e);
 
+private slots:
+    void messageFilter(KCMessageBoxPanel::buttonState message);
+
 private:
+    KCMessageBoxPanel::buttonState messageState;
     QVBoxLayout *mainLayout;
     QPropertyAnimation *widthExpand, *heightExpand;
     QSequentialAnimationGroup *showAnimation;

@@ -117,6 +117,44 @@ KCMessageBoxPanel::KCMessageBoxPanel(QWidget *parent) :
     setScaledContents(true);
     setPixmap(QPixmap(":/MsgBox/image/MessageBox/Bottom.png"));
     setMinimumWidth(0);
+
+    buttonMapper=new QSignalMapper(this);
+
+    okButton=new KCGraphicButtonOK(this);
+    okButton->setGeometry((width()-okButton->width())/2,
+                          (height()-okButton->height())/2,
+                          okButton->width(),
+                          okButton->height());
+    connect(okButton, SIGNAL(clicked()), buttonMapper, SLOT(map()));
+    buttonMapper->setMapping(okButton, 1);
+    connect(okButton, SIGNAL(clicked()), this, SIGNAL(requiredExit()));
+
+    connect(buttonMapper, SIGNAL(mapped(int)),
+            this, SLOT(sendSignals(int)));
+}
+
+void KCMessageBoxPanel::sendSignals(int buttonIndex)
+{
+    switch(buttonIndex)
+    {
+    case 1:
+        emit requiredMessage(buttonOK);
+        break;
+    case 2:
+        emit requiredMessage(buttonCancel);
+        break;
+    default:
+        emit requiredMessage(none);
+        break;
+    }
+}
+
+void KCMessageBoxPanel::resizeEvent(QResizeEvent *e)
+{
+    okButton->move((width()-okButton->width())/2,
+             (height()-okButton->height())/2);
+    QLabel::resizeEvent(e);
+
 }
 
 KCMessageBoxContext::KCMessageBoxContext(QWidget *parent) :
@@ -208,6 +246,9 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     setWindowFlags(windowFlags() | Qt::ToolTip);
     setWindowOpacity(0.92);
 
+    //Set default value
+    messageState=KCMessageBoxPanel::none;
+
     //Set layout
     mainLayout=new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
@@ -224,6 +265,11 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     //Set panel
     panel=new KCMessageBoxPanel(this);
     mainLayout->addWidget(panel);
+
+    connect(panel, SIGNAL(requiredMessage(KCMessageBoxPanel::buttonState)),
+            this, SLOT(messageFilter(KCMessageBoxPanel::buttonState)));
+    connect(panel, SIGNAL(requiredExit()),
+            this, SLOT(close()));
 
     showAnimation=new QSequentialAnimationGroup(this);
 
@@ -305,4 +351,9 @@ void KCMessageBox::showEvent(QShowEvent *e)
     setGeometry(beginState);
     showAnimation->start();
     QWidget::showEvent(e);
+}
+
+void KCMessageBox::messageFilter(KCMessageBoxPanel::buttonState message)
+{
+    messageState=message;
 }
