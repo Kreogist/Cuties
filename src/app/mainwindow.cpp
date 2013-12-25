@@ -574,12 +574,10 @@ void MainWindow::createActions()
 
 void MainWindow::aboutCuties()
 {
-    /*QMessageBox::about(this, tr("About Cuties"),
-                       tr("Kreogist Cuties is an light IDE which is designed for ACMer/OIer"));*/
-    KCMessageBox *test=new KCMessageBox(this);
-    test->setTitle("About Cuties");
-    test->addText(tr("Kreogist Cuties is an light IDE which is designed for ACMer/OIer"));
-    test->exec();
+    KCMessageBox *aboutCuties=new KCMessageBox(this);
+    aboutCuties->setTitle("About Cuties");
+    aboutCuties->addText(tr("Kreogist Cuties is an light IDE which is designed for ACMer/OIer"));
+    aboutCuties->exec();
 }
 
 void MainWindow::aboutQt()
