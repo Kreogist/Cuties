@@ -30,7 +30,7 @@ class QTreeView;
 class QToolBar;
 class QToolButton;
 class QStandardItemModel;
-
+class QKeyEvent;
 
 class KCDebugWatch : public QDockWidget
 {
@@ -44,6 +44,10 @@ public:
     void setCustomWatchModel(QStandardItemModel* model);
 
 signals:
+    void requireSetTextFocus();
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
 
 public slots:
     void retranslate();

@@ -61,6 +61,9 @@ public slots:
     void animeHideCompileError();
     void hideCompileDock();
 
+protected:
+    void keyPressEvent(QKeyEvent *e);
+
 private slots:
     //Maximum button float setting.
     void setFloat();

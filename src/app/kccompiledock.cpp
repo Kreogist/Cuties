@@ -179,6 +179,18 @@ void KCCompileDock::hideCompileDock()
     setVisible(false);
 }
 
+void KCCompileDock::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+        break;
+    }
+}
+
 void KCCompileDock::setFloat()
 {
     setFloating(true);

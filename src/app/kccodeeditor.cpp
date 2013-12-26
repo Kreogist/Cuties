@@ -71,6 +71,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(linePanel);
 
     smartPanel=new KCSmartPanel(this);
+    smartPanel->setVisible(false);
     mainLayout->addWidget(smartPanel);
 
     editor=new KCTextEditor(this);

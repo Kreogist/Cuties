@@ -22,6 +22,7 @@
 #include <QStyleFactory>
 #include <QTextDocument>
 #include <QLineEdit>
+#include <QKeyEvent>
 
 #include "kcplaintextbrowser.h"
 #include "gdbcontroller.h"
@@ -103,6 +104,17 @@ void KCDebugCommandIO::retranslateAndSet()
 {
     retranslate();
     setWindowTitle(windowTitleString);
+}
+
+void KCDebugCommandIO::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetTextFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+    }
 }
 
 void KCDebugCommandIO::onCurrentIndexChanged(QString command)

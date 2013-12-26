@@ -21,6 +21,7 @@
 #include <QToolButton>
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QKeyEvent>
 #include <QSizePolicy>
 
 #include "kccolorconfigure.h"
@@ -279,6 +280,17 @@ void KCDebugControlPanel::onDebugNextClicked()
 void KCDebugControlPanel::onDebugReturnClicked()
 {
     gdbController->execReturn();
+}
+
+void KCDebugControlPanel::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetTextFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+    }
 }
 
 void KCDebugControlPanel::onDebugStepClicked()

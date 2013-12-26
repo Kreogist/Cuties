@@ -690,6 +690,8 @@ void MainWindow::createDocks()
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
+    connect(debugControl, &KCDebugControlPanel::requireSetTextFocus,
+            tabManager, &KCTabManager::setFocus);
     connect(debugControl, &KCDebugControlPanel::debugStarted,
             this, &MainWindow::startDebug);
     connect(debugControl, &KCDebugControlPanel::debugStopped,
@@ -699,12 +701,16 @@ void MainWindow::createDocks()
 
     //Debug Command IO
     debugCommandIO=new KCDebugCommandIO(this);
+    connect(debugCommandIO, &KCDebugCommandIO::requireSetTextFocus,
+            tabManager, &KCTabManager::setFocus);
     addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
     debugCommandIO->hide();
     visibleRecorder->addWidget(debugCommandIO);
 
     //Debug Watch
     debugWatch=new KCDebugWatch(this);
+    connect(debugWatch, &KCDebugWatch::requireSetTextFocus,
+            tabManager, &KCTabManager::setFocus);
     addDockWidget(Qt::RightDockWidgetArea, debugWatch, Qt::Vertical);
     debugWatch->hide();
     visibleRecorder->addWidget(debugWatch);
@@ -1034,16 +1040,28 @@ void MainWindow::changeCompileDockVisibleState()
 void MainWindow::changeDebugControlVisibleState()
 {
     debugControl->setVisible(!debugControl->isVisible());
+    if(debugControl->isVisible())
+    {
+        debugControl->setFocus();
+    }
 }
 
 void MainWindow::changeDebugCommandIOVisibleState()
 {
     debugCommandIO->setVisible(!debugCommandIO->isVisible());
+    if(debugCommandIO->isVisible())
+    {
+        debugCommandIO->setFocus();
+    }
 }
 
 void MainWindow::changeDebugWatchVisibleState()
 {
     debugWatch->setVisible(!debugWatch->isVisible());
+    if(debugWatch->isVisible())
+    {
+        debugWatch->setFocus();
+    }
 }
 
 void MainWindow::changeJudgeDockVisibleState()

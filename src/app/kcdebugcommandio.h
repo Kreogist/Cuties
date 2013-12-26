@@ -29,6 +29,7 @@ class QComboBox;
 class QTextDocument;
 class KCPlainTextBrowser;
 class GdbController;
+class QKeyEvent;
 
 class KCDebugCommandIO : public QDockWidget
 {
@@ -39,9 +40,15 @@ public:
     void setGdbInstance(GdbController *gdbInstance);
     void clearInstance();
 
+signals:
+    void requireSetTextFocus();
+
 public slots:
     void retranslate();
     void retranslateAndSet();
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
 
 private slots:
     void onCurrentIndexChanged(QString command);

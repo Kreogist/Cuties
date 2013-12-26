@@ -27,6 +27,7 @@
 class QToolBar;
 class QToolButton;
 class GdbController;
+class QKeyEvent;
 
 class KCDebugControlPanel : public QDockWidget
 {
@@ -39,6 +40,7 @@ public:
 signals:
     void debugStarted();
     void debugStopped();
+    void requireSetTextFocus();
 
 public slots:
     void retranslate();
@@ -52,6 +54,9 @@ public slots:
     void onDebugNextiClicked();
     void onDebugStepiClicked();
     void onDebugReturnClicked();
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
 
 private slots:
 

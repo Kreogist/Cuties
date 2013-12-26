@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QStandardItemModel>
+#include <QKeyEvent>
 
 #include "kcdebugwatch.h"
 #include "kclanguageconfigure.h"
@@ -136,6 +137,17 @@ void KCDebugWatch::setLocalWatchModel(QStandardItemModel *model)
 void KCDebugWatch::setCustomWatchModel(QStandardItemModel *model)
 {
     customWatch->setModel(model);
+}
+
+void KCDebugWatch::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetTextFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+    }
 }
 
 void KCDebugWatch::retranslate()
