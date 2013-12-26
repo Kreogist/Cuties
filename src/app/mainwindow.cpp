@@ -576,6 +576,10 @@ void MainWindow::aboutCuties()
 {
     KCMessageBox *aboutCuties=new KCMessageBox(this);
     aboutCuties->setTitle("About Cuties");
+    aboutCuties->addImage(":/mainicon/image/Cuties.png",
+                          256,
+                          256);
+    aboutCuties->addText("\nKreogist Cuties\n" + qApp->applicationVersion() + "\n(C) 2013 Kreogist Dev Team\n\n");
     aboutCuties->addText(tr("Kreogist Cuties is an light IDE which is designed for ACMer/OIer"));
     aboutCuties->exec();
 }

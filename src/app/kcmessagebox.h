@@ -87,7 +87,8 @@ public:
     explicit KCMessageBoxContext(QWidget *parent = 0);
     void addWidget(QWidget *widget);
     void addText(const QString &text);
-    void addImage(const QString &path);
+    void addImage(const QString &path, int width=-1, int height=-1);
+    void addImage(QPixmap pixmap, int width=-1, int height=-1);
     int getHeightSizeHint() const;
     int getWidthSizeHint() const;
 
@@ -95,6 +96,7 @@ protected:
     void resizeEvent(QResizeEvent *e);
 
 private:
+    QLabel *upIndicator, *downIndicator;
     QWidget *context;
     QVBoxLayout *contextLayout;
     int insertPlace;
@@ -108,7 +110,12 @@ public:
     explicit KCMessageBox(QWidget *parent = 0);
     void setTitle(const QString &text);
     void addText(const QString &text);
-    void addImage(const QString &path);
+    void addImage(const QString &path,
+                  int width=-1,
+                  int height=-1);
+    void addImage(QPixmap pixmap,
+                  int width=-1,
+                  int height=-1);
     void addWidget(QWidget *widget);
 
     KCMessageBoxPanel::buttonState messageBoxState();

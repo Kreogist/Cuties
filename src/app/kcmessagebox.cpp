@@ -171,10 +171,11 @@ KCMessageBoxContext::KCMessageBoxContext(QWidget *parent) :
     contextLayout=new QVBoxLayout(context);
     contextLayout->setContentsMargins(0,0,0,0);
     contextLayout->setSpacing(0);
+    contextLayout->setAlignment(Qt::AlignHCenter);
     context->setLayout(contextLayout);
 
-    QLabel *upIndicator=new QLabel(context),
-           *downIndicator=new QLabel(context);
+    upIndicator=new QLabel(context);
+    downIndicator=new QLabel(context);
 
     upIndicator->setScaledContents(true);
     upIndicator->setPixmap(QPixmap(":/MsgBox/image/MessageBox/UpBound.png"));
@@ -192,7 +193,7 @@ KCMessageBoxContext::KCMessageBoxContext(QWidget *parent) :
 
 void KCMessageBoxContext::addWidget(QWidget *widget)
 {
-    contextLayout->insertWidget(insertPlace++, widget);
+    contextLayout->insertWidget(insertPlace++, widget, 0, Qt::AlignCenter);
     int cacheHint;
     cacheHint=contextLayout->sizeHint().height();
     if(heightSizeHint<cacheHint)
@@ -214,17 +215,38 @@ void KCMessageBoxContext::addText(const QString &text)
     addWidget(insertCaption);
 }
 
-void KCMessageBoxContext::addImage(const QString &path)
+void KCMessageBoxContext::addImage(const QString &path,
+                                   int width,
+                                   int height)
+{
+    addImage(QPixmap(path), width, height);
+}
+
+void KCMessageBoxContext::addImage(QPixmap pixmap,
+                                   int width,
+                                   int height)
 {
     QLabel *insertCaption=new QLabel(context);
-    insertCaption->setPixmap(QPixmap(path));
+    insertCaption->setPixmap(pixmap);
     insertCaption->setAlignment(Qt::AlignHCenter);
+    if(width > 0)
+    {
+        insertCaption->setScaledContents(true);
+        insertCaption->setFixedWidth(width);
+    }
+    if(height > 0)
+    {
+        insertCaption->setScaledContents(true);
+        insertCaption->setFixedHeight(height);
+    }
     addWidget(insertCaption);
 }
 
 void KCMessageBoxContext::resizeEvent(QResizeEvent *e)
 {
     context->resize(e->size());
+    upIndicator->setFixedWidth(e->size().width());
+    downIndicator->setFixedWidth(e->size().width());
     QWidget::resizeEvent(e);
 }
 
@@ -244,7 +266,7 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
 {
     //Set properties
     setWindowFlags(windowFlags() | Qt::ToolTip);
-    setWindowOpacity(0.92);
+    setWindowOpacity(0.95);
 
     //Set default value
     messageState=KCMessageBoxPanel::none;
@@ -291,9 +313,18 @@ void KCMessageBox::addText(const QString &text)
     context->addText(text);
 }
 
-void KCMessageBox::addImage(const QString &path)
+void KCMessageBox::addImage(const QString &path,
+                            int width,
+                            int height)
 {
-    context->addImage(path);
+    context->addImage(path, width, height);
+}
+
+void KCMessageBox::addImage(QPixmap pixmap,
+                            int width,
+                            int height)
+{
+    context->addImage(pixmap, width, height);
 }
 
 void KCMessageBox::addWidget(QWidget *widget)
