@@ -2,7 +2,32 @@
 <html>
   <head>
     <title>Kreogist - Cuties - Download Cuties Now!</title>
-    <link rel="stylesheet" href="../style.css" type="text/css" />
+    <script>
+	var ua=navigator.userAgent.toLowerCase();
+	if(ua.indexOf("maxthon")>-1)
+	{
+		//Maxthon browser will use blink core.
+		document.write("<link rel=\"stylesheet\" href=\"../blinkstyle.css\" type=\"text/css\" />");
+	}
+	else if(ua.indexOf("chrome")>-1)
+	{
+		var cp=ua.indexOf("chrome");
+		var indexnumber=ua.substring(cp+7);
+		indexnumber=indexnumber.substring(0, indexnumber.indexOf("."));
+	    if(Number(indexnumber)>27)
+		{
+			document.write("<link rel=\"stylesheet\" href=\"../blinkstyle.css\" type=\"text/css\" />");
+		}
+		else
+		{
+			document.write("<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" />");
+		}
+	}
+	else
+	{
+		document.write("<link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" />");
+	}
+	</script>
 	<link rel="shortcut icon" href="http://kreogist.github.io/Cuties/favicon.ico" />
     <meta charset="utf-8" />
     <script src="../prefetch.js"></script>
