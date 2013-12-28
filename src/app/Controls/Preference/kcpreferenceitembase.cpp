@@ -69,12 +69,14 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
     //Init animation
     //Fade out Animation
     fadeMeOut=new QTimeLine(100, this);
+    fadeMeOut->setUpdateInterval(1);
     fadeMeOut->setStartFrame(255);
     connect(fadeMeOut, SIGNAL(frameChanged(int)),
             this, SLOT(setBackgroundAlpha(int)));
 
     //Expand Animation
     expandAnimation=new QTimeLine(100, this);
+    expandAnimation->setUpdateInterval(1);
     expandAnimation->setEasingCurve(QEasingCurve::OutCubic);
     connect(expandAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(setItemHeight(int)));
@@ -83,6 +85,7 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
 
     //Fold Animation
     foldAnimation=new QTimeLine(100, this);
+    foldAnimation->setUpdateInterval(1);
     foldAnimation->setEndFrame(27);
     foldAnimation->setEasingCurve(QEasingCurve::OutCubic);
     connect(foldAnimation, SIGNAL(frameChanged(int)),
@@ -90,6 +93,7 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
 
     //Show Animation
     showAnimation=new QTimeLine(100, this);
+    showAnimation->setUpdateInterval(1);
     showAnimation->setEndFrame(27);
     showAnimation->setEasingCurve(QEasingCurve::OutCubic);
     connect(showAnimation, SIGNAL(frameChanged(int)),
@@ -97,6 +101,7 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
 
     //Hide Animation
     hideAnimation=new QTimeLine(100, this);
+    hideAnimation->setUpdateInterval(1);
     hideAnimation->setEndFrame(0);
     hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
     connect(hideAnimation, SIGNAL(frameChanged(int)),

@@ -91,10 +91,12 @@ KCCompileDock::KCCompileDock(QWidget *parent):
 
     //Set error info treeview widget show/hide animation timeline
     animeShowErrorInfoTree=new QTimeLine(400,this);
+    animeShowErrorInfoTree->setUpdateInterval(1);
     animeShowErrorInfoTree->setEasingCurve(QEasingCurve::OutCubic);
     connect(animeShowErrorInfoTree, SIGNAL(frameChanged(int)),
             this, SLOT(changeCompileSplitterWidthValue(int)));
     animeHideErrorInfoTree=new QTimeLine(400,this);
+    animeHideErrorInfoTree->setUpdateInterval(1);
     animeHideErrorInfoTree->setEasingCurve(QEasingCurve::OutCubic);
     connect(animeHideErrorInfoTree, SIGNAL(frameChanged(int)),
             this, SLOT(changeCompileSplitterWidthValue(int)));

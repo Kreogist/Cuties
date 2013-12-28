@@ -97,6 +97,7 @@ KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
 void KCReplaceWindow::showAnime()
 {
     QTimeLine *showAnimation=new QTimeLine(250, this);
+    showAnimation->setUpdateInterval(1);
     showAnimation->setEasingCurve(QEasingCurve::OutCubic);
     showAnimation->setStartFrame(0);
     showAnimation->setEndFrame(61);
@@ -114,6 +115,7 @@ void KCReplaceWindow::resizeDock(int newHeight)
 void KCReplaceWindow::hideAnime()
 {
     QTimeLine *hideAnimation=new QTimeLine(250, this);
+    hideAnimation->setUpdateInterval(1);
     hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
     hideAnimation->setStartFrame(61);
     hideAnimation->setEndFrame(0);
