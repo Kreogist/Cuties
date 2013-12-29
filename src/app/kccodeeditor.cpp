@@ -599,6 +599,26 @@ QTextCursor KCCodeEditor::getTextCursor()
     return editor->textCursor();
 }
 
+void KCCodeEditor::setVScrollValue(int value)
+{
+    editor->setVScrollValue(value);
+}
+
+void KCCodeEditor::setHScrollValue(int value)
+{
+    editor->setHScrollValue(value);
+}
+
+int KCCodeEditor::getVScrollValue()
+{
+    return editor->getVScrollValue();
+}
+
+int KCCodeEditor::getHScrollValue()
+{
+    return editor->getHScrollValue();
+}
+
 int KCCodeEditor::getTextLines()
 {
     return editor->document()->blockCount();

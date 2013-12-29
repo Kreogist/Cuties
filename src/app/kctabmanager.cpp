@@ -78,19 +78,19 @@ void KCTabManager::restoreUnclosedFiles()
         KCCodeEditor *editor;
         if(currentFileStatus.untitled)
         {
-            //New file and cache it.
             unclosedFileItem=newFile();
             editor=qobject_cast<KCCodeEditor *>(widget(unclosedFileItem));
             editor->readCacheFile(currentFileStatus.filePath);
         }
         else
         {
-            //Open file
             unclosedFileItem=open(currentFileStatus.filePath);
             editor=qobject_cast<KCCodeEditor *>(widget(unclosedFileItem));
         }
         editor->setDocumentCursor(currentFileStatus.horizontalCursorPosition,
                                   currentFileStatus.verticalCursorPosition);
+        editor->setHScrollValue(currentFileStatus.horizontalScrollPosition);
+        editor->setVScrollValue(currentFileStatus.verticalScrollPosition);
     }
     if(currentUnclosedFileIndex<count() && currentUnclosedFileIndex>-1)
     {
@@ -455,13 +455,12 @@ void KCTabManager::closeEvent(QCloseEvent *e)
             {
                 if(editor->isModified())
                 {
-                    KCDocumentRecorder::getInstance()->appendRecord(editor);
+                    KCDocumentRecorder::getInstance()->appendRecord(editor, true);
                 }
             }
             else
             {
-                KCDocumentRecorder::getInstance()->appendRecord(editor->getFilePath(),
-                                                                editor->getTextCursor());
+                KCDocumentRecorder::getInstance()->appendRecord(editor);
             }
         }
         if(!page->close())

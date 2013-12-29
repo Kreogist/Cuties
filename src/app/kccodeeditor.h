@@ -59,6 +59,11 @@ public:
     QString getExecFileName();
     QTextCursor getTextCursor();
 
+    void setVScrollValue(int value);
+    void setHScrollValue(int value);
+    int getVScrollValue();
+    int getHScrollValue();
+
     int getTextLines();
     bool isModified();
     QTextDocument *document();

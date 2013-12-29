@@ -46,6 +46,10 @@ public:
     QRectF blockRect(const QTextBlock &block);
     void zoomIn(int range = 1);
     void zoomOut(int range = 1);
+    void setVScrollValue(int value);
+    void setHScrollValue(int value);
+    int getVScrollValue();
+    int getHScrollValue();
 
 signals:
     void requireHideOthers();

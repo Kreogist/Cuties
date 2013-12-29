@@ -1212,6 +1212,26 @@ void KCTextEditor::setTheCursorWidth(int width)
     setCursorWidth(width);
 }
 
+void KCTextEditor::setVScrollValue(int value)
+{
+    verticalScrollBar()->setValue(value);
+}
+
+void KCTextEditor::setHScrollValue(int value)
+{
+    horizontalScrollBar()->setValue(value);
+}
+
+int KCTextEditor::getVScrollValue()
+{
+    return verticalScrollBar()->value();
+}
+
+int KCTextEditor::getHScrollValue()
+{
+    return horizontalScrollBar()->value();
+}
+
 void KCTextEditor::zoomIn(int range)
 {
     QFont f = this->font();
