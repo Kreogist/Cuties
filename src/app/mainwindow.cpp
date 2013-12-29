@@ -577,8 +577,8 @@ void MainWindow::aboutCuties()
     KCMessageBox *aboutCuties=new KCMessageBox(this);
     aboutCuties->setTitle("About Cuties");
     aboutCuties->addImage(":/mainicon/image/Cuties.png",
-                          256,
-                          256);
+                          64,
+                          64);
     aboutCuties->addText("\nKreogist Cuties\n" + qApp->applicationVersion() + "\n(C) 2013 Kreogist Dev Team\n");
     aboutCuties->addText(tr("\nThis program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n"));
     aboutCuties->addText(tr("\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n"));

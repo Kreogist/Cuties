@@ -28,9 +28,11 @@
 #include <QSequentialAnimationGroup>
 #include <QMouseEvent>
 #include <QSignalMapper>
-#include <QAbstractButton>
+#include <QHBoxLayout>
+#include <QKeyEvent>
 
 #include "Controls/GraphicButtons/kcgraphicbuttonok.h"
+#include "Controls/GraphicButtons/kcgraphicbuttoncancel.h"
 
 class KCMessageBoxTitle : public QLabel
 {
@@ -58,6 +60,7 @@ class KCMessageBoxPanel : public QLabel
     Q_OBJECT
 public:
     explicit KCMessageBoxPanel(QWidget *parent = 0);
+    void enabledCancel();
     enum buttonState
     {
         none = 0,
@@ -72,12 +75,11 @@ signals:
 private slots:
     void sendSignals(int buttonIndex);
 
-protected:
-    void resizeEvent(QResizeEvent *e);
-
 private:
     KCGraphicButtonOK *okButton;
+    KCGraphicButtonCancel *cancelButton;
     QSignalMapper *buttonMapper;
+    QHBoxLayout *panelLayout;
 };
 
 class KCMessageBoxContext : public QWidget
@@ -94,6 +96,8 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *e);
+
+public slots:
 
 private:
     QLabel *upIndicator, *downIndicator;
@@ -117,6 +121,7 @@ public:
                   int width=-1,
                   int height=-1);
     void addWidget(QWidget *widget);
+    void enabledCancel();
 
     KCMessageBoxPanel::buttonState messageBoxState();
 
@@ -126,6 +131,7 @@ public slots:
 
 protected:
     void showEvent(QShowEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 
 private slots:
     void messageFilter(KCMessageBoxPanel::buttonState message);

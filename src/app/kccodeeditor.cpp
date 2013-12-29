@@ -232,7 +232,7 @@ void KCCodeEditor::showSearchBar()
     {
         searcherConnections.disConnectAll();
         replaceBar->setConnected(false);
-        replaceBar->hideAnime();
+        replaceBar->animeHide();
     }
 
     if(!searchBar->isVisible())
@@ -276,7 +276,7 @@ void KCCodeEditor::showReplaceBar()
         {
             editor->backupSearchTextCursor();
         }
-        replaceBar->showAnime();
+        replaceBar->animeShow();
         if(!replaceBar->getConnected())
         {
             replaceBar->setConnected(true);
@@ -574,7 +574,7 @@ void KCCodeEditor::onModificationChanged(bool changed)
 void KCCodeEditor::onHideOtherWidgets()
 {
     searchBar->animeHide();
-    replaceBar->hideAnime();
+    replaceBar->animeHide();
     emit requiredHideDocks();
 }
 

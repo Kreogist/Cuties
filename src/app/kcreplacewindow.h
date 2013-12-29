@@ -37,8 +37,8 @@ signals:
     void requireReplaceAll(const QString &oldText, const QString &newText);
 
 public slots:
-    void showAnime();
-    void hideAnime();
+    void animeShow();
+    void animeHide();
 
 private slots:
     void resizeDock(int newHeight);

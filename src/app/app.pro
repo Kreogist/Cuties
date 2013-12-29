@@ -108,7 +108,8 @@ SOURCES += \
     kcsubmenu.cpp \
     kcoptionbutton.cpp \
     kcnormalcontentmenu.cpp \
-    kcvisiblerecorder.cpp
+    kcvisiblerecorder.cpp \
+    Controls/GraphicButtons/kcgraphicbuttoncancel.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -192,7 +193,8 @@ HEADERS += \
     kcsubmenu.h \
     kcoptionbutton.h \
     kcnormalcontentmenu.h \
-    kcvisiblerecorder.h
+    kcvisiblerecorder.h \
+    Controls/GraphicButtons/kcgraphicbuttoncancel.h
 
 
 # Enable C++11

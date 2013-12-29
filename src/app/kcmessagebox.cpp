@@ -118,19 +118,36 @@ KCMessageBoxPanel::KCMessageBoxPanel(QWidget *parent) :
     setPixmap(QPixmap(":/MsgBox/image/MessageBox/Bottom.png"));
     setMinimumWidth(0);
 
+    panelLayout=new QHBoxLayout(this);
+    panelLayout->setContentsMargins(0,0,0,0);
+    panelLayout->setSpacing(50);
+    setLayout(panelLayout);
+
+    panelLayout->addStretch();
     buttonMapper=new QSignalMapper(this);
 
     okButton=new KCGraphicButtonOK(this);
-    okButton->setGeometry((width()-okButton->width())/2,
-                          (height()-okButton->height())/2,
-                          okButton->width(),
-                          okButton->height());
+    panelLayout->addWidget(okButton);
     connect(okButton, SIGNAL(clicked()), buttonMapper, SLOT(map()));
     buttonMapper->setMapping(okButton, 1);
     connect(okButton, SIGNAL(clicked()), this, SIGNAL(requiredExit()));
 
+    cancelButton=new KCGraphicButtonCancel(this);
+    panelLayout->addWidget(cancelButton);
+    cancelButton->hide();
+    connect(cancelButton, SIGNAL(clicked()), buttonMapper, SLOT(map()));
+    buttonMapper->setMapping(cancelButton, 2);
+    connect(cancelButton, SIGNAL(clicked()), this, SIGNAL(requiredExit()));
+
+    panelLayout->addStretch();
+
     connect(buttonMapper, SIGNAL(mapped(int)),
             this, SLOT(sendSignals(int)));
+}
+
+void KCMessageBoxPanel::enabledCancel()
+{
+    cancelButton->show();
 }
 
 void KCMessageBoxPanel::sendSignals(int buttonIndex)
@@ -149,18 +166,11 @@ void KCMessageBoxPanel::sendSignals(int buttonIndex)
     }
 }
 
-void KCMessageBoxPanel::resizeEvent(QResizeEvent *e)
-{
-    okButton->move((width()-okButton->width())/2,
-             (height()-okButton->height())/2);
-    QLabel::resizeEvent(e);
-
-}
-
 KCMessageBoxContext::KCMessageBoxContext(QWidget *parent) :
     QWidget(parent)
 {
     setMinimumWidth(0);
+    setMinimumHeight(0);
     context=new QWidget(this);
     context->setContentsMargins(0,0,0,0);
     context->setAutoFillBackground(true);
@@ -332,6 +342,16 @@ void KCMessageBox::addWidget(QWidget *widget)
     context->addWidget(widget);
 }
 
+void KCMessageBox::enabledCancel()
+{
+    panel->enabledCancel();
+}
+
+KCMessageBoxPanel::buttonState KCMessageBox::messageBoxState()
+{
+    return messageState;
+}
+
 void KCMessageBox::showEvent(QShowEvent *e)
 {
     QRect parentGeometry=parentWidget()->geometry();
@@ -382,6 +402,25 @@ void KCMessageBox::showEvent(QShowEvent *e)
     setGeometry(beginState);
     showAnimation->start();
     QWidget::showEvent(e);
+}
+
+void KCMessageBox::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        messageFilter(KCMessageBoxPanel::buttonOK);
+        close();
+        break;
+    case Qt::Key_Escape:
+        messageFilter(KCMessageBoxPanel::buttonCancel);
+        close();
+        break;
+    default:
+        QDialog::keyPressEvent(e);
+        break;
+    }
 }
 
 void KCMessageBox::messageFilter(KCMessageBoxPanel::buttonState message)

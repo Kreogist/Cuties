@@ -86,7 +86,7 @@ KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton, &QToolButton::clicked,
-            this, &KCReplaceWindow::hideAnime);
+            this, &KCReplaceWindow::animeHide);
 
     //Set Original Height.
     setFixedHeight(0);
@@ -109,7 +109,7 @@ KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
             this, &KCReplaceWindow::hide);
 }
 
-void KCReplaceWindow::showAnime()
+void KCReplaceWindow::animeShow()
 {
     hideAnimation->stop();
     if(showAnimation->state()==QTimeLine::Running)
@@ -127,7 +127,7 @@ void KCReplaceWindow::resizeDock(int newHeight)
     setFixedHeight(newHeight);
 }
 
-void KCReplaceWindow::hideAnime()
+void KCReplaceWindow::animeHide()
 {
     emit requireLostFocus();
     showAnimation->stop();

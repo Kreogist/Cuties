@@ -110,6 +110,8 @@
     <qresource prefix="/Buttons">
         <file>image/Buttons/ok_hover.png</file>
         <file>image/Buttons/ok_normal.png</file>
+        <file>image/Buttons/cancel_hover.png</file>
+        <file>image/Buttons/cancel_normal.png</file>
     </qresource>
     <qresource prefix="/WelcomeWindow">
         <file>image/Welcome/CreateNewFile.png</file>
