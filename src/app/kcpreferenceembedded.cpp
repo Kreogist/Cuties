@@ -51,7 +51,7 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
     generalInts[intItemHistoryMax]=
         addItemInt(intItemCaption[intItemHistoryMax],
                    KCHistoryConfigure::getInstance()->getMaxRecentFilesSize(),
-                   100,
+                   1000,
                    4);
     generalTitles[titleSearchOptions]=addTitle(generalTitleText[titleSearchOptions]);
     generalCombos[comboSearchEngine]=
@@ -178,7 +178,7 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     editorTitles[titleClipboard]=addTitle(editorTitleText[titleClipboard]);
     editorInts[intClipboardTrackingMax]=addItemInt(intItemCaption[intClipboardTrackingMax],
                                                    KCClipboard::getInstance()->getMaxDataCount(),
-                                                   100,
+                                                   1000,
                                                    5);
     addStretch();
 

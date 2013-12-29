@@ -20,6 +20,7 @@
 #ifndef KCREPLACEWINDOW_H
 #define KCREPLACEWINDOW_H
 
+#include <QTimeLine>
 #include <QSignalMapper>
 
 #include "kcsearchwidget.h"
@@ -58,6 +59,7 @@ private:
     QToolButton *closeButton;
 
     QSignalMapper *mapper;
+    QTimeLine *showAnimation, *hideAnimation;
 };
 
 #endif // KCREPLACEWINDOW_H
