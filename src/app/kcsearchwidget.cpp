@@ -178,6 +178,7 @@ void KCSearchWidget::resizeEvent(QResizeEvent *event)
 {
     searchText->setFixedWidth(event->size().width());
 }
+
 bool KCSearchWidget::getConnected() const
 {
     return connected;

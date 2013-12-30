@@ -409,6 +409,7 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionEditCut],SIGNAL(triggered()),tabManager,SLOT(cut()));
 
     //Edit -> Copy
+    actionMainWindowItem[actionEditCopy]->setShortcut(Qt::Key_Control + Qt::Key_C);
     connect(actionMainWindowItem[actionEditCopy],SIGNAL(triggered()),tabManager,SLOT(copy()));
 
     //Edit -> Paste
@@ -456,7 +457,7 @@ void MainWindow::createActions()
         actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
     */
     //Search -> Replace
-    actionMainWindowItem[actionSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
+    actionMainWindowItem[actionSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
     connect(actionMainWindowItem[actionSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
     /*
         //Search -> Replace In Files
@@ -474,16 +475,16 @@ void MainWindow::createActions()
             this,SLOT(statusShowGoto()));
 
     //Execute -> Comile And Run
-    actionMainWindowItem[actionExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
+    actionMainWindowItem[actionExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
     connect(actionMainWindowItem[actionExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(onActionCompileAndRun()));
 
     //Execute -> Compile
-    actionMainWindowItem[actionExecuteCompile]->setShortcut(QKeySequence(Qt::Key_F9));
+    actionMainWindowItem[actionExecuteCompile]->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
     connect(actionMainWindowItem[actionExecuteCompile],SIGNAL(triggered()),
             this,SLOT(onActionCompile()));
 
     //Execute -> Run
-    actionMainWindowItem[actionExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
+    actionMainWindowItem[actionExecuteRun]->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_R));
     connect(actionMainWindowItem[actionExecuteRun],SIGNAL(triggered()),this,SLOT(onActionRun()));
     /*
         //Execute -> Parameters

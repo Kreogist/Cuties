@@ -1,3 +1,48 @@
+0.2.5.18
+New Features:
+1. SAO Style Main Menu Animation.
+2. Full screen features for all platforms.
+3. Mail processing status widget added.
+4. New default code color style.
+5. Add compiler can't find hint.
+6. Partly support Windows GDB.
+7. Initial multi-thread GDB debugging support.
+8. Zoom In/Out support.
+9. Record dock visible status.
+10. Distinguish C and C++ files.
+11. Tab Menu initial support.
+12. SAO Style messagebox support.
+13. Document recorder now can remember scrollbar value.
+14. Messagebox now can support cancel and return value.
+
+Updates:
+0. Improve all Animation fluency.
+1. Changed file restore policy, now Cuties won't clear the cache until the next cache.
+2. Changed search cursor saved policy.
+3. Changed Quotation Highlighter policy.
+4. Clear some console includes.
+5. Connect language changed event to every widgets.
+6. Update escape key policy.
+7. New toolbar icons.
+8. Enabled font antialias for all platforms.
+9. Changed history upper bound to 1,000.
+10. Enhanced Document record policy.
+11. Update menu item shortcut.
+
+Bug Fixed:
+1. Fixed save dialog won't popup bug when the new create file closed.
+2. Fixed the mail server connect timeout bug.
+3. Fixed full screen restore crashed bug in Windows.
+4. Fixed tab key bug.
+5. Fixed menu indicator position bug.
+6. Correct main menu item parent relationship.
+7. Mac OS X Menu bug.
+8. Fixed zoom in/out from 1 pixel size.
+9. Fixed #5 search function bug.
+10. Fixed #6 infinite replace bug.
+11. Fixed online search options cannot save bug.
+12. Fixed search bar and replace bar initial variable bug.
+
 0.2.5.15
 Bug Fixed:
 1. Fixed replace function didn't work bug.

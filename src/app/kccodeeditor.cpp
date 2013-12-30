@@ -247,9 +247,9 @@ void KCCodeEditor::showSearchBar()
             searchBar->setConnected(true);
             connectSearchWidgetWithEditor(searchBar);
             searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
-                                         editor, SLOT(setFocus()));
-            searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
                                          this, SLOT(setUseLastCuror()));
+            searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                         editor, SLOT(setFocus()));
         }
     }
 
@@ -282,9 +282,9 @@ void KCCodeEditor::showReplaceBar()
             replaceBar->setConnected(true);
             connectSearchWidgetWithEditor(replaceBar);
             searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
-                                         editor, SLOT(setFocus()));
-            searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
                                          this, SLOT(setUseLastCuror()));
+            searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                         editor, SLOT(setFocus()));
             searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
                                          editor,&KCTextEditor::replace);
             searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,

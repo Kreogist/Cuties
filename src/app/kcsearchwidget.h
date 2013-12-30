@@ -86,7 +86,7 @@ private:
     };
 
     int currResultNum;
-    bool connected;
+    bool connected=false;
 
     QGridLayout *searchLayout;
     QToolButton *prevResult, *nextResult;
