@@ -26,6 +26,7 @@
 #include "kcplaintextbrowser.h"
 #include "gdbcontroller.h"
 #include "kclanguageconfigure.h"
+#include "kcfontconfigure.h"
 
 #include "kcdebugcommandio.h"
 
@@ -85,20 +86,15 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     contentWidget->setLayout(mainLayout);
 
     //Set command line input.
-    //debugInput=new QComboBox(this);
     debugInput=new KCDebugInput(this);
-    //debugInput->setEditable(true);
-    //debugInput->setAutoCompletion(true);
-    //debugInput->setStyle(QStyleFactory::create("fusion"));
     mainLayout->addWidget(debugInput);
 
     //Set output text browser.
     debugOutputTextBrowser=new KCPlainTextBrowser(this);
+    debugOutputTextBrowser->setFont(KCFontConfigure::getInstance()->getCodeFont());
     mainLayout->addWidget(debugOutputTextBrowser,1);
     connect(debugInput,SIGNAL(execCommand(QString)),
             this,SLOT(onCurrentIndexChanged(QString)));
-    /*connect(debugInput, SIGNAL(activated(QString)),
-            this, SLOT(onCurrentIndexChanged(QString)));*/
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugCommandIO::retranslateAndSet);

@@ -56,40 +56,60 @@ struct bkpt_struct
     QString original_location;
 };
 
+class GdbThread : public QThread
+{
+    Q_OBJECT
+public:
+    explicit GdbThread(QObject * parent = 0);
+    ~GdbThread();
+    void run() Q_DECL_OVERRIDE;
+
+    QString getFilePath() const;
+    void setFilePath(const QString &value);
+    void quitGDB();
+    QString getGdbPath() const;
+    void setGdbPath(const QString &value);
+    bool isGdbRunning();
+
+signals:
+    void readyReadStandardError();
+    void readyReadStandardOutput();
+    void parseMessage(QString value);
+    void parseError(QString value);
+    void addSystemMessage(QString value);
+
+public slots:
+    void readGdbStandardError();
+    void readGdbStandardOutput();
+    void execGdbCommand(const QString &command);
+
+private:
+    QScopedPointer<QProcess> gdbProcess;
+    KCConnectionHandler readProcessData;
+    QString filePath;
+    QString gdbPath;
+};
+
 class GdbController : public QObject
 {
     Q_OBJECT
 public:
     explicit GdbController(QObject *parent = 0);
-    ~GdbController();
 
     static void setGDBPath(const QString &path);
     static bool checkGDB();
     static void isGDBPathRight();
-
 
     const QVector<bkpt_struct> *getBkptVec() const;
 
     QSharedPointer<dbgOutputReceiver> getDbgOutputs();
 
 signals:
-#ifndef Q_OS_WIN32
-    void byteDelivery(const QByteArray &data);
-#endif
     void requireDisconnectDebug();
     void requireLineJump(int lineNum);
 
 public slots:
-#ifndef Q_OS_WIN32
-    bool startListen();
-    void bytesAvailable();
-    void readDebugeeOutput(const QByteArray &data);
-#endif
-    void readGdbStandardError();
-    void readGdbStandardOutput();
-
     bool runGDB(const QString &filePath);
-    void launchGDB(QString gdbPath, QStringList args);
     void quitGDB();
 
     //breakpoint
@@ -125,32 +145,26 @@ public slots:
     //run gdb command
     void execGdbCommand(const QString &command);
 
-private:
-#ifndef Q_OS_WIN32
-    QString debugServerPath;
-    int debugServerFd;
-    QSocketNotifier *debugServerNotifier;
-    QString debugErrorString;
-    QString getServerName();
-#endif
+private slots:
+    void parseLine(const QString &_msg);
+    void parseError(const QString &_error);
 
+private:
     void configureGDB();
-    void showMessage(const QString &msg);
 
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin,const QChar *end);
-    void parseLine(const QString &_msg);
 
     static QString gdbPath;
     static bool checkResult;
+    bool exitedNormally=false;
     QVector<bkpt_struct> bkptVec;
 
-    QScopedPointer<QProcess> gdbProcess;
+    GdbThread *gdbProcessThread;
     QSharedPointer<dbgOutputReceiver> dbgOutputs;
     QTextCodec *debugCodec;
     QTextCodec::ConverterState debugCodecState;
     KCDebuggerConfigure *instance;
-    KCConnectionHandler readProcessData;
 };
 
 #endif // GDBCONTROLLER_H

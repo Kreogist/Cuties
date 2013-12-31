@@ -65,8 +65,8 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     compileOutputTextInfo=new KCPlainTextBrowser(this);
     compileOutputTextInfo->setContentsMargins(0,0,0,0);
     compileOutputTextInfo->setMinimumWidth(0);
-    compileOutputTextInfo->setWordWrapMode(QTextOption::NoWrap);
     compileOutputTextInfo->setFont(KCFontConfigure::getInstance()->getCodeFont());
+    compileOutputTextInfo->setWordWrapMode(QTextOption::NoWrap);
     compileOutputInfoSplitter->addWidget(compileOutputTextInfo);
     //Set treeview output widget
     compileOutputErrorInfoTree=new QTreeView(this);
