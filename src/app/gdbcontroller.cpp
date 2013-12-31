@@ -58,7 +58,7 @@ GdbController::GdbController(QObject *parent) :
 {
     instance=KCDebuggerConfigure::getInstance();
     setGDBPath(instance->getGdbPath());
-    qDebug()<<instance->getGdbPath();
+    //qDebug()<<instance->getGdbPath();
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 
@@ -395,7 +395,6 @@ bool GdbController::runGDB(const QString &filePath)
     {
 #ifndef Q_OS_WIN
         startListen();
-        qDebug()<<getServerName();
 #endif
         readProcessData.disConnectAll();
         gdbProcess.reset(new QProcess(this));
