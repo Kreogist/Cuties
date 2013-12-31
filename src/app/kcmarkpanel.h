@@ -48,6 +48,7 @@ private:
     QPixmap markPix;
     QPoint pressedPos;
     bool isPressed;
+    int markPanelHeight;
 };
 
 #endif // KCMARKPANEL_H

@@ -33,6 +33,7 @@
 #include <QSocketNotifier>
 #include <QDebug>
 #include <QTextCodec>
+#include <QThread>
 
 #include "gdbmivalue.h"
 #include "dbgoutputreceiver.h"
@@ -66,12 +67,15 @@ public:
     static bool checkGDB();
     static void isGDBPathRight();
 
-    bool runGDB(const QString &filePath);
-    void quitGDB();
 
     const QVector<bkpt_struct> *getBkptVec() const;
 
     QSharedPointer<dbgOutputReceiver> getDbgOutputs();
+
+public slots:
+    bool runGDB(const QString &filePath);
+    void launchGDB(QString gdbPath, QStringList args);
+    void quitGDB();
 
 signals:
 #ifndef Q_OS_WIN32

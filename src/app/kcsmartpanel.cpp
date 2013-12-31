@@ -20,6 +20,7 @@
 #include <QDebug>
 
 #include "kctextblockdata.h"
+#include "kctexteditor.h"
 
 #include "kcsmartpanel.h"
 
@@ -29,7 +30,16 @@ static const int curr_line_color=255;
 KCSmartPanel::KCSmartPanel(QWidget *parent) :
     KCPanel(parent)
 {
-    setAutoAdaptWidth(true);
+    setContentsMargins(0,0,0,0);
+    foldMark.load(":/SmartPanel/image/folder.png");
+    compileErrorMark.load(":/SmartPanel/image/compile_error.png");
+    foldMarkWidth=foldMark.width();
+    foldMarkHeight=foldMark.height();
+    errorMarkWidth=compileErrorMark.width();
+    errorMarkHeight=compileErrorMark.height();
+    setAutoAdaptWidth(false);
+    setAutoFillBackground(true);
+    setFixedWidth(errorMarkWidth+4);
     textColor.setRgb(normal_color,normal_color,normal_color);
     previousLevel=0;
 }
@@ -45,7 +55,7 @@ void KCSmartPanel::draw(QPainter *painter, QTextBlock *block,
                           bool isCurrentLine)
 {
     Q_UNUSED(isCurrentLine);
-
+    heightMove=(lineHeight+foldMarkHeight)/2;
     KCTextBlockData *data=static_cast<KCTextBlockData *>(block->userData());
     if(data!=NULL)
     {
@@ -63,11 +73,22 @@ void KCSmartPanel::draw(QPainter *painter, QTextBlock *block,
 
             if(data->getCodeLevel()>previousLevel)
             {
-                painter->drawText(x, y-lineHeight, w, h,
-                                  Qt::AlignRight |  Qt::AlignTop,
-                                  QString("+"));
+                painter->drawPixmap((w-foldMarkWidth)/2,
+                                    y-heightMove,
+                                    foldMarkWidth,
+                                    foldMarkHeight,
+                                    foldMark);
             }
             previousLevel=data->getCodeLevel();
+
+            if(data->getHasError())
+            {
+                painter->drawPixmap((w-errorMarkWidth)/2,
+                                    y+(h-errorMarkHeight)/2,
+                                    errorMarkWidth,
+                                    errorMarkHeight,
+                                    compileErrorMark);
+            }
         }
     }
 }

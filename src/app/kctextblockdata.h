@@ -88,6 +88,8 @@ public:
     void setLineCommentPos(int value);
     int getQuotationStatus() const;
     void setQuotationStatus(int value);
+    bool getHasError() const;
+    void setHasError(bool value);
 
 private:
     unsigned long long int searchCode;
@@ -100,6 +102,7 @@ private:
     int lineCommentPos;
     int quotationStatus;
     markUnit markInfo;
+    bool hasError=false;
 };
 
 #endif // KCTEXTBLOCKDATA_H

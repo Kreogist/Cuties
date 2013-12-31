@@ -65,6 +65,8 @@ signals:
     void requireShowError();
     //Output text changed
     void compilerOutputTextChanged(QString text);
+    //Add error for smart panel.
+    void occurErrorAtLine(int lineNum);
 
 public slots:
     void onCompileMessageReceived(compileErrorInfo error);

@@ -18,6 +18,7 @@
  */
 
 #include <QScrollBar>
+#include <QPainter>
 #include <QPalette>
 #include <QMenu>
 #include <QStyleFactory>
@@ -96,7 +97,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 }
 
 void KCTextEditor::paintEvent(QPaintEvent *e)
-{
+{   
     QPlainTextEdit::paintEvent(e);
     emit updated();
 }
@@ -803,11 +804,10 @@ void KCTextEditor::updateHighlights()
 }
 
 void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections)
-{
+{ 
     if(!isReadOnly())
     {
         QTextEdit::ExtraSelection selection;
-
         selection.format.setBackground(lineColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
         selection.cursor=textCursor();
@@ -1210,6 +1210,15 @@ void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
 void KCTextEditor::setTheCursorWidth(int width)
 {
     setCursorWidth(width);
+}
+
+void KCTextEditor::setLineErrorState(QList<int> errorList)
+{
+    for(QTextBlock i=document()->begin(); i.isValid(); i=i.next())
+    {
+        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(i.userData());
+        blockData->setHasError((errorList.indexOf(i.blockNumber())!=-1));
+    }
 }
 
 void KCTextEditor::setVScrollValue(int value)

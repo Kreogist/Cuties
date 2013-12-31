@@ -75,6 +75,7 @@ public slots:
     void setTabWidth(int width);
     void setWordWrap(QTextOption::WrapMode wrapMode);
     void setTheCursorWidth(int width);
+    void setLineErrorState(QList<int> errorList);
 
 private slots:
     void updateSearchResults();

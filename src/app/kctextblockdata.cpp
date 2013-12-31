@@ -208,3 +208,13 @@ void KCTextBlockData::setQuotationStatus(int value)
 {
     quotationStatus = value;
 }
+
+bool KCTextBlockData::getHasError() const
+{
+    return hasError;
+}
+
+void KCTextBlockData::setHasError(bool value)
+{
+    hasError = value;
+}

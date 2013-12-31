@@ -125,7 +125,7 @@ void KCCompileDock::jumpToError(QModelIndex currentErrorItemIndex)
         if(compileErrorInfoList->at(indexCurrentError).errorColumn > -1)
         {
             emit requireGotoLine(compileErrorInfoList->at(indexCurrentError).errorLine - 1,
-                                 compileErrorInfoList->at(indexCurrentError).errorColumn);
+                                 compileErrorInfoList->at(indexCurrentError).errorColumn - 1);
         }
         else
         {

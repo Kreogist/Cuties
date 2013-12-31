@@ -117,6 +117,8 @@ void KCCompileOutputReceiver::onCompileMessageReceived(compileErrorInfo error)
     compileErrorInfoList.append(error);
     //Expand the model
     addErrorInfoItem(error);
+    //Emit a signal for code editor to show mark.
+    emit occurErrorAtLine(error.errorLine);
 }
 
 //Return the compile error info list
@@ -174,13 +176,13 @@ void KCCompileOutputReceiver::expandItem(QStandardItem *itemModelIndex)
     if(compileErrorInfoList[itemErrorIndex].errorLine > -1)
     {
         //If column number is abaliable, display it.
-        if(compileErrorInfoList[itemErrorIndex].errorColumn > -1)
+        if(compileErrorInfoList[itemErrorIndex].errorColumn != -1)
         {
-            expandItemInfo+= "\n" +
+            expandItemInfo+= QString("\n" +
                              tr("Line ") + QString::number(compileErrorInfoList[itemErrorIndex].errorLine) +
                              tr(", ") +
                              tr("Column ") + QString::number(compileErrorInfoList[itemErrorIndex].errorColumn) +
-                             tr(".");
+                             tr("."));
         }
         else
         {

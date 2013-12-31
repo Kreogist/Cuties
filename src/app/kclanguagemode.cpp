@@ -209,14 +209,18 @@ void KCLanguageMode::connectCompilerAndOutputReceiver()
             compiler->compilerVersion());
 
     //Output Compile Message:
+    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileError,
+                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileCommandLine,
                                        compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileMessage,
                                        compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
-    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileError,
-                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        compilerReceiver,&KCCompileOutputReceiver::onCompileFinished);
+    compilerConnectionHandles+=connect(compilerReceiver, &KCCompileOutputReceiver::occurErrorAtLine,
+                                       this, &KCLanguageMode::requireSmartPanelError);
+    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
+                                       this, &KCLanguageMode::requireDrawError);
 }
 
 bool KCLanguageMode::checkIfIsCompiling()

@@ -71,7 +71,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(linePanel);
 
     smartPanel=new KCSmartPanel(this);
-    smartPanel->setVisible(false);
     mainLayout->addWidget(smartPanel);
 
     editor=new KCTextEditor(this);
@@ -107,6 +106,11 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     searchUseLastCursor=false;
 
     languageMode=new KCLanguageMode(this);
+
+    connect(languageMode, &KCLanguageMode::requireSmartPanelError,
+            this, &KCCodeEditor::addErrorsToStack);
+    connect(languageMode, &KCLanguageMode::requireDrawError,
+            this, &KCCodeEditor::redrawSmartPanel);
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -178,6 +182,10 @@ void KCCodeEditor::setDebugging(bool value)
     debugging = value;
 }
 
+void KCCodeEditor::resetCompileErrorCache()
+{
+    errorOccurLines.clear();
+}
 
 void KCCodeEditor::onShowNextSearchResult()
 {
@@ -224,6 +232,18 @@ void KCCodeEditor::showCompileBar()
 void KCCodeEditor::setUseLastCuror()
 {
     searchUseLastCursor=true;
+}
+
+void KCCodeEditor::addErrorsToStack(int lineNum)
+{
+    //lineNum begins from 1, so we have to reduce 1.
+    errorOccurLines.append(lineNum-1);
+}
+
+void KCCodeEditor::redrawSmartPanel()
+{
+    editor->setLineErrorState(errorOccurLines);
+    smartPanel->update();
 }
 
 void KCCodeEditor::showSearchBar()

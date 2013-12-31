@@ -67,6 +67,8 @@ signals:
     void compileSuccessfully(QString execFileName);
     void requireHideCompileDock();
     void requireDisconnectDebug();
+    void requireSmartPanelError(int errorLine);
+    void requireDrawError();
 
 public slots:
     void onCompileFinished(bool hasError);

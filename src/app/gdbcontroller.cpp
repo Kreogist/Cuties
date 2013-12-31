@@ -264,7 +264,8 @@ void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
     _tmp_bkpt.times=gmvBkpt["times"].getValue().toInt();
     _tmp_bkpt.original_location=gmvBkpt["original-location"].getValue();
 
-    /*qDebug()<<_tmp_bkpt.number;
+    /*
+    qDebug()<<_tmp_bkpt.number;
     qDebug()<<_tmp_bkpt.type;
     qDebug()<<_tmp_bkpt.disp;
     qDebug()<<_tmp_bkpt.enabled;
@@ -275,10 +276,10 @@ void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
     qDebug()<<_tmp_bkpt.line;
     qDebug()<<_tmp_bkpt.threadGroups;
     qDebug()<<_tmp_bkpt.times;
-    qDebug()<<_tmp_bkpt.original_location;*/
+    qDebug()<<_tmp_bkpt.original_location;
+    */
 
     bkptVec<<_tmp_bkpt;
-
 }
 
 const QVector<bkpt_struct> *GdbController::getBkptVec() const
@@ -396,11 +397,16 @@ bool GdbController::runGDB(const QString &filePath)
                                  SIGNAL(readyReadStandardError()),
                                  this,
                                  SLOT(readGdbStandardError()));
-        gdbProcess->start(gdbPath,_arg);
+        launchGDB(gdbPath, _arg);
         configureGDB();
         return true;
     }
     return false;
+}
+
+void GdbController::launchGDB(QString gdbPath, QStringList args)
+{
+    gdbProcess->start(gdbPath, args);
 }
 
 void GdbController::quitGDB()
@@ -410,7 +416,8 @@ void GdbController::quitGDB()
         return;
     }
     int timeout=500; //Timeout to kill;
-    gdbProcess->write(qPrintable(QString("q\n")));
+    execGdbCommand("q");
+    execGdbCommand("y");
 
     //Read wait for finished document, this is the right way.
     if(!gdbProcess->waitForFinished(timeout))
@@ -438,10 +445,10 @@ void GdbController::setBreakPoint(const QString &fileName,
                         const int &lineNum,
                         const int &count)
 {
-    gdbProcess->write(qPrintable(QString("-break-insert ")+
+    execGdbCommand(QString("-break-insert ")+
                      fileName+":"+
                      QString::number(lineNum)+" "+
-                     QString::number(count)+"\n"));
+                     QString::number(count));
 }
 
 /*!
@@ -450,8 +457,7 @@ void GdbController::setBreakPoint(const QString &fileName,
  */
 void GdbController::setBreakPoint(const QString &functionName)
 {
-    gdbProcess->write(qPrintable(QString("-break-insert ")+
-                     functionName+"\n"));
+    execGdbCommand(QString("-break-insert ")+functionName);
 }
 
 
@@ -460,9 +466,9 @@ void GdbController::setBreakPoint(const QString &functionName)
  */
 void GdbController::setBreakCondition(const int &number, const QString &expr)
 {
-    gdbProcess->write(qPrintable(QString("-break-condition ")+
+    execGdbCommand(QString("-break-condition ")+
                      QString::number(number)+" "
-                     +expr+"\n"));
+                     +expr);
 }
 
 /*!
@@ -471,8 +477,7 @@ void GdbController::setBreakCondition(const int &number, const QString &expr)
  */
 void GdbController::setWatchPoint(const QString &var)
 {
-    gdbProcess->write(qPrintable(QString("-break-watch ")+
-                     var+"\n"));
+    execGdbCommand(QString("-break-watch ")+var+"\n");
 }
 
 
@@ -481,8 +486,8 @@ void GdbController::setWatchPoint(const QString &var)
  */
 void GdbController::execRun()
 {
-    gdbProcess->write(qPrintable(QString("-exec-run\n")));
-    gdbProcess->write(qPrintable(QString("set breakpoint main\n")));
+    execGdbCommand("-break-insert main");
+    execGdbCommand("-exec-run");
 }
 
 /*!
@@ -490,7 +495,7 @@ void GdbController::execRun()
  */
 void GdbController::execAbort()
 {
-    gdbProcess->write(qPrintable(QString("-exec-abort\n")));
+    execGdbCommand("-exec-abort");
 }
 
 /*!
@@ -498,7 +503,7 @@ void GdbController::execAbort()
  */
 void GdbController::execContinue()
 {
-    gdbProcess->write(qPrintable(QString("-exec-continue\n")));
+    execGdbCommand("-exec-continue");
 }
 
 /*!
@@ -506,7 +511,7 @@ void GdbController::execContinue()
  */
 void GdbController::execFinish()
 {
-    gdbProcess->write(qPrintable(QString("-exec-continue\n")));
+    execGdbCommand("-exec-continue");
 }
 
 /*!
@@ -514,7 +519,7 @@ void GdbController::execFinish()
  */
 void GdbController::execNext()
 {
-    gdbProcess->write(qPrintable(QString("-exec-next\n")));
+    execGdbCommand("-exec-next");
 }
 
 /*!
@@ -522,7 +527,7 @@ void GdbController::execNext()
  */
 void GdbController::execNexti()
 {
-    gdbProcess->write(qPrintable(QString("-exec-next-instruction\n")));
+    execGdbCommand("-exec-next-instruction");
 }
 
 /*!
@@ -530,14 +535,14 @@ void GdbController::execNexti()
  */
 void GdbController::execReturn()
 {
-    gdbProcess->write(qPrintable(QString("-exec-return\n")));
+    execGdbCommand("-exec-return");
 }
 /*!
  * \brief Asynchronous command. Resumes execution of the inferior program, stopping when the beginning of the next source line is reached, if the next source line is not a function call. If it is, stop at the first instruction of the called function.
  */
 void GdbController::execStep()
 {
-    gdbProcess->write(qPrintable(QString("-exec-step\n")));
+    execGdbCommand("-exec-step");
 }
 
 /*!
@@ -545,7 +550,7 @@ void GdbController::execStep()
  */
 void GdbController::execStepi()
 {
-    gdbProcess->write(qPrintable(QString("-exec-step-instruction\n")));
+    execGdbCommand("-exec-step-instruction");
 }
 
 /*!
@@ -555,29 +560,29 @@ void GdbController::execStepi()
  */
 void GdbController::execUntil(const QString &location)
 {
-    gdbProcess->write(qPrintable(QString("-exec-until ")+location+"\n"));
+    execGdbCommand(QString("-exec-until ")+location);
 }
 
 void GdbController::stackListLocals()
 {
-    gdbProcess->write(qPrintable(QString("-stack-list-locals 1\n")));
+//    execGdbCommand("-stack-list-locals 1");
 }
 
 void GdbController::evaluate(const QString &expr)
 {
-    gdbProcess->write(qPrintable(QString("-data-evaluate-expression ")+expr+"\n"));
+    execGdbCommand(QString("-data-evaluate-expression ")+expr);
 }
 
 void GdbController::execGdbCommand(const QString &command)
 {
-    gdbProcess->write(qPrintable(command));
+    dbgOutputs->addText(QString("(gdb): "+command+"\n"));
+    gdbProcess->write(qPrintable(QString(command+"\n")));
 }
 
 void GdbController::configureGDB()
 {
 #ifdef Q_OS_WIN32
-    gdbProcess->write(qPrintable(QString("set new-console on\n")));
-    gdbProcess->write(qPrintable(QString("show new-console\n")));
+    execGdbCommand("set new-console on");
 #endif
 }
 

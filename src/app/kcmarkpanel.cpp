@@ -28,6 +28,7 @@ KCMarkPanel::KCMarkPanel(QWidget *parent) :
     KCPanel(parent)
 {
     markPix.load(":/img/image/BreakPoint.png");
+    markPanelHeight=markPix.height();
     setAutoAdaptWidth(false);
     setAutoFillBackground(true);
     setFixedWidth(25);
@@ -63,7 +64,7 @@ void KCMarkPanel::draw(QPainter *painter, QTextBlock *block,
         if(markInfo.marked)
         {
             painter->drawPixmap(x,
-                                y - 3,
+                                y+(h-markPanelHeight)/2,
                                 markPix.width(),
                                 markPix.height(),
                                 markPix);

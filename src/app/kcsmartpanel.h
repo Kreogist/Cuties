@@ -21,7 +21,9 @@
 #define KCSMARTPANEL_H
 
 #include <QFont>
+#include <QPixmap>
 #include <QColor>
+#include <QList>
 
 #include "kcpanel.h"
 
@@ -33,8 +35,6 @@ public:
 
 signals:
 
-public slots:
-
 protected:
     void paintEvent(QPaintEvent *event);
     void draw(QPainter *painter, QTextBlock *block,
@@ -43,8 +43,13 @@ protected:
 
 private:
     QColor textColor;
+    QPixmap foldMark;
+    QPixmap compileErrorMark;
     bool startRedraw;
     int previousLevel;
+    int foldMarkWidth, foldMarkHeight;
+    int errorMarkWidth, errorMarkHeight;
+    int heightMove;
 };
 
 #endif // KCSMARTPANEL_H

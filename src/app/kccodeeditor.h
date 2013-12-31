@@ -24,6 +24,7 @@
 #include <QTextCursor>
 #include <QString>
 #include <QWidget>
+#include <QList>
 
 #include <QDebug>
 
@@ -77,6 +78,8 @@ public:
     bool getDebugging() const;
     void setDebugging(bool value);
 
+    void resetCompileErrorCache();
+
 signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
@@ -114,6 +117,8 @@ private slots:
                       bool wholeWordSets);
     void onShowNextSearchResult();
     void setUseLastCuror();
+    void addErrorsToStack(int lineNum);
+    void redrawSmartPanel();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -154,6 +159,8 @@ private:
     friend class KCLanguageMode;
     bool cacheNewFileMode;
     bool debugging;
+
+    QList<int> errorOccurLines;
 };
 
 #endif // TEXTEDITOR_H
