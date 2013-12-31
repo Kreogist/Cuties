@@ -124,5 +124,6 @@
     <qresource prefix="/SmartPanel">
         <file>image/folder.png</file>
         <file>image/compile_error.png</file>
+        <file>image/folderEnd.png</file>
     </qresource>
 </RCC>

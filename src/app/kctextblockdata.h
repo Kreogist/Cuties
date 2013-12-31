@@ -90,6 +90,10 @@ public:
     void setQuotationStatus(int value);
     bool getHasError() const;
     void setHasError(bool value);
+    bool getCodeLevelUp() const;
+    void setCodeLevelUp(bool value);
+    bool getCodeLevelDown() const;
+    void setCodeLevelDown(bool value);
 
 private:
     unsigned long long int searchCode;
@@ -103,6 +107,7 @@ private:
     int quotationStatus;
     markUnit markInfo;
     bool hasError=false;
+    bool codeLevelUp=false, codeLevelDown=false;
 };
 
 #endif // KCTEXTBLOCKDATA_H

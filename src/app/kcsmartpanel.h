@@ -43,13 +43,10 @@ protected:
 
 private:
     QColor textColor;
-    QPixmap foldMark;
+    QPixmap foldMark, foldEndMark;
     QPixmap compileErrorMark;
-    bool startRedraw;
-    int previousLevel;
     int foldMarkWidth, foldMarkHeight;
     int errorMarkWidth, errorMarkHeight;
-    int heightMove;
 };
 
 #endif // KCSMARTPANEL_H
