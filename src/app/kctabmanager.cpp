@@ -433,6 +433,7 @@ void KCTabManager::closeEvent(QCloseEvent *e)
             QMessageBox msg;
             msg.setText("File " + editor->getDocumentTitle() + " is debugging.");
             msg.exec();
+            e->ignore();
             return;
         }
     }
