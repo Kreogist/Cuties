@@ -476,8 +476,9 @@ QList<int> KCCodeEditor::getBreakpoints()
 
 void KCCodeEditor::onDebugJumpLine(int lineNum)
 {
-    setDocumentCursor(lineNum, 0);
-    markPanel->setDebugCursor(lineNum);
+    int realLineNum=lineNum-1;
+    setDocumentCursor(realLineNum, 0);
+    markPanel->setDebugCursor(realLineNum);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
