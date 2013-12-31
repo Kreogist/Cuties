@@ -416,7 +416,6 @@ void KCTabManager::onCurrentTabChange(int index)
     {
         emit rewriteDisVisible();
     }
-
     currentTextCursorChanged();
 }
 

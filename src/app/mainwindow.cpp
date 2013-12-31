@@ -1292,10 +1292,15 @@ void MainWindow::onCurrentTabChanged()
     KCCompileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
     if(compilerReceiver!=NULL)
     {
+        /*
+         * Here we do something interesting.
+         * We can think that if there's no compiler, there's no debugger.
+         * This is the only way can help us to solve the multi-thread debugging
+         * bug.
+         */
         compileDock->setCompileOutputReceiver(compilerReceiver);
+        connectDebugDockWithCurrEditor();
     }
-
-    connectDebugDockWithCurrEditor();
 }
 
 void MainWindow::startDebug()
