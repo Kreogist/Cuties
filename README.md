@@ -13,6 +13,7 @@ Copyright © 2013 Kreogist Dev Team. All rights reserved.
 
 - Intel® Pentium™ III M processor or better.
 - 64MB of RAM or better(DDR or better recommended).
+- Intel® HD Graphics 2000 or better
 - ??MB of disk space.
 
 ##Required OS

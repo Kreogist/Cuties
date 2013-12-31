@@ -69,6 +69,7 @@ signals:
     void requireDisconnectDebug();
     void requireSmartPanelError(int errorLine);
     void requireDrawError();
+    void requireDebugJumpLine(int debugLine);
 
 public slots:
     void onCompileFinished(bool hasError);

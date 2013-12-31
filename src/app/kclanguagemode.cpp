@@ -164,9 +164,12 @@ GdbController *KCLanguageMode::startDebug()
         gdbControllerInstance=new GdbController(this);
         connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
                 this, SIGNAL(requireDisconnectDebug()));
+        connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
+                this, SIGNAL(requireDebugJumpLine(int)));
     }
 
     gdbControllerInstance->runGDB(m_parent->execFileName);
+    gdbControllerInstance->setBreakPointList(m_parent->getBreakpoints());
     gdbControllerInstance->execRun();
 
     return gdbControllerInstance;

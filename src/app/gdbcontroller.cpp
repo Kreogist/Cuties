@@ -97,6 +97,8 @@ void GdbController::parseLine(const QString &_msg)
     const QChar *begin=_msg.begin();
     const QChar *end=_msg.end();
 
+    //qDebug()<<_msg;
+
     switch(_firstChar)
     {
     case '^':
@@ -171,7 +173,7 @@ void GdbController::parseLine(const QString &_msg)
         break;
     }
     case '*':
-    {
+    {   
         begin++;
 
         QString _str_async;
@@ -186,23 +188,38 @@ void GdbController::parseLine(const QString &_msg)
                 break;
             }
         }
-
-        begin++;    //skip ,
-
-        GdbMiValue result;
-
-        for(; begin<end; begin++)
-        {
-            GdbMiValue child;
-            child.build(begin,end);
-
-            result+=child;
-        }
-
         if(_str_async == "stopped")
         {
+            //Refresh stack list
             stackListLocals();
-            qDebug()<<*begin;
+
+            QString stoppedDetails;
+            stoppedDetails=QString("GDB: Stopped. ");
+            //Here we have to display many many details.
+            begin++;
+            if(begin>=end)
+            {
+                return ;
+            }
+
+            GdbMiValue result;
+
+            for(; begin<end; begin++)
+            {
+                GdbMiValue child;
+                child.build(begin,end);
+                if(child.getName()=="reason")
+                {
+                    stoppedDetails.append("Reason: " + child.getValue());
+                }
+                if(child.getName()=="frame")
+                {
+                    emit requireLineJump(child["line"].getValue().toInt());
+                }
+                result+=child;
+            }
+            stoppedDetails.append("\n");
+            dbgOutputs->addText(stoppedDetails);
         }
 
         break;
@@ -426,7 +443,15 @@ void GdbController::quitGDB()
         gdbProcess->kill();
         parseLine("Cuties: GDB process was stop by force.");
     }
-    //emit requireDisconnectDebug();
+    emit requireDisconnectDebug();
+}
+
+void GdbController::setBreakPointList(QList<int> breakpointLine)
+{
+    for(int i=0; i<breakpointLine.count(); i++)
+    {
+        setBreakPoint(breakpointLine.at(i));
+    }
 }
 
 void GdbController::readGdbStandardError()
@@ -448,7 +473,12 @@ void GdbController::setBreakPoint(const QString &fileName,
     execGdbCommand(QString("-break-insert ")+
                      fileName+":"+
                      QString::number(lineNum)+" "+
-                     QString::number(count));
+                   QString::number(count));
+}
+
+void GdbController::setBreakPoint(const int &lineNum)
+{
+    execGdbCommand(QString("-break-insert ") + QString::number(lineNum));
 }
 
 /*!
@@ -486,7 +516,6 @@ void GdbController::setWatchPoint(const QString &var)
  */
 void GdbController::execRun()
 {
-    execGdbCommand("-break-insert main");
     execGdbCommand("-exec-run");
 }
 
@@ -575,7 +604,7 @@ void GdbController::evaluate(const QString &expr)
 
 void GdbController::execGdbCommand(const QString &command)
 {
-    dbgOutputs->addText(QString("(gdb): "+command+"\n"));
+    dbgOutputs->addText(QString("(gdb): "+command)+"\n");
     gdbProcess->write(qPrintable(QString(command+"\n")));
 }
 

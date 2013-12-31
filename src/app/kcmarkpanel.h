@@ -30,9 +30,8 @@ class KCMarkPanel : public KCPanel
     Q_OBJECT
 public:
     explicit KCMarkPanel(QWidget *parent = 0);
-
-    QPixmap getMarkPix() const;
-    void setMarkPix(const QPixmap &value);
+    void setDebugCursor(int lineNum);
+    void resetDebugCursor();
 
 public slots:
 
@@ -45,10 +44,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e);
 
 private:
-    QPixmap markPix;
+    QPixmap markPix, debugArrow;
     QPoint pressedPos;
     bool isPressed;
     int markPanelHeight;
+    int debugCursorLine=-1;
 };
 
 #endif // KCMARKPANEL_H

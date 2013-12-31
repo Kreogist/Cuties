@@ -72,16 +72,12 @@ public:
 
     QSharedPointer<dbgOutputReceiver> getDbgOutputs();
 
-public slots:
-    bool runGDB(const QString &filePath);
-    void launchGDB(QString gdbPath, QStringList args);
-    void quitGDB();
-
 signals:
 #ifndef Q_OS_WIN32
     void byteDelivery(const QByteArray &data);
 #endif
     void requireDisconnectDebug();
+    void requireLineJump(int lineNum);
 
 public slots:
 #ifndef Q_OS_WIN32
@@ -92,10 +88,16 @@ public slots:
     void readGdbStandardError();
     void readGdbStandardOutput();
 
+    bool runGDB(const QString &filePath);
+    void launchGDB(QString gdbPath, QStringList args);
+    void quitGDB();
+
     //breakpoint
+    void setBreakPointList(QList<int> breakpointLine);
     void setBreakPoint(const QString &fileName,
                        const int &lineNum,
                        const int &count);
+    void setBreakPoint(const int &lineNum);
     void setBreakPoint(const QString &functionName);
     void setBreakCondition(const int &number, const QString &expr);
 

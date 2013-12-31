@@ -1241,6 +1241,22 @@ int KCTextEditor::getHScrollValue()
     return horizontalScrollBar()->value();
 }
 
+QList<int> KCTextEditor::getBreakPoints()
+{
+    QList<int> breakPointList;
+    for(QTextBlock i=document()->begin();
+        i.isValid();
+        i=i.next())
+    {
+        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(i.userData());
+        if(blockData->getMarkInfo().marked)
+        {
+            breakPointList.append(i.blockNumber());
+        }
+    }
+    return breakPointList;
+}
+
 void KCTextEditor::zoomIn(int range)
 {
     QFont f = this->font();

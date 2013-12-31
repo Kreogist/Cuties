@@ -107,8 +107,10 @@ public slots:
     void setOverwriteMode(bool newValue);
     bool readCacheFile(const QString &cachedfilePath);
     bool writeCacheFile(const QString &filePath);
+    QList<int> getBreakpoints();
 
 private slots:
+    void onDebugJumpLine(int lineNum);
     void onModificationChanged(bool changed);
     void onHideOtherWidgets();
     void onSearchNext(QString searchTextSets,

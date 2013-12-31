@@ -111,6 +111,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             this, &KCCodeEditor::addErrorsToStack);
     connect(languageMode, &KCLanguageMode::requireDrawError,
             this, &KCCodeEditor::redrawSmartPanel);
+    connect(languageMode, &KCLanguageMode::requireDebugJumpLine,
+            this, &KCCodeEditor::onDebugJumpLine);
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -180,6 +182,10 @@ bool KCCodeEditor::getDebugging() const
 void KCCodeEditor::setDebugging(bool value)
 {
     debugging = value;
+    if(!debugging)
+    {
+        markPanel->resetDebugCursor();
+    }
 }
 
 void KCCodeEditor::resetCompileErrorCache()
@@ -461,6 +467,17 @@ bool KCCodeEditor::saveAs(const QString &fileName,
 bool KCCodeEditor::writeCacheFile(const QString &filePath)
 {
     return saveAs(filePath, true);
+}
+
+QList<int> KCCodeEditor::getBreakpoints()
+{
+    return editor->getBreakPoints();
+}
+
+void KCCodeEditor::onDebugJumpLine(int lineNum)
+{
+    setDocumentCursor(lineNum, 0);
+    markPanel->setDebugCursor(lineNum);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)
