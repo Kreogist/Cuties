@@ -67,6 +67,11 @@ KCCppHighlighter::KCCppHighlighter(QObject *parent) :
     hlrKeyWords.regexp.setPattern(strKeyWords);
     rules<<hlrKeyWords;
 
+    //Numbers
+    hlrSpTypes.type_name = "number";
+    hlrSpTypes.regexp.setPattern(QString("\\b\\d+(\\.)?\\d*\\b"));
+    rules<<hlrSpTypes;
+
     //Set Other Special Types:
     //Pre-Process
     hlrSpTypes.type_name = "preproc";
