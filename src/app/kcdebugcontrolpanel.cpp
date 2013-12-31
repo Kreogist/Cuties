@@ -166,6 +166,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugControlPanel::retranslateAndSet);
 
+    debugRunning=false;
 }
 
 void KCDebugControlPanel::retranslate()
@@ -234,11 +235,13 @@ void KCDebugControlPanel::retranslateAndSet()
 
 void KCDebugControlPanel::onDebugStartClicked()
 {
+    debugRunning=true;
     emit debugStarted();
 }
 
 void KCDebugControlPanel::onDebugStopClicked()
 {
+    debugRunning=false;
     emit debugStopped();
 }
 
@@ -264,22 +267,34 @@ void KCDebugControlPanel::onRunToCursorClicked()
 //-----control program by using gdbController-----
 void KCDebugControlPanel::onDebugContinueClicked()
 {
-    gdbController->execContinue();
+    if(gdbController!=NULL)
+    {
+        gdbController->execContinue();
+    }
 }
 
 void KCDebugControlPanel::onDebugNextiClicked()
 {
-    gdbController->execNexti();
+    if(gdbController!=NULL)
+    {
+        gdbController->execNexti();
+    }
 }
 
 void KCDebugControlPanel::onDebugNextClicked()
 {
-    gdbController->execNext();
+    if(gdbController!=NULL)
+    {
+        gdbController->execNext();
+    }
 }
 
 void KCDebugControlPanel::onDebugReturnClicked()
 {
-    gdbController->execReturn();
+    if(gdbController!=NULL)
+    {
+        gdbController->execReturn();
+    }
 }
 
 void KCDebugControlPanel::keyPressEvent(QKeyEvent *e)
@@ -295,11 +310,17 @@ void KCDebugControlPanel::keyPressEvent(QKeyEvent *e)
 
 void KCDebugControlPanel::onDebugStepClicked()
 {
-    gdbController->execStep();
+    if(gdbController!=NULL)
+    {
+        gdbController->execStep();
+    }
 }
 
 void KCDebugControlPanel::onDebugStepiClicked()
 {
-    gdbController->execStepi();
+    if(gdbController!=NULL)
+    {
+        gdbController->execStepi();
+    }
 }
 //-------------------------------------------------

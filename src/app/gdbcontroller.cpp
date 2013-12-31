@@ -609,10 +609,7 @@ void GdbController::evaluate(const QString &expr)
 
 void GdbController::execGdbCommand(const QString &command)
 {
-    if(gdbProcessThread->isGdbRunning())
-    {
-        gdbProcessThread->execGdbCommand(command);
-    }
+    gdbProcessThread->execGdbCommand(command);
 }
 
 void GdbController::configureGDB()
