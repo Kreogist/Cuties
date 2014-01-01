@@ -103,12 +103,11 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
             parseTuple(begin,end);
             break;
         default:
-            /*for(; begin<end; begin++)
+            for(; begin<end; begin++)
             {
                 qDebug()<<*begin;
             }
-            qDebug()<<"error! GdbMiValue:unknow";*/
-            ;
+            qDebug()<<"error! GdbMiValue:unknow";
         }
     }
 }
