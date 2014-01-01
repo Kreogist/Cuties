@@ -58,6 +58,7 @@ QString GdbMiValue::getName() const
 
 void GdbMiValue::build(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     switch(begin->toLatin1())
     {
     case '\"':

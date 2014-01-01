@@ -1,18 +1,18 @@
 # basic settings
-keyword=#35c502 // for language keywords
-datatype=#2edeca // for basic types
-comment=#d589ba // for comments
-number=#D56F2B 	// for literal numbers
-string=#f0ff00, bold  // for strings and chars
+preproc=#d8b566 // for preproc directives (e.g. #include, import)
+keyword=#24e28b // for language keywords
+datatype=#33ccff // for basic types
+comment=#767672 // for comments
+number=#7CFBE1 	// for literal numbers
+string=#f0f06f  // for strings and chars
+todo=#ffcc99	// for TODO and FIXME
 usertype=#39D898  // for user defined types
 regexp=#FF8533   // for strings and chars
 specialchar=#FF55FF // for special chars, e.g., \n, \t, \\
-preproc=#d8b566 // for preproc directives (e.g. #include, import)
 symbol=#AA2222  // for simbols (e.g. <, >, +)
 function=#000000, bold // for function calls and declarations
 cbracket=#CE0F0F // for block brackets (e.g. {, })
-todo=#7CFBE1, bold	// for TODO and FIXME
-code=#7FE939, bold // for code snippets
+code=#7FE939 // for code snippets
 
 # Predefined variables and functions (for instance glsl)
 predef_var=#2C2C90

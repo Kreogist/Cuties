@@ -68,11 +68,11 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setPalette(pal);
     setFrameStyle(0);
 
-    lineColor = QColor(0x40,0x40,0x40);
+    lineColor = QColor(0x40,0x40,0x40,200);
     searchResultColor = QColor(98,147,221);
     searchResultColor = QColor(0x5A,0x86,0xCA);
-    noMatchedParenthesesColor = QColor(0xc8,0x0,0x0);
-    matchedParenthesesColor = QColor(0xfd,0x95,0x00);
+    noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
+    matchedParenthesesColor = QColor(0xf8,0x9b,0x9b);
 
     searchCode=0;
 
