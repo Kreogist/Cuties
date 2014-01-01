@@ -1,12 +1,12 @@
 # basic settings
 keyword=#35c502 // for language keywords
 datatype=#2edeca // for basic types
-usertype=#39D898  // for user defined types
-string=#f0ff00, bold  // for strings and chars
-regexp=#FF8533   // for strings and chars
-specialchar=#FF55FF // for special chars, e.g., \n, \t, \\
 comment=#d589ba // for comments
 number=#D56F2B 	// for literal numbers
+string=#f0ff00, bold  // for strings and chars
+usertype=#39D898  // for user defined types
+regexp=#FF8533   // for strings and chars
+specialchar=#FF55FF // for special chars, e.g., \n, \t, \\
 preproc=#d8b566 // for preproc directives (e.g. #include, import)
 symbol=#AA2222  // for simbols (e.g. <, >, +)
 function=#000000, bold // for function calls and declarations

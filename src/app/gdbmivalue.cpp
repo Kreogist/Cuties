@@ -81,7 +81,6 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
                 break;
             }
         }
-
         if(begin == end || *begin!='=')
         {
             //is a c-string
@@ -104,11 +103,12 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
             parseTuple(begin,end);
             break;
         default:
-            for(; begin<end; begin++)
+            /*for(; begin<end; begin++)
             {
                 qDebug()<<*begin;
             }
-            qDebug()<<"error! GdbMiValue:unknow";
+            qDebug()<<"error! GdbMiValue:unknow";*/
+            ;
         }
     }
 }
@@ -187,7 +187,6 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
                 break;
             default:
             {
-
                 if(c < '0' || c > '7')
                 {
                     isEscape=false;
@@ -226,6 +225,7 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
         GdbMiValue child;
         child.build(begin,end);
         children<<child;
+        skipCommas(begin, end);
     }
 
     if(begin+1 < end)

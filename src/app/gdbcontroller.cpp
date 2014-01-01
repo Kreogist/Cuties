@@ -140,6 +140,8 @@ void GdbThread::readGdbStandardOutput()
     while(gdbProcess->readLine(buf,2000)>0)
     {
         _msg=QString(buf);
+        _msg.remove("\n");
+        _msg.remove("\r");
         //If is empty, finish a part!
         if(_msg.isEmpty())
         {
@@ -185,6 +187,8 @@ GdbController::GdbController(QObject *parent) :
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 
+    requestForceUpdateLocal=false;
+
     debugCodec=QTextCodec::codecForLocale();
     gdbProcessThread=new GdbThread(this);
     connect(gdbProcessThread, SIGNAL(parseMessage(QString)),
@@ -197,16 +201,6 @@ GdbController::GdbController(QObject *parent) :
 
 void GdbController::parseLine(const QString &_msg)
 {
-    if(_msg.isEmpty() || _msg.contains("(gdb)"))
-    {
-        return ;
-    }
-
-/*    dbgOutputs->addText(QString("start output"));
-    dbgOutputs->addText(_msg);
-    dbgOutputs->addText(QString("end output"));
-    return;*/
-
     char _firstChar=_msg.begin()->toLatin1();
     const QChar *begin=_msg.begin();
     const QChar *end=_msg.end();
@@ -240,20 +234,24 @@ void GdbController::parseLine(const QString &_msg)
                 return ;
             }
 
-
             GdbMiValue result;
-
             result.build(begin,end);
 
-            if(result.getName() == "bkpt")
-            {
-                parseBkpt(result);
-                break;
-            }
             if(result.getName() == "locals")
             {
-                //dbgOutputs->addLocals(result);
-                dbgOutputs->addText(QString::number(result.size()));
+                dbgOutputs->addLocals(result);
+                break;
+            }
+            else if(result.getName() == "bkpt")
+            {
+                parseBkpt(result);
+                emit requireLineJump(result["line"].getValue().toInt());
+                //Refresh stack list
+                if(!requestForceUpdateLocal)
+                {
+                    requestForceUpdateLocal=true;
+                    stackListLocals();
+                }
                 break;
             }
             if(result.getName() == "value")
@@ -265,6 +263,7 @@ void GdbController::parseLine(const QString &_msg)
         else if(_str_async == "running")
         {
             dbgOutputs->addConsoleOutput("  -> Cuties: Running program.\n");
+            break;
         }
         else if(_str_async == "error")
         {
@@ -279,6 +278,7 @@ void GdbController::parseLine(const QString &_msg)
             result.build(begin,end);
 
             dbgOutputs->addErrorText(result.getValue()+"\n");
+            break;
         }
         else
         {
@@ -307,6 +307,7 @@ void GdbController::parseLine(const QString &_msg)
         if(_str_async == "stopped")
         {
             //Refresh stack list
+            requestForceUpdateLocal=true;
             stackListLocals();
 
             QString stoppedDetails;
@@ -629,7 +630,7 @@ void GdbController::execUntil(const QString &location)
 
 void GdbController::stackListLocals()
 {
-    //execGdbCommand("-stack-list-locals 1");
+    execGdbCommand("-stack-list-locals 1");
 }
 
 void GdbController::evaluate(const QString &expr)
