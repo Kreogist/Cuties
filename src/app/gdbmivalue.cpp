@@ -207,7 +207,7 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
 
     }
 
-    value=QString::fromUtf8(_tmp);
+    value=QString(_tmp);
 
     if(begin+1 <end)
     {

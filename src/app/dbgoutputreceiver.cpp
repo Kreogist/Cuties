@@ -68,13 +68,10 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
 {
     localVarModel->clear();
 
-    for(QList<GdbMiValue>::iterator i=localVars.begin(),e=localVars.end();
-        i<e;
-        ++i)
+    for(int i=0; i<localVars.size(); i++)
     {
-        QString name=i->at(0).getValue();  //name
-        QString value=i->at(1).getValue(); //value
-
+        QString name=localVars.at(i).at(0).getValue();  //name
+        QString value=localVars.at(i).at(1).getValue(); //value
         QStandardItem *varName=new QStandardItem(name);
         QStandardItem *varValue=new QStandardItem(value);
         QList<QStandardItem *> localVar;

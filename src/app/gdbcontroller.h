@@ -88,6 +88,7 @@ private:
     KCConnectionHandler readProcessData;
     QString filePath;
     QString gdbPath;
+    QString messageCache;
 };
 
 class GdbController : public QObject
@@ -148,12 +149,13 @@ public slots:
 private slots:
     void parseLine(const QString &_msg);
     void parseError(const QString &_error);
+    void parseCommand(const QString &_cmd);
 
 private:
     void configureGDB();
 
     void parseBkpt(const GdbMiValue &gmvBkpt);
-    QString parseOutputStream(const QChar *begin,const QChar *end);
+    QString parseOutputStream(const QChar *begin, const QChar *end);
 
     static QString gdbPath;
     static bool checkResult;

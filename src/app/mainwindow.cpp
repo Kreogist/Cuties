@@ -723,6 +723,7 @@ void MainWindow::showDebugDocks()
 {
     debugControl->show();
     debugCommandIO->show();
+    debugWatch->show();
 }
 
 void MainWindow::createMenu()

@@ -25,26 +25,14 @@
 
 #include "gdbcontroller.h"
 
+#include <fstream>
+
 #ifdef Q_OS_UNIX
 QString GdbController::gdbPath="/usr/bin/gdb";
 #endif
 
 #ifdef Q_OS_WIN32
 QString GdbController::gdbPath="C:/MinGW/bin/gdb.exe";
-#else
-#include <QSocketNotifier>
-#include <QTemporaryFile>
-#include <QVarLengthArray>
-#include <sys/ioctl.h>
-#ifdef Q_OS_SOLARIS
-# include <sys/filio.h> // FIONREAD
-#endif
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <string.h>
-#include <unistd.h>
 #endif
 
 bool GdbController::checkResult=false;
@@ -57,7 +45,7 @@ static bool isAnsycChar(const char &c)
 GdbThread::GdbThread(QObject *parent) :
     QThread(parent)
 {
-    ;
+    messageCache.clear();
 }
 
 GdbThread::~GdbThread()
@@ -74,7 +62,7 @@ void GdbThread::run()
 #ifdef Q_OS_WIN32
           ;
 #else
-        <<QString("--tty=" + getServerName());
+          ;
 #endif
     readProcessData+=connect(gdbProcess.data(),
                              SIGNAL(readyReadStandardOutput()),
@@ -103,7 +91,7 @@ void GdbThread::quitGDB()
     {
         return;
     }
-    int timeout=500; //Timeout to kill;
+    int timeout=100; //Timeout to kill;
     execGdbCommand("q");
     execGdbCommand("y");
 
@@ -120,6 +108,7 @@ void GdbThread::execGdbCommand(const QString &command)
     emit addSystemMessage(QString("(gdb): "+command+"\n"));
     gdbProcess->write(qPrintable(QString(command+"\n")));
 }
+
 QString GdbThread::getGdbPath() const
 {
     return gdbPath;
@@ -145,13 +134,46 @@ void GdbThread::readGdbStandardError()
 
 void GdbThread::readGdbStandardOutput()
 {
-    char buf[1000];
-    while(gdbProcess->readLine(buf,1000)>0)
-    {
-        QString _msg=QString::fromUtf8(buf);
-        _msg.remove('\n');
+    char buf[2004];
 
-        emit parseMessage(_msg);
+    QString _msg;
+    while(gdbProcess->readLine(buf,2000)>0)
+    {
+        _msg=QString(buf);
+        //If is empty, finish a part!
+        if(_msg.isEmpty())
+        {
+            return;
+        }
+        if(_msg.contains("(gdb)"))
+        {
+            //Here means we have finished a part.
+            if(!messageCache.isEmpty())
+            {
+                emit parseMessage(messageCache);
+                messageCache.clear();
+            }
+            return;
+        }
+        char firstLetter=_msg.begin()->toLatin1();
+        switch(firstLetter)
+        {
+        case '^':
+        case '*':
+        case '~':
+        case '@':
+        case '&':
+        case '=':
+            if(!messageCache.isEmpty())
+            {
+                emit parseMessage(messageCache);
+            }
+            messageCache=_msg;
+            break;
+        default:
+            messageCache.append(_msg);
+            break;
+        }
     }
 }
 
@@ -169,6 +191,8 @@ GdbController::GdbController(QObject *parent) :
             this, SLOT(parseLine(QString)));
     connect(gdbProcessThread, SIGNAL(parseError(QString)),
             this, SLOT(parseError(QString)));
+    connect(gdbProcessThread, SIGNAL(addSystemMessage(QString)),
+            this, SLOT(parseCommand(QString)));
 }
 
 void GdbController::parseLine(const QString &_msg)
@@ -177,6 +201,11 @@ void GdbController::parseLine(const QString &_msg)
     {
         return ;
     }
+
+/*    dbgOutputs->addText(QString("start output"));
+    dbgOutputs->addText(_msg);
+    dbgOutputs->addText(QString("end output"));
+    return;*/
 
     char _firstChar=_msg.begin()->toLatin1();
     const QChar *begin=_msg.begin();
@@ -211,6 +240,7 @@ void GdbController::parseLine(const QString &_msg)
                 return ;
             }
 
+
             GdbMiValue result;
 
             result.build(begin,end);
@@ -222,7 +252,8 @@ void GdbController::parseLine(const QString &_msg)
             }
             if(result.getName() == "locals")
             {
-                dbgOutputs->addLocals(result);
+                //dbgOutputs->addLocals(result);
+                dbgOutputs->addText(QString::number(result.size()));
                 break;
             }
             if(result.getName() == "value")
@@ -258,7 +289,7 @@ void GdbController::parseLine(const QString &_msg)
         break;
     }
     case '*':
-    {   
+    {
         begin++;
 
         QString _str_async;
@@ -377,7 +408,12 @@ void GdbController::parseError(const QString &_error)
     dbgOutputs->addErrorText(_error);
 }
 
-QString GdbController::parseOutputStream(const QChar *begin, const QChar *end)
+void GdbController::parseCommand(const QString &_cmd)
+{
+    dbgOutputs->addTargetOutput(_cmd);
+}
+
+QString GdbController::parseOutputStream(const QChar *begin,const QChar *end)
 {
     GdbMiValue result;
     result.build(begin,end);
@@ -402,8 +438,7 @@ void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
     _tmp_bkpt.times=gmvBkpt["times"].getValue().toInt();
     _tmp_bkpt.original_location=gmvBkpt["original-location"].getValue();
 
-    /*
-    qDebug()<<_tmp_bkpt.number;
+    /*qDebug()<<_tmp_bkpt.number;
     qDebug()<<_tmp_bkpt.type;
     qDebug()<<_tmp_bkpt.disp;
     qDebug()<<_tmp_bkpt.enabled;
@@ -417,12 +452,7 @@ void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
     qDebug()<<_tmp_bkpt.original_location;
     */
 
-    bkptVec<<_tmp_bkpt;
-}
-
-const QVector<bkpt_struct> *GdbController::getBkptVec() const
-{
-    return &bkptVec;
+    bkptVec<<_tmp_bkpt;;
 }
 
 void GdbController::setGDBPath(const QString &path)
@@ -599,7 +629,7 @@ void GdbController::execUntil(const QString &location)
 
 void GdbController::stackListLocals()
 {
-//    execGdbCommand("-stack-list-locals 1");
+    //execGdbCommand("-stack-list-locals 1");
 }
 
 void GdbController::evaluate(const QString &expr)
