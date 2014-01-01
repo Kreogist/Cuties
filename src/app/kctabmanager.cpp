@@ -87,10 +87,13 @@ void KCTabManager::restoreUnclosedFiles()
             unclosedFileItem=open(currentFileStatus.filePath);
             editor=qobject_cast<KCCodeEditor *>(widget(unclosedFileItem));
         }
-        editor->setDocumentCursor(currentFileStatus.horizontalCursorPosition,
-                                  currentFileStatus.verticalCursorPosition);
-        editor->setHScrollValue(currentFileStatus.horizontalScrollPosition);
-        editor->setVScrollValue(currentFileStatus.verticalScrollPosition);
+        if(editor!=NULL)
+        {
+            editor->setDocumentCursor(currentFileStatus.horizontalCursorPosition,
+                                      currentFileStatus.verticalCursorPosition);
+            editor->setHScrollValue(currentFileStatus.horizontalScrollPosition);
+            editor->setVScrollValue(currentFileStatus.verticalScrollPosition);
+        }
     }
     if(currentUnclosedFileIndex<count() && currentUnclosedFileIndex>-1)
     {
@@ -439,7 +442,6 @@ void KCTabManager::closeEvent(QCloseEvent *e)
     //set the accept flag
     e->accept();
     //Cleae the last UnClosed File Paths.
-    KCHistoryConfigure::getInstance()->clearAllUnClosedFilePaths();
     KCDocumentRecorder::getInstance()->clear();
     KCDocumentRecorder::getInstance()->setUnclosedCurrentIndex(currentIndex());
     while(i--)

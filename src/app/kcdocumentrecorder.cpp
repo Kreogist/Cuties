@@ -42,6 +42,22 @@ void KCDocumentRecorder::appendRecord(KCCodeEditor *editor, bool untitled)
     unclosedFileInfos.prepend(currentStatus);
 }
 
+void KCDocumentRecorder::appendRecord(const QString &filePath,
+                                      int lineNum,
+                                      int columnNum,
+                                      int hScrollNum,
+                                      int vScrollNum)
+{
+    UnclosedFileStatus currentStatus;
+    currentStatus.untitled=false;
+    currentStatus.filePath=filePath;
+    currentStatus.horizontalCursorPosition=lineNum;
+    currentStatus.verticalCursorPosition=columnNum;
+    currentStatus.horizontalScrollPosition=hScrollNum;
+    currentStatus.verticalScrollPosition=vScrollNum;
+    unclosedFileInfos.prepend(currentStatus);
+}
+
 UnclosedFileStatus KCDocumentRecorder::getUnclosedFileStatus(int index)
 {
     return unclosedFileInfos.at(index);

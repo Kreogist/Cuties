@@ -390,7 +390,6 @@ void GdbController::parseLine(const QString &_msg)
     {
         //begin++;
         //dbgOutputs->addLogOutput(parseOutputStream(begin,end));
-
         break;
     }
     case '=':

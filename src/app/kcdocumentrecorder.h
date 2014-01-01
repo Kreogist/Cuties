@@ -23,6 +23,11 @@ class KCDocumentRecorder : public QObject
 public:
     static KCDocumentRecorder *getInstance();
     void appendRecord(KCCodeEditor *editor, bool untitled=false);
+    void appendRecord(const QString &filePath,
+                      int lineNum,
+                      int columnNum,
+                      int hScrollNum=0,
+                      int vScrollNum=0);
     UnclosedFileStatus getUnclosedFileStatus(int index);
     int getUnclosedFileCount();
     bool setUnclosedUntitledFileDir(const QString &dirPath);
