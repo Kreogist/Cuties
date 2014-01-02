@@ -225,6 +225,11 @@ void KCMessageBoxContext::addText(const QString &text)
     addWidget(insertCaption);
 }
 
+void KCMessageBoxContext::addSpacing(const int &value)
+{
+    contextLayout->insertSpacing(insertPlace++, value);
+}
+
 void KCMessageBoxContext::addImage(const QString &path,
                                    int width,
                                    int height)
@@ -335,6 +340,11 @@ void KCMessageBox::addImage(QPixmap pixmap,
                             int height)
 {
     context->addImage(pixmap, width, height);
+}
+
+void KCMessageBox::addSpacing(int value)
+{
+    context->addSpacing(value);
 }
 
 void KCMessageBox::addWidget(QWidget *widget)

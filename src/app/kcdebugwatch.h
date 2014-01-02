@@ -53,6 +53,11 @@ public slots:
     void retranslate();
     void retranslateAndSet();
 
+private slots:
+    void onActionAddWatch();
+    void onActionModifyWatch();
+    void onActionRemoveWatch();
+
 private:
     QSplitter *watchDockContainer;
     QTreeView *localWatch;

@@ -89,6 +89,7 @@ public:
     explicit KCMessageBoxContext(QWidget *parent = 0);
     void addWidget(QWidget *widget);
     void addText(const QString &text);
+    void addSpacing(const int &value);
     void addImage(const QString &path, int width=-1, int height=-1);
     void addImage(QPixmap pixmap, int width=-1, int height=-1);
     int getHeightSizeHint() const;
@@ -120,6 +121,7 @@ public:
     void addImage(QPixmap pixmap,
                   int width=-1,
                   int height=-1);
+    void addSpacing(int value);
     void addWidget(QWidget *widget);
     void enabledCancel();
 

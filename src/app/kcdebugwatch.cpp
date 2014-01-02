@@ -26,9 +26,11 @@
 #include <QHBoxLayout>
 #include <QStandardItemModel>
 #include <QKeyEvent>
+#include <QLineEdit>
 
 #include "kcdebugwatch.h"
 #include "kclanguageconfigure.h"
+#include "kcmessagebox.h"
 
 KCDebugWatch::KCDebugWatch(QWidget *parent) :
     QDockWidget(parent)
@@ -90,15 +92,21 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     customWatchCommands[customWatchAdd]=new QToolButton(watchDockContainer);
     customWatchCommands[customWatchAdd]->setToolTip(customWatchCommandTitle[customWatchAdd]);
     customWatchCommands[customWatchAdd]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/AddWatch.png"));
+    connect(customWatchCommands[customWatchAdd], SIGNAL(clicked()),
+            this, SLOT(onActionAddWatch()));
     customWatchControl->addWidget(customWatchCommands[customWatchAdd]);
     customWatchCommands[customWatchEdit]=new QToolButton(watchDockContainer);
     customWatchCommands[customWatchEdit]->setToolTip(customWatchCommandTitle[customWatchEdit]);
     customWatchCommands[customWatchEdit]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/ModifyWatch.png"));
+    connect(customWatchCommands[customWatchEdit], SIGNAL(clicked()),
+            this, SLOT(onActionModifyWatch()));
     customWatchControl->addWidget(customWatchCommands[customWatchEdit]);
     customWatchControl->addSeparator();
     customWatchCommands[customWatchRemove]=new QToolButton(watchDockContainer);
     customWatchCommands[customWatchRemove]->setToolTip(customWatchCommandTitle[customWatchRemove]);
     customWatchCommands[customWatchRemove]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/RemoveWatch.png"));
+    connect(customWatchCommands[customWatchRemove], SIGNAL(clicked()),
+            this, SLOT(onActionRemoveWatch()));
     customWatchControl->addWidget(customWatchCommands[customWatchRemove]);
 
     customWatchControlLayout->addWidget(customWatchControl);
@@ -170,4 +178,34 @@ void KCDebugWatch::retranslateAndSet()
     customWatchCommands[customWatchAdd]->setToolTip(customWatchCommandTitle[customWatchAdd]);
     customWatchCommands[customWatchEdit]->setToolTip(customWatchCommandTitle[customWatchEdit]);
     customWatchCommands[customWatchRemove]->setToolTip(customWatchCommandTitle[customWatchRemove]);
+}
+
+void KCDebugWatch::onActionAddWatch()
+{
+    KCMessageBox *addWatchEquation=new KCMessageBox(this);
+    QLineEdit *equation=new QLineEdit(this);
+    equation->setFixedWidth(250);
+    QPalette pal=equation->palette();
+    pal.setColor(QPalette::Base, QColor(255,255,255,50));
+    equation->setPalette(pal);
+    addWatchEquation->enabledCancel();
+    addWatchEquation->setTitle("Add Watch");
+    addWatchEquation->addText(tr("Enter Variable Equation/Name:"));
+    addWatchEquation->addSpacing(5);
+    addWatchEquation->addWidget(equation);
+    addWatchEquation->exec();
+    if(addWatchEquation->messageBoxState()==KCMessageBoxPanel::buttonOK)
+    {
+        qDebug()<<equation->text();
+    }
+}
+
+void KCDebugWatch::onActionModifyWatch()
+{
+    ;
+}
+
+void KCDebugWatch::onActionRemoveWatch()
+{
+    ;
 }

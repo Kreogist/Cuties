@@ -19,11 +19,11 @@
 
 #include <QToolButton>
 #include <QApplication>
-#include <QMessageBox>
 
 #include "kctabmanager.h"
 #include "kcdocumentrecorder.h"
 #include "kclanguageconfigure.h"
+#include "kcmessagebox.h"
 
 KCTabManager::KCTabManager(QWidget *parent) :
     QTabWidget(parent)
@@ -434,9 +434,10 @@ void KCTabManager::closeEvent(QCloseEvent *e)
         if(editor->getDebugging())
         {
             //This editor is debugging
-            QMessageBox msg;
-            msg.setText("File " + editor->getDocumentTitle() + " is debugging.");
-            msg.exec();
+            KCMessageBox *debugPrevent=new KCMessageBox(this->parentWidget());
+            debugPrevent->setTitle("Debug");
+            debugPrevent->addText("File " + editor->getDocumentTitle() + " is debugging.");
+            debugPrevent->exec();
             e->ignore();
             return;
         }
