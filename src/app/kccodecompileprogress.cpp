@@ -104,6 +104,10 @@ void KCCodeCompileProgress::delayHide()
 {
     if(currentState < errorEnumBegin)
     {
+        return;
+    }
+    else if(currentState==compileSuccess)
+    {
         QTimer::singleShot(1000, this, SLOT(animeHide()));
     }
     else

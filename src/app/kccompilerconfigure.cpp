@@ -60,6 +60,7 @@ void KCCompilerConfigure::readConfigure()
     gccPath=cfgOperator.value("GCC-Path", gccPath).toString();
     gppPath=cfgOperator.value("GPP-Path", gppPath).toString();
     fpcPath=cfgOperator.value("FPC-Path", fpcPath).toString();
+    delayCompile=cfgOperator.value("delayCompile", delayCompile).toBool();
     cfgOperator.endGroup();
 }
 
@@ -70,6 +71,7 @@ void KCCompilerConfigure::writeConfigure()
     cfgOperator.setValue("GCC-Path", gccPath);
     cfgOperator.setValue("GPP-Path", gppPath);
     cfgOperator.setValue("FPC-Path", fpcPath);
+    cfgOperator.setValue("delayCompile", delayCompile);
     cfgOperator.endGroup();
 }
 
