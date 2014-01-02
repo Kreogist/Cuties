@@ -126,6 +126,7 @@ private slots:
 
 protected:
     void closeEvent(QCloseEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     bool searchUseLastCursor;

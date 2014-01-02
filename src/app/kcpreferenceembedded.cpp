@@ -283,9 +283,14 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
     //Get configure instance
     instance=KCCompilerConfigure::getInstance();
     compilerTitles[titleCompilerOptions]=addTitle(compilerTitleText[titleCompilerOptions]);
-    compilerBooleans[booleanDelayCompile]=
-        addItemBoolean(booleanItemCaption[booleanDelayCompile],
-                       instance->getDelayCompile());
+    compilerBooleanGroups[booleanGroupDelayCompile]=
+            addItemBooleanGroup(booleanGroupCaption[booleanGroupDelayCompile],
+                                instance->getDelayCompile());
+    compilerInts[intDelayTimeout]=addItemInt(intItemCaption[intDelayTimeout],
+                                             instance->getDelayTimeout(),
+                                             500,
+                                             20);
+    compilerBooleanGroups[booleanGroupDelayCompile]->addTrueValueGroupItem(compilerInts[intDelayTimeout]);
 
     compilerTitles[titleCompilerPath]=addTitle(compilerTitleText[titleCompilerPath]);
     compilerPathItems[pathGPPCompiler]=
@@ -311,7 +316,9 @@ void KCPreferenceEmbeddedCompiler::retranslate()
     compilerTitleText[titleCompilerPath]=tr("Compiler Path");
     compilerTitleText[titleCompilerOptions]=tr("Compiler Options");
 
-    booleanItemCaption[booleanDelayCompile]=tr("Delay Compile");
+    booleanGroupCaption[booleanGroupDelayCompile]=tr("Delay Compile:");
+
+    intItemCaption[intDelayTimeout]=tr("Delay Compile Timeout Speed:");
 
     pathItemCaption[pathGPPCompiler]=tr("g++ Compiler:");
     pathItemCaption[pathGCCCompiler]=tr("gcc Compiler:");
@@ -335,9 +342,15 @@ void KCPreferenceEmbeddedCompiler::retranslateAndSet()
     }
 
     //Reset bool items.
-    for(i=booleanDelayCompile; i<booleanItemCount; i++)
+    for(i=booleanGroupDelayCompile; i<booleanGroupItemCount; i++)
     {
-        compilerBooleans[i]->setBooleanCaptionText(booleanItemCaption[i]);
+        compilerBooleanGroups[i]->setBooleanCaptionText(booleanGroupCaption[i]);
+    }
+
+    //Reset int items.
+    for(i=intDelayTimeout; i<intItemCount; i++)
+    {
+        compilerInts[i]->setIntCaptionText(intItemCaption[i]);
     }
 
     //Reset path items.
@@ -353,7 +366,8 @@ void KCPreferenceEmbeddedCompiler::applyPreference()
     instance->setGppPath(compilerPathItems[pathGPPCompiler]->getCurrentValue().toString());
     instance->setGccPath(compilerPathItems[pathGCCCompiler]->getCurrentValue().toString());
     instance->setFpcPath(compilerPathItems[pathFPCCompiler]->getCurrentValue().toString());
-    instance->setDelayCompile(compilerBooleans[booleanDelayCompile]->getCurrentValue().toBool());
+    instance->setDelayCompile(compilerBooleanGroups[booleanGroupDelayCompile]->getCurrentValue().toBool());
+    instance->setDelayTimeout(compilerInts[intDelayTimeout]->getCurrentValue().toInt());
 }
 
 KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :

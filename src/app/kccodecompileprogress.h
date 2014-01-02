@@ -13,6 +13,7 @@ class KCCodeCompileProgress : public QWidget
 public:
     explicit KCCodeCompileProgress(QWidget *parent = 0);
     void countToCompile();
+    void regeometry(int w);
     enum CompileState
     {
         certifyCompile,
@@ -53,7 +54,6 @@ private:
     QColor progressColor, originalColor;
     QPalette progressPal;
 
-    static int timeoutCount;
     static int compileProgressWidth;
     static int compileProgressHeight;
 };

@@ -41,6 +41,16 @@ KCCompilerConfigure::KCCompilerConfigure()
 #endif
 
     delayCompile=false;
+    delayTimeout=20;
+}
+int KCCompilerConfigure::getDelayTimeout() const
+{
+    return delayTimeout;
+}
+
+void KCCompilerConfigure::setDelayTimeout(int value)
+{
+    delayTimeout = value;
 }
 
 bool KCCompilerConfigure::getDelayCompile() const
@@ -61,6 +71,7 @@ void KCCompilerConfigure::readConfigure()
     gppPath=cfgOperator.value("GPP-Path", gppPath).toString();
     fpcPath=cfgOperator.value("FPC-Path", fpcPath).toString();
     delayCompile=cfgOperator.value("delayCompile", delayCompile).toBool();
+    delayTimeout=cfgOperator.value("delayTimeout", delayTimeout).toInt();
     cfgOperator.endGroup();
 }
 
@@ -72,6 +83,7 @@ void KCCompilerConfigure::writeConfigure()
     cfgOperator.setValue("GPP-Path", gppPath);
     cfgOperator.setValue("FPC-Path", fpcPath);
     cfgOperator.setValue("delayCompile", delayCompile);
+    cfgOperator.setValue("delayTimeout", delayTimeout);
     cfgOperator.endGroup();
 }
 

@@ -108,10 +108,10 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     languageMode=new KCLanguageMode(this);
 
-    connect(languageMode, SIGNAL(compileFinished()),
-            currentCompileProgress, SLOT(delayHide()));
     connect(languageMode, SIGNAL(compileSuccessfully(QString)),
             currentCompileProgress, SLOT(showCompileSuccess()));
+    connect(languageMode, SIGNAL(compileFinished()),
+            currentCompileProgress, SLOT(delayHide()));
     connect(languageMode, SIGNAL(compileErrorOccur(int)),
             currentCompileProgress, SLOT(showCompileError(int)));
     connect(currentCompileProgress, SIGNAL(requireCompile()),
@@ -564,6 +564,12 @@ void KCCodeEditor::closeEvent(QCloseEvent *e)
     }
 
     return ;
+}
+
+void KCCodeEditor::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    currentCompileProgress->regeometry(width());
 }
 
 void KCCodeEditor::setDocumentTitle(const QString &title)

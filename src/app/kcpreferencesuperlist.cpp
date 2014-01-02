@@ -65,7 +65,7 @@ void KCPreferenceSuperListContent::resetCurrentIndex()
     if(currentItemIndex!=-1)
     {
         superListItems.at(currentItemIndex)->editFinished();
-        setFixedHeight(originalHeight);
+        setFixedHeight(superListLayout->sizeHint().height());
         currentItemIndex=-1;
     }
 }

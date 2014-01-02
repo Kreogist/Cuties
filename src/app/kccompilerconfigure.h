@@ -42,6 +42,8 @@ public:
     void setFpcPath(const QString &value);
     bool getDelayCompile() const;
     void setDelayCompile(bool value);
+    int getDelayTimeout() const;
+    void setDelayTimeout(int value);
 
 private:
     KCCompilerConfigure();
@@ -49,6 +51,7 @@ private:
 
     QString gccPath, gppPath, fpcPath;
     bool delayCompile;
+    int delayTimeout;
 };
 
 #endif // KCCOMPILERCONFIGURE_H

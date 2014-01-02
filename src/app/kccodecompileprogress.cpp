@@ -22,10 +22,10 @@
 #include <QGraphicsDropShadowEffect>
 
 #include "kccodecompileprogress.h"
+#include "kccompilerconfigure.h"
 
 int KCCodeCompileProgress::compileProgressWidth = 280;
 int KCCodeCompileProgress::compileProgressHeight = 60;
-int KCCodeCompileProgress::timeoutCount = 50;
 
 KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     QWidget(parent)
@@ -73,7 +73,27 @@ void KCCodeCompileProgress::countToCompile()
     setProgressColor(originalColor);
     setCompileState(certifyCompile);
     compileProgressDisplay->setValue(100);
-    timeoutCounter->start(1000/timeoutCount);
+    timeoutCounter->start(KCCompilerConfigure::getInstance()->getDelayTimeout());
+}
+
+void KCCodeCompileProgress::regeometry(int w)
+{
+    int nX=(w-compileProgressWidth)/2;
+    bool animationRunning=(animation->state()==QAbstractAnimation::Running);
+    animation->stop();
+    move(nX, y());
+    if(animationRunning)
+    {
+        QRect startGeometry=animation->startValue().toRect();
+        QRect endGeometry=animation->endValue().toRect();
+        startGeometry.setX(nX);
+        startGeometry.setWidth(compileProgressWidth);
+        endGeometry.setX(nX);
+        endGeometry.setWidth(compileProgressWidth);
+        animation->setStartValue(startGeometry);
+        animation->setEndValue(endGeometry);
+        animation->start();
+    }
 }
 
 void KCCodeCompileProgress::setText(const QString &text)
@@ -102,7 +122,7 @@ void KCCodeCompileProgress::showCompileError(int errors)
 
 void KCCodeCompileProgress::delayHide()
 {
-    if(currentState < errorEnumBegin)
+    if(currentState < compileSuccess)
     {
         return;
     }
@@ -121,8 +141,7 @@ void KCCodeCompileProgress::animeShow()
     //Stop all animation for no reason.
     animation->stop();
     disconnect(hideConnection);
-    int geometryArg=parentWidget()->width()/3;
-    QRect endGeometry=QRect(geometryArg,
+    QRect endGeometry=QRect((parentWidget()->width()-compileProgressWidth)/2,
                             0,
                             compileProgressWidth,
                             compileProgressHeight);
@@ -144,8 +163,7 @@ void KCCodeCompileProgress::animeHide()
     //reconnect it.
     hideConnection=connect(animation, SIGNAL(finished()),
                            this, SLOT(hide()));
-    int geometryArg=parentWidget()->width()/3;
-    QRect endGeometry=QRect(geometryArg,
+    QRect endGeometry=QRect((parentWidget()->width()-compileProgressWidth)/2,
                             -compileProgressHeight-5,
                             compileProgressWidth,
                             compileProgressHeight);
@@ -159,7 +177,7 @@ void KCCodeCompileProgress::animeHide()
 
 void KCCodeCompileProgress::refreshTimemout()
 {
-    compileProgressDisplay->setValue(compileProgressDisplay->value()-1);
+    compileProgressDisplay->setValue(compileProgressDisplay->value()-5);
     if(compileProgressDisplay->value()==0)
     {
         timeoutCounter->stop();
@@ -194,6 +212,7 @@ void KCCodeCompileProgress::setCompileState(KCCodeCompileProgress::CompileState 
         setText(tr("Compile Success"));
         setValue(100);
         setProgressColor(QColor(0,255,0));
+        delayHide();
         break;
     case errorCantFindCompiler:
         setText(tr("Can't find compiler."));

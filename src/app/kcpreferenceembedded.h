@@ -180,13 +180,21 @@ private:
     QString compilerTitleText[titleCount];
     QLabel *compilerTitles[titleCount];
 
-    enum CompilerBooleanEnum
+    enum CompilerBooleanGroupEnum
     {
-        booleanDelayCompile,
-        booleanItemCount
+        booleanGroupDelayCompile,
+        booleanGroupItemCount
     };
-    QString booleanItemCaption[booleanItemCount];
-    KCPreferenceItemBoolean *compilerBooleans[booleanItemCount];
+    QString booleanGroupCaption[booleanGroupItemCount];
+    KCPreferenceItemBooleanGroup *compilerBooleanGroups[booleanGroupItemCount];
+
+    enum CompilerIntEnum
+    {
+        intDelayTimeout,
+        intItemCount
+    };
+    QString intItemCaption[intItemCount];
+    KCPreferenceItemInt *compilerInts[intItemCount];
 
     enum CompilerPathItemEnum
     {
