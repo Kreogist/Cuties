@@ -91,6 +91,7 @@ private:
     QString debugCursorControlCaption[debugCursorControlButtonCount],
             debugCursorControlToolTips[debugCursorControlButtonCount];
     QString debugControlToolTips[debugControlButtonCount];
+    bool debugRunning=false;
 };
 
 #endif // KCDEBUGCONTROLBUTTONS_H

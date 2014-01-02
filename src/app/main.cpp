@@ -44,7 +44,7 @@
 static inline void setApplicationInfo()
 {
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.2.5.18"));
+    QApplication::setApplicationVersion(QString("0.2.6.3"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
@@ -111,7 +111,7 @@ static inline void processArg()
              * But MainWindow will open the files which didn't be closed when quit Cuties.
              * So we add it as a unclosed file so that when the mainwindow show,it will be opened.
              */
-            KCHistoryConfigure::getInstance()->addUnClosedFilePath(QFileInfo(arg).absoluteFilePath(),0,0);
+            KCDocumentRecorder::getInstance()->appendRecord(QFileInfo(arg).absoluteFilePath(),0,0);
         }
     }
 

@@ -72,7 +72,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(linePanel);
 
     smartPanel=new KCSmartPanel(this);
-    smartPanel->setVisible(false);
     mainLayout->addWidget(smartPanel);
 
     editor=new KCTextEditor(this);
@@ -117,6 +116,12 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             currentCompileProgress, SLOT(showCompileError(int)));
     connect(currentCompileProgress, SIGNAL(requireCompile()),
             this, SIGNAL(requiredCompileFile()));
+    connect(languageMode, &KCLanguageMode::requireSmartPanelError,
+            this, &KCCodeEditor::addErrorsToStack);
+    connect(languageMode, &KCLanguageMode::requireDrawError,
+            this, &KCCodeEditor::redrawSmartPanel);
+    connect(languageMode, &KCLanguageMode::requireDebugJumpLine,
+            this, &KCCodeEditor::onDebugJumpLine);
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -186,11 +191,20 @@ bool KCCodeEditor::getDebugging() const
 void KCCodeEditor::setDebugging(bool value)
 {
     debugging = value;
+    if(!debugging)
+    {
+        markPanel->resetDebugCursor();
+    }
 }
 
 void KCCodeEditor::setCompileBarState(KCCodeCompileProgress::CompileState state)
 {
     currentCompileProgress->setCompileState(state);
+}
+
+void KCCodeEditor::resetCompileErrorCache()
+{
+    errorOccurLines.clear();
 }
 
 void KCCodeEditor::onShowNextSearchResult()
@@ -239,6 +253,18 @@ void KCCodeEditor::showCompileBar()
 void KCCodeEditor::setUseLastCuror()
 {
     searchUseLastCursor=true;
+}
+
+void KCCodeEditor::addErrorsToStack(int lineNum)
+{
+    //lineNum begins from 1, so we have to reduce 1.
+    errorOccurLines.append(lineNum-1);
+}
+
+void KCCodeEditor::redrawSmartPanel()
+{
+    editor->setLineErrorState(errorOccurLines);
+    smartPanel->update();
 }
 
 void KCCodeEditor::showSearchBar()
@@ -456,6 +482,18 @@ bool KCCodeEditor::saveAs(const QString &fileName,
 bool KCCodeEditor::writeCacheFile(const QString &filePath)
 {
     return saveAs(filePath, true);
+}
+
+QList<int> KCCodeEditor::getBreakpoints()
+{
+    return editor->getBreakPoints();
+}
+
+void KCCodeEditor::onDebugJumpLine(int lineNum)
+{
+    int realLineNum=lineNum-1;
+    setDocumentCursor(realLineNum, 0);
+    markPanel->setDebugCursor(realLineNum);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)

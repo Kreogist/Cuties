@@ -18,6 +18,7 @@
  */
 
 #include <QScrollBar>
+#include <QPainter>
 #include <QPalette>
 #include <QMenu>
 #include <QStyleFactory>
@@ -67,11 +68,11 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setPalette(pal);
     setFrameStyle(0);
 
-    lineColor = QColor(0x40,0x40,0x40);
+    lineColor = QColor(0x40,0x40,0x40,200);
     searchResultColor = QColor(98,147,221);
     searchResultColor = QColor(0x5A,0x86,0xCA);
-    noMatchedParenthesesColor = QColor(0xc8,0x0,0x0);
-    matchedParenthesesColor = QColor(0xfd,0x95,0x00);
+    noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
+    matchedParenthesesColor = QColor(0xf8,0x9b,0x9b);
 
     searchCode=0;
 
@@ -96,7 +97,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 }
 
 void KCTextEditor::paintEvent(QPaintEvent *e)
-{
+{   
     QPlainTextEdit::paintEvent(e);
     emit updated();
 }
@@ -803,11 +804,10 @@ void KCTextEditor::updateHighlights()
 }
 
 void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections)
-{
+{ 
     if(!isReadOnly())
     {
         QTextEdit::ExtraSelection selection;
-
         selection.format.setBackground(lineColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
         selection.cursor=textCursor();
@@ -1212,6 +1212,15 @@ void KCTextEditor::setTheCursorWidth(int width)
     setCursorWidth(width);
 }
 
+void KCTextEditor::setLineErrorState(QList<int> errorList)
+{
+    for(QTextBlock i=document()->begin(); i.isValid(); i=i.next())
+    {
+        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(i.userData());
+        blockData->setHasError((errorList.indexOf(i.blockNumber())!=-1));
+    }
+}
+
 void KCTextEditor::setVScrollValue(int value)
 {
     verticalScrollBar()->setValue(value);
@@ -1230,6 +1239,22 @@ int KCTextEditor::getVScrollValue()
 int KCTextEditor::getHScrollValue()
 {
     return horizontalScrollBar()->value();
+}
+
+QList<int> KCTextEditor::getBreakPoints()
+{
+    QList<int> breakPointList;
+    for(QTextBlock i=document()->begin();
+        i.isValid();
+        i=i.next())
+    {
+        KCTextBlockData *blockData=static_cast<KCTextBlockData *>(i.userData());
+        if(blockData->getMarkInfo().marked)
+        {
+            breakPointList.append(i.blockNumber());
+        }
+    }
+    return breakPointList;
 }
 
 void KCTextEditor::zoomIn(int range)

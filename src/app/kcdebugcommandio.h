@@ -21,15 +21,32 @@
 #define KCGDBCOMMANDIO_H
 
 #include <QDockWidget>
+#include <QLineEdit>
+#include <QComboBox>
 
 #include "kcconnectionhandler.h"
 
 class QVBoxLayout;
-class QComboBox;
 class QTextDocument;
 class KCPlainTextBrowser;
 class GdbController;
 class QKeyEvent;
+
+class KCDebugInput : public QComboBox
+{
+    Q_OBJECT
+public:
+    explicit KCDebugInput(QWidget *parent = 0);
+
+signals:
+    void execCommand(QString cmd);
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
+
+private:
+
+};
 
 class KCDebugCommandIO : public QDockWidget
 {
@@ -57,7 +74,8 @@ private:
     QString windowTitleString;
     QVBoxLayout *mainLayout;
     KCPlainTextBrowser *debugOutputTextBrowser;
-    QComboBox *debugInput;
+    //QComboBox *debugInput;
+    KCDebugInput *debugInput;
     GdbController *instance;
 
     KCPlainTextBrowser *resetBackup;

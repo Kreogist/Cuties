@@ -60,26 +60,6 @@ void KCHistoryConfigure::readConfigure()
     historyDirPath=settings.value("HistoryDir").toString();
     settings.endGroup();
 
-    //Load last times unclosed file.
-    settings.beginGroup("AutoRemember");
-    unClosedCurrent=settings.value("LastUnclosedFileIndex", -1).toInt();
-    int unClosedFilePathsSize=settings.beginReadArray("UnclosedFilePaths");
-
-    for(int i=0; i<unClosedFilePathsSize; i++)
-    {
-        settings.setArrayIndex(i);
-
-        QFileInfo _fileInfo(settings.value("filePath").toString());
-        if(_fileInfo.exists())
-        {
-            unClosedFilePaths.append(_fileInfo.absoluteFilePath());
-            unClosedFileH.append(settings.value("hPosition").toInt());
-            unClosedFileV.append(settings.value("vPosition").toInt());
-        }
-    }
-    settings.endArray();
-    settings.endGroup();
-
     QString filePath;
     settings.beginGroup("History");
     maxRecentFilesSize=settings.value("maxRecentFilesSize", 10).toInt();
@@ -121,22 +101,6 @@ void KCHistoryConfigure::writeConfigure()
         settings.beginGroup("Environments");
         settings.setValue("HistoryDir",historyDirPath);
         settings.endGroup();
-        settings.beginGroup("AutoRemember");
-        settings.setValue("LastUnclosedFileIndex", unClosedCurrent);
-        settings.beginWriteArray("unClosedFilePaths");
-
-        int unCloseCount=unClosedFilePaths.size()-1;
-        int itemCount;
-        for(int i=0; i<=unCloseCount; i++)
-        {
-            itemCount=unCloseCount - i;
-            settings.setArrayIndex(i);
-            settings.setValue("filePath",unClosedFilePaths.at(itemCount));
-            settings.setValue("hPosition", unClosedFileH.at(itemCount));
-            settings.setValue("vPosition", unClosedFileV.at(itemCount));
-        }
-        settings.endArray();
-        settings.endGroup();
 
         settings.beginGroup("History");
         settings.setValue("maxRecentFilesSize", maxRecentFilesSize);
@@ -174,47 +138,6 @@ void KCHistoryConfigure::setTrackUserHistoryEnabled(bool enabled)
 bool KCHistoryConfigure::isTrackUserHistoryEnabled() const
 {
     return trackUserHistory;
-}
-
-void KCHistoryConfigure::clearAllUnClosedFilePaths()
-{
-    unClosedFilePaths.clear();
-    unClosedFileH.clear();
-    unClosedFileV.clear();
-}
-
-QStringList KCHistoryConfigure::getAllUnClosedFilePaths() const
-{
-    return unClosedFilePaths;
-}
-
-void KCHistoryConfigure::addUnClosedFilePath(const QString &path,
-        const int &HValue,
-        const int &VValue)
-{
-    unClosedFilePaths.append(path);
-    unClosedFileH.append(HValue);
-    unClosedFileV.append(VValue);
-}
-
-QList<int> KCHistoryConfigure::getAllUnClosedFileHs() const
-{
-    return unClosedFileH;
-}
-
-QList<int> KCHistoryConfigure::getAllUnClosedFileVs() const
-{
-    return unClosedFileV;
-}
-
-int KCHistoryConfigure::getUnClosedCurrent() const
-{
-    return unClosedCurrent;
-}
-
-void KCHistoryConfigure::setUnClosedCurrent(int value)
-{
-    unClosedCurrent = value;
 }
 
 int KCHistoryConfigure::getMaxRecentFilesSize() const

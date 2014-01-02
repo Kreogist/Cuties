@@ -28,20 +28,23 @@ KCMarkPanel::KCMarkPanel(QWidget *parent) :
     KCPanel(parent)
 {
     markPix.load(":/img/image/BreakPoint.png");
+    debugArrow.load(":/SmartPanel/image/debugarrow.png");
+    markPanelHeight=markPix.height();
     setAutoAdaptWidth(false);
     setAutoFillBackground(true);
     setFixedWidth(25);
     isPressed=false;
 }
 
-QPixmap KCMarkPanel::getMarkPix() const
+void KCMarkPanel::setDebugCursor(int lineNum)
 {
-    return markPix;
+    debugCursorLine=lineNum;
+    update();
 }
 
-void KCMarkPanel::setMarkPix(const QPixmap &value)
+void KCMarkPanel::resetDebugCursor()
 {
-    markPix = value;
+    setDebugCursor(-1);
 }
 
 void KCMarkPanel::draw(QPainter *painter, QTextBlock *block,
@@ -63,11 +66,20 @@ void KCMarkPanel::draw(QPainter *painter, QTextBlock *block,
         if(markInfo.marked)
         {
             painter->drawPixmap(x,
-                                y - 3,
+                                y+(h-markPanelHeight)/2,
                                 markPix.width(),
-                                markPix.height(),
+                                markPanelHeight,
                                 markPix);
         }
+    }
+
+    if(block->blockNumber()==debugCursorLine)
+    {
+        painter->drawPixmap(x,
+                            y+(h-debugArrow.height())/2,
+                            debugArrow.width(),
+                            debugArrow.height(),
+                            debugArrow);
     }
 }
 

@@ -53,7 +53,6 @@
         <file>image/Control Center/cciEditor.png</file>
         <file>image/Control Center/cciFileAssociation.png</file>
         <file>image/Control Center/cciGeneral.png</file>
-        <file>image/Control Center/cciLanguage.png</file>
     </qresource>
     <qresource prefix="/JudgeToolBar">
         <file>image/Judge Dock/ToolBarAdd.png</file>
@@ -122,4 +121,10 @@
         <file>image/FileAssociate/PlainText/PlainText_64x64.png</file>
     </qresource>
     <qresource prefix="/FileAssociation"/>
+    <qresource prefix="/SmartPanel">
+        <file>image/folder.png</file>
+        <file>image/compile_error.png</file>
+        <file>image/folderEnd.png</file>
+        <file>image/debugarrow.png</file>
+    </qresource>
 </RCC>

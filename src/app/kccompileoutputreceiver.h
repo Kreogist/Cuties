@@ -67,6 +67,8 @@ signals:
     void compilerOutputTextChanged(QString text);
     //Show have how many errors.
     void errorOccurs(int errors);
+    //Add error for smart panel.
+    void occurErrorAtLine(int lineNum);
 
 public slots:
     void onCompileMessageReceived(compileErrorInfo error);

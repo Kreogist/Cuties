@@ -29,6 +29,7 @@
 #include <QFuture>
 #include <QFont>
 #include <QFontMetrics>
+#include <QList>
 
 #include "kctextsearcher.h"
 #include "kcfloattoolbar.h"
@@ -50,6 +51,7 @@ public:
     void setHScrollValue(int value);
     int getVScrollValue();
     int getHScrollValue();
+    QList<int> getBreakPoints();
 
 signals:
     void requireHideOthers();
@@ -75,6 +77,7 @@ public slots:
     void setTabWidth(int width);
     void setWordWrap(QTextOption::WrapMode wrapMode);
     void setTheCursorWidth(int width);
+    void setLineErrorState(QList<int> errorList);
 
 private slots:
     void updateSearchResults();

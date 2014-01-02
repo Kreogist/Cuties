@@ -50,10 +50,10 @@ protected:
                       int x, int y, int w, int h,
                       bool isCurrentLine) = 0;
     int lineHeight;
+    KCTextEditor *e;
 
 private:
     int getRealLineCount(const QTextBlock &block, const int &offset);
-    KCTextEditor *e;
 
     int first,last;
 

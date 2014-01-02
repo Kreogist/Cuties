@@ -20,6 +20,7 @@
 #include <QDebug>
 
 #include "kctextblockdata.h"
+#include "kctexteditor.h"
 
 #include "kcsmartpanel.h"
 
@@ -29,14 +30,22 @@ static const int curr_line_color=255;
 KCSmartPanel::KCSmartPanel(QWidget *parent) :
     KCPanel(parent)
 {
-    setAutoAdaptWidth(true);
+    setContentsMargins(0,0,0,0);
+    foldMark.load(":/SmartPanel/image/folder.png");
+    foldEndMark.load(":/SmartPanel/image/folderEnd.png");
+    compileErrorMark.load(":/SmartPanel/image/compile_error.png");
+    foldMarkWidth=foldMark.width();
+    foldMarkHeight=foldMark.height();
+    errorMarkWidth=compileErrorMark.width();
+    errorMarkHeight=compileErrorMark.height();
+    setAutoAdaptWidth(false);
+    setAutoFillBackground(true);
+    setFixedWidth(errorMarkWidth+4);
     textColor.setRgb(normal_color,normal_color,normal_color);
-    previousLevel=0;
 }
 
 void KCSmartPanel::paintEvent(QPaintEvent *event)
 {
-    startRedraw=true;
     KCPanel::paintEvent(event);
 }
 
@@ -45,29 +54,30 @@ void KCSmartPanel::draw(QPainter *painter, QTextBlock *block,
                           bool isCurrentLine)
 {
     Q_UNUSED(isCurrentLine);
-
+    Q_UNUSED(x);
     KCTextBlockData *data=static_cast<KCTextBlockData *>(block->userData());
     if(data!=NULL)
     {
-        if(startRedraw)
-        {
-            //Check previous block data is smaller or the same
-            previousLevel=data->getCodeLevel();
-            startRedraw=false;
-        }
-        else
-        {
-            QPen pen(painter->pen());
-            pen.setColor(textColor);
-            painter->setPen(pen);
+        QPen pen(painter->pen());
+        pen.setColor(textColor);
+        painter->setPen(pen);
 
-            if(data->getCodeLevel()>previousLevel)
-            {
-                painter->drawText(x, y-lineHeight, w, h,
-                                  Qt::AlignRight |  Qt::AlignTop,
-                                  QString("+"));
-            }
-            previousLevel=data->getCodeLevel();
+        if(data->getHasError())
+        {
+            painter->drawPixmap((w-errorMarkWidth)/2,
+                                y+(h-errorMarkHeight)/2,
+                                errorMarkWidth,
+                                errorMarkHeight,
+                                compileErrorMark);
+        }
+
+        if(data->getCodeLevelUp())
+        {
+            painter->drawPixmap((w-foldMarkWidth)/2,
+                                y+(h-foldMarkHeight)/2,
+                                foldMarkWidth,
+                                foldMarkHeight,
+                                foldMark);
         }
     }
 }

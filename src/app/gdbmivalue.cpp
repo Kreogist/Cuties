@@ -58,6 +58,7 @@ QString GdbMiValue::getName() const
 
 void GdbMiValue::build(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     switch(begin->toLatin1())
     {
     case '\"':
@@ -81,7 +82,6 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
                 break;
             }
         }
-
         if(begin == end || *begin!='=')
         {
             //is a c-string
@@ -187,7 +187,6 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
                 break;
             default:
             {
-
                 if(c < '0' || c > '7')
                 {
                     isEscape=false;
@@ -207,7 +206,7 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
 
     }
 
-    value=QString::fromUtf8(_tmp);
+    value=QString(_tmp);
 
     if(begin+1 <end)
     {
@@ -226,6 +225,7 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
         GdbMiValue child;
         child.build(begin,end);
         children<<child;
+        skipCommas(begin, end);
     }
 
     if(begin+1 < end)

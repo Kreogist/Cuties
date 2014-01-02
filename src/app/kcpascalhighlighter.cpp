@@ -57,6 +57,11 @@ KCPascalHighlighter::KCPascalHighlighter(QObject *parent) :
         QRegularExpression::CaseInsensitiveOption);
     rules<<hlrKeyWords;
 
+    //Numbers
+    hlrSpTypes.type_name = "number";
+    hlrSpTypes.regexp.setPattern(QString("\\b\\d+(\\.)?\\d*\\b"));
+    rules<<hlrSpTypes;
+
     //Set Other Special Types:
 
     //TODO
@@ -96,6 +101,7 @@ void KCPascalHighlighter::KCHighlightBlock(const QString &text)
     QTextBlock prevBlock=currentBlock().previous();
 
     int baseLevel=0;
+    bool levelUp=false, levelDown=false;
     if(prevBlock.isValid())
     {
         KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
@@ -105,11 +111,15 @@ void KCPascalHighlighter::KCHighlightBlock(const QString &text)
         if(prevBlock.text().contains(QRegularExpression("\\b(begin)\\b")))
         {
             baseLevel++;
+            levelUp=true;
         }
         else if(prevBlock.text().contains(QRegularExpression("\\b(end)\\b")))
         {
             baseLevel--;
+            levelDown=true;
         }
+        prevData->setCodeLevelUp(levelUp);
+        prevData->setCodeLevelDown(levelDown);
     }
     data->setCodeLevel(baseLevel);
 

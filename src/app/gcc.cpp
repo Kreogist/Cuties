@@ -135,7 +135,7 @@ void gcc::parseLine(const QString &text)
             QString errorDetailInfo=text.mid(NewHead);
             errorDetailInfo.chop(1);    //remove :
 
-            errorMessageExpression.setPattern("(\\d+):(\\d+)");
+            errorMessageExpression.setPattern("(\\d+):(\\d+): ");
             errorMatcher=errorMessageExpression.match(errorDetailInfo);
 
             compileErrorInfo newCompilerErrorInfo;

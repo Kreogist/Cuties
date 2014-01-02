@@ -169,9 +169,12 @@ GdbController *KCLanguageMode::startDebug()
         gdbControllerInstance=new GdbController(this);
         connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
                 this, SIGNAL(requireDisconnectDebug()));
+        connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
+                this, SIGNAL(requireDebugJumpLine(int)));
     }
 
     gdbControllerInstance->runGDB(m_parent->execFileName);
+    gdbControllerInstance->setBreakPointList(m_parent->getBreakpoints());
     gdbControllerInstance->execRun();
 
     return gdbControllerInstance;
@@ -214,14 +217,18 @@ void KCLanguageMode::connectCompilerAndOutputReceiver()
             compiler->compilerVersion());
 
     //Output Compile Message:
+    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileError,
+                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileCommandLine,
                                        compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileMessage,
                                        compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
-    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileError,
-                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        compilerReceiver,&KCCompileOutputReceiver::onCompileFinished);
+    compilerConnectionHandles+=connect(compilerReceiver, &KCCompileOutputReceiver::occurErrorAtLine,
+                                       this, &KCLanguageMode::requireSmartPanelError);
+    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
+                                       this, &KCLanguageMode::requireDrawError);
 }
 
 bool KCLanguageMode::checkIfIsCompiling()
