@@ -30,6 +30,7 @@
 #include <QScrollBar>
 #include <QSettings>
 #include <QTimeLine>
+#include <QShowEvent>
 
 #include "kchistoryconfigure.h"
 #include "kcgeneralconfigure.h"
@@ -108,6 +109,15 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     languageMode=new KCLanguageMode(this);
 
+    connect(languageMode, SIGNAL(compileFinished()),
+            currentCompileProgress, SLOT(delayHide()));
+    connect(languageMode, SIGNAL(compileSuccessfully(QString)),
+            currentCompileProgress, SLOT(showCompileSuccess()));
+    connect(languageMode, SIGNAL(compileErrorOccur(int)),
+            currentCompileProgress, SLOT(showCompileError(int)));
+    connect(currentCompileProgress, SIGNAL(requireCompile()),
+            this, SIGNAL(requiredCompileFile()));
+
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
@@ -178,6 +188,10 @@ void KCCodeEditor::setDebugging(bool value)
     debugging = value;
 }
 
+void KCCodeEditor::setCompileBarState(KCCodeCompileProgress::CompileState state)
+{
+    currentCompileProgress->setCompileState(state);
+}
 
 void KCCodeEditor::onShowNextSearchResult()
 {
@@ -214,11 +228,12 @@ void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
 
 void KCCodeEditor::showCompileBar()
 {
-    return;
     if(!currentCompileProgress->isVisible())
     {
         currentCompileProgress->animeShow();
     }
+    currentCompileProgress->countToCompile();
+    return;
 }
 
 void KCCodeEditor::setUseLastCuror()
@@ -627,12 +642,6 @@ int KCCodeEditor::getTextLines()
 void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
 {
     editor->setDocumentCursor(nLine,linePos);
-}
-
-void KCCodeEditor::resizeEvent(QResizeEvent *e)
-{
-    QWidget::resizeEvent(e);
-    searchBar->updateGeometry();
 }
 
 void KCCodeEditor::fileInfoChanged(const QFile &file)

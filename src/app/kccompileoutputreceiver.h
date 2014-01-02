@@ -65,6 +65,8 @@ signals:
     void requireShowError();
     //Output text changed
     void compilerOutputTextChanged(QString text);
+    //Show have how many errors.
+    void errorOccurs(int errors);
 
 public slots:
     void onCompileMessageReceived(compileErrorInfo error);
@@ -80,6 +82,8 @@ private:
     QList<compileErrorInfo> compileErrorInfoList;
     //Define compiler info
     QString compilerVersion;
+    //Count errors.
+    int errorCounter;
 };
 
 #endif // KCCOMPILEOUTPUTRECEIVER_H

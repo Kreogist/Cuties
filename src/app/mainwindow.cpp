@@ -88,6 +88,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(hideAllDocks()));
     connect(tabManager, SIGNAL(requireDisconnectDebug()),
             this, SLOT(disconnectDebugDock()));
+    connect(tabManager, SIGNAL(requiredCompileFile()),
+            this, SLOT(compileProgram()));
 
     restoreSettings();
 }
@@ -944,13 +946,22 @@ void MainWindow::show()
 void MainWindow::onActionCompile()
 {
     compileFinishedConnection.disConnectAll();
-    compileProgram();
+    //compileProgram();
+    onActionDelayCompile();
+}
+
+void MainWindow::onActionDelayCompile()
+{
+    KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
+    if(currentEditor!=NULL)
+    {
+        currentEditor->showCompileBar();
+    }
 }
 
 void MainWindow::compileProgram()
 {
     KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
-    currentEditor->showCompileBar();
     //Check Tab Status.
     if(currentEditor!=NULL)
     {
@@ -961,6 +972,7 @@ void MainWindow::compileProgram()
         }
         //if the file has been compiled,
         //then we clean the text of last compiling.
+        currentEditor->setCompileBarState(KCCodeCompileProgress::checkingCompiler);
         KCCompileOutputReceiver *receiver=currentEditor->langMode()->getCompilerReceiver();
         if(receiver!=NULL)
         {
@@ -970,7 +982,7 @@ void MainWindow::compileProgram()
         {
             if(currentEditor->langMode()->compilerIsExsist())
             {
-                qDebug()<<currentEditor->langMode()->compilerIsExsist();
+                currentEditor->setCompileBarState(KCCodeCompileProgress::errorCantFindCompiler);
                 QMessageBox msg;
                 msg.setText("Compiler not find.");
                 msg.exec();
@@ -980,6 +992,7 @@ void MainWindow::compileProgram()
             compileDock->setVisible(true);
             //Set To Compile Mode.
             compileDock->animeHideCompileError();
+            currentEditor->setCompileBarState(KCCodeCompileProgress::runningCompiler);
             currentEditor->langMode()->compile();
             //The receiver is NULL if we didn't compile the file before.
             //And if receiver is NULL, setReceiver() will cause the program crash.
@@ -1018,7 +1031,8 @@ void MainWindow::onActionCompileAndRun()
                                            compileDock, SLOT(hideCompileDock()));
         compileFinishedConnection+=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
                                            KCExecutor::getInstance(),SLOT(exec(QString)));
-        compileProgram();
+        //compileProgram();
+        onActionDelayCompile();
     }
 }
 

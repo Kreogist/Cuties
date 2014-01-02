@@ -119,6 +119,9 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
 
+private slots:
+    void compileProgram();
+
 private:
     KCWelcomeWindow *welcomeWindow;
     QPropertyAnimation *showWelcomeWindow, *hideWelcomeWindow;
@@ -260,7 +263,7 @@ private:
 
     KCVisibleRecorder *visibleRecorder;
 
-    void compileProgram();
+    void onActionDelayCompile();
 
     void saveSettings();
     void restoreSettings();

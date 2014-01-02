@@ -67,6 +67,8 @@ signals:
     void compileSuccessfully(QString execFileName);
     void requireHideCompileDock();
     void requireDisconnectDebug();
+    void compileFinished();
+    void compileErrorOccur(int errors);
 
 public slots:
     void onCompileFinished(bool hasError);

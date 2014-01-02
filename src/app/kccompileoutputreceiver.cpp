@@ -96,6 +96,7 @@ void KCCompileOutputReceiver::resetCompilerOutputReceiver()
     //Reset the model/text/list
     clearErrorInfoItem();
     clearCompilerOutputText();
+    errorCounter=0;
     compileErrorInfoList.clear();
 }
 
@@ -115,6 +116,7 @@ void KCCompileOutputReceiver::onCompileMessageReceived(compileErrorInfo error)
     }
     //Add the new error to the list
     compileErrorInfoList.append(error);
+    errorCounter++;
     //Expand the model
     addErrorInfoItem(error);
 }
@@ -133,8 +135,9 @@ void KCCompileOutputReceiver::onCompileFinished(bool errorOccured)
     {
         //Output the count of errors
         addCompilerOutputText(QTime::currentTime().toString("hh:mm:ss") +
-                              " " + QString::number(compilerOutputModel->rowCount()) +
+                              " " + QString::number(errorCounter) +
                               tr(" Errors Occur."));
+        emit errorOccurs(errorCounter);
     }
     else
     {
@@ -188,7 +191,6 @@ void KCCompileOutputReceiver::expandItem(QStandardItem *itemModelIndex)
                              tr("Line ") + QString::number(compileErrorInfoList[itemErrorIndex].errorLine) +
                              tr(".");
         }
-
     }
     //If the file path is avalibable, display it! :)
     if(!compileErrorInfoList[itemErrorIndex].errorFilePath.isEmpty())

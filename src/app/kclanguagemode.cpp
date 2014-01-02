@@ -69,6 +69,8 @@ void KCLanguageMode::compile()
     if(compilerReceiver==NULL)
     {
         compilerReceiver=new KCCompileOutputReceiver(this);
+        connect(compilerReceiver, SIGNAL(errorOccurs(int)),
+                this, SIGNAL(compileErrorOccur(int)));
     }
     connectCompilerAndOutputReceiver();
 
@@ -141,8 +143,11 @@ void KCLanguageMode::setFileSuffix(const QString &suffix)
         compiler.reset();
         m_highlighter.reset(new KCHighlighter(this));
     }
-
-
+    if(!compiler.isNull())
+    {
+        connect(compiler.data(),&KCCompilerBase::compileFinished,
+                this ,&KCLanguageMode::compileFinished);
+    }
     Q_ASSERT(!m_highlighter.isNull());
     m_highlighter->setDocument(m_parent->document());
 }

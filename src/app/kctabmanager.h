@@ -61,6 +61,7 @@ signals:
     void tabClear();
     void requiredHideDocks();
     void requireDisconnectDebug();
+    void requiredCompileFile();
 
 public slots:
     void openAndJumpTo(const QString &filePath);

@@ -77,11 +77,14 @@ public:
     bool getDebugging() const;
     void setDebugging(bool value);
 
+    void setCompileBarState(KCCodeCompileProgress::CompileState state);
+
 signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
     void rewriteStateChanged(bool nowValue);
     void requiredHideDocks();
+    void requiredCompileFile();
 
 public slots:
     bool open(const QString &fileName,
@@ -117,7 +120,6 @@ private slots:
 
 protected:
     void closeEvent(QCloseEvent *e);
-    void resizeEvent(QResizeEvent *e);
 
 private:
     bool searchUseLastCursor;

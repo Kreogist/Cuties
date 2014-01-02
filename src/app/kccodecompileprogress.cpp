@@ -18,11 +18,14 @@
  */
 
 #include <QVBoxLayout>
+#include <QTimer>
 #include <QGraphicsDropShadowEffect>
 
 #include "kccodecompileprogress.h"
 
-static const int compileProgressHeight=60;
+int KCCodeCompileProgress::compileProgressWidth = 280;
+int KCCodeCompileProgress::compileProgressHeight = 60;
+int KCCodeCompileProgress::timeoutCount = 50;
 
 KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     QWidget(parent)
@@ -30,7 +33,8 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     setObjectName("KCCodeCompileProgress");
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
-    setFixedHeight(compileProgressHeight);
+    setFixedSize(compileProgressWidth,
+                 compileProgressHeight);
 
     QGraphicsDropShadowEffect *shadowEffect=new QGraphicsDropShadowEffect(this);
     shadowEffect->setBlurRadius(15.0);
@@ -48,9 +52,28 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     compileProgressLayout->addWidget(compileProgressText);
 
     compileProgressDisplay=new QProgressBar(this);
+    compileProgressDisplay->setTextVisible(false);
     compileProgressDisplay->setMinimum(0);
     compileProgressDisplay->setMaximum(100);
     compileProgressLayout->addWidget(compileProgressDisplay);
+    progressPal=compileProgressDisplay->palette();
+    progressColor=progressPal.color(QPalette::Highlight);
+    originalColor=progressColor;
+
+    animation=new QPropertyAnimation(this, "geometry", this);
+    animation->setDuration(500);
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+
+    timeoutCounter=new QTimer(this);
+    connect(timeoutCounter, SIGNAL(timeout()), this, SLOT(refreshTimemout()));
+}
+
+void KCCodeCompileProgress::countToCompile()
+{
+    setProgressColor(originalColor);
+    setCompileState(certifyCompile);
+    compileProgressDisplay->setValue(100);
+    timeoutCounter->start(1000/timeoutCount);
 }
 
 void KCCodeCompileProgress::setText(const QString &text)
@@ -63,24 +86,116 @@ void KCCodeCompileProgress::setValue(const int &value)
     compileProgressDisplay->setValue(value);
 }
 
+void KCCodeCompileProgress::showCompileSuccess()
+{
+    setCompileState(compileSuccess);
+}
+
+void KCCodeCompileProgress::showCompileError(int errors)
+{
+    setCompileState(errorCompileError);
+    setText(QString(QString::number(errors) + " " +
+                     tr("errors occured.")));
+    setValue(100);
+    setProgressColor(QColor(255,0,0));
+}
+
+void KCCodeCompileProgress::delayHide()
+{
+    if(currentState < errorEnumBegin)
+    {
+        QTimer::singleShot(1000, this, SLOT(animeHide()));
+    }
+    else
+    {
+        QTimer::singleShot(3000, this, SLOT(animeHide()));
+    }
+}
+
 void KCCodeCompileProgress::animeShow()
 {
-    QPropertyAnimation *showAnimation=new QPropertyAnimation(this, "geometry");
+    //Stop all animation for no reason.
+    animation->stop();
+    disconnect(hideConnection);
     int geometryArg=parentWidget()->width()/3;
-    QRect startGeometry=QRect(geometryArg,
-                              -compileProgressHeight,
-                              geometryArg,
-                              compileProgressHeight);
-    QRect endGeometry=startGeometry;
-    endGeometry.setTop(0);
-    showAnimation->setStartValue(startGeometry);
-    showAnimation->setEndValue(endGeometry);
-    showAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    QRect endGeometry=QRect(geometryArg,
+                            0,
+                            compileProgressWidth,
+                            compileProgressHeight);
+    QRect startGeometry=endGeometry;
+    startGeometry.setTop(-compileProgressHeight-30);
+    startGeometry.setHeight(compileProgressHeight);
+    animation->setStartValue(startGeometry);
+    animation->setEndValue(endGeometry);
     show();
-    showAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+    animation->start();
 }
 
 void KCCodeCompileProgress::animeHide()
 {
-    ;
+    //Stop all animation for no reason.
+    animation->stop();
+
+    disconnect(hideConnection);
+    //reconnect it.
+    hideConnection=connect(animation, SIGNAL(finished()),
+                           this, SLOT(hide()));
+    int geometryArg=parentWidget()->width()/3;
+    QRect endGeometry=QRect(geometryArg,
+                            -compileProgressHeight-5,
+                            compileProgressWidth,
+                            compileProgressHeight);
+    QRect startGeometry=endGeometry;
+    startGeometry.setTop(0);
+    startGeometry.setHeight(compileProgressHeight);
+    animation->setStartValue(startGeometry);
+    animation->setEndValue(endGeometry);
+    animation->start();
+}
+
+void KCCodeCompileProgress::refreshTimemout()
+{
+    compileProgressDisplay->setValue(compileProgressDisplay->value()-1);
+    if(compileProgressDisplay->value()==0)
+    {
+        timeoutCounter->stop();
+        emit requireCompile();
+    }
+}
+
+void KCCodeCompileProgress::setProgressColor(QColor color)
+{
+    progressColor=color;
+    progressPal.setColor(QPalette::Highlight, progressColor);
+    compileProgressDisplay->setPalette(progressPal);
+}
+
+void KCCodeCompileProgress::setCompileState(KCCodeCompileProgress::CompileState stateValue)
+{
+    currentState=stateValue;
+    switch(stateValue)
+    {
+    case certifyCompile:
+        setText(tr("Certify Compile"));
+        break;
+    case checkingCompiler:
+        setText(tr("Checking Compiler"));
+        setValue(33);
+        break;
+    case runningCompiler:
+        setText(tr("Compiling"));
+        setValue(67);
+        break;
+    case compileSuccess:
+        setText(tr("Compile Success"));
+        setValue(100);
+        setProgressColor(QColor(0,255,0));
+        break;
+    case errorCantFindCompiler:
+        setText(tr("Can't find compiler."));
+        setValue(100);
+        break;
+    default:
+        break;
+    }
 }
