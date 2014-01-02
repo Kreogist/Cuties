@@ -163,9 +163,9 @@ KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(const QString &captionTex
 {
     KCPreferenceItemInt *newIntItem=new KCPreferenceItemInt(contents);
     newIntItem->setIntCaptionText(captionText);
-    newIntItem->setOriginalValue(defaultValue);
     newIntItem->setMaximumInt(maxValue);
     newIntItem->setMinimumInt(minValue);
+    newIntItem->setOriginalValue(defaultValue);
     contents->appendItem(newIntItem);
     return newIntItem;
 }
