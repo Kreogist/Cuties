@@ -225,6 +225,8 @@ void KCCompileDock::setCompileOutputReceiver(KCCompileOutputReceiver *newReceive
     compileOutputErrorInfoTree->setModel(currentReceiver->getCompilerOutputModel());
     //Connet signals and slots
     receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::requireShowError,
+                                       this, &KCCompileDock::show);
+    receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::requireShowError,
                                        this, &KCCompileDock::animeShowCompileError);
     receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::compilerOutputTextChanged,
                                        compileOutputTextInfo, &KCPlainTextBrowser::setPlainText);

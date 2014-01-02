@@ -992,8 +992,6 @@ void MainWindow::compileProgram()
                 msg.exec();
                 return;
             }
-            //Active Compile Dock.
-            compileDock->setVisible(true);
             //Set To Compile Mode.
             compileDock->animeHideCompileError();
             currentEditor->setCompileBarState(KCCodeCompileProgress::runningCompiler);
