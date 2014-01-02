@@ -242,6 +242,11 @@ void GdbController::parseLine(const QString &_msg)
                 dbgOutputs->addLocals(result);
                 break;
             }
+            else if(result.getName() == "value")
+            {
+                dbgOutputs->addExprValue(result.getValue());
+                break;
+            }
             else if(result.getName() == "bkpt")
             {
                 parseBkpt(result);
@@ -252,11 +257,6 @@ void GdbController::parseLine(const QString &_msg)
                     requestForceUpdateLocal=true;
                     stackListLocals();
                 }
-                break;
-            }
-            if(result.getName() == "value")
-            {
-                dbgOutputs->addExprValue(result.getValue());
                 break;
             }
         }

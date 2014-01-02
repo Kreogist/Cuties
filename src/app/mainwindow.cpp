@@ -1332,6 +1332,15 @@ void MainWindow::startDebugToCursor()
 void MainWindow::onActionStartDebug(int lineNumber)
 {
     KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    QFile executeFile(currEditor->getExecFileName());
+    if(!executeFile.exists())
+    {
+        KCMessageBox *notCompile=new KCMessageBox(this);
+        notCompile->setTitle("Error");
+        notCompile->addText(tr("File is not compiled."));
+        notCompile->exec();
+        return;
+    }
 
     if(currEditor->getDebugging())
     {

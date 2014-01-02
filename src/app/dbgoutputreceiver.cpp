@@ -18,17 +18,17 @@
  */
 
 #include "dbgoutputreceiver.h"
+#include "kclanguageconfigure.h"
 
 dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     QObject(parent)
 {
+    retranslate();
     textStreamOutput=new QTextDocument(this);
     textStreamOutput->setDocumentLayout(
         new QPlainTextDocumentLayout(textStreamOutput));
 
     stackInfoModel=new QStandardItemModel(this);
-    QStringList labels;
-    labels<<tr("name")<<tr("value");
 
     watchModel=new QStandardItemModel(this);
     watchModel->setColumnCount(2);
@@ -42,6 +42,9 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     errorFormat.setForeground(QBrush(QColor(255,0,0)));
     targetFormat.setForeground(QBrush(QColor(0,0x8f,0xff)));
     logFormat.setForeground(QBrush(Qt::yellow));
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &dbgOutputReceiver::retranslateAndSet);
 }
 
 void dbgOutputReceiver::addErrorText(QString text)
@@ -68,6 +71,8 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
 {
     localVarModel->clear();
 
+    localVarModel->setColumnCount(2);
+    localVarModel->setHorizontalHeaderLabels(labels);
     for(int i=0; i<localVars.size(); i++)
     {
         QString name=localVars.at(i).at(0).getValue();  //name
@@ -101,6 +106,18 @@ void dbgOutputReceiver::insertText(const QString &text,
 QTextDocument *dbgOutputReceiver::getTextStreamOutput() const
 {
     return textStreamOutput;
+}
+
+void dbgOutputReceiver::retranslate()
+{
+    labels<<tr("Name")<<tr("Value");
+}
+
+void dbgOutputReceiver::retranslateAndSet()
+{
+    retranslate();
+    localVarModel->setHorizontalHeaderLabels(labels);
+    watchModel->setHorizontalHeaderLabels(labels);
 }
 
 void dbgOutputReceiver::clearOutput()

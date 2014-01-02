@@ -39,6 +39,8 @@ public:
     QTextDocument *getTextStreamOutput() const;
 
 public slots:
+    void retranslate();
+    void retranslateAndSet();
     void clearOutput();
     void addConsoleOutput(QString text);
     void addTargetOutput(QString text);
@@ -57,6 +59,7 @@ private:
     QTextDocument *textStreamOutput;
 
     QTextCharFormat normalFormat,errorFormat,targetFormat,logFormat;
+    QStringList labels;
 };
 
 #endif // DBGOUTPUTRECEIVER_H
