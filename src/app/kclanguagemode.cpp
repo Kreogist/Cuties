@@ -180,6 +180,24 @@ GdbController *KCLanguageMode::startDebug()
     return gdbControllerInstance;
 }
 
+GdbController *KCLanguageMode::startDebugToCursor(int lineNumber)
+{
+    if(gdbControllerInstance == NULL)
+    {
+        gdbControllerInstance=new GdbController(this);
+        connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
+                this, SIGNAL(requireDisconnectDebug()));
+        connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
+                this, SIGNAL(requireDebugJumpLine(int)));
+    }
+
+    gdbControllerInstance->runGDB(m_parent->execFileName);
+    gdbControllerInstance->setBreakPoint(lineNumber);
+    gdbControllerInstance->execRun();
+
+    return gdbControllerInstance;
+}
+
 void KCLanguageMode::stopDebug()
 {
     if(gdbControllerInstance!=NULL)

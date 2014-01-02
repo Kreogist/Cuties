@@ -82,6 +82,7 @@ signals:
 public slots:
     void show();
     void startDebug();
+    void startDebugToCursor();
     void stopDebug();
     void onActionCompileAndRun();
     void onActionRun();

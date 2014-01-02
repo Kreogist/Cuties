@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include <QKeyEvent>
 #include <QSizePolicy>
+#include <QTextCursor>
 
 #include "kccolorconfigure.h"
 #include "kclanguageconfigure.h"
@@ -67,7 +68,6 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     QVBoxLayout *mainLayout=new QVBoxLayout(centralWidget);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    //mainLayout->setSizeConstraint(QLayout::SetMaximumSize);
     centralWidget->setLayout(mainLayout);
 
     setWidget(centralWidget);
@@ -239,6 +239,13 @@ void KCDebugControlPanel::onDebugStartClicked()
     emit debugStarted();
 }
 
+
+void KCDebugControlPanel::onRunToCursorClicked()
+{
+    debugRunning=true;
+    emit debugStartedToCursor();
+}
+
 void KCDebugControlPanel::onDebugStopClicked()
 {
     debugRunning=false;
@@ -257,11 +264,6 @@ void KCDebugControlPanel::setGdbController(GdbController* controller)
 void KCDebugControlPanel::clearGdbController()
 {
     gdbController=NULL;
-}
-
-void KCDebugControlPanel::onRunToCursorClicked()
-{
-    //! TODO: doesn't accomplished RunToCursor
 }
 
 //-----control program by using gdbController-----

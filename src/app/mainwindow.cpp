@@ -701,6 +701,9 @@ void MainWindow::createDocks()
             this, &MainWindow::startDebug);
     connect(debugControl, &KCDebugControlPanel::debugStopped,
             this, &MainWindow::stopDebug);
+    connect(debugControl, &KCDebugControlPanel::debugStartedToCursor,
+            this, &MainWindow::startDebugToCursor);
+
     debugControl->hide();
     visibleRecorder->addWidget(debugControl);
 
@@ -1332,6 +1335,23 @@ void MainWindow::startDebug()
     showDebugDocks();
 }
 
+void MainWindow::startDebugToCursor()
+{
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+
+    if(currEditor->getDebugging())
+    {
+        //Current File is debugging
+        return;
+    }
+    KCLanguageMode *currLangMode=currEditor->langMode();
+    currEditor->setDebugging(true);
+    currLangMode->startDebugToCursor(currEditor->getTextCursor().blockNumber());
+
+    connectDebugDockWithCurrEditor();
+    showDebugDocks();
+}
+
 void MainWindow::stopDebug()
 {
     KCCodeEditor *currEditor=tabManager->getCurrentEditor();
@@ -1354,8 +1374,8 @@ void MainWindow::stopDebug()
 
 void MainWindow::connectDebugDockWithCurrEditor()
 {
-    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
-    GdbController *gdbControllerInstance=currLangMode->getGdbController();
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    GdbController *gdbControllerInstance=currEditor->langMode()->getGdbController();
 
     if(gdbControllerInstance!=NULL)
     {

@@ -40,6 +40,7 @@ public:
 signals:
     void debugStarted();
     void debugStopped();
+    void debugStartedToCursor();
     void requireSetTextFocus();
 
 public slots:
