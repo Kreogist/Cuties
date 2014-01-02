@@ -55,8 +55,7 @@ public:
     bool compilerIsNull();
     bool compilerIsExsist();
     void compile();
-    GdbController *startDebug();
-    GdbController *startDebugToCursor(int lineNumber);
+    GdbController *startDebug(int lineNumber);
     void stopDebug();
     void setMode(const modeType &type);
     void setFileSuffix(const QString &suffix);

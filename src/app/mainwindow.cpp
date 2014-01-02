@@ -1321,21 +1321,15 @@ void MainWindow::onCurrentTabChanged()
 
 void MainWindow::startDebug()
 {
-    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
-    if(currEditor->getDebugging())
-    {
-        //Current File is debugging
-        return;
-    }
-    KCLanguageMode *currLangMode=currEditor->langMode();
-    currEditor->setDebugging(true);
-    currLangMode->startDebug();
-
-    connectDebugDockWithCurrEditor();
-    showDebugDocks();
+    onActionStartDebug();
 }
 
 void MainWindow::startDebugToCursor()
+{
+    onActionStartDebug(tabManager->getCurrentEditor()->getTextCursor().blockNumber());
+}
+
+void MainWindow::onActionStartDebug(int lineNumber)
 {
     KCCodeEditor *currEditor=tabManager->getCurrentEditor();
 
@@ -1346,7 +1340,7 @@ void MainWindow::startDebugToCursor()
     }
     KCLanguageMode *currLangMode=currEditor->langMode();
     currEditor->setDebugging(true);
-    currLangMode->startDebugToCursor(currEditor->getTextCursor().blockNumber());
+    currLangMode->startDebug(lineNumber);
 
     connectDebugDockWithCurrEditor();
     showDebugDocks();

@@ -83,6 +83,7 @@ public slots:
     void show();
     void startDebug();
     void startDebugToCursor();
+    void onActionStartDebug(int lineNumber=-1);
     void stopDebug();
     void onActionCompileAndRun();
     void onActionRun();
