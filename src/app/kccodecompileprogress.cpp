@@ -17,6 +17,7 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
 #include <QVBoxLayout>
 #include <QTimer>
 #include <QGraphicsDropShadowEffect>
@@ -70,10 +71,18 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
 
 void KCCodeCompileProgress::countToCompile()
 {
-    setProgressColor(originalColor);
-    setCompileState(certifyCompile);
-    compileProgressDisplay->setValue(100);
-    timeoutCounter->start(KCCompilerConfigure::getInstance()->getDelayTimeout());
+    if(KCCompilerConfigure::getInstance()->getDelayCompile())
+    {
+        setProgressColor(originalColor);
+        setCompileState(certifyCompile);
+        compileProgressDisplay->setValue(100);
+        timeoutCounter->start(KCCompilerConfigure::getInstance()->getDelayTimeout());
+    }
+    else
+    {
+        compileProgressDisplay->setValue(0);
+        emit requireCompile();
+    }
 }
 
 void KCCodeCompileProgress::regeometry(int w)
@@ -118,6 +127,7 @@ void KCCodeCompileProgress::showCompileError(int errors)
                      tr("errors occured.")));
     setValue(100);
     setProgressColor(QColor(255,0,0));
+    delayHide();
 }
 
 void KCCodeCompileProgress::delayHide()
@@ -132,7 +142,7 @@ void KCCodeCompileProgress::delayHide()
     }
     else
     {
-        QTimer::singleShot(3000, this, SLOT(animeHide()));
+        QTimer::singleShot(2000, this, SLOT(animeHide()));
     }
 }
 
@@ -141,13 +151,10 @@ void KCCodeCompileProgress::animeShow()
     //Stop all animation for no reason.
     animation->stop();
     disconnect(hideConnection);
-    QRect endGeometry=QRect((parentWidget()->width()-compileProgressWidth)/2,
-                            0,
-                            compileProgressWidth,
-                            compileProgressHeight);
-    QRect startGeometry=endGeometry;
-    startGeometry.setTop(-compileProgressHeight-30);
-    startGeometry.setHeight(compileProgressHeight);
+    QRect startGeometry=geometry();
+    QRect endGeometry=startGeometry;
+    endGeometry.setTop(0);
+    endGeometry.setHeight(compileProgressHeight);
     animation->setStartValue(startGeometry);
     animation->setEndValue(endGeometry);
     show();
@@ -163,13 +170,10 @@ void KCCodeCompileProgress::animeHide()
     //reconnect it.
     hideConnection=connect(animation, SIGNAL(finished()),
                            this, SLOT(hide()));
-    QRect endGeometry=QRect((parentWidget()->width()-compileProgressWidth)/2,
-                            -compileProgressHeight-5,
-                            compileProgressWidth,
-                            compileProgressHeight);
-    QRect startGeometry=endGeometry;
-    startGeometry.setTop(0);
-    startGeometry.setHeight(compileProgressHeight);
+    QRect startGeometry=geometry();
+    QRect endGeometry=startGeometry;
+    endGeometry.setTop(-compileProgressHeight-5);
+    endGeometry.setHeight(compileProgressHeight);
     animation->setStartValue(startGeometry);
     animation->setEndValue(endGeometry);
     animation->start();

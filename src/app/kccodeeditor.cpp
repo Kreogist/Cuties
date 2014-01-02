@@ -102,6 +102,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     connect(editor, &KCTextEditor::requireHideOthers,
             this, &KCCodeEditor::onHideOtherWidgets);
 
+    currentCompileProgress->regeometry(width());
+
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
     searchUseLastCursor=false;
