@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(tabManager);
 
     visibleRecorder=KCVisibleRecorder::getInstance();
+    compilerInstance=KCCompilerConfigure::getInstance();
 
     //Create All Window Contents
     createDocks();
@@ -947,8 +948,14 @@ void MainWindow::show()
 void MainWindow::onActionCompile()
 {
     compileFinishedConnection.disConnectAll();
-    //compileProgram();
-    onActionDelayCompile();
+    if(compilerInstance->getDelayCompile())
+    {
+        onActionDelayCompile();
+    }
+    else
+    {
+        compileProgram();
+    }
 }
 
 void MainWindow::onActionDelayCompile()
@@ -1033,8 +1040,14 @@ void MainWindow::onActionCompileAndRun()
                                            compileDock, SLOT(hideCompileDock()));
         compileFinishedConnection+=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
                                            KCExecutor::getInstance(),SLOT(exec(QString)));
-        //compileProgram();
-        onActionDelayCompile();
+        if(compilerInstance->getDelayCompile())
+        {
+            onActionDelayCompile();
+        }
+        else
+        {
+            compileProgram();
+        }
     }
 }
 

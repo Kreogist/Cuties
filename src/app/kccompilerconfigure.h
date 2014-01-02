@@ -40,12 +40,15 @@ public:
     void setGppPath(const QString &value);
     QString getFpcPath() const;
     void setFpcPath(const QString &value);
+    bool getDelayCompile() const;
+    void setDelayCompile(bool value);
 
 private:
     KCCompilerConfigure();
     static KCCompilerConfigure *instance;
 
     QString gccPath, gppPath, fpcPath;
+    bool delayCompile;
 };
 
 #endif // KCCOMPILERCONFIGURE_H

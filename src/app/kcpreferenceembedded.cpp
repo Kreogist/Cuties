@@ -282,6 +282,10 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
 
     //Get configure instance
     instance=KCCompilerConfigure::getInstance();
+    compilerTitles[titleCompilerOptions]=addTitle(compilerTitleText[titleCompilerOptions]);
+    compilerBooleans[booleanDelayCompile]=
+        addItemBoolean(booleanItemCaption[booleanDelayCompile],
+                       instance->getDelayCompile());
 
     compilerTitles[titleCompilerPath]=addTitle(compilerTitleText[titleCompilerPath]);
     compilerPathItems[pathGPPCompiler]=
@@ -305,6 +309,9 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
 void KCPreferenceEmbeddedCompiler::retranslate()
 {
     compilerTitleText[titleCompilerPath]=tr("Compiler Path");
+    compilerTitleText[titleCompilerOptions]=tr("Compiler Options");
+
+    booleanItemCaption[booleanDelayCompile]=tr("Delay Compile");
 
     pathItemCaption[pathGPPCompiler]=tr("g++ Compiler:");
     pathItemCaption[pathGCCCompiler]=tr("gcc Compiler:");
@@ -327,6 +334,12 @@ void KCPreferenceEmbeddedCompiler::retranslateAndSet()
         compilerTitles[i]->setText(compilerTitleText[i]);
     }
 
+    //Reset bool items.
+    for(i=booleanDelayCompile; i<booleanItemCount; i++)
+    {
+        compilerBooleans[i]->setBooleanCaptionText(booleanItemCaption[i]);
+    }
+
     //Reset path items.
     for(i=pathGPPCompiler; i<pathItemCount; i++)
     {
@@ -340,6 +353,7 @@ void KCPreferenceEmbeddedCompiler::applyPreference()
     instance->setGppPath(compilerPathItems[pathGPPCompiler]->getCurrentValue().toString());
     instance->setGccPath(compilerPathItems[pathGCCCompiler]->getCurrentValue().toString());
     instance->setFpcPath(compilerPathItems[pathFPCCompiler]->getCurrentValue().toString());
+    instance->setDelayCompile(compilerBooleans[booleanDelayCompile]->getCurrentValue().toBool());
 }
 
 KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :

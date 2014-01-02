@@ -39,6 +39,18 @@ KCCompilerConfigure::KCCompilerConfigure()
     gppPath="/Compiler/MinGW/bin/g++.exe";
     fpcPath="/Compiler/FPC/bin/i386-win32/fpc.exe";
 #endif
+
+    delayCompile=false;
+}
+
+bool KCCompilerConfigure::getDelayCompile() const
+{
+    return delayCompile;
+}
+
+void KCCompilerConfigure::setDelayCompile(bool value)
+{
+    delayCompile = value;
 }
 
 void KCCompilerConfigure::readConfigure()

@@ -60,6 +60,7 @@
 #include "kcmainmenu.h"
 #include "kcsubmenu.h"
 #include "kcvisiblerecorder.h"
+#include "kccompilerconfigure.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -256,6 +257,7 @@ private:
     KCTitleBar *titlebar;
     KCStatusBar *statusBar;
     KCConnectionHandler compileFinishedConnection;
+    KCCompilerConfigure *compilerInstance;
 
     KCDebugControlPanel *debugControl;
     KCDebugCommandIO *debugCommandIO;
