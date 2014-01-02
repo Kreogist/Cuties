@@ -73,6 +73,12 @@ KCCppHighlighter::KCCppHighlighter(QObject *parent) :
     rules<<hlrSpTypes;
 
     //Set Other Special Types:
+
+    //Pre-Process back text
+    hlrSpTypes.type_name = "preprocdata";
+    hlrSpTypes.regexp.setPattern(QString("^[[:blank:]]*#([[:blank:]]*[[:word:]]*).*"));
+    rules<<hlrSpTypes;
+
     //Pre-Process
     hlrSpTypes.type_name = "preproc";
     hlrSpTypes.regexp.setPattern(QString("^[[:blank:]]*#([[:blank:]]*[[:word:]]*)"));

@@ -114,9 +114,9 @@ void KCCompileOutputReceiver::onCompileMessageReceived(compileErrorInfo error)
         emit requireShowError();
         hasOutputHeader=true;
     }
+    errorCounter++;
     //Add the new error to the list
     compileErrorInfoList.append(error);
-    errorCounter++;
     //Expand the model
     addErrorInfoItem(error);
     //Emit a signal for code editor to show mark.
