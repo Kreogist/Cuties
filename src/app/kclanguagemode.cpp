@@ -39,12 +39,12 @@ KCLanguageMode::KCLanguageMode(QWidget *parent) :
     m_type=Invalid;
     setFileSuffix(KCGeneralConfigure::getInstance()->getDefaultLanguageModeString());
 
-    Q_ASSERT(m_parent!=NULL);
     gdbControllerInstance=new GdbController(this);
     connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
             this, SIGNAL(requireDisconnectDebug()));
     connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
             this, SIGNAL(requireDebugJumpLine(int)));
+    Q_ASSERT(m_parent!=NULL);
 }
 
 bool KCLanguageMode::compilerIsNull()

@@ -296,12 +296,6 @@ void GdbController::parseLine(const QString &_msg)
         }
         if(_str_async == "stopped")
         {
-            //Refresh stack list
-            if(!requestForceUpdateLocal)
-            {
-                updateDockInfos();
-            }
-
             QString stoppedDetails;
             dbgOutputs->addConsoleOutput("  -> Cuties: GDB stopped.\n");
             //Here we have to display many many details.
@@ -327,13 +321,13 @@ void GdbController::parseLine(const QString &_msg)
                 }
                 else if(child.getName()=="frame")
                 {
+                    emit requireLineJump(child["line"].getValue().toInt());
                     stoppedDetails+=QString("Frame Details: address  :" + child["addr"].getValue() + "\n" +
                                             "               function :" + child["func"].getValue() + "\n" +
                                             "               args     :" + child["args"].getValue() + "\n" +
                                             "               file     :" + child["file"].getValue() + "\n" +
                                             "               fullname :" + child["fullname"].getValue() + "\n" +
                                             "               line     :" + child["line"].getValue()) + "\n";
-                    emit requireLineJump(child["line"].getValue().toInt());
                 }
                 else if(child.getName()=="disp")
                 {
@@ -355,6 +349,12 @@ void GdbController::parseLine(const QString &_msg)
             }
             stoppedDetails.append("\n");
             dbgOutputs->addText(stoppedDetails);
+
+            //Refresh stack list
+            if(!requestForceUpdateLocal)
+            {
+                updateDockInfos();
+            }
             break;
         }
         break;
