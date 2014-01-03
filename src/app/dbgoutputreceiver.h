@@ -44,11 +44,8 @@ public slots:
     void retranslate();
     void retranslateAndSet();
     void clearOutput();
-<<<<<<< HEAD
     void clearTextStream();
-=======
-    void appendExpr(const QString &value, int index=-1);
->>>>>>> b7202490d12b0d79939e79ac4a2d99f97fdc5f6f
+    void appendExpr(const QString &value);
     void addConsoleOutput(QString text);
     void addTargetOutput(QString text);
     void addLogOutput(QString text);
