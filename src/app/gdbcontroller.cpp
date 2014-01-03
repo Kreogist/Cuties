@@ -205,8 +205,6 @@ void GdbController::parseLine(const QString &_msg)
     const QChar *begin=_msg.begin();
     const QChar *end=_msg.end();
 
-    exitedNormally=false;
-
     switch(_firstChar)
     {
     case '^':
@@ -244,6 +242,7 @@ void GdbController::parseLine(const QString &_msg)
             }
             else if(result.getName() == "value")
             {
+                qDebug()<<result.getValue();
                 dbgOutputs->addExprValue(result.getValue());
                 break;
             }
@@ -254,8 +253,7 @@ void GdbController::parseLine(const QString &_msg)
                 //Refresh stack list
                 if(!requestForceUpdateLocal)
                 {
-                    requestForceUpdateLocal=true;
-                    stackListLocals();
+                    updateDockInfos();
                 }
                 break;
             }
@@ -307,8 +305,10 @@ void GdbController::parseLine(const QString &_msg)
         if(_str_async == "stopped")
         {
             //Refresh stack list
-            requestForceUpdateLocal=true;
-            stackListLocals();
+            if(!requestForceUpdateLocal)
+            {
+                updateDockInfos();
+            }
 
             QString stoppedDetails;
             dbgOutputs->addConsoleOutput("  -> Cuties: GDB stopped.\n");
@@ -328,11 +328,6 @@ void GdbController::parseLine(const QString &_msg)
                 if(child.getName()=="reason")
                 {
                     stoppedDetails+=QString("Reason: " + child.getValue() + "\n");
-                    if(child.getValue()=="exited-normally")
-                    {
-                        exitedNormally=true;
-                        break;
-                    }
                 }
                 else if(child.getName()=="func")
                 {
@@ -625,6 +620,13 @@ void GdbController::execStepi()
 void GdbController::execUntil(const QString &location)
 {
     execGdbCommand(QString("-exec-until ")+location);
+}
+
+void GdbController::updateDockInfos()
+{
+    requestForceUpdateLocal=true;
+    stackListLocals();
+    requestForceUpdateLocal=false;
 }
 
 void GdbController::stackListLocals()

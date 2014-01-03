@@ -138,6 +138,7 @@ public slots:
     void execUntil(const QString &location);
 
     //Stack Manipulation
+    void updateDockInfos();
     void stackListLocals();
 
     //Data Evaluate
@@ -159,7 +160,6 @@ private:
 
     static QString gdbPath;
     static bool checkResult;
-    bool exitedNormally=false;
     QVector<bkpt_struct> bkptVec;
 
     GdbThread *gdbProcessThread;

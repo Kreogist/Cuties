@@ -433,6 +433,7 @@ void KCTabManager::closeEvent(QCloseEvent *e)
         KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(widget(i));
         if(editor->getDebugging())
         {
+            setCurrentIndex(i);
             //This editor is debugging
             KCMessageBox *debugPrevent=new KCMessageBox(this->parentWidget());
             debugPrevent->setTitle("Debug");

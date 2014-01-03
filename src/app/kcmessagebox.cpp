@@ -445,6 +445,10 @@ void KCMessageBox::messageFilter(KCMessageBoxPanel::buttonState message)
 
 void KCMessageBox::animateClose()
 {
+    if(showAnimation->state()==QAbstractAnimation::Running)
+    {
+        showAnimation->stop();
+    }
     QRect startGeometry=geometry();
     QRect endGeometry=startGeometry;
     endGeometry.setTop(startGeometry.top()+
