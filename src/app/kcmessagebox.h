@@ -137,14 +137,15 @@ protected:
 
 private slots:
     void messageFilter(KCMessageBoxPanel::buttonState message);
+    void animateClose();
 
 private:
     KCMessageBoxPanel::buttonState messageState;
     QVBoxLayout *mainLayout;
-    QPropertyAnimation *widthExpand, *heightExpand;
+    QPropertyAnimation *widthExpand, *heightExpand, *exitAnimation;
     QSequentialAnimationGroup *showAnimation;
 
-    int expectedWidth, expectedHeight;
+    int expectedWidth, expectedHeight, beginHeight;
 
     KCMessageBoxTitle *title;
     KCMessageBoxPanel *panel;
