@@ -620,7 +620,7 @@ void GdbController::updateDockInfos()
     //Updates local watch
     stackListLocals();
     //Update watch
-    QStringList customWatchList=dbgOutputs->getWatchExps();
+    QStringList customWatchList=dbgOutputs->getWatchExpList();
     for(int i=0; i<customWatchList.count(); i++)
     {
         expIndex=i;

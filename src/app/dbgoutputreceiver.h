@@ -37,7 +37,8 @@ public:
     QStandardItemModel *getLocalVarModel() const;
     QStandardItemModel *getWatchModel() const;
     QTextDocument *getTextStreamOutput() const;
-    QStringList getWatchExps() const;
+    QStringList getWatchExpList() const;
+    QString getWatchExp(const int &index) const;
     void setWatchExps(const QStringList &value);
 
 public slots:
@@ -53,6 +54,7 @@ public slots:
     void addLocals(GdbMiValue localVars);
     void addExprValue(int expIndex, QString value);
     void addText(const QString &text);
+    void removeExprValue(int expIndex);
 
 private:
     void insertText(const QString &text,const QTextCharFormat &charFormat);

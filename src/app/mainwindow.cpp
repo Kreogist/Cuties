@@ -543,6 +543,15 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionDebugReturn], SIGNAL(triggered()),
             debugControl, SLOT(onDebugReturnClicked()));
 
+    connect(actionMainWindowItem[actionDebugAddWatch], SIGNAL(triggered()),
+            debugWatch, SLOT(onActionAddWatch()));
+
+    connect(actionMainWindowItem[actionDebugModifiedWatch], SIGNAL(triggered()),
+            debugWatch, SLOT(onActionModifyWatch()));
+
+    connect(actionMainWindowItem[actionDebugRemoveWatch], SIGNAL(triggered()),
+            debugWatch, SLOT(onActionRemoveWatch()));
+
     //Tools -> Preferences
     actionMainWindowItem[actionToolsPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
     actionMainWindowItem[actionToolsPreferences]->setMenuRole(QAction::PreferencesRole);

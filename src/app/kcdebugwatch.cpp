@@ -212,11 +212,17 @@ void KCDebugWatch::onActionAddWatch()
 
 void KCDebugWatch::onActionModifyWatch()
 {
+    int currentIndex=customWatch->currentIndex().row();
+    if(currentIndex==-1)
+    {
+        return;
+    }
     KCMessageBox *modifyWatchEquation=new KCMessageBox(this->parentWidget());
     QLineEdit *equation=new QLineEdit(this);
-    QString originalData="WTF?!";
+    QString originalData=gdbController->getDbgOutputs()->getWatchExp(currentIndex);
     equation->setFixedWidth(250);
-    equation->setText("original text");
+    equation->setText(originalData);
+    equation->selectAll();
     QPalette pal=equation->palette();
     pal.setColor(QPalette::Base, QColor(255,255,255,50));
     equation->setPalette(pal);
@@ -230,21 +236,29 @@ void KCDebugWatch::onActionModifyWatch()
     modifyWatchEquation->exec();
     if(modifyWatchEquation->messageBoxState()==KCMessageBoxPanel::buttonOK)
     {
-        qDebug()<<equation->text();
+        if(!equation->text().isEmpty())
+        {
+            gdbController->getDbgOutputs()->appendExpr(equation->text());
+        }
     }
 }
 
 void KCDebugWatch::onActionRemoveWatch()
 {
+    int currentIndex=customWatch->currentIndex().row();
+    if(currentIndex==-1)
+    {
+        return;
+    }
     KCMessageBox *deleteWatch=new KCMessageBox(this->parentWidget());
     deleteWatch->enabledCancel();
     deleteWatch->setTitle("Remove Watch");
     deleteWatch->addText(tr("Are you sure to remove to watch this?"));
     deleteWatch->addSpacing(10);
-    deleteWatch->addText("equation");
+    deleteWatch->addText(gdbController->getDbgOutputs()->getWatchExp(currentIndex));
     deleteWatch->exec();
     if(deleteWatch->messageBoxState()==KCMessageBoxPanel::buttonOK)
     {
-        qDebug()<<"Sure";
+        gdbController->getDbgOutputs()->removeExprValue(currentIndex);
     }
 }
