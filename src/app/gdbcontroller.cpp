@@ -190,13 +190,6 @@ GdbController::GdbController(QObject *parent) :
     requestForceUpdateLocal=false;
 
     debugCodec=QTextCodec::codecForLocale();
-    gdbProcessThread=new GdbThread(this);
-    connect(gdbProcessThread, SIGNAL(parseMessage(QString)),
-            this, SLOT(parseLine(QString)));
-    connect(gdbProcessThread, SIGNAL(parseError(QString)),
-            this, SLOT(parseError(QString)));
-    connect(gdbProcessThread, SIGNAL(addSystemMessage(QString)),
-            this, SLOT(parseCommand(QString)));
 }
 
 void GdbController::parseLine(const QString &_msg)
@@ -472,6 +465,7 @@ bool GdbController::runGDB(const QString &filePath)
 {
     if(checkResult)
     {
+        createGDBThread();
         gdbProcessThread->setGdbPath(gdbPath);
         gdbProcessThread->setFilePath(filePath);
         gdbProcessThread->run();
@@ -647,6 +641,17 @@ void GdbController::configureGDB()
 #ifdef Q_OS_WIN32
     execGdbCommand("set new-console on");
 #endif
+}
+
+void GdbController::createGDBThread()
+{
+    gdbProcessThread=new GdbThread(this);
+    connect(gdbProcessThread, SIGNAL(parseMessage(QString)),
+            this, SLOT(parseLine(QString)));
+    connect(gdbProcessThread, SIGNAL(parseError(QString)),
+            this, SLOT(parseError(QString)));
+    connect(gdbProcessThread, SIGNAL(addSystemMessage(QString)),
+            this, SLOT(parseCommand(QString)));
 }
 
 QSharedPointer<dbgOutputReceiver> GdbController::getDbgOutputs()

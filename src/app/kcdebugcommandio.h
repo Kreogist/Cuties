@@ -78,7 +78,7 @@ private:
     KCDebugInput *debugInput;
     GdbController *instance;
 
-    KCPlainTextBrowser *resetBackup;
+    QTextDocument *blankOutput;
 };
 
 #endif // KCGDBCOMMANDIO_H

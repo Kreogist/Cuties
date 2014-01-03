@@ -35,13 +35,16 @@ KCLanguageMode::KCLanguageMode(QWidget *parent) :
 {
     m_parent=qobject_cast<KCCodeEditor *>(parent);
     compilerReceiver=NULL;
-    gdbControllerInstance=NULL;
-
     setCompileState(uncompiled);
     m_type=Invalid;
     setFileSuffix(KCGeneralConfigure::getInstance()->getDefaultLanguageModeString());
 
     Q_ASSERT(m_parent!=NULL);
+    gdbControllerInstance=new GdbController(this);
+    connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
+            this, SIGNAL(requireDisconnectDebug()));
+    connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
+            this, SIGNAL(requireDebugJumpLine(int)));
 }
 
 bool KCLanguageMode::compilerIsNull()
@@ -164,15 +167,6 @@ GdbController *KCLanguageMode::getGdbController() const
 
 GdbController *KCLanguageMode::startDebug(int lineNumber)
 {
-    if(gdbControllerInstance == NULL)
-    {
-        gdbControllerInstance=new GdbController(this);
-        connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
-                this, SIGNAL(requireDisconnectDebug()));
-        connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
-                this, SIGNAL(requireDebugJumpLine(int)));
-    }
-
     gdbControllerInstance->runGDB(m_parent->execFileName);
     if(lineNumber<0)
     {
@@ -193,7 +187,7 @@ void KCLanguageMode::stopDebug()
     {
         gdbControllerInstance->quitGDB();
     }
-    compilerConnectionHandles.disConnectAll();
+    //compilerConnectionHandles.disConnectAll();
 }
 
 void KCLanguageMode::onCompileFinished(bool hasError)

@@ -153,6 +153,7 @@ private slots:
 
 private:
     void configureGDB();
+    void createGDBThread();
 
     void parseBkpt(const GdbMiValue &gmvBkpt);
     QString parseOutputStream(const QChar *begin, const QChar *end);

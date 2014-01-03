@@ -280,7 +280,7 @@ private:
     void setDocOpenMenuState(bool state);
 
     void showDebugDocks();
-    void connectDebugDockWithCurrEditor();
+    void connectDebugDockWithCurrEditor(GdbController *gdbControllerInstance);
 
     int currentWindowState();
 };

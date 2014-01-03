@@ -120,9 +120,16 @@ void dbgOutputReceiver::retranslateAndSet()
     watchModel->setHorizontalHeaderLabels(labels);
 }
 
-void dbgOutputReceiver::clearOutput()
+void dbgOutputReceiver::clearTextStream()
 {
     textStreamOutput->clear();
+    textStreamOutput->setDocumentLayout(
+        new QPlainTextDocumentLayout(textStreamOutput));
+}
+
+void dbgOutputReceiver::clearOutput()
+{
+    clearTextStream();
     stackInfoModel->clear();
     localVarModel->clear();
     watchModel->clear();

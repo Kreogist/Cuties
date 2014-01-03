@@ -42,6 +42,7 @@ public slots:
     void retranslate();
     void retranslateAndSet();
     void clearOutput();
+    void clearTextStream();
     void addConsoleOutput(QString text);
     void addTargetOutput(QString text);
     void addLogOutput(QString text);

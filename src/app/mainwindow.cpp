@@ -1299,6 +1299,7 @@ void MainWindow::onCurrentTabChanged()
     KCCodeEditor *currEditor=tabManager->getCurrentEditor();
     if(currEditor==NULL)
     {
+        disconnectDebugDock();
         return ;
     }
 
@@ -1313,8 +1314,10 @@ void MainWindow::onCurrentTabChanged()
          * bug.
          */
         compileDock->setCompileOutputReceiver(compilerReceiver);
-        connectDebugDockWithCurrEditor();
     }
+    GdbController *debugReceiver=currLangMode->getGdbController();
+    Q_ASSERT(debugReceiver!=NULL);
+    connectDebugDockWithCurrEditor(debugReceiver);
 }
 
 void MainWindow::startDebug()
@@ -1347,9 +1350,9 @@ void MainWindow::onActionStartDebug(int lineNumber)
     }
     KCLanguageMode *currLangMode=currEditor->langMode();
     currEditor->setDebugging(true);
+    connectDebugDockWithCurrEditor(currLangMode->getGdbController());
     currLangMode->startDebug(lineNumber);
 
-    connectDebugDockWithCurrEditor();
     showDebugDocks();
 }
 
@@ -1370,14 +1373,10 @@ void MainWindow::stopDebug()
         currLangMode->stopDebug();
         currEditor->setDebugging(false);
     }
-    disconnectDebugDock();
 }
 
-void MainWindow::connectDebugDockWithCurrEditor()
+void MainWindow::connectDebugDockWithCurrEditor(GdbController *gdbControllerInstance)
 {
-    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
-    GdbController *gdbControllerInstance=currEditor->langMode()->getGdbController();
-
     if(gdbControllerInstance!=NULL)
     {
         debugControl->setGdbController(gdbControllerInstance);
@@ -1385,16 +1384,12 @@ void MainWindow::connectDebugDockWithCurrEditor()
         debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getLocalVarModel());
         debugWatch->setCustomWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
     }
-    else
-    {
-        disconnectDebugDock();
-    }
 }
 
 void MainWindow::disconnectDebugDock()
 {
-    debugCommandIO->clearInstance();
     debugControl->clearGdbController();
+    debugCommandIO->clearInstance();
     debugWatch->clearLocalWatchModel();
     debugWatch->clearCustomWatchModel();
 }

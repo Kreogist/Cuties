@@ -89,7 +89,7 @@ private:
 
     QScopedPointer<KCCompilerBase> compiler;
     KCCompileOutputReceiver *compilerReceiver;
-    KCConnectionHandler compilerConnectionHandles,gdbConnectionHandles;
+    KCConnectionHandler compilerConnectionHandles;
     compileState state;
     QReadWriteLock stateLock;
 

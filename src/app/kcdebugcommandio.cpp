@@ -99,21 +99,24 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugCommandIO::retranslateAndSet);
 
-    resetBackup=new KCPlainTextBrowser(this);
-    resetBackup->setVisible(false);
+    blankOutput=new QTextDocument(this);
+    blankOutput->setDocumentLayout(
+        new QPlainTextDocumentLayout(blankOutput));
 }
 
 void KCDebugCommandIO::setGdbInstance(GdbController *gdbInstance)
 {
     instance=gdbInstance;
-    debugOutputTextBrowser->setDocument(gdbInstance->getDbgOutputs()->getTextStreamOutput());
+    debugOutputTextBrowser->setDocument(instance->getDbgOutputs()->getTextStreamOutput());
 }
 
 void KCDebugCommandIO::clearInstance()
 {
     instance=NULL;
-    resetBackup->clear();
-    debugOutputTextBrowser->setDocument(resetBackup->document());
+    if(debugOutputTextBrowser->document()!=blankOutput)
+    {
+        debugOutputTextBrowser->setDocument(blankOutput);
+    }
 }
 
 void KCDebugCommandIO::retranslate()

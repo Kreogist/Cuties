@@ -36,10 +36,12 @@ GdbMiValue GdbMiValue::operator [](const char *_str_name) const
 {
     int i=children.size();
     while(i--)
+    {
         if(children[i].name == _str_name)
         {
             return children[i];
         }
+    }
 
     return GdbMiValue();
 }
@@ -115,6 +117,7 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
 
 void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     type=Const;
 
     QByteArray _tmp;
@@ -207,11 +210,11 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
     }
 
     value=QString(_tmp);
-
     if(begin+1 <end)
     {
         begin++;    //skip "
     }
+    skipCommas(begin, end);
 }
 
 void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
@@ -232,6 +235,7 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
     {
         begin++;    //skip ]
     }
+    skipCommas(begin, end);
 }
 
 void GdbMiValue::parseTuple(const QChar *&begin, const QChar *&end)
@@ -253,6 +257,7 @@ void GdbMiValue::parseTuple(const QChar *&begin, const QChar *&end)
     {
         begin++;
     }    //skip }
+    skipCommas(begin, end);
 }
 
 QString GdbMiValue::getValue() const
