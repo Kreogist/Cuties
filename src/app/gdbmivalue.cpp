@@ -214,11 +214,11 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
     {
         begin++;    //skip "
     }
-    skipCommas(begin, end);
 }
 
 void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     begin++;    //skip [
 
     type=List;
@@ -235,11 +235,11 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
     {
         begin++;    //skip ]
     }
-    skipCommas(begin, end);
 }
 
 void GdbMiValue::parseTuple(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     begin++;    //skip {
 
     type=Tuple;
@@ -257,7 +257,6 @@ void GdbMiValue::parseTuple(const QChar *&begin, const QChar *&end)
     {
         begin++;
     }    //skip }
-    skipCommas(begin, end);
 }
 
 QString GdbMiValue::getValue() const

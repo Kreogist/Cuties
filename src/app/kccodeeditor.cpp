@@ -116,14 +116,14 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             currentCompileProgress, SLOT(delayHide()));
     connect(languageMode, SIGNAL(compileErrorOccur(int)),
             currentCompileProgress, SLOT(showCompileError(int)));
-    connect(currentCompileProgress, SIGNAL(requireCompile()),
-            this, SIGNAL(requiredCompileFile()));
     connect(languageMode, &KCLanguageMode::requireSmartPanelError,
             this, &KCCodeEditor::addErrorsToStack);
     connect(languageMode, &KCLanguageMode::requireDrawError,
             this, &KCCodeEditor::redrawSmartPanel);
     connect(languageMode, &KCLanguageMode::requireDebugJumpLine,
             this, &KCCodeEditor::onDebugJumpLine);
+    connect(currentCompileProgress, SIGNAL(requireCompile()),
+            this, SIGNAL(requiredCompileFile()));
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
