@@ -91,7 +91,7 @@ void dbgOutputReceiver::addExprValue(int expIndex,
                                      QString value)
 {
     QStandardItem *exprValue=watchModel->takeItem(expIndex, 1);
-    qDebug()<<value;\
+    qDebug()<<value;
 }
 
 void dbgOutputReceiver::addText(const QString &text)

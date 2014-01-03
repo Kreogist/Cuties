@@ -473,7 +473,7 @@ void GdbController::quitGDB()
 {
     gdbProcessThread->quitGDB();
     gdbProcessThread->quit();
-    emit requireDisconnectDebug();
+    //emit requireDisconnectDebug();
 }
 
 void GdbController::setBreakPointList(QList<int> breakpointLine)
