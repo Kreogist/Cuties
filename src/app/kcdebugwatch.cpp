@@ -127,6 +127,13 @@ KCDebugWatch::~KCDebugWatch()
     customWatchControlLayout->deleteLater();
 }
 
+void KCDebugWatch::setGdbController(GdbController *controller)
+{
+    gdbController=controller;
+    setLocalWatchModel(gdbController->getDbgOutputs()->getLocalVarModel());
+    setCustomWatchModel(gdbController->getDbgOutputs()->getWatchModel());
+}
+
 void KCDebugWatch::clearLocalWatchModel()
 {
     localWatch->setModel(NULL);
@@ -196,7 +203,10 @@ void KCDebugWatch::onActionAddWatch()
     addWatchEquation->exec();
     if(addWatchEquation->messageBoxState()==KCMessageBoxPanel::buttonOK)
     {
-        qDebug()<<equation->text();
+        if(!equation->text().isEmpty())
+        {
+            gdbController->getDbgOutputs()->appendExpr(equation->text());
+        }
     }
 }
 

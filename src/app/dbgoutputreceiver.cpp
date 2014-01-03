@@ -43,6 +43,8 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     targetFormat.setForeground(QBrush(QColor(0,0x8f,0xff)));
     logFormat.setForeground(QBrush(Qt::yellow));
 
+    watchExps.clear();
+
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &dbgOutputReceiver::retranslateAndSet);
 }
@@ -85,9 +87,11 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
     }
 }
 
-void dbgOutputReceiver::addExprValue(QString value)
+void dbgOutputReceiver::addExprValue(int expIndex,
+                                     QString value)
 {
-    ;
+    QStandardItem *exprValue=watchModel->takeItem(expIndex);
+    qDebug()<<value;
 }
 
 void dbgOutputReceiver::addText(const QString &text)
@@ -101,6 +105,16 @@ void dbgOutputReceiver::insertText(const QString &text,
     QTextCursor text_cursor=QTextCursor(textStreamOutput);
     text_cursor.movePosition(QTextCursor::End);
     text_cursor.insertText(text,charFormat);
+}
+
+QStringList dbgOutputReceiver::getWatchExps() const
+{
+    return watchExps;
+}
+
+void dbgOutputReceiver::setWatchExps(const QStringList &value)
+{
+    watchExps = value;
 }
 
 QTextDocument *dbgOutputReceiver::getTextStreamOutput() const
@@ -133,6 +147,18 @@ void dbgOutputReceiver::clearOutput()
     stackInfoModel->clear();
     localVarModel->clear();
     watchModel->clear();
+}
+
+void dbgOutputReceiver::appendExpr(const QString &value, int index)
+{
+    if(index<0)
+    {
+        watchExps.append(value);
+    }
+    else
+    {
+        watchExps.insert(index, value);
+    }
 }
 
 QStandardItemModel *dbgOutputReceiver::getWatchModel() const

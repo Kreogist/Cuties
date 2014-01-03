@@ -198,8 +198,6 @@ void GdbController::parseLine(const QString &_msg)
     const QChar *begin=_msg.begin();
     const QChar *end=_msg.end();
 
-    exitedNormally=false;
-
     switch(_firstChar)
     {
     case '^':
@@ -237,7 +235,7 @@ void GdbController::parseLine(const QString &_msg)
             }
             else if(result.getName() == "value")
             {
-                dbgOutputs->addExprValue(result.getValue());
+                dbgOutputs->addExprValue(expIndex, result.getValue());
                 break;
             }
             else if(result.getName() == "bkpt")
@@ -247,8 +245,7 @@ void GdbController::parseLine(const QString &_msg)
                 //Refresh stack list
                 if(!requestForceUpdateLocal)
                 {
-                    requestForceUpdateLocal=true;
-                    stackListLocals();
+                    updateDockInfos();
                 }
                 break;
             }
@@ -300,8 +297,10 @@ void GdbController::parseLine(const QString &_msg)
         if(_str_async == "stopped")
         {
             //Refresh stack list
-            requestForceUpdateLocal=true;
-            stackListLocals();
+            if(!requestForceUpdateLocal)
+            {
+                updateDockInfos();
+            }
 
             QString stoppedDetails;
             dbgOutputs->addConsoleOutput("  -> Cuties: GDB stopped.\n");
@@ -321,11 +320,6 @@ void GdbController::parseLine(const QString &_msg)
                 if(child.getName()=="reason")
                 {
                     stoppedDetails+=QString("Reason: " + child.getValue() + "\n");
-                    if(child.getValue()=="exited-normally")
-                    {
-                        exitedNormally=true;
-                        break;
-                    }
                 }
                 else if(child.getName()=="func")
                 {
@@ -539,7 +533,6 @@ void GdbController::setWatchPoint(const QString &var)
     execGdbCommand(QString("-break-watch ")+var+"\n");
 }
 
-
 /*!
  * \brief Asynchronous command. Starts execution of the inferior from the beginning. The inferior executes until either a breakpoint is encountered or the program exits.
  */
@@ -619,6 +612,21 @@ void GdbController::execStepi()
 void GdbController::execUntil(const QString &location)
 {
     execGdbCommand(QString("-exec-until ")+location);
+}
+
+void GdbController::updateDockInfos()
+{
+    requestForceUpdateLocal=true;
+    //Updates local watch
+    stackListLocals();
+    //Update watch
+    QStringList customWatchList=dbgOutputs->getWatchExps();
+    for(int i=0; i<customWatchList.count(); i++)
+    {
+        expIndex=i;
+        evaluate(customWatchList.at(i));
+    }
+    requestForceUpdateLocal=false;
 }
 
 void GdbController::stackListLocals()

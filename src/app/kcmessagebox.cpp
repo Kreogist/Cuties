@@ -306,7 +306,7 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     connect(panel, SIGNAL(requiredMessage(KCMessageBoxPanel::buttonState)),
             this, SLOT(messageFilter(KCMessageBoxPanel::buttonState)));
     connect(panel, SIGNAL(requiredExit()),
-            this, SLOT(close()));
+            this, SLOT(animateClose()));
 
     showAnimation=new QSequentialAnimationGroup(this);
 
@@ -316,6 +316,11 @@ KCMessageBox::KCMessageBox(QWidget *parent) :
     heightExpand=new QPropertyAnimation(this, "geometry", this);
     heightExpand->setDuration(150);
     heightExpand->setEasingCurve(QEasingCurve::OutCubic);
+
+    exitAnimation=new QPropertyAnimation(this, "geometry", this);
+    exitAnimation->setDuration(100);
+    connect(exitAnimation, SIGNAL(finished()),
+            this, SLOT(close()));
 }
 
 void KCMessageBox::setTitle(const QString &text)
@@ -366,7 +371,7 @@ void KCMessageBox::showEvent(QShowEvent *e)
 {
     QRect parentGeometry=parentWidget()->geometry();
     int originalX, originalY, expectedX, expectedY, originalWidth,
-            beginY, beginHeight, cacheExpected, minimumHeight=190;
+            beginY, cacheExpected, minimumHeight=190;
     originalWidth=width();
     beginHeight=height();
     cacheExpected=title->getTitleWidthHint();
@@ -421,11 +426,11 @@ void KCMessageBox::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Enter:
     case Qt::Key_Return:
         messageFilter(KCMessageBoxPanel::buttonOK);
-        close();
+        animateClose();
         break;
     case Qt::Key_Escape:
         messageFilter(KCMessageBoxPanel::buttonCancel);
-        close();
+        animateClose();
         break;
     default:
         QDialog::keyPressEvent(e);
@@ -436,4 +441,21 @@ void KCMessageBox::keyPressEvent(QKeyEvent *e)
 void KCMessageBox::messageFilter(KCMessageBoxPanel::buttonState message)
 {
     messageState=message;
+}
+
+void KCMessageBox::animateClose()
+{
+    if(showAnimation->state()==QAbstractAnimation::Running)
+    {
+        showAnimation->stop();
+    }
+    QRect startGeometry=geometry();
+    QRect endGeometry=startGeometry;
+    endGeometry.setTop(startGeometry.top()+
+                       startGeometry.height()/2-
+                       beginHeight/2);
+    endGeometry.setHeight(beginHeight);
+    exitAnimation->setStartValue(startGeometry);
+    exitAnimation->setEndValue(endGeometry);
+    exitAnimation->start();
 }
