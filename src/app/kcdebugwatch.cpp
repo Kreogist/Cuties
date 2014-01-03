@@ -182,16 +182,16 @@ void KCDebugWatch::retranslateAndSet()
 
 void KCDebugWatch::onActionAddWatch()
 {
-    KCMessageBox *addWatchEquation=new KCMessageBox(this);
+    KCMessageBox *addWatchEquation=new KCMessageBox(this->parentWidget());
     QLineEdit *equation=new QLineEdit(this);
     equation->setFixedWidth(250);
     QPalette pal=equation->palette();
     pal.setColor(QPalette::Base, QColor(255,255,255,50));
     equation->setPalette(pal);
     addWatchEquation->enabledCancel();
-    addWatchEquation->setTitle("Add Watch");
-    addWatchEquation->addText(tr("Enter Variable Equation/Name:"));
-    addWatchEquation->addSpacing(5);
+    addWatchEquation->setTitle("New Watch");
+    addWatchEquation->addText(tr("Enter variable equation/name:"));
+    addWatchEquation->addSpacing(10);
     addWatchEquation->addWidget(equation);
     addWatchEquation->exec();
     if(addWatchEquation->messageBoxState()==KCMessageBoxPanel::buttonOK)
@@ -202,10 +202,39 @@ void KCDebugWatch::onActionAddWatch()
 
 void KCDebugWatch::onActionModifyWatch()
 {
-    ;
+    KCMessageBox *modifyWatchEquation=new KCMessageBox(this->parentWidget());
+    QLineEdit *equation=new QLineEdit(this);
+    QString originalData="WTF?!";
+    equation->setFixedWidth(250);
+    equation->setText("original text");
+    QPalette pal=equation->palette();
+    pal.setColor(QPalette::Base, QColor(255,255,255,50));
+    equation->setPalette(pal);
+    modifyWatchEquation->enabledCancel();
+    modifyWatchEquation->setTitle("Modify Watch");
+    modifyWatchEquation->addText(tr("Change equation/variable name:"));
+    modifyWatchEquation->addSpacing(10);
+    modifyWatchEquation->addText(originalData);
+    modifyWatchEquation->addSpacing(5);
+    modifyWatchEquation->addWidget(equation);
+    modifyWatchEquation->exec();
+    if(modifyWatchEquation->messageBoxState()==KCMessageBoxPanel::buttonOK)
+    {
+        qDebug()<<equation->text();
+    }
 }
 
 void KCDebugWatch::onActionRemoveWatch()
 {
-    ;
+    KCMessageBox *deleteWatch=new KCMessageBox(this->parentWidget());
+    deleteWatch->enabledCancel();
+    deleteWatch->setTitle("Remove Watch");
+    deleteWatch->addText(tr("Are you sure to remove to watch this?"));
+    deleteWatch->addSpacing(10);
+    deleteWatch->addText("equation");
+    deleteWatch->exec();
+    if(deleteWatch->messageBoxState()==KCMessageBoxPanel::buttonOK)
+    {
+        qDebug()<<"Sure";
+    }
 }
