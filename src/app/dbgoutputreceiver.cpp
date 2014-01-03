@@ -90,8 +90,10 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
 void dbgOutputReceiver::addExprValue(int expIndex,
                                      QString value)
 {
-    //watchModel->takeItem(expIndex, 1)->setText(value);
-    qDebug()<<value;
+    //QString name=watchExps.at(expIndex);  //name
+    QStandardItem *varValue=watchModel->takeItem(expIndex, 1);
+    varValue->setText(value);
+    watchModel->setItem(expIndex, 1, varValue);
 }
 
 void dbgOutputReceiver::addText(const QString &text)
@@ -99,7 +101,7 @@ void dbgOutputReceiver::addText(const QString &text)
     insertText(text,normalFormat);
 }
 
-void dbgOutputReceiver::removeExprValue(int expIndex)
+void dbgOutputReceiver::removeExpr(int expIndex)
 {
     watchExps.removeAt(expIndex);
     watchModel->removeRow(expIndex);
@@ -174,6 +176,24 @@ void dbgOutputReceiver::appendExpr(const QString &value)
     QList<QStandardItem *> watchVar;
     watchVar<<varName<<varValue;
     watchModel->appendRow(watchVar);
+}
+
+void dbgOutputReceiver::insertExpr(int expIndex, const QString &value)
+{
+    watchExps.insert(expIndex, value);
+    QString name=value;  //name
+    QString empty=QString(""); //value
+    QStandardItem *varName=new QStandardItem(name);
+    QStandardItem *varValue=new QStandardItem(empty);
+    QList<QStandardItem *> watchVar;
+    watchVar<<varName<<varValue;
+    watchModel->insertRow(expIndex, watchVar);
+}
+
+void dbgOutputReceiver::modifyExpr(int expIndex, const QString &value)
+{
+    insertExpr(expIndex, value);
+    removeExpr(expIndex+1);
 }
 
 QStandardItemModel *dbgOutputReceiver::getWatchModel() const

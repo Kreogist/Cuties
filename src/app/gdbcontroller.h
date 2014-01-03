@@ -169,6 +169,7 @@ private:
     QTextCodec::ConverterState debugCodecState;
     KCDebuggerConfigure *instance;
     bool requestForceUpdateLocal;
+    QList<int> customIndexList;
 
     int expIndex;
 };

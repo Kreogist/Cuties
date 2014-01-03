@@ -189,6 +189,7 @@ void KCDebugWatch::retranslateAndSet()
 
 void KCDebugWatch::onActionAddWatch()
 {
+    int currentIndex=customWatch->currentIndex().row();
     KCMessageBox *addWatchEquation=new KCMessageBox(this->parentWidget());
     QLineEdit *equation=new QLineEdit(this);
     equation->setFixedWidth(250);
@@ -205,7 +206,15 @@ void KCDebugWatch::onActionAddWatch()
     {
         if(!equation->text().isEmpty())
         {
-            gdbController->getDbgOutputs()->appendExpr(equation->text());
+            if(currentIndex==-1)
+            {
+                gdbController->getDbgOutputs()->appendExpr(equation->text());
+            }
+            else
+            {
+                gdbController->getDbgOutputs()->insertExpr(currentIndex,
+                                                           equation->text());
+            }
         }
     }
 }
@@ -238,7 +247,8 @@ void KCDebugWatch::onActionModifyWatch()
     {
         if(!equation->text().isEmpty())
         {
-            gdbController->getDbgOutputs()->appendExpr(equation->text());
+            gdbController->getDbgOutputs()->modifyExpr(currentIndex,
+                                                       equation->text());
         }
     }
 }
@@ -259,6 +269,6 @@ void KCDebugWatch::onActionRemoveWatch()
     deleteWatch->exec();
     if(deleteWatch->messageBoxState()==KCMessageBoxPanel::buttonOK)
     {
-        gdbController->getDbgOutputs()->removeExprValue(currentIndex);
+        gdbController->getDbgOutputs()->removeExpr(currentIndex);
     }
 }

@@ -46,7 +46,6 @@ public slots:
     void retranslateAndSet();
     void clearOutput();
     void clearTextStream();
-    void appendExpr(const QString &value);
     void addConsoleOutput(QString text);
     void addTargetOutput(QString text);
     void addLogOutput(QString text);
@@ -54,7 +53,10 @@ public slots:
     void addLocals(GdbMiValue localVars);
     void addExprValue(int expIndex, QString value);
     void addText(const QString &text);
-    void removeExprValue(int expIndex);
+    void appendExpr(const QString &value);
+    void insertExpr(int expIndex, const QString &value);
+    void modifyExpr(int expIndex, const QString &value);
+    void removeExpr(int expIndex);
 
 private:
     void insertText(const QString &text,const QTextCharFormat &charFormat);
