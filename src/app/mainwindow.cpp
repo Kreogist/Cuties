@@ -1382,8 +1382,7 @@ void MainWindow::connectDebugDockWithCurrEditor()
     {
         debugControl->setGdbController(gdbControllerInstance);
         debugCommandIO->setGdbInstance(gdbControllerInstance);
-        debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getLocalVarModel());
-        debugWatch->setCustomWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
+        debugWatch->setGdbController(gdbControllerInstance);
     }
     else
     {

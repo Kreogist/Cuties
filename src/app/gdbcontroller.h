@@ -168,6 +168,8 @@ private:
     QTextCodec::ConverterState debugCodecState;
     KCDebuggerConfigure *instance;
     bool requestForceUpdateLocal;
+
+    int expIndex;
 };
 
 #endif // GDBCONTROLLER_H

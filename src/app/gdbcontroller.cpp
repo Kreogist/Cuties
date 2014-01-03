@@ -242,8 +242,7 @@ void GdbController::parseLine(const QString &_msg)
             }
             else if(result.getName() == "value")
             {
-                qDebug()<<result.getValue();
-                dbgOutputs->addExprValue(result.getValue());
+                dbgOutputs->addExprValue(expIndex, result.getValue());
                 break;
             }
             else if(result.getName() == "bkpt")
@@ -540,7 +539,6 @@ void GdbController::setWatchPoint(const QString &var)
     execGdbCommand(QString("-break-watch ")+var+"\n");
 }
 
-
 /*!
  * \brief Asynchronous command. Starts execution of the inferior from the beginning. The inferior executes until either a breakpoint is encountered or the program exits.
  */
@@ -625,7 +623,15 @@ void GdbController::execUntil(const QString &location)
 void GdbController::updateDockInfos()
 {
     requestForceUpdateLocal=true;
+    //Updates local watch
     stackListLocals();
+    //Update watch
+    QStringList customWatchList=dbgOutputs->getWatchExps();
+    for(int i=0; i<customWatchList.count(); i++)
+    {
+        expIndex=i;
+        evaluate(customWatchList.at(i));
+    }
     requestForceUpdateLocal=false;
 }
 

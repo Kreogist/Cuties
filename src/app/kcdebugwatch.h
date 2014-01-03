@@ -22,6 +22,8 @@
 
 #include <QDockWidget>
 
+#include "gdbcontroller.h"
+
 class QLabel;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -38,6 +40,7 @@ class KCDebugWatch : public QDockWidget
 public:
     explicit KCDebugWatch(QWidget *parent = 0);
     ~KCDebugWatch();
+    void setGdbController(GdbController* controller);
     void clearLocalWatchModel();
     void clearCustomWatchModel();
     void setLocalWatchModel(QStandardItemModel* model);
@@ -76,6 +79,7 @@ private:
     QString customWatchCommandTitle[CustomWatchCommandCount];
 
     QHBoxLayout *customWatchControlLayout;
+    GdbController *gdbController;
 
     QString windowTitleString,
             localWatchTitle,

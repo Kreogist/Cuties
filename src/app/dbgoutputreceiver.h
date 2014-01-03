@@ -37,17 +37,20 @@ public:
     QStandardItemModel *getLocalVarModel() const;
     QStandardItemModel *getWatchModel() const;
     QTextDocument *getTextStreamOutput() const;
+    QStringList getWatchExps() const;
+    void setWatchExps(const QStringList &value);
 
 public slots:
     void retranslate();
     void retranslateAndSet();
     void clearOutput();
+    void appendExpr(const QString &value, int index=-1);
     void addConsoleOutput(QString text);
     void addTargetOutput(QString text);
     void addLogOutput(QString text);
     void addErrorText(QString text);
     void addLocals(GdbMiValue localVars);
-    void addExprValue(QString value);
+    void addExprValue(int expIndex, QString value);
     void addText(const QString &text);
 
 private:
@@ -56,6 +59,7 @@ private:
     QStandardItemModel *stackInfoModel;
     QStandardItemModel *localVarModel;
     QStandardItemModel *watchModel;
+    QStringList watchExps;
     QTextDocument *textStreamOutput;
 
     QTextCharFormat normalFormat,errorFormat,targetFormat,logFormat;
