@@ -33,6 +33,11 @@
 KCLanguageMode::KCLanguageMode(QWidget *parent) :
     QObject(parent)
 {
+    languageName[PlainText]="";
+    languageName[Cpp]="c++";
+    languageName[C]="c";
+    languageName[Pascal]="pascal";
+
     m_parent=qobject_cast<KCCodeEditor *>(parent);
     compilerReceiver=NULL;
     setCompileState(uncompiled);
@@ -167,6 +172,7 @@ GdbController *KCLanguageMode::getGdbController() const
 
 GdbController *KCLanguageMode::startDebug(int lineNumber)
 {
+    gdbControllerInstance->setFileType(languageName[m_type]);
     gdbControllerInstance->runGDB(m_parent->execFileName);
     if(lineNumber<0)
     {

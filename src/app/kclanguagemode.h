@@ -41,7 +41,8 @@ public:
         PlainText,
         Cpp,
         C,
-        Pascal
+        Pascal,
+        ModeTypeCount
     };
 
     enum compileState
@@ -92,6 +93,7 @@ private:
     KCConnectionHandler compilerConnectionHandles;
     compileState state;
     QReadWriteLock stateLock;
+    QString languageName[ModeTypeCount];
 
     GdbController *gdbControllerInstance;
 
