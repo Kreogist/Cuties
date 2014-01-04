@@ -1,4 +1,3 @@
-
 @font-face
 {
 	font-family: "sao";
@@ -96,7 +95,7 @@ p{margin-top:2em;}
 }
 .wrapper-dropdown:hover .dropdown{
     opacity:0.9;
-    max-height:30em;
+    max-height:100em;
     transition:all 0.3s ease-in-out;
     transition-delay:0.2s;
 }
