@@ -1,3 +1,48 @@
+0.2.6.3
+New Features:
+1. Unibody smart panel initial support.
+2. Commpile error show in smart panel.
+3. Number highlight.
+4. Debug goto line function support.
+5. Debug breakpoint add function support.
+6. Debug images added.
+7. Multi-thread Debugging support.
+8. Use a steady cache to output GDB command output.
+9. Delay compile support.
+10. Add preproc data highlight for C/C++
+11. Delay compile enabled switch.
+12. Customize delay compile speed.
+13. Add watch dialog.
+14. Add modify/remove watch function.
+15. Message Box exit animation.
+16. Custom watch support.
+17. Show the last time debug state.
+
+Updates:
+1. Clear some image.
+2. Add code level up&down counter.
+3. Update color configures
+4. Update skip comma policy to enhance the command output steady.
+5. Enhanced delay compile animation.
+6. Compile progress policy.
+7. Debug dock retranslate.
+8. Detect file compiled or not before debugging.
+9. Compile dock will appear when it need.
+10. Switch to the tab when Cuties exit the file is still debugging.
+11. Steady GDB Output.
+12. Debugger path relative path support.
+
+Bug Fixed:
+1. Fixed Debug crashed bug.
+2. Fixed GDB cursor goto the previous line bug.
+3. Fixed Cuties exit when there's file still debugging bug.
+4. Fixed Multi-debugging crashed bug when user do multi-debugging and then cloase all the files and then open a new file.
+5. Fixed GDB infinity output bug.
+6. Fixed crashed bug when there's no GDBController.
+7. Fixed show local list debug crashed bug.
+8. Fixed open file crashed bug when there's not a exsist file in restore cache.
+9. Fixed the integer select list was lock at 99.
+
 0.2.5.18
 New Features:
 1. SAO Style Main Menu Animation.
