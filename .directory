@@ -1,4 +1,6 @@
 [Dolphin]
+GroupedSorting=true
 PreviewsShown=true
-Timestamp=2013,11,16,20,48,4
+SortRole=type
+Timestamp=2014,1,5,15,7,56
 Version=3
