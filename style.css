@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=Exo+2);
 @font-face
 {
 	font-family: "sao";
@@ -24,7 +25,7 @@
 body{
     background-color:#434343;
     font-size:18px;
-    font-family:"sao", "华文细黑";
+    font-family: 'Exo 2', "华文细黑";
     min-width:980px;
 }
 
@@ -57,7 +58,7 @@ footer a:hover {
 
 p{margin-top:2em;}
 /*==>common class<==*/
-.normal-font{font-weight:400;}
+.normal-font{font-family: 'Exo 2',"华文细黑";font-weight:400;}
 .light-font{font-family:"SourceSansPro-Regular", "华文细黑";}
 .exlight-font{font-family:"SourceSansPro-ExtraLight", "华文细黑";}
 .center-text{text-align:center;}
@@ -88,7 +89,6 @@ p{margin-top:2em;}
     position:absolute;
     margin:0;
     padding:0;
-    font-family:"sao";
     left:0;
     top:0;
     width:100%;
@@ -106,7 +106,6 @@ p{margin-top:2em;}
     margin-left:-302px;
     background:rgba(200,200,200,0.9);
     box-shadow:0 0 2px #fff;
-    font-family:"Gotham Nights";
     font-size:18px;
     visibility:hidden;
     opacity:0;
