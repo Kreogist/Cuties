@@ -83,44 +83,21 @@
 			<p class="normal-font"><br />All versions of Cuties provided on DBank Mirror: </p>
 
             <div class="download-context">
-                <div class="download-context-box">
-                    <h1 class="platform">Windows</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">Download</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c089qgludy">With MinGW & FPC Compiler(7z, 95.03MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0iduyqxqf">With MinGW & FPC Compiler(zip, 350.11MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0vs6v76rj">With TDM-GCC & FPC Compiler(7z, 66.71MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0vudh71li">With TDM-GCC & FPC Compiler(zip, 143.56MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0y6qkpkd1">With MinGW Compiler(7z, 67.93MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0fntf1wnx">With MinGW Compiler(zip, 305.46MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0yhkuo9ms">With TDM-GCC Compiler(7z, 40.31MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0o0tt7k3m">With TDM-GCC Compiler(zip, 98.92MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0m9lm2tk0">With FPC Compiler (7z, 46.74MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c05qzq0v23">With FPC Compiler (zip, 73.77MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0h3nafqhh">No Compiler(7z, 20.02MB) Mirror DBank</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0gdw2j71n">No Compiler(zip, 29.13MB) Mirror DBank</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="download-context-box">
-                    <h1 class="platform">Mac</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">Coming Soon...</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="download-context-box">
-                    <h1 class="platform">Linux</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">Comming Soon...</a></li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="download-context-box">
+            <h1 class="platform">Windows</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-windows") >Download</a>
             </div>
+            <div class="download-context-box">
+            <h1 class="platform">Mac</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-mac") >Comming Soon...</a>
+            </div>
+            
+            <div class="download-context-box">
+            <h1 class="platform">Linux</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-linux") >Comming Soon...</a>
+            </div>
+            </div>
+            
 			<p class="normal-font center-text"><br /><br />We also provide Cuties on Those Mirror</p>
 			<a href="downloads.html">
 			<p class="normal-font center-text" style="margin-top:0px; margin-bottom:0px;"><br /><br /><img src="../mainsite-github.png" width=64px;/></p>
@@ -151,11 +128,44 @@
         </div>
     </div>
     </div>
+    <div id="dialog-wrapper" >
+    <div id="dialog-windows" class="dialog" onclick=HideDialogs()>
+    <h1>Windows</h1>
+    <p>
+    <ul class="menu-link-wrapper">
+    <li ><a class="menu-link" href="http://dl.vmall.com/c089qgludy">With MinGW & FPC Compiler(7z, 95.03MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0iduyqxqf">With MinGW & FPC Compiler(zip, 350.11MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0vs6v76rj">With TDM-GCC & FPC Compiler(7z, 66.71MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0vudh71li">With TDM-GCC & FPC Compiler(zip, 143.56MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0y6qkpkd1">With MinGW Compiler(7z, 67.93MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0fntf1wnx">With MinGW Compiler(zip, 305.46MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0yhkuo9ms">With TDM-GCC Compiler(7z, 40.31MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0o0tt7k3m">With TDM-GCC Compiler(zip, 98.92MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0m9lm2tk0">With FPC Compiler (7z, 46.74MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c05qzq0v23">With FPC Compiler (zip, 73.77MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0h3nafqhh">No Compiler(7z, 20.02MB) Mirror DBank</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0gdw2j71n">No Compiler(zip, 29.13MB) Mirror DBank</a></li>
+    </ul>
+    </p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-mac" class="dialog" onclick=HideDialogs()>
+    <h1>Mac</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-linux" class="dialog" onclick=HideDialogs()>
+    <h1>Linux</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    </div>
     <div class="footer_wrap">
       <footer class="inner">
         <p class="copyright exlight-font">© 2013 <a href="http://kreogist.github.io/Cuties/">Kreogist Dev Team</a>. </p>
     	  <p />
       </footer>
     </div>
+    <script src="../dialog.js"></script>
 </body>
 </html>

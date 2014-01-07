@@ -82,45 +82,23 @@
 			}
 			</script>
 			<p class="normal-font"><br />所有版本的 Cuties 下载：</p>
-            <div class="download-context">
-                <div class="download-context-box">
-                    <h1 class="platform">Windows</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">立即下载</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c089qgludy">带有 MinGW 和 FPC 编译器的 Cuties (7z, 95.03MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0iduyqxqf">带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0vs6v76rj">带有 TDM-GCC 和 FPC 编译器的 Cuties (7z, 66.71MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0vudh71li">带有 TDM-GCC 和 FPC 编译器的 Cuties (zip, 143.56MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0y6qkpkd1">带有 MinGW 编译器的 Cuties (7z, 67.93MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0fntf1wnx">带有 MinGW 编译器的 Cuties (zip, 305.46MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0yhkuo9ms">带有 TDM-GCC 编译器的 Cuties (7z, 40.31MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0o0tt7k3m">带有 TDM-GCC 编译器的 Cuties (zip, 98.92MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0m9lm2tk0">带有 FPC 编译器的 Cuties  (7z, 46.74MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c05qzq0v23">带有 FPC 编译器的 Cuties  (zip, 73.77MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0h3nafqhh">没有编译器的 Cuties (7z, 20.02MB) 华为网盘镜像</a></li>
-							<li ><a class="menu-link" href="http://dl.vmall.com/c0gdw2j71n">没有编译器的 Cuties (zip, 29.13MB) 华为网盘镜像</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="download-context-box">
-                    <h1 class="platform">Mac</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">即将到来</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="download-context-box">
-                    <h1 class="platform">Linux</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">即将到来</a></li>
-                        </ul>
-                    </div>
-                </div>
+			
+			<div class="download-context">
+			<div class="download-context-box">
+			<h1 class="platform">Windows</h1>
+			<a class="menu-link"  onclick=ShowDialog("dialog-windows") >下载</a>
             </div>
+            <div class="download-context-box">
+            <h1 class="platform">Mac</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-mac") >即将到来</a>
+            </div>
+            
+            <div class="download-context-box">
+            <h1 class="platform">Linux</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-linux") >即将到来</a>
+            </div>
+            </div>
+            
 			<p class="normal-font center-text"><br /><br />我们在这些网站提供 Cuties 安装包的镜像</p>
 			<a href="downloads.html">
 			<p class="normal-font center-text" style="margin-top:0px; margin-bottom:0px;"><br /><br /><img src="../mainsite-github.png" width=64px;/></p>
@@ -150,7 +128,39 @@
 			<p class="normal-font">如要获得Cuties的源代码，请访问<a href="opensource.html">Project Cuties</a>以获得Cuties的源代码。</p>
         </div>
     </div>
-
+    </div>
+    
+    <div id="dialog-wrapper" >
+    <div id="dialog-windows" class="dialog" onclick=HideDialogs()>
+    <h1>Windows</h1>
+    <p>
+    <ul class="menu-link-wrapper">
+    <li ><a class="menu-link" href="http://dl.vmall.com/c089qgludy">带有 MinGW 和 FPC 编译器的 Cuties (7z, 95.03MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0iduyqxqf">带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0vs6v76rj">带有 TDM-GCC 和 FPC 编译器的 Cuties (7z, 66.71MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0vudh71li">带有 TDM-GCC 和 FPC 编译器的 Cuties (zip, 143.56MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0y6qkpkd1">带有 MinGW 编译器的 Cuties (7z, 67.93MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0fntf1wnx">带有 MinGW 编译器的 Cuties (zip, 305.46MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0yhkuo9ms">带有 TDM-GCC 编译器的 Cuties (7z, 40.31MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0o0tt7k3m">带有 TDM-GCC 编译器的 Cuties (zip, 98.92MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0m9lm2tk0">带有 FPC 编译器的 Cuties  (7z, 46.74MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c05qzq0v23">带有 FPC 编译器的 Cuties  (zip, 73.77MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0h3nafqhh">没有编译器的 Cuties (7z, 20.02MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0gdw2j71n">没有编译器的 Cuties (zip, 29.13MB) 华为网盘镜像</a></li>
+    </ul>
+    </p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-mac" class="dialog" onclick=HideDialogs()>
+    <h1>Mac</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-linux" class="dialog" onclick=HideDialogs()>
+    <h1>Linux</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
     </div>
 	<div class="footer_wrap">
     <footer class="inner">
@@ -158,5 +168,6 @@
   	  <p />
     </footer>
 	</div>
+	<script src="../dialog.js"></script>
 </body>
 </html>

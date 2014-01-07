@@ -82,45 +82,22 @@
 			}
 			</script>
 			<p class="normal-font"><br />所有版本的 Cuties 下载：</p>
-            <div class="download-context">
-                <div class="download-context-box">
-                    <h1 class="platform">Windows</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">立即下载</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1bn9Zg0B">带有 MinGW 和 FPC 编译器的 Cuties (7z, 95.03MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1qWydqGG">带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1ntwN4zn">带有 TDM-GCC 和 FPC 编译器的 Cuties (7z, 66.71MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1sjyHlNJ">带有 TDM-GCC 和 FPC 编译器的 Cuties (zip, 143.56MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1eQzJ93k">带有 MinGW 编译器的 Cuties (7z, 67.93MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1kTE26BP">带有 MinGW 编译器的 Cuties (zip, 305.46MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1o60Pm7S">带有 TDM-GCC 编译器的 Cuties (7z, 40.31MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/13V77S">带有 TDM-GCC 编译器的 Cuties (zip, 98.92MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1gdspYF5">带有 FPC 编译器的 Cuties  (7z, 46.74MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1bn492EV">带有 FPC 编译器的 Cuties  (zip, 73.77MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1i3oikWt">没有编译器的 Cuties (7z, 20.02MB) 百度云镜像</a></li>
-							<li ><a class="menu-link" href="http://pan.baidu.com/s/1i3r5Xy9">没有编译器的 Cuties (zip, 29.13MB) 百度云镜像</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="download-context-box">
-                    <h1 class="platform">Mac</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">即将到来</a></li>
-                        </ul>
-                    </div>
-                </div>
 
-                <div class="download-context-box">
-                    <h1 class="platform">Linux</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">即将到来</a></li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="download-context">
+            <div class="download-context-box">
+            <h1 class="platform">Windows</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-windows") >下载</a>
             </div>
+            <div class="download-context-box">
+            <h1 class="platform">Mac</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-mac") >即将到来</a>
+            </div>
+            <div class="download-context-box">
+            <h1 class="platform">Linux</h1>
+            <a class="menu-link"  onclick=ShowDialog("dialog-linux") >即将到来</a>
+            </div>
+            </div>
+
 			<p class="normal-font center-text"><br /><br />我们在这些网站提供 Cuties 安装包的镜像</p>
 			<a href="downloads.html">
 			<p class="normal-font center-text" style="margin-top:0px; margin-bottom:0px;"><br /><br /><img src="../mainsite-github.png" width=64px;/></p>
@@ -150,7 +127,39 @@
 			<p class="normal-font">如要获得Cuties的源代码，请访问<a href="opensource.html">Project Cuties</a>以获得Cuties的源代码。</p>
         </div>
     </div>
-
+    </div>
+    
+    <div id="dialog-wrapper" >
+    <div id="dialog-windows" class="dialog" onclick=HideDialogs()>
+    <h1>Windows</h1>
+    <p>
+    <ul class="menu-link-wrapper">
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1bn9Zg0B">带有 MinGW 和 FPC 编译器的 Cuties (7z, 95.03MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1qWydqGG">带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1ntwN4zn">带有 TDM-GCC 和 FPC 编译器的 Cuties (7z, 66.71MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1sjyHlNJ">带有 TDM-GCC 和 FPC 编译器的 Cuties (zip, 143.56MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1eQzJ93k">带有 MinGW 编译器的 Cuties (7z, 67.93MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1kTE26BP">带有 MinGW 编译器的 Cuties (zip, 305.46MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1o60Pm7S">带有 TDM-GCC 编译器的 Cuties (7z, 40.31MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/13V77S">带有 TDM-GCC 编译器的 Cuties (zip, 98.92MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1gdspYF5">带有 FPC 编译器的 Cuties  (7z, 46.74MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1bn492EV">带有 FPC 编译器的 Cuties  (zip, 73.77MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1i3oikWt">没有编译器的 Cuties (7z, 20.02MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1i3r5Xy9">没有编译器的 Cuties (zip, 29.13MB) 百度云镜像</a></li>
+    </ul>
+    </p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-mac" class="dialog" onclick=HideDialogs()>
+    <h1>Mac</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-linux" class="dialog" onclick=HideDialogs()>
+    <h1>Linux</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
     </div>
 	<div class="footer_wrap">
     <footer class="inner">
@@ -158,5 +167,6 @@
   	  <p />
     </footer>
 	</div>
+	<script src="../dialog.js"></script>
 </body>
 </html>

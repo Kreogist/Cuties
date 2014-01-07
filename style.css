@@ -3,6 +3,11 @@
 	font-family: "sao";
 	src: url('fonts/sao.otf') format('OpenType');
 }
+@font-face
+{
+	font-family: "Gotham Nights";
+	src: url('fonts/GothamNights.ttf');
+}
 	
 @font-face
 {
@@ -52,7 +57,7 @@ footer a:hover {
 
 p{margin-top:2em;}
 /*==>common class<==*/
-.normal-font{font-family:"Lucida Grande", "Arial", "华文细黑", "SimHei";font-weight:400;}
+.normal-font{font-weight:400;}
 .light-font{font-family:"SourceSansPro-Regular", "华文细黑";}
 .exlight-font{font-family:"SourceSansPro-ExtraLight", "华文细黑";}
 .center-text{text-align:center;}
@@ -78,27 +83,86 @@ p{margin-top:2em;}
     transition:all 0.2s ease-in-out;
 }
 .menu-link:active{color:#555;background:rgba(255,193,44,1);}
-
-.wrapper-dropdown{position:relative;cursor:pointer;}
-.wrapper-dropdown .dropdown{
+#dialog-wrapper{
+    z-index:8888;
     position:absolute;
-    top:0;
+    margin:0;
+    padding:0;
+    font-family:"sao";
     left:0;
-    list-style:none;
+    top:0;
+    width:100%;
+    height:100%;
+}
+.dialog{
+    z-index:9000;
+    display:inline-block;
+    position:fixed;
+    padding:0px 3px;
+    top:50%;
+    left:50%;
+    width:570px;
+    margin-top:-285px;
+    margin-left:-302px;
+    background:rgba(200,200,200,0.9);
+    box-shadow:0 0 2px #fff;
+    font-family:"Gotham Nights";
+    font-size:18px;
+    visibility:hidden;
+    opacity:0;
+    transform:scale(0.8,0.8);
+    transition:all 0.1s ease-in-out;
+}
+.dialog.active{
+    visibility:visible;
+    opacity:100;
+    transform:scale(1,1);
+    }
+.dialog li{list-style:none;}
+.dialog h1{
+    font-family:"Gotham Nights";
+    text-align:center;
+    font-weight:normal;
+    height:70px;
+    line-height:70px;
+    margin:0px -3px 30px -3px;
+    color:#666;
+    text-shadow:1px 1px 3px #A7A7A7;
+    background:rgba(255,255,255,0.4);
+    
+}
+.dialog h1.dialog-bottom{
+    margin:0px -3px 0px -3px;
+    box-shadow:0 -10px 10px rgba(0,0,0,0.1);
+}
+#dialog-windows{}
+#dialog-mac{display:none;}
+#dialog-linux{display:none;}
+.menu-link-wrapper{
     padding:0;
     margin:0;
-    width:100%;
-    
-    opacity:0.9;
-    max-height:2em;
-    overflow:hidden;
 }
-.wrapper-dropdown:hover .dropdown{
-    opacity:0.9;
-    max-height:100em;
-    transition:all 0.3s ease-in-out;
-    transition-delay:0.2s;
+.dialog .menu-link-wrapper{max-height:360px;overflow:auto;}
+.dialog .menu-link{
+    display:block;
+    background:rgba(255,255,255,0.2);
+    padding:5px 10px;
+    margin:2px 0px;
+    box-shadow:0px 0px 4px rgba(255,255,255,0.2);
+    border:1px solid rgba(255,255,255,0.1);
+    text-decoration:none;
+    }
+.dialog .menu-link:link{color:#222;}
+.dialog .menu-link:visited{color:#222;}
+.dialog .menu-link:hover{
+    background:rgba(237,179,41,1);
+    border:1px solid rgb(237,179,41);
+    box-shadow:0 0 6px rgba(255,193,44,0.8);
+    transition:all 0.2s ease-in-out;
 }
+
+.menu-link:active{color:#555;background:rgba(255,193,44,1);}
+
 /*==>common class<==*/
 #footer_wrap {
 	margin-top: 0px;
@@ -127,6 +191,7 @@ p{margin-top:2em;}
     padding:4px;
     padding-bottom:10px;
 	padding-right:0px;
+	font-family:"sao";
     font-size:1.4em;
     color:#eee;
     margin:0;
@@ -464,6 +529,7 @@ p{margin-top:2em;}
     border-radius:2%;
     margin-bottom:15px;
     color:transparent;
+    font-family:"sao";
     text-shadow:
     0px 0px 2px #000,
     0px 0px 0px rgba(255,255,255,1),

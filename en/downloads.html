@@ -71,7 +71,7 @@
 			{
 			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
 				document.write("<p class=\"normal-font center-text\">Sorry, no " + navigator.platform + " version currently...</p>");
-			}
+			} 
 			else
 			{
 				document.write("<p class=\"normal-font center-text\">Sorry, but we have no " + navigator.platform + " version.</p>");
@@ -82,40 +82,16 @@
             <div class="download-context">
                 <div class="download-context-box">
                     <h1 class="platform">Windows</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">Download</a></li>
-							<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-fpc-offline.7z">With MinGW & FPC Compiler(7z, 95.03MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-fpc-offline.zip">With MinGW & FPC Compiler(zip, 350.11MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-fpc-offline.7z">With TDM-GCC & FPC Compiler(7z, 66.71MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-fpc-offline.zip">With TDM-GCC & FPC Compiler(zip, 143.56MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-offline.7z">With MinGW Compiler(7z, 67.93MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-offline.zip">With MinGW Compiler(zip, 305.46MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-offline.7z">With TDM-GCC Compiler(7z, 40.31MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-offline.zip">With TDM-GCC Compiler(zip, 98.92MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-fpc-offline.7z">With FPC Compiler (7z, 46.74MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-fpc-offline.zip">With FPC Compiler (zip, 73.77MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-offline.7z">No Compiler(7z, 20.02MB)</a></li>
-<li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-offline.zip">No Compiler(zip, 29.13MB)</a></li>
-                        </ul>
-                    </div>
+                    <a class="menu-link"  onclick=ShowDialog("dialog-windows") >Download</a>
                 </div>
                 <div class="download-context-box">
                     <h1 class="platform">Mac</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">Comming Soon...</a></li>
-                        </ul>
-                    </div>
+                    <a class="menu-link"  onclick=ShowDialog("dialog-mac") >Comming Soon...</a>
                 </div>
 
                 <div class="download-context-box">
                     <h1 class="platform">Linux</h1>
-                    <div class="wrapper-dropdown">
-                        <ul class="dropdown">
-                            <li><a class="menu-link" href="#">Comming Soon...</a></li>
-                        </ul>
-                    </div>
+                    <a class="menu-link"  onclick=ShowDialog("dialog-linux") >Comming Soon...</a>
                 </div>
             </div>
 			<p class="normal-font center-text"><br /><br />We also provide Cuties on Those Mirror</p>
@@ -148,11 +124,44 @@
         </div>
     </div>
     </div>
-    <div class="footer_wrap">
+    <div id="dialog-wrapper" >
+    <div id="dialog-windows" class="dialog" onclick=HideDialogs()>
+    <h1>Windows</h1>
+    <p>
+    <ul class="menu-link-wrapper">
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-fpc-offline.7z">With MinGW & FPC Compiler(7z, 95.03MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-fpc-offline.zip">With MinGW & FPC Compiler(zip, 350.11MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-fpc-offline.7z">With TDM-GCC & FPC Compiler(7z, 66.71MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-fpc-offline.zip">With TDM-GCC & FPC Compiler(zip, 143.56MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-offline.7z">With MinGW Compiler(7z, 67.93MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-offline.zip">With MinGW Compiler(zip, 305.46MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-offline.7z">With TDM-GCC Compiler(7z, 40.31MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-offline.zip">With TDM-GCC Compiler(zip, 98.92MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-fpc-offline.7z">With FPC Compiler (7z, 46.74MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-fpc-offline.zip">With FPC Compiler (zip, 73.77MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-offline.7z">No Compiler(7z, 20.02MB)</a></li>
+    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-offline.zip">No Compiler(zip, 29.13MB)</a></li>
+    </ul>
+    </p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-mac" class="dialog" onclick=HideDialogs()>
+    <h1>Mac</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    <div id="dialog-linux" class="dialog" onclick=HideDialogs()>
+    <h1>Linux</h1>
+    <p></p>
+    <h1 class="dialog-bottom"></h1>
+    </div>
+    </div>
+  <div class="footer_wrap">
       <footer class="inner">
         <p class="copyright exlight-font">© 2013 <a href="http://kreogist.github.io/Cuties/">Kreogist Dev Team</a>. </p>
     	  <p />
       </footer>
     </div>
+   <script src="../dialog.js"></script>
 </body>
 </html>
