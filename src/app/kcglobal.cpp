@@ -90,5 +90,18 @@ void KCGlobal::showInGraphicalShell(const QString &filePath)
     QProcess::startDetached("explorer.exe",
                             QStringList(QString(QLatin1String("/select,") +
                                         QDir::toNativeSeparators(filePath))));
+    return;
+#endif
+#ifdef Q_OS_MACX
+    QStringList scriptArgs;
+    scriptArgs << QLatin1String("-e")
+               << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
+                                     .arg(filePath);
+    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    scriptArgs.clear();
+    scriptArgs << QLatin1String("-e")
+               << QLatin1String("tell application \"Finder\" to activate");
+    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
+    return;
 #endif
 }

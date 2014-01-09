@@ -22,5 +22,11 @@
 KCFloatToolBar::KCFloatToolBar(QWidget *parent) :
     QWidget(parent)
 {
-    setWindowFlags(Qt::Popup);
+    setWindowFlags(Qt::ToolTip);
+}
+
+void KCFloatToolBar::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+    parentWidget()->setFocus();
 }

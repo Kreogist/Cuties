@@ -235,8 +235,11 @@ void GdbController::parseLine(const QString &_msg)
             }
             else if(result.getName() == "value")
             {
-                dbgOutputs->addExprValue(customIndexList.at(0), result.getValue());
-                customIndexList.removeFirst();
+                if(!customIndexList.isEmpty())
+                {
+                    dbgOutputs->addExprValue(customIndexList.at(0), result.getValue());
+                    customIndexList.removeFirst();
+                }
                 break;
             }
             else if(result.getName() == "bkpt")
