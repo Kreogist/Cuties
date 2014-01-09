@@ -104,6 +104,8 @@ public:
     const QVector<bkpt_struct> *getBkptVec() const;
 
     QSharedPointer<dbgOutputReceiver> getDbgOutputs();
+    QString getFileType() const;
+    void setFileType(const QString &value);
 
 signals:
     void requireDisconnectDebug();
@@ -170,6 +172,7 @@ private:
     KCDebuggerConfigure *instance;
     bool requestForceUpdateLocal;
     QList<int> customIndexList;
+    QString fileType;
 
     int expIndex;
 };

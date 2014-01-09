@@ -412,6 +412,16 @@ QString GdbController::parseOutputStream(const QChar *begin,const QChar *end)
     return result.getValue();
 }
 
+QString GdbController::getFileType() const
+{
+    return fileType;
+}
+
+void GdbController::setFileType(const QString &value)
+{
+    fileType = value;
+}
+
 void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
 {
     bkpt_struct _tmp_bkpt;
@@ -484,7 +494,7 @@ void GdbController::setBreakPointList(QList<int> breakpointLine)
 {
     for(int i=0; i<breakpointLine.count(); i++)
     {
-        setBreakPoint(breakpointLine.at(i));
+        setBreakPoint(breakpointLine.at(i)+1);
     }
 }
 
@@ -653,6 +663,10 @@ void GdbController::configureGDB()
 #ifdef Q_OS_WIN32
     execGdbCommand("set new-console on");
 #endif
+    if(!fileType.isEmpty())
+    {
+        execGdbCommand(QString("set language " + fileType));
+    }
 }
 
 void GdbController::createGDBThread()
