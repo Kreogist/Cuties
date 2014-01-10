@@ -154,6 +154,16 @@ void KCSearchWidget::onMenuClicked()
     onTextChanged(searchText->text());
 }
 
+void KCSearchWidget::setResultMatchStyle()
+{
+    ;
+}
+
+void KCSearchWidget::setResultUnmatchStyle()
+{
+    ;
+}
+
 void KCSearchWidget::setText(const QString &text)
 {
     searchText->setText(text);
@@ -168,3 +178,14 @@ void KCSearchWidget::resizeEvent(QResizeEvent *event)
 {
     searchText->setFixedWidth(event->size().width());
 }
+
+bool KCSearchWidget::getConnected() const
+{
+    return connected;
+}
+
+void KCSearchWidget::setConnected(bool value)
+{
+    connected = value;
+}
+

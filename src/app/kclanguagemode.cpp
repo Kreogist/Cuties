@@ -34,20 +34,33 @@
 KCLanguageMode::KCLanguageMode(QWidget *parent) :
     QObject(parent)
 {
+    languageName[PlainText]="";
+    languageName[Cpp]="c++";
+    languageName[C]="c";
+    languageName[Pascal]="pascal";
+
     m_parent=qobject_cast<KCCodeEditor *>(parent);
     compilerReceiver=NULL;
-    gdbControllerInstance=NULL;
-
     setCompileState(uncompiled);
     m_type=Invalid;
     setFileSuffix(KCGeneralConfigure::getInstance()->getDefaultLanguageModeString());
 
+    gdbControllerInstance=new GdbController(this);
+    connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
+            this, SIGNAL(requireDisconnectDebug()));
+    connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
+            this, SIGNAL(requireDebugJumpLine(int)));
     Q_ASSERT(m_parent!=NULL);
 }
 
 bool KCLanguageMode::compilerIsNull()
 {
     return compiler.isNull();
+}
+
+bool KCLanguageMode::compilerIsExsist()
+{
+    return compiler->compilerExsist();
 }
 
 void KCLanguageMode::setMode(const modeType &type)
@@ -65,6 +78,8 @@ void KCLanguageMode::compile()
     if(compilerReceiver==NULL)
     {
         compilerReceiver=new KCCompileOutputReceiver(this);
+        connect(compilerReceiver, SIGNAL(errorOccurs(int)),
+                this, SIGNAL(compileErrorOccur(int)));
     }
     connectCompilerAndOutputReceiver();
 
@@ -91,18 +106,27 @@ void KCLanguageMode::compile()
 
 void KCLanguageMode::setFileSuffix(const QString &suffix)
 {
-    QRegularExpression _regexp_cpp("(h|hpp|rh|hh|c|cpp|cc|cxx|c++|cp)",
+    QRegularExpression _regexp_cpp("(h|hpp|rh|hh|cpp|cc|cxx|c++|cp)",
                                    QRegularExpression::CaseInsensitiveOption);
     QRegularExpression _regexp_pascal("pas",
                                       QRegularExpression::CaseInsensitiveOption);
 
-    if(suffix.contains(_regexp_cpp))
+    if(suffix=="c")
+    {
+        if(m_type==C) //file type doesn't change,so return.
+        {
+            return ;
+        }
+        m_type=C;
+        compiler.reset(new gcc(this,false));
+        m_highlighter.reset(new KCCppHighlighter(this));
+    }
+    else if(suffix.contains(_regexp_cpp))
     {
         if(m_type==Cpp) //file type doesn't change,so return.
         {
             return ;
         }
-
         m_type=Cpp;
         compiler.reset(new gcc(this));
         m_highlighter.reset(new KCCppHighlighter(this));
@@ -113,7 +137,6 @@ void KCLanguageMode::setFileSuffix(const QString &suffix)
         {
             return ;
         }
-
         m_type=Pascal;
         compiler.reset(new fpc(this));
         m_highlighter.reset(new KCPascalHighlighter(this));
@@ -129,8 +152,11 @@ void KCLanguageMode::setFileSuffix(const QString &suffix)
         compiler.reset();
         m_highlighter.reset(new KCHighlighter(this));
     }
-
-
+    if(!compiler.isNull())
+    {
+        connect(compiler.data(),&KCCompilerBase::compileFinished,
+                this ,&KCLanguageMode::compileFinished);
+    }
     Q_ASSERT(!m_highlighter.isNull());
     m_highlighter->setDocument(m_parent->document());
 }
@@ -145,17 +171,18 @@ GdbController *KCLanguageMode::getGdbController() const
     return gdbControllerInstance;
 }
 
-GdbController *KCLanguageMode::startDebug()
+GdbController *KCLanguageMode::startDebug(int lineNumber)
 {
-    if(gdbControllerInstance == NULL)
-    {
-        gdbControllerInstance=new GdbController(this);
-        connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
-                this, SIGNAL(requireDisconnectDebug()));
-    }
-
+    gdbControllerInstance->setFileType(languageName[m_type]);
     gdbControllerInstance->runGDB(m_parent->execFileName);
-    qDebug()<<"Do you?";
+    if(lineNumber<0)
+    {
+        gdbControllerInstance->setBreakPointList(m_parent->getBreakpoints());
+    }
+    else
+    {
+        gdbControllerInstance->setBreakPoint(lineNumber);
+    }
     gdbControllerInstance->execRun();
 
     connect(m_parent->markPanel,&KCMarkPanel::markSetted,
@@ -175,7 +202,7 @@ void KCLanguageMode::stopDebug()
     {
         gdbControllerInstance->quitGDB();
     }
-    compilerConnectionHandles.disConnectAll();
+    //compilerConnectionHandles.disConnectAll();
 }
 
 void KCLanguageMode::onCompileFinished(bool hasError)
@@ -206,14 +233,18 @@ void KCLanguageMode::connectCompilerAndOutputReceiver()
             compiler->compilerVersion());
 
     //Output Compile Message:
+    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileError,
+                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileCommandLine,
                                        compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileMessage,
                                        compilerReceiver,&KCCompileOutputReceiver::addCompilerOutputText);
-    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileError,
-                                       compilerReceiver,&KCCompileOutputReceiver::onCompileMessageReceived);
     compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
                                        compilerReceiver,&KCCompileOutputReceiver::onCompileFinished);
+    compilerConnectionHandles+=connect(compilerReceiver, &KCCompileOutputReceiver::occurErrorAtLine,
+                                       this, &KCLanguageMode::requireSmartPanelError);
+    compilerConnectionHandles+=connect(compiler.data(),&KCCompilerBase::compileFinished,
+                                       this, &KCLanguageMode::requireDrawError);
 }
 
 bool KCLanguageMode::checkIfIsCompiling()

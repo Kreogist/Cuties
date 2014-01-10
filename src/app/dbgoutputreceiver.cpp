@@ -18,17 +18,17 @@
  */
 
 #include "dbgoutputreceiver.h"
+#include "kclanguageconfigure.h"
 
 dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     QObject(parent)
 {
+    retranslate();
     textStreamOutput=new QTextDocument(this);
     textStreamOutput->setDocumentLayout(
         new QPlainTextDocumentLayout(textStreamOutput));
 
     stackInfoModel=new QStandardItemModel(this);
-    QStringList labels;
-    labels<<tr("name")<<tr("value");
 
     watchModel=new QStandardItemModel(this);
     watchModel->setColumnCount(2);
@@ -42,6 +42,11 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     errorFormat.setForeground(QBrush(QColor(255,0,0)));
     targetFormat.setForeground(QBrush(QColor(0,0x8f,0xff)));
     logFormat.setForeground(QBrush(Qt::yellow));
+
+    watchExps.clear();
+
+    connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
+            this, &dbgOutputReceiver::retranslateAndSet);
 }
 
 void dbgOutputReceiver::addErrorText(QString text)
@@ -68,13 +73,12 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
 {
     localVarModel->clear();
 
-    for(QList<GdbMiValue>::iterator i=localVars.begin(),e=localVars.end();
-        i<e;
-        ++i)
+    localVarModel->setColumnCount(2);
+    localVarModel->setHorizontalHeaderLabels(labels);
+    for(int i=0; i<localVars.size(); i++)
     {
-        QString name=i->at(0).getValue();  //name
-        QString value=i->at(1).getValue(); //value
-
+        QString name=localVars.at(i).at(0).getValue();  //name
+        QString value=localVars.at(i).at(1).getValue(); //value
         QStandardItem *varName=new QStandardItem(name);
         QStandardItem *varValue=new QStandardItem(value);
         QList<QStandardItem *> localVar;
@@ -83,14 +87,24 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
     }
 }
 
-void dbgOutputReceiver::addExprValue(QString value)
+void dbgOutputReceiver::addExprValue(int expIndex,
+                                     QString value)
 {
-    ;
+    //QString name=watchExps.at(expIndex);  //name
+    QStandardItem *varValue=watchModel->takeItem(expIndex, 1);
+    varValue->setText(value);
+    watchModel->setItem(expIndex, 1, varValue);
 }
 
 void dbgOutputReceiver::addText(const QString &text)
 {
     insertText(text,normalFormat);
+}
+
+void dbgOutputReceiver::removeExpr(int expIndex)
+{
+    watchExps.removeAt(expIndex);
+    watchModel->removeRow(expIndex);
 }
 
 void dbgOutputReceiver::insertText(const QString &text,
@@ -101,17 +115,85 @@ void dbgOutputReceiver::insertText(const QString &text,
     text_cursor.insertText(text,charFormat);
 }
 
+QStringList dbgOutputReceiver::getWatchExpList() const
+{
+    return watchExps;
+}
+
+QString dbgOutputReceiver::getWatchExp(const int &index) const
+{
+    if(index>-1 && index<watchExps.count())
+    {
+        return watchExps.at(index);
+    }
+    return QString("");
+}
+
+void dbgOutputReceiver::setWatchExps(const QStringList &value)
+{
+    watchExps = value;
+}
+
 QTextDocument *dbgOutputReceiver::getTextStreamOutput() const
 {
     return textStreamOutput;
 }
 
-void dbgOutputReceiver::clearOutput()
+void dbgOutputReceiver::retranslate()
+{
+    labels<<tr("Name")<<tr("Value");
+}
+
+void dbgOutputReceiver::retranslateAndSet()
+{
+    retranslate();
+    localVarModel->setHorizontalHeaderLabels(labels);
+    watchModel->setHorizontalHeaderLabels(labels);
+}
+
+void dbgOutputReceiver::clearTextStream()
 {
     textStreamOutput->clear();
+    textStreamOutput->setDocumentLayout(
+        new QPlainTextDocumentLayout(textStreamOutput));
+}
+
+void dbgOutputReceiver::clearOutput()
+{
+    clearTextStream();
     stackInfoModel->clear();
     localVarModel->clear();
     watchModel->clear();
+}
+
+void dbgOutputReceiver::appendExpr(const QString &value)
+{
+    watchExps.append(value);
+    QString name=value;  //name
+    QString empty=QString(""); //value
+    QStandardItem *varName=new QStandardItem(name);
+    QStandardItem *varValue=new QStandardItem(empty);
+    QList<QStandardItem *> watchVar;
+    watchVar<<varName<<varValue;
+    watchModel->appendRow(watchVar);
+}
+
+void dbgOutputReceiver::insertExpr(int expIndex, const QString &value)
+{
+    watchExps.insert(expIndex, value);
+    QString name=value;  //name
+    QString empty=QString(""); //value
+    QStandardItem *varName=new QStandardItem(name);
+    QStandardItem *varValue=new QStandardItem(empty);
+    QList<QStandardItem *> watchVar;
+    watchVar<<varName<<varValue;
+    watchModel->insertRow(expIndex, watchVar);
+}
+
+void dbgOutputReceiver::modifyExpr(int expIndex, const QString &value)
+{
+    insertExpr(expIndex, value);
+    removeExpr(expIndex+1);
 }
 
 QStandardItemModel *dbgOutputReceiver::getWatchModel() const

@@ -86,12 +86,7 @@ void KCCompilerBase::startCompile(const QString &filePath)
 bool KCCompilerBase::checkCompilerPath(const QString &compilerPath)
 {
     QFileInfo _fileInfo(compilerPath);
-
-    if(_fileInfo.exists() && _fileInfo.isExecutable())
-    {
-        return true;
-    }
-    return false;
+    return (_fileInfo.exists() && _fileInfo.isExecutable());
 }
 
 bool KCCompilerBase::compilerExsist()

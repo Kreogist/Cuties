@@ -24,6 +24,7 @@
 #include <QTextCursor>
 #include <QString>
 #include <QWidget>
+#include <QList>
 
 #include <QDebug>
 
@@ -59,6 +60,11 @@ public:
     QString getExecFileName();
     QTextCursor getTextCursor();
 
+    void setVScrollValue(int value);
+    void setHScrollValue(int value);
+    int getVScrollValue();
+    int getHScrollValue();
+
     int getTextLines();
     bool isModified();
     QTextDocument *document();
@@ -69,12 +75,18 @@ public:
     void insertTextAtCursor(QString insertText);
     bool getCacheNewFileMode() const;
     void setCacheNewFileMode(bool value);
+    bool getDebugging() const;
+    void setDebugging(bool value);
+
+    void setCompileBarState(KCCodeCompileProgress::CompileState state);
+    void resetCompileErrorCache();
 
 signals:
     void filenameChanged(QString newName);
     void fileTextCursorChanged();
     void rewriteStateChanged(bool nowValue);
     void requiredHideDocks();
+    void requiredCompileFile();
 
 public slots:
     bool open(const QString &fileName,
@@ -97,8 +109,10 @@ public slots:
     void setOverwriteMode(bool newValue);
     bool readCacheFile(const QString &cachedfilePath);
     bool writeCacheFile(const QString &filePath);
+    QList<int> getBreakpoints();
 
 private slots:
+    void onDebugJumpLine(int lineNum);
     void onModificationChanged(bool changed);
     void onHideOtherWidgets();
     void onSearchNext(QString searchTextSets,
@@ -107,6 +121,8 @@ private slots:
                       bool wholeWordSets);
     void onShowNextSearchResult();
     void setUseLastCuror();
+    void addErrorsToStack(int lineNum);
+    void redrawSmartPanel();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -146,6 +162,9 @@ private:
 
     friend class KCLanguageMode;
     bool cacheNewFileMode;
+    bool debugging;
+
+    QList<int> errorOccurLines;
 };
 
 #endif // TEXTEDITOR_H

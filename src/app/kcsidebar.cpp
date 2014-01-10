@@ -321,24 +321,28 @@ KCSideBar::KCSideBar(QWidget *parent) :
             this, SLOT(foldAnime()));
 
     showDockAnimation=new QTimeLine(100, this);
+    showDockAnimation->setUpdateInterval(1);
     showDockAnimation->setEasingCurve(QEasingCurve::OutCubic);
     showDockAnimation->setEndFrame(30);
     connect(showDockAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
 
     hideDockAnimation=new QTimeLine(100, this);
+    hideDockAnimation->setUpdateInterval(1);
     hideDockAnimation->setEasingCurve(QEasingCurve::OutCubic);
     hideDockAnimation->setEndFrame(6);
     connect(hideDockAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
 
     expandAnimation=new QTimeLine(250, this);
+    expandAnimation->setUpdateInterval(1);
     expandAnimation->setEasingCurve(QEasingCurve::OutCubic);
     expandAnimation->setEndFrame(230);
     connect(expandAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
 
     foldAnimation=new QTimeLine(250, this);
+    foldAnimation->setUpdateInterval(1);
     foldAnimation->setEasingCurve(QEasingCurve::OutCubic);
     foldAnimation->setEndFrame(30);
     connect(foldAnimation, SIGNAL(frameChanged(int)),

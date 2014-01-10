@@ -42,27 +42,24 @@ KCFontConfigure::KCFontConfigure()
 #ifdef Q_OS_WIN32
     applicationFont=QFont("Hiragino Sans GB W3");
     applicationFont.setPixelSize(13);
+    applicationFont.setStyleStrategy(QFont::PreferAntialias);
     codeFontName="Monaco";
     codeFont=QFont(codeFontName);
+    codeFont.setStyleStrategy(QFont::PreferAntialias);
     codeFont.setPixelSize(12);
     menuFont=applicationFont;
-    menuFont.setPixelSize(16);
+    menuFont.setStyleStrategy(QFont::PreferAntialias);
 #endif
 #ifdef Q_OS_UNIX
     applicationFont=QFont("Hiragino Sans GB W3");
     applicationFont.setPixelSize(13);
+    applicationFont.setStyleStrategy(QFont::PreferAntialias);
     codeFontName="Monaco";
     codeFont=QFont(codeFontName);
+    codeFont.setStyleStrategy(QFont::PreferAntialias);
     codeFont.setPixelSize(12);
     menuFont.setPixelSize(16);
     menuFont.setStyleStrategy(QFont::PreferAntialias);
-#endif
-#ifdef Q_OS_WIN32
-    menuFont=applicationFont;
-#else
-#ifdef Q_OS_UNIX
-    menuFont=QFont("sao");
-#endif
 #endif
     applyConfigure();
 }

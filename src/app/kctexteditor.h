@@ -29,6 +29,7 @@
 #include <QFuture>
 #include <QFont>
 #include <QFontMetrics>
+#include <QList>
 
 #include "kctextsearcher.h"
 #include "kcfloattoolbar.h"
@@ -44,12 +45,21 @@ public:
     void setDocumentCursor(int nLine, int linePos);
     void backupSearchTextCursor();
     QRectF blockRect(const QTextBlock &block);
+    void zoomIn(int range = 1);
+    void zoomOut(int range = 1);
+    void setVScrollValue(int value);
+    void setHScrollValue(int value);
+    int getVScrollValue();
+    int getHScrollValue();
+    QList<int> getBreakPoints();
 
 signals:
     void requireHideOthers();
     void updated();
     void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);
+    void matchedResult();
+    void nomatchedResult();
 
 public slots:
     void updateHighlights();
@@ -67,6 +77,7 @@ public slots:
     void setTabWidth(int width);
     void setWordWrap(QTextOption::WrapMode wrapMode);
     void setTheCursorWidth(int width);
+    void setLineErrorState(QList<int> errorList);
 
 private slots:
     void updateSearchResults();
@@ -75,7 +86,6 @@ protected:
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *e);
 
@@ -87,7 +97,10 @@ private:
                                    int matchedParentheses,
                                    QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
-    bool findString(bool forward);
+    bool findForward();
+    bool findBackward();
+    bool findFirstSeachResult();
+    bool findLastSearchResult();
     void generalSearch(const QTextBlock &block,
                        const int &lines,
                        const bool forward);
@@ -106,8 +119,6 @@ private:
     void insertTab(QTextCursor insertTabCursor, int tabCount = 1, bool forceInsert = false);
     void removeTab(QTextCursor removeTabCursor, int tabCount = 1);
     void tabPressEvent(QTextCursor tabPressCursor);
-    void zoomIn(int range);
-    void zoomOut(int range);
 
     KCEditorConfigure *configureInstance;
     KCClipboard *clipboard;
@@ -122,7 +133,6 @@ private:
     bool searchRegularExpression;
     bool searchCaseSensitively;
     bool searchWholeWord;
-    bool controlKeyDown=false;
     unsigned long long int searchCode;
     QScopedPointer<KCTextSearcher> searcherForPrev,searcherForNext;
     QFuture<void> threadPrev,threadNext;

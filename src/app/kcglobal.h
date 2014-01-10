@@ -34,6 +34,7 @@ public:
     QString getSettingsFileName() const;
     void setSettingsFileName(const QString &filePath);
     static KCGlobal *getInstance();
+    void showInGraphicalShell(const QString &filePath);
 
 private:
     KCGlobal();

@@ -19,163 +19,443 @@
 
 #include <QHBoxLayout>
 #include <QDebug>
+#include <QPainter>
+#include <QApplication>
 
 #include "kcmessagebox.h"
 
 KCMessageBoxTitle::KCMessageBoxTitle(QWidget *parent) :
-    QWidget(parent)
+    QLabel(parent)
 {
     //Set properties
-    setAutoFillBackground(true);
+    setContentsMargins(0,0,0,0);
     setFixedHeight(60);
-    //For debug
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,0,0));
-    setPalette(pal);
+    setScaledContents(true);
+    setPixmap(QPixmap(":/MsgBox/image/MessageBox/Title.png"));
+    setMinimumWidth(0);
 
-    /*QLabel *background=new QLabel(this);
-    background->setPixmap(QPixmap(":/MsgBox/image/MessageBox/Title.png"));
-    setFixedHeight(background->sizeHint().height());*/
-
-    //Set layout for title caption display
-    QHBoxLayout *titleLayout=new QHBoxLayout(this);
-    titleLayout->setContentsMargins(0,0,0,0);
-    titleLayout->setSpacing(0);
-    setLayout(titleLayout);
-
+    //Set font
     QFont titleFont;
     titleFont.setFamily("sao");
     titleFont.setPixelSize(20);
 
-    //Add title caption
+    //Set widgets
     titleCaption=new QLabel(this);
     titleCaption->setFont(titleFont);
-    titleCaption->setAlignment(Qt::AlignCenter);
-    titleLayout->addWidget(titleCaption);
+    titleCaption->setAlignment(Qt::AlignHCenter);
+    titleCaption->resize(width(), titleCaption->height());
+    titleCaption->setGeometry(0,
+                              (height()-titleCaption->height())/2,
+                              width(),
+                              height());
+    setTitleText(QApplication::applicationName());
+
+    hasPressed=false;
 }
 
-void KCMessageBoxTitle::setTitleText(QString newTitleText)
+void KCMessageBoxTitle::setTitleText(const QString &text)
 {
-    titleCaption->setText(newTitleText);
+    titleCaption->setText(text);
+    widthSizeHint=titleCaption->sizeHint().width()+70;
+    if(widthSizeHint<300)
+    {
+        widthSizeHint=300;
+    }
+}
+
+int KCMessageBoxTitle::getTitleWidthHint()
+{
+    return widthSizeHint;
+}
+
+void KCMessageBoxTitle::resizeEvent(QResizeEvent *e)
+{
+    QLabel::resizeEvent(e);
+    titleCaption->resize(width(), titleCaption->height());
+}
+
+void KCMessageBoxTitle::mousePressEvent(QMouseEvent *event)
+{
+    if(event->buttons() == Qt::LeftButton)
+    {
+        hasPressed=true;
+        mousePosStart=event->pos();
+        event->accept();
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
+void KCMessageBoxTitle::mouseMoveEvent(QMouseEvent *event)
+{
+    if(hasPressed && event->buttons() == Qt::LeftButton)
+    {
+        parentWidget()->move(parentWidget()->pos() + event->pos() - mousePosStart);
+    }
+}
+
+void KCMessageBoxTitle::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(hasPressed)
+    {
+        hasPressed=false;
+        event->accept();
+    }
+    else
+    {
+        event->ignore();
+    }
 }
 
 KCMessageBoxPanel::KCMessageBoxPanel(QWidget *parent) :
-    QWidget(parent)
+    QLabel(parent)
 {
     //Set properties
-    setAutoFillBackground(true);
-    setFixedHeight(67);
-
-    //Debug use
-    QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(0,255,0));
-    setPalette(pal);
-}
-
-KCMessageBoxContent::KCMessageBoxContent(QWidget *parent) :
-    QWidget(parent)
-{
-    //Set properties
-    setAutoFillBackground(true);
+    setFixedHeight(66);
+    setScaledContents(true);
+    setPixmap(QPixmap(":/MsgBox/image/MessageBox/Bottom.png"));
     setMinimumWidth(0);
-    setMinimumHeight(18);
 
-    //Debug use
-    QPalette pal=this->palette();
+    panelLayout=new QHBoxLayout(this);
+    panelLayout->setContentsMargins(0,0,0,0);
+    panelLayout->setSpacing(50);
+    setLayout(panelLayout);
+
+    panelLayout->addStretch();
+    buttonMapper=new QSignalMapper(this);
+
+    okButton=new KCGraphicButtonOK(this);
+    panelLayout->addWidget(okButton);
+    connect(okButton, SIGNAL(clicked()), buttonMapper, SLOT(map()));
+    buttonMapper->setMapping(okButton, 1);
+    connect(okButton, SIGNAL(clicked()), this, SIGNAL(requiredExit()));
+
+    cancelButton=new KCGraphicButtonCancel(this);
+    panelLayout->addWidget(cancelButton);
+    cancelButton->hide();
+    connect(cancelButton, SIGNAL(clicked()), buttonMapper, SLOT(map()));
+    buttonMapper->setMapping(cancelButton, 2);
+    connect(cancelButton, SIGNAL(clicked()), this, SIGNAL(requiredExit()));
+
+    panelLayout->addStretch();
+
+    connect(buttonMapper, SIGNAL(mapped(int)),
+            this, SLOT(sendSignals(int)));
+}
+
+void KCMessageBoxPanel::enabledCancel()
+{
+    cancelButton->show();
+}
+
+void KCMessageBoxPanel::sendSignals(int buttonIndex)
+{
+    switch(buttonIndex)
+    {
+    case 1:
+        emit requiredMessage(buttonOK);
+        break;
+    case 2:
+        emit requiredMessage(buttonCancel);
+        break;
+    default:
+        emit requiredMessage(none);
+        break;
+    }
+}
+
+KCMessageBoxContext::KCMessageBoxContext(QWidget *parent) :
+    QWidget(parent)
+{
+    setMinimumWidth(0);
+    setMinimumHeight(0);
+    context=new QWidget(this);
+    context->setContentsMargins(0,0,0,0);
+    context->setAutoFillBackground(true);
+    QPalette pal=context->palette();
     pal.setColor(QPalette::Window, QColor(0xdd, 0xdd, 0xdd));
-    setPalette(pal);
+    context->setPalette(pal);
 
-    //Set MainLayout
-    mainLayout=new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0,0,0,0);
-    mainLayout->setSpacing(0);
-    setLayout(mainLayout);
+    contextLayout=new QVBoxLayout(context);
+    contextLayout->setContentsMargins(0,0,0,0);
+    contextLayout->setSpacing(0);
+    contextLayout->setAlignment(Qt::AlignHCenter);
+    context->setLayout(contextLayout);
 
-    //Add up bound image
-    QLabel *upBoundImage=new QLabel(this);
-    upBoundImage->setPixmap(QPixmap(":/MsgBox/image/MessageBox/UpBound.png"));
-    mainLayout->addWidget(upBoundImage);
+    upIndicator=new QLabel(context);
+    downIndicator=new QLabel(context);
 
-    //Add content layout, all the widget will be add to this layout
-    contentLayout=new QVBoxLayout();
-    contentLayout->setContentsMargins(0,0,0,0);
-    contentLayout->setSpacing(0);
-    mainLayout->addLayout(contentLayout, 1);
+    upIndicator->setScaledContents(true);
+    upIndicator->setPixmap(QPixmap(":/MsgBox/image/MessageBox/UpBound.png"));
+    downIndicator->setScaledContents(true);
+    downIndicator->setPixmap(QPixmap(":/MsgBox/image/MessageBox/DownBound.png"));
 
-    //Add down bound image
-    QLabel *downBoundImage=new QLabel(this);
-    downBoundImage->setPixmap(QPixmap(":/MsgBox/image/MessageBox/DownBound.png"));
-    mainLayout->addWidget(downBoundImage);
+    contextLayout->addWidget(upIndicator);
+    contextLayout->addSpacing(15);
+    contextLayout->addStretch();
+    contextLayout->addSpacing(15);
+    contextLayout->addWidget(downIndicator);
+
+    insertPlace=2;
 }
 
-KCMessageBoxContent::~KCMessageBoxContent()
+void KCMessageBoxContext::addWidget(QWidget *widget)
 {
-    contentLayout->deleteLater();
+    contextLayout->insertWidget(insertPlace++, widget, 0, Qt::AlignCenter);
+    int cacheHint;
+    cacheHint=contextLayout->sizeHint().height();
+    if(heightSizeHint<cacheHint)
+    {
+        heightSizeHint=cacheHint;
+    }
+    cacheHint=widget->sizeHint().width()+40;
+    if(widthSizeHint < cacheHint)
+    {
+        widthSizeHint = cacheHint;
+    }
 }
 
-void KCMessageBoxContent::addText(QString displayText)
+void KCMessageBoxContext::addText(const QString &text)
 {
-    QLabel *newLabelText=new QLabel(this);
-    newLabelText->setText(displayText);
-    contentLayout->addWidget(newLabelText);
+    QLabel *insertCaption=new QLabel(context);
+    insertCaption->setText(text);
+    insertCaption->setAlignment(Qt::AlignHCenter);
+    addWidget(insertCaption);
+}
+
+void KCMessageBoxContext::addSpacing(const int &value)
+{
+    contextLayout->insertSpacing(insertPlace++, value);
+}
+
+void KCMessageBoxContext::addImage(const QString &path,
+                                   int width,
+                                   int height)
+{
+    addImage(QPixmap(path), width, height);
+}
+
+void KCMessageBoxContext::addImage(QPixmap pixmap,
+                                   int width,
+                                   int height)
+{
+    QLabel *insertCaption=new QLabel(context);
+    insertCaption->setPixmap(pixmap);
+    insertCaption->setAlignment(Qt::AlignHCenter);
+    if(width > 0)
+    {
+        insertCaption->setScaledContents(true);
+        insertCaption->setFixedWidth(width);
+    }
+    if(height > 0)
+    {
+        insertCaption->setScaledContents(true);
+        insertCaption->setFixedHeight(height);
+    }
+    addWidget(insertCaption);
+}
+
+void KCMessageBoxContext::resizeEvent(QResizeEvent *e)
+{
+    context->resize(e->size());
+    upIndicator->setFixedWidth(e->size().width());
+    downIndicator->setFixedWidth(e->size().width());
+    QWidget::resizeEvent(e);
+}
+
+int KCMessageBoxContext::getWidthSizeHint() const
+{
+    return widthSizeHint;
+}
+
+int KCMessageBoxContext::getHeightSizeHint() const
+{
+    return heightSizeHint;
 }
 
 //Message Box Title
 KCMessageBox::KCMessageBox(QWidget *parent) :
-    QWidget(parent)
+    QDialog(parent)
 {
     //Set properties
-    setWindowFlags(Qt::Window |
-                   Qt::FramelessWindowHint);
-    setMinimumWidth(0);
-    setMinimumHeight(0);
+    setWindowFlags(windowFlags() | Qt::ToolTip);
+    setWindowOpacity(0.95);
 
-    //Set main layout
+    //Set default value
+    messageState=KCMessageBoxPanel::none;
+
+    //Set layout
     mainLayout=new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    //Set title widget
-    titleWidget=new KCMessageBoxTitle(this);
-    mainLayout->addWidget(titleWidget);
+    //Set title
+    title=new KCMessageBoxTitle(this);
+    mainLayout->addWidget(title);
 
-    //Set content widget
-    contentWidget=new KCMessageBoxContent(this);
-    contentWidget->setVisible(false);
-    mainLayout->addWidget(contentWidget, 1);
+    context=new KCMessageBoxContext(this);
+    mainLayout->addWidget(context, 1);
 
-    //Set panel widget
-    panelWidget=new KCMessageBoxPanel(this);
-    mainLayout->addWidget(panelWidget);
+    //Set panel
+    panel=new KCMessageBoxPanel(this);
+    mainLayout->addWidget(panel);
+
+    connect(panel, SIGNAL(requiredMessage(KCMessageBoxPanel::buttonState)),
+            this, SLOT(messageFilter(KCMessageBoxPanel::buttonState)));
+    connect(panel, SIGNAL(requiredExit()),
+            this, SLOT(animateClose()));
+
+    showAnimation=new QSequentialAnimationGroup(this);
+
+    widthExpand=new QPropertyAnimation(this, "geometry", this);
+    widthExpand->setDuration(100);
+
+    heightExpand=new QPropertyAnimation(this, "geometry", this);
+    heightExpand->setDuration(150);
+    heightExpand->setEasingCurve(QEasingCurve::OutCubic);
+
+    exitAnimation=new QPropertyAnimation(this, "geometry", this);
+    exitAnimation->setDuration(100);
+    connect(exitAnimation, SIGNAL(finished()),
+            this, SLOT(close()));
 }
 
-void KCMessageBox::show()
+void KCMessageBox::setTitle(const QString &text)
 {
-    //Start width expand animation
-    QPropertyAnimation *widthExpand=new QPropertyAnimation(this, "geometry");
-    widthExpand->setDuration(300);
-    QRect startRect=QRect(parentWidget()->x()+parentWidget()->width()/2,
-                          parentWidget()->y()+parentWidget()->height()/2-63,
-                          0,
-                          127);
-    QRect endRect=startRect;
-    endRect.setWidth(300);
-    endRect.setX(endRect.x() - endRect.width()/2);
-    widthExpand->setStartValue(startRect);
-    widthExpand->setEndValue(endRect);
-    QWidget::show();
-    widthExpand->start(QAbstractAnimation::DeleteWhenStopped);
-    qDebug()<<startRect.left()<<endRect.left()<<endRect.width();
+    title->setTitleText(text);
 }
 
-void KCMessageBox::addText(QString displayText)
+void KCMessageBox::addText(const QString &text)
 {
-    contentWidget->addText(displayText);
+    context->addText(text);
 }
 
-void KCMessageBox::setTitle(QString messageBoxTitle)
+void KCMessageBox::addImage(const QString &path,
+                            int width,
+                            int height)
 {
-    titleWidget->setTitleText(messageBoxTitle);
+    context->addImage(path, width, height);
 }
 
+void KCMessageBox::addImage(QPixmap pixmap,
+                            int width,
+                            int height)
+{
+    context->addImage(pixmap, width, height);
+}
+
+void KCMessageBox::addSpacing(int value)
+{
+    context->addSpacing(value);
+}
+
+void KCMessageBox::addWidget(QWidget *widget)
+{
+    context->addWidget(widget);
+}
+
+void KCMessageBox::enabledCancel()
+{
+    panel->enabledCancel();
+}
+
+KCMessageBoxPanel::buttonState KCMessageBox::messageBoxState()
+{
+    return messageState;
+}
+
+void KCMessageBox::showEvent(QShowEvent *e)
+{
+    QRect parentGeometry=parentWidget()->geometry();
+    int originalX, originalY, expectedX, expectedY, originalWidth,
+            beginY, cacheExpected, minimumHeight=190;
+    originalWidth=width();
+    beginHeight=height();
+    cacheExpected=title->getTitleWidthHint();
+    expectedWidth=context->getWidthSizeHint();
+    if(expectedWidth < cacheExpected)
+    {
+        expectedWidth=cacheExpected;
+    }
+    cacheExpected=context->getHeightSizeHint()+beginHeight;
+    if(cacheExpected > minimumHeight)
+    {
+        expectedHeight=cacheExpected;
+    }
+    else
+    {
+        expectedHeight=minimumHeight;
+    }
+
+    originalX=parentGeometry.x()+parentGeometry.width()/2;
+    originalY=parentGeometry.y()+parentGeometry.height()/2;
+    expectedX=originalX-expectedWidth/2;
+    expectedY=originalY-expectedHeight/2;
+    beginY=originalY-height()/2;
+    beginState=QRect(originalX-originalWidth/2,
+                     beginY,
+                     originalWidth,
+                     beginHeight);
+    heightExState=QRect(expectedX,
+                        beginY,
+                        expectedWidth,
+                        beginHeight);
+    finalState=heightExState;
+    finalState.setY(expectedY);
+    finalState.setHeight(expectedHeight);
+    widthExpand->setStartValue(beginState);
+    widthExpand->setEndValue(heightExState);
+    showAnimation->addAnimation(widthExpand);
+
+    heightExpand->setStartValue(heightExState);
+    heightExpand->setEndValue(finalState);
+    showAnimation->addAnimation(heightExpand);
+
+    setGeometry(beginState);
+    showAnimation->start();
+    QWidget::showEvent(e);
+}
+
+void KCMessageBox::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        messageFilter(KCMessageBoxPanel::buttonOK);
+        animateClose();
+        break;
+    case Qt::Key_Escape:
+        messageFilter(KCMessageBoxPanel::buttonCancel);
+        animateClose();
+        break;
+    default:
+        QDialog::keyPressEvent(e);
+        break;
+    }
+}
+
+void KCMessageBox::messageFilter(KCMessageBoxPanel::buttonState message)
+{
+    messageState=message;
+}
+
+void KCMessageBox::animateClose()
+{
+    if(showAnimation->state()==QAbstractAnimation::Running)
+    {
+        showAnimation->stop();
+    }
+    QRect startGeometry=geometry();
+    QRect endGeometry=startGeometry;
+    endGeometry.setTop(startGeometry.top()+
+                       startGeometry.height()/2-
+                       beginHeight/2);
+    endGeometry.setHeight(beginHeight);
+    exitAnimation->setStartValue(startGeometry);
+    exitAnimation->setEndValue(endGeometry);
+    exitAnimation->start();
+}

@@ -21,6 +21,7 @@
 #define KCFLOATTOOLBAR_H
 
 #include <QWidget>
+#include <QShowEvent>
 
 class KCFloatToolBar : public QWidget
 {
@@ -31,6 +32,9 @@ public:
 signals:
 
 public slots:
+
+protected:
+    void showEvent(QShowEvent *e);
 
 };
 

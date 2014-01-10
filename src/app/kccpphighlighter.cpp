@@ -67,7 +67,18 @@ KCCppHighlighter::KCCppHighlighter(QObject *parent) :
     hlrKeyWords.regexp.setPattern(strKeyWords);
     rules<<hlrKeyWords;
 
+    //Numbers
+    hlrSpTypes.type_name = "number";
+    hlrSpTypes.regexp.setPattern(QString("\\b\\d+(\\.)?\\d*\\b"));
+    rules<<hlrSpTypes;
+
     //Set Other Special Types:
+
+    //Pre-Process back text
+    hlrSpTypes.type_name = "preprocdata";
+    hlrSpTypes.regexp.setPattern(QString("^[[:blank:]]*#([[:blank:]]*[[:word:]]*).*"));
+    rules<<hlrSpTypes;
+
     //Pre-Process
     hlrSpTypes.type_name = "preproc";
     hlrSpTypes.regexp.setPattern(QString("^[[:blank:]]*#([[:blank:]]*[[:word:]]*)"));
@@ -177,6 +188,7 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
     QTextBlock prevBlock=currentBlock().previous();
 
     int baseLevel=0;
+    bool levelUp=false, levelDown=false;
     if(prevBlock.isValid())
     {
         KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
@@ -191,12 +203,16 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
             if(i->character == '{')
             {
                 baseLevel++;
+                levelUp=true;
             }
             else if(i->character == '}')
             {
                 baseLevel--;
+                levelDown=true;
             }
         }
+        prevData->setCodeLevelUp(levelUp);
+        prevData->setCodeLevelDown(levelDown);
     }
     data->setCodeLevel(baseLevel);
 

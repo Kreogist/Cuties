@@ -65,7 +65,7 @@ void KCPreferenceSuperListContent::resetCurrentIndex()
     if(currentItemIndex!=-1)
     {
         superListItems.at(currentItemIndex)->editFinished();
-        setFixedHeight(originalHeight);
+        setFixedHeight(superListLayout->sizeHint().height());
         currentItemIndex=-1;
     }
 }
@@ -163,9 +163,9 @@ KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(const QString &captionTex
 {
     KCPreferenceItemInt *newIntItem=new KCPreferenceItemInt(contents);
     newIntItem->setIntCaptionText(captionText);
-    newIntItem->setOriginalValue(defaultValue);
     newIntItem->setMaximumInt(maxValue);
     newIntItem->setMinimumInt(minValue);
+    newIntItem->setOriginalValue(defaultValue);
     contents->appendItem(newIntItem);
     return newIntItem;
 }

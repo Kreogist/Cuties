@@ -13,6 +13,8 @@ struct UnclosedFileStatus
     bool untitled;
     int horizontalCursorPosition;
     int verticalCursorPosition;
+    int horizontalScrollPosition;
+    int verticalScrollPosition;
 };
 
 class KCDocumentRecorder : public QObject
@@ -20,9 +22,12 @@ class KCDocumentRecorder : public QObject
     Q_OBJECT
 public:
     static KCDocumentRecorder *getInstance();
-    void appendRecord(const QString &fileName,
-                      QTextCursor cursor);
-    void appendRecord(KCCodeEditor *textEditor);
+    void appendRecord(KCCodeEditor *editor, bool untitled=false);
+    void appendRecord(const QString &filePath,
+                      int lineNum,
+                      int columnNum,
+                      int hScrollNum=0,
+                      int vScrollNum=0);
     UnclosedFileStatus getUnclosedFileStatus(int index);
     int getUnclosedFileCount();
     bool setUnclosedUntitledFileDir(const QString &dirPath);

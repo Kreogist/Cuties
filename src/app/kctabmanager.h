@@ -39,6 +39,8 @@
 #include "kccolorconfigure.h"
 #include "kcsearchwindow.h"
 #include "kccodeeditor.h"
+#include "kcnormalcontentmenu.h"
+#include "kcglobal.h"
 
 class KCTabManager : public QTabWidget
 {
@@ -49,8 +51,6 @@ public:
     int getCurrentLineNum() const;
     void restoreUnclosedFiles();
     KCCodeEditor *getCurrentEditor() const;
-    void setDebuggingEditor(KCCodeEditor *value);
-    KCCodeEditor *getDebuggingEditor() const;
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);
@@ -61,13 +61,14 @@ signals:
     void tabClear();
     void requiredHideDocks();
     void requireDisconnectDebug();
+    void requiredCompileFile();
 
 public slots:
     void openAndJumpTo(const QString &filePath);
     int open(const QString &filePath);
     void open();
     int newFile();
-    bool newFileWithHighlight(const QString &fileSuffix);
+    int newFileWithHighlight(const QString &fileSuffix);
     void save();
     void saveAs();
     void saveAll();
@@ -92,6 +93,8 @@ public slots:
     void switchCurrentToLine(int nLineNum, int nColNum);
     void insertToCurrentEditor(QString insertText);
     QString textNowSelect();
+    void retranslate();
+    void retranslateAndSet();
 
 protected:
     void closeEvent(QCloseEvent *e);
@@ -100,14 +103,27 @@ protected:
 private slots:
     void setTabMoveableValue(bool newValue);
     void setTabCloseable(bool newValue);
+    void popupTabMenu(const QPoint &point);
+    void browseCurrentFile();
 
 private:
+    void createTabMenu();
     int newFileCount;
     KCCodeEditor *currentEditor;
     KCEditorConfigure *editorConfigureInstance;
     QTabBar *tabBarControl;
-    KCCodeEditor *debuggingEditor;
-    bool debuggingState;
+    enum tabMenuActions
+    {
+        closeTab,
+        closeOtherTab,
+        browseFile,
+        TabMenuActionCount
+    };
+    KCNormalContentMenu *tabMenu;
+    QAction *tabMenuActionItem[TabMenuActionCount];
+    QString tabMenuActionCaption[TabMenuActionCount];
+
+    KCGlobal *globalInstance;
 };
 
 #endif // KCTABMANAGER_H

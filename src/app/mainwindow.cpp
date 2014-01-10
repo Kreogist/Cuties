@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this,SLOT(onCurrentTabChanged()));
     setCentralWidget(tabManager);
 
+    visibleRecorder=KCVisibleRecorder::getInstance();
+
     //Create All Window Contents
     createDocks();
     createTitlebar();
@@ -86,6 +88,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(hideAllDocks()));
     connect(tabManager, SIGNAL(requireDisconnectDebug()),
             this, SLOT(disconnectDebugDock()));
+    connect(tabManager, SIGNAL(requiredCompileFile()),
+            this, SLOT(compileProgram()));
 
     restoreSettings();
 }
@@ -102,6 +106,8 @@ void MainWindow::showEvent(QShowEvent *e)
 
 void MainWindow::animateShowWelcomeWindow()
 {
+    visibleRecorder->backupWidgetVisible();
+    visibleRecorder->hideAll();
     hideWelcomeWindow->stop();
     welcomeWindow->show();
     QRect endValue=QRect(width()/8,
@@ -116,6 +122,7 @@ void MainWindow::animateShowWelcomeWindow()
 void MainWindow::animateHideWelcomeWindow()
 {
     showWelcomeWindow->stop();
+    visibleRecorder->restoreWidgetVisible();
     QRect endValue=QRect(width()/8,
                          -height(),
                          width()/4*3,
@@ -404,6 +411,7 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionEditCut],SIGNAL(triggered()),tabManager,SLOT(cut()));
 
     //Edit -> Copy
+    actionMainWindowItem[actionEditCopy]->setShortcut(Qt::Key_Control + Qt::Key_C);
     connect(actionMainWindowItem[actionEditCopy],SIGNAL(triggered()),tabManager,SLOT(copy()));
 
     //Edit -> Paste
@@ -451,7 +459,7 @@ void MainWindow::createActions()
         actStatusTips[mnuSearchFindInFiles]=QString(tr("Search for a text partten in multiple files."));
     */
     //Search -> Replace
-    actionMainWindowItem[actionSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_R));
+    actionMainWindowItem[actionSearchReplace]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_H));
     connect(actionMainWindowItem[actionSearchReplace],SIGNAL(triggered()),tabManager,SLOT(showReplaceBar()));
     /*
         //Search -> Replace In Files
@@ -469,16 +477,16 @@ void MainWindow::createActions()
             this,SLOT(statusShowGoto()));
 
     //Execute -> Comile And Run
-    actionMainWindowItem[actionExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::Key_F11));
+    actionMainWindowItem[actionExecuteCompileAndRun]->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
     connect(actionMainWindowItem[actionExecuteCompileAndRun],SIGNAL(triggered()),this,SLOT(onActionCompileAndRun()));
 
     //Execute -> Compile
-    actionMainWindowItem[actionExecuteCompile]->setShortcut(QKeySequence(Qt::Key_F9));
+    actionMainWindowItem[actionExecuteCompile]->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
     connect(actionMainWindowItem[actionExecuteCompile],SIGNAL(triggered()),
             this,SLOT(onActionCompile()));
 
     //Execute -> Run
-    actionMainWindowItem[actionExecuteRun]->setShortcut(QKeySequence(Qt::Key_F10));
+    actionMainWindowItem[actionExecuteRun]->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_R));
     connect(actionMainWindowItem[actionExecuteRun],SIGNAL(triggered()),this,SLOT(onActionRun()));
     /*
         //Execute -> Parameters
@@ -535,6 +543,15 @@ void MainWindow::createActions()
     connect(actionMainWindowItem[actionDebugReturn], SIGNAL(triggered()),
             debugControl, SLOT(onDebugReturnClicked()));
 
+    connect(actionMainWindowItem[actionDebugAddWatch], SIGNAL(triggered()),
+            debugWatch, SLOT(onActionAddWatch()));
+
+    connect(actionMainWindowItem[actionDebugModifiedWatch], SIGNAL(triggered()),
+            debugWatch, SLOT(onActionModifyWatch()));
+
+    connect(actionMainWindowItem[actionDebugRemoveWatch], SIGNAL(triggered()),
+            debugWatch, SLOT(onActionRemoveWatch()));
+
     //Tools -> Preferences
     actionMainWindowItem[actionToolsPreferences]->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_Period));
     actionMainWindowItem[actionToolsPreferences]->setMenuRole(QAction::PreferencesRole);
@@ -569,12 +586,16 @@ void MainWindow::createActions()
 
 void MainWindow::aboutCuties()
 {
-    QMessageBox::about(this, tr("About Cuties"),
-                       tr("Kreogist Cuties is an light IDE which is designed for ACMer/OIer"));
-    /*KCMessageBox *test=new KCMessageBox(this);
-    test->setTitle("About");
-    test->addText(tr("Kreogist Cute IDE is an light IDE which is designed for ACMer/OIer"));
-    test->show();*/
+    KCMessageBox *aboutCuties=new KCMessageBox(this);
+    aboutCuties->setTitle("About Cuties");
+    aboutCuties->addImage(":/mainicon/image/Cuties.png",
+                          64,
+                          64);
+    aboutCuties->addText("\nKreogist Cuties\n" + qApp->applicationVersion() + "\n(C) 2013 Kreogist Dev Team\n");
+    aboutCuties->addText(tr("\nThis program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n"));
+    aboutCuties->addText(tr("\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n"));
+    aboutCuties->addText(tr("\nYou should have received a copy of the GNU General Public License\nalong with this program.  If not, see <http://www.gnu.org/licenses/>.\n"));
+    aboutCuties->exec();
 }
 
 void MainWindow::aboutQt()
@@ -665,6 +686,7 @@ void MainWindow::createDocks()
     addDockWidget(Qt::BottomDockWidgetArea,compileDock);
     //TODO: Configure Hide.
     compileDock->hide();
+    visibleRecorder->addWidget(compileDock);
 
     //Sidebar Dock
     sideBar=new KCSideBar(this);
@@ -682,27 +704,40 @@ void MainWindow::createDocks()
     //Debug Panel
     debugControl=new KCDebugControlPanel(this);
     addDockWidget(Qt::BottomDockWidgetArea, debugControl, Qt::Horizontal);
+    connect(debugControl, &KCDebugControlPanel::requireSetTextFocus,
+            tabManager, &KCTabManager::setFocus);
     connect(debugControl, &KCDebugControlPanel::debugStarted,
             this, &MainWindow::startDebug);
     connect(debugControl, &KCDebugControlPanel::debugStopped,
             this, &MainWindow::stopDebug);
+    connect(debugControl, &KCDebugControlPanel::debugStartedToCursor,
+            this, &MainWindow::startDebugToCursor);
+
     debugControl->hide();
+    visibleRecorder->addWidget(debugControl);
 
     //Debug Command IO
     debugCommandIO=new KCDebugCommandIO(this);
+    connect(debugCommandIO, &KCDebugCommandIO::requireSetTextFocus,
+            tabManager, &KCTabManager::setFocus);
     addDockWidget(Qt::BottomDockWidgetArea, debugCommandIO, Qt::Horizontal);
     debugCommandIO->hide();
+    visibleRecorder->addWidget(debugCommandIO);
 
     //Debug Watch
     debugWatch=new KCDebugWatch(this);
+    connect(debugWatch, &KCDebugWatch::requireSetTextFocus,
+            tabManager, &KCTabManager::setFocus);
     addDockWidget(Qt::RightDockWidgetArea, debugWatch, Qt::Vertical);
     debugWatch->hide();
+    visibleRecorder->addWidget(debugWatch);
 }
 
 void MainWindow::showDebugDocks()
 {
     debugControl->show();
     debugCommandIO->show();
+    debugWatch->show();
 }
 
 void MainWindow::createMenu()
@@ -924,13 +959,22 @@ void MainWindow::show()
 void MainWindow::onActionCompile()
 {
     compileFinishedConnection.disConnectAll();
-    compileProgram();
+    onActionDelayCompile();
+}
+
+void MainWindow::onActionDelayCompile()
+{
+    KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
+    if(currentEditor!=NULL)
+    {
+        currentEditor->showCompileBar();
+    }
 }
 
 void MainWindow::compileProgram()
 {
     KCCodeEditor *currentEditor=tabManager->getCurrentEditor();
-    currentEditor->showCompileBar();
+    currentEditor->resetCompileErrorCache();
     //Check Tab Status.
     if(currentEditor!=NULL)
     {
@@ -941,6 +985,7 @@ void MainWindow::compileProgram()
         }
         //if the file has been compiled,
         //then we clean the text of last compiling.
+        currentEditor->setCompileBarState(KCCodeCompileProgress::checkingCompiler);
         KCCompileOutputReceiver *receiver=currentEditor->langMode()->getCompilerReceiver();
         if(receiver!=NULL)
         {
@@ -948,10 +993,17 @@ void MainWindow::compileProgram()
         }
         if(!currentEditor->langMode()->compilerIsNull())
         {
-            //Active Compile Dock.
-            compileDock->setVisible(true);
+            if(currentEditor->langMode()->compilerIsExsist())
+            {
+                currentEditor->setCompileBarState(KCCodeCompileProgress::errorCantFindCompiler);
+                QMessageBox msg;
+                msg.setText("Compiler not find.");
+                msg.exec();
+                return;
+            }
             //Set To Compile Mode.
             compileDock->animeHideCompileError();
+            currentEditor->setCompileBarState(KCCodeCompileProgress::runningCompiler);
             currentEditor->langMode()->compile();
             //The receiver is NULL if we didn't compile the file before.
             //And if receiver is NULL, setReceiver() will cause the program crash.
@@ -990,7 +1042,7 @@ void MainWindow::onActionCompileAndRun()
                                            compileDock, SLOT(hideCompileDock()));
         compileFinishedConnection+=connect(currentEditor->langMode(),SIGNAL(compileSuccessfully(QString)),
                                            KCExecutor::getInstance(),SLOT(exec(QString)));
-        compileProgram();
+        onActionDelayCompile();
     }
 }
 
@@ -1015,16 +1067,28 @@ void MainWindow::changeCompileDockVisibleState()
 void MainWindow::changeDebugControlVisibleState()
 {
     debugControl->setVisible(!debugControl->isVisible());
+    if(debugControl->isVisible())
+    {
+        debugControl->setFocus();
+    }
 }
 
 void MainWindow::changeDebugCommandIOVisibleState()
 {
     debugCommandIO->setVisible(!debugCommandIO->isVisible());
+    if(debugCommandIO->isVisible())
+    {
+        debugCommandIO->setFocus();
+    }
 }
 
 void MainWindow::changeDebugWatchVisibleState()
 {
     debugWatch->setVisible(!debugWatch->isVisible());
+    if(debugWatch->isVisible())
+    {
+        debugWatch->setFocus();
+    }
 }
 
 void MainWindow::changeJudgeDockVisibleState()
@@ -1244,6 +1308,7 @@ void MainWindow::onCurrentTabChanged()
     KCCodeEditor *currEditor=tabManager->getCurrentEditor();
     if(currEditor==NULL)
     {
+        disconnectDebugDock();
         return ;
     }
 
@@ -1251,83 +1316,90 @@ void MainWindow::onCurrentTabChanged()
     KCCompileOutputReceiver *compilerReceiver=currLangMode->getCompilerReceiver();
     if(compilerReceiver!=NULL)
     {
+        /*
+         * Here we do something interesting.
+         * We can think that if there's no compiler, there's no debugger.
+         * This is the only way can help us to solve the multi-thread debugging
+         * bug.
+         */
         compileDock->setCompileOutputReceiver(compilerReceiver);
     }
-
-    connectDebugDockWithCurrEditor();
+    GdbController *debugReceiver=currLangMode->getGdbController();
+    Q_ASSERT(debugReceiver!=NULL);
+    connectDebugDockWithCurrEditor(debugReceiver);
 }
 
 void MainWindow::startDebug()
 {
-    qDebug()<<"start SLOT 1";
-    /*if(tabManager->getDebuggingEditor()!=NULL)
-    {
-        //Debugging!
-        return;
-    }*/
-    qDebug()<<"start SLOT 2";
-    tabManager->setDebuggingEditor(tabManager->getCurrentEditor());
-    KCCodeEditor *currEditor=tabManager->getDebuggingEditor();
-    qDebug()<<"start SLOT 3";
-    KCLanguageMode *currLangMode=currEditor->langMode();
-    qDebug()<<"start SLOT 4";
-    currLangMode->startDebug();
-    qDebug()<<"start SLOT 5";
+    onActionStartDebug();
+}
 
-    connectDebugDockWithCurrEditor();
-    qDebug()<<"start SLOT 6";
+void MainWindow::startDebugToCursor()
+{
+    onActionStartDebug(tabManager->getCurrentEditor()->getTextCursor().blockNumber());
+}
+
+void MainWindow::onActionStartDebug(int lineNumber)
+{
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
+    QFile executeFile(currEditor->getExecFileName());
+    if(!executeFile.exists())
+    {
+        KCMessageBox *notCompile=new KCMessageBox(this);
+        notCompile->setTitle("Error");
+        notCompile->addText(tr("File is not compiled."));
+        notCompile->exec();
+        return;
+    }
+
+    if(currEditor->getDebugging())
+    {
+        //Current File is debugging
+        return;
+    }
+    KCLanguageMode *currLangMode=currEditor->langMode();
+    currEditor->setDebugging(true);
+    connectDebugDockWithCurrEditor(currLangMode->getGdbController());
+    currLangMode->startDebug(lineNumber);
+
     showDebugDocks();
-    qDebug()<<"start SLOT 7";
 }
 
 void MainWindow::stopDebug()
 {
-    qDebug()<<"SLOT 0";
-    KCCodeEditor *currEditor=tabManager->getDebuggingEditor();
+    KCCodeEditor *currEditor=tabManager->getCurrentEditor();
     if(currEditor==NULL)
     {
         return;
     }
+    if(!currEditor->getDebugging())
+    {
+        return;
+    }
     KCLanguageMode *currLangMode=currEditor->langMode();
-    qDebug()<<"SLOT 1";
     if(currLangMode!=NULL)
     {
-        qDebug()<<"SLOT 2";
         currLangMode->stopDebug();
-        qDebug()<<"SLOT 3";
+        currEditor->setDebugging(false);
     }
-    qDebug()<<"SLOT 4";
-    disconnectDebugDock();
-    qDebug()<<"SLOT 5";
-    tabManager->setDebuggingEditor(NULL);
-    qDebug()<<"SLOT 6";
 }
 
-void MainWindow::connectDebugDockWithCurrEditor()
+void MainWindow::connectDebugDockWithCurrEditor(GdbController *gdbControllerInstance)
 {
-    KCLanguageMode *currLangMode=tabManager->getCurrentEditor()->langMode();
-    GdbController *gdbControllerInstance=currLangMode->getGdbController();
-
     if(gdbControllerInstance!=NULL)
     {
         debugControl->setGdbController(gdbControllerInstance);
         debugCommandIO->setGdbInstance(gdbControllerInstance);
-        debugWatch->setLocalWatchModel(gdbControllerInstance->getDbgOutputs()->getLocalVarModel());
-        debugWatch->setCustomWatchModel(gdbControllerInstance->getDbgOutputs()->getWatchModel());
+        debugWatch->setGdbController(gdbControllerInstance);
     }
 }
 
 void MainWindow::disconnectDebugDock()
 {
-    qDebug()<<"Disconnect Flag1";
-    debugCommandIO->clearInstance();
-    qDebug()<<"Disconnect Flag2";
     debugControl->clearGdbController();
-    qDebug()<<"Disconnect Flag3";
+    debugCommandIO->clearInstance();
     debugWatch->clearLocalWatchModel();
-    qDebug()<<"Disconnect Flag4";
     debugWatch->clearCustomWatchModel();
-    qDebug()<<"Disconnect Flag5";
 }
 
 void MainWindow::setFullScreen()

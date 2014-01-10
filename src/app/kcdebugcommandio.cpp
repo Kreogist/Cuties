@@ -21,13 +21,39 @@
 #include <QComboBox>
 #include <QStyleFactory>
 #include <QTextDocument>
-#include <QLineEdit>
+#include <QKeyEvent>
 
 #include "kcplaintextbrowser.h"
 #include "gdbcontroller.h"
 #include "kclanguageconfigure.h"
+#include "kcfontconfigure.h"
 
 #include "kcdebugcommandio.h"
+
+KCDebugInput::KCDebugInput(QWidget *parent) :
+    QComboBox(parent)
+{
+    //Set Properties.
+    setEditable(true);
+    setAutoCompletion(true);
+    setStyle(QStyleFactory::create("fusion"));
+}
+
+void KCDebugInput::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        emit execCommand(lineEdit()->text());
+        addItem(lineEdit()->text());
+        lineEdit()->clear();
+        break;
+    default:
+        QComboBox::keyPressEvent(e);
+        break;
+    }
+}
 
 KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     QDockWidget(parent)
@@ -60,40 +86,37 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     contentWidget->setLayout(mainLayout);
 
     //Set command line input.
-    debugInput=new QComboBox(this);
-    debugInput->setEditable(true);
-    debugInput->setAutoCompletion(true);
-    debugInput->setStyle(QStyleFactory::create("fusion"));
+    debugInput=new KCDebugInput(this);
     mainLayout->addWidget(debugInput);
 
     //Set output text browser.
     debugOutputTextBrowser=new KCPlainTextBrowser(this);
+    debugOutputTextBrowser->setFont(KCFontConfigure::getInstance()->getCodeFont());
     mainLayout->addWidget(debugOutputTextBrowser,1);
-    connect(debugInput,SIGNAL(currentIndexChanged(QString)),
+    connect(debugInput,SIGNAL(execCommand(QString)),
             this,SLOT(onCurrentIndexChanged(QString)));
-    /*connect(debugInput, SIGNAL(activated(QString)),
-            this, SLOT(onCurrentIndexChanged(QString)));*/
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugCommandIO::retranslateAndSet);
 
-    resetBackup=new KCPlainTextBrowser(this);
-    resetBackup->setVisible(false);
+    blankOutput=new QTextDocument(this);
+    blankOutput->setDocumentLayout(
+        new QPlainTextDocumentLayout(blankOutput));
 }
 
 void KCDebugCommandIO::setGdbInstance(GdbController *gdbInstance)
 {
     instance=gdbInstance;
-    debugOutputTextBrowser->setDocument(gdbInstance->getDbgOutputs()->getTextStreamOutput());
+    debugOutputTextBrowser->setDocument(instance->getDbgOutputs()->getTextStreamOutput());
 }
 
 void KCDebugCommandIO::clearInstance()
 {
     instance=NULL;
-    resetBackup->clear();
-    qDebug()<<"Find?";
-    debugOutputTextBrowser->setDocument(resetBackup->document());
-    qDebug()<<"Find?";
+    if(debugOutputTextBrowser->document()!=blankOutput)
+    {
+        debugOutputTextBrowser->setDocument(blankOutput);
+    }
 }
 
 void KCDebugCommandIO::retranslate()
@@ -107,9 +130,19 @@ void KCDebugCommandIO::retranslateAndSet()
     setWindowTitle(windowTitleString);
 }
 
-void KCDebugCommandIO::onCurrentIndexChanged(QString command)
+void KCDebugCommandIO::keyPressEvent(QKeyEvent *e)
 {
-    instance->execGdbCommand(qPrintable(command+'\n'));
-    debugInput->lineEdit()->selectAll();
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetTextFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+    }
 }
 
+void KCDebugCommandIO::onCurrentIndexChanged(QString command)
+{
+    instance->execGdbCommand(qPrintable(command));
+    debugInput->lineEdit()->selectAll();
+}

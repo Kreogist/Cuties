@@ -36,10 +36,12 @@ GdbMiValue GdbMiValue::operator [](const char *_str_name) const
 {
     int i=children.size();
     while(i--)
+    {
         if(children[i].name == _str_name)
         {
             return children[i];
         }
+    }
 
     return GdbMiValue();
 }
@@ -58,6 +60,7 @@ QString GdbMiValue::getName() const
 
 void GdbMiValue::build(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     switch(begin->toLatin1())
     {
     case '\"':
@@ -81,7 +84,6 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
                 break;
             }
         }
-
         if(begin == end || *begin!='=')
         {
             //is a c-string
@@ -115,6 +117,7 @@ void GdbMiValue::build(const QChar *&begin, const QChar *&end)
 
 void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     type=Const;
 
     QByteArray _tmp;
@@ -187,7 +190,6 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
                 break;
             default:
             {
-
                 if(c < '0' || c > '7')
                 {
                     isEscape=false;
@@ -207,8 +209,7 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
 
     }
 
-    value=QString::fromUtf8(_tmp);
-
+    value=QString(_tmp);
     if(begin+1 <end)
     {
         begin++;    //skip "
@@ -217,6 +218,7 @@ void GdbMiValue::parseConst(const QChar *&begin, const QChar *&end)
 
 void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     begin++;    //skip [
 
     type=List;
@@ -226,6 +228,7 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
         GdbMiValue child;
         child.build(begin,end);
         children<<child;
+        skipCommas(begin, end);
     }
 
     if(begin+1 < end)
@@ -236,6 +239,7 @@ void GdbMiValue::parseList(const QChar *&begin, const QChar *&end)
 
 void GdbMiValue::parseTuple(const QChar *&begin, const QChar *&end)
 {
+    skipCommas(begin, end);
     begin++;    //skip {
 
     type=Tuple;

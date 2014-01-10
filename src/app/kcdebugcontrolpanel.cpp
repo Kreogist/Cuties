@@ -21,7 +21,9 @@
 #include <QToolButton>
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QKeyEvent>
 #include <QSizePolicy>
+#include <QTextCursor>
 
 #include "kccolorconfigure.h"
 #include "kclanguageconfigure.h"
@@ -40,11 +42,12 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     setObjectName("DebugPanel");
     setAllowedAreas(Qt::RightDockWidgetArea |
                     Qt::BottomDockWidgetArea);
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     //Set compile dock palette
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Window, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
@@ -65,7 +68,6 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     QVBoxLayout *mainLayout=new QVBoxLayout(centralWidget);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-    mainLayout->setSizeConstraint(QLayout::SetMaximumSize);
     centralWidget->setLayout(mainLayout);
 
     setWidget(centralWidget);
@@ -139,6 +141,8 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     {
         debugCursorControlButton[i]->setFixedWidth(maxButtonSizeHint);
     }
+    setFixedWidth(maxButtonSizeHint);
+    mainLayout->addStretch();
 
     connect(debugControlButton[debugStart],SIGNAL(clicked()),
             this,SLOT(onDebugStartClicked()));
@@ -162,6 +166,7 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCDebugControlPanel::retranslateAndSet);
 
+    debugRunning=false;
 }
 
 void KCDebugControlPanel::retranslate()
@@ -230,11 +235,20 @@ void KCDebugControlPanel::retranslateAndSet()
 
 void KCDebugControlPanel::onDebugStartClicked()
 {
+    debugRunning=true;
     emit debugStarted();
+}
+
+
+void KCDebugControlPanel::onRunToCursorClicked()
+{
+    debugRunning=true;
+    emit debugStartedToCursor();
 }
 
 void KCDebugControlPanel::onDebugStopClicked()
 {
+    debugRunning=false;
     emit debugStopped();
 }
 
@@ -252,39 +266,63 @@ void KCDebugControlPanel::clearGdbController()
     gdbController=NULL;
 }
 
-void KCDebugControlPanel::onRunToCursorClicked()
-{
-    //! TODO: doesn't accomplished RunToCursor
-}
-
 //-----control program by using gdbController-----
 void KCDebugControlPanel::onDebugContinueClicked()
 {
-    gdbController->execContinue();
+    if(gdbController!=NULL)
+    {
+        gdbController->execContinue();
+    }
 }
 
 void KCDebugControlPanel::onDebugNextiClicked()
 {
-    gdbController->execNexti();
+    if(gdbController!=NULL)
+    {
+        gdbController->execNexti();
+    }
 }
 
 void KCDebugControlPanel::onDebugNextClicked()
 {
-    gdbController->execNext();
+    if(gdbController!=NULL)
+    {
+        gdbController->execNext();
+    }
 }
 
 void KCDebugControlPanel::onDebugReturnClicked()
 {
-    gdbController->execReturn();
+    if(gdbController!=NULL)
+    {
+        gdbController->execReturn();
+    }
+}
+
+void KCDebugControlPanel::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetTextFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+    }
 }
 
 void KCDebugControlPanel::onDebugStepClicked()
 {
-    gdbController->execStep();
+    if(gdbController!=NULL)
+    {
+        gdbController->execStep();
+    }
 }
 
 void KCDebugControlPanel::onDebugStepiClicked()
 {
-    gdbController->execStepi();
+    if(gdbController!=NULL)
+    {
+        gdbController->execStepi();
+    }
 }
 //-------------------------------------------------

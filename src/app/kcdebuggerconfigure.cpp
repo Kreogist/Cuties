@@ -33,18 +33,36 @@ KCDebuggerConfigure::KCDebuggerConfigure()
 #endif
 
 #ifdef Q_OS_WIN32
-    gdbPath="C:/MinGW/bin/gdb.exe";
+    gdbPath="/Compiler/MinGW/bin/gdb.exe";
 #endif
 }
 
 QString KCDebuggerConfigure::getGdbPath() const
 {
+#ifdef Q_OS_WIN32
+    if(gdbPath.mid(1,1)==":")
+    {
+        return gdbPath;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + gdbPath;
+    }
+#else
     return gdbPath;
+#endif
 }
 
 void KCDebuggerConfigure::setGdbPath(const QString &value)
 {
-    gdbPath = value;
+    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
+    {
+        gdbPath = value.mid(qApp->applicationDirPath().length());
+    }
+    else
+    {
+        gdbPath = value;
+    }
 }
 
 void KCDebuggerConfigure::readConfigure()

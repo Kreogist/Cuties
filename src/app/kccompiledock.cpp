@@ -65,8 +65,8 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     compileOutputTextInfo=new KCPlainTextBrowser(this);
     compileOutputTextInfo->setContentsMargins(0,0,0,0);
     compileOutputTextInfo->setMinimumWidth(0);
-    compileOutputTextInfo->setWordWrapMode(QTextOption::NoWrap);
     compileOutputTextInfo->setFont(KCFontConfigure::getInstance()->getCodeFont());
+    compileOutputTextInfo->setWordWrapMode(QTextOption::NoWrap);
     compileOutputInfoSplitter->addWidget(compileOutputTextInfo);
     //Set treeview output widget
     compileOutputErrorInfoTree=new QTreeView(this);
@@ -91,10 +91,12 @@ KCCompileDock::KCCompileDock(QWidget *parent):
 
     //Set error info treeview widget show/hide animation timeline
     animeShowErrorInfoTree=new QTimeLine(400,this);
+    animeShowErrorInfoTree->setUpdateInterval(1);
     animeShowErrorInfoTree->setEasingCurve(QEasingCurve::OutCubic);
     connect(animeShowErrorInfoTree, SIGNAL(frameChanged(int)),
             this, SLOT(changeCompileSplitterWidthValue(int)));
     animeHideErrorInfoTree=new QTimeLine(400,this);
+    animeHideErrorInfoTree->setUpdateInterval(1);
     animeHideErrorInfoTree->setEasingCurve(QEasingCurve::OutCubic);
     connect(animeHideErrorInfoTree, SIGNAL(frameChanged(int)),
             this, SLOT(changeCompileSplitterWidthValue(int)));
@@ -123,7 +125,7 @@ void KCCompileDock::jumpToError(QModelIndex currentErrorItemIndex)
         if(compileErrorInfoList->at(indexCurrentError).errorColumn > -1)
         {
             emit requireGotoLine(compileErrorInfoList->at(indexCurrentError).errorLine - 1,
-                                 compileErrorInfoList->at(indexCurrentError).errorColumn);
+                                 compileErrorInfoList->at(indexCurrentError).errorColumn - 1);
         }
         else
         {
@@ -179,6 +181,18 @@ void KCCompileDock::hideCompileDock()
     setVisible(false);
 }
 
+void KCCompileDock::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+        break;
+    }
+}
+
 void KCCompileDock::setFloat()
 {
     setFloating(true);
@@ -210,6 +224,8 @@ void KCCompileDock::setCompileOutputReceiver(KCCompileOutputReceiver *newReceive
     compileOutputTextInfo->setPlainText(currentReceiver->getCompilerOutputText());
     compileOutputErrorInfoTree->setModel(currentReceiver->getCompilerOutputModel());
     //Connet signals and slots
+    receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::requireShowError,
+                                       this, &KCCompileDock::show);
     receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::requireShowError,
                                        this, &KCCompileDock::animeShowCompileError);
     receiverConnectionHandles+=connect(currentReceiver, &KCCompileOutputReceiver::compilerOutputTextChanged,

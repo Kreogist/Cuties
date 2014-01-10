@@ -39,6 +39,28 @@ KCCompilerConfigure::KCCompilerConfigure()
     gppPath="/Compiler/MinGW/bin/g++.exe";
     fpcPath="/Compiler/FPC/bin/i386-win32/fpc.exe";
 #endif
+
+    delayCompile=false;
+    delayTimeout=20;
+}
+int KCCompilerConfigure::getDelayTimeout() const
+{
+    return delayTimeout;
+}
+
+void KCCompilerConfigure::setDelayTimeout(int value)
+{
+    delayTimeout = value;
+}
+
+bool KCCompilerConfigure::getDelayCompile() const
+{
+    return delayCompile;
+}
+
+void KCCompilerConfigure::setDelayCompile(bool value)
+{
+    delayCompile = value;
 }
 
 void KCCompilerConfigure::readConfigure()
@@ -48,6 +70,8 @@ void KCCompilerConfigure::readConfigure()
     gccPath=cfgOperator.value("GCC-Path", gccPath).toString();
     gppPath=cfgOperator.value("GPP-Path", gppPath).toString();
     fpcPath=cfgOperator.value("FPC-Path", fpcPath).toString();
+    delayCompile=cfgOperator.value("delayCompile", delayCompile).toBool();
+    delayTimeout=cfgOperator.value("delayTimeout", delayTimeout).toInt();
     cfgOperator.endGroup();
 }
 
@@ -58,6 +82,8 @@ void KCCompilerConfigure::writeConfigure()
     cfgOperator.setValue("GCC-Path", gccPath);
     cfgOperator.setValue("GPP-Path", gppPath);
     cfgOperator.setValue("FPC-Path", fpcPath);
+    cfgOperator.setValue("delayCompile", delayCompile);
+    cfgOperator.setValue("delayTimeout", delayTimeout);
     cfgOperator.endGroup();
 }
 

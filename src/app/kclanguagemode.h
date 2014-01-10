@@ -40,7 +40,9 @@ public:
         Invalid,
         PlainText,
         Cpp,
-        Pascal
+        C,
+        Pascal,
+        ModeTypeCount
     };
 
     enum compileState
@@ -52,8 +54,9 @@ public:
 
     explicit KCLanguageMode(QWidget *parent = 0);
     bool compilerIsNull();
+    bool compilerIsExsist();
     void compile();
-    GdbController *startDebug();
+    GdbController *startDebug(int lineNumber);
     void stopDebug();
     void setMode(const modeType &type);
     void setFileSuffix(const QString &suffix);
@@ -65,6 +68,11 @@ signals:
     void compileSuccessfully(QString execFileName);
     void requireHideCompileDock();
     void requireDisconnectDebug();
+    void compileFinished();
+    void compileErrorOccur(int errors);
+    void requireSmartPanelError(int errorLine);
+    void requireDrawError();
+    void requireDebugJumpLine(int debugLine);
 
 public slots:
     void onCompileFinished(bool hasError);
@@ -83,9 +91,10 @@ private:
 
     QScopedPointer<KCCompilerBase> compiler;
     KCCompileOutputReceiver *compilerReceiver;
-    KCConnectionHandler compilerConnectionHandles,gdbConnectionHandles;
+    KCConnectionHandler compilerConnectionHandles;
     compileState state;
     QReadWriteLock stateLock;
+    QString languageName[ModeTypeCount];
 
     GdbController *gdbControllerInstance;
 

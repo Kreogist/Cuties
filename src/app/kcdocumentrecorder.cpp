@@ -15,32 +15,46 @@ KCDocumentRecorder *KCDocumentRecorder::getInstance()
     return instance==nullptr?instance=new KCDocumentRecorder:instance;
 }
 
-void KCDocumentRecorder::appendRecord(const QString &fileName,
-                                      QTextCursor cursor)
+void KCDocumentRecorder::appendRecord(KCCodeEditor *editor, bool untitled)
 {
     UnclosedFileStatus currentStatus;
-    currentStatus.filePath=fileName;
-    currentStatus.untitled=false;
+    QTextCursor cursor;
+    currentStatus.untitled=untitled;
+    if(untitled)
+    {
+        //This will treat as a untitled file.
+        QString cacheFilePath=QString(unclosedUntitledFileDir +
+                                      QString::number(cacheCount++));
+        //Save the file as a cache file
+        editor->writeCacheFile(cacheFilePath);
+        cursor=editor->getTextCursor();
+        currentStatus.filePath=cacheFilePath;
+    }
+    else
+    {
+        cursor=editor->getTextCursor();
+        currentStatus.filePath=editor->getFilePath();
+    }
     currentStatus.horizontalCursorPosition=cursor.blockNumber();
     currentStatus.verticalCursorPosition=cursor.columnNumber();
+    currentStatus.horizontalScrollPosition=editor->getHScrollValue();
+    currentStatus.verticalScrollPosition=editor->getVScrollValue();
     unclosedFileInfos.prepend(currentStatus);
 }
 
-void KCDocumentRecorder::appendRecord(KCCodeEditor *textEditor)
+void KCDocumentRecorder::appendRecord(const QString &filePath,
+                                      int lineNum,
+                                      int columnNum,
+                                      int hScrollNum,
+                                      int vScrollNum)
 {
-    //This will treat as a untitled file.
-    QString cacheFilePath=QString(unclosedUntitledFileDir +
-                                  QString::number(cacheCount++));
-
-    //Save the file as a cache file
-    textEditor->writeCacheFile(cacheFilePath);
-    QTextCursor cursor=textEditor->getTextCursor();
-    //This is a unsaved untitled file
     UnclosedFileStatus currentStatus;
-    currentStatus.filePath=cacheFilePath;
-    currentStatus.untitled=true;
-    currentStatus.horizontalCursorPosition=cursor.blockNumber();
-    currentStatus.verticalCursorPosition=cursor.columnNumber();
+    currentStatus.untitled=false;
+    currentStatus.filePath=filePath;
+    currentStatus.horizontalCursorPosition=lineNum;
+    currentStatus.verticalCursorPosition=columnNum;
+    currentStatus.horizontalScrollPosition=hScrollNum;
+    currentStatus.verticalScrollPosition=vScrollNum;
     unclosedFileInfos.prepend(currentStatus);
 }
 
@@ -110,6 +124,8 @@ void KCDocumentRecorder::readSettings()
         currentStatus.filePath=settings.value("FilePath", QString("")).toString();
         currentStatus.horizontalCursorPosition=settings.value("HorizontalPosition", 0).toInt();
         currentStatus.verticalCursorPosition=settings.value("VerticalPosition", 0).toInt();
+        currentStatus.horizontalScrollPosition=settings.value("HorizontalScroll",0).toInt();
+        currentStatus.verticalScrollPosition=settings.value("VerticalScroll", 0).toInt();
         unclosedFileInfos.append(currentStatus);
     }
     settings.endArray();
@@ -132,6 +148,8 @@ void KCDocumentRecorder::writeSettings()
         settings.setValue("FilePath", currentStatus.filePath);
         settings.setValue("HorizontalPosition", currentStatus.horizontalCursorPosition);
         settings.setValue("VerticalPosition", currentStatus.verticalCursorPosition);
+        settings.setValue("HorizontalScroll", currentStatus.horizontalScrollPosition);
+        settings.setValue("VerticalScroll", currentStatus.verticalScrollPosition);
     }
     settings.endArray();
     settings.endGroup();

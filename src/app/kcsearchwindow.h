@@ -20,6 +20,8 @@
 #ifndef KCSEARCHWINDOW_H
 #define KCSEARCHWINDOW_H
 
+#include <QPropertyAnimation>
+
 #include "kcsearchwidget.h"
 
 class KCSearchWindow : public KCSearchWidget
@@ -36,6 +38,8 @@ public slots:
 
 private:
     QToolButton *closeButton;
+    QPropertyAnimation *showAnime;
+    QPropertyAnimation *hideAnime;
 };
 
 #endif // KCSEARCHWINDOW_H

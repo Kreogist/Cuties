@@ -30,6 +30,7 @@
 #include <QScrollBar>
 #include <QSettings>
 #include <QTimeLine>
+#include <QShowEvent>
 
 #include "kchistoryconfigure.h"
 #include "kcgeneralconfigure.h"
@@ -101,12 +102,29 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     connect(editor, &KCTextEditor::requireHideOthers,
             this, &KCCodeEditor::onHideOtherWidgets);
 
+    currentCompileProgress->regeometry(width());
+
     //Default Disable Overwrite Mode.
     editor->setOverwriteMode(false);
     searchUseLastCursor=false;
 
     languageMode=new KCLanguageMode(this);
     languageMode->getGdbController();
+
+    connect(languageMode, SIGNAL(compileSuccessfully(QString)),
+            currentCompileProgress, SLOT(showCompileSuccess()));
+    connect(languageMode, SIGNAL(compileFinished()),
+            currentCompileProgress, SLOT(delayHide()));
+    connect(languageMode, SIGNAL(compileErrorOccur(int)),
+            currentCompileProgress, SLOT(showCompileError(int)));
+    connect(languageMode, &KCLanguageMode::requireSmartPanelError,
+            this, &KCCodeEditor::addErrorsToStack);
+    connect(languageMode, &KCLanguageMode::requireDrawError,
+            this, &KCCodeEditor::redrawSmartPanel);
+    connect(languageMode, &KCLanguageMode::requireDebugJumpLine,
+            this, &KCCodeEditor::onDebugJumpLine);
+    connect(currentCompileProgress, SIGNAL(requireCompile()),
+            this, SIGNAL(requiredCompileFile()));
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -116,6 +134,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     fileError=QFileDevice::NoError;
 
     cacheNewFileMode=false;
+    debugging=false;
 }
 
 KCCodeEditor::~KCCodeEditor()
@@ -162,6 +181,33 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
                                  this, &KCCodeEditor::onShowNextSearchResult);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
                                  editor, &KCTextEditor::showPreviousSearchResult);
+    searcherConnections+=connect(editor, &KCTextEditor::matchedResult,
+                                 widget, &KCSearchWidget::setResultMatchStyle);
+    searcherConnections+=connect(editor, &KCTextEditor::nomatchedResult,
+                                 widget, &KCSearchWidget::setResultUnmatchStyle);
+}
+bool KCCodeEditor::getDebugging() const
+{
+    return debugging;
+}
+
+void KCCodeEditor::setDebugging(bool value)
+{
+    debugging = value;
+    if(!debugging)
+    {
+        markPanel->resetDebugCursor();
+    }
+}
+
+void KCCodeEditor::setCompileBarState(KCCodeCompileProgress::CompileState state)
+{
+    currentCompileProgress->setCompileState(state);
+}
+
+void KCCodeEditor::resetCompileErrorCache()
+{
+    errorOccurLines.clear();
 }
 
 void KCCodeEditor::onShowNextSearchResult()
@@ -199,11 +245,29 @@ void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
 
 void KCCodeEditor::showCompileBar()
 {
-    return;
     if(!currentCompileProgress->isVisible())
     {
         currentCompileProgress->animeShow();
     }
+    currentCompileProgress->countToCompile();
+    return;
+}
+
+void KCCodeEditor::setUseLastCuror()
+{
+    searchUseLastCursor=true;
+}
+
+void KCCodeEditor::addErrorsToStack(int lineNum)
+{
+    //lineNum begins from 1, so we have to reduce 1.
+    errorOccurLines.append(lineNum-1);
+}
+
+void KCCodeEditor::redrawSmartPanel()
+{
+    editor->setLineErrorState(errorOccurLines);
+    smartPanel->update();
 }
 
 void KCCodeEditor::showSearchBar()
@@ -211,7 +275,8 @@ void KCCodeEditor::showSearchBar()
     if(replaceBar->isVisible())
     {
         searcherConnections.disConnectAll();
-        replaceBar->hideAnime();
+        replaceBar->setConnected(false);
+        replaceBar->animeHide();
     }
 
     if(!searchBar->isVisible())
@@ -221,11 +286,15 @@ void KCCodeEditor::showSearchBar()
             editor->backupSearchTextCursor();
         }
         searchBar->animeShow();
-        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
-                                     editor, SLOT(setFocus()));
-        searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
-                                     this, SLOT(setUseLastCuror()));
-        connectSearchWidgetWithEditor(searchBar);
+        if(!searchBar->getConnected())
+        {
+            searchBar->setConnected(true);
+            connectSearchWidgetWithEditor(searchBar);
+            searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                         this, SLOT(setUseLastCuror()));
+            searcherConnections+=connect(searchBar, SIGNAL(requireLostFocus()),
+                                         editor, SLOT(setFocus()));
+        }
     }
 
     QTextCursor _textCursor=editor->textCursor();
@@ -236,34 +305,37 @@ void KCCodeEditor::showSearchBar()
     searchBar->setTextFocus();
 }
 
-void KCCodeEditor::setUseLastCuror()
-{
-    searchUseLastCursor=true;
-}
-
 void KCCodeEditor::showReplaceBar()
 {
     if(searchBar->isVisible())
     {
-        searchBar->animeHide();
         searcherConnections.disConnectAll();
+        searchBar->setConnected(false);
+        searchBar->animeHide();
     }
 
     if(!replaceBar->isVisible())
     {
-        replaceBar->showAnime();
-
-        connectSearchWidgetWithEditor(replaceBar);
-        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
-                                     editor, SLOT(setFocus()));
-        searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
-                                     this, SLOT(setUseLastCuror()));
-        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
-                                     editor,&KCTextEditor::replace);
-        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
-                                     editor,&KCTextEditor::replaceAndFind);
-        searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAll,
-                                     editor,&KCTextEditor::replaceAll);
+        if(!searchUseLastCursor)
+        {
+            editor->backupSearchTextCursor();
+        }
+        replaceBar->animeShow();
+        if(!replaceBar->getConnected())
+        {
+            replaceBar->setConnected(true);
+            connectSearchWidgetWithEditor(replaceBar);
+            searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                         this, SLOT(setUseLastCuror()));
+            searcherConnections+=connect(replaceBar, SIGNAL(requireLostFocus()),
+                                         editor, SLOT(setFocus()));
+            searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplace,
+                                         editor,&KCTextEditor::replace);
+            searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAndFind,
+                                         editor,&KCTextEditor::replaceAndFind);
+            searcherConnections+=connect(replaceBar,&KCReplaceWindow::requireReplaceAll,
+                                         editor,&KCTextEditor::replaceAll);
+        }
     }
 
     QTextCursor _textCursor=editor->textCursor();
@@ -415,10 +487,20 @@ bool KCCodeEditor::writeCacheFile(const QString &filePath)
     return saveAs(filePath, true);
 }
 
+QList<int> KCCodeEditor::getBreakpoints()
+{
+    return editor->getBreakPoints();
+}
+
+void KCCodeEditor::onDebugJumpLine(int lineNum)
+{
+    int realLineNum=lineNum-1;
+    setDocumentCursor(realLineNum, 0);
+    markPanel->setDebugCursor(realLineNum);
+}
+
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
-    qDebug()<<"alive slot 1";
-
     if(editor->document()->isModified() &&
        ((filePath.isEmpty() && !cacheNewFileMode) ||
         !filePath.isEmpty()))
@@ -487,6 +569,12 @@ void KCCodeEditor::closeEvent(QCloseEvent *e)
     return ;
 }
 
+void KCCodeEditor::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+    currentCompileProgress->regeometry(width());
+}
+
 void KCCodeEditor::setDocumentTitle(const QString &title)
 {
     editor->setDocumentTitle(title);
@@ -548,7 +636,7 @@ void KCCodeEditor::onModificationChanged(bool changed)
 void KCCodeEditor::onHideOtherWidgets()
 {
     searchBar->animeHide();
-    replaceBar->hideAnime();
+    replaceBar->animeHide();
     emit requiredHideDocks();
 }
 
@@ -573,6 +661,26 @@ QTextCursor KCCodeEditor::getTextCursor()
     return editor->textCursor();
 }
 
+void KCCodeEditor::setVScrollValue(int value)
+{
+    editor->setVScrollValue(value);
+}
+
+void KCCodeEditor::setHScrollValue(int value)
+{
+    editor->setHScrollValue(value);
+}
+
+int KCCodeEditor::getVScrollValue()
+{
+    return editor->getVScrollValue();
+}
+
+int KCCodeEditor::getHScrollValue()
+{
+    return editor->getHScrollValue();
+}
+
 int KCCodeEditor::getTextLines()
 {
     return editor->document()->blockCount();
@@ -581,12 +689,6 @@ int KCCodeEditor::getTextLines()
 void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
 {
     editor->setDocumentCursor(nLine,linePos);
-}
-
-void KCCodeEditor::resizeEvent(QResizeEvent *e)
-{
-    QWidget::resizeEvent(e);
-    searchBar->updateGeometry();
 }
 
 void KCCodeEditor::fileInfoChanged(const QFile &file)

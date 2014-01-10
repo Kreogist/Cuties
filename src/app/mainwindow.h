@@ -59,6 +59,7 @@
 #include "kcmailreports.h"
 #include "kcmainmenu.h"
 #include "kcsubmenu.h"
+#include "kcvisiblerecorder.h"
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
@@ -81,6 +82,8 @@ signals:
 public slots:
     void show();
     void startDebug();
+    void startDebugToCursor();
+    void onActionStartDebug(int lineNumber=-1);
     void stopDebug();
     void onActionCompileAndRun();
     void onActionRun();
@@ -117,6 +120,9 @@ protected:
     void closeEvent(QCloseEvent *e);
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+
+private slots:
+    void compileProgram();
 
 private:
     KCWelcomeWindow *welcomeWindow;
@@ -257,7 +263,9 @@ private:
     KCDebugCommandIO *debugCommandIO;
     KCDebugWatch *debugWatch;
 
-    void compileProgram();
+    KCVisibleRecorder *visibleRecorder;
+
+    void onActionDelayCompile();
 
     void saveSettings();
     void restoreSettings();
@@ -272,7 +280,7 @@ private:
     void setDocOpenMenuState(bool state);
 
     void showDebugDocks();
-    void connectDebugDockWithCurrEditor();
+    void connectDebugDockWithCurrEditor(GdbController *gdbControllerInstance);
 
     int currentWindowState();
 };

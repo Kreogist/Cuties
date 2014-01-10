@@ -24,7 +24,7 @@ KCStatusCursorInfo::KCStatusCursorInfo(QWidget *parent) :
     QWidget(parent)
 {
     retranslate();
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(2,0,5,0);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     QHBoxLayout *textLayout=new QHBoxLayout(this);
@@ -135,7 +135,7 @@ void KCStatusCursorInfo::updateCursorPosition(int newLineNum, int newColumnNum)
     if(newLineNum>0)
     {
         lineNumString=QString::number(newLineNum);
-        columnNumString=QString::number(newColumnNum);
+        columnNumString=QString::number(newColumnNum+1);
     }
     else
     {

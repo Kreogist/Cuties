@@ -20,6 +20,7 @@
 #ifndef KCREPLACEWINDOW_H
 #define KCREPLACEWINDOW_H
 
+#include <QTimeLine>
 #include <QSignalMapper>
 
 #include "kcsearchwidget.h"
@@ -36,8 +37,8 @@ signals:
     void requireReplaceAll(const QString &oldText, const QString &newText);
 
 public slots:
-    void showAnime();
-    void hideAnime();
+    void animeShow();
+    void animeHide();
 
 private slots:
     void resizeDock(int newHeight);
@@ -58,6 +59,7 @@ private:
     QToolButton *closeButton;
 
     QSignalMapper *mapper;
+    QTimeLine *showAnimation, *hideAnimation;
 };
 
 #endif // KCREPLACEWINDOW_H

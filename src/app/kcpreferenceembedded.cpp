@@ -51,7 +51,7 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
     generalInts[intItemHistoryMax]=
         addItemInt(intItemCaption[intItemHistoryMax],
                    KCHistoryConfigure::getInstance()->getMaxRecentFilesSize(),
-                   100,
+                   1000,
                    4);
     generalTitles[titleSearchOptions]=addTitle(generalTitleText[titleSearchOptions]);
     generalCombos[comboSearchEngine]=
@@ -134,6 +134,7 @@ void KCPreferenceEmbeddedGeneral::applyPreference()
     instance->setUseDefaultLanguageWhenSave(generalBooleans[booleanUseDefaultLanguageOnSave]->getCurrentValue().toBool());
     //Set automatic remember
     instance->setRememberUnclosedFile(generalBooleans[booleanAutoOpenUnclosed]->getCurrentValue().toBool());
+    instance->setSearchEngineIndex(generalCombos[comboSearchEngine]->getCurrentValue().toInt());
     //Set history max
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(generalInts[intItemHistoryMax]->getCurrentValue().toInt());
 }
@@ -177,7 +178,7 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     editorTitles[titleClipboard]=addTitle(editorTitleText[titleClipboard]);
     editorInts[intClipboardTrackingMax]=addItemInt(intItemCaption[intClipboardTrackingMax],
                                                    KCClipboard::getInstance()->getMaxDataCount(),
-                                                   100,
+                                                   1000,
                                                    5);
     addStretch();
 
@@ -281,6 +282,15 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
 
     //Get configure instance
     instance=KCCompilerConfigure::getInstance();
+    compilerTitles[titleCompilerOptions]=addTitle(compilerTitleText[titleCompilerOptions]);
+    compilerBooleanGroups[booleanGroupDelayCompile]=
+            addItemBooleanGroup(booleanGroupCaption[booleanGroupDelayCompile],
+                                instance->getDelayCompile());
+    compilerInts[intDelayTimeout]=addItemInt(intItemCaption[intDelayTimeout],
+                                             instance->getDelayTimeout(),
+                                             500,
+                                             20);
+    compilerBooleanGroups[booleanGroupDelayCompile]->addTrueValueGroupItem(compilerInts[intDelayTimeout]);
 
     compilerTitles[titleCompilerPath]=addTitle(compilerTitleText[titleCompilerPath]);
     compilerPathItems[pathGPPCompiler]=
@@ -304,6 +314,11 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
 void KCPreferenceEmbeddedCompiler::retranslate()
 {
     compilerTitleText[titleCompilerPath]=tr("Compiler Path");
+    compilerTitleText[titleCompilerOptions]=tr("Compiler Options");
+
+    booleanGroupCaption[booleanGroupDelayCompile]=tr("Delay Compile:");
+
+    intItemCaption[intDelayTimeout]=tr("Delay Compile Timeout Speed:");
 
     pathItemCaption[pathGPPCompiler]=tr("g++ Compiler:");
     pathItemCaption[pathGCCCompiler]=tr("gcc Compiler:");
@@ -326,6 +341,18 @@ void KCPreferenceEmbeddedCompiler::retranslateAndSet()
         compilerTitles[i]->setText(compilerTitleText[i]);
     }
 
+    //Reset bool items.
+    for(i=booleanGroupDelayCompile; i<booleanGroupItemCount; i++)
+    {
+        compilerBooleanGroups[i]->setBooleanCaptionText(booleanGroupCaption[i]);
+    }
+
+    //Reset int items.
+    for(i=intDelayTimeout; i<intItemCount; i++)
+    {
+        compilerInts[i]->setIntCaptionText(intItemCaption[i]);
+    }
+
     //Reset path items.
     for(i=pathGPPCompiler; i<pathItemCount; i++)
     {
@@ -339,6 +366,8 @@ void KCPreferenceEmbeddedCompiler::applyPreference()
     instance->setGppPath(compilerPathItems[pathGPPCompiler]->getCurrentValue().toString());
     instance->setGccPath(compilerPathItems[pathGCCCompiler]->getCurrentValue().toString());
     instance->setFpcPath(compilerPathItems[pathFPCCompiler]->getCurrentValue().toString());
+    instance->setDelayCompile(compilerBooleanGroups[booleanGroupDelayCompile]->getCurrentValue().toBool());
+    instance->setDelayTimeout(compilerInts[intDelayTimeout]->getCurrentValue().toInt());
 }
 
 KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :

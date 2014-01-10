@@ -173,11 +173,28 @@ public slots:
 private:
     enum CompilerTitleEnum
     {
+        titleCompilerOptions,
         titleCompilerPath,
         titleCount
     };
     QString compilerTitleText[titleCount];
     QLabel *compilerTitles[titleCount];
+
+    enum CompilerBooleanGroupEnum
+    {
+        booleanGroupDelayCompile,
+        booleanGroupItemCount
+    };
+    QString booleanGroupCaption[booleanGroupItemCount];
+    KCPreferenceItemBooleanGroup *compilerBooleanGroups[booleanGroupItemCount];
+
+    enum CompilerIntEnum
+    {
+        intDelayTimeout,
+        intItemCount
+    };
+    QString intItemCaption[intItemCount];
+    KCPreferenceItemInt *compilerInts[intItemCount];
 
     enum CompilerPathItemEnum
     {

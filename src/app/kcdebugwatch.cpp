@@ -25,9 +25,12 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QStandardItemModel>
+#include <QKeyEvent>
+#include <QLineEdit>
 
 #include "kcdebugwatch.h"
 #include "kclanguageconfigure.h"
+#include "kcmessagebox.h"
 
 KCDebugWatch::KCDebugWatch(QWidget *parent) :
     QDockWidget(parent)
@@ -46,6 +49,7 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     //Set compile dock palette
     QPalette pal=palette();
     pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
+    pal.setColor(QPalette::Window, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
     pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
     pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
@@ -88,15 +92,21 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     customWatchCommands[customWatchAdd]=new QToolButton(watchDockContainer);
     customWatchCommands[customWatchAdd]->setToolTip(customWatchCommandTitle[customWatchAdd]);
     customWatchCommands[customWatchAdd]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/AddWatch.png"));
+    connect(customWatchCommands[customWatchAdd], SIGNAL(clicked()),
+            this, SLOT(onActionAddWatch()));
     customWatchControl->addWidget(customWatchCommands[customWatchAdd]);
     customWatchCommands[customWatchEdit]=new QToolButton(watchDockContainer);
     customWatchCommands[customWatchEdit]->setToolTip(customWatchCommandTitle[customWatchEdit]);
     customWatchCommands[customWatchEdit]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/ModifyWatch.png"));
+    connect(customWatchCommands[customWatchEdit], SIGNAL(clicked()),
+            this, SLOT(onActionModifyWatch()));
     customWatchControl->addWidget(customWatchCommands[customWatchEdit]);
     customWatchControl->addSeparator();
     customWatchCommands[customWatchRemove]=new QToolButton(watchDockContainer);
     customWatchCommands[customWatchRemove]->setToolTip(customWatchCommandTitle[customWatchRemove]);
     customWatchCommands[customWatchRemove]->setIcon(QPixmap(":/DebugToolBar/image/Debug Docks/RemoveWatch.png"));
+    connect(customWatchCommands[customWatchRemove], SIGNAL(clicked()),
+            this, SLOT(onActionRemoveWatch()));
     customWatchControl->addWidget(customWatchCommands[customWatchRemove]);
 
     customWatchControlLayout->addWidget(customWatchControl);
@@ -115,6 +125,13 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
 KCDebugWatch::~KCDebugWatch()
 {
     customWatchControlLayout->deleteLater();
+}
+
+void KCDebugWatch::setGdbController(GdbController *controller)
+{
+    gdbController=controller;
+    setLocalWatchModel(gdbController->getDbgOutputs()->getLocalVarModel());
+    setCustomWatchModel(gdbController->getDbgOutputs()->getWatchModel());
 }
 
 void KCDebugWatch::clearLocalWatchModel()
@@ -137,6 +154,17 @@ void KCDebugWatch::setCustomWatchModel(QStandardItemModel *model)
     customWatch->setModel(model);
 }
 
+void KCDebugWatch::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        emit requireSetTextFocus();
+    default:
+        QDockWidget::keyPressEvent(e);
+    }
+}
+
 void KCDebugWatch::retranslate()
 {
     windowTitleString=tr("Watch");
@@ -157,4 +185,90 @@ void KCDebugWatch::retranslateAndSet()
     customWatchCommands[customWatchAdd]->setToolTip(customWatchCommandTitle[customWatchAdd]);
     customWatchCommands[customWatchEdit]->setToolTip(customWatchCommandTitle[customWatchEdit]);
     customWatchCommands[customWatchRemove]->setToolTip(customWatchCommandTitle[customWatchRemove]);
+}
+
+void KCDebugWatch::onActionAddWatch()
+{
+    int currentIndex=customWatch->currentIndex().row();
+    KCMessageBox *addWatchEquation=new KCMessageBox(this->parentWidget());
+    QLineEdit *equation=new QLineEdit(this);
+    equation->setFixedWidth(250);
+    QPalette pal=equation->palette();
+    pal.setColor(QPalette::Base, QColor(255,255,255,50));
+    equation->setPalette(pal);
+    addWatchEquation->enabledCancel();
+    addWatchEquation->setTitle("New Watch");
+    addWatchEquation->addText(tr("Enter variable equation/name:"));
+    addWatchEquation->addSpacing(10);
+    addWatchEquation->addWidget(equation);
+    addWatchEquation->exec();
+    if(addWatchEquation->messageBoxState()==KCMessageBoxPanel::buttonOK)
+    {
+        if(!equation->text().isEmpty())
+        {
+            if(currentIndex==-1)
+            {
+                gdbController->getDbgOutputs()->appendExpr(equation->text());
+            }
+            else
+            {
+                gdbController->getDbgOutputs()->insertExpr(currentIndex,
+                                                           equation->text());
+            }
+        }
+    }
+}
+
+void KCDebugWatch::onActionModifyWatch()
+{
+    int currentIndex=customWatch->currentIndex().row();
+    if(currentIndex==-1)
+    {
+        return;
+    }
+    KCMessageBox *modifyWatchEquation=new KCMessageBox(this->parentWidget());
+    QLineEdit *equation=new QLineEdit(this);
+    QString originalData=gdbController->getDbgOutputs()->getWatchExp(currentIndex);
+    equation->setFixedWidth(250);
+    equation->setText(originalData);
+    equation->selectAll();
+    QPalette pal=equation->palette();
+    pal.setColor(QPalette::Base, QColor(255,255,255,50));
+    equation->setPalette(pal);
+    modifyWatchEquation->enabledCancel();
+    modifyWatchEquation->setTitle("Modify Watch");
+    modifyWatchEquation->addText(tr("Change equation/variable name:"));
+    modifyWatchEquation->addSpacing(10);
+    modifyWatchEquation->addText(originalData);
+    modifyWatchEquation->addSpacing(5);
+    modifyWatchEquation->addWidget(equation);
+    modifyWatchEquation->exec();
+    if(modifyWatchEquation->messageBoxState()==KCMessageBoxPanel::buttonOK)
+    {
+        if(!equation->text().isEmpty())
+        {
+            gdbController->getDbgOutputs()->modifyExpr(currentIndex,
+                                                       equation->text());
+        }
+    }
+}
+
+void KCDebugWatch::onActionRemoveWatch()
+{
+    int currentIndex=customWatch->currentIndex().row();
+    if(currentIndex==-1)
+    {
+        return;
+    }
+    KCMessageBox *deleteWatch=new KCMessageBox(this->parentWidget());
+    deleteWatch->enabledCancel();
+    deleteWatch->setTitle("Remove Watch");
+    deleteWatch->addText(tr("Are you sure to remove to watch this?"));
+    deleteWatch->addSpacing(10);
+    deleteWatch->addText(gdbController->getDbgOutputs()->getWatchExp(currentIndex));
+    deleteWatch->exec();
+    if(deleteWatch->messageBoxState()==KCMessageBoxPanel::buttonOK)
+    {
+        gdbController->getDbgOutputs()->removeExpr(currentIndex);
+    }
 }

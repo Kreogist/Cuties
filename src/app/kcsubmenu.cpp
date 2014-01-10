@@ -93,7 +93,7 @@ void KCSubMenu::showEvent(QShowEvent *e)
     endPosition.setHeight(endPositionHeight);
     showAnimation->setStartValue(startPostion);
     showAnimation->setEndValue(endPosition);
-    indicator->setGeometry(startPostion.left()-28,
+    indicator->setGeometry(startPostion.left()-26,
                            newIndicatorPosition-115,
                            28,
                            230);

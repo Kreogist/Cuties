@@ -60,8 +60,6 @@ public:
     void readConfigure();
     void writeConfigure();
 
-    void writeLastSessionConfigure();
-
     void cleanAllHistorys();
 
     void setTrackUserHistoryEnabled(bool enabled);
@@ -70,20 +68,11 @@ public:
     void setHistoryDir(const QString &dirPath);
     QString getHistoryDir() const;
 
-    void clearAllUnClosedFilePaths();
-    QStringList getAllUnClosedFilePaths() const;
-    void addUnClosedFilePath(const QString &path, const int &HValue, const int &VValue);
-
     int getMaxRecentFilesSize() const;
     void setMaxRecentFilesSize(int value);
     void clearAllRecentFilesRecord();
     void addRecentFileRecord(const QString &path);
     QStringList getAllRecentOpenedFilesRecord() const;
-
-    QList<int> getAllUnClosedFileVs() const;
-    QList<int> getAllUnClosedFileHs() const;
-    int getUnClosedCurrent() const;
-    void setUnClosedCurrent(int value);
 
     QStandardItemModel *getRecentOpenedFileModel() const;
     void setRecentOpenedFileModel(QStandardItemModel *value);
@@ -115,13 +104,9 @@ private:
     int maxRecentFilesSize;
     bool trackUserHistory;
     bool cleanMark;
-    QStringList unClosedFilePaths;
     static KCHistoryConfigure *instance;
 
-    QList<int> unClosedFileV;
-    QList<int> unClosedFileH;
     QList<recentFileInfo> recentFileList;
-    int unClosedCurrent;
 
     QIcon recentFileIcon[sourceFileTypeCount];
     QString filePathCaption, lastReadCaption;

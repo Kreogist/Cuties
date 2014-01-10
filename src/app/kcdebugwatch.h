@@ -22,6 +22,8 @@
 
 #include <QDockWidget>
 
+#include "gdbcontroller.h"
+
 class QLabel;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -30,7 +32,7 @@ class QTreeView;
 class QToolBar;
 class QToolButton;
 class QStandardItemModel;
-
+class QKeyEvent;
 
 class KCDebugWatch : public QDockWidget
 {
@@ -38,16 +40,26 @@ class KCDebugWatch : public QDockWidget
 public:
     explicit KCDebugWatch(QWidget *parent = 0);
     ~KCDebugWatch();
+    void setGdbController(GdbController* controller);
     void clearLocalWatchModel();
     void clearCustomWatchModel();
     void setLocalWatchModel(QStandardItemModel* model);
     void setCustomWatchModel(QStandardItemModel* model);
 
 signals:
+    void requireSetTextFocus();
+
+protected:
+    void keyPressEvent(QKeyEvent *e);
 
 public slots:
     void retranslate();
     void retranslateAndSet();
+
+private slots:
+    void onActionAddWatch();
+    void onActionModifyWatch();
+    void onActionRemoveWatch();
 
 private:
     QSplitter *watchDockContainer;
@@ -67,6 +79,7 @@ private:
     QString customWatchCommandTitle[CustomWatchCommandCount];
 
     QHBoxLayout *customWatchControlLayout;
+    GdbController *gdbController;
 
     QString windowTitleString,
             localWatchTitle,

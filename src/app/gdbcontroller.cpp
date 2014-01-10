@@ -18,11 +18,14 @@
  */
 
 #include <QTimer>
+#include <QApplication>
 
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "gdbcontroller.h"
+
+#include <fstream>
 
 #ifdef Q_OS_UNIX
 QString GdbController::gdbPath="/usr/bin/gdb";
@@ -30,20 +33,6 @@ QString GdbController::gdbPath="/usr/bin/gdb";
 
 #ifdef Q_OS_WIN32
 QString GdbController::gdbPath="C:/MinGW/bin/gdb.exe";
-#else
-#include <QSocketNotifier>
-#include <QTemporaryFile>
-#include <QVarLengthArray>
-#include <sys/ioctl.h>
-#ifdef Q_OS_SOLARIS
-# include <sys/filio.h> // FIONREAD
-#endif
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <string.h>
-#include <unistd.h>
 #endif
 
 bool GdbController::checkResult=false;
@@ -53,47 +42,158 @@ static bool isAnsycChar(const char &c)
     return (c >= 'a' && c <= 'z') || c == '-';
 }
 
+GdbThread::GdbThread(QObject *parent) :
+    QThread(parent)
+{
+    messageCache.clear();
+}
+
+GdbThread::~GdbThread()
+{
+    quitGDB();
+}
+
+void GdbThread::run()
+{
+    readProcessData.disConnectAll();
+    gdbProcess.reset(new QProcess(this));
+    QStringList _arg;
+    _arg<<filePath<<"--interpreter"<<"mi"
+#ifdef Q_OS_WIN32
+          ;
+#else
+          ;
+#endif
+    readProcessData+=connect(gdbProcess.data(),
+                             SIGNAL(readyReadStandardOutput()),
+                             this,
+                             SLOT(readGdbStandardOutput()));
+    readProcessData+=connect(gdbProcess.data(),
+                             SIGNAL(readyReadStandardError()),
+                             this,
+                             SLOT(readGdbStandardError()));
+    gdbProcess->start(gdbPath, _arg);
+}
+
+QString GdbThread::getFilePath() const
+{
+    return filePath;
+}
+
+void GdbThread::setFilePath(const QString &value)
+{
+    filePath = value;
+}
+
+void GdbThread::quitGDB()
+{
+    if(gdbProcess->state()==QProcess::NotRunning)
+    {
+        return;
+    }
+    int timeout=100; //Timeout to kill;
+    execGdbCommand("q");
+    execGdbCommand("y");
+
+    //Read wait for finished document, this is the right way.
+    if(!gdbProcess->waitForFinished(timeout))
+    {
+        //gdb doesn't quit till now, so we have to kill it.
+        gdbProcess->kill();
+    }
+}
+
+void GdbThread::execGdbCommand(const QString &command)
+{
+    emit addSystemMessage(QString("(gdb): "+command+"\n"));
+    gdbProcess->write(qPrintable(QString(command+"\n")));
+}
+
+QString GdbThread::getGdbPath() const
+{
+    return gdbPath;
+}
+
+void GdbThread::setGdbPath(const QString &value)
+{
+    gdbPath = value;
+}
+
+bool GdbThread::isGdbRunning()
+{
+    return (gdbProcess->state()==QProcess::Running);
+}
+
+
+void GdbThread::readGdbStandardError()
+{
+    QByteArray err = gdbProcess->readAllStandardError();
+
+    emit parseError(err);
+}
+
+void GdbThread::readGdbStandardOutput()
+{
+    char buf[2004];
+
+    QString _msg;
+    while(gdbProcess->readLine(buf,2000)>0)
+    {
+        _msg=QString(buf);
+        _msg.remove("\n");
+        _msg.remove("\r");
+        //If is empty, finish a part!
+        if(_msg.isEmpty())
+        {
+            return;
+        }
+        if(_msg.contains("(gdb)"))
+        {
+            //Here means we have finished a part.
+            if(!messageCache.isEmpty())
+            {
+                emit parseMessage(messageCache);
+                messageCache.clear();
+            }
+            return;
+        }
+        char firstLetter=_msg.begin()->toLatin1();
+        switch(firstLetter)
+        {
+        case '^':
+        case '*':
+        case '~':
+        case '@':
+        case '&':
+        case '=':
+            if(!messageCache.isEmpty())
+            {
+                emit parseMessage(messageCache);
+            }
+            messageCache=_msg;
+            break;
+        default:
+            messageCache.append(_msg);
+            break;
+        }
+    }
+}
+
 GdbController::GdbController(QObject *parent) :
     QObject(parent)
 {
     instance=KCDebuggerConfigure::getInstance();
     setGDBPath(instance->getGdbPath());
-    qDebug()<<instance->getGdbPath();
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 
+    requestForceUpdateLocal=false;
+
     debugCodec=QTextCodec::codecForLocale();
-#ifndef Q_OS_WIN32
-    connect(this, SIGNAL(byteDelivery(QByteArray)),
-            this, SLOT(readDebugeeOutput(QByteArray)));
-#endif
-}
-
-GdbController::~GdbController()
-{
-    quitGDB();
-}
-
-void GdbController::readGdbStandardOutput()
-{
-    char buf[1000];
-    while(gdbProcess->readLine(buf,1000)>0)
-    {
-        QString _msg=QString::fromUtf8(buf);
-        _msg.remove('\n');
-
-        parseLine(_msg);
-    }
 }
 
 void GdbController::parseLine(const QString &_msg)
 {
-    qDebug()<<_msg;
-    if(_msg.isEmpty() || _msg.contains("(gdb)"))
-    {
-        return ;
-    }
-
     char _firstChar=_msg.begin()->toLatin1();
     const QChar *begin=_msg.begin();
     const QChar *end=_msg.end();
@@ -126,28 +226,38 @@ void GdbController::parseLine(const QString &_msg)
             }
 
             GdbMiValue result;
-
             result.build(begin,end);
 
-            if(result.getName() == "bkpt")
-            {
-                parseBkpt(result);
-                break;
-            }
             if(result.getName() == "locals")
             {
                 dbgOutputs->addLocals(result);
                 break;
             }
-            if(result.getName() == "value")
+            else if(result.getName() == "value")
             {
-                dbgOutputs->addExprValue(result.getValue());
+                if(!customIndexList.isEmpty())
+                {
+                    dbgOutputs->addExprValue(customIndexList.at(0), result.getValue());
+                    customIndexList.removeFirst();
+                }
+                break;
+            }
+            else if(result.getName() == "bkpt")
+            {
+                parseBkpt(result);
+                emit requireLineJump(result["line"].getValue().toInt());
+                //Refresh stack list
+                if(!requestForceUpdateLocal)
+                {
+                    updateDockInfos();
+                }
                 break;
             }
         }
         else if(_str_async == "running")
         {
-
+            dbgOutputs->addConsoleOutput("  -> Cuties: Running program.\n");
+            break;
         }
         else if(_str_async == "error")
         {
@@ -162,6 +272,7 @@ void GdbController::parseLine(const QString &_msg)
             result.build(begin,end);
 
             dbgOutputs->addErrorText(result.getValue()+"\n");
+            break;
         }
         else
         {
@@ -187,25 +298,69 @@ void GdbController::parseLine(const QString &_msg)
                 break;
             }
         }
-
-        begin++;    //skip ,
-
-        GdbMiValue result;
-
-        for(; begin<end; begin++)
-        {
-            GdbMiValue child;
-            child.build(begin,end);
-
-            result+=child;
-        }
-
         if(_str_async == "stopped")
         {
-            stackListLocals();
-            qDebug()<<*begin;
-        }
+            QString stoppedDetails;
+            dbgOutputs->addConsoleOutput("  -> Cuties: GDB stopped.\n");
+            //Here we have to display many many details.
+            stoppedDetails="Details:\n";
+            begin++;
+            if(begin>=end)
+            {
+                return ;
+            }
 
+            GdbMiValue result;
+            for(; begin<end; begin++)
+            {
+                GdbMiValue child;
+                child.build(begin,end);
+                if(child.getName()=="reason")
+                {
+                    stoppedDetails+=QString("Reason: " + child.getValue() + "\n");
+                }
+                else if(child.getName()=="func")
+                {
+                    stoppedDetails+=QString("At function: " + child.getValue() + "\n");
+                }
+                else if(child.getName()=="frame")
+                {
+                    emit requireLineJump(child["line"].getValue().toInt());
+                    stoppedDetails+=QString("Frame Details: address  :" + child["addr"].getValue() + "\n" +
+                                            "               function :" + child["func"].getValue() + "\n" +
+                                            "               args     :" + child["args"].getValue() + "\n" +
+                                            "               file     :" + child["file"].getValue() + "\n" +
+                                            "               fullname :" + child["fullname"].getValue() + "\n" +
+                                            "               line     :" + child["line"].getValue()) + "\n";
+                }
+                else if(child.getName()=="disp")
+                {
+                    stoppedDetails+=QString("disp: " + child.getValue() + "\n");
+                }
+                else if(child.getName()=="thread-id")
+                {
+                    stoppedDetails+=QString("thread-id: " + child.getValue() + "\n");
+                }
+                else if(child.getName()=="bkptno")
+                {
+                    stoppedDetails+=QString("bkptno: " + child.getValue() + "\n");
+                }
+                else if(child.getName()=="stopped-threads")
+                {
+                    stoppedDetails+=QString("stopped-threads: "+child.getValue()+"\n");
+                }
+                result+=child;
+            }
+            stoppedDetails.append("\n");
+            dbgOutputs->addText(stoppedDetails);
+
+            //Refresh stack list
+            if(!requestForceUpdateLocal)
+            {
+                updateDockInfos();
+            }
+            break;
+        }
         break;
     }
     case '~':
@@ -224,9 +379,8 @@ void GdbController::parseLine(const QString &_msg)
     }
     case '&':
     {
-        begin++;
-        dbgOutputs->addLogOutput(parseOutputStream(begin,end));
-
+        //begin++;
+        //dbgOutputs->addLogOutput(parseOutputStream(begin,end));
         break;
     }
     case '=':
@@ -240,12 +394,32 @@ void GdbController::parseLine(const QString &_msg)
     }
 }
 
-QString GdbController::parseOutputStream(const QChar *begin, const QChar *end)
+void GdbController::parseError(const QString &_error)
+{
+    dbgOutputs->addErrorText(_error);
+}
+
+void GdbController::parseCommand(const QString &_cmd)
+{
+    dbgOutputs->addTargetOutput(_cmd);
+}
+
+QString GdbController::parseOutputStream(const QChar *begin,const QChar *end)
 {
     GdbMiValue result;
     result.build(begin,end);
 
     return result.getValue();
+}
+
+QString GdbController::getFileType() const
+{
+    return fileType;
+}
+
+void GdbController::setFileType(const QString &value)
+{
+    fileType = value;
 }
 
 void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
@@ -276,15 +450,10 @@ void GdbController::parseBkpt(const GdbMiValue &gmvBkpt)
     qDebug()<<_tmp_bkpt.line;
     qDebug()<<_tmp_bkpt.threadGroups;
     qDebug()<<_tmp_bkpt.times;
-    qDebug()<<_tmp_bkpt.original_location;*/
+    qDebug()<<_tmp_bkpt.original_location;
+    */
 
-    bkptVec<<_tmp_bkpt;
-
-}
-
-const QVector<bkpt_struct> *GdbController::getBkptVec() const
-{
-    return &bkptVec;
+    bkptVec<<_tmp_bkpt;;
 }
 
 void GdbController::setGDBPath(const QString &path)
@@ -300,142 +469,33 @@ bool GdbController::checkGDB()
     return checkResult=_fileInfo.exists() && _fileInfo.isExecutable();
 }
 
-#ifndef Q_OS_WIN32
-bool GdbController::startListen()
-{
-    if (!debugServerPath.isEmpty())
-        return true;
-    QByteArray codedServerPath;
-    forever {
-        {
-            QTemporaryFile tf;
-            if (!tf.open()) {
-                debugErrorString = tr("Cannot create temporary file: %1").arg(tf.errorString());
-                debugServerPath.clear();
-                return false;
-            }
-            debugServerPath = tf.fileName();
-        }
-        // By now the temp file was deleted again
-        codedServerPath = QFile::encodeName(debugServerPath);
-        if (!::mkfifo(codedServerPath.constData(), 0600))
-            break;
-        if (errno != EEXIST) {
-            debugErrorString = tr("Cannot create FiFo %1: %2").
-                            arg(debugServerPath, QString::fromLocal8Bit(strerror(errno)));
-            debugServerPath.clear();
-            return false;
-        }
-    }
-    if ((debugServerFd = ::open(codedServerPath.constData(), O_RDONLY|O_NONBLOCK)) < 0) {
-        debugErrorString = tr("Cannot open FiFo %1: %2").
-                        arg(debugServerPath, QString::fromLocal8Bit(strerror(errno)));
-        debugServerPath.clear();
-        return false;
-    }
-    debugServerNotifier = new QSocketNotifier(debugServerFd, QSocketNotifier::Read, this);
-    connect(debugServerNotifier, SIGNAL(activated(int)), SLOT(bytesAvailable()));
-    return true;
-}
-
-void GdbController::bytesAvailable()
-{
-    size_t nbytes = 0;
-    if (::ioctl(debugServerFd, FIONREAD, (char *) &nbytes) < 0)
-        return;
-    QVarLengthArray<char, 8192> buff(nbytes);
-    if (::read(debugServerFd, buff.data(), nbytes) != (int)nbytes)
-        return;
-    if (nbytes) // Skip EOF notifications
-        emit byteDelivery(QByteArray::fromRawData(buff.data(), nbytes));
-}
-
-QString GdbController::getServerName()
-{
-    return debugServerPath;
-}
-
-void GdbController::readDebugeeOutput(const QByteArray &data)
-{
-    QString msg = debugCodec->toUnicode(data.constData(), data.length(),
-        &debugCodecState);
-    /*! Fixed me:
-     *      Here we have to showMessage(msg) to Console Window,
-     *  but I can't solve it. Please Fixed this ASAP.
-     */
-    showMessage(msg);
-}
-#endif
-
-void GdbController::showMessage(const QString &msg)
-{
-    qDebug()<<msg;
-}
-
 bool GdbController::runGDB(const QString &filePath)
 {
     if(checkResult)
     {
-#ifndef Q_OS_WIN
-        startListen();
-        qDebug()<<getServerName();
-#endif
-        readProcessData.disConnectAll();
-        gdbProcess.reset(new QProcess(this));
-        QStringList _arg;
-        _arg<<filePath<<"--interpreter"<<"mi"
-#ifdef Q_OS_WIN32
-              ;
-#else
-            <<QString("--tty=" + getServerName());
-#endif
-        readProcessData+=connect(gdbProcess.data(),
-                                 SIGNAL(readyReadStandardOutput()),
-                                 this,
-                                 SLOT(readGdbStandardOutput()));
-        readProcessData+=connect(gdbProcess.data(),
-                                 SIGNAL(readyReadStandardError()),
-                                 this,
-                                 SLOT(readGdbStandardError()));
-        gdbProcess->start(gdbPath,_arg);
-
+        createGDBThread();
+        gdbProcessThread->setGdbPath(gdbPath);
+        gdbProcessThread->setFilePath(filePath);
+        gdbProcessThread->run();
         configureGDB();
-
         return true;
     }
     return false;
 }
 
-void GdbController::configGdb()
-{
-    gdbProcess->write(qPrintable(QString("set exec-wrapper \"gnome-terminal -x\"\n")));
-}
-
 void GdbController::quitGDB()
 {
-    if(gdbProcess->state()==QProcess::NotRunning)
-    {
-        return;
-    }
-    int timeout=500; //Timeout to kill;
-    gdbProcess->write(qPrintable(QString("q\n")));
-    qDebug()<<"Key1";
-
-    //Read wait for finished document, this is the right way.
-    if(!gdbProcess->waitForFinished(timeout))
-    {
-        //gdb doesn't quit till now, so we have to kill it.
-        gdbProcess->kill();
-        parseLine("Cuties: GDB process was stop by force.");
-    }
+    gdbProcessThread->quitGDB();
+    gdbProcessThread->quit();
     //emit requireDisconnectDebug();
 }
 
-void GdbController::readGdbStandardError()
+void GdbController::setBreakPointList(QList<int> breakpointLine)
 {
-    QByteArray err = gdbProcess->readAllStandardError();
-
-    dbgOutputs->addErrorText(QString(err));
+    for(int i=0; i<breakpointLine.count(); i++)
+    {
+        setBreakPoint(breakpointLine.at(i)+1);
+    }
 }
 
 /*!
@@ -443,15 +503,19 @@ void GdbController::readGdbStandardError()
  *!
  *!The breakpoint number is not in effect until it has been hit count times.
  *! */
-void GdbController::setBreakPoint(const int &lineNum,
+void GdbController::setBreakPoint(const QString &fileName,
+                        const int &lineNum,
                         const int &count)
 {
-    qDebug()<<qPrintable(QString("-break-insert ")+
-                         " -i "+
-                         QString::number(count)+" "+QString::number(lineNum)+"\n");
-    gdbProcess->write(qPrintable(QString("-break-insert ")+
-                      " -i "+
-                      QString::number(count)+" "+QString::number(lineNum)+"\n"));
+    execGdbCommand(QString("-break-insert ")+
+                     fileName+":"+
+                     QString::number(lineNum)+" "+
+                   QString::number(count));
+}
+
+void GdbController::setBreakPoint(const int &lineNum)
+{
+    execGdbCommand(QString("-break-insert ") + QString::number(lineNum));
 }
 
 /*!
@@ -460,8 +524,7 @@ void GdbController::setBreakPoint(const int &lineNum,
  */
 void GdbController::setBreakPoint(const QString &functionName)
 {
-    gdbProcess->write(qPrintable(QString("-break-insert ")+
-                     functionName+"\n"));
+    execGdbCommand(QString("-break-insert ")+functionName);
 }
 
 
@@ -470,9 +533,9 @@ void GdbController::setBreakPoint(const QString &functionName)
  */
 void GdbController::setBreakCondition(const int &number, const QString &expr)
 {
-    gdbProcess->write(qPrintable(QString("-break-condition ")+
+    execGdbCommand(QString("-break-condition ")+
                      QString::number(number)+" "
-                     +expr+"\n"));
+                     +expr);
 }
 
 /*!
@@ -481,17 +544,15 @@ void GdbController::setBreakCondition(const int &number, const QString &expr)
  */
 void GdbController::setWatchPoint(const QString &var)
 {
-    gdbProcess->write(qPrintable(QString("-break-watch ")+
-                     var+"\n"));
+    execGdbCommand(QString("-break-watch ")+var+"\n");
 }
-
 
 /*!
  * \brief Asynchronous command. Starts execution of the inferior from the beginning. The inferior executes until either a breakpoint is encountered or the program exits.
  */
 void GdbController::execRun()
 {
-    gdbProcess->write(qPrintable(QString("-exec-run\n")));
+    execGdbCommand("-exec-run");
 }
 
 /*!
@@ -499,7 +560,7 @@ void GdbController::execRun()
  */
 void GdbController::execAbort()
 {
-    gdbProcess->write(qPrintable(QString("-exec-abort\n")));
+    execGdbCommand("-exec-abort");
 }
 
 /*!
@@ -507,7 +568,7 @@ void GdbController::execAbort()
  */
 void GdbController::execContinue()
 {
-    gdbProcess->write(qPrintable(QString("-exec-continue\n")));
+    execGdbCommand("-exec-continue");
 }
 
 /*!
@@ -515,7 +576,7 @@ void GdbController::execContinue()
  */
 void GdbController::execFinish()
 {
-    gdbProcess->write(qPrintable(QString("-exec-continue\n")));
+    execGdbCommand("-exec-continue");
 }
 
 /*!
@@ -523,7 +584,7 @@ void GdbController::execFinish()
  */
 void GdbController::execNext()
 {
-    gdbProcess->write(qPrintable(QString("-exec-next\n")));
+    execGdbCommand("-exec-next");
 }
 
 /*!
@@ -531,7 +592,7 @@ void GdbController::execNext()
  */
 void GdbController::execNexti()
 {
-    gdbProcess->write(qPrintable(QString("-exec-next-instruction\n")));
+    execGdbCommand("-exec-next-instruction");
 }
 
 /*!
@@ -539,14 +600,14 @@ void GdbController::execNexti()
  */
 void GdbController::execReturn()
 {
-    gdbProcess->write(qPrintable(QString("-exec-return\n")));
+    execGdbCommand("-exec-return");
 }
 /*!
  * \brief Asynchronous command. Resumes execution of the inferior program, stopping when the beginning of the next source line is reached, if the next source line is not a function call. If it is, stop at the first instruction of the called function.
  */
 void GdbController::execStep()
 {
-    gdbProcess->write(qPrintable(QString("-exec-step\n")));
+    execGdbCommand("-exec-step");
 }
 
 /*!
@@ -554,7 +615,7 @@ void GdbController::execStep()
  */
 void GdbController::execStepi()
 {
-    gdbProcess->write(qPrintable(QString("-exec-step-instruction\n")));
+    execGdbCommand("-exec-step-instruction");
 }
 
 /*!
@@ -564,30 +625,59 @@ void GdbController::execStepi()
  */
 void GdbController::execUntil(const QString &location)
 {
-    gdbProcess->write(qPrintable(QString("-exec-until ")+location+"\n"));
+    execGdbCommand(QString("-exec-until ")+location);
+}
+
+void GdbController::updateDockInfos()
+{
+    requestForceUpdateLocal=true;
+    //Updates local watch
+    stackListLocals();
+    //Update watch
+    QStringList customWatchList=dbgOutputs->getWatchExpList();
+    for(int i=0; i<customWatchList.count(); i++)
+    {
+        customIndexList.append(i);
+        evaluate(customWatchList.at(i));
+    }
+    requestForceUpdateLocal=false;
 }
 
 void GdbController::stackListLocals()
 {
-    gdbProcess->write(qPrintable(QString("-stack-list-locals 1\n")));
+    execGdbCommand("-stack-list-locals 1");
 }
 
 void GdbController::evaluate(const QString &expr)
 {
-    gdbProcess->write(qPrintable(QString("-data-evaluate-expression ")+expr+"\n"));
+    execGdbCommand(QString("-data-evaluate-expression ")+expr);
 }
 
 void GdbController::execGdbCommand(const QString &command)
 {
-    gdbProcess->write(qPrintable(command));
+    gdbProcessThread->execGdbCommand(command);
 }
 
 void GdbController::configureGDB()
 {
 #ifdef Q_OS_WIN32
-    gdbProcess->write(qPrintable(QString("set new-console on\n")));
-    gdbProcess->write(qPrintable(QString("show new-console\n")));
+    execGdbCommand("set new-console on");
 #endif
+    if(!fileType.isEmpty())
+    {
+        execGdbCommand(QString("set language " + fileType));
+    }
+}
+
+void GdbController::createGDBThread()
+{
+    gdbProcessThread=new GdbThread(this);
+    connect(gdbProcessThread, SIGNAL(parseMessage(QString)),
+            this, SLOT(parseLine(QString)));
+    connect(gdbProcessThread, SIGNAL(parseError(QString)),
+            this, SLOT(parseError(QString)));
+    connect(gdbProcessThread, SIGNAL(addSystemMessage(QString)),
+            this, SLOT(parseCommand(QString)));
 }
 
 QSharedPointer<dbgOutputReceiver> GdbController::getDbgOutputs()

@@ -20,6 +20,8 @@
 #ifndef KCDEBUGGERCONFIGURE_H
 #define KCDEBUGGERCONFIGURE_H
 
+#include <QApplication>
+
 #include "kcconfigure.h"
 
 class KCDebuggerConfigure : public KCConfigure

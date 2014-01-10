@@ -17,8 +17,6 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QTimeLine>
-
 #include "kccolorconfigure.h"
 
 #include "kcreplacewindow.h"
@@ -88,21 +86,39 @@ KCReplaceWindow::KCReplaceWindow(QWidget *parent) :
     closeButton->setPalette(pal);
     //Set Button Action
     connect(closeButton, &QToolButton::clicked,
-            this, &KCReplaceWindow::hideAnime);
+            this, &KCReplaceWindow::animeHide);
 
     //Set Original Height.
     setFixedHeight(0);
-}
 
-void KCReplaceWindow::showAnime()
-{
-    QTimeLine *showAnimation=new QTimeLine(250, this);
+    showAnimation=new QTimeLine(250, this);
+    showAnimation->setUpdateInterval(1);
     showAnimation->setEasingCurve(QEasingCurve::OutCubic);
-    showAnimation->setStartFrame(0);
     showAnimation->setEndFrame(61);
     connect(showAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(resizeDock(int)));
-    this->show();
+
+    hideAnimation=new QTimeLine(250, this);
+    hideAnimation->setUpdateInterval(1);
+    hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    hideAnimation->setEndFrame(0);
+
+    connect(hideAnimation, SIGNAL(frameChanged(int)),
+            this, SLOT(resizeDock(int)));
+    connect(hideAnimation, &QTimeLine::finished,
+            this, &KCReplaceWindow::hide);
+}
+
+void KCReplaceWindow::animeShow()
+{
+    hideAnimation->stop();
+    if(showAnimation->state()==QTimeLine::Running)
+    {
+        return;
+    }
+    showAnimation->stop();
+    showAnimation->setStartFrame(height());
+    show();
     showAnimation->start();
 }
 
@@ -111,17 +127,16 @@ void KCReplaceWindow::resizeDock(int newHeight)
     setFixedHeight(newHeight);
 }
 
-void KCReplaceWindow::hideAnime()
+void KCReplaceWindow::animeHide()
 {
-    QTimeLine *hideAnimation=new QTimeLine(250, this);
-    hideAnimation->setEasingCurve(QEasingCurve::OutCubic);
-    hideAnimation->setStartFrame(61);
-    hideAnimation->setEndFrame(0);
-    connect(hideAnimation, SIGNAL(frameChanged(int)),
-            this, SLOT(resizeDock(int)));
-    connect(hideAnimation, &QTimeLine::finished,
-            this, &KCReplaceWindow::hide);
     emit requireLostFocus();
+    showAnimation->stop();
+    if(hideAnimation->state()==QTimeLine::Running)
+    {
+        return;
+    }
+    hideAnimation->stop();
+    hideAnimation->setStartFrame(height());
     hideAnimation->start();
 }
 
