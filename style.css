@@ -351,9 +351,11 @@ p{margin-top:2em;}
     flex-direction:column;
     justify-content: center;
     align-items: center;
+    font-family:"sao";
     width:64px;
     height:64px;
     background:url("buttons.png");
+
 }
 
 #home-btn{background-position:0px -256px;}

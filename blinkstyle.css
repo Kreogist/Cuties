@@ -344,6 +344,7 @@ height:0;
     flex-direction:column;
     justify-content: center;
     align-items: center;
+    font-family:"sao";
     width:64px;
     height:64px;
     background:url("buttons.png");
