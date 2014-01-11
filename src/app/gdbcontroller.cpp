@@ -24,8 +24,7 @@
 #include <stdio.h>
 
 #include "gdbcontroller.h"
-
-#include <fstream>
+#include <kcexecutor.h>
 
 #ifdef Q_OS_UNIX
 QString GdbController::gdbPath="/usr/bin/gdb";
@@ -62,7 +61,7 @@ void GdbThread::run()
 #ifdef Q_OS_WIN32
           ;
 #else
-          ;
+       <<"-tty"<<(tty=KCExecutor::getInstance()->getNewConsole());
 #endif
     readProcessData+=connect(gdbProcess.data(),
                              SIGNAL(readyReadStandardOutput()),
@@ -101,6 +100,7 @@ void GdbThread::quitGDB()
         //gdb doesn't quit till now, so we have to kill it.
         gdbProcess->kill();
     }
+    KCExecutor::getInstance()->releaseConsole(tty);
 }
 
 void GdbThread::execGdbCommand(const QString &command)
