@@ -273,7 +273,7 @@ p{margin-top:2em;}
     margin-top:100px;
 }
 #left-box{
-    z-index:8888;
+    z-index:6666;
     display:flex;
     flex-direction:column;
     justify-content: center;
