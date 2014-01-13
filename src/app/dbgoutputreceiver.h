@@ -51,7 +51,8 @@ public slots:
     void addLogOutput(QString text);
     void addErrorText(QString text);
     void addLocals(GdbMiValue localVars);
-    void addExprValue(int expIndex, QString value);
+    void addExprValue(QString value);
+    void resetExprValue();
     void addText(const QString &text);
     void appendExpr(const QString &value);
     void insertExpr(int expIndex, const QString &value);
@@ -61,6 +62,7 @@ public slots:
 private:
     void insertText(const QString &text,const QTextCharFormat &charFormat);
 
+    int watchIndex;
     QStandardItemModel *stackInfoModel;
     QStandardItemModel *localVarModel;
     QStandardItemModel *watchModel;

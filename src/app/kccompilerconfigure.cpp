@@ -90,7 +90,7 @@ void KCCompilerConfigure::writeConfigure()
 QString KCCompilerConfigure::getGccPath() const
 {
 #ifdef Q_OS_WIN32
-    if(gccPath.mid(1,1)==":")
+    if(gccPath.mid(1,1)==":" || gccPath.left(2)=="//")
     {
         return gccPath;
     }
@@ -118,7 +118,7 @@ void KCCompilerConfigure::setGccPath(const QString &value)
 QString KCCompilerConfigure::getGppPath() const
 {
 #ifdef Q_OS_WIN32
-    if(gppPath.mid(1,1)==":")
+    if(gppPath.mid(1,1)==":"  || gccPath.left(2)=="//")
     {
         return gppPath;
     }
@@ -146,7 +146,7 @@ void KCCompilerConfigure::setGppPath(const QString &value)
 QString KCCompilerConfigure::getFpcPath() const
 {
 #ifdef Q_OS_WIN32
-    if(fpcPath.mid(1,1)==":")
+    if(fpcPath.mid(1,1)==":" || gccPath.left(2)=="//")
     {
         return fpcPath;
     }

@@ -235,11 +235,7 @@ void GdbController::parseLine(const QString &_msg)
             }
             else if(result.getName() == "value")
             {
-                if(!customIndexList.isEmpty())
-                {
-                    dbgOutputs->addExprValue(customIndexList.at(0), result.getValue());
-                    customIndexList.removeFirst();
-                }
+                dbgOutputs->addExprValue(result.getValue());
                 break;
             }
             else if(result.getName() == "bkpt")
@@ -635,9 +631,9 @@ void GdbController::updateDockInfos()
     stackListLocals();
     //Update watch
     QStringList customWatchList=dbgOutputs->getWatchExpList();
+    dbgOutputs->resetExprValue();
     for(int i=0; i<customWatchList.count(); i++)
     {
-        customIndexList.append(i);
         evaluate(customWatchList.at(i));
     }
     requestForceUpdateLocal=false;

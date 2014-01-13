@@ -44,6 +44,7 @@ dbgOutputReceiver::dbgOutputReceiver(QObject *parent) :
     logFormat.setForeground(QBrush(Qt::yellow));
 
     watchExps.clear();
+    resetExprValue();
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &dbgOutputReceiver::retranslateAndSet);
@@ -84,16 +85,34 @@ void dbgOutputReceiver::addLocals(GdbMiValue localVars)
         QList<QStandardItem *> localVar;
         localVar<<varName<<varValue;
         localVarModel->appendRow(localVar);
+        watchIndex=0;
     }
 }
 
-void dbgOutputReceiver::addExprValue(int expIndex,
-                                     QString value)
+void dbgOutputReceiver::addExprValue(QString value)
 {
-    //QString name=watchExps.at(expIndex);  //name
-    QStandardItem *varValue=watchModel->takeItem(expIndex, 1);
-    varValue->setText(value);
-    watchModel->setItem(expIndex, 1, varValue);
+    QString name=watchExps.at(watchIndex);  //name
+    QStandardItem *varName=new QStandardItem(name);
+    QStandardItem *varValue=new QStandardItem(value);
+    QList<QStandardItem *> watchVar;
+    watchVar<<varName<<varValue;
+    watchModel->appendRow(watchVar);
+    watchIndex++;
+}
+
+void dbgOutputReceiver::resetExprValue()
+{
+    watchModel->clear();
+    watchModel->setColumnCount(2);
+    watchModel->setHorizontalHeaderLabels(labels);
+    if(watchExps.isEmpty())
+    {
+        watchIndex=-1;
+    }
+    else
+    {
+        watchIndex=0;
+    }
 }
 
 void dbgOutputReceiver::addText(const QString &text)
@@ -103,8 +122,16 @@ void dbgOutputReceiver::addText(const QString &text)
 
 void dbgOutputReceiver::removeExpr(int expIndex)
 {
-    watchExps.removeAt(expIndex);
     watchModel->removeRow(expIndex);
+    watchExps.removeAt(expIndex);
+    if(watchExps.isEmpty())
+    {
+        watchIndex=-1;
+    }
+    else
+    {
+        watchIndex=0;
+    }
 }
 
 void dbgOutputReceiver::insertText(const QString &text,
