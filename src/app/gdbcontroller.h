@@ -89,6 +89,9 @@ private:
     QString filePath;
     QString gdbPath;
     QString messageCache;
+#ifndef Q_OS_WIN32
+    QString tty;
+#endif
 };
 
 class GdbController : public QObject
@@ -177,4 +180,4 @@ private:
     int expIndex;
 };
 
-#endif // GDBCONTROLLER_H
+#endif

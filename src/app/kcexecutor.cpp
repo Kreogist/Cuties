@@ -271,3 +271,33 @@ KCExecutor *KCExecutor::getInstance()
     }
     return instance;
 }
+
+QString KCExecutor::getNewConsole()
+{
+    QSharedPointer<QProcess> console;
+    console.reset(new QProcess);
+    Terminal terminal=KCRunner::getDefaultTerminal();
+    console->start(QLatin1String(terminal.terminal_name));
+    //TODO: waitting time can be configured!
+    //if(console->waitForStarted())
+    //{
+        QString tty;
+        console->waitForStarted();
+        //console->waitForReadyRead();
+        console->write(qPrintable(QString("tty\n")));
+        console->waitForBytesWritten();
+        console->waitForReadyRead();
+        tty=QString(console->readAllStandardOutput());
+        qDebug()<<tty;
+        KCExecutor::getInstance()->consoles[tty]=QSharedPointer<QProcess>(console);
+        //console->write("clear\n");
+        return tty;
+    //}
+}
+
+void KCExecutor::releaseConsole(const QString &tty)
+{
+    auto it=KCExecutor::getInstance()->consoles.find(tty);
+    if(it!=KCExecutor::getInstance()->consoles.end())
+        KCExecutor::getInstance()->consoles.erase(it);
+}

@@ -33,6 +33,9 @@ public:
     void setDebugCursor(int lineNum);
     void resetDebugCursor();
 
+signals:
+    void markSetted(int blockNumber);
+
 public slots:
 
 protected:

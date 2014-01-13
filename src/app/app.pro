@@ -98,7 +98,7 @@ SOURCES += \
     kcwelcomewindow.cpp \
     kreogistcutestyle.cpp \
     mainwindow.cpp \
-    textcharformatmap.cpp \ 
+    textcharformatmap.cpp \
     kcstatusrecorder.cpp \
     kcdocumentrecorder.cpp \
     kcsmartpanel.cpp \
@@ -184,7 +184,7 @@ HEADERS += \
     kcwelcomewindow.h \
     kreogistcutestyle.h \
     mainwindow.h \
-    textcharformatmap.h \ 
+    textcharformatmap.h \
     kcstatusrecorder.h \
     kcdocumentrecorder.h \
     kcsmartpanel.h \

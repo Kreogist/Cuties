@@ -24,8 +24,10 @@
 #include <QProcess>
 #include <QThread>
 #include <QByteArray>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <QMap>
 #include <QReadWriteLock>
 
 
@@ -99,6 +101,8 @@ public:
     static void setDefaultTerminal(const int &num);
     static QStringList getSupportTerminalList();
     static KCExecutor *getInstance();
+    static QString getNewConsole();
+    static void releaseConsole(const QString &tty);
 
 public slots:
     void exec(const QString &programPath);
@@ -106,6 +110,7 @@ public slots:
 private:
     QReadWriteLock lock;
     QList<KCRunner *> runnerList;
+    QMap<QString ,QSharedPointer<QProcess>> consoles;
 
     static KCExecutor *instance;
 };
