@@ -272,6 +272,7 @@ KCExecutor *KCExecutor::getInstance()
     return instance;
 }
 
+#ifndef Q_OS_WIN32
 QString KCExecutor::getNewConsole()
 {
     QSharedPointer<QProcess> console;
@@ -294,6 +295,7 @@ QString KCExecutor::getNewConsole()
         return tty;
     //}
 }
+#endif
 
 void KCExecutor::releaseConsole(const QString &tty)
 {

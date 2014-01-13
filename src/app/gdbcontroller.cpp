@@ -100,7 +100,9 @@ void GdbThread::quitGDB()
         //gdb doesn't quit till now, so we have to kill it.
         gdbProcess->kill();
     }
+#ifndef Q_OS_WIN32
     KCExecutor::getInstance()->releaseConsole(tty);
+#endif
 }
 
 void GdbThread::execGdbCommand(const QString &command)
