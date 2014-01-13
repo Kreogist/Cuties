@@ -205,10 +205,10 @@ int main(int argc, char *argv[])
     app.setEffectEnabled(Qt::UI_FadeTooltip, true);
 
     //Load Splash Screen
-    KCSplashScreen *splash=new KCSplashScreen;
-    splash->setPixmap(QPixmap(":/img/image/Splash.png"));
-    splash->show();
-    splash->raise();
+    KCSplashScreen splash;
+    splash.setPixmap(QPixmap(":/img/image/Splash.png"));
+    splash.show();
+    splash.raise();
     app.processEvents();
 
     initApplicationSettings();
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
     //Initalize and show Application MainWindow.
     MainWindow mainWindow;
     mainWindow.show();
-    splash->finish(&mainWindow);
+    splash.finish(&mainWindow);
 
     return app.exec();
 }

@@ -25,6 +25,17 @@
 #include <QFile>
 #include <QDebug>
 
+#ifndef Q_OS_WIN32
+#include <QTemporaryFile>
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+#endif
+
 #include "kcglobal.h"
 
 #include "kcexecutor.h"
@@ -275,25 +286,39 @@ KCExecutor *KCExecutor::getInstance()
 #ifndef Q_OS_WIN32
 QString KCExecutor::getNewConsole()
 {
-    QSharedPointer<QProcess> console;
-    console.reset(new QProcess);
-    Terminal terminal=KCRunner::getDefaultTerminal();
-    console->start(QLatin1String(terminal.terminal_name));
-    //TODO: waitting time can be configured!
-    //if(console->waitForStarted())
-    //{
+    /*
+     * For more information about xTerm, please visit:
+     * http://publib.boulder.ibm.com/infocenter/pseries/v5r3/index.jsp?topic=/com.ibm.aix.cmds/doc/aixcmds6/xterm.htm
+     *
+     * Use a temp file to receive tty destination.
+     *
+     */
+    QTemporaryFile ttyReceiver;
+    if(ttyReceiver.open())
+    {
+        QStringList args;
+        //Reset console.
+        QSharedPointer<QProcess> console;
+        console.reset(new QProcess);
+        //Get default terminal.
+        Terminal terminal=KCRunner::getDefaultTerminal();
+        args<<"-hold"<<"-e"<<"tty>" + ttyReceiver.fileName() +"; while :;do sleep 3600;done";
+        console->start(QLatin1String(terminal.terminal_name), args);
+        QTextStream _textIn(&ttyReceiver);
         QString tty;
-        console->waitForStarted();
-        //console->waitForReadyRead();
-        console->write(qPrintable(QString("tty\n")));
-        console->waitForBytesWritten();
-        console->waitForReadyRead();
-        tty=QString(console->readAllStandardOutput());
-        qDebug()<<tty;
+        tty.clear();
+        while(tty.length()==0)
+        {
+            tty=QString(_textIn.readAll());
+        }
+        tty.remove("\n");
+        ttyReceiver.close();
+        ttyReceiver.remove();
+        //Save console.
         KCExecutor::getInstance()->consoles[tty]=QSharedPointer<QProcess>(console);
-        //console->write("clear\n");
-        return tty;
-    //}
+        return QString(tty);
+    }
+    return QString("");
 }
 #endif
 
@@ -301,5 +326,7 @@ void KCExecutor::releaseConsole(const QString &tty)
 {
     auto it=KCExecutor::getInstance()->consoles.find(tty);
     if(it!=KCExecutor::getInstance()->consoles.end())
+    {
         KCExecutor::getInstance()->consoles.erase(it);
+    }
 }

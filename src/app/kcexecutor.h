@@ -102,7 +102,7 @@ public:
     static QStringList getSupportTerminalList();
     static KCExecutor *getInstance();
 #ifndef Q_OS_WIN32
-    static QString getNewConsole();
+    QString getNewConsole();
 #endif
     static void releaseConsole(const QString &tty);
 

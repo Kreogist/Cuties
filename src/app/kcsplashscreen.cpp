@@ -23,5 +23,10 @@ KCSplashScreen::KCSplashScreen()
 {
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
     setContentsMargins(0,0,0,0);
+}
+
+void KCSplashScreen::showEvent(QShowEvent *e)
+{
+    QSplashScreen::showEvent(e);
     QTimer::singleShot(1000, this, SLOT(close()));
 }

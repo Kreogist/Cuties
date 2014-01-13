@@ -22,6 +22,7 @@
 
 #include <QSplashScreen>
 #include <QTimer>
+#include <QShowEvent>
 
 class KCSplashScreen : public QSplashScreen
 {
@@ -30,6 +31,9 @@ public:
     KCSplashScreen();
 
 signals:
+
+protected:
+    void showEvent(QShowEvent *e);
 
 public slots:
 
