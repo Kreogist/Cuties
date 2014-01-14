@@ -41,13 +41,20 @@
 #include "kcstatusrecorder.h"
 #include "kcdocumentrecorder.h"
 
+/*!
+ * \brief setApplicationInfo function is used to set basic information of Cuties
+ *        and window icon.
+ *
+ */
 static inline void setApplicationInfo()
 {
+    //Set application details.
     QApplication::setApplicationName(QString("Cuties"));
-    QApplication::setApplicationVersion(QString("0.2.7.0"));
+    QApplication::setApplicationVersion(QString("0.3.0.0"));
     QApplication::setOrganizationName("Kreogist Dev Team");
     QApplication::setOrganizationDomain("https://kreogist.github.io/Cuties");
 
+    //Set window icon
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.png"));
 }
 
@@ -78,7 +85,7 @@ static inline void printHelp()
     printf("  %s -v,--version           Print %s version\n",
            appName.constData(),
            appName.constData());
-    printf("  %s [FILES]             Open [FILES] in %s\n",
+    printf("  %s [FILES]                Open [FILES] in %s\n",
            appName.constData(),
            appName.constData());
     fflush(stdout);

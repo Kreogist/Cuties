@@ -200,7 +200,8 @@ HEADERS += \
 
 
 # Enable C++11
-CONFIG += c++11
+CONFIG += c++11\
+          console
 
 RESOURCES += \
     rc.qrc
