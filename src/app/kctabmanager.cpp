@@ -28,43 +28,56 @@
 KCTabManager::KCTabManager(QWidget *parent) :
     QTabWidget(parent)
 {
+    //Get translation.
     retranslate();
-    setObjectName("KCTabManager");
-    clear();
 
+    //Get configures.
+    globalInstance=KCGlobal::getInstance();
     editorConfigureInstance=KCEditorConfigure::getInstance();
 
+    //Set properties.
+    setObjectName("KCTabManager");
+    setContentsMargins(0,0,0,0);
     setAcceptDrops(true);
     setDocumentMode(true);
-    setContentsMargins(0,0,0,0);
     setMovable(editorConfigureInstance->getTabMoveable());
     setTabsClosable(editorConfigureInstance->getTabCloseable());
     setElideMode(Qt::ElideRight);
     setTabPosition(QTabWidget::South);
+    clear();
 
+    //Tab menu.
     createTabMenu();
 
-    tabBarControl = this->tabBar();
-    QPalette pal=tabBarControl->palette();
+    //Tab bar settings.
+    tabBarWidget=tabBar();
+    //Set palette.
+    QPalette pal=tabBarWidget->palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
-    tabBarControl->setPalette(pal);
-    tabBarControl->setMinimumHeight(0);
-    tabBarControl->setContentsMargins(0,0,0,0);
-    tabBarControl->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(tabBarControl, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(popupTabMenu(QPoint)));
+    tabBarWidget->setPalette(pal);
+    //Set tab bar properties.
+    tabBarWidget->setMinimumHeight(0);
+    tabBarWidget->setContentsMargins(0,0,0,0);
+    tabBarWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    //Connect tab bar and tab menu.
+    connect(tabBarWidget, &QTabBar::customContextMenuRequested,
+            this, &KCTabManager::popupTabMenu);
 
-    connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(onTabCloseRequested(int)));
-    connect(this,SIGNAL(currentChanged(int)),this,SLOT(onCurrentTabChange(int)));
-    connect(editorConfigureInstance, SIGNAL(tabMoveableChanged(bool)),this,SLOT(setTabMoveableValue(bool)));
-    connect(editorConfigureInstance, SIGNAL(tabCloseableChanged(bool)),this,SLOT(setTabCloseable(bool)));
+    //Connect signal and event.
+    connect(this, &KCTabManager::tabCloseRequested,
+            this, &KCTabManager::onTabCloseRequested);
+    connect(this, &KCTabManager::currentChanged,
+            this, &KCTabManager::onCurrentTabChange);
 
+    //Connect settings and event.
+    connect(editorConfigureInstance, &KCEditorConfigure::tabMoveableChanged,
+            this, &KCTabManager::setTabMoveableValue);
+    connect(editorConfigureInstance, &KCEditorConfigure::tabCloseableChanged,
+            this, &KCTabManager::setTabCloseable);
+
+    //Connect retranslate event.
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCTabManager::retranslateAndSet);
-
-    newFileCount=1;
-    currentEditor=NULL;
-    globalInstance=KCGlobal::getInstance();
 }
 
 void KCTabManager::restoreUnclosedFiles()
