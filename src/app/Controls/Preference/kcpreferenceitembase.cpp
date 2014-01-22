@@ -230,6 +230,16 @@ void KCPreferenceItemBase::mousePressEvent(QMouseEvent *e)
     }
     emit editFocusCapture();
 }
+QString KCPreferenceItemBase::getKeyNames() const
+{
+    return keyNames;
+}
+
+void KCPreferenceItemBase::setKeyNames(const QString &value)
+{
+    keyNames = value;
+}
+
 
 void KCPreferenceItemBase::setBackgroundAlpha(int newAlpha)
 {

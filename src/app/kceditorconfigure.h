@@ -34,28 +34,9 @@ public:
     void readConfigure();
     void writeConfigure();
     static KCEditorConfigure *getInstance();
-    bool usingBlankInsteadTab() const;
-    void setUsingBlankInsteadTab(bool enabled);
-    int getTabSpacing() const;
-    void setTabSpacing(const int &width);
-    QTextOption::WrapMode getWrapMode() const;
-    void setWrapMode(QTextOption::WrapMode value);
-    int getCursorWidth() const;
-    void setCursorWidth(int value);
-    bool getOverwriteMode() const;
-    void setOverwriteMode(bool value);
-    bool getTabMoveable() const;
-    void setTabMoveable(bool value);
-    bool getTabCloseable() const;
-    void setTabCloseable(bool value);
-    bool getLineNumVisible() const;
-    void setLineNumVisible(bool value);
-    QString getEditorFont() const;
-    void setEditorFont(const QString &value);
-    int getWrapModeInt() const;
+
+    QTextOption::WrapMode indexToWrapMode(int index);
     int getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const;
-    int getSpacePerTab() const;
-    void setSpacePerTab(int value);
 
 signals:
     void spacePerTabChanged(int newValue);

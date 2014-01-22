@@ -55,13 +55,13 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 
     //Set Customize TextEditor Properties.
     //Set Tab Width.
-    setTabStopWidth(fontMetrics().width(' ')*configureInstance->getTabSpacing());
+    setTabStopWidth(fontMetrics().width(' ')*configureInstance->getValue("TabWidth").toInt());
     //Set WordWarp Mode.
-    setWordWrapMode(configureInstance->getWrapMode());
+    //setWordWrapMode(configureInstance->getWrapMode());
     //Set Cursor Width.
-    setCursorWidth(configureInstance->getCursorWidth());
+    setCursorWidth(configureInstance->getValue("CursorWidth").toInt());
     //Set OverWrite Mode.
-    setOverwriteMode(configureInstance->getOverwriteMode());
+    //setOverwriteMode(configureInstance->getOverwriteMode());
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -494,8 +494,8 @@ void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount, bool for
     if(tabCount>0)
     {
         insertTabCursor.clearSelection();
-        QString spaceChar=configureInstance->usingBlankInsteadTab()?
-                          QString(" ").repeated(configureInstance->getSpacePerTab()):
+        QString spaceChar=configureInstance->getValue("isUsingBlankInsteadTab").toBool()?
+                          QString(" ").repeated(configureInstance->getValue("SpacePerTab").toInt()):
                           "\t";
         if(insertTabCursor.document()->characterAt(insertTabCursor.position())=='}' && !forceInsert)
         {
@@ -513,9 +513,9 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
     removeTabCursor.clearSelection();
 
     //We have to judge whether we are using tab or space.
-    if(configureInstance->usingBlankInsteadTab())
+    if(configureInstance->getValue("isUsingBlankInsteadTab").toBool())
     {
-        int expectLength=tabCount * configureInstance->getSpacePerTab();
+        int expectLength=tabCount * configureInstance->getValue("SpacePerTab").toInt();
         if(expectLength > removeTabCursor.positionInBlock())
         {
             /*
@@ -578,8 +578,8 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
             // Only one line partially selected.
             tabPressCursor.removeSelectedText();
         } else {
-            QString spaceChar=configureInstance->usingBlankInsteadTab()?
-                              QString(" ").repeated(configureInstance->getSpacePerTab()):
+            QString spaceChar=configureInstance->getValue("isUsingBlankInsteadTab").toBool()?
+                              QString(" ").repeated(configureInstance->getValue("SpacePerTab").toInt()):
                               "\t";
             for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
                 int indentPosition = findFirstCharacter(block);

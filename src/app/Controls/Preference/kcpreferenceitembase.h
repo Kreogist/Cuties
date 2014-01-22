@@ -53,6 +53,8 @@ public:
     void editFinished();
     void setExpandFinishedHeight(const int &endHeight);
     int getExpandFinishedHeight() const;
+    QString getKeyNames() const;
+    void setKeyNames(const QString &value);
 
 signals:
     void editFocusCapture();
@@ -97,7 +99,7 @@ protected:
     QVBoxLayout *editLayout;
     QLabel *valueDisplayer;
     KCPreferenceOriginalLabel *originalValueDisplayer;
-    QString originalValueIs;
+    QString originalValueIs, keyNames;
 };
 
 #endif // KCPREFERENCEITEMBASE_H

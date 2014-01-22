@@ -23,26 +23,7 @@ KCEditorConfigure *KCEditorConfigure::instance=nullptr;
 
 KCEditorConfigure::KCEditorConfigure()
 {
-    wrapMode=QTextOption::NoWrap;
-    wrapModeInt=0;
-    isUsingBlankInsteadTab=true;
-    lineNumVisible=true;
-    tabWidth=4;
-    spacePerTab=4;
-    cursorWidth=1;
-    overwriteMode=false;
-    tabMoveable=true;
-    tabCloseable=true;
-}
-int KCEditorConfigure::getSpacePerTab() const
-{
-    return spacePerTab;
-}
-
-void KCEditorConfigure::setSpacePerTab(int value)
-{
-    spacePerTab = value;
-    emit spacePerTabChanged(value);
+    ;
 }
 
 KCEditorConfigure *KCEditorConfigure::getInstance()
@@ -50,61 +31,36 @@ KCEditorConfigure *KCEditorConfigure::getInstance()
     return instance==nullptr?instance=new KCEditorConfigure:instance;
 }
 
-bool KCEditorConfigure::getLineNumVisible() const
+QTextOption::WrapMode KCEditorConfigure::indexToWrapMode(int index)
 {
-    return lineNumVisible;
+    switch(index)
+    {
+    case 0:
+        return QTextOption::NoWrap;
+    case 1:
+        return QTextOption::WordWrap;
+    case 2:
+        return QTextOption::ManualWrap;
+    case 3:
+        return QTextOption::WrapAnywhere;
+    case 4:
+        return QTextOption::WrapAtWordBoundaryOrAnywhere;
+    };
+    return QTextOption::NoWrap;
 }
-
-void KCEditorConfigure::setLineNumVisible(bool value)
-{
-    lineNumVisible = value;
-    emit lineNumPanelVisibleChanged(value);
-}
-
-
 
 void KCEditorConfigure::readConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Editor");
-    tabWidth=settings.value("TabWidth",tabWidth).toInt();
-    isUsingBlankInsteadTab=settings.value("isUsingBlankInsteadTab",
-                                          isUsingBlankInsteadTab).toBool();
-    lineNumVisible=settings.value("LineNumVisible", lineNumVisible).toBool();
-    int wMode=settings.value("WordWrap", 0).toInt();
-    switch(wMode)
+    QStringList currentKeys=settings.childKeys();
+    for(QStringList::const_iterator i=currentKeys.begin();
+        i!=currentKeys.end();
+        i++)
     {
-    case 0:
-        wrapMode=QTextOption::NoWrap;
-        break;
-    case 1:
-        wrapMode=QTextOption::WordWrap;
-        break;
-    case 2:
-        wrapMode=QTextOption::ManualWrap;
-        break;
-    case 3:
-        wrapMode=QTextOption::WrapAnywhere;
-        break;
-    case 4:
-        wrapMode=QTextOption::WrapAtWordBoundaryOrAnywhere;
-        break;
-    default:
-        wrapMode=QTextOption::NoWrap;
-        break;
+        configureMap[*i]=settings.value(*i);
     }
-    wrapModeInt=getWrapModeNumber(wrapMode);
-
-    cursorWidth=settings.value("CursorWidth", cursorWidth).toInt();
-    overwriteMode=settings.value("OverwriteMode", overwriteMode).toBool();
-    tabMoveable=settings.value("TabMoveable", tabMoveable).toBool();
-    tabCloseable=settings.value("TabCloseable", tabCloseable).toBool();
     settings.endGroup();
-}
-
-int KCEditorConfigure::getWrapModeInt() const
-{
-    return wrapModeInt;
 }
 
 int KCEditorConfigure::getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const
@@ -128,90 +84,12 @@ void KCEditorConfigure::writeConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
     settings.beginGroup("Editor");
-    settings.setValue("WordWrap", wrapMode);
-    settings.setValue("TabWidth",tabWidth);
-    settings.setValue("CursorWidth", cursorWidth);
-    settings.setValue("isUsingBlankInsteadTab",isUsingBlankInsteadTab);
-    settings.setValue("LineNumVisible", lineNumVisible);
-    settings.setValue("OverwriteMode", overwriteMode);
-    settings.setValue("TabMoveable", tabMoveable);
-    settings.setValue("TabCloseable", tabCloseable);
+    QList<QString> keys=configureMap.keys();
+    for(QList<QString>::iterator i=keys.begin();
+        i!=keys.end();
+        i++)
+    {
+        settings.setValue(*i, configureMap[*i]);
+    }
     settings.endGroup();
-}
-
-bool KCEditorConfigure::usingBlankInsteadTab() const
-{
-    return isUsingBlankInsteadTab;
-}
-
-void KCEditorConfigure::setUsingBlankInsteadTab(bool enabled)
-{
-    isUsingBlankInsteadTab=enabled;
-    emit spaceInsteadOfTab(enabled);
-}
-
-int KCEditorConfigure::getTabSpacing() const
-{
-    return tabWidth;
-}
-
-void KCEditorConfigure::setTabSpacing(const int &width)
-{
-    tabWidth=width;
-    emit tabWidthChanged(tabWidth);
-}
-
-QTextOption::WrapMode KCEditorConfigure::getWrapMode() const
-{
-    return wrapMode;
-}
-
-void KCEditorConfigure::setWrapMode(QTextOption::WrapMode value)
-{
-    wrapMode = value;
-    //wrapModeInt =
-    emit wrapModeChanged(value);
-}
-
-int KCEditorConfigure::getCursorWidth() const
-{
-    return cursorWidth;
-}
-
-void KCEditorConfigure::setCursorWidth(int value)
-{
-    cursorWidth = value;
-    emit cursorWidthChanged(value);
-}
-
-bool KCEditorConfigure::getOverwriteMode() const
-{
-    return overwriteMode;
-}
-
-void KCEditorConfigure::setOverwriteMode(bool value)
-{
-    overwriteMode = value;
-}
-
-bool KCEditorConfigure::getTabMoveable() const
-{
-    return tabMoveable;
-}
-
-void KCEditorConfigure::setTabMoveable(bool value)
-{
-    tabMoveable = value;
-    emit tabMoveableChanged(value);
-}
-
-bool KCEditorConfigure::getTabCloseable() const
-{
-    return tabCloseable;
-}
-
-void KCEditorConfigure::setTabCloseable(bool value)
-{
-    tabCloseable = value;
-    emit tabCloseableChanged(value);
 }

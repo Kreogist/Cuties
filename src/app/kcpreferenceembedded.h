@@ -90,8 +90,6 @@ private:
     };
     QString intItemCaption[intItemCount];
     KCPreferenceItemInt *generalInts[intItemCount];
-
-    KCGeneralConfigure *instance;
 };
 
 class KCPreferenceEmbeddedEditor : public KCPreferenceSuperList
@@ -155,8 +153,6 @@ private:
     KCPreferenceItemInt *editorInts[intItemCount];
 
     KCPreferenceItemBooleanGroup *tabSpacingItem;
-
-    KCEditorConfigure *instance;
 };
 
 class KCPreferenceEmbeddedCompiler : public KCPreferenceSuperList
@@ -206,8 +202,6 @@ private:
     KCPreferenceItemPath *compilerPathItems[pathItemCount];
     QString pathItemCaption[pathItemCount];
     QString pathItemTitleCaption[pathItemCount];
-
-    KCCompilerConfigure *instance;
 };
 
 class KCPreferenceEmbeddedDebugger : public KCPreferenceSuperList
@@ -219,7 +213,6 @@ public:
 public slots:
     void retranslate();
     void retranslateAndSet();
-    void applyPreference();
 
 private:
     enum DebuggerTitleEnum
@@ -238,8 +231,6 @@ private:
     KCPreferenceItemPath *debuggerPathItems[pathItemCount];
     QString pathItemCaption[pathItemCount];
     QString pathItemTitleCaption[pathItemCount];
-
-    KCDebuggerConfigure *instance;
 };
 
 class KCPreferenceEmbeddedFileAssociation : public KCPreferenceSuperList

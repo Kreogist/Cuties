@@ -242,7 +242,7 @@ KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
 
 void KCWelcomeWindowOpenFile::retranslate()
 {
-    openFileTitleCaption=tr("Open an Exsisting Source File");
+    openFileTitleCaption=tr("Open an Existing Source File");
 }
 
 void KCWelcomeWindowOpenFile::retranslateAndSet()

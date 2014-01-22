@@ -71,12 +71,12 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
 
 void KCCodeCompileProgress::countToCompile()
 {
-    if(KCCompilerConfigure::getInstance()->getDelayCompile())
+    if(KCCompilerConfigure::getInstance()->getValue("delayCompile").toBool())
     {
         setProgressColor(originalColor);
         setCompileState(certifyCompile);
         compileProgressDisplay->setValue(100);
-        timeoutCounter->start(KCCompilerConfigure::getInstance()->getDelayTimeout());
+        timeoutCounter->start(KCCompilerConfigure::getInstance()->getValue("delayTimeout").toInt());
     }
     else
     {

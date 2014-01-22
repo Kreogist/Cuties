@@ -36,28 +36,28 @@ KCPreferenceEmbeddedGeneral::KCPreferenceEmbeddedGeneral(QWidget *parent) :
     generalCombos[comboDefaultProgrammingLanguage]=
         addItemCombo(comboItemCaption[comboDefaultProgrammingLanguage],
                      comboItemText[comboDefaultProgrammingLanguage],
-                     instance->getDefaultLanguageMode());
+                     "DefaultLanguageMode");
     generalBooleans[booleanUseDefaultLanguageOnOpen]=
         addItemBoolean(booleanItemCaption[booleanUseDefaultLanguageOnOpen],
-                       instance->getUseDefaultLanguageWhenOpen());
+                       "UseDefaultLanguageModeWhenOpen");
     generalBooleans[booleanUseDefaultLanguageOnSave]=
         addItemBoolean(booleanItemCaption[booleanUseDefaultLanguageOnSave],
-                       instance->getUseDefaultLanguageWhenSave());
+                       "UseDefaultLanguageModeWhenSave");
     generalTitles[titleAutomaticRemember]=addTitle(generalTitleText[titleAutomaticRemember]);
     generalBooleans[booleanAutoOpenUnclosed]=
         addItemBoolean(booleanItemCaption[booleanAutoOpenUnclosed],
-                       instance->getRememberUnclosedFile());
+                       "RememberUnclosed");
     generalTitles[titleHistory]=addTitle(generalTitleText[titleHistory]);
     generalInts[intItemHistoryMax]=
         addItemInt(intItemCaption[intItemHistoryMax],
-                   KCHistoryConfigure::getInstance()->getMaxRecentFilesSize(),
+                   "MaxRecentFilesSize",
                    1000,
                    4);
     generalTitles[titleSearchOptions]=addTitle(generalTitleText[titleSearchOptions]);
     generalCombos[comboSearchEngine]=
         addItemCombo(comboItemCaption[comboSearchEngine],
                      comboItemText[comboSearchEngine],
-                     instance->getSearchEngineIndex());
+                     "SearchEngineIndex");
     addStretch();
 
     connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
@@ -126,15 +126,7 @@ void KCPreferenceEmbeddedGeneral::retranslateAndSet()
 
 void KCPreferenceEmbeddedGeneral::applyPreference()
 {
-    //Set each value
-    //Default Language
-    instance->setDefaultLanguageMode(generalCombos[comboDefaultProgrammingLanguage]->getCurrentValue().toInt());
-    //Default use default language suffix
-    instance->setUseDefaultLanguageWhenOpen(generalBooleans[booleanUseDefaultLanguageOnOpen]->getCurrentValue().toBool());
-    instance->setUseDefaultLanguageWhenSave(generalBooleans[booleanUseDefaultLanguageOnSave]->getCurrentValue().toBool());
-    //Set automatic remember
-    instance->setRememberUnclosedFile(generalBooleans[booleanAutoOpenUnclosed]->getCurrentValue().toBool());
-    instance->setSearchEngineIndex(generalCombos[comboSearchEngine]->getCurrentValue().toInt());
+    KCPreferenceSuperList::applyPreference();
     //Set history max
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(generalInts[intItemHistoryMax]->getCurrentValue().toInt());
 }
@@ -150,34 +142,34 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
 
     editorTitles[titleViewOptions]=addTitle(editorTitleText[titleViewOptions]);
     editorBooleans[booleanShowLinePanel]=addItemBoolean(booleanItemCaption[booleanShowLinePanel],
-                   instance->getLineNumVisible());
+                                                        "LineNumVisible");
 
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]=
             addItemBooleanGroup(booleanGroupCaption[booleanGroupSpacingInsteadOfTab],
-                                instance->usingBlankInsteadTab());
+                                "isUsingBlankInsteadTab");
     editorInts[intSpacePerTab]=addItemInt(intItemCaption[intSpacePerTab],
-                                          instance->getSpacePerTab());
+                                          "SpacePerTab");
     editorInts[intTabSpacing]=addItemInt(intItemCaption[intTabSpacing],
-                                         instance->getTabSpacing());
+                                         "TabWidth");
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addTrueValueGroupItem(editorInts[intSpacePerTab]);
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addFalseValueGroupItem(editorInts[intTabSpacing]);
     editorCombos[comboWordWrapMode]=addItemCombo(comboItemCaption[comboWordWrapMode],
                                                  comboItemText[comboWordWrapMode],
-                                                 instance->getWrapModeInt());
+                                                 "WordWrap");
     editorInts[intCursorWidth]=addItemInt(intItemCaption[intCursorWidth],
-                                          instance->getCursorWidth(),
+                                          "CursorWidth",
                                           10,
                                           1);
 
     editorTitles[titleMultipleTabs]=addTitle(editorTitleText[titleMultipleTabs]);
     editorBooleans[booleanTabMoveable]=addItemBoolean(booleanItemCaption[booleanTabMoveable],
-                                                      instance->getTabMoveable());
+                                                      "TabMoveable");
     editorBooleans[booleanTabCloseable]=addItemBoolean(booleanItemCaption[booleanTabCloseable],
-                                                       instance->getTabCloseable());
+                                                       "TabCloseable");
 
     editorTitles[titleClipboard]=addTitle(editorTitleText[titleClipboard]);
     editorInts[intClipboardTrackingMax]=addItemInt(intItemCaption[intClipboardTrackingMax],
-                                                   KCClipboard::getInstance()->getMaxDataCount(),
+                                                   "ClipboardMax",
                                                    1000,
                                                    5);
     addStretch();
@@ -249,11 +241,8 @@ void KCPreferenceEmbeddedEditor::retranslateAndSet()
 
 void KCPreferenceEmbeddedEditor::applyPreference()
 {
-    instance->setLineNumVisible(editorBooleans[booleanShowLinePanel]->getCurrentValue().toBool());
-    instance->setUsingBlankInsteadTab(editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->getCurrentValue().toBool());
-    instance->setSpacePerTab(editorInts[intSpacePerTab]->getCurrentValue().toInt());
-    instance->setTabSpacing(editorInts[intTabSpacing]->getCurrentValue().toInt());
-    switch(editorCombos[comboWordWrapMode]->getCurrentValue().toInt())
+    KCPreferenceSuperList::applyPreference();
+    /*switch(editorCombos[comboWordWrapMode]->getCurrentValue().toInt())
     {
     case 0:
         instance->setWrapMode(QTextOption::NoWrap);
@@ -267,10 +256,7 @@ void KCPreferenceEmbeddedEditor::applyPreference()
     case 3:
         instance->setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
         break;
-    }
-    instance->setCursorWidth(editorInts[intCursorWidth]->getCurrentValue().toInt());
-    instance->setTabMoveable(editorBooleans[booleanTabMoveable]->getCurrentValue().toBool());
-    instance->setTabCloseable(editorBooleans[booleanTabCloseable]->getCurrentValue().toBool());
+    }*/
     KCClipboard::getInstance()->setMaxDataCount(editorInts[intClipboardTrackingMax]->getCurrentValue().toInt());
 }
 
@@ -282,12 +268,13 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
 
     //Get configure instance
     instance=KCCompilerConfigure::getInstance();
+
     compilerTitles[titleCompilerOptions]=addTitle(compilerTitleText[titleCompilerOptions]);
     compilerBooleanGroups[booleanGroupDelayCompile]=
             addItemBooleanGroup(booleanGroupCaption[booleanGroupDelayCompile],
-                                instance->getDelayCompile());
+                                "delayCompile");
     compilerInts[intDelayTimeout]=addItemInt(intItemCaption[intDelayTimeout],
-                                             instance->getDelayTimeout(),
+                                             "delayTimeout",
                                              500,
                                              20);
     compilerBooleanGroups[booleanGroupDelayCompile]->addTrueValueGroupItem(compilerInts[intDelayTimeout]);
@@ -295,15 +282,15 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
     compilerTitles[titleCompilerPath]=addTitle(compilerTitleText[titleCompilerPath]);
     compilerPathItems[pathGPPCompiler]=
         addItemPath(pathItemCaption[pathGPPCompiler],
-                    instance->getGppPath(),
+                    "GPP-Path",
                     pathItemTitleCaption[pathGPPCompiler]);
     compilerPathItems[pathGCCCompiler]=
         addItemPath(pathItemCaption[pathGCCCompiler],
-                    instance->getGccPath(),
+                    "GCC-Path",
                     pathItemTitleCaption[pathGCCCompiler]);
     compilerPathItems[pathFPCCompiler]=
         addItemPath(pathItemCaption[pathFPCCompiler],
-                    instance->getFpcPath(),
+                    "FPC-Path",
                     pathItemTitleCaption[pathFPCCompiler]);
     addStretch();
 
@@ -363,11 +350,21 @@ void KCPreferenceEmbeddedCompiler::retranslateAndSet()
 
 void KCPreferenceEmbeddedCompiler::applyPreference()
 {
-    instance->setGppPath(compilerPathItems[pathGPPCompiler]->getCurrentValue().toString());
-    instance->setGccPath(compilerPathItems[pathGCCCompiler]->getCurrentValue().toString());
-    instance->setFpcPath(compilerPathItems[pathFPCCompiler]->getCurrentValue().toString());
-    instance->setDelayCompile(compilerBooleanGroups[booleanGroupDelayCompile]->getCurrentValue().toBool());
-    instance->setDelayTimeout(compilerInts[intDelayTimeout]->getCurrentValue().toInt());
+    KCCompilerConfigure *compilerInstance=static_cast<KCCompilerConfigure *>(instance);
+    int itemCount=contents->getItemCount();
+    for(int i=0;i<itemCount;i++)
+    {
+        if(contents->getItemKey(i).toLower().contains("path"))
+        {
+            compilerInstance->setPathValue(contents->getItemKey(i),
+                                           contents->getItemValue(i).toString());
+        }
+        else
+        {
+            compilerInstance->setValue(contents->getItemKey(i),
+                                       contents->getItemValue(i));
+        }
+    }
 }
 
 KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
@@ -382,7 +379,7 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
     debuggerTitles[titleGDBSettings]=addTitle(debuggerTitleText[titleGDBSettings]);
 
     debuggerPathItems[pathGDBDebugger]=addItemPath(pathItemCaption[pathGDBDebugger],
-                                                   instance->getGdbPath(),
+                                                   "GDBPath",
                                                    pathItemTitleCaption[pathGDBDebugger]);
 
     addStretch();
@@ -418,11 +415,6 @@ void KCPreferenceEmbeddedDebugger::retranslateAndSet()
         debuggerPathItems[i]->setPathCaptionText(pathItemCaption[i]);
         debuggerPathItems[i]->setDialogTitle(pathItemTitleCaption[i]);
     }
-}
-
-void KCPreferenceEmbeddedDebugger::applyPreference()
-{
-    instance->setGdbPath(debuggerPathItems[pathGDBDebugger]->getCurrentValue().toString());
 }
 
 KCPreferenceEmbeddedFileAssociation::KCPreferenceEmbeddedFileAssociation(QWidget *parent) :

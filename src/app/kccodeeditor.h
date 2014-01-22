@@ -131,7 +131,7 @@ protected:
 private:
     bool searchUseLastCursor;
     bool processSaveAsAction(const QString &dialogCaption);
-    bool requireSaveAs(const QString &Caption);
+    bool requireSaveAs(const QString &caption);
     void computeExecFileName();
     void fileInfoChanged(const QFile &file);
     void connectSearchWidgetWithEditor(KCSearchWidget *widget);

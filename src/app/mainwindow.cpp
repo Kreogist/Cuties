@@ -946,7 +946,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::show()
 {
     KCMainWindow::show();
-    if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile())
+    if(KCGeneralConfigure::getInstance()->getValue("RememberUnclosed").toBool())
     {
         tabManager->restoreUnclosedFiles();
         if(tabManager->count()>0)
@@ -1049,7 +1049,7 @@ void MainWindow::onActionCompileAndRun()
 void MainWindow::onActionSearchOnline()
 {
     KCGeneralConfigure *instance=KCGeneralConfigure::getInstance();
-    QDesktopServices::openUrl(QUrl(instance->getSearchEngineList().at(instance->getSearchEngineIndex()).engineURL +
+    QDesktopServices::openUrl(QUrl(instance->getSearchEngineList().at(instance->getValue("SearchEngineIndex").toInt()).engineURL +
                                    tabManager->textNowSelect()));
 }
 

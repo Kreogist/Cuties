@@ -29,7 +29,7 @@ fpc::fpc(QObject *parent) :
 
 QString fpc::compilerPath()
 {
-    return instance->getFpcPath();
+    return instance->getPathValue("FPC-Path");
 }
 
 QStringList fpc::getVersionArg()

@@ -21,6 +21,7 @@
 #define KCCONFIGURE_H
 
 #include <QObject>
+#include <QMap>
 #include <QSettings>
 #include <QString>
 
@@ -32,8 +33,14 @@ public:
     virtual void readConfigure() = 0;
     virtual void writeConfigure() = 0;
 
+    virtual QVariant getValue(const QString &key);
+    virtual void setValue(const QString &key, const QVariant &value);
+
     static QString getCfgFileName();
     static void setCfgFileName(const QString &value);
+
+protected:
+    QMap<QString, QVariant> configureMap;
 
 private:
     static QString cfgFileName;

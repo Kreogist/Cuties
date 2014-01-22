@@ -29,6 +29,8 @@
 #include <QResizeEvent>
 #include <QSignalMapper>
 
+#include "kcconfigure.h"
+
 #include "Controls/Preference/kcpreferenceitembase.h"
 #include "Controls/Preference/kcpreferenceitemcombo.h"
 #include "Controls/Preference/kcpreferenceitemboolean.h"
@@ -44,6 +46,10 @@ public:
     void appendTitle(QLabel *newTitleWidget);
     void appendItem(KCPreferenceItemBase *newItemWidget);
     void appendStretch();
+
+    int getItemCount();
+    QString getItemKey(int itemIndex);
+    QVariant getItemValue(int itemIndex);
 
 signals:
     void changeHeight(int changedHeight);
@@ -71,21 +77,21 @@ public:
     QLabel *addTitle(const QString &titleText);
     KCPreferenceItemCombo *addItemCombo(const QString &captionText,
                                         const QList<QString> &comboItemList,
-                                        int defaultValue);
+                                        const QString &key);
     KCPreferenceItemCombo *addItemCombo(KCPreferenceItemCombo *newComboItem);
     KCPreferenceItemBoolean *addItemBoolean(const QString &captionText,
-                                            bool defaultValue);
+                                            const QString &key);
     KCPreferenceItemBoolean *addItemBoolean(KCPreferenceItemBoolean *newBooleanItem);
     KCPreferenceItemInt *addItemInt(const QString &captionText,
-                    int defaultValue,
-                    int maxValue=100,
-                    int minValue=0);
+                                    const QString &key,
+                                    int maxValue=100,
+                                    int minValue=0);
     KCPreferenceItemInt *addItemInt(KCPreferenceItemInt *newIntItem);
     KCPreferenceItemBooleanGroup *addItemBooleanGroup(const QString &captionText,
-                                                      bool defaultValue);
+                                                      const QString &key);
     KCPreferenceItemPath *addItemPath(KCPreferenceItemPath *newPathItem);
     KCPreferenceItemPath *addItemPath(const QString &captionText,
-                                      QString defaultValue,
+                                      const QString &key,
                                       QString defaultTitleValue=QString(""));
     void addStretch();
 
@@ -93,12 +99,13 @@ signals:
 
 public slots:
     void resetCurrentIndex();
-    virtual void applyPreference()=0;
+    virtual void applyPreference();
 
 protected:
     void resizeEvent(QResizeEvent *event);
     QFont titleFont;
     KCPreferenceSuperListContent *contents;
+    KCConfigure *instance;
 
 };
 

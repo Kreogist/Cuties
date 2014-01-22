@@ -68,7 +68,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(markPanel);
 
     linePanel=new KCLinenumPanel(this);
-    linePanel->setVisible(configureInstance->getLineNumVisible());
+    linePanel->setVisible(configureInstance->getValue("LineNumVisible").toBool());
     mainLayout->addWidget(linePanel);
 
     smartPanel=new KCSmartPanel(this);
@@ -420,37 +420,38 @@ bool KCCodeEditor::processSaveAsAction(const QString &dialogCaption)
     }
 }
 
-bool KCCodeEditor::requireSaveAs(const QString &Caption)
+bool KCCodeEditor::requireSaveAs(const QString &caption)
 {
-    if(KCGeneralConfigure::getInstance()->getUseDefaultLanguageWhenSave())
+    KCGeneralConfigure* instance=KCGeneralConfigure::getInstance();
+    if(instance->getValue("UseDefaultLanguageModeWhenSave").toBool())
     {
         QString defaultSelectFilter;
-        switch(KCGeneralConfigure::getInstance()->getDefaultLanguageMode())
+        switch(instance->getValue("DefaultLanguageMode").toInt())
         {
         case 1:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getCfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::cFiles);
             break;
         case 2:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getCppfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::cppFiles);
             break;
         case 3:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getPasfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::pascalFiles);
             break;
         default:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getAsfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::allFiles);
         }
         filePath=QFileDialog::getSaveFileName(this,
-                                              Caption,
+                                              caption,
                                               KCHistoryConfigure::getInstance()->getHistoryDir(),
-                                              KCGeneralConfigure::getInstance()->getStrFileFilter(),
+                                              instance->getTotalFileFilter(),
                                               &defaultSelectFilter);
     }
     else
     {
         filePath=QFileDialog::getSaveFileName(this,
-                                              Caption,
+                                              caption,
                                               KCHistoryConfigure::getInstance()->getHistoryDir(),
-                                              KCGeneralConfigure::getInstance()->getStrFileFilter());
+                                              instance->getTotalFileFilter());
     }
     if(!filePath.isEmpty())
     {

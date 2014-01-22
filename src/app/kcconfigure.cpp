@@ -31,4 +31,12 @@ void KCConfigure::setCfgFileName(const QString &value)
     cfgFileName = value;
 }
 
+QVariant KCConfigure::getValue(const QString &key)
+{
+    return configureMap[key];
+}
 
+void KCConfigure::setValue(const QString &key, const QVariant &value)
+{
+    configureMap[key]=value;
+}

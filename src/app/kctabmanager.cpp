@@ -37,8 +37,8 @@ KCTabManager::KCTabManager(QWidget *parent) :
     setAcceptDrops(true);
     setDocumentMode(true);
     setContentsMargins(0,0,0,0);
-    setMovable(editorConfigureInstance->getTabMoveable());
-    setTabsClosable(editorConfigureInstance->getTabCloseable());
+    setMovable(editorConfigureInstance->getValue("TabMoveable").toBool());
+    setTabsClosable(editorConfigureInstance->getValue("TabCloseable").toBool());
     setElideMode(Qt::ElideRight);
     setTabPosition(QTabWidget::South);
 
@@ -157,6 +157,7 @@ void KCTabManager::openAndJumpTo(const QString &filePath)
 
 void KCTabManager::open()
 {
+    KCGeneralConfigure* instance=KCGeneralConfigure::getInstance();
     QStringList fileNameList;
     QString historyDirPath=KCHistoryConfigure::getInstance()->getHistoryDir();
     QFileInfo historyDirDetect(historyDirPath);
@@ -164,27 +165,27 @@ void KCTabManager::open()
     {
         historyDirPath=qApp->applicationDirPath();
     }
-    if(KCGeneralConfigure::getInstance()->getUseDefaultLanguageWhenOpen())
+    if(instance->getValue("UseDefaultLanguageModeWhenOpen").toBool())
     {
         QString defaultSelectFilter;
-        switch(KCGeneralConfigure::getInstance()->getDefaultLanguageMode())
+        switch(instance->getValue("DefaultLanguageMode").toInt())
         {
         case 1:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getCfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::cFiles);
             break;
         case 2:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getCppfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::cppFiles);
             break;
         case 3:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getPasfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::pascalFiles);
             break;
         default:
-            defaultSelectFilter=KCGeneralConfigure::getInstance()->getAsfFilter();
+            defaultSelectFilter=instance->getFilter(KCGeneralConfigure::allFiles);
         }
         fileNameList=QFileDialog::getOpenFileNames(this,
                        tr("Open File"),
                        historyDirPath,
-                       KCGeneralConfigure::getInstance()->getStrFileFilter(),
+                       instance->getTotalFileFilter(),
                        &defaultSelectFilter);
     }
     else
@@ -192,7 +193,7 @@ void KCTabManager::open()
         fileNameList=QFileDialog::getOpenFileNames(this,
                        tr("Open File"),
                        historyDirPath,
-                       KCGeneralConfigure::getInstance()->getStrFileFilter());
+                       instance->getTotalFileFilter());
     }
 
     QString name;
@@ -454,7 +455,8 @@ void KCTabManager::closeEvent(QCloseEvent *e)
 
         //Save the current opened file.
         KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(page);
-        if(KCGeneralConfigure::getInstance()->getRememberUnclosedFile() && editor!=NULL)
+        if(KCGeneralConfigure::getInstance()->getValue("RememberUnclosed").toBool()
+                && editor!=NULL)
         {
             editor->setCacheNewFileMode(true);
             if(editor->getFilePath().isEmpty())

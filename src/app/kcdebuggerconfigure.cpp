@@ -69,7 +69,13 @@ void KCDebuggerConfigure::readConfigure()
 {
     QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
     cfgOperator.beginGroup("Debugger");
-    gdbPath=cfgOperator.value("GDBPath", gdbPath).toString();
+    QStringList currentKeys=cfgOperator.childKeys();
+    for(QStringList::const_iterator i=currentKeys.begin();
+        i!=currentKeys.end();
+        i++)
+    {
+        configureMap[*i]=cfgOperator.value(*i);
+    }
     cfgOperator.endGroup();
 }
 
@@ -77,6 +83,12 @@ void KCDebuggerConfigure::writeConfigure()
 {
     QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
     cfgOperator.beginGroup("Debugger");
-    cfgOperator.setValue("GDBPath", gdbPath);
+    QList<QString> keys=configureMap.keys();
+    for(QList<QString>::iterator i=keys.begin();
+        i!=keys.end();
+        i++)
+    {
+        cfgOperator.setValue(*i, configureMap[*i]);
+    }
     cfgOperator.endGroup();
 }

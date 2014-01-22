@@ -17,7 +17,6 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <QDebug>
 
 #include "kcpreferencesuperlist.h"
@@ -95,6 +94,21 @@ void KCPreferenceSuperListContent::appendStretch()
     superListLayout->addStretch();
 }
 
+int KCPreferenceSuperListContent::getItemCount()
+{
+    return superListItems.count();
+}
+
+QString KCPreferenceSuperListContent::getItemKey(int itemIndex)
+{
+    return superListItems.at(itemIndex)->getKeyNames();
+}
+
+QVariant KCPreferenceSuperListContent::getItemValue(int itemIndex)
+{
+    return superListItems.at(itemIndex)->getCurrentValue();
+}
+
 KCPreferenceSuperList::KCPreferenceSuperList(QWidget *parent) :
     QScrollArea(parent)
 {
@@ -123,13 +137,14 @@ QLabel *KCPreferenceSuperList::addTitle(const QString &titleText)
 
 KCPreferenceItemCombo *KCPreferenceSuperList::addItemCombo(const QString &captionText,
                                                            const QList<QString> &comboItemList,
-                                                           int defaultValue)
+                                                           const QString &key)
 {
     KCPreferenceItemCombo *newComboItem=new KCPreferenceItemCombo(contents);
     newComboItem->setComboCaptionText(captionText);
     newComboItem->setComboTextList(comboItemList);
     newComboItem->refreshComboText();
-    newComboItem->setOriginalValue(defaultValue);
+    newComboItem->setKeyNames(key);
+    newComboItem->setOriginalValue(instance->getValue(key).toInt());
     contents->appendItem(newComboItem);
     return newComboItem;
 }
@@ -141,11 +156,12 @@ KCPreferenceItemCombo *KCPreferenceSuperList::addItemCombo(KCPreferenceItemCombo
 }
 
 KCPreferenceItemBoolean *KCPreferenceSuperList::addItemBoolean(const QString &captionText,
-                                                               bool defaultValue)
+                                                               const QString &key)
 {
     KCPreferenceItemBoolean *newBooleanItem=new KCPreferenceItemBoolean(contents);
     newBooleanItem->setBooleanCaptionText(captionText);
-    newBooleanItem->setOriginalValue(defaultValue);
+    newBooleanItem->setKeyNames(key);
+    newBooleanItem->setOriginalValue(instance->getValue(key).toBool());
     contents->appendItem(newBooleanItem);
     return newBooleanItem;
 }
@@ -157,7 +173,7 @@ KCPreferenceItemBoolean *KCPreferenceSuperList::addItemBoolean(KCPreferenceItemB
 }
 
 KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(const QString &captionText,
-                                                       int defaultValue,
+                                                       const QString &key,
                                                        int maxValue,
                                                        int minValue)
 {
@@ -165,7 +181,8 @@ KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(const QString &captionTex
     newIntItem->setIntCaptionText(captionText);
     newIntItem->setMaximumInt(maxValue);
     newIntItem->setMinimumInt(minValue);
-    newIntItem->setOriginalValue(defaultValue);
+    newIntItem->setKeyNames(key);
+    newIntItem->setOriginalValue(instance->getValue(key).toInt());
     contents->appendItem(newIntItem);
     return newIntItem;
 }
@@ -177,11 +194,12 @@ KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(KCPreferenceItemInt *newI
 }
 
 KCPreferenceItemBooleanGroup *KCPreferenceSuperList::addItemBooleanGroup(const QString &captionText,
-                                                                         bool defaultValue)
+                                                                         const QString &key)
 {
     KCPreferenceItemBooleanGroup *newBooleanGroupItem=new KCPreferenceItemBooleanGroup(contents);
     newBooleanGroupItem->setBooleanCaptionText(captionText);
-    newBooleanGroupItem->setOriginalValue(defaultValue);
+    newBooleanGroupItem->setKeyNames(key);
+    newBooleanGroupItem->setOriginalValue(instance->getValue(key).toBool());
     contents->appendItem(newBooleanGroupItem);
     return newBooleanGroupItem;
 }
@@ -193,12 +211,13 @@ KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(KCPreferenceItemPath *n
 }
 
 KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionText,
-                                                         QString defaultValue,
+                                                         const QString &key,
                                                          QString defaultTitleValue)
 {
     KCPreferenceItemPath *newPathItem=new KCPreferenceItemPath(this);
     newPathItem->setPathCaptionText(captionText);
-    newPathItem->setOriginalValue(defaultValue);
+    newPathItem->setKeyNames(key);
+    newPathItem->setOriginalValue(instance->getValue(key).toString());
     newPathItem->setDialogTitle(defaultTitleValue);
     contents->appendItem(newPathItem);
     return newPathItem;
@@ -207,6 +226,15 @@ KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionT
 void KCPreferenceSuperList::addStretch()
 {
     contents->appendStretch();
+}
+
+void KCPreferenceSuperList::applyPreference()
+{
+    int itemCount=contents->getItemCount();
+    for(int i=0;i<itemCount;i++)
+    {
+        instance->setValue(contents->getItemKey(i), contents->getItemValue(i));
+    }
 }
 
 void KCPreferenceSuperList::resetCurrentIndex()

@@ -28,7 +28,7 @@ KCCompilerConfigure *KCCompilerConfigure::getInstance()
 
 KCCompilerConfigure::KCCompilerConfigure()
 {
-#ifdef Q_OS_UNIX
+/*#ifdef Q_OS_UNIX
     gccPath="/usr/bin/gcc";
     gppPath="/usr/bin/g++";
     fpcPath="/usr/bin/fpc";
@@ -38,40 +38,20 @@ KCCompilerConfigure::KCCompilerConfigure()
     gccPath="/Compiler/MinGW/bin/gcc.exe";
     gppPath="/Compiler/MinGW/bin/g++.exe";
     fpcPath="/Compiler/FPC/bin/i386-win32/fpc.exe";
-#endif
-
-    delayCompile=false;
-    delayTimeout=20;
-}
-int KCCompilerConfigure::getDelayTimeout() const
-{
-    return delayTimeout;
-}
-
-void KCCompilerConfigure::setDelayTimeout(int value)
-{
-    delayTimeout = value;
-}
-
-bool KCCompilerConfigure::getDelayCompile() const
-{
-    return delayCompile;
-}
-
-void KCCompilerConfigure::setDelayCompile(bool value)
-{
-    delayCompile = value;
+#endif*/
 }
 
 void KCCompilerConfigure::readConfigure()
 {
     QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
     cfgOperator.beginGroup("Compiler");
-    gccPath=cfgOperator.value("GCC-Path", gccPath).toString();
-    gppPath=cfgOperator.value("GPP-Path", gppPath).toString();
-    fpcPath=cfgOperator.value("FPC-Path", fpcPath).toString();
-    delayCompile=cfgOperator.value("delayCompile", delayCompile).toBool();
-    delayTimeout=cfgOperator.value("delayTimeout", delayTimeout).toInt();
+    QStringList currentKeys=cfgOperator.childKeys();
+    for(QStringList::const_iterator i=currentKeys.begin();
+        i!=currentKeys.end();
+        i++)
+    {
+        configureMap[*i]=cfgOperator.value(*i);
+    }
     cfgOperator.endGroup();
 }
 
@@ -79,94 +59,44 @@ void KCCompilerConfigure::writeConfigure()
 {
     QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
     cfgOperator.beginGroup("Compiler");
-    cfgOperator.setValue("GCC-Path", gccPath);
-    cfgOperator.setValue("GPP-Path", gppPath);
-    cfgOperator.setValue("FPC-Path", fpcPath);
-    cfgOperator.setValue("delayCompile", delayCompile);
-    cfgOperator.setValue("delayTimeout", delayTimeout);
+    QList<QString> keys=configureMap.keys();
+    for(QList<QString>::iterator i=keys.begin();
+        i!=keys.end();
+        i++)
+    {
+        cfgOperator.setValue(*i, configureMap[*i]);
+    }
     cfgOperator.endGroup();
 }
 
-QString KCCompilerConfigure::getGccPath() const
+void KCCompilerConfigure::setPathValue(const QString &key,
+                                       const QString &value)
 {
-#ifdef Q_OS_WIN32
-    if(gccPath.mid(1,1)==":" || gccPath.left(2)=="//")
-    {
-        return gccPath;
-    }
-    else
-    {
-        return qApp->applicationDirPath() + gccPath;
-    }
-#else
-    return gccPath;
-#endif
-}
-
-void KCCompilerConfigure::setGccPath(const QString &value)
-{
+    QString recordValue;
     if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
     {
-        gccPath = value.mid(qApp->applicationDirPath().length());
+        recordValue = value.mid(qApp->applicationDirPath().length());
     }
     else
     {
-        gccPath = value;
+        recordValue = value;
     }
+    setValue(key, recordValue);
 }
 
-QString KCCompilerConfigure::getGppPath() const
+QString KCCompilerConfigure::getPathValue(const QString &key)
 {
+    QString pathValue=getValue(key).toString();
 #ifdef Q_OS_WIN32
-    if(gppPath.mid(1,1)==":"  || gccPath.left(2)=="//")
+    if(pathValue.mid(1,1)==":" || pathValue.left(2)=="//")
     {
-        return gppPath;
+        return pathValue;
     }
     else
     {
-        return qApp->applicationDirPath() + gppPath;
+        return qApp->applicationDirPath() + pathValue;
     }
 #else
-    return gppPath;
+    return pathValue;
 #endif
-}
-
-void KCCompilerConfigure::setGppPath(const QString &value)
-{
-    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
-    {
-        gppPath = value.mid(qApp->applicationDirPath().length());
-    }
-    else
-    {
-        gppPath = value;
-    }
-}
-
-QString KCCompilerConfigure::getFpcPath() const
-{
-#ifdef Q_OS_WIN32
-    if(fpcPath.mid(1,1)==":" || gccPath.left(2)=="//")
-    {
-        return fpcPath;
-    }
-    else
-    {
-        return qApp->applicationDirPath() + fpcPath;
-    }
-#else
-    return fpcPath;
-#endif
-}
-
-void KCCompilerConfigure::setFpcPath(const QString &value)
-{
-    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
-    {
-        fpcPath = value.mid(qApp->applicationDirPath().length());
-    }
-    else
-    {
-        fpcPath = value;
-    }
 }
