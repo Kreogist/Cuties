@@ -39,12 +39,11 @@ public:
     int getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const;
 
 signals:
+    void editorConfigureRefresh();
     void spacePerTabChanged(int newValue);
     void tabWidthChanged(int newValue);
     void wrapModeChanged(QTextOption::WrapMode newWrapMode);
     void cursorWidthChanged(int newValue);
-    void tabMoveableChanged(bool newValue);
-    void tabCloseableChanged(bool newValue);
     void spaceInsteadOfTab(bool newValue);
     void lineNumPanelVisibleChanged(bool newValue);
 

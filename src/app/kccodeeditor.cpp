@@ -142,6 +142,13 @@ KCCodeEditor::~KCCodeEditor()
     mainLayout->deleteLater();
 }
 
+void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settings)
+{
+    editor->setCursorWidth(settings.cursorWidth);
+    editor->setWordWrap(settings.wrapMode);
+    editor->setTabStopWidth(fontMetrics().width(' ')*settings.tabSpace);
+}
+
 bool KCCodeEditor::getOverwriteMode()
 {
     return editor->overwriteMode();

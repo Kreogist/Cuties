@@ -93,6 +93,7 @@ public slots:
     void switchCurrentToLine(int nLineNum, int nColNum);
     void insertToCurrentEditor(QString insertText);
     QString textNowSelect();
+    void editorConfigureRefresh();
     void retranslate();
     void retranslateAndSet();
 
@@ -110,7 +111,7 @@ private:
     void createTabMenu();
     int newFileCount;
     KCCodeEditor *currentEditor;
-    KCEditorConfigure *editorConfigureInstance;
+    KCEditorConfigure *editorConfigure;
     QTabBar *tabBarControl;
     enum tabMenuActions
     {

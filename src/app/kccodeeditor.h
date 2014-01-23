@@ -51,6 +51,16 @@ public:
     explicit KCCodeEditor(QWidget *parent = 0);
     ~KCCodeEditor();
 
+    struct KCCodeEditorSettings
+    {
+        bool usingBlankInsteadTab;
+        int spacePerTab;
+        int tabSpace;
+        QTextOption::WrapMode wrapMode;
+        int cursorWidth;
+    };
+
+    void applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settings);
     QFileDevice::FileError error();
     void setDocumentTitle(const QString &title);
     QString getDocumentTitle();

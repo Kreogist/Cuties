@@ -32,15 +32,14 @@ KCTabManager::KCTabManager(QWidget *parent) :
     setObjectName("KCTabManager");
     clear();
 
-    editorConfigureInstance=KCEditorConfigure::getInstance();
+    editorConfigure=KCEditorConfigure::getInstance();
 
     setAcceptDrops(true);
     setDocumentMode(true);
     setContentsMargins(0,0,0,0);
-    setMovable(editorConfigureInstance->getValue("TabMoveable").toBool());
-    setTabsClosable(editorConfigureInstance->getValue("TabCloseable").toBool());
     setElideMode(Qt::ElideRight);
     setTabPosition(QTabWidget::South);
+    editorConfigureRefresh();
 
     createTabMenu();
 
@@ -56,11 +55,12 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     connect(this,SIGNAL(tabCloseRequested(int)),this,SLOT(onTabCloseRequested(int)));
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(onCurrentTabChange(int)));
-    connect(editorConfigureInstance, SIGNAL(tabMoveableChanged(bool)),this,SLOT(setTabMoveableValue(bool)));
-    connect(editorConfigureInstance, SIGNAL(tabCloseableChanged(bool)),this,SLOT(setTabCloseable(bool)));
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCTabManager::retranslateAndSet);
+
+    connect(editorConfigure, SIGNAL(editorConfigureRefresh()),
+            this, SLOT(editorConfigureRefresh()));
 
     newFileCount=1;
     currentEditor=NULL;
@@ -548,6 +548,27 @@ QString KCTabManager::textNowSelect()
         }
     }
     return QString("");
+}
+
+void KCTabManager::editorConfigureRefresh()
+{
+    //Set tab manager settings.
+    setMovable(editorConfigure->getValue("TabMoveable").toBool());
+    setTabsClosable(editorConfigure->getValue("TabCloseable").toBool());
+    //Set editor's settings.
+    KCCodeEditor::KCCodeEditorSettings editorSettings;
+    editorSettings.usingBlankInsteadTab=editorConfigure->getValue("isUsingBlankInsteadTab").toBool();
+    editorSettings.cursorWidth=editorConfigure->getValue("CursorWidth").toInt();
+    editorSettings.spacePerTab=editorConfigure->getValue("SpacePerTab").toInt();
+    editorSettings.tabSpace=editorConfigure->getValue("TabWidth").toInt();
+    editorSettings.wrapMode=editorConfigure->indexToWrapMode(editorConfigure->getValue("WordWrap").toInt());
+    int i=count();
+    while(i--)
+    {
+        //Save the current opened file.
+        KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(widget(i));
+        editor->applyEditorSettings(editorSettings);
+    }
 }
 
 void KCTabManager::retranslate()

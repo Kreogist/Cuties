@@ -92,4 +92,5 @@ void KCEditorConfigure::writeConfigure()
         settings.setValue(*i, configureMap[*i]);
     }
     settings.endGroup();
+    emit editorConfigureRefresh();
 }
