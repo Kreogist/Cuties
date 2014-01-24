@@ -30,7 +30,7 @@ Cuties requires that various tools and packages be available for use in the buil
 
 If you think the following step is too advanced or too tedious, we provide you a [Quick preparing guide](https://github.com/Kreogist/Cuties/wiki/Quick-preparing-guide). And you can skip to [Downloading the source](https://github.com/Kreogist/Cuties/wiki/Build-&-Install-Cuties#downloading-the-source).
 
-### Tools/packages necessary for building GCC
+### Tools/packages necessary for building Cuties
 
 * **Qt 5.1.1 libraries or above**
 
