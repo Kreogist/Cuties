@@ -109,6 +109,8 @@ private slots:
 
 private:
     void createTabMenu();
+    void prepareCodeEditor(KCCodeEditor *editor,
+                           QString fileTitle);
     int newFileCount;
     KCCodeEditor *currentEditor;
     KCEditorConfigure *editorConfigure;

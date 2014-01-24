@@ -136,17 +136,7 @@ int KCTabManager::open(const QString &filePath)
     KCCodeEditor *tmp=new KCCodeEditor(this);
     if(tmp->open(filePath))
     {
-        tmp->setDocumentTitle(name);
-        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
-        connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
-        connect(tmp,SIGNAL(requiredHideDocks()),this,SIGNAL(requiredHideDocks()));
-        connect(tmp,SIGNAL(requiredCompileFile()),this,SIGNAL(requiredCompileFile()));
-        emit tabAdded();
-        tmp->applyEditorSettings(editorSettings);
-        if(count()==0)  //before the tab be added, count() == 0
-        {
-            emit tabNonClear();
-        }
+        prepareCodeEditor(tmp, name);
         return addTab(tmp,name);
     }
     else
@@ -222,28 +212,38 @@ void KCTabManager::open()
     currentTextCursorChanged();
 }
 
+
+void KCTabManager::prepareCodeEditor(KCCodeEditor *editor,
+                                     QString fileTitle)
+{
+    editor->setDocumentTitle(fileTitle);
+    connect(editor, &KCCodeEditor::fileTextCursorChanged,
+            this, &KCTabManager::currentTextCursorChanged);
+    connect(editor, &KCCodeEditor::rewriteStateChanged,
+            this, &KCTabManager::rewriteDataChanged);
+    connect(editor, &KCCodeEditor::requiredHideDocks,
+            this, &KCTabManager::requiredHideDocks);
+    connect(editor, &KCCodeEditor::requiredCompileFile,
+            this, &KCTabManager::requiredCompileFile);
+    emit tabAdded();
+    if(count()==0)  //before the tab be added, count() == 1
+    {
+        emit tabNonClear();
+    }
+    editor->applyEditorSettings(editorSettings);
+}
+
 int KCTabManager::newFile()
 {
     KCCodeEditor *tmp=new KCCodeEditor(this);
     if(tmp!=NULL)
     {
-        tmp->setGeometry(0, -this->height(), this->width(), this->height());
+        //tmp->setGeometry(0, -this->height(), this->width(), this->height());
         QString newFileTitle=
             tr("Untitled")+ " " +QString::number(newFileCount++);
-        tmp->setDocumentTitle(newFileTitle);
-        connect(tmp,SIGNAL(fileTextCursorChanged()),this,SLOT(currentTextCursorChanged()));
-        connect(tmp,SIGNAL(rewriteStateChanged(bool)),this,SIGNAL(rewriteDataChanged(bool)));
-        connect(tmp,SIGNAL(requiredHideDocks()),this,SIGNAL(requiredHideDocks()));
-        connect(tmp,SIGNAL(requiredCompileFile()),this,SIGNAL(requiredCompileFile()));
-        emit tabAdded();
-        if(count()==0)  //before the tab be added, count() == 1
-        {
-            emit tabNonClear();
-        }
-        tmp->applyEditorSettings(editorSettings);
+        prepareCodeEditor(tmp, newFileTitle);
         int newTabIndex=addTab(tmp,newFileTitle);
         setCurrentIndex(newTabIndex);
-        currentTextCursorChanged();
         return newTabIndex;
     }
     QErrorMessage error(this);
