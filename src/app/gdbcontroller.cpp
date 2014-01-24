@@ -185,7 +185,7 @@ GdbController::GdbController(QObject *parent) :
     QObject(parent)
 {
     instance=KCDebuggerConfigure::getInstance();
-    setGDBPath(instance->getGdbPath());
+    setGDBPath(instance->getPathValue("GDBPath"));
     dbgOutputs.reset(new dbgOutputReceiver(this));
     checkGDB();
 

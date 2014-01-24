@@ -29,40 +29,44 @@ KCDebuggerConfigure *KCDebuggerConfigure::getInstance()
 KCDebuggerConfigure::KCDebuggerConfigure()
 {
 #ifdef Q_OS_UNIX
-    gdbPath="/usr/bin/gdb";
+    setValue("GDBPath", "/usr/bin/gdb");
 #endif
 
 #ifdef Q_OS_WIN32
-    gdbPath="/Compiler/MinGW/bin/gdb.exe";
+    setValue("GDBPath", "/Compiler/MinGW/bin/gdb.exe");
 #endif
 }
 
-QString KCDebuggerConfigure::getGdbPath() const
+void KCDebuggerConfigure::setPathValue(const QString &key,
+                                       const QString &value)
 {
-#ifdef Q_OS_WIN32
-    if(gdbPath.mid(1,1)==":")
-    {
-        return gdbPath;
-    }
-    else
-    {
-        return qApp->applicationDirPath() + gdbPath;
-    }
-#else
-    return gdbPath;
-#endif
-}
-
-void KCDebuggerConfigure::setGdbPath(const QString &value)
-{
+    QString recordValue;
     if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
     {
-        gdbPath = value.mid(qApp->applicationDirPath().length());
+        recordValue = value.mid(qApp->applicationDirPath().length());
     }
     else
     {
-        gdbPath = value;
+        recordValue = value;
     }
+    setValue(key, recordValue);
+}
+
+QString KCDebuggerConfigure::getPathValue(const QString &key)
+{
+    QString pathValue=getValue(key).toString();
+#ifdef Q_OS_WIN32
+    if(pathValue.mid(1,1)==":" || pathValue.left(2)=="//")
+    {
+        return pathValue;
+    }
+    else
+    {
+        return qApp->applicationDirPath() + pathValue;
+    }
+#else
+    return pathValue;
+#endif
 }
 
 void KCDebuggerConfigure::readConfigure()

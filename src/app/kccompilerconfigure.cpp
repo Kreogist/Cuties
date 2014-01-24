@@ -28,17 +28,20 @@ KCCompilerConfigure *KCCompilerConfigure::getInstance()
 
 KCCompilerConfigure::KCCompilerConfigure()
 {
-/*#ifdef Q_OS_UNIX
-    gccPath="/usr/bin/gcc";
-    gppPath="/usr/bin/g++";
-    fpcPath="/usr/bin/fpc";
+#ifdef Q_OS_UNIX
+    setValue("GPP-Path","/usr/bin/gcc");
+    setValue("GCC-Path","/usr/bin/g++");
+    setValue("FPC-Path","/usr/bin/fpc");
 #endif
 
 #ifdef Q_OS_WIN32
-    gccPath="/Compiler/MinGW/bin/gcc.exe";
-    gppPath="/Compiler/MinGW/bin/g++.exe";
-    fpcPath="/Compiler/FPC/bin/i386-win32/fpc.exe";
-#endif*/
+    setValue("GPP-Path","/Compiler/MinGW/bin/g++.exe");
+    setValue("GCC-Path","/Compiler/MinGW/bin/gcc.exe");
+    setValue("FPC-Path","/Compiler/FPC/bin/i386-win32/fpc.exe");
+#endif
+
+    setValue("delayCompile", false);
+    setValue("delayTimeout", 20);
 }
 
 void KCCompilerConfigure::readConfigure()

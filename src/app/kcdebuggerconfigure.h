@@ -31,15 +31,12 @@ public:
     void readConfigure();
     void writeConfigure();
     static KCDebuggerConfigure *getInstance();
-
-    QString getGdbPath() const;
-    void setGdbPath(const QString &value);
+    void setPathValue(const QString &key, const QString &value);
+    QString getPathValue(const QString &key);
 
 private:
     KCDebuggerConfigure();
     static KCDebuggerConfigure *instance;
-
-    QString gdbPath;
 };
 
 #endif // KCDEBUGGERCONFIGURE_H
