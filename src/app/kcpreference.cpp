@@ -532,19 +532,31 @@ void KCPreference::showLanguageSelector()
 
 void KCPreference::resizeEvent(QResizeEvent *e)
 {
-    languageSelector->setGeometry(width()/4,
-                                  languageSelector->y(),
-                                  width()/2,
-                                  height()/2);
     if(languageSelectorShow->state()==QPropertyAnimation::Running)
     {
         languageSelectorShow->stop();
         showLanguageSelector();
+        return;
     }
     if(languageSelectorHide->state()==QPropertyAnimation::Running)
     {
         languageSelectorHide->stop();
         hideLanguageSelector();
+        return;
+    }
+    if(languageSelector->geometry().top()>=0)
+    {
+        languageSelector->setGeometry(width()/4,
+                                      0,
+                                      width()/2,
+                                      height()/2);
+    }
+    else
+    {
+        languageSelector->setGeometry(width()/4,
+                                      -height()/2,
+                                      width()/2,
+                                      height()/2);
     }
     QWidget::resizeEvent(e);
 }
