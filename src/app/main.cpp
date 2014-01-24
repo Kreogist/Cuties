@@ -46,7 +46,7 @@
  *        and window icon.
  *
  */
-static inline void setApplicationInfo()
+static inline void loadApplicationInfo()
 {
     //Set application details.
     QApplication::setApplicationName(QString("Cuties"));
@@ -56,24 +56,34 @@ static inline void setApplicationInfo()
 
     //Set window icon
     QApplication::setWindowIcon(QIcon(":/mainicon/image/Cuties.png"));
+
+    //Set application effects
+    QApplication::setEffectEnabled(Qt::UI_AnimateCombo, true);
+    QApplication::setEffectEnabled(Qt::UI_FadeMenu, true);
+    QApplication::setEffectEnabled(Qt::UI_AnimateToolBox, true);
+    QApplication::setEffectEnabled(Qt::UI_AnimateTooltip, true);
+    QApplication::setEffectEnabled(Qt::UI_FadeTooltip, true);
 }
 
-static inline void initApplicationSettings()
+/*!
+ * \brief initApplicationSettings function is used to load settings
+ */
+static inline void loadApplicationSettings()
 {
     KCStatusRecorder::getInstance()->readRecord();
     KCDocumentRecorder::getInstance()->readSettings();
-    KCGlobal *KCGlobalInstance = KCGlobal::getInstance();
-    KCGlobalInstance->readSettings();
+    KCGlobal::getInstance()->readSettings();
 }
 
 static inline void printVersion()
 {
-    printf("%s\n",qApp->applicationName().toLocal8Bit().constData());
-    printf("Version: %s\n",qApp->applicationVersion().toLocal8Bit().constData());
-    printf("Copyright (C) 2013 %s\n",qApp->organizationName().toLocal8Bit().constData());
-    printf("Homepage: %s\n",qApp->organizationDomain().toLocal8Bit().constData());
-    printf("License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n");
+    printf("Kreogist %s %s\n",qApp->applicationName().toLocal8Bit().constData(),
+                              qApp->applicationVersion().toLocal8Bit().constData());
+    printf("Copyright (C) 2013 %s. <%s>\n", qApp->organizationName().toLocal8Bit().constData(),
+                                            qApp->organizationDomain().toLocal8Bit().constData());
+    printf("License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n");
     printf("This is free software: you are free to change and redistribute it.\n");
+    printf("There is NO WARRANTY, to the extent permitted by law.\n");
 }
 
 static inline void printHelp()
@@ -202,14 +212,8 @@ int main(int argc, char *argv[])
     //qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
-    setApplicationInfo();
+    loadApplicationInfo();
     processArg();
-
-    app.setEffectEnabled(Qt::UI_AnimateCombo, true);
-    app.setEffectEnabled(Qt::UI_FadeMenu, true);
-    app.setEffectEnabled(Qt::UI_AnimateToolBox, true);
-    app.setEffectEnabled(Qt::UI_AnimateTooltip, true);
-    app.setEffectEnabled(Qt::UI_FadeTooltip, true);
 
     //Load Splash Screen
     KCSplashScreen splash;
@@ -218,7 +222,7 @@ int main(int argc, char *argv[])
     splash.raise();
     app.processEvents();
 
-    initApplicationSettings();
+    loadApplicationSettings();
     app.processEvents();
 
     //Initalize Application Palette.

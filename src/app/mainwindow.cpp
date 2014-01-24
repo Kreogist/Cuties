@@ -27,40 +27,32 @@
 MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
 {
-    //Set MainWindow properties.
+    //Set properties.
     setObjectName("MainWindow");
-    //Set MainWindow title.
-    setWindowTitle(tr(trWindowTitle.toLatin1()));
-
-    //Set Palette.
+    setWindowTitle(windowTitleTranslate);
+    //Set palette.
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
-    //Set Central Widget.
-    tabManager=new KCTabManager(this);
-    connect(tabManager,SIGNAL(currentChanged(int)),
-            this,SLOT(onCurrentTabChanged()));
-    setCentralWidget(tabManager);
-
+    //Init widget recorder
     visibleRecorder=KCVisibleRecorder::getInstance();
+
+    //Set central widget.
+    tabManager=new KCTabManager(this);
+    setCentralWidget(tabManager);
 
     //Create All Window Contents
     createDocks();
     createTitlebar();
     createToolBar();
     createStatusbar();
+
+    //Get translations.
+    retranslate();
+
     createMenu();
     createActions();
-
-    connect(tabManager,SIGNAL(tabAdded()),
-            this,SLOT(setDocOpenMenuEnabled()));
-    connect(tabManager,SIGNAL(tabAdded()),
-            titlebar,SLOT(showToolBar()));
-    connect(tabManager,SIGNAL(tabClear()),
-            this,SLOT(setNoDocOpenMenuEnabled()));
-    connect(tabManager,SIGNAL(tabClear()),
-            titlebar,SLOT(hideToolBar()));
 
     //Restore the last time running states
     retranslateAndSet();
@@ -75,9 +67,30 @@ MainWindow::MainWindow(QWidget *parent) :
     hideWelcomeWindow=new QPropertyAnimation(welcomeWindow, "geometry", this);
     hideWelcomeWindow->setEasingCurve(QEasingCurve::OutCubic);
 
-    connect(hideWelcomeWindow, &QPropertyAnimation::finished, welcomeWindow, &KCWelcomeWindow::hide);
-    connect(tabManager, &KCTabManager::tabNonClear, this, &MainWindow::animateHideWelcomeWindow);
-    connect(tabManager, &KCTabManager::tabClear, this, &MainWindow::animateShowWelcomeWindow);
+    //Connect event.
+    //Tab-manager events.
+    connect(tabManager,SIGNAL(currentChanged(int)),
+            this,SLOT(onCurrentTabChanged()));
+    connect(tabManager,SIGNAL(tabAdded()),
+            this,SLOT(setDocOpenMenuEnabled()));
+    connect(tabManager,SIGNAL(tabClear()),
+            this,SLOT(setNoDocOpenMenuEnabled()));
+
+    //Toolbar event.
+    connect(tabManager,SIGNAL(tabAdded()),
+            titlebar,SLOT(showToolBar()));
+    connect(tabManager,SIGNAL(tabClear()),
+            titlebar,SLOT(hideToolBar()));
+
+    //Welcome window event.
+    connect(hideWelcomeWindow, &QPropertyAnimation::finished,
+            welcomeWindow, &KCWelcomeWindow::hide);
+    connect(tabManager, &KCTabManager::tabNonClear,
+            this, &MainWindow::animateHideWelcomeWindow);
+    connect(tabManager, &KCTabManager::tabClear,
+            this, &MainWindow::animateShowWelcomeWindow);
+
+    //Welcome window actions.
     connect(welcomeWindow, &KCWelcomeWindow::requiredNewFile,
             tabManager, &KCTabManager::newFileWithHighlight);
     connect(welcomeWindow, SIGNAL(requiredOpenFile()),
@@ -91,12 +104,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(tabManager, SIGNAL(requiredCompileFile()),
             this, SLOT(compileProgram()));
 
+    //Restore last time settings
     restoreSettings();
 }
 
 void MainWindow::showEvent(QShowEvent *e)
 {
     KCMainWindow::showEvent(e);
+    //Resize welcome window
     welcomeWindow->setGeometry(width()/8,
                                height()/8,
                                width()/4*3,
@@ -675,6 +690,7 @@ void MainWindow::createDocks()
     */
 
     setDockNestingEnabled(true);
+
     //Compile Dock
     compileDock=new KCCompileDock(this);
     connect(compileDock,SIGNAL(requireOpenErrFile(QString)),
@@ -861,7 +877,10 @@ void MainWindow::setDocOpenMenuEnabled()
 
 void MainWindow::restoreSettings()
 {
+    //Restore window geometry first.
     setGeometry(KCStatusRecorder::getInstance()->getWidgetRect(objectName()));
+
+    //Get window state
     Qt::WindowStates mainWindowState=KCStatusRecorder::getInstance()->getWidgetState(objectName());
     if(mainWindowState==Qt::WindowFullScreen)
     {
@@ -1129,8 +1148,10 @@ void MainWindow::setCurrentTextCursorLine(int NewLineNumber)
     tabManager->switchCurrentToLine(NewLineNumber-1,0);
 }
 
-void MainWindow::retranslateAndSet()
+void MainWindow::retranslate()
 {
+    windowTitleTranslate=tr("Cuties");
+
     sidebarStateString[sidebarLock]=tr("Lock Sidebar");
     sidebarStateString[sidebarUnlock]=tr("Unlock sidebar");
     fullScreenStateString[fullScreen]=tr("Enter Full Screen");
@@ -1245,7 +1266,11 @@ void MainWindow::retranslateAndSet()
     actionMainWindowText[actionHelpAboutQt]=tr("About Qt");
     actionMainWindowText[actionHelpBugReport]=tr("Report a bug");
     actionMainWindowText[actionHelpSendFeedbacks]=tr("Send a feedback");
+}
 
+void MainWindow::retranslateAndSet()
+{
+    retranslate();
     toolButtonTips[toolButtonNewFile]=actionMainWindowText[actionFileNewFile]+"\n"+actionStatusTips[actionFileNewFile];
     toolButtonTips[toolButtonOpenFile]=actionMainWindowText[actionFileOpen]+"\n"+actionStatusTips[actionFileOpen];
     toolButtonTips[toolButtonSave]=actionMainWindowText[actionFileSave]+"\n"+actionStatusTips[actionFileSave];
@@ -1257,7 +1282,7 @@ void MainWindow::retranslateAndSet()
     toolButtonTips[toolButtonSearch]=actionMainWindowText[actionSearchFind]+"\n"+actionStatusTips[actionSearchFind];
     toolButtonTips[toolButtonCompileAndRun]=actionMainWindowText[actionExecuteCompileAndRun]+"\n"+actionStatusTips[actionExecuteCompileAndRun];
 
-    setWindowTitle(tr(trWindowTitle.toLatin1()));
+    setWindowTitle(windowTitleTranslate);
     for(int i=menuFile; i<menuMainItemsCount; i++)
     {
         menuMainWindowItem[i]->setTitle(menuMainWindowText[i]);

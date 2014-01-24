@@ -94,6 +94,7 @@ public slots:
     void setNoDocOpenMenuEnabled();
     void setDocOpenMenuEnabled();
     void setCurrentTextCursorLine(int NewLineNumber);
+    void retranslate();
     void retranslateAndSet();
 
 private slots:
@@ -249,7 +250,7 @@ private:
     QString fullScreenStateString[FullScreenStateCount];
 
     //All the names we need to translate.
-    QString trWindowTitle="Cuties";
+    QString windowTitleTranslate;
 
     KCTabManager *tabManager;
     KCSideBar *sideBar;

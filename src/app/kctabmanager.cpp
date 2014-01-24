@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist-Cuties. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <QToolButton>
@@ -28,12 +28,14 @@
 KCTabManager::KCTabManager(QWidget *parent) :
     QTabWidget(parent)
 {
+    //Get translation.
     retranslate();
-    setObjectName("KCTabManager");
-    clear();
 
     editorConfigure=KCEditorConfigure::getInstance();
 
+    //Set properties.
+    setObjectName("KCTabManager");
+    setContentsMargins(0,0,0,0);
     setAcceptDrops(true);
     setDocumentMode(true);
     setContentsMargins(0,0,0,0);
@@ -41,9 +43,12 @@ KCTabManager::KCTabManager(QWidget *parent) :
     setTabPosition(QTabWidget::South);
     editorConfigureRefresh();
 
+    //Tab menu.
     createTabMenu();
 
-    tabBarControl = this->tabBar();
+    //Tab bar settings.
+    tabBarControl=tabBar();
+    //Set palette.
     QPalette pal=tabBarControl->palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     tabBarControl->setPalette(pal);
