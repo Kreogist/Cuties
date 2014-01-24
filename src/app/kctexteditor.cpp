@@ -28,7 +28,6 @@
 
 #include "kctextblockdata.h"
 #include "kcclipboard.h"
-#include "kceditorconfigure.h"
 #include "kcfontconfigure.h"
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
@@ -44,24 +43,12 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     QFont editorFont=KCFontConfigure::getInstance()->getCodeFont();
     setFont(editorFont);
 
-    configureInstance=KCEditorConfigure::getInstance();
-
     /*clipboard=KCClipboard::getInstance();
     clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
             this,SLOT(insertPlainText(QString)));*/
 
     textFloatToolBar=new KCFloatToolBar(this);
-
-    //Set Customize TextEditor Properties.
-    //Set Tab Width.
-    setTabStopWidth(fontMetrics().width(' ')*configureInstance->getValue("TabWidth").toInt());
-    //Set WordWarp Mode.
-    //setWordWrapMode(configureInstance->getWrapMode());
-    //Set Cursor Width.
-    setCursorWidth(configureInstance->getValue("CursorWidth").toInt());
-    //Set OverWrite Mode.
-    //setOverwriteMode(configureInstance->getOverwriteMode());
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -87,13 +74,6 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
-
-    connect(configureInstance, &KCEditorConfigure::tabWidthChanged,
-            this, &KCTextEditor::setTabWidth);
-    connect(configureInstance, &KCEditorConfigure::wrapModeChanged,
-            this, &KCTextEditor::setWordWrap);
-    connect(configureInstance, &KCEditorConfigure::cursorWidthChanged,
-            this, &KCTextEditor::setTheCursorWidth);
 }
 
 void KCTextEditor::paintEvent(QPaintEvent *e)
@@ -494,8 +474,8 @@ void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount, bool for
     if(tabCount>0)
     {
         insertTabCursor.clearSelection();
-        QString spaceChar=configureInstance->getValue("isUsingBlankInsteadTab").toBool()?
-                          QString(" ").repeated(configureInstance->getValue("SpacePerTab").toInt()):
+        QString spaceChar=usingBlankInsteadTab?
+                          QString(" ").repeated(spacePerTab):
                           "\t";
         if(insertTabCursor.document()->characterAt(insertTabCursor.position())=='}' && !forceInsert)
         {
@@ -513,9 +493,9 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
     removeTabCursor.clearSelection();
 
     //We have to judge whether we are using tab or space.
-    if(configureInstance->getValue("isUsingBlankInsteadTab").toBool())
+    if(usingBlankInsteadTab)
     {
-        int expectLength=tabCount * configureInstance->getValue("SpacePerTab").toInt();
+        int expectLength=tabCount*spacePerTab;
         if(expectLength > removeTabCursor.positionInBlock())
         {
             /*
@@ -539,22 +519,6 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
         //Test for first time.
 
     }
-/*
-    while(tabCount-- && !removeTabCursor.atBlockStart())
-    {
-        if(configureInstance->usingBlankInsteadTab())
-        {
-            removeTabCursor.movePosition(QTextCursor::Left,
-                                         QTextCursor::KeepAnchor,
-                                         configureInstance->getTabSpacing());
-        }
-        else
-        {
-            removeTabCursor.movePosition(QTextCursor::Left,
-                                         QTextCursor::KeepAnchor);
-        }
-    }*/
-
     removeTabCursor.removeSelectedText();
 }
 
@@ -578,8 +542,8 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
             // Only one line partially selected.
             tabPressCursor.removeSelectedText();
         } else {
-            QString spaceChar=configureInstance->getValue("isUsingBlankInsteadTab").toBool()?
-                              QString(" ").repeated(configureInstance->getValue("SpacePerTab").toInt()):
+            QString spaceChar=usingBlankInsteadTab?
+                              QString(" ").repeated(spacePerTab):
                               "\t";
             for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
                 int indentPosition = findFirstCharacter(block);
@@ -598,6 +562,17 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
     insertTab(tabPressCursor, 1, true);
     tabPressCursor.endEditBlock();
 }
+
+void KCTextEditor::setSpacePerTab(int value)
+{
+    spacePerTab = value;
+}
+
+void KCTextEditor::setUsingBlankInsteadTab(bool value)
+{
+    usingBlankInsteadTab = value;
+}
+
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
 {

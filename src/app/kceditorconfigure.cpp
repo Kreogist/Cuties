@@ -17,6 +17,8 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "kcclipboard.h"
+
 #include "kceditorconfigure.h"
 
 KCEditorConfigure *KCEditorConfigure::instance=nullptr;
@@ -61,6 +63,8 @@ void KCEditorConfigure::readConfigure()
         configureMap[*i]=settings.value(*i);
     }
     settings.endGroup();
+    KCClipboard::getInstance()->setMaxDataCount(
+                getValue("ClipboardMax").toInt());
 }
 
 int KCEditorConfigure::getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const

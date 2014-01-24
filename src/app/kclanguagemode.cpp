@@ -193,7 +193,7 @@ GdbController *KCLanguageMode::startDebug(int lineNumber)
 
 void KCLanguageMode::setBreakPointAtLine(int line)
 {
-
+    ;
 }
 
 void KCLanguageMode::stopDebug()

@@ -35,7 +35,6 @@
 #include "kchistoryconfigure.h"
 #include "kcgeneralconfigure.h"
 #include "kccolorconfigure.h"
-#include "kceditorconfigure.h"
 
 #include "kctexteditor.h"
 #include "kclinenumpanel.h"
@@ -53,8 +52,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setContentsMargins(0,0,0,0);
 
-    configureInstance=KCEditorConfigure::getInstance();
-
     replaceLayout=new QVBoxLayout(this);
     replaceLayout->setContentsMargins(0,0,0,0);
     replaceLayout->setSpacing(0);
@@ -68,7 +65,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     mainLayout->addWidget(markPanel);
 
     linePanel=new KCLinenumPanel(this);
-    linePanel->setVisible(configureInstance->getValue("LineNumVisible").toBool());
     mainLayout->addWidget(linePanel);
 
     smartPanel=new KCSmartPanel(this);
@@ -96,8 +92,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             this, &KCCodeEditor::cursorChanged);
     connect(editor, &KCTextEditor::overwriteModeChanged,
             this, &KCCodeEditor::rewriteStateChanged);
-    connect(configureInstance, &KCEditorConfigure::lineNumPanelVisibleChanged,
-            linePanel, &KCLinenumPanel::setVisible);
 
     connect(editor, &KCTextEditor::requireHideOthers,
             this, &KCCodeEditor::onHideOtherWidgets);
@@ -147,6 +141,9 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setCursorWidth(settings.cursorWidth);
     editor->setWordWrap(settings.wrapMode);
     editor->setTabStopWidth(fontMetrics().width(' ')*settings.tabSpace);
+    editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
+    editor->setSpacePerTab(settings.spacePerTab);
+    linePanel->setVisible(settings.lineNumberPanelVisible);
 }
 
 bool KCCodeEditor::getOverwriteMode()

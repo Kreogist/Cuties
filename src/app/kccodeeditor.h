@@ -34,7 +34,6 @@
 
 class QVBoxLayout;
 class QHBoxLayout;
-class KCEditorConfigure;
 class KCSearchWindow;
 class KCReplaceWindow;
 class KCLanguageMode;
@@ -58,6 +57,7 @@ public:
         int tabSpace;
         QTextOption::WrapMode wrapMode;
         int cursorWidth;
+        bool lineNumberPanelVisible;
     };
 
     void applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settings);
@@ -145,8 +145,6 @@ private:
     void computeExecFileName();
     void fileInfoChanged(const QFile &file);
     void connectSearchWidgetWithEditor(KCSearchWidget *widget);
-
-    KCEditorConfigure *configureInstance;
 
     KCLanguageMode *languageMode;
 

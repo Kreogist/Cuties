@@ -20,6 +20,8 @@
 #include <QDebug>
 #include <QStringList>
 
+#include "kchistoryconfigure.h"
+
 #include "kcgeneralconfigure.h"
 
 KCGeneralConfigure *KCGeneralConfigure::instance=nullptr;
@@ -82,6 +84,8 @@ void KCGeneralConfigure::writeConfigure()
         settings.setValue(*i, configureMap[*i]);
     }
     settings.endGroup();
+    KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(
+                getValue("MaxRecentFilesSize").toInt());
 }
 
 QString KCGeneralConfigure::getDefaultLanguageModeString()

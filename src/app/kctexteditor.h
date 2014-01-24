@@ -34,7 +34,6 @@
 #include "kctextsearcher.h"
 #include "kcfloattoolbar.h"
 
-class KCEditorConfigure;
 class KCClipboard;
 
 class KCTextEditor : public QPlainTextEdit
@@ -52,6 +51,8 @@ public:
     int getVScrollValue();
     int getHScrollValue();
     QList<int> getBreakPoints();
+    void setUsingBlankInsteadTab(bool value);
+    void setSpacePerTab(int value);
 
 signals:
     void requireHideOthers();
@@ -120,12 +121,14 @@ private:
     void removeTab(QTextCursor removeTabCursor, int tabCount = 1);
     void tabPressEvent(QTextCursor tabPressCursor);
 
-    KCEditorConfigure *configureInstance;
     KCClipboard *clipboard;
     QColor lineColor;
     QColor searchResultColor;
     QColor noMatchedParenthesesColor;
     QColor matchedParenthesesColor;
+
+    bool usingBlankInsteadTab=true;
+    int spacePerTab=4;
 
     QString searchText;
     QString leftParenthesesLists=QString("([{");

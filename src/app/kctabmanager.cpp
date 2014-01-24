@@ -568,6 +568,7 @@ void KCTabManager::editorConfigureRefresh()
     editorSettings.spacePerTab=editorConfigure->getValue("SpacePerTab").toInt();
     editorSettings.tabSpace=editorConfigure->getValue("TabWidth").toInt();
     editorSettings.wrapMode=editorConfigure->indexToWrapMode(editorConfigure->getValue("WordWrap").toInt());
+    editorSettings.lineNumberPanelVisible=editorConfigure->getValue("LineNumVisible").toBool();
     int i=count();
     while(i--)
     {

@@ -40,12 +40,6 @@ public:
 
 signals:
     void editorConfigureRefresh();
-    void spacePerTabChanged(int newValue);
-    void tabWidthChanged(int newValue);
-    void wrapModeChanged(QTextOption::WrapMode newWrapMode);
-    void cursorWidthChanged(int newValue);
-    void spaceInsteadOfTab(bool newValue);
-    void lineNumPanelVisibleChanged(bool newValue);
 
 private:
     KCEditorConfigure();
