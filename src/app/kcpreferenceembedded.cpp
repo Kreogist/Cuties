@@ -148,9 +148,13 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
             addItemBooleanGroup(booleanGroupCaption[booleanGroupSpacingInsteadOfTab],
                                 "isUsingBlankInsteadTab");
     editorInts[intSpacePerTab]=addItemInt(intItemCaption[intSpacePerTab],
-                                          "SpacePerTab");
+                                          "SpacePerTab",
+                                          10,
+                                          1);
     editorInts[intTabSpacing]=addItemInt(intItemCaption[intTabSpacing],
-                                         "TabWidth");
+                                         "TabWidth",
+                                         10,
+                                         1);
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addTrueValueGroupItem(editorInts[intSpacePerTab]);
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addFalseValueGroupItem(editorInts[intTabSpacing]);
     editorCombos[comboWordWrapMode]=addItemCombo(comboItemCaption[comboWordWrapMode],

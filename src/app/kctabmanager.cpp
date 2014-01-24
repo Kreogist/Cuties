@@ -137,6 +137,7 @@ int KCTabManager::open(const QString &filePath)
         connect(tmp,SIGNAL(requiredHideDocks()),this,SIGNAL(requiredHideDocks()));
         connect(tmp,SIGNAL(requiredCompileFile()),this,SIGNAL(requiredCompileFile()));
         emit tabAdded();
+        tmp->applyEditorSettings(editorSettings);
         if(count()==0)  //before the tab be added, count() == 0
         {
             emit tabNonClear();
@@ -234,6 +235,7 @@ int KCTabManager::newFile()
         {
             emit tabNonClear();
         }
+        tmp->applyEditorSettings(editorSettings);
         int newTabIndex=addTab(tmp,newFileTitle);
         setCurrentIndex(newTabIndex);
         currentTextCursorChanged();
@@ -556,7 +558,6 @@ void KCTabManager::editorConfigureRefresh()
     setMovable(editorConfigure->getValue("TabMoveable").toBool());
     setTabsClosable(editorConfigure->getValue("TabCloseable").toBool());
     //Set editor's settings.
-    KCCodeEditor::KCCodeEditorSettings editorSettings;
     editorSettings.usingBlankInsteadTab=editorConfigure->getValue("isUsingBlankInsteadTab").toBool();
     editorSettings.cursorWidth=editorConfigure->getValue("CursorWidth").toInt();
     editorSettings.spacePerTab=editorConfigure->getValue("SpacePerTab").toInt();

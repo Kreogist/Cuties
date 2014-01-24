@@ -125,6 +125,7 @@ private:
     QString tabMenuActionCaption[TabMenuActionCount];
 
     KCGlobal *globalInstance;
+    KCCodeEditor::KCCodeEditorSettings editorSettings;
 };
 
 #endif // KCTABMANAGER_H

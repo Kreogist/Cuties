@@ -109,7 +109,8 @@ void KCPanel::paintEvent(QPaintEvent *event)
 
     //find first visiable block
     int lineCount;
-    for(lineCount=0; block.isValid();
+    for(lineCount=0;
+        block.isValid();
         block=block.next())
     {
         lineCount+=block.lineCount();
@@ -120,6 +121,8 @@ void KCPanel::paintEvent(QPaintEvent *event)
     }
 
     first=block.blockNumber();
+    //qDebug()<<block.firstLineNumber()<<block.lineCount()<<block.layout();
+
     QRectF currentRect;
     int topHint=top==0?4:1;
 
@@ -133,7 +136,7 @@ void KCPanel::paintEvent(QPaintEvent *event)
         currentRect=e->blockRect(block);
         painter.save();
         this->draw(&painter, &block,
-                   0, currentRect.top()+topHint, width(), currentRect.height(),
+                   0, currentRect.top()+topHint, width(), currentRect.bottom()-currentRect.top(),
                    currentLineNum==block.blockNumber()?1:0);
         painter.restore();
         bottom-=getRealLineCount(block,lineCount-top);

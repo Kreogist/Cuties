@@ -83,8 +83,8 @@ KCPreferenceItemInt::~KCPreferenceItemInt()
 void KCPreferenceItemInt::setOriginalValue(const QVariant &value)
 {
     syncValue(value.toInt());
-    valueDisplayer->setText(QString::number(value.toInt()));
-    KCPreferenceItemBase::setOriginalValue(value);
+    valueDisplayer->setText(QString::number(intSpinValueChanger->value()));
+    KCPreferenceItemBase::setOriginalValue(intSpinValueChanger->value());
 
     connect(intSpinValueChanger, SIGNAL(valueChanged(int)),
             this, SLOT(valueChangedEvent()));

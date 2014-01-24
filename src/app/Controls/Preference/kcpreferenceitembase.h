@@ -48,8 +48,8 @@ public:
     explicit KCPreferenceItemBase(QWidget *parent = 0);
     QVariant getCurrentValue() const;
     void setCurrentValue(const QVariant &value);
-    QVariant getOriginalValue() const;
-    void setOriginalValue(const QVariant &value);
+    virtual QVariant getOriginalValue() const;
+    virtual void setOriginalValue(const QVariant &value);
     void editFinished();
     void setExpandFinishedHeight(const int &endHeight);
     int getExpandFinishedHeight() const;
