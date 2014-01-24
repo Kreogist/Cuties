@@ -34,6 +34,7 @@ KCGeneralConfigure *KCGeneralConfigure::getInstance()
 KCGeneralConfigure::KCGeneralConfigure()
 {
     retranslate();
+    setGroupName("General");
 
     QString defaultSearchEngineURL[SearchEngineCount];
     defaultSearchEngineURL[Google]="https://www.google.com.hk/#newwindow=1&safe=strict&q=";
@@ -58,32 +59,9 @@ QString KCGeneralConfigure::getTotalFileFilter() const
     return totalFileFilter;
 }
 
-void KCGeneralConfigure::readConfigure()
-{
-    QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup("General");
-    QStringList currentKeys=settings.childKeys();
-    for(QStringList::const_iterator i=currentKeys.begin();
-        i!=currentKeys.end();
-        i++)
-    {
-        configureMap[*i]=settings.value(*i);
-    }
-    settings.endGroup();
-}
-
 void KCGeneralConfigure::writeConfigure()
 {
-    QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup("General");
-    QList<QString> keys=configureMap.keys();
-    for(QList<QString>::iterator i=keys.begin();
-        i!=keys.end();
-        i++)
-    {
-        settings.setValue(*i, configureMap[*i]);
-    }
-    settings.endGroup();
+    KCConfigure::writeConfigure();
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(
                 getValue("MaxRecentFilesSize").toInt());
 }

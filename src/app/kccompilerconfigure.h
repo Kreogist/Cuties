@@ -30,10 +30,6 @@ class KCCompilerConfigure : public KCConfigure
 {
     Q_OBJECT
 public:
-    void readConfigure();
-    void writeConfigure();
-    void setPathValue(const QString &key, const QString &value);
-    QString getPathValue(const QString &key);
     static KCCompilerConfigure *getInstance();
 
 private:

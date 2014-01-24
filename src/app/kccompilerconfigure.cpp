@@ -28,6 +28,7 @@ KCCompilerConfigure *KCCompilerConfigure::getInstance()
 
 KCCompilerConfigure::KCCompilerConfigure()
 {
+    setGroupName("Compiler");
 #ifdef Q_OS_UNIX
     setValue("GPP-Path","/usr/bin/gcc");
     setValue("GCC-Path","/usr/bin/g++");
@@ -42,64 +43,4 @@ KCCompilerConfigure::KCCompilerConfigure()
 
     setValue("delayCompile", false);
     setValue("delayTimeout", 20);
-}
-
-void KCCompilerConfigure::readConfigure()
-{
-    QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
-    cfgOperator.beginGroup("Compiler");
-    QStringList currentKeys=cfgOperator.childKeys();
-    for(QStringList::const_iterator i=currentKeys.begin();
-        i!=currentKeys.end();
-        i++)
-    {
-        configureMap[*i]=cfgOperator.value(*i);
-    }
-    cfgOperator.endGroup();
-}
-
-void KCCompilerConfigure::writeConfigure()
-{
-    QSettings cfgOperator(getCfgFileName(), QSettings::IniFormat);
-    cfgOperator.beginGroup("Compiler");
-    QList<QString> keys=configureMap.keys();
-    for(QList<QString>::iterator i=keys.begin();
-        i!=keys.end();
-        i++)
-    {
-        cfgOperator.setValue(*i, configureMap[*i]);
-    }
-    cfgOperator.endGroup();
-}
-
-void KCCompilerConfigure::setPathValue(const QString &key,
-                                       const QString &value)
-{
-    QString recordValue;
-    if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
-    {
-        recordValue = value.mid(qApp->applicationDirPath().length());
-    }
-    else
-    {
-        recordValue = value;
-    }
-    setValue(key, recordValue);
-}
-
-QString KCCompilerConfigure::getPathValue(const QString &key)
-{
-    QString pathValue=getValue(key).toString();
-#ifdef Q_OS_WIN32
-    if(pathValue.mid(1,1)==":" || pathValue.left(2)=="//")
-    {
-        return pathValue;
-    }
-    else
-    {
-        return qApp->applicationDirPath() + pathValue;
-    }
-#else
-    return pathValue;
-#endif
 }

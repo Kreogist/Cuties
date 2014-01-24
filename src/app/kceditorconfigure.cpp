@@ -25,7 +25,7 @@ KCEditorConfigure *KCEditorConfigure::instance=nullptr;
 
 KCEditorConfigure::KCEditorConfigure()
 {
-    ;
+    setGroupName("Editor");
 }
 
 KCEditorConfigure *KCEditorConfigure::getInstance()
@@ -53,16 +53,7 @@ QTextOption::WrapMode KCEditorConfigure::indexToWrapMode(int index)
 
 void KCEditorConfigure::readConfigure()
 {
-    QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup("Editor");
-    QStringList currentKeys=settings.childKeys();
-    for(QStringList::const_iterator i=currentKeys.begin();
-        i!=currentKeys.end();
-        i++)
-    {
-        configureMap[*i]=settings.value(*i);
-    }
-    settings.endGroup();
+    KCConfigure::readConfigure();
     KCClipboard::getInstance()->setMaxDataCount(
                 getValue("ClipboardMax").toInt());
 }
@@ -86,15 +77,7 @@ int KCEditorConfigure::getWrapModeNumber(QTextOption::WrapMode destinationWrapMo
 
 void KCEditorConfigure::writeConfigure()
 {
-    QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup("Editor");
-    QList<QString> keys=configureMap.keys();
-    for(QList<QString>::iterator i=keys.begin();
-        i!=keys.end();
-        i++)
-    {
-        settings.setValue(*i, configureMap[*i]);
-    }
-    settings.endGroup();
+    KCConfigure::writeConfigure();
+    KCClipboard::getInstance()->setMaxDataCount(getValue("ClipboardMax").toInt());
     emit editorConfigureRefresh();
 }

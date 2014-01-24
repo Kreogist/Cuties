@@ -28,11 +28,7 @@ class KCDebuggerConfigure : public KCConfigure
 {
     Q_OBJECT
 public:
-    void readConfigure();
-    void writeConfigure();
     static KCDebuggerConfigure *getInstance();
-    void setPathValue(const QString &key, const QString &value);
-    QString getPathValue(const QString &key);
 
 private:
     KCDebuggerConfigure();

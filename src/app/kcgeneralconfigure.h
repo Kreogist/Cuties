@@ -36,7 +36,6 @@ class KCGeneralConfigure : public KCConfigure
 {
     Q_OBJECT
 public:
-    void readConfigure();
     void writeConfigure();
     static KCGeneralConfigure *getInstance();
 

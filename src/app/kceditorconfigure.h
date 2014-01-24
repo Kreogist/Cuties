@@ -44,15 +44,6 @@ signals:
 private:
     KCEditorConfigure();
     static KCEditorConfigure *instance;
-
-    //Values:
-    QTextOption::WrapMode wrapMode;
-    int wrapModeInt;
-    bool isUsingBlankInsteadTab, overwriteMode;
-    bool lineNumVisible;
-    int tabWidth, cursorWidth;
-    bool tabMoveable, tabCloseable;
-    int spacePerTab;
 };
 
 
