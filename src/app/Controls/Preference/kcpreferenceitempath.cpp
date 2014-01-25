@@ -17,6 +17,9 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QCompleter>
+#include <QDirModel>
+
 #include "kcpreferenceitempath.h"
 
 KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
@@ -48,6 +51,10 @@ KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
     filePathData=new QLineEdit(this);
     browseFileAction=new QPushButton(this);
     browseFileAction->setText(browseText);
+    QCompleter *completer = new QCompleter(filePathData);
+    QDirModel *dirModel = new QDirModel(filePathData);
+    completer->setModel(dirModel);
+    filePathData->setCompleter(completer);
     setEditWidgetStatus(false);
     pathLayout->addWidget(filePathData, 1);
     pathLayout->addWidget(browseFileAction);
