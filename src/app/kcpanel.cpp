@@ -129,10 +129,6 @@ void KCPanel::paintEvent(QPaintEvent *event)
     for(; bottom>=0 && block.isValid();
         block=block.next())
     {
-        /*
-         * If block is the first block, the real line count is (line_count-top).
-         * Otherwise the real line count is block.lineCount();
-         */
         currentRect=e->blockRect(block);
         painter.save();
         this->draw(&painter, &block,

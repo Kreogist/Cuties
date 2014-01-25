@@ -667,22 +667,22 @@ QTextCursor KCCodeEditor::getTextCursor()
 
 void KCCodeEditor::setVScrollValue(int value)
 {
-    editor->setVScrollValue(value);
+    editor->setVerticalScrollValue(value);
 }
 
 void KCCodeEditor::setHScrollValue(int value)
 {
-    editor->setHScrollValue(value);
+    editor->setHorizontalScrollValue(value);
 }
 
 int KCCodeEditor::getVScrollValue()
 {
-    return editor->getVScrollValue();
+    return editor->verticalScrollValue();
 }
 
 int KCCodeEditor::getHScrollValue()
 {
-    return editor->getHScrollValue();
+    return editor->horizontalScrollValue();
 }
 
 int KCCodeEditor::getTextLines()
@@ -692,7 +692,7 @@ int KCCodeEditor::getTextLines()
 
 void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
 {
-    editor->setDocumentCursor(nLine,linePos);
+    editor->setCursorPosition(nLine,linePos);
 }
 
 void KCCodeEditor::fileInfoChanged(const QFile &file)

@@ -32,6 +32,12 @@
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
 
+KCPanelManager::KCPanelManager(QWidget *parent) :
+    QWidget(parent)
+{
+    ;
+}
+
 KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
@@ -74,6 +80,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
+
+    panelManager=new KCPanelManager(this);
 }
 
 void KCTextEditor::paintEvent(QPaintEvent *e)
@@ -581,16 +589,28 @@ int KCTextEditor::findFirstCharacter(const QTextBlock &block)
     return ret;
 }
 
-void KCTextEditor::setDocumentCursor(int nLine, int linePos)
+/*!
+ * \brief This function will set the text cursor to the position located by line
+ *        number and column number.
+ * \param lineNumber Line number of the destionation position.
+ * \param columnNumber Column number of the destionation position.
+ */
+void KCTextEditor::setCursorPosition(int lineNumber,
+                                     int columnNumber)
 {
     QTextCursor cursor = textCursor();
-    cursor.setPosition(document()->findBlockByNumber(nLine).position());
+    cursor.setPosition(document()->findBlockByNumber(lineNumber).position());
     cursor.movePosition(QTextCursor::NextCharacter,
                         QTextCursor::MoveAnchor,
-                        linePos);
+                        columnNumber);
     setTextCursor(cursor);
 }
 
+/*!
+ * \brief This function will backup the current cursor. The backuped cursor will
+ *        be set at the time the search content changed. This function is used
+ *        to let the search function begin to search at the same place.
+ */
 void KCTextEditor::backupSearchTextCursor()
 {
     searchBackupCursor=textCursor();
@@ -1159,22 +1179,15 @@ void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
     }*/
 }
 
-void KCTextEditor::wheelEvent(QWheelEvent *e)
+void KCTextEditor::wheelEvent(QWheelEvent *event)
 {
-    if(e->modifiers() & Qt::ControlModifier)
+    if(event->modifiers() & Qt::ControlModifier)
     {
-        if(e->angleDelta().y()>0)
-        {
-            zoomIn(2);
-        }
-        else
-        {
-            zoomOut(2);
-        }
-        e->ignore();
+        zoomIn(event->angleDelta().y()/56);
+        event->ignore();
         return;
     }
-    QPlainTextEdit::wheelEvent(e);
+    QPlainTextEdit::wheelEvent(event);
 }
 
 void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
@@ -1196,22 +1209,36 @@ void KCTextEditor::setLineErrorState(QList<int> errorList)
     }
 }
 
-void KCTextEditor::setVScrollValue(int value)
+/*!
+ * \brief Set the vertical scroll bar value.
+ * \param value The scroll bar value.
+ */
+void KCTextEditor::setVerticalScrollValue(int value)
 {
     verticalScrollBar()->setValue(value);
 }
 
-void KCTextEditor::setHScrollValue(int value)
+/*!
+ * \brief Set the horizontal scroll bar value.
+ * \param value The scroll bar value.
+ */
+void KCTextEditor::setHorizontalScrollValue(int value)
 {
     horizontalScrollBar()->setValue(value);
 }
 
-int KCTextEditor::getVScrollValue()
+/*!
+ * \brief Get the vertical scroll bar value.
+ */
+int KCTextEditor::verticalScrollValue()
 {
     return verticalScrollBar()->value();
 }
 
-int KCTextEditor::getHScrollValue()
+/*!
+ * \brief Get the horizontal scroll bar value.
+ */
+int KCTextEditor::horizontalScrollValue()
 {
     return horizontalScrollBar()->value();
 }
@@ -1234,12 +1261,14 @@ QList<int> KCTextEditor::getBreakPoints()
 
 void KCTextEditor::zoomIn(int range)
 {
-    QFont f = this->font();
-    const int newSize = f.pixelSize() + range;
+    QFont zoomFont = font();
+    const int newSize = zoomFont.pixelSize()+range;
     if(newSize<=0)
+    {
         return;
-    f.setPixelSize(newSize);
-    setFont(f);
+    }
+    zoomFont.setPixelSize(newSize);
+    setFont(zoomFont);
 }
 
 void KCTextEditor::zoomOut(int range)

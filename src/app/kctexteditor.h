@@ -36,23 +36,36 @@
 
 class KCClipboard;
 
+class KCPanelManager : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCPanelManager(QWidget *parent = 0);
+
+signals:
+
+private:
+    ;
+};
+
 class KCTextEditor : public QPlainTextEdit
 {
     Q_OBJECT
 public:
     explicit KCTextEditor(QWidget *parent = 0);
-    void setDocumentCursor(int nLine, int linePos);
+    void setCursorPosition(int lineNumber,
+                           int columnNumber);
     void backupSearchTextCursor();
     QRectF blockRect(const QTextBlock &block);
-    void zoomIn(int range = 1);
-    void zoomOut(int range = 1);
-    void setVScrollValue(int value);
-    void setHScrollValue(int value);
-    int getVScrollValue();
-    int getHScrollValue();
+    void setVerticalScrollValue(int value);
+    void setHorizontalScrollValue(int value);
+    int verticalScrollValue();
+    int horizontalScrollValue();
     QList<int> getBreakPoints();
     void setUsingBlankInsteadTab(bool value);
     void setSpacePerTab(int value);
+    void zoomIn(int range = 1);
+    void zoomOut(int range = 1);
 
 signals:
     void requireHideOthers();
@@ -88,7 +101,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
-    void wheelEvent(QWheelEvent *e);
+    void wheelEvent(QWheelEvent *event);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
@@ -126,6 +139,8 @@ private:
     QColor searchResultColor;
     QColor noMatchedParenthesesColor;
     QColor matchedParenthesesColor;
+
+    KCPanelManager *panelManager;
 
     bool usingBlankInsteadTab=true;
     int spacePerTab=4;
