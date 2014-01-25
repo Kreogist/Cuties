@@ -103,7 +103,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     searchUseLastCursor=false;
 
     languageMode=new KCLanguageMode(this);
-    languageMode->getGdbController();
 
     connect(languageMode, SIGNAL(compileSuccessfully(QString)),
             currentCompileProgress, SLOT(showCompileSuccess()));

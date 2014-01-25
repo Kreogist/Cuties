@@ -37,6 +37,10 @@ KCCodeCompileProgress::KCCodeCompileProgress(QWidget *parent) :
     setFixedSize(compileProgressWidth,
                  compileProgressHeight);
 
+    QFont progressFont=font();
+    progressFont.setPixelSize(12);
+    setFont(progressFont);
+
     QGraphicsDropShadowEffect *shadowEffect=new QGraphicsDropShadowEffect(this);
     shadowEffect->setBlurRadius(15.0);
     shadowEffect->setColor(QColor(0, 0, 0, 200));
