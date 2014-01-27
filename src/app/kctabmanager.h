@@ -51,6 +51,7 @@ public:
     int getCurrentLineNum() const;
     void restoreUnclosedFiles();
     KCCodeEditor *getCurrentEditor() const;
+    void hideCurrentCompileBar();
 
 signals:
     void cursorDataChanged(int nCursorLine, int nCursorCol);

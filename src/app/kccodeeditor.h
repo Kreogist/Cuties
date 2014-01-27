@@ -83,7 +83,7 @@ public:
     void setCacheNewFileMode(bool value);
     bool getDebugging() const;
     void setDebugging(bool value);
-
+    void hideCompileBar();
     void setCompileBarState(KCCodeCompileProgress::CompileState state);
     void resetCompileErrorCache();
 

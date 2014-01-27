@@ -1002,6 +1002,7 @@ void MainWindow::compileProgram()
         //File Not Save.
         if(Q_UNLIKELY(!currentEditor->save()))
         {
+            currentEditor->hideCompileBar();
             return;
         }
         //if the file has been compiled,

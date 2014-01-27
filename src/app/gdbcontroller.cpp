@@ -179,6 +179,11 @@ void GdbThread::readGdbStandardOutput()
             break;
         }
     }
+    if(!messageCache.isEmpty())
+    {
+        emit parseMessage(messageCache);
+        messageCache.clear();
+    }
 }
 
 GdbController::GdbController(QObject *parent) :

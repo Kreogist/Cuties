@@ -178,6 +178,11 @@ void KCCodeEditor::setDebugging(bool value)
     }
 }
 
+void KCCodeEditor::hideCompileBar()
+{
+    currentCompileProgress->animeHide();
+}
+
 void KCCodeEditor::setCompileBarState(KCCodeCompileProgress::CompileState state)
 {
     currentCompileProgress->setCompileState(state);

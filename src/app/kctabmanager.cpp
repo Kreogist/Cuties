@@ -112,6 +112,11 @@ KCCodeEditor *KCTabManager::getCurrentEditor() const
     return currentEditor;
 }
 
+void KCTabManager::hideCurrentCompileBar()
+{
+    currentEditor->hideCompileBar();
+}
+
 /*!
  * \brief KCTabManager::open will open the file and switch to it.
  * \param filePath the path of the file that should be opened.
