@@ -49,21 +49,14 @@ public:
     explicit KCPreferenceBannerWidget(QWidget *parent = 0);
 
 signals:
-    void requiredChangeLanguage();
 
 public slots:
     void retranslate();
     void retranslateAndSet();
 
-private slots:
-    void refreshLanguageInfo();
-
 private:
     QLabel *titleCaption;
     QString titleCaptionText;
-
-    QToolButton *localeSettings;
-    KCLanguageConfigure *instance;
 };
 
 class KCPreferenceListButton : public QWidget
@@ -108,6 +101,7 @@ public:
 
 signals:
     void categoryChanged(int newCategoryIndex);
+    void requiredChangeLanguage();
 
 public slots:
     void retranslate();
@@ -115,12 +109,16 @@ public slots:
 
 private slots:
     void listSelectChangedEvent(int listIndex);
+    void refreshLanguageInfo();
 
 private:
     QString categoryCaptions[KCCategoryCount];
     int currentCategory;
 
     KCPreferenceListButton *categoryButton[KCCategoryCount];
+    QToolButton *localeSettings;
+
+    KCLanguageConfigure *instance;
 };
 
 class KCPreferenceContents : public KCPreferencePager

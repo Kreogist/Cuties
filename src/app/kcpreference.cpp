@@ -61,41 +61,6 @@ KCPreferenceBannerWidget::KCPreferenceBannerWidget(QWidget *parent) :
     titleLayout->addWidget(titleCaption);
 
     titleLayout->addStretch();
-
-    localeSettings=new QToolButton(this);
-    localeSettings->setAutoRaise(true);
-    localeSettings->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    localeSettings->setFixedHeight(32);
-    pal=localeSettings->palette();
-    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
-    localeSettings->setPalette(pal);
-    titleLayout->addWidget(localeSettings);
-
-    connect(localeSettings, SIGNAL(clicked()),
-            this, SIGNAL(requiredChangeLanguage()));
-
-    instance=KCLanguageConfigure::getInstance();
-
-    connect(instance, &KCLanguageConfigure::newLanguageSet,
-            this, &KCPreferenceBannerWidget::refreshLanguageInfo);
-    refreshLanguageInfo();
-}
-
-void KCPreferenceBannerWidget::refreshLanguageInfo()
-{
-    if(instance->getCurrentLanguageIndex()<0)
-    {
-        localeSettings->setText("No langauge files.");
-    }
-    else
-    {
-        localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
-        localeSettings->setText(instance->getLanguageCaption().at(instance->getCurrentLanguageIndex()));
-    }
 }
 
 void KCPreferenceBannerWidget::retranslate()
@@ -272,6 +237,30 @@ KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
      */
     currentCategory=KCPreferenceGeneral;
     categoryButton[currentCategory]->setCategoryPressed(true);
+
+    instance=KCLanguageConfigure::getInstance();
+
+    localeSettings=new QToolButton(this);
+    localeSettings->setAutoRaise(true);
+    localeSettings->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    localeSettings->setFixedHeight(32);
+    localeSettings->setFixedWidth(width());
+    QPalette pal=localeSettings->palette();
+    pal.setColor(QPalette::Base, QColor(0xf7,0xcf,0x3d));
+    pal.setColor(QPalette::Button, QColor(0xf7,0xcf,0x3d));
+    pal.setColor(QPalette::ButtonText, QColor(0,0,0));
+    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
+    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    localeSettings->setPalette(pal);
+    categoryListLayout->addWidget(localeSettings);
+
+    connect(localeSettings, SIGNAL(clicked()),
+            this, SIGNAL(requiredChangeLanguage()));
+
+    refreshLanguageInfo();
+
+    connect(instance, &KCLanguageConfigure::newLanguageSet,
+            this, &KCPreferenceCategoryList::refreshLanguageInfo);
 }
 
 void KCPreferenceCategoryList::listSelectChangedEvent(int listIndex)
@@ -284,6 +273,19 @@ void KCPreferenceCategoryList::listSelectChangedEvent(int listIndex)
     currentCategory=listIndex;
     emit categoryChanged(currentCategory);
     categoryButton[currentCategory]->setCategoryPressed(true);
+}
+
+void KCPreferenceCategoryList::refreshLanguageInfo()
+{
+    if(instance->getCurrentLanguageIndex()<0)
+    {
+        localeSettings->setText("No langauge files.");
+    }
+    else
+    {
+        localeSettings->setIcon(QIcon(instance->getCurrentLanguageIcon()));
+        localeSettings->setText(instance->getLanguageCaption().at(instance->getCurrentLanguageIndex()));
+    }
 }
 
 void KCPreferenceCategoryList::retranslate()
@@ -449,7 +451,7 @@ KCPreference::KCPreference(QWidget *parent) :
     languageSelectorHide->setEasingCurve(QEasingCurve::OutCubic);
     languageSelectorHide->setDuration(500);
 
-    connect(bannerWidget, &KCPreferenceBannerWidget::requiredChangeLanguage,
+    connect(categoryList, &KCPreferenceCategoryList::requiredChangeLanguage,
             this, &KCPreference::showLanguageSelector);
 
     connect(languageSelector, &KCPreferenceEmbeddedLanguage::requiredHideLanguageSelector,

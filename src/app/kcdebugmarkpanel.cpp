@@ -87,7 +87,7 @@ void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
         for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
         {
             KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-            if(data !=NULL)
+            if(data!=NULL)
             {
                 markUnit markInfo=data->getMarkInfo();
                 if(markInfo.rect.contains(pressedPos,true))
