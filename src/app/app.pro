@@ -111,7 +111,10 @@ SOURCES += \
     kcvisiblerecorder.cpp \
     Controls/GraphicButtons/kcgraphicbuttoncancel.cpp \
     kcdebugbreakpointmanager.cpp \
-    kctextpanel.cpp
+    kctextpanel.cpp \
+    kctextpanelmanager.cpp \
+    kclinenumberpanel.cpp \
+    kcunibodypanel.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -198,7 +201,10 @@ HEADERS += \
     kcvisiblerecorder.h \
     Controls/GraphicButtons/kcgraphicbuttoncancel.h \
     kcdebugbreakpointmanager.h \
-    kctextpanel.h
+    kctextpanel.h \
+    kctextpanelmanager.h \
+    kclinenumberpanel.h \
+    kcunibodypanel.h
 
 
 # Enable C++11

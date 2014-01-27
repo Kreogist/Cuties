@@ -6,8 +6,7 @@ KCTextPanel::KCTextPanel(QWidget *parent) :
     ;
 }
 
-KCPanelManager::KCPanelManager(QWidget *parent) :
-    QWidget(parent)
+void KCTextPanel::paintEvent(QPaintEvent *event)
 {
-    ;
+    emit requireRepaintLineNumber(this, event);
 }

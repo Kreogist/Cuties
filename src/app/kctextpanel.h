@@ -3,36 +3,28 @@
 
 #include <QWidget>
 #include <QPaintEvent>
+#include <QTextBlock>
+#include <QTextCursor>
 
 class KCTextPanel : public QWidget
 {
     Q_OBJECT
 public:
     explicit KCTextPanel(QWidget *parent = 0);
+    virtual void drawContent(int x,
+                             int y,
+                             int width,
+                             int height,
+                             QTextBlock block,
+                             QTextCursor textCursor)=0;
+    virtual void setPanelWidth(int lineNumberPanelWidth)=0;
 
-    QSize sizeHint() const {
-        return QSize(100, 0);
-    }
 signals:
-    void requireRepaintLineNumber(QPaintEvent *event);
+    void requireRepaintLineNumber(KCTextPanel *panel,
+                                  QPaintEvent *event);
 
 protected:
-    void paintEvent(QPaintEvent *event) {
-        emit requireRepaintLineNumber(event);
-    }
+    void paintEvent(QPaintEvent *event);
 
 };
-
-class KCPanelManager : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit KCPanelManager(QWidget *parent = 0);
-
-signals:
-
-private:
-    ;
-};
-
 #endif // KCTEXTPANEL_H

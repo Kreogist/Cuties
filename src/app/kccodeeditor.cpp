@@ -64,16 +64,8 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     markPanel=new KCMarkPanel(this);
     mainLayout->addWidget(markPanel);
 
-    linePanel=new KCLinenumPanel(this);
-    mainLayout->addWidget(linePanel);
-
-    smartPanel=new KCSmartPanel(this);
-    mainLayout->addWidget(smartPanel);
-
     editor=new KCTextEditor(this);
     markPanel->setTextEditor(editor);
-    linePanel->setTextEditor(editor);
-    smartPanel->setTextEditor(editor);
 
     mainLayout->addWidget(editor);
     replaceLayout->addLayout(mainLayout);
@@ -142,7 +134,7 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setTabStopWidth(fontMetrics().width(' ')*settings.tabSpace);
     editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
     editor->setSpacePerTab(settings.spacePerTab);
-    linePanel->setVisible(settings.lineNumberPanelVisible);
+    //linePanel->setVisible(settings.lineNumberPanelVisible);
 }
 
 bool KCCodeEditor::getOverwriteMode()
@@ -270,7 +262,6 @@ void KCCodeEditor::addErrorsToStack(int lineNum)
 void KCCodeEditor::redrawSmartPanel()
 {
     editor->setLineErrorState(errorOccurLines);
-    smartPanel->update();
 }
 
 void KCCodeEditor::showSearchBar()

@@ -32,12 +32,6 @@
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
 
-KCPanelManager::KCPanelManager(QWidget *parent) :
-    QWidget(parent)
-{
-    ;
-}
-
 KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
@@ -81,14 +75,17 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
 
-    //panelManager=new KCPanelManager(this);
+    panelManager=new KCTextPanelManager(this);
 
-    lineNumberArea = new KCTextPanel(this);
+    lineNumberPanel=new KCLineNumberPanel(this);
+    panelManager->addPanel(lineNumberPanel);
+    unibodyPanel=new KCUnibodyPanel(this);
+    panelManager->addPanel(unibodyPanel);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
-    connect(lineNumberArea, SIGNAL(requireRepaintLineNumber(QPaintEvent*)),
-            this, SLOT(lineNumberAreaPaintEvent(QPaintEvent*)));
+    connect(panelManager, SIGNAL(requirePaintPanel(KCTextPanel*,QPaintEvent*)),
+            this, SLOT(panelPaintEvent(KCTextPanel*,QPaintEvent*)));
 
     updateLineNumberAreaWidth(0);
 }
@@ -805,6 +802,11 @@ void KCTextEditor::updateHighlights()
     setExtraSelections(extraSelections);
 }
 
+void KCTextEditor::updatePanelManager()
+{
+    panelManager->update();
+}
+
 void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections)
 { 
     if(!isReadOnly())
@@ -1283,7 +1285,7 @@ void KCTextEditor::zoomOut(int range)
     zoomIn(-range);
 }
 
-int KCTextEditor::lineNumberAreaWidth()
+int KCTextEditor::lineNumberPanelWidth()
 {
     int digits = 1;
     int max = qMax(1, blockCount());
@@ -1299,18 +1301,18 @@ int KCTextEditor::lineNumberAreaWidth()
 
 void KCTextEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
-    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+    setViewportMargins(panelManager->resizePanel(lineNumberPanelWidth()), 0, 0, 0);
 }
 
 void KCTextEditor::updateLineNumberArea(const QRect &rect, int dy)
 {
-    if (dy)
+    if(dy)
     {
-        lineNumberArea->scroll(0, dy);
+        //panelManager->scroll(0, dy);
     }
     else
     {
-        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+        panelManager->update(0, rect.y(), panelManager->width(), rect.height());
     }
 
     if (rect.contains(viewport()->rect()))
@@ -1324,29 +1326,30 @@ void KCTextEditor::resizeEvent(QResizeEvent *e)
     QPlainTextEdit::resizeEvent(e);
 
     QRect cr = contentsRect();
-    lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    panelManager->setGeometry(QRect(cr.left(),
+                                    cr.top(),
+                                    panelManager->resizePanel(lineNumberPanelWidth()),
+                                    cr.height()));
 }
 
-void KCTextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
+void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
+                                   QPaintEvent *event)
 {
-    QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), Qt::lightGray);
-    QTextBlock block = firstVisibleBlock();
-    int blockNumber = block.blockNumber();
-    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int) blockBoundingRect(block).height();
+    QTextBlock block=firstVisibleBlock();
+    int blockNumber=block.blockNumber();
+    int top=(int)blockBoundingGeometry(block).translated(contentOffset()).top();
+    int bottom=top+(int)blockBoundingRect(block).height();
 
-    while (block.isValid() && top <= event->rect().bottom()) {
-        if (block.isVisible() && bottom >= event->rect().top()) {
-            QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::black);
-            painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
-                             Qt::AlignRight, number);
+    while (block.isValid() && top <= event->rect().bottom())
+    {
+        if (block.isVisible() && bottom >= event->rect().top())
+        {
+            panel->drawContent(0, top, panel->width(), fontMetrics().height(),
+                               block, textCursor());
         }
-
-        block = block.next();
-        top = bottom;
-        bottom = top + (int) blockBoundingRect(block).height();
+        block=block.next();
+        top=bottom;
+        bottom=top+(int)blockBoundingRect(block).height();
         ++blockNumber;
     }
 }

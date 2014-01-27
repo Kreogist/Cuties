@@ -153,9 +153,8 @@ private:
     QVBoxLayout *replaceLayout;
     QHBoxLayout *mainLayout;
     KCTextEditor *editor;
-    KCLinenumPanel *linePanel;
     KCMarkPanel *markPanel;
-    KCSmartPanel *smartPanel;
+    //KCSmartPanel *smartPanel;
 
     QString filePath;
     QString execFileName;

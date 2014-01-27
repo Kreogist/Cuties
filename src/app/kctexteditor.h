@@ -34,7 +34,9 @@
 
 #include "kctextsearcher.h"
 #include "kcfloattoolbar.h"
-#include "kctextpanel.h"
+#include "kctextpanelmanager.h"
+#include "kclinenumberpanel.h"
+#include "kcunibodypanel.h"
 
 class KCClipboard;
 
@@ -57,7 +59,7 @@ public:
     void zoomIn(int range = 1);
     void zoomOut(int range = 1);
 
-    int lineNumberAreaWidth();
+    int lineNumberPanelWidth();
 
 signals:
     void requireHideOthers();
@@ -70,6 +72,7 @@ signals:
 public slots:
     void updateHighlights();
     //void pasteFromeHistory();
+    void updatePanelManager();
     bool showPreviousSearchResult();
     bool showNextSearchResult();
     void searchString(QString searchTextSets,
@@ -87,7 +90,8 @@ public slots:
 
 private slots:
     void updateSearchResults();
-    void lineNumberAreaPaintEvent(QPaintEvent *event);
+    void panelPaintEvent(KCTextPanel *panel,
+                                  QPaintEvent *event);
 
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea(const QRect &, int);
@@ -138,8 +142,6 @@ private:
     QColor noMatchedParenthesesColor;
     QColor matchedParenthesesColor;
 
-    KCPanelManager *panelManager;
-
     bool usingBlankInsteadTab=true;
     int spacePerTab=4;
 
@@ -155,7 +157,9 @@ private:
     QTextCursor searchBackupCursor;
     KCFloatToolBar *textFloatToolBar;
 
-    KCTextPanel *lineNumberArea;
+    KCTextPanelManager *panelManager;
+    KCLineNumberPanel *lineNumberPanel;
+    KCUnibodyPanel *unibodyPanel;
 };
 
 #endif // CODEEDITOR_H
