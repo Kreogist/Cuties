@@ -30,23 +30,13 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QList>
+#include <QResizeEvent>
 
 #include "kctextsearcher.h"
 #include "kcfloattoolbar.h"
+#include "kctextpanel.h"
 
 class KCClipboard;
-
-class KCPanelManager : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit KCPanelManager(QWidget *parent = 0);
-
-signals:
-
-private:
-    ;
-};
 
 class KCTextEditor : public QPlainTextEdit
 {
@@ -66,6 +56,8 @@ public:
     void setSpacePerTab(int value);
     void zoomIn(int range = 1);
     void zoomOut(int range = 1);
+
+    int lineNumberAreaWidth();
 
 signals:
     void requireHideOthers();
@@ -95,6 +87,10 @@ public slots:
 
 private slots:
     void updateSearchResults();
+    void lineNumberAreaPaintEvent(QPaintEvent *event);
+
+    void updateLineNumberAreaWidth(int newBlockCount);
+    void updateLineNumberArea(const QRect &, int);
 
 protected:
     void paintEvent(QPaintEvent *e);
@@ -102,6 +98,8 @@ protected:
     void keyPressEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *event);
+
+    void resizeEvent(QResizeEvent *event);
 
 private:
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
@@ -156,6 +154,8 @@ private:
     QFuture<void> threadPrev,threadNext;
     QTextCursor searchBackupCursor;
     KCFloatToolBar *textFloatToolBar;
+
+    KCTextPanel *lineNumberArea;
 };
 
 #endif // CODEEDITOR_H
