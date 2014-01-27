@@ -38,7 +38,6 @@ class KCSearchWindow;
 class KCReplaceWindow;
 class KCLanguageMode;
 class KCTextEditor;
-class KCLinenumPanel;
 class KCSearchWidget;
 
 class KCCodeEditor : public QWidget

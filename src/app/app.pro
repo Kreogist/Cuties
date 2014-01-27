@@ -69,7 +69,6 @@ SOURCES += \
     kcjudgedock.cpp \
     kclanguageconfigure.cpp \
     kclanguagemode.cpp \
-    kclinenumpanel.cpp \
     kcmainwindow.cpp \
     kcmessagebox.cpp \
     kcpanel.cpp \
@@ -158,7 +157,6 @@ HEADERS += \
     kcjudgedock.h \
     kclanguageconfigure.h \
     kclanguagemode.h \
-    kclinenumpanel.h \
     kcmainwindow.h \
     kcmessagebox.h \
     kcpanel.h \

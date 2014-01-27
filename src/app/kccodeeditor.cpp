@@ -37,7 +37,6 @@
 #include "kccolorconfigure.h"
 
 #include "kctexteditor.h"
-#include "kclinenumpanel.h"
 #include "kcsearchwindow.h"
 #include "kcreplacewindow.h"
 
