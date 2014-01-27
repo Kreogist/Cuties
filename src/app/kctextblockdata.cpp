@@ -237,3 +237,25 @@ void KCTextBlockData::setCodeLevelDown(bool value)
 {
     codeLevelDown = value;
 }
+
+QRect KCTextBlockData::getCodeLevelRect() const
+{
+    return codeLevelRect;
+}
+
+void KCTextBlockData::setCodeLevelRect(const QRect &value)
+{
+    codeLevelRect = value;
+}
+
+bool KCTextBlockData::getHasFolded() const
+{
+    return hasFolded;
+}
+
+void KCTextBlockData::setHasFolded(bool value)
+{
+    hasFolded = value;
+}
+
+

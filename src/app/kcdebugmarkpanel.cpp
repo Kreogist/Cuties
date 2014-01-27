@@ -19,6 +19,7 @@ KCDebugMarkPanel::KCDebugMarkPanel(QWidget *parent) :
 
 void KCDebugMarkPanel::drawContent(int x, int y, int width, int height, QTextBlock block, QTextCursor cursor)
 {
+    Q_UNUSED(cursor);
     QPainter painter(this);
     KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
     if(data!=NULL)
@@ -90,7 +91,8 @@ void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
             if(data!=NULL)
             {
                 markUnit markInfo=data->getMarkInfo();
-                if(markInfo.rect.contains(pressedPos,true))
+                if(markInfo.rect.contains(pressedPos,true) &&
+                        markInfo.rect.contains(event->pos()))
                 {
                     markInfo.marked^=1;   //exchange the state
                     data->setMarkInfo(markInfo);

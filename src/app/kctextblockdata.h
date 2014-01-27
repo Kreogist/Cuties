@@ -94,6 +94,10 @@ public:
     void setCodeLevelUp(bool value);
     bool getCodeLevelDown() const;
     void setCodeLevelDown(bool value);
+    QRect getCodeLevelRect() const;
+    void setCodeLevelRect(const QRect &value);
+    bool getHasFolded() const;
+    void setHasFolded(bool value);
 
 private:
     unsigned long long int searchCode;
@@ -107,7 +111,9 @@ private:
     int quotationStatus;
     markUnit markInfo;
     bool hasError=false;
+    QRect codeLevelRect;
     bool codeLevelUp=false, codeLevelDown=false;
+    bool hasFolded=false;
 };
 
 #endif // KCTEXTBLOCKDATA_H

@@ -126,5 +126,6 @@
         <file>image/compile_error.png</file>
         <file>image/folderEnd.png</file>
         <file>image/debugarrow.png</file>
+        <file>image/folded.png</file>
     </qresource>
 </RCC>

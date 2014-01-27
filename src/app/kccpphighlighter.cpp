@@ -203,16 +203,22 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
             if(i->character == '{')
             {
                 baseLevel++;
-                levelUp=true;
             }
             else if(i->character == '}')
             {
                 baseLevel--;
-                levelDown=true;
             }
         }
-        prevData->setCodeLevelUp(levelUp);
-        prevData->setCodeLevelDown(levelDown);
+        prevData->setCodeLevelUp(false);
+        prevData->setCodeLevelDown(false);
+        if(baseLevel>prevData->getCodeLevel())
+        {
+            prevData->setCodeLevelUp(true);
+        }
+        else if(baseLevel<prevData->getCodeLevel())
+        {
+            prevData->setCodeLevelDown(true);
+        }
     }
     data->setCodeLevel(baseLevel);
 

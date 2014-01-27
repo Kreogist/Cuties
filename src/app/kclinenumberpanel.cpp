@@ -30,7 +30,7 @@ void KCLineNumberPanel::drawContent(int x,
     QPen pen(painter.pen());
     pen.setColor(textColor);
     painter.setPen(pen);
-    painter.drawText(x, y, width, height,
+    painter.drawText(x, y+(height-fontMetrics().height())/2, width, height,
                      Qt::AlignRight, QString::number(block.blockNumber() + 1));
     if(isCurrentLine)
     {

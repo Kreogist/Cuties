@@ -12,12 +12,20 @@ public:
     void setPanelWidth(int lineNumberPanelWidth);
 
 signals:
+    void requireFoldStartAt(int blockIndex);
+    void requireUnfoldStartAt(int blockIndex);
 
 public slots:
 
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 private:
-    QPixmap foldMark, foldEndMark;
+    QPixmap foldMark, foldEndMark, foldedMark;
     QPixmap compileErrorMark;
+    QPoint pressedPos;
+    bool isPressed=false;
     int foldMarkWidth, foldMarkHeight;
     int errorMarkWidth, errorMarkHeight;
 };

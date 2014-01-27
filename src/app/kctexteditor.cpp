@@ -88,6 +88,10 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(panelManager, SIGNAL(requirePaintPanel(KCTextPanel*,QPaintEvent*)),
             this, SLOT(panelPaintEvent(KCTextPanel*,QPaintEvent*)));
+    connect(unibodyPanel, SIGNAL(requireFoldStartAt(int)),
+            this, SLOT(foldCode(int)));
+    connect(unibodyPanel, SIGNAL(requireUnfoldStartAt(int)),
+            this, SLOT(unfoldCode(int)));
 
     updateLineNumberAreaWidth(0);
 }
@@ -1333,6 +1337,45 @@ void KCTextEditor::updateLineNumberArea(const QRect &rect, int dy)
     }
 }
 
+void KCTextEditor::foldCode(int startFoldBlockIndex)
+{
+    QTextBlock foldBlock=document()->findBlockByNumber(startFoldBlockIndex);
+    KCTextBlockData *data=static_cast<KCTextBlockData *>(foldBlock.userData());
+    int startCodeLevel=data->getCodeLevel();
+    foldBlock=foldBlock.next();
+    while(foldBlock.isValid())
+    {
+        data=static_cast<KCTextBlockData *>(foldBlock.userData());
+        if(data->getCodeLevel()==startCodeLevel)
+        {
+            break;
+        }
+        foldBlock.setVisible(false);
+        foldBlock=foldBlock.next();
+    }
+    hide();
+    show();
+    panelManager->update();
+}
+
+void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
+{
+    QTextBlock foldBlock=document()->findBlockByNumber(startUnfoldBlockIndex);
+    KCTextBlockData *data=static_cast<KCTextBlockData *>(foldBlock.userData());
+    data->setHasFolded(false);
+    foldBlock=foldBlock.next();
+    while(foldBlock.isValid() && (!foldBlock.isVisible()))
+    {
+        data=static_cast<KCTextBlockData *>(foldBlock.userData());
+        data->setHasFolded(false);
+        foldBlock.setVisible(true);
+        foldBlock=foldBlock.next();
+    }
+    hide();
+    show();
+    panelManager->update();
+}
+
 void KCTextEditor::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
@@ -1352,17 +1395,16 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     int top=(int)blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom=top+(int)blockBoundingRect(block).height();
     panel->setFirstBlock(block);
-    while (top <= event->rect().bottom())
+    while (block.isValid() && top <= event->rect().bottom())
     {
         if (block.isVisible() && bottom >= event->rect().top())
         {
-            panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount()+1,
+            panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount(),
                                block, textCursor());
         }
-        if(!block.next().isValid())
+        if(block.next().isValid())
         {
             panel->setLastBlock(block);
-            return;
         }
         block=block.next();
         top=bottom;
