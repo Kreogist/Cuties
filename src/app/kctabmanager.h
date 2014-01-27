@@ -106,6 +106,7 @@ private slots:
     void setTabCloseable(bool newValue);
     void popupTabMenu(const QPoint &point);
     void browseCurrentFile();
+    void copyFilePathToClipboard();
 
 private:
     void createTabMenu();
@@ -119,6 +120,7 @@ private:
     {
         closeTab,
         closeOtherTab,
+        copyFilePath,
         browseFile,
         TabMenuActionCount
     };

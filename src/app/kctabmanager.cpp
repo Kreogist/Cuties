@@ -17,6 +17,7 @@
  *  along with Kreogist-Cuties. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QClipboard>
 #include <QToolButton>
 #include <QApplication>
 
@@ -582,6 +583,7 @@ void KCTabManager::retranslate()
 {
     tabMenuActionCaption[closeTab]=tr("Close Tab");
     tabMenuActionCaption[closeOtherTab]=tr("Close Other Tabs");
+    tabMenuActionCaption[copyFilePath]=tr("Copy File Path to Clipboard");
     tabMenuActionCaption[browseFile]=tr("Browse File");
 }
 
@@ -665,6 +667,15 @@ void KCTabManager::browseCurrentFile()
     globalInstance->showInGraphicalShell(currentEditor->getFilePath());
 }
 
+void KCTabManager::copyFilePathToClipboard()
+{
+    QString currentFilePath=currentEditor->getFilePath();
+#ifdef Q_OS_WIN32
+    currentFilePath.replace("/","\\");
+#endif
+    qApp->clipboard()->setText(currentFilePath);
+}
+
 void KCTabManager::createTabMenu()
 {
     tabMenu=new KCNormalContentMenu(this);
@@ -678,6 +689,8 @@ void KCTabManager::createTabMenu()
             this, SLOT(closeCurrentTab()));
     connect(tabMenuActionItem[closeOtherTab], SIGNAL(triggered()),
             this, SLOT(closeAllOtherTab()));
+    connect(tabMenuActionItem[copyFilePath], SIGNAL(triggered()),
+            this, SLOT(copyFilePathToClipboard()));
     connect(tabMenuActionItem[browseFile], SIGNAL(triggered()),
             this, SLOT(browseCurrentFile()));
 }

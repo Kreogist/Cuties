@@ -29,7 +29,6 @@
 #include "kcgeneralconfigure.h"
 
 #include "kclanguagemode.h"
-#include "kcmarkpanel.h"
 
 KCLanguageMode::KCLanguageMode(QWidget *parent) :
     QObject(parent)
