@@ -1353,9 +1353,10 @@ void KCTextEditor::foldCode(int startFoldBlockIndex)
         foldBlock.setVisible(false);
         foldBlock=foldBlock.next();
     }
+    panelManager->update();
+    update();
     hide();
     show();
-    panelManager->update();
 }
 
 void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
@@ -1371,9 +1372,10 @@ void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
         foldBlock.setVisible(true);
         foldBlock=foldBlock.next();
     }
+    panelManager->update();
+    update();
     hide();
     show();
-    panelManager->update();
 }
 
 void KCTextEditor::resizeEvent(QResizeEvent *e)
