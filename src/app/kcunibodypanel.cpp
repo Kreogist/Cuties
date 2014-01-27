@@ -28,7 +28,6 @@ void KCUnibodyPanel::drawContent(int x,
                                  QTextCursor cursor)
 {
     Q_UNUSED(x);
-    Q_UNUSED(width);
     Q_UNUSED(cursor);
     KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
     QPainter painter(this);
@@ -36,7 +35,7 @@ void KCUnibodyPanel::drawContent(int x,
     {
         if(data->getHasError())
         {
-            painter.drawPixmap((height-errorMarkWidth)/2,
+            painter.drawPixmap((width-errorMarkWidth)/2,
                                 y+(height-errorMarkHeight)/2,
                                 errorMarkWidth,
                                 errorMarkHeight,
@@ -45,7 +44,7 @@ void KCUnibodyPanel::drawContent(int x,
 
         if(data->getCodeLevelUp())
         {
-            painter.drawPixmap((height-foldMarkWidth)/2,
+            painter.drawPixmap((width-foldMarkWidth)/2,
                                 y+(height-foldMarkHeight)/2,
                                 foldMarkWidth,
                                 foldMarkHeight,

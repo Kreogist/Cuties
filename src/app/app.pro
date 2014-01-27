@@ -71,7 +71,6 @@ SOURCES += \
     kclanguagemode.cpp \
     kclinenumpanel.cpp \
     kcmainwindow.cpp \
-    kcmarkpanel.cpp \
     kcmessagebox.cpp \
     kcpanel.cpp \
     kcpascalhighlighter.cpp \
@@ -161,7 +160,6 @@ HEADERS += \
     kclanguagemode.h \
     kclinenumpanel.h \
     kcmainwindow.h \
-    kcmarkpanel.h \
     kcmessagebox.h \
     kcpanel.h \
     kcpascalhighlighter.h \
