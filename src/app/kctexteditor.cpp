@@ -1352,11 +1352,11 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     int top=(int)blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom=top+(int)blockBoundingRect(block).height();
     panel->setFirstBlock(block);
-    while (block.isValid() && top <= event->rect().bottom())
+    while (top <= event->rect().bottom())
     {
         if (block.isVisible() && bottom >= event->rect().top())
         {
-            panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount(),
+            panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount()+1,
                                block, textCursor());
         }
         if(!block.next().isValid())
