@@ -65,9 +65,6 @@ void KCUnibodyPanel::drawContent(int x,
                                    foldMark);
             }
         }
-        //Debug
-        painter.drawText(x, y+(height-fontMetrics().height())/2, width, height,
-                         Qt::AlignRight, QString::number(data->getCodeLevel()));
     }
 }
 
@@ -103,8 +100,6 @@ void KCUnibodyPanel::mouseReleaseEvent(QMouseEvent *event)
                 if(currentRect.contains(pressedPos) &&
                    currentRect.contains(event->pos()))
                 {
-                    qDebug()<<block.blockNumber()<<
-                               data->getCodeLevelUp();
                     if(data->getCodeLevelUp())
                     {
                         if(data->getHasFolded())
