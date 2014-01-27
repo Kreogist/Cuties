@@ -77,12 +77,12 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 
     panelManager=new KCTextPanelManager(this);
 
+    debugMarkPanel=new KCDebugMarkPanel(this);
+    panelManager->addPanel(debugMarkPanel);
     lineNumberPanel=new KCLineNumberPanel(this);
     panelManager->addPanel(lineNumberPanel);
     unibodyPanel=new KCUnibodyPanel(this);
     panelManager->addPanel(unibodyPanel);
-    debugMarkPanel=new KCDebugMarkPanel(this);
-    panelManager->addPanel(debugMarkPanel);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
@@ -1287,6 +1287,16 @@ void KCTextEditor::zoomOut(int range)
     zoomIn(-range);
 }
 
+void KCTextEditor::resetDebugCursor()
+{
+    debugMarkPanel->resetDebugCursor();
+}
+
+void KCTextEditor::setDebugCursor(int lineNumber)
+{
+    debugMarkPanel->setDebugCursor(lineNumber);
+}
+
 int KCTextEditor::lineNumberPanelWidth()
 {
     int digits = 1;
@@ -1346,13 +1356,17 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     {
         if (block.isVisible() && bottom >= event->rect().top())
         {
-            panel->drawContent(0, top, panel->width(), fontMetrics().height(),
+            panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount(),
                                block, textCursor());
+        }
+        if(!block.next().isValid())
+        {
+            panel->setLastBlock(block);
+            return;
         }
         block=block.next();
         top=bottom;
         bottom=top+(int)blockBoundingRect(block).height();
         ++blockNumber;
     }
-    panel->setLastBlock(block);
 }

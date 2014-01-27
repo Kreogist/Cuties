@@ -185,8 +185,8 @@ GdbController *KCLanguageMode::startDebug(int lineNumber)
     }
     gdbControllerInstance->execRun();
 
-    connect(m_parent->markPanel,&KCMarkPanel::markSetted,
-            this,&KCLanguageMode::setBreakPointAtLine);
+    /*connect(m_parent->markPanel,&KCMarkPanel::markSetted,
+            this,&KCLanguageMode::setBreakPointAtLine);*/
 
     return gdbControllerInstance;
 }

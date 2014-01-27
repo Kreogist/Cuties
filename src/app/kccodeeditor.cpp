@@ -38,7 +38,6 @@
 
 #include "kctexteditor.h"
 #include "kclinenumpanel.h"
-#include "kcmarkpanel.h"
 #include "kcsearchwindow.h"
 #include "kcreplacewindow.h"
 
@@ -51,23 +50,14 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setContentsMargins(0,0,0,0);
 
-    replaceLayout=new QVBoxLayout(this);
-    replaceLayout->setContentsMargins(0,0,0,0);
-    replaceLayout->setSpacing(0);
-    setLayout(replaceLayout);
-
-    mainLayout=new QHBoxLayout();
+    mainLayout=new QVBoxLayout(this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
-
-    markPanel=new KCMarkPanel(this);
-    mainLayout->addWidget(markPanel);
+    setLayout(mainLayout);
 
     editor=new KCTextEditor(this);
-    markPanel->setTextEditor(editor);
 
     mainLayout->addWidget(editor);
-    replaceLayout->addLayout(mainLayout);
 
     currentCompileProgress=new KCCodeCompileProgress(editor);
     currentCompileProgress->hide();
@@ -75,7 +65,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     searchBar->hide();
     replaceBar=new KCReplaceWindow(this);
     replaceBar->hide();
-    replaceLayout->addWidget(replaceBar);
+    mainLayout->addWidget(replaceBar);
 
     connect(editor->document(), &QTextDocument::modificationChanged,
             this, &KCCodeEditor::onModificationChanged);
@@ -119,11 +109,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 
     cacheNewFileMode=false;
     debugging=false;
-}
-
-KCCodeEditor::~KCCodeEditor()
-{
-    mainLayout->deleteLater();
 }
 
 void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settings)
@@ -190,7 +175,7 @@ void KCCodeEditor::setDebugging(bool value)
     debugging = value;
     if(!debugging)
     {
-        markPanel->resetDebugCursor();
+        editor->resetDebugCursor();
     }
 }
 
@@ -490,7 +475,7 @@ void KCCodeEditor::onDebugJumpLine(int lineNum)
 {
     int realLineNum=lineNum-1;
     setDocumentCursor(realLineNum, 0);
-    markPanel->setDebugCursor(realLineNum);
+    editor->setDebugCursor(realLineNum);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)

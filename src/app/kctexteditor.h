@@ -59,7 +59,8 @@ public:
     void setSpacePerTab(int value);
     void zoomIn(int range = 1);
     void zoomOut(int range = 1);
-
+    void resetDebugCursor();
+    void setDebugCursor(int lineNumber);
     int lineNumberPanelWidth();
 
 signals:

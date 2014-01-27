@@ -25,9 +25,9 @@ void KCDebugMarkPanel::drawContent(int x, int y, int width, int height, QTextBlo
     {
         markUnit markInfo=data->getMarkInfo();
         QPoint markBegin(x,y);
-        markInfo.markRect.setTopLeft(markBegin);
-        markInfo.markRect.setWidth(width);
-        markInfo.markRect.setHeight(height);
+        markInfo.rect.setTopLeft(markBegin);
+        markInfo.rect.setWidth(width);
+        markInfo.rect.setHeight(height);
         data->setMarkInfo(markInfo);
 
         if(markInfo.marked)
@@ -56,6 +56,17 @@ void KCDebugMarkPanel::setPanelWidth(int lineNumberPanelWidth)
     return;
 }
 
+void KCDebugMarkPanel::setDebugCursor(int lineNum)
+{
+    debugCursorLine=lineNum;
+    update();
+}
+
+void KCDebugMarkPanel::resetDebugCursor()
+{
+    setDebugCursor(-1);
+}
+
 void KCDebugMarkPanel::mousePressEvent(QMouseEvent *event)
 {
     if(event->buttons() == Qt::LeftButton)
@@ -63,6 +74,7 @@ void KCDebugMarkPanel::mousePressEvent(QMouseEvent *event)
         isPressed=true;
         pressedPos=event->pos();
     }
+    QWidget::mousePressEvent(event);
 }
 
 void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
@@ -78,7 +90,7 @@ void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
             if(data !=NULL)
             {
                 markUnit markInfo=data->getMarkInfo();
-                if(markInfo.markRect.contains(pressedPos,true))
+                if(markInfo.rect.contains(pressedPos,true))
                 {
                     markInfo.marked^=1;   //exchange the state
                     data->setMarkInfo(markInfo);
@@ -89,4 +101,5 @@ void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
         }
         isPressed=false;
     }
+    QWidget::mouseReleaseEvent(event);
 }

@@ -38,7 +38,6 @@ class KCSearchWindow;
 class KCReplaceWindow;
 class KCLanguageMode;
 class KCTextEditor;
-class KCMarkPanel;
 class KCLinenumPanel;
 class KCSearchWidget;
 
@@ -47,7 +46,6 @@ class KCCodeEditor : public QWidget
     Q_OBJECT
 public:
     explicit KCCodeEditor(QWidget *parent = 0);
-    ~KCCodeEditor();
 
     struct KCCodeEditorSettings
     {
@@ -149,10 +147,8 @@ private:
 
     KCCodeCompileProgress *currentCompileProgress;
 
-    QVBoxLayout *replaceLayout;
-    QHBoxLayout *mainLayout;
+    QVBoxLayout *mainLayout;
     KCTextEditor *editor;
-    KCMarkPanel *markPanel;
 
     QString filePath;
     QString execFileName;
