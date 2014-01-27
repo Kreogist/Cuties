@@ -188,7 +188,6 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
     QTextBlock prevBlock=currentBlock().previous();
 
     int baseLevel=0;
-    bool levelUp=false, levelDown=false;
     if(prevBlock.isValid())
     {
         KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());

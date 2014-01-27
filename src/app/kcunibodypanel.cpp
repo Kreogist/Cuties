@@ -97,7 +97,7 @@ void KCUnibodyPanel::mouseReleaseEvent(QMouseEvent *event)
         for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
         {
             KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-            if(data!=NULL)
+            if(block.isVisible() && data!=NULL)
             {
                 QRect currentRect=data->getCodeLevelRect();
                 if(currentRect.contains(pressedPos) &&
