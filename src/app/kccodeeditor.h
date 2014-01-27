@@ -39,7 +39,6 @@ class KCReplaceWindow;
 class KCLanguageMode;
 class KCTextEditor;
 class KCMarkPanel;
-class KCSmartPanel;
 class KCLinenumPanel;
 class KCSearchWidget;
 
@@ -154,7 +153,6 @@ private:
     QHBoxLayout *mainLayout;
     KCTextEditor *editor;
     KCMarkPanel *markPanel;
-    //KCSmartPanel *smartPanel;
 
     QString filePath;
     QString execFileName;

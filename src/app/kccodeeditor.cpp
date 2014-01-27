@@ -39,7 +39,6 @@
 #include "kctexteditor.h"
 #include "kclinenumpanel.h"
 #include "kcmarkpanel.h"
-#include "kcsmartpanel.h"
 #include "kcsearchwindow.h"
 #include "kcreplacewindow.h"
 

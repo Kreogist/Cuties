@@ -40,6 +40,7 @@ struct parenthesesInfo
 struct markUnit
 {
     QRect rect;
+    QRect markRect;
     bool marked;
     markUnit()
     {

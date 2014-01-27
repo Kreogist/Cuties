@@ -202,7 +202,7 @@ void KCLanguageMode::stopDebug()
     {
         gdbControllerInstance->quitGDB();
     }
-    //compilerConnectionHandles.disConnectAll();
+    compilerConnectionHandles.disConnectAll();
 }
 
 void KCLanguageMode::onCompileFinished(bool hasError)

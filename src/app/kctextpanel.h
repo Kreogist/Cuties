@@ -18,6 +18,10 @@ public:
                              QTextBlock block,
                              QTextCursor textCursor)=0;
     virtual void setPanelWidth(int lineNumberPanelWidth)=0;
+    QTextBlock getFirstBlock() const;
+    void setFirstBlock(const QTextBlock &value);
+    QTextBlock getLastBlock() const;
+    void setLastBlock(const QTextBlock &value);
 
 signals:
     void requireRepaintLineNumber(KCTextPanel *panel,
@@ -25,6 +29,8 @@ signals:
 
 protected:
     void paintEvent(QPaintEvent *event);
+    QTextBlock firstBlock;
+    QTextBlock lastBlock;
 
 };
 #endif // KCTEXTPANEL_H

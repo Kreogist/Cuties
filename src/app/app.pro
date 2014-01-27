@@ -101,7 +101,6 @@ SOURCES += \
     textcharformatmap.cpp \
     kcstatusrecorder.cpp \
     kcdocumentrecorder.cpp \
-    kcsmartpanel.cpp \
     kcmailreports.cpp \
     kcmailprocessobject.cpp \
     kcmainmenu.cpp \
@@ -114,7 +113,8 @@ SOURCES += \
     kctextpanel.cpp \
     kctextpanelmanager.cpp \
     kclinenumberpanel.cpp \
-    kcunibodypanel.cpp
+    kcunibodypanel.cpp \
+    kcdebugmarkpanel.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -191,7 +191,6 @@ HEADERS += \
     textcharformatmap.h \
     kcstatusrecorder.h \
     kcdocumentrecorder.h \
-    kcsmartpanel.h \
     kcmailreports.h \
     kcmailprocessobject.h \
     kcmainmenu.h \
@@ -204,7 +203,8 @@ HEADERS += \
     kctextpanel.h \
     kctextpanelmanager.h \
     kclinenumberpanel.h \
-    kcunibodypanel.h
+    kcunibodypanel.h \
+    kcdebugmarkpanel.h
 
 
 # Enable C++11

@@ -37,6 +37,7 @@
 #include "kctextpanelmanager.h"
 #include "kclinenumberpanel.h"
 #include "kcunibodypanel.h"
+#include "kcdebugmarkpanel.h"
 
 class KCClipboard;
 
@@ -160,6 +161,7 @@ private:
     KCTextPanelManager *panelManager;
     KCLineNumberPanel *lineNumberPanel;
     KCUnibodyPanel *unibodyPanel;
+    KCDebugMarkPanel *debugMarkPanel;
 };
 
 #endif // CODEEDITOR_H

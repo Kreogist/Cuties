@@ -81,6 +81,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     panelManager->addPanel(lineNumberPanel);
     unibodyPanel=new KCUnibodyPanel(this);
     panelManager->addPanel(unibodyPanel);
+    debugMarkPanel=new KCDebugMarkPanel(this);
+    panelManager->addPanel(debugMarkPanel);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
@@ -1339,7 +1341,7 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     int blockNumber=block.blockNumber();
     int top=(int)blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom=top+(int)blockBoundingRect(block).height();
-
+    panel->setFirstBlock(block);
     while (block.isValid() && top <= event->rect().bottom())
     {
         if (block.isVisible() && bottom >= event->rect().top())
@@ -1352,4 +1354,5 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
         bottom=top+(int)blockBoundingRect(block).height();
         ++blockNumber;
     }
+    panel->setLastBlock(block);
 }
