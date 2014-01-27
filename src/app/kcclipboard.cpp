@@ -20,7 +20,10 @@
 
 #include <QClipboard>
 #include <QApplication>
+#include <QRegularExpression>
 #include <QDebug>
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 #include "kcclipboard.h"
 
@@ -31,45 +34,22 @@ KCClipboard::KCClipboard()
     clipboardTextsModel=new QStandardItemModel(this);
     clipboardTextsModelRoot=clipboardTextsModel->invisibleRootItem();
 
-    ignoreSignal=false;
-    maxDataCount=10;
+    systemClipboard=qApp->clipboard();
 
-    connect(qApp->clipboard(),&QClipboard::dataChanged,
+    connect(systemClipboard,&QClipboard::dataChanged,
             this,&KCClipboard::onSystemClipboardChanged);
 }
 
 KCClipboard *KCClipboard::getInstance()
 {
-    return instance==nullptr?
-           (instance=new KCClipboard):
-           instance;
+    return instance==nullptr?instance=new KCClipboard:instance;
 }
 
 void KCClipboard::onSystemClipboardChanged()
 {
     if(!ignoreSignal)
     {
-        QClipboard *_clipboard=qApp->clipboard();
-        QString _text=_clipboard->text();
-        QString _caption;
-        int firstNextLineChar=_text.indexOf("\n");
-        if(firstNextLineChar!=-1)
-        {
-            _caption=_text.left(firstNextLineChar) + "...";
-        }
-        else
-        {
-            _caption=_text;
-        }
-
-        QStandardItem *clipItem=new QStandardItem(_caption);
-        clipItem->setEditable(false);
-        clipItem->setToolTip(_text);
-        if(clipboardTextsModelRoot->rowCount() >= maxDataCount)
-        {
-            clipboardTextsModelRoot->removeRow(maxDataCount - 1);
-        }
-        clipboardTextsModelRoot->insertRow(0, clipItem);
+        addToClipboardStack(systemClipboard->text());
     }
     else
     {
@@ -87,11 +67,11 @@ void KCClipboard::setClipboardTextsModel(QStandardItemModel *value)
     clipboardTextsModel = value;
 }
 
-QString KCClipboard::getHistoryClipboardText(int ItemID)
+QString KCClipboard::getHistoryClipboardText(int itemIndex)
 {
-    QString newClipData=clipboardTextsModel->item(ItemID)->toolTip();
+    QString newClipData=clipboardTextsModel->item(itemIndex)->toolTip();
     ignoreSignal=true;
-    qApp->clipboard()->setText(newClipData);
+    systemClipboard->setText(newClipData);
     return newClipData;
 }
 
@@ -111,4 +91,28 @@ void KCClipboard::setMaxDataCount(int value)
         while(clipboardTextsModelRoot->rowCount() > value);
     }
     maxDataCount = value;
+}
+
+void KCClipboard::addToClipboardStack(QString _text)
+{
+    QString _caption;
+    int firstChar=_text.indexOf(QRegularExpression("\\S"));
+    if(firstChar!=-1)
+    {
+        _caption=_text.mid(firstChar);
+    }
+    firstChar=_caption.indexOf("\n"); //firstChar now becomes firstNextLineChar.
+    if(firstChar!=-1)
+    {
+        _caption=_caption.left(firstChar-1)+"...";
+    }
+
+    QStandardItem *clipItem=new QStandardItem(_caption);
+    clipItem->setEditable(false);
+    clipItem->setToolTip(_text);
+    if(clipboardTextsModelRoot->rowCount() >= maxDataCount)
+    {
+        clipboardTextsModelRoot->removeRow(maxDataCount - 1);
+    }
+    clipboardTextsModelRoot->insertRow(0, clipItem);
 }

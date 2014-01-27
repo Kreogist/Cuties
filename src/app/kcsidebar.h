@@ -47,6 +47,7 @@ public:
 
 signals:
     void requiredInsertText(QString insertText);
+    void requireSetCurrentEditorFocus();
 
 private slots:
     void dblClickClipboardItems(QModelIndex ItemID);
@@ -113,6 +114,7 @@ public:
 signals:
     void historyRequiredOpenFiles(QString filePath);
     void clipRequiredInsertText(QString insertText);
+    void requireSetCurrentEditorFocus();
     void expandRequest();
     void foldRequest();
 
@@ -161,6 +163,7 @@ public:
 signals:
     void historyRequiredOpenFiles(QString filePath);
     void clipboardRequiredInsertText(QString insertText);
+    void requireSetCurrentEditorFocus();
 
 public slots:
     void retranslate();

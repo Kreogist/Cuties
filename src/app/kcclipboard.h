@@ -22,11 +22,10 @@
 
 #include <QObject>
 #include <QString>
-#include <QStringList>
 
-#include <QStandardItemModel>
-#include <QStandardItem>
-
+class QStandardItemModel;
+class QStandardItem;
+class QClipboard;
 
 class KCClipboard : public QObject
 {
@@ -36,10 +35,11 @@ public:
 
     QStandardItemModel *getClipboardTextsModel() const;
     void setClipboardTextsModel(QStandardItemModel *value);
-    QString getHistoryClipboardText(int ItemID);
+    QString getHistoryClipboardText(int itemIndex);
 
     int getMaxDataCount();
     void setMaxDataCount(int value);
+    void addToClipboardStack(QString _text);
 
 signals:
 
@@ -49,12 +49,13 @@ public slots:
 private:
     KCClipboard();
     static KCClipboard *instance;
-    int maxDataCount;
 
+    int maxDataCount=10;
     QStandardItemModel *clipboardTextsModel;
     QStandardItem *clipboardTextsModelRoot;
 
-    bool ignoreSignal;
+    bool ignoreSignal=false;
+    QClipboard *systemClipboard;
 };
 
 #endif // KCCLIPBOARD_H

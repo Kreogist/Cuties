@@ -35,6 +35,7 @@ KCClipboardHistoryStack::KCClipboardHistoryStack(QWidget *parent) :
 void KCClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
 {
     emit requiredInsertText(KCClipboard::getInstance()->getHistoryClipboardText(ItemID.row()));
+    emit requireSetCurrentEditorFocus();
 }
 
 KCHistoryStack::KCHistoryStack(QWidget *parent) :
@@ -202,6 +203,8 @@ KCSideBarContent::KCSideBarContent(QWidget *parent) :
     contents->addWidget(clipboardStack);
     connect(clipboardStack, SIGNAL(requiredInsertText(QString)),
             this, SIGNAL(clipRequiredInsertText(QString)));
+    connect(clipboardStack, SIGNAL(requireSetCurrentEditorFocus()),
+            this, SIGNAL(requireSetCurrentEditorFocus()));
 }
 
 KCSideBarContent::~KCSideBarContent()
@@ -315,6 +318,8 @@ KCSideBar::KCSideBar(QWidget *parent) :
             this, SIGNAL(historyRequiredOpenFiles(QString)));
     connect(centralWidget, SIGNAL(clipRequiredInsertText(QString)),
             this, SIGNAL(clipboardRequiredInsertText(QString)));
+    connect(centralWidget, SIGNAL(requireSetCurrentEditorFocus()),
+            this, SIGNAL(requireSetCurrentEditorFocus()));
     connect(centralWidget, SIGNAL(expandRequest()),
             this, SLOT(expandAnime()));
     connect(centralWidget, SIGNAL(foldRequest()),

@@ -712,6 +712,8 @@ void MainWindow::createDocks()
             tabManager, SLOT(openAndJumpTo(QString)));
     connect(sideBar, SIGNAL(clipboardRequiredInsertText(QString)),
             tabManager, SLOT(insertToCurrentEditor(QString)));
+    connect(sideBar, SIGNAL(requireSetCurrentEditorFocus()),
+            tabManager, SLOT(setFocus()));
     connect(tabManager, &KCTabManager::tabNonClear,
             sideBar, &KCSideBar::show);
     connect(tabManager, &KCTabManager::tabClear,

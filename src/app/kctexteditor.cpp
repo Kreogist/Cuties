@@ -81,7 +81,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
 
-    panelManager=new KCPanelManager(this);
+    //panelManager=new KCPanelManager(this);
 }
 
 void KCTextEditor::paintEvent(QPaintEvent *e)
@@ -584,9 +584,7 @@ void KCTextEditor::setUsingBlankInsteadTab(bool value)
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
 {
-    QString text=block.text();
-    int ret=text.indexOf(QRegularExpression("\\S"));
-    return ret;
+    return block.text().indexOf(QRegularExpression("\\S"));
 }
 
 /*!
