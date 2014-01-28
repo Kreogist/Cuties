@@ -48,7 +48,28 @@ void KCLineNumberPanel::drawContent(int x,
 
 void KCLineNumberPanel::setPanelWidth(int lineNumberPanelWidth)
 {
-    setFixedWidth(lineNumberPanelWidth);
+    if(isVisible())
+    {
+        setFixedWidth(lineNumberPanelWidth);
+    }
+    else
+    {
+        currentWidth=lineNumberPanelWidth;
+        setFixedWidth(0);
+    }
+}
+
+void KCLineNumberPanel::setVisible(bool visible)
+{
+    KCTextPanel::setVisible(visible);
+    if(visible)
+    {
+        setFixedWidth(currentWidth);
+    }
+    else
+    {
+        setFixedWidth(0);
+    }
 }
 
 void KCLineNumberPanel::mousePressEvent(QMouseEvent *event)

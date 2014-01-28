@@ -117,7 +117,7 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setTabStopWidth(fontMetrics().width(' ')*settings.tabSpace);
     editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
     editor->setSpacePerTab(settings.spacePerTab);
-    //linePanel->setVisible(settings.lineNumberPanelVisible);
+    editor->setLinePanelVisible(settings.lineNumberPanelVisible);
 }
 
 bool KCCodeEditor::getOverwriteMode()

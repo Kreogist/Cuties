@@ -62,6 +62,7 @@ public:
     void resetDebugCursor();
     void setDebugCursor(int lineNumber);
     int lineNumberPanelWidth();
+    void setLinePanelVisible(bool value);
 
 signals:
     void requireHideOthers();

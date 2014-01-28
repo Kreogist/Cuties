@@ -1281,6 +1281,12 @@ int KCTextEditor::lineNumberPanelWidth()
     return space;
 }
 
+void KCTextEditor::setLinePanelVisible(bool value)
+{
+    lineNumberPanel->setVisible(value);
+    updateLineNumberAreaWidth(0);
+}
+
 void KCTextEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(panelManager->resizePanel(lineNumberPanelWidth()), 0, 0, 0);

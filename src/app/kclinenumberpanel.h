@@ -16,6 +16,7 @@ signals:
     void requireSelectLine(int blockNumber);
 
 public slots:
+    void setVisible(bool visible);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -25,6 +26,7 @@ private:
     QColor textColor;
     QPoint pressedPos;
     bool isPressed;
+    int currentWidth;
 };
 
 #endif // KCLINENUMBERPANEL_H
