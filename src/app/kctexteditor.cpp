@@ -1288,15 +1288,8 @@ void KCTextEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 
 void KCTextEditor::updateLineNumberArea(const QRect &rect, int dy)
 {
-    if(dy)
-    {
-        //panelManager->scroll(0, dy);
-    }
-    else
-    {
-        panelManager->update(0, rect.y(), panelManager->width(), rect.height());
-    }
-
+    Q_UNUSED(dy);
+    panelManager->update();
     if (rect.contains(viewport()->rect()))
     {
         updateLineNumberAreaWidth(0);

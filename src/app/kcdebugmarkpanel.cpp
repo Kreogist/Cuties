@@ -86,8 +86,8 @@ void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
             if(data!=NULL)
             {
                 QRect markRect=data->getRect();
-                if(markRect.contains(pressedPos,true) &&
-                   markRect.contains(event->pos(), true))
+                if(markRect.contains(pressedPos) &&
+                   markRect.contains(event->pos()))
                 {
                     markUnit markInfo=data->getMarkInfo();
                     markInfo.marked^=1;   //exchange the state

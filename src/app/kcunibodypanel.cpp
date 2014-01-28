@@ -98,8 +98,8 @@ void KCUnibodyPanel::mouseReleaseEvent(QMouseEvent *event)
             if(block.isVisible() && data!=NULL)
             {
                 QRect codeLevelRect=data->getRect();
-                if(codeLevelRect.contains(pressedPos, true) &&
-                   codeLevelRect.contains(event->pos(), true))
+                if(codeLevelRect.contains(pressedPos) &&
+                   codeLevelRect.contains(event->pos()))
                 {
                     codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
                     if(codeLevelInfo.codeLevelUp)
