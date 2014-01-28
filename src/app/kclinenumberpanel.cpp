@@ -20,6 +20,7 @@ void KCLineNumberPanel::drawContent(int x,
                                     KCTextBlockData *data,
                                     QTextCursor cursor)
 {
+    Q_UNUSED(data);
     QPainter painter(this);
     bool isCurrentLine=cursor.blockNumber()==block->blockNumber();
     if(isCurrentLine)

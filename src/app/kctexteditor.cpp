@@ -1353,7 +1353,8 @@ void KCTextEditor::selectBlock(int blockNumber)
 void KCTextEditor::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
-
+    updateHighlights();
+    updateSearchResults();
     QRect cr = contentsRect();
     panelManager->setGeometry(QRect(cr.left(),
                                     cr.top(),

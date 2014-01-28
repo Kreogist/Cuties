@@ -31,6 +31,7 @@ void KCUnibodyPanel::drawContent(int x,
                                  QTextCursor cursor)
 {
     Q_UNUSED(x);
+    Q_UNUSED(block)
     Q_UNUSED(cursor);
     if(data!=NULL)
     {

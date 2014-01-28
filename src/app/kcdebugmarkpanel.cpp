@@ -20,6 +20,7 @@ KCDebugMarkPanel::KCDebugMarkPanel(QWidget *parent) :
 void KCDebugMarkPanel::drawContent(int x, int y, int width, int height,
                                    QTextBlock *block, KCTextBlockData *data, QTextCursor cursor)
 {
+    Q_UNUSED(width);
     Q_UNUSED(cursor);
     QPainter painter(this);
     if(data!=NULL)
