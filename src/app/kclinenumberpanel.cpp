@@ -82,7 +82,7 @@ void KCLineNumberPanel::mouseReleaseEvent(QMouseEvent *event)
                 if(lineNumberRect.contains(pressedPos) &&
                    lineNumberRect.contains(event->pos()))
                 {
-                    emit requireGotoLineNumber(block.blockNumber());
+                    emit requireSelectLine(block.blockNumber());
                     break;
                 }
             }

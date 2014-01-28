@@ -89,6 +89,7 @@ public slots:
     void setWordWrap(QTextOption::WrapMode wrapMode);
     void setTheCursorWidth(int width);
     void setLineErrorState(QList<int> errorList);
+    void setCursorAtLine(int blockNumber);
 
 private slots:
     void updateSearchResults();

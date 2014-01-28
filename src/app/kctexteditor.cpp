@@ -84,16 +84,18 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     unibodyPanel=new KCUnibodyPanel(this);
     panelManager->addPanel(unibodyPanel);
 
-    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
-    connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
-    connect(panelManager, SIGNAL(requirePaintPanel(KCTextPanel*,QPaintEvent*)),
-            this, SLOT(panelPaintEvent(KCTextPanel*,QPaintEvent*)));
-    connect(unibodyPanel, SIGNAL(requireFoldStartAt(int)),
-            this, SLOT(foldCode(int)));
-    connect(unibodyPanel, SIGNAL(requireUnfoldStartAt(int)),
-            this, SLOT(unfoldCode(int)));
-    connect(lineNumberPanel, SIGNAL(requireGotoLineNumber(int)),
-            this, SLOT(selectBlock(int)));
+    connect(this, &KCTextEditor::blockCountChanged,
+            this, &KCTextEditor::updateLineNumberAreaWidth);
+    connect(this, &KCTextEditor::updateRequest,
+            this, &KCTextEditor::updateLineNumberArea);
+    connect(panelManager, &KCTextPanelManager::requirePaintPanel,
+            this, &KCTextEditor::panelPaintEvent);
+    connect(unibodyPanel, &KCUnibodyPanel::requireFoldStartAt,
+            this, &KCTextEditor::foldCode);
+    connect(unibodyPanel, &KCUnibodyPanel::requireUnfoldStartAt,
+            this, &KCTextEditor::unfoldCode);
+    connect(lineNumberPanel, &KCLineNumberPanel::requireSelectLine,
+            this, &KCTextEditor::selectBlock);
 
     updateLineNumberAreaWidth(0);
 }
@@ -1189,6 +1191,11 @@ void KCTextEditor::setLineErrorState(QList<int> errorList)
     }
 }
 
+void KCTextEditor::setCursorAtLine(int blockNumber)
+{
+    setCursorPosition(blockNumber,0);
+}
+
 /*!
  * \brief Set the vertical scroll bar value.
  * \param value The scroll bar value.
@@ -1352,6 +1359,7 @@ void KCTextEditor::selectBlock(int blockNumber)
                         QTextCursor::KeepAnchor,
                         selectedBlock.length()-1);
     setTextCursor(cursor);
+    setHorizontalScrollValue(0);
 }
 
 void KCTextEditor::resizeEvent(QResizeEvent *e)
