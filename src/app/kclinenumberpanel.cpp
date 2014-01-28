@@ -16,11 +16,12 @@ void KCLineNumberPanel::drawContent(int x,
                                     int y,
                                     int width,
                                     int height,
-                                    QTextBlock block,
+                                    QTextBlock *block,
+                                    KCTextBlockData *data,
                                     QTextCursor cursor)
 {
     QPainter painter(this);
-    bool isCurrentLine=cursor.blockNumber()==block.blockNumber();
+    bool isCurrentLine=cursor.blockNumber()==block->blockNumber();
     if(isCurrentLine)
     {
         QFont font=painter.font();
@@ -29,18 +30,11 @@ void KCLineNumberPanel::drawContent(int x,
 
         textColor.setRgb(255,255,255);
     }
-    KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-    QRect lineNumberRect;
-    QPoint lineNumberBegin(x, y);
-    lineNumberRect.setTopLeft(lineNumberBegin);
-    lineNumberRect.setWidth(width);
-    lineNumberRect.setHeight(height);
-    data->setLineNumberRect(lineNumberRect);
     QPen pen(painter.pen());
     pen.setColor(textColor);
     painter.setPen(pen);
     painter.drawText(x, y+(height-fontMetrics().height())/2, width, height,
-                     Qt::AlignRight, QString::number(block.blockNumber() + 1));
+                     Qt::AlignRight, QString::number(block->blockNumber() + 1));
     if(isCurrentLine)
     {
         QFont font=painter.font();
@@ -78,7 +72,7 @@ void KCLineNumberPanel::mouseReleaseEvent(QMouseEvent *event)
             KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
             if(block.isVisible() && data!=NULL)
             {
-                QRect lineNumberRect=data->getLineNumberRect();
+                QRect lineNumberRect=data->getRect();
                 if(lineNumberRect.contains(pressedPos) &&
                    lineNumberRect.contains(event->pos()))
                 {

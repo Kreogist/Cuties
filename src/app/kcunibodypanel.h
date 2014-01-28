@@ -8,7 +8,8 @@ class KCUnibodyPanel : public KCTextPanel
     Q_OBJECT
 public:
     explicit KCUnibodyPanel(QWidget *parent = 0);
-    void drawContent(int x, int y, int width, int height, QTextBlock block, QTextCursor cursor);
+    void drawContent(int x, int y, int width, int height,
+                     QTextBlock *block, KCTextBlockData *data, QTextCursor cursor);
     void setPanelWidth(int lineNumberPanelWidth);
 
 signals:

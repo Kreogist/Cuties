@@ -10,7 +10,8 @@ class KCDebugMarkPanel : public KCTextPanel
     Q_OBJECT
 public:
     explicit KCDebugMarkPanel(QWidget *parent = 0);
-    void drawContent(int x, int y, int width, int height, QTextBlock block, QTextCursor cursor);
+    void drawContent(int x, int y, int width, int height,
+                     QTextBlock *block, KCTextBlockData *data, QTextCursor cursor);
     void setPanelWidth(int lineNumberPanelWidth);
     void setDebugCursor(int lineNum);
     void resetDebugCursor();

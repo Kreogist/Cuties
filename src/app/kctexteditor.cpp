@@ -55,7 +55,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setPalette(pal);
     setFrameStyle(0);
 
-    lineColor = QColor(0x40,0x40,0x40,200);
+    lineColor = QColor(0x40,0x40,0x40);
     searchResultColor = QColor(98,147,221);
     searchResultColor = QColor(0x5A,0x86,0xCA);
     noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
@@ -100,12 +100,6 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     updateLineNumberAreaWidth(0);
 }
 
-void KCTextEditor::paintEvent(QPaintEvent *e)
-{   
-    QPlainTextEdit::paintEvent(e);
-    emit updated();
-}
-
 void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block)
 {
     KCTextBlockData *data=(KCTextBlockData *)block.userData();
@@ -115,7 +109,7 @@ void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block)
     {
         data->endUsingSearchDatas();
         generalSearch(block,height()/fontMetrics().lineSpacing()+2,true);    //search 50 lines
-        return;
+        data->beginUsingSearchDatas();
     }
     data->endUsingSearchDatas();
 }
@@ -1325,10 +1319,7 @@ void KCTextEditor::foldCode(int startFoldBlockIndex)
         foldBlock.setVisible(false);
         foldBlock=foldBlock.next();
     }
-    panelManager->update();
-    update();
-    hide();
-    show();
+    viewport()->update();
 }
 
 void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
@@ -1344,10 +1335,7 @@ void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
         foldBlock.setVisible(true);
         foldBlock=foldBlock.next();
     }
-    panelManager->update();
-    update();
-    hide();
-    show();
+    viewport()->update();
 }
 
 void KCTextEditor::selectBlock(int blockNumber)
@@ -1383,10 +1371,12 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     panel->setFirstBlock(block);
     while (block.isValid() && top <= event->rect().bottom())
     {
+        KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
+        data->setRect(blockBoundingGeometry(block).toAlignedRect());
         if (block.isVisible() && bottom >= event->rect().top())
         {
             panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount(),
-                               block, textCursor());
+                               &block, data, textCursor());
         }
         if(block.next().isValid())
         {

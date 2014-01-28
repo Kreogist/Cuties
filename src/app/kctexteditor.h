@@ -65,7 +65,6 @@ public:
 
 signals:
     void requireHideOthers();
-    void updated();
     void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);
     void matchedResult();
@@ -103,7 +102,7 @@ private slots:
     void selectBlock(int blockNumber);
 
 protected:
-    void paintEvent(QPaintEvent *e);
+    //void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);

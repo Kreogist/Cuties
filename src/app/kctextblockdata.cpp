@@ -233,12 +233,13 @@ void KCTextBlockData::setHasError(bool value)
     codeLevelInfo.hasError = value;
 }
 
-QRect KCTextBlockData::getLineNumberRect() const
+QRect KCTextBlockData::getRect() const
 {
-    return lineNumberRect;
+    return rect;
 }
 
-void KCTextBlockData::setLineNumberRect(const QRect &value)
+void KCTextBlockData::setRect(const QRect &value)
 {
-    lineNumberRect = value;
+    rect = value;
 }
+

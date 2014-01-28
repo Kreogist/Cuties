@@ -12,8 +12,10 @@ KCTextPanelManager::KCTextPanelManager(QWidget *parent) :
 
 void KCTextPanelManager::addPanel(KCTextPanel *panel)
 {
-    connect(panel, SIGNAL(requireRepaintLineNumber(KCTextPanel*,QPaintEvent*)),
-            this, SIGNAL(requirePaintPanel(KCTextPanel*,QPaintEvent*)));
+    connect(panel, &KCTextPanel::requireRepaintLineNumber,
+            this, &KCTextPanelManager::requirePaintPanel);
+    connect(panel, &KCTextPanel::requireUpdateAllPanel,
+            this, &KCTextPanelManager::updateAllPanel);
     layout->addWidget(panel);
 }
 
@@ -30,9 +32,8 @@ int KCTextPanelManager::resizePanel(int lineNumberPanelWidth)
     return managerWidth;
 }
 
-void KCTextPanelManager::paintEvent(QPaintEvent *event)
+void KCTextPanelManager::updateAllPanel()
 {
-    QWidget::paintEvent(event);
     int panelCount=layout->count();
     while(panelCount--)
     {

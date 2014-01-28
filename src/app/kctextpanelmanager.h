@@ -20,9 +20,9 @@ signals:
                            QPaintEvent *event);
 
 public slots:
+    void updateAllPanel();
 
 protected:
-    void paintEvent(QPaintEvent *event);
 
 private:
     QHBoxLayout *layout;

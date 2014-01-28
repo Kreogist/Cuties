@@ -17,31 +17,25 @@ KCDebugMarkPanel::KCDebugMarkPanel(QWidget *parent) :
     isPressed=false;
 }
 
-void KCDebugMarkPanel::drawContent(int x, int y, int width, int height, QTextBlock block, QTextCursor cursor)
+void KCDebugMarkPanel::drawContent(int x, int y, int width, int height,
+                                   QTextBlock *block, KCTextBlockData *data, QTextCursor cursor)
 {
     Q_UNUSED(cursor);
     QPainter painter(this);
-    KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
     if(data!=NULL)
     {
         markUnit markInfo=data->getMarkInfo();
-        QPoint markBegin(x,y);
-        markInfo.rect.setTopLeft(markBegin);
-        markInfo.rect.setWidth(width);
-        markInfo.rect.setHeight(height);
-        data->setMarkInfo(markInfo);
-
         if(markInfo.marked)
         {
             painter.drawPixmap(x,
-                                y+(height-markPanelHeight)/2,
-                                markPix.width(),
-                                markPanelHeight,
-                                markPix);
+                               y+(height-markPanelHeight)/2,
+                               markPix.width(),
+                               markPanelHeight,
+                               markPix);
         }
     }
 
-    if(block.blockNumber()==debugCursorLine)
+    if(block->blockNumber()==debugCursorLine)
     {
         painter.drawPixmap(x,
                             y+(height-debugArrow.height())/2,
@@ -90,10 +84,11 @@ void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
             KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
             if(data!=NULL)
             {
-                markUnit markInfo=data->getMarkInfo();
-                if(markInfo.rect.contains(pressedPos,true) &&
-                        markInfo.rect.contains(event->pos()))
+                QRect markRect=data->getRect();
+                if(markRect.contains(pressedPos,true) &&
+                   markRect.contains(event->pos(), true))
                 {
+                    markUnit markInfo=data->getMarkInfo();
                     markInfo.marked^=1;   //exchange the state
                     data->setMarkInfo(markInfo);
                     update();

@@ -26,21 +26,16 @@ void KCUnibodyPanel::drawContent(int x,
                                  int y,
                                  int width,
                                  int height,
-                                 QTextBlock block,
+                                 QTextBlock *block,
+                                 KCTextBlockData *data,
                                  QTextCursor cursor)
 {
     Q_UNUSED(x);
     Q_UNUSED(cursor);
-    KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
     if(data!=NULL)
     {
         QPainter painter(this);
         codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
-        QPoint codeLevelBegin(x, y);
-        codeLevelInfo.codeLevelRect.setTopLeft(codeLevelBegin);
-        codeLevelInfo.codeLevelRect.setWidth(width);
-        codeLevelInfo.codeLevelRect.setHeight(height);
-        data->setCodeLevelInfo(codeLevelInfo);
 
         if(codeLevelInfo.hasError)
         {
@@ -101,22 +96,25 @@ void KCUnibodyPanel::mouseReleaseEvent(QMouseEvent *event)
             KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
             if(block.isVisible() && data!=NULL)
             {
-                codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
-                if(codeLevelInfo.codeLevelRect.contains(pressedPos) &&
-                   codeLevelInfo.codeLevelRect.contains(event->pos()))
+                QRect codeLevelRect=data->getRect();
+                if(codeLevelRect.contains(pressedPos, true) &&
+                   codeLevelRect.contains(event->pos(), true))
                 {
+                    codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
                     if(codeLevelInfo.codeLevelUp)
                     {
                         if(codeLevelInfo.hasFolded)
                         {
                             //Unfold
                             emit requireUnfoldStartAt(block.blockNumber());
+                            emit requireUpdateAllPanel();
                             codeLevelInfo.hasFolded=false;
                         }
                         else
                         {
                             //Fold
                             emit requireFoldStartAt(block.blockNumber());
+                            emit requireUpdateAllPanel();
                             codeLevelInfo.hasFolded=true;
                         }
                         data->setCodeLevelInfo(codeLevelInfo);

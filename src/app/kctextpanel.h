@@ -6,6 +6,8 @@
 #include <QTextBlock>
 #include <QTextCursor>
 
+#include "kctextblockdata.h"
+
 class KCTextPanel : public QWidget
 {
     Q_OBJECT
@@ -15,7 +17,8 @@ public:
                              int y,
                              int width,
                              int height,
-                             QTextBlock block,
+                             QTextBlock *block,
+                             KCTextBlockData *data,
                              QTextCursor textCursor)=0;
     virtual void setPanelWidth(int lineNumberPanelWidth)=0;
     QTextBlock getFirstBlock() const;
@@ -26,6 +29,7 @@ public:
 signals:
     void requireRepaintLineNumber(KCTextPanel *panel,
                                   QPaintEvent *event);
+    void requireUpdateAllPanel();
 
 protected:
     void paintEvent(QPaintEvent *event);
