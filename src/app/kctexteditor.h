@@ -99,6 +99,7 @@ private slots:
     void updateLineNumberArea(const QRect &, int);
     void foldCode(int startFoldBlockIndex);
     void unfoldCode(int startUnfoldBlockIndex);
+    void selectBlock(int blockNumber);
 
 protected:
     void paintEvent(QPaintEvent *e);

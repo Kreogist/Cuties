@@ -12,11 +12,18 @@ public:
     void setPanelWidth(int lineNumberPanelWidth);
 
 signals:
+    void requireGotoLineNumber(int blockNumber);
 
 public slots:
 
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
 private:
     QColor textColor;
+    QPoint pressedPos;
+    bool isPressed;
 };
 
 #endif // KCLINENUMBERPANEL_H

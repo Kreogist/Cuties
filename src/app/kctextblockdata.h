@@ -111,6 +111,8 @@ public:
     bool getHasFolded() const;
     void setHasFolded(bool value);
     void setHasError(bool value);
+    QRect getLineNumberRect() const;
+    void setLineNumberRect(const QRect &value);
 
 private:
     unsigned long long int searchCode;
@@ -123,6 +125,7 @@ private:
     int quotationStatus;
     markUnit markInfo;
     codeLevelUnit codeLevelInfo;
+    QRect lineNumberRect;
 };
 
 #endif // KCTEXTBLOCKDATA_H

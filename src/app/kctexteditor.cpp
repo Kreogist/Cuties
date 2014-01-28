@@ -92,6 +92,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
             this, SLOT(foldCode(int)));
     connect(unibodyPanel, SIGNAL(requireUnfoldStartAt(int)),
             this, SLOT(unfoldCode(int)));
+    connect(lineNumberPanel, SIGNAL(requireGotoLineNumber(int)),
+            this, SLOT(selectBlock(int)));
 
     updateLineNumberAreaWidth(0);
 }
@@ -1339,6 +1341,17 @@ void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
     update();
     hide();
     show();
+}
+
+void KCTextEditor::selectBlock(int blockNumber)
+{
+    QTextCursor cursor=textCursor();
+    QTextBlock selectedBlock=document()->findBlockByNumber(blockNumber);
+    cursor.setPosition(selectedBlock.position());
+    cursor.movePosition(QTextCursor::NextCharacter,
+                        QTextCursor::KeepAnchor,
+                        selectedBlock.length()-1);
+    setTextCursor(cursor);
 }
 
 void KCTextEditor::resizeEvent(QResizeEvent *e)

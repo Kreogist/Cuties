@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <QPainter>
 
+#include "kctextblockdata.h"
+
 #include "kclinenumberpanel.h"
 
 KCLineNumberPanel::KCLineNumberPanel(QWidget *parent) :
@@ -27,6 +29,13 @@ void KCLineNumberPanel::drawContent(int x,
 
         textColor.setRgb(255,255,255);
     }
+    KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
+    QRect lineNumberRect;
+    QPoint lineNumberBegin(x, y);
+    lineNumberRect.setTopLeft(lineNumberBegin);
+    lineNumberRect.setWidth(width);
+    lineNumberRect.setHeight(height);
+    data->setLineNumberRect(lineNumberRect);
     QPen pen(painter.pen());
     pen.setColor(textColor);
     painter.setPen(pen);
@@ -45,4 +54,40 @@ void KCLineNumberPanel::drawContent(int x,
 void KCLineNumberPanel::setPanelWidth(int lineNumberPanelWidth)
 {
     setFixedWidth(lineNumberPanelWidth);
+}
+
+void KCLineNumberPanel::mousePressEvent(QMouseEvent *event)
+{
+    if(event->buttons() == Qt::LeftButton)
+    {
+        isPressed=true;
+        pressedPos=event->pos();
+    }
+    QWidget::mousePressEvent(event);
+}
+
+void KCLineNumberPanel::mouseReleaseEvent(QMouseEvent *event)
+{
+    if(isPressed)
+    {
+        QTextBlock block=getFirstBlock();
+        int lastBlockNumber=getLastBlock().blockNumber();
+
+        for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
+        {
+            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
+            if(block.isVisible() && data!=NULL)
+            {
+                QRect lineNumberRect=data->getLineNumberRect();
+                if(lineNumberRect.contains(pressedPos) &&
+                   lineNumberRect.contains(event->pos()))
+                {
+                    emit requireGotoLineNumber(block.blockNumber());
+                    break;
+                }
+            }
+        }
+        isPressed=false;
+    }
+    QWidget::mouseReleaseEvent(event);
 }
