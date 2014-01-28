@@ -164,6 +164,7 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
     searcherConnections+=connect(editor, &KCTextEditor::nomatchedResult,
                                  widget, &KCSearchWidget::setResultUnmatchStyle);
 }
+
 bool KCCodeEditor::getDebugging() const
 {
     return debugging;
@@ -254,7 +255,7 @@ void KCCodeEditor::redrawSmartPanel()
 
 void KCCodeEditor::showSearchBar()
 {
-    if(replaceBar->isVisible())
+    if(replaceBar->getConnected())
     {
         searcherConnections.disConnectAll();
         replaceBar->setConnected(false);
@@ -289,7 +290,7 @@ void KCCodeEditor::showSearchBar()
 
 void KCCodeEditor::showReplaceBar()
 {
-    if(searchBar->isVisible())
+    if(searchBar->getConnected())
     {
         searcherConnections.disConnectAll();
         searchBar->setConnected(false);

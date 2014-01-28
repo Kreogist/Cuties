@@ -182,8 +182,8 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
     }
 
     KCTextBlockData *data=static_cast<KCTextBlockData *>(currentBlockUserData());
-
     Q_ASSERT(data!=NULL);
+    codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
 
     QTextBlock prevBlock=currentBlock().previous();
 
@@ -192,7 +192,8 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
     {
         KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
         Q_ASSERT(prevData!=NULL);
-        baseLevel=prevData->getCodeLevel();
+        codeLevelUnit prevCodeLevelInfo=prevData->getCodeLevelInfo();
+        baseLevel=prevCodeLevelInfo.codeLevel;
 
         for(auto i=prevData->getFirstParenthesesInfo(),
             l=prevData->getEndParenthesesInfo();
@@ -208,18 +209,20 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
                 baseLevel--;
             }
         }
-        prevData->setCodeLevelUp(false);
-        prevData->setCodeLevelDown(false);
-        if(baseLevel>prevData->getCodeLevel())
+        prevCodeLevelInfo.codeLevelUp=false;
+        prevCodeLevelInfo.codeLevelDown=false;
+        if(baseLevel>prevCodeLevelInfo.codeLevel)
         {
-            prevData->setCodeLevelUp(true);
+            prevCodeLevelInfo.codeLevelUp=true;
         }
-        else if(baseLevel<prevData->getCodeLevel())
+        else if(baseLevel<prevCodeLevelInfo.codeLevel)
         {
-            prevData->setCodeLevelDown(true);
+            prevCodeLevelInfo.codeLevelDown=true;
         }
+        prevData->setCodeLevelInfo(prevCodeLevelInfo);
     }
-    data->setCodeLevel(baseLevel);
+    codeLevelInfo.codeLevel=baseLevel;
+    data->setCodeLevelInfo(codeLevelInfo);
 
     //Highlight single line comment
     if(data->getLineCommentPos()!=-1)

@@ -48,7 +48,7 @@ private:
     QPalette pal;
 
     QPropertyAnimation *statusAnime;
-    int destinationTop;
+    int destinationTop=0;
 };
 
 class KCMailReports : public QDialog

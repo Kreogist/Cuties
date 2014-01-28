@@ -90,10 +90,8 @@ protected:
     int valueChangedAlpha;
     int expandEndHeight;
     QTimeLine *fadeMeOut;
-    QTimeLine *expandAnimation;
-    QTimeLine *foldAnimation;
-    QTimeLine *showAnimation;
-    QTimeLine *hideAnimation;
+    QTimeLine *foldAnimation, *unfoldAnimation;
+    QTimeLine *showAnimation, *hideAnimation;
     QPalette pal;
     QColor backgroundColor;
     QVBoxLayout *editLayout;

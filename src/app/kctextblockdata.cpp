@@ -25,7 +25,6 @@
 KCTextBlockData::KCTextBlockData()
 {
     searchCode=0;
-    codeLevel=0;
     resetForSearch();
 }
 
@@ -169,16 +168,6 @@ QList<parenthesesInfo>::iterator KCTextBlockData::getEndParenthesesInfo()
     return parenthesesInfos.end();
 }
 
-void KCTextBlockData::setCodeLevel(const int &level)
-{
-    codeLevel=level;
-}
-
-int KCTextBlockData::getCodeLevel() const
-{
-    return codeLevel;
-}
-
 markUnit KCTextBlockData::getMarkInfo() const
 {
     return markInfo;
@@ -209,53 +198,37 @@ void KCTextBlockData::setQuotationStatus(int value)
     quotationStatus = value;
 }
 
-bool KCTextBlockData::getHasError() const
+codeLevelUnit KCTextBlockData::getCodeLevelInfo() const
 {
-    return hasError;
+    return codeLevelInfo;
 }
 
-void KCTextBlockData::setHasError(bool value)
+void KCTextBlockData::setCodeLevelInfo(const codeLevelUnit &value)
 {
-    hasError = value;
+    codeLevelInfo = value;
 }
 
-bool KCTextBlockData::getCodeLevelUp() const
+int KCTextBlockData::getCodeLevel() const
 {
-    return codeLevelUp;
+    return codeLevelInfo.codeLevel;
 }
 
-void KCTextBlockData::setCodeLevelUp(bool value)
+void KCTextBlockData::setCodeLevel(int value)
 {
-    codeLevelUp = value;
-}
-bool KCTextBlockData::getCodeLevelDown() const
-{
-    return codeLevelDown;
-}
-
-void KCTextBlockData::setCodeLevelDown(bool value)
-{
-    codeLevelDown = value;
-}
-
-QRect KCTextBlockData::getCodeLevelRect() const
-{
-    return codeLevelRect;
-}
-
-void KCTextBlockData::setCodeLevelRect(const QRect &value)
-{
-    codeLevelRect = value;
+    codeLevelInfo.codeLevel = value;
 }
 
 bool KCTextBlockData::getHasFolded() const
 {
-    return hasFolded;
+    return codeLevelInfo.hasFolded;
 }
 
 void KCTextBlockData::setHasFolded(bool value)
 {
-    hasFolded = value;
+    codeLevelInfo.hasFolded = value;
 }
 
-
+void KCTextBlockData::setHasError(bool value)
+{
+    codeLevelInfo.hasError = value;
+}

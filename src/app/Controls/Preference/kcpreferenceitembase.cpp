@@ -75,12 +75,12 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
             this, SLOT(setBackgroundAlpha(int)));
 
     //Expand Animation
-    expandAnimation=new QTimeLine(100, this);
-    expandAnimation->setUpdateInterval(1);
-    expandAnimation->setEasingCurve(QEasingCurve::OutCubic);
-    connect(expandAnimation, SIGNAL(frameChanged(int)),
+    unfoldAnimation=new QTimeLine(100, this);
+    unfoldAnimation->setUpdateInterval(1);
+    unfoldAnimation->setEasingCurve(QEasingCurve::OutCubic);
+    connect(unfoldAnimation, SIGNAL(frameChanged(int)),
             this, SLOT(setItemHeight(int)));
-    connect(expandAnimation, SIGNAL(finished()),
+    connect(unfoldAnimation, SIGNAL(finished()),
             this, SLOT(showEditWidget()));
 
     //Fold Animation
@@ -134,7 +134,7 @@ void KCPreferenceItemBase::setOriginalValue(const QVariant &value)
 
 void KCPreferenceItemBase::editFinished()
 {
-    expandAnimation->stop();
+    unfoldAnimation->stop();
     if(valueChanged)
     {
         fadeMeOut->setEndFrame(valueChangedAlpha);
@@ -153,7 +153,7 @@ void KCPreferenceItemBase::editFinished()
 void KCPreferenceItemBase::setExpandFinishedHeight(const int &endHeight)
 {
     expandEndHeight=endHeight;
-    expandAnimation->setEndFrame(endHeight);
+    unfoldAnimation->setEndFrame(endHeight);
 }
 
 int KCPreferenceItemBase::getExpandFinishedHeight() const
@@ -224,8 +224,8 @@ void KCPreferenceItemBase::mousePressEvent(QMouseEvent *e)
     if(!editMode)
     {
         foldAnimation->stop();
-        expandAnimation->setStartFrame(height());
-        expandAnimation->start();
+        unfoldAnimation->setStartFrame(height());
+        unfoldAnimation->start();
         editMode=true;
     }
     emit editFocusCapture();

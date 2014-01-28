@@ -32,12 +32,17 @@ void KCUnibodyPanel::drawContent(int x,
     Q_UNUSED(x);
     Q_UNUSED(cursor);
     KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-    QPainter painter(this);
     if(data!=NULL)
     {
-        QRect currentRect(x, y, width, height);
-        data->setCodeLevelRect(currentRect);
-        if(data->getHasError())
+        QPainter painter(this);
+        codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
+        QPoint codeLevelBegin(x, y);
+        codeLevelInfo.codeLevelRect.setTopLeft(codeLevelBegin);
+        codeLevelInfo.codeLevelRect.setWidth(width);
+        codeLevelInfo.codeLevelRect.setHeight(height);
+        data->setCodeLevelInfo(codeLevelInfo);
+
+        if(codeLevelInfo.hasError)
         {
             painter.drawPixmap((width-errorMarkWidth)/2,
                                 y+(height-errorMarkHeight)/2,
@@ -46,9 +51,9 @@ void KCUnibodyPanel::drawContent(int x,
                                 compileErrorMark);
         }
 
-        if(data->getCodeLevelUp())
+        if(codeLevelInfo.codeLevelUp)
         {
-            if(data->getHasFolded())
+            if(codeLevelInfo.hasFolded)
             {
                 painter.drawPixmap((width-foldMarkWidth)/2,
                                    y+(height-foldMarkHeight)/2,
@@ -96,24 +101,25 @@ void KCUnibodyPanel::mouseReleaseEvent(QMouseEvent *event)
             KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
             if(block.isVisible() && data!=NULL)
             {
-                QRect currentRect=data->getCodeLevelRect();
-                if(currentRect.contains(pressedPos) &&
-                   currentRect.contains(event->pos()))
+                codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
+                if(codeLevelInfo.codeLevelRect.contains(pressedPos) &&
+                   codeLevelInfo.codeLevelRect.contains(event->pos()))
                 {
-                    if(data->getCodeLevelUp())
+                    if(codeLevelInfo.codeLevelUp)
                     {
-                        if(data->getHasFolded())
+                        if(codeLevelInfo.hasFolded)
                         {
                             //Unfold
                             emit requireUnfoldStartAt(block.blockNumber());
-                            data->setHasFolded(false);
+                            codeLevelInfo.hasFolded=false;
                         }
                         else
                         {
                             //Fold
                             emit requireFoldStartAt(block.blockNumber());
-                            data->setHasFolded(true);
+                            codeLevelInfo.hasFolded=true;
                         }
+                        data->setCodeLevelInfo(codeLevelInfo);
                     }
                     break;
                 }

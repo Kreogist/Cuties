@@ -117,8 +117,6 @@ private:
                                    int matchedParentheses,
                                    QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
-    bool findForward();
-    bool findBackward();
     bool findFirstSeachResult();
     bool findLastSearchResult();
     void generalSearch(const QTextBlock &block,

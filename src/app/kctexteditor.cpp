@@ -102,30 +102,18 @@ void KCTextEditor::paintEvent(QPaintEvent *e)
     emit updated();
 }
 
-void KCTextEditor::checkWhetherBlockSearchedAndDealWith(
-    const QTextBlock &block)
+void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block)
 {
     KCTextBlockData *data=(KCTextBlockData *)block.userData();
     //check whether the block has been searched
     data->beginUsingSearchDatas();
-    bool hasSearched=data->isSearched(searchCode);
-    if(!hasSearched)
+    if(!data->isSearched(searchCode))
     {
         data->endUsingSearchDatas();
-        generalSearch(block,50,true);    //search 50 lines
-        data->beginUsingSearchDatas();
+        generalSearch(block,height()/fontMetrics().lineSpacing()+2,true);    //search 50 lines
+        return;
     }
     data->endUsingSearchDatas();
-}
-
-bool KCTextEditor::showPreviousSearchResult()
-{
-    return findForward();
-}
-
-bool KCTextEditor::showNextSearchResult()
-{
-    return findBackward();
 }
 
 void KCTextEditor::setTabWidth(int width)
@@ -133,7 +121,7 @@ void KCTextEditor::setTabWidth(int width)
     setTabStopWidth(fontMetrics().width(' ')*width);
 }
 
-bool KCTextEditor::findForward()
+bool KCTextEditor::showPreviousSearchResult()
 {
     QTextCursor searchCursor;
 
@@ -187,7 +175,7 @@ bool KCTextEditor::findForward()
     return findLastSearchResult();
 }
 
-bool KCTextEditor::findBackward()
+bool KCTextEditor::showNextSearchResult()
 {
     QTextCursor searchCursor=textCursor();
 
@@ -341,7 +329,7 @@ void KCTextEditor::searchString(QString searchTextSets,
         updateSearchResults();
         searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
         searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
-        findBackward();
+        showNextSearchResult();
     }
 }
 
@@ -1061,35 +1049,6 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             QPlainTextEdit::keyPressEvent(e);
             break;
         }
-
-        /*//Now we have to judge normal case.
-        int pos=findFirstCharacter(_textCursor.block());
-        //If we are at the before place, and this is just a blank
-        //line or only contains spaces or tabs.
-        if(pos < 0)
-        {
-            //If using tab instead of tab
-            if(configureInstance->usingBlankInsteadTab())
-            {
-                if(_textCursor.positionInBlock()==0)
-                {
-                    QPlainTextEdit::keyPressEvent(e);
-                    break;
-                }
-                removeTab(_textCursor);
-                break;
-            }
-            QPlainTextEdit::keyPressEvent(e);
-            break;
-        }
-        if(_textCursor.positionInBlock()<=pos && (!pos<configureInstance->usingBlankInsteadTab()))
-        {
-            if(_textCursor.positionInBlock()>0)
-            {
-                removeTab(_textCursor);
-                break;
-            }
-        }*/
         QPlainTextEdit::keyPressEvent(e);
         break;
     }
@@ -1191,6 +1150,10 @@ void KCTextEditor::mouseReleaseEvent(QMouseEvent *e)
                                       textFloatToolBar->width(),
                                       textFloatToolBar->height());
         textFloatToolBar->show();
+    }
+    else
+    {
+        textFloatToolBar->hide();
     }*/
 }
 

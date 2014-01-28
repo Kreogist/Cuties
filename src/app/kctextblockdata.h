@@ -47,6 +47,24 @@ struct markUnit
     }
 };
 
+struct codeLevelUnit
+{
+    QRect codeLevelRect;
+    bool codeLevelUp;
+    bool codeLevelDown;
+    bool hasFolded;
+    bool hasError;
+    int codeLevel;
+    codeLevelUnit()
+    {
+        codeLevel=0;
+        codeLevelUp=false;
+        codeLevelDown=false;
+        hasFolded=false;
+        hasError=false;
+    }
+};
+
 class KCTextBlockData : public QTextBlockUserData
 {
 public:
@@ -80,24 +98,19 @@ public:
     QList<parenthesesInfo>::iterator getFirstParenthesesInfo();
     QList<parenthesesInfo>::iterator getEndParenthesesInfo();
 
-    void setCodeLevel(const int &level);
-    int getCodeLevel() const;
     markUnit getMarkInfo() const;
     void setMarkInfo(const markUnit &value);
     int getLineCommentPos() const;
     void setLineCommentPos(int value);
     int getQuotationStatus() const;
     void setQuotationStatus(int value);
-    bool getHasError() const;
-    void setHasError(bool value);
-    bool getCodeLevelUp() const;
-    void setCodeLevelUp(bool value);
-    bool getCodeLevelDown() const;
-    void setCodeLevelDown(bool value);
-    QRect getCodeLevelRect() const;
-    void setCodeLevelRect(const QRect &value);
+    codeLevelUnit getCodeLevelInfo() const;
+    void setCodeLevelInfo(const codeLevelUnit &value);
+    int getCodeLevel() const;
+    void setCodeLevel(int value);
     bool getHasFolded() const;
     void setHasFolded(bool value);
+    void setHasError(bool value);
 
 private:
     unsigned long long int searchCode;
@@ -106,14 +119,10 @@ private:
     QList<matchedInfo> matchedTextPositions;
     QList<parenthesesInfo> parenthesesInfos;
     QList<quotationInfo> quotationInfos;
-    int codeLevel;
     int lineCommentPos;
     int quotationStatus;
     markUnit markInfo;
-    bool hasError=false;
-    QRect codeLevelRect;
-    bool codeLevelUp=false, codeLevelDown=false;
-    bool hasFolded=false;
+    codeLevelUnit codeLevelInfo;
 };
 
 #endif // KCTEXTBLOCKDATA_H
