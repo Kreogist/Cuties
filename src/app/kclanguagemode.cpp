@@ -103,6 +103,11 @@ void KCLanguageMode::compile()
     compiler->startCompile(m_parent->filePath);
 }
 
+void KCLanguageMode::stopCompile()
+{
+    compiler->stopCompile();
+}
+
 void KCLanguageMode::setFileSuffix(const QString &suffix)
 {
     QRegularExpression _regexp_cpp("(h|hpp|rh|hh|cpp|cc|cxx|c++|cp)",

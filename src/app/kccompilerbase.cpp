@@ -83,10 +83,15 @@ void KCCompilerBase::startCompile(const QString &filePath)
     compiler->start(compilerPath, arg);
 }
 
+void KCCompilerBase::stopCompile()
+{
+    compiler->kill();
+}
+
 bool KCCompilerBase::checkCompilerPath(const QString &compilerPath)
 {
-    QFileInfo _fileInfo(compilerPath);
-    return (_fileInfo.exists() && _fileInfo.isExecutable());
+    QFileInfo compilerInfo(compilerPath);
+    return (compilerInfo.exists() && compilerInfo.isExecutable());
 }
 
 bool KCCompilerBase::compilerExsist()

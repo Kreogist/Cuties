@@ -4,27 +4,23 @@ Copyright © 2013 Kreogist Dev Team. All rights reserved.
 
 ##Menu
 * Recommended System Requirements
-* Required OS
+* Building Prerequisites
+* Downloading the source
 * Building
 * Install
 * License
 
-##Recommended System Requirements
-
+## Recommended System Requirements
+Cuties is a cross-platform application. It is supported on a variety of 32-bit and 64-bit platforms. You can use Cuites on the following desktop platforms:
 - Intel® Pentium™ III M processor or better.
 - 64MB of RAM or better(DDR or better recommended).
 - Intel GMA-HD / nVIDIA GeForce 6200LE / ATI Radeon X300 or better.
 - ??MB of disk space.
-
-##Required OS
-
-Cuties is a cross-platform application. It is supported on a variety of 32-bit and 64-bit platforms. You can use Cuites on the following desktop platforms:
-
 - Microsoft® Windows® XP Service Pack 2 or later.
-- Apple Mac OS X Lion 10.7 or later.
-- Linux/X11
+  Apple Mac OS X Lion 10.7 or later.
+  Linux/X11
 
-## Prerequisites
+## Building Prerequisites
 
 Cuties requires that various tools and packages be available for use in the build procedure. Modifying Cuties sources requires additional tools described below.
 
@@ -50,7 +46,7 @@ For Ubuntu Linux or other Linux user, you should provide your own compilers. You
 
 If you have trouble with set up Qt, please visit [Download Qt](http://qt-project.org/downloads) for binary packages, [Getting Started with Qt](http://qt-project.org/doc/qt-5/gettingstarted.html) for Downloading and Installing Qt guide.
 
-### Tools/packages additional for building GCC
+### Tools/packages additional for building Cuties
 
 * **Qt Creator 2.7 or above**
 

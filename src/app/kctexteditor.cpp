@@ -35,37 +35,47 @@
 KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
-    setContentsMargins(0, 0, 0, 0);
+    //Initialize properties.
     setObjectName("KCTextEditor");
-    setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(false);
 
+    //Initialize visual properties.
+    setContentsMargins(0,0,0,0);
+    setFrameShape(QFrame::NoFrame);
     QFont editorFont=KCFontConfigure::getInstance()->getCodeFont();
     setFont(editorFont);
-
-    /*clipboard=KCClipboard::getInstance();
-    clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
-    connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
-            this,SLOT(insertPlainText(QString)));*/
-
-    textFloatToolBar=new KCFloatToolBar(this);
-
-    QPalette pal = palette();
+    QPalette pal=palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
-    setFrameStyle(0);
 
+    //Initialize variables.
+    /***Colors***/
     lineColor = QColor(0x40,0x40,0x40);
     searchResultColor = QColor(98,147,221);
     searchResultColor = QColor(0x5A,0x86,0xCA);
     noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
     matchedParenthesesColor = QColor(0xf8,0x9b,0x9b);
-
+    /***Search code***/
     searchCode=0;
+    /***Clipboard Menu***/
+    /*clipboard=KCClipboard::getInstance();
+    clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
+    connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
+            this,SLOT(insertPlainText(QString)));*/
 
-    //Solve the default line's bug.
-    updateHighlights();
+    //Initial child widgets
+    /***Float toolbar***/
+    //textFloatToolBar=new KCFloatToolBar(this);
+    /***Panel Manager & Panels***/
+    panelManager=new KCTextPanelManager(this);
+    debugMarkPanel=new KCDebugMarkPanel(this);
+    panelManager->addPanel(debugMarkPanel);
+    lineNumberPanel=new KCLineNumberPanel(this);
+    panelManager->addPanel(lineNumberPanel);
+    unibodyPanel=new KCUnibodyPanel(this);
+    panelManager->addPanel(unibodyPanel);
 
+    //Connect signals and signals/slots.
     connect(this, &KCTextEditor::cursorPositionChanged,
             this, &KCTextEditor::updateHighlights);
     connect(this, &KCTextEditor::textChanged,
@@ -74,16 +84,6 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
             this,SLOT(updateSearchResults()));
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
             this,SLOT(updateHighlights()));
-
-    panelManager=new KCTextPanelManager(this);
-
-    debugMarkPanel=new KCDebugMarkPanel(this);
-    panelManager->addPanel(debugMarkPanel);
-    lineNumberPanel=new KCLineNumberPanel(this);
-    panelManager->addPanel(lineNumberPanel);
-    unibodyPanel=new KCUnibodyPanel(this);
-    panelManager->addPanel(unibodyPanel);
-
     connect(this, &KCTextEditor::blockCountChanged,
             this, &KCTextEditor::updateLineNumberAreaWidth);
     connect(this, &KCTextEditor::updateRequest,
@@ -97,7 +97,9 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     connect(lineNumberPanel, &KCLineNumberPanel::requireSelectLine,
             this, &KCTextEditor::selectBlock);
 
+    //Called initialize widget procedure.
     updateLineNumberAreaWidth(0);
+    updateHighlights();
 }
 
 void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block)
@@ -1264,6 +1266,7 @@ void KCTextEditor::resetDebugCursor()
 
 void KCTextEditor::setDebugCursor(int lineNumber)
 {
+    setCursorPosition(lineNumber, 0);
     debugMarkPanel->setDebugCursor(lineNumber);
 }
 
@@ -1289,7 +1292,7 @@ void KCTextEditor::setLinePanelVisible(bool value)
 
 void KCTextEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
-    setViewportMargins(panelManager->resizePanel(lineNumberPanelWidth()), 0, 0, 0);
+    setViewportMargins(panelManager->resizeManagerWidth(lineNumberPanelWidth()), 0, 0, 0);
 }
 
 void KCTextEditor::updateLineNumberArea(const QRect &rect, int dy)
@@ -1357,8 +1360,9 @@ void KCTextEditor::resizeEvent(QResizeEvent *e)
     QRect cr = contentsRect();
     panelManager->setGeometry(QRect(cr.left(),
                                     cr.top(),
-                                    panelManager->resizePanel(lineNumberPanelWidth()),
+                                    panelManager->resizeManagerWidth(lineNumberPanelWidth()),
                                     cr.height()));
+    setViewportMargins(panelManager->width(), 0, 0, 0);
 }
 
 void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
@@ -1369,7 +1373,7 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     int top=(int)blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom=top+(int)blockBoundingRect(block).height();
     panel->setFirstBlock(block);
-    while (block.isValid() && top <= event->rect().bottom())
+    while (top <= event->rect().bottom())
     {
         KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
         data->setRect(blockBoundingGeometry(block).toAlignedRect());
@@ -1378,11 +1382,15 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
             panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount(),
                                &block, data, textCursor());
         }
-        if(block.next().isValid())
+        block=block.next();
+        if(block.isValid())
         {
             panel->setLastBlock(block);
         }
-        block=block.next();
+        else
+        {
+            break;
+        }
         top=bottom;
         bottom=top+(int)blockBoundingRect(block).height();
         ++blockNumber;

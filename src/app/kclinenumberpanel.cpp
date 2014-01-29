@@ -72,38 +72,9 @@ void KCLineNumberPanel::setVisible(bool visible)
     }
 }
 
-void KCLineNumberPanel::mousePressEvent(QMouseEvent *event)
+void KCLineNumberPanel::mouseClickEventRaised(QTextBlock *block,
+                                              KCTextBlockData *data)
 {
-    if(event->buttons() == Qt::LeftButton)
-    {
-        isPressed=true;
-        pressedPos=event->pos();
-    }
-    QWidget::mousePressEvent(event);
-}
-
-void KCLineNumberPanel::mouseReleaseEvent(QMouseEvent *event)
-{
-    if(isPressed)
-    {
-        QTextBlock block=getFirstBlock();
-        int lastBlockNumber=getLastBlock().blockNumber();
-
-        for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
-        {
-            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-            if(block.isVisible() && data!=NULL)
-            {
-                QRect lineNumberRect=data->getRect();
-                if(lineNumberRect.contains(pressedPos) &&
-                   lineNumberRect.contains(event->pos()))
-                {
-                    emit requireSelectLine(block.blockNumber());
-                    break;
-                }
-            }
-        }
-        isPressed=false;
-    }
-    QWidget::mouseReleaseEvent(event);
+    Q_UNUSED(data);
+    emit requireSelectLine(block->blockNumber());
 }

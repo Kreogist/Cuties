@@ -1,5 +1,4 @@
 #include <QDebug>
-#include <QMouseEvent>
 #include <QPainter>
 
 #include "kctextblockdata.h"
@@ -75,56 +74,26 @@ void KCUnibodyPanel::setPanelWidth(int lineNumberPanelWidth)
     return;
 }
 
-void KCUnibodyPanel::mousePressEvent(QMouseEvent *event)
+void KCUnibodyPanel::mouseClickEventRaised(QTextBlock *block,
+                                           KCTextBlockData *data)
 {
-    if(event->buttons() == Qt::LeftButton)
+    codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
+    if(codeLevelInfo.codeLevelUp)
     {
-        isPressed=true;
-        pressedPos=event->pos();
-    }
-    QWidget::mousePressEvent(event);
-}
-
-void KCUnibodyPanel::mouseReleaseEvent(QMouseEvent *event)
-{
-    if(isPressed)
-    {
-        QTextBlock block=getFirstBlock();
-        int lastBlockNumber=getLastBlock().blockNumber();
-
-        for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
+        if(codeLevelInfo.hasFolded)
         {
-            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-            if(block.isVisible() && data!=NULL)
-            {
-                QRect codeLevelRect=data->getRect();
-                if(codeLevelRect.contains(pressedPos) &&
-                   codeLevelRect.contains(event->pos()))
-                {
-                    codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
-                    if(codeLevelInfo.codeLevelUp)
-                    {
-                        if(codeLevelInfo.hasFolded)
-                        {
-                            //Unfold
-                            emit requireUnfoldStartAt(block.blockNumber());
-                            emit requireUpdateAllPanel();
-                            codeLevelInfo.hasFolded=false;
-                        }
-                        else
-                        {
-                            //Fold
-                            emit requireFoldStartAt(block.blockNumber());
-                            emit requireUpdateAllPanel();
-                            codeLevelInfo.hasFolded=true;
-                        }
-                        data->setCodeLevelInfo(codeLevelInfo);
-                    }
-                    break;
-                }
-            }
+            //Unfold
+            emit requireUnfoldStartAt(block->blockNumber());
+            emit requireUpdateAllPanel();
+            codeLevelInfo.hasFolded=false;
         }
-        isPressed=false;
+        else
+        {
+            //Fold
+            emit requireFoldStartAt(block->blockNumber());
+            emit requireUpdateAllPanel();
+            codeLevelInfo.hasFolded=true;
+        }
+        data->setCodeLevelInfo(codeLevelInfo);
     }
-    QWidget::mouseReleaseEvent(event);
 }

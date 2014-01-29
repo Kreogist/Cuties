@@ -19,13 +19,11 @@ public:
 signals:
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseClickEventRaised(QTextBlock *block,
+                               KCTextBlockData *data);
 
 private:
     QPixmap markPix, debugArrow;
-    QPoint pressedPos;
-    bool isPressed;
     int markPanelHeight;
     int debugCursorLine=-1;
 };

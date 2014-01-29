@@ -55,7 +55,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     setLayout(mainLayout);
 
     editor=new KCTextEditor(this);
-
     mainLayout->addWidget(editor);
 
     currentCompileProgress=new KCCodeCompileProgress(editor);
@@ -476,11 +475,9 @@ QList<int> KCCodeEditor::getBreakpoints()
     return editor->getBreakPoints();
 }
 
-void KCCodeEditor::onDebugJumpLine(int lineNum)
+void KCCodeEditor::onDebugJumpLine(int blockNumber)
 {
-    int realLineNum=lineNum-1;
-    setDocumentCursor(realLineNum, 0);
-    editor->setDebugCursor(realLineNum);
+    editor->setDebugCursor(blockNumber-1);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)

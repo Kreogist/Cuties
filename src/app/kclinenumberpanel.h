@@ -19,13 +19,11 @@ public slots:
     void setVisible(bool visible);
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseClickEventRaised(QTextBlock *block,
+                               KCTextBlockData *data);
 
 private:
     QColor textColor;
-    QPoint pressedPos;
-    bool isPressed;
     int currentWidth;
 };
 

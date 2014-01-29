@@ -45,6 +45,8 @@ public:
     QString compilerVersion();
     //Use the current configure start compile process.
     void startCompile(const QString &filePath);
+    //Stop the compile process.
+    void stopCompile();
     /*
      * Some virtual functions.
      * These functions must be provided by the inherit class.

@@ -56,6 +56,7 @@ public:
     bool compilerIsNull();
     bool compilerIsExsist();
     void compile();
+    void stopCompile();
     GdbController *startDebug(int lineNumber);
     void stopDebug();
     void setMode(const modeType &type);

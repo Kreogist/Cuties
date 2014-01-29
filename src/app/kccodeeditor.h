@@ -17,6 +17,18 @@
  *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*!
+ * \copyright GNU Public License v3
+ * \details
+ *    This file is the function implementation file of class KCCodeEditor.
+ *    KCCodeEditor is the base class of KCTabManager. KCCodeEditor is a
+ * combination of the following classes:
+ *        KCTextEditor
+ *        KCLanguageMode
+ *    KCTextEditor is used to edit the code. And KCLanguageMode will process
+ * the compile and debug process.
+ */
+
 #ifndef TEXTEDITOR_H
 #define TEXTEDITOR_H
 
@@ -95,6 +107,7 @@ signals:
     void requiredCompileFile();
 
 public slots:
+    //KCTextEditor link slots
     bool open(const QString &fileName,
               bool cacheMode=false);
     bool save();
@@ -118,7 +131,7 @@ public slots:
     QList<int> getBreakpoints();
 
 private slots:
-    void onDebugJumpLine(int lineNum);
+    void onDebugJumpLine(int blockNumber);
     void onModificationChanged(bool changed);
     void onHideOtherWidgets();
     void onSearchNext(QString searchTextSets,
