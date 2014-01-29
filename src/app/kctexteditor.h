@@ -56,7 +56,6 @@ public:
     void setCursorPosition(int lineNumber,
                            int columnNumber);
     void backupSearchTextCursor();
-    QRectF blockRect(const QTextBlock &block);
     void setVerticalScrollValue(int value);
     void setHorizontalScrollValue(int value);
     int verticalScrollValue();
@@ -136,7 +135,8 @@ private:
                              const QTextBlock &block,
                              const bool forward);
     void initTextSearcher(QScopedPointer<KCTextSearcher> &searcher);
-    void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block);
+    void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
+                                              KCTextBlockData *data);
     int matchParentheses(const char &parenthesesA,
                          const char &parenthesesB,
                          QList<parenthesesInfo>::iterator startPos,

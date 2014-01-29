@@ -76,5 +76,5 @@ void KCLineNumberPanel::mouseClickEventRaised(QTextBlock *block,
                                               KCTextBlockData *data)
 {
     Q_UNUSED(data);
-    emit requireSelectLine(block->blockNumber());
+    emit requireSelectBlock(block->blockNumber());
 }

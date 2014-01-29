@@ -13,7 +13,7 @@ public:
     void setPanelWidth(int lineNumberPanelWidth);
 
 signals:
-    void requireSelectLine(int blockNumber);
+    void requireSelectBlock(int blockNumber);
 
 public slots:
     void setVisible(bool visible);

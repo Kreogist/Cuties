@@ -94,7 +94,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
             this, &KCTextEditor::foldCode);
     connect(unibodyPanel, &KCUnibodyPanel::requireUnfoldStartAt,
             this, &KCTextEditor::unfoldCode);
-    connect(lineNumberPanel, &KCLineNumberPanel::requireSelectLine,
+    connect(lineNumberPanel, &KCLineNumberPanel::requireSelectBlock,
             this, &KCTextEditor::selectBlock);
 
     //Called initialize widget procedure.
@@ -102,15 +102,17 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     updateHighlights();
 }
 
-void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block)
+void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
+                                                        KCTextBlockData *data)
 {
-    KCTextBlockData *data=(KCTextBlockData *)block.userData();
     //check whether the block has been searched
     data->beginUsingSearchDatas();
     if(!data->isSearched(searchCode))
     {
         data->endUsingSearchDatas();
-        generalSearch(block,height()/fontMetrics().lineSpacing()+2,true);    //search 50 lines
+        generalSearch(block,
+                      height()/fontMetrics().lineSpacing()+2,
+                      true);    //search a screen lines.
         data->beginUsingSearchDatas();
     }
     data->endUsingSearchDatas();
@@ -123,27 +125,23 @@ void KCTextEditor::setTabWidth(int width)
 
 bool KCTextEditor::showPreviousSearchResult()
 {
-    QTextCursor searchCursor;
-
     //Simbol to match a string
-    bool hasMatch=false,
-         isCursorLine;
+    bool hasMatch=false, isCursorLine;
     //Backup current cursor
-    searchCursor=textCursor();
+    QTextCursor searchCursor=textCursor();
     //Check search position
     int currentCursorPostion=searchCursor.selectionStart(),
         matchedCount;
     searchCursor.setPosition(currentCursorPostion);
     KCTextBlockData::matchedInfo currentMatch;
+    KCTextBlockData *blockData;
     //Search from current place to next place
     for(QTextBlock i=searchCursor.block();   //From current block
         i.isValid() && !hasMatch;           //to the destination block
         i=i.previous())  //If search forward, to previous
     {                                       //otherwise to the next.
-        KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-
-        checkWhetherBlockSearchedAndDealWith(i);
-
+        blockData=static_cast<KCTextBlockData *>(i.userData());
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
         if(blockData->hasMatched())         //If current have search result
         {
@@ -178,23 +176,22 @@ bool KCTextEditor::showPreviousSearchResult()
 bool KCTextEditor::showNextSearchResult()
 {
     QTextCursor searchCursor=textCursor();
-
     //Simbol to match a string
-    bool hasMatch=false,
-         isCursorLine;
+    bool hasMatch=false, isCursorLine;
     //Backup current cursor
     //Check search position
     int currentCursorPostion=searchCursor.position(),
         matchedCount, comparePosition;
     searchCursor.setPosition(currentCursorPostion);
+    KCTextBlockData *blockData;
     KCTextBlockData::matchedInfo currentMatch;
     //Search from current place to next place
     for(QTextBlock i=searchCursor.block();
         i.isValid() && !hasMatch;
         i=i.next())
     {
-        KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
+        blockData=static_cast<KCTextBlockData *>(i.userData());
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
         if(blockData->hasMatched())         //If current have search result
         {
@@ -238,7 +235,7 @@ bool KCTextEditor::findFirstSeachResult()
         i=i.next())
     {
         KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
         if(blockData->hasMatched())         //If current have search result
         {
@@ -275,7 +272,7 @@ bool KCTextEditor::findLastSearchResult()
         i=i.previous())
     {
         KCTextBlockData *blockData=(KCTextBlockData *)i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
 
         blockData->beginUsingSearchDatas();
         if(blockData->hasMatched())
@@ -422,7 +419,7 @@ bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
         i=i.next())
     {
         KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
         matchedCount+=blockData->matchedCount();
         blockData->endUsingSearchDatas();
@@ -612,11 +609,6 @@ void KCTextEditor::setCursorPosition(int lineNumber,
 void KCTextEditor::backupSearchTextCursor()
 {
     searchBackupCursor=textCursor();
-}
-
-QRectF KCTextEditor::blockRect(const QTextBlock &block)
-{
-    return blockBoundingGeometry(block);
 }
 
 int KCTextEditor::highlightParentheses(QList<QTextEdit::ExtraSelection> &selections)
@@ -829,7 +821,7 @@ void KCTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection> &selec
         {
             continue;
         }
-        checkWhetherBlockSearchedAndDealWith(block);
+        checkWhetherBlockSearchedAndDealWith(block, currBlockData);
         currBlockData->beginUsingSearchDatas();
         if(currBlockData->hasMatched())
         {
@@ -1059,27 +1051,35 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         {
             QChar previousChar=_textCursor.document()->characterAt(_textCursor.position()-1),
                   currentChar=_textCursor.document()->characterAt(_textCursor.position());
-            if(previousChar == '{' && currentChar == '}')
+            if(previousChar == '{')
             {
-                //It's a pair of char '{}'
-                // Indent it!
-                QPlainTextEdit::keyPressEvent(e);
-                _textCursor.insertBlock();
-                QTextBlock nextBlock=_textCursor.block();
-                QTextBlock currBlock=nextBlock.previous();
-                QTextBlock prevBlock=currBlock.previous();
-                KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
-                KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
-                KCTextBlockData *nextData=static_cast<KCTextBlockData *>(nextBlock.userData());
-                currData->setCodeLevel(prevData->getCodeLevel() + 1);
-                nextData->setCodeLevel(prevData->getCodeLevel() + 1);
-                _textCursor.setPosition(nextBlock.position());
-                setTextCursor(_textCursor);
-                insertTab(_textCursor, prevData->getCodeLevel() + 1);
-                _textCursor.movePosition(QTextCursor::PreviousBlock);
-                setTextCursor(_textCursor);
-                insertTab(_textCursor, prevData->getCodeLevel() + 1);
-                break;
+                if(currentChar == '}')
+                {
+                    //It's a pair of char '{}'
+                    // Indent it!
+                    QPlainTextEdit::keyPressEvent(e);
+                    _textCursor.insertBlock();
+                    QTextBlock nextBlock=_textCursor.block();
+                    QTextBlock currBlock=nextBlock.previous();
+                    QTextBlock prevBlock=currBlock.previous();
+                    KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
+                    KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
+                    KCTextBlockData *nextData=static_cast<KCTextBlockData *>(nextBlock.userData());
+                    currData->setCodeLevel(prevData->getCodeLevel() + 1);
+                    nextData->setCodeLevel(prevData->getCodeLevel() + 1);
+                    _textCursor.setPosition(nextBlock.position());
+                    setTextCursor(_textCursor);
+                    insertTab(_textCursor, prevData->getCodeLevel() + 1);
+                    _textCursor.movePosition(QTextCursor::PreviousBlock);
+                    setTextCursor(_textCursor);
+                    insertTab(_textCursor, prevData->getCodeLevel() + 1);
+                    break;
+                }
+                KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+                if(currData->getHasFolded())
+                {
+                    unfoldCode(_textCursor.block().blockNumber());
+                }
             }
             if(currentChar == ')' || currentChar == ']')
             {
