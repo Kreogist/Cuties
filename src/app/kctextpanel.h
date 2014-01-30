@@ -43,7 +43,7 @@ public:
     explicit KCTextPanel(QWidget *parent = 0);
     /*!
      * \brief This function will be called when the KCTextEditor repaint the
-     *        panel. All the KCTextPanel must implement this function.
+     * panel. All the KCTextPanel must implement this function.
      */
     virtual void drawContent(int x,
                              int y,
@@ -54,8 +54,8 @@ public:
                              QTextCursor textCursor)=0;
     /*!
      * \brief This function will calculate the panel's width. You can get a
-     *        reference value: the width of the line number panel. The panel's
-     *        width must be calculate in this function.
+     * reference value: the width of the line number panel. The panel's width
+     * must be calculate in this function.
      * \param lineNumberPanelWidth The width of the line number panel.
      */
     virtual void setPanelWidth(int lineNumberPanelWidth)=0;
@@ -76,11 +76,10 @@ signals:
     /*!
      * \breif This signal will ask the panel manager to repaint all the panels.
      *
-     *        If you emit this signal, please check it is REALLY need to repaint
-     *        all the other panels. Because this event will cost a HUGE CPU
-     *        usage.
+     * If you emit this signal, please check it is REALLY need to repaint all
+     * the other panels. Because this event will cost a HUGE CPU usage.
      *
-     *        Make sure again before you emit this signal.
+     * Make sure again before you emit this signal.
      */
     void requireUpdateAllPanel();
 
@@ -88,13 +87,12 @@ protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    virtual void mouseClickEventRaised(QTextBlock *block,
-                                       KCTextBlockData *data);
+    virtual void panelItemClickEvent(QTextBlock *block,
+                                     KCTextBlockData *data);
 
 private:
     QTextBlock firstBlock;
     QTextBlock lastBlock;
-    QPoint pressedPos;
     bool isPressed=false;
 };
 #endif // KCTEXTPANEL_H

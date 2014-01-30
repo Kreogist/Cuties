@@ -62,7 +62,7 @@ void KCDebugMarkPanel::resetDebugCursor()
     setDebugCursor(-1);
 }
 
-void KCDebugMarkPanel::mouseClickEventRaised(QTextBlock *block,
+void KCDebugMarkPanel::panelItemClickEvent(QTextBlock *block,
                                              KCTextBlockData *data)
 {
     Q_UNUSED(block);

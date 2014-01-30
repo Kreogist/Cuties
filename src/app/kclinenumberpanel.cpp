@@ -72,7 +72,7 @@ void KCLineNumberPanel::setVisible(bool visible)
     }
 }
 
-void KCLineNumberPanel::mouseClickEventRaised(QTextBlock *block,
+void KCLineNumberPanel::panelItemClickEvent(QTextBlock *block,
                                               KCTextBlockData *data)
 {
     Q_UNUSED(data);

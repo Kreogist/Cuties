@@ -74,7 +74,7 @@ void KCUnibodyPanel::setPanelWidth(int lineNumberPanelWidth)
     return;
 }
 
-void KCUnibodyPanel::mouseClickEventRaised(QTextBlock *block,
+void KCUnibodyPanel::panelItemClickEvent(QTextBlock *block,
                                            KCTextBlockData *data)
 {
     codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();

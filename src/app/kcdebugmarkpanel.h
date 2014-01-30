@@ -19,7 +19,7 @@ public:
 signals:
 
 protected:
-    void mouseClickEventRaised(QTextBlock *block,
+    void panelItemClickEvent(QTextBlock *block,
                                KCTextBlockData *data);
 
 private:
