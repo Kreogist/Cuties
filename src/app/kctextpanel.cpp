@@ -31,11 +31,12 @@ void KCTextPanel::mouseReleaseEvent(QMouseEvent *event)
     if(isPressed)
     {
         QTextBlock block=getFirstBlock();
+        KCTextBlockData *data;
         int lastBlockNumber=getLastBlock().blockNumber();
 
         for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
         {
-            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
+            data=static_cast<KCTextBlockData *>(block.userData());
             if(block.isVisible() && data!=NULL)
             {
                 QRect mouseDetectRect=data->getRect();
