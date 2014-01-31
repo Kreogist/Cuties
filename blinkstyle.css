@@ -173,6 +173,17 @@ height:0;
 }
 
 /*==>common class<==*/
+
+.mirror-link{
+    display:inline-block;
+    margin-right:2em;
+}
+.mirror-link img{
+    display:block;
+    width:120px;
+    height:120px;
+}
+
 #footer_wrap {
 	margin-top: 0px;
 	color: #FFFFFF;

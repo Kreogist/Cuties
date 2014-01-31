@@ -84,6 +84,7 @@ p{margin-top:2em;}
     transition:all 0.2s ease-in-out;
 }
 .menu-link:active{color:#555;background:rgba(255,193,44,1);}
+
 #dialog-wrapper{
     z-index:8888;
     position:absolute;
@@ -176,6 +177,17 @@ p{margin-top:2em;}
 .menu-link:active{color:#555;background:rgba(255,193,44,1);}
 
 /*==>common class<==*/
+
+.mirror-link{
+    display:inline-block;
+    margin-right:2em;
+}
+.mirror-link img{
+    display:block;
+    width:120px;
+    height:120px;
+}
+
 #footer_wrap {
 	margin-top: 0px;
 	color: #FFFFFF;
