@@ -143,7 +143,6 @@ p{margin-top:2em;}
     width:54px;
     background-image:url("ok_normal.png");
     background-size:54px 54px;
-    content:"haha";
 }
 .dialog-button:hover{
     background-image:url("ok_hover.png");
