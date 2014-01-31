@@ -9,6 +9,7 @@
 KCLineNumberPanel::KCLineNumberPanel(QWidget *parent) :
     KCTextPanel(parent)
 {
+    setObjectName("KCLineNumberPanel");
     textColor.setRgb(120,120,120);
 }
 
@@ -48,41 +49,33 @@ void KCLineNumberPanel::drawContent(int x,
 
 void KCLineNumberPanel::setPanelWidth(int lineNumberPanelWidth)
 {
-    setFixedWidth(lineNumberPanelWidth);
+    if(isVisible())
+    {
+        setFixedWidth(lineNumberPanelWidth);
+    }
+    else
+    {
+        currentWidth=lineNumberPanelWidth;
+        setFixedWidth(0);
+    }
 }
 
-void KCLineNumberPanel::mousePressEvent(QMouseEvent *event)
+void KCLineNumberPanel::setVisible(bool visible)
 {
-    if(event->buttons() == Qt::LeftButton)
+    KCTextPanel::setVisible(visible);
+    if(visible)
     {
-        isPressed=true;
-        pressedPos=event->pos();
+        setFixedWidth(currentWidth);
     }
-    QWidget::mousePressEvent(event);
+    else
+    {
+        setFixedWidth(0);
+    }
 }
 
-void KCLineNumberPanel::mouseReleaseEvent(QMouseEvent *event)
+void KCLineNumberPanel::panelItemClickEvent(QTextBlock *block,
+                                              KCTextBlockData *data)
 {
-    if(isPressed)
-    {
-        QTextBlock block=getFirstBlock();
-        int lastBlockNumber=getLastBlock().blockNumber();
-
-        for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
-        {
-            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-            if(block.isVisible() && data!=NULL)
-            {
-                QRect lineNumberRect=data->getRect();
-                if(lineNumberRect.contains(pressedPos) &&
-                   lineNumberRect.contains(event->pos()))
-                {
-                    emit requireSelectLine(block.blockNumber());
-                    break;
-                }
-            }
-        }
-        isPressed=false;
-    }
-    QWidget::mouseReleaseEvent(event);
+    Q_UNUSED(data);
+    emit requireSelectBlock(block->blockNumber());
 }

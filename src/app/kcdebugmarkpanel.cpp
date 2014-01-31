@@ -9,12 +9,12 @@
 KCDebugMarkPanel::KCDebugMarkPanel(QWidget *parent) :
     KCTextPanel(parent)
 {
+    setObjectName("KCDebugMarkPanel");
     markPix.load(":/img/image/BreakPoint.png");
     debugArrow.load(":/SmartPanel/image/debugarrow.png");
     markPanelHeight=markPix.height();
     setAutoFillBackground(true);
     setFixedWidth(25);
-    isPressed=false;
 }
 
 void KCDebugMarkPanel::drawContent(int x, int y, int width, int height,
@@ -23,17 +23,14 @@ void KCDebugMarkPanel::drawContent(int x, int y, int width, int height,
     Q_UNUSED(width);
     Q_UNUSED(cursor);
     QPainter painter(this);
-    if(data!=NULL)
+    markUnit markInfo=data->getMarkInfo();
+    if(markInfo.marked)
     {
-        markUnit markInfo=data->getMarkInfo();
-        if(markInfo.marked)
-        {
-            painter.drawPixmap(x,
-                               y+(height-markPanelHeight)/2,
-                               markPix.width(),
-                               markPanelHeight,
-                               markPix);
-        }
+        painter.drawPixmap(x,
+                           y+(height-markPanelHeight)/2,
+                           markPix.width(),
+                           markPanelHeight,
+                           markPix);
     }
 
     if(block->blockNumber()==debugCursorLine)
@@ -63,41 +60,27 @@ void KCDebugMarkPanel::resetDebugCursor()
     setDebugCursor(-1);
 }
 
-void KCDebugMarkPanel::mousePressEvent(QMouseEvent *event)
+void KCDebugMarkPanel::panelItemClickEvent(QTextBlock *block,
+                                             KCTextBlockData *data)
 {
-    if(event->buttons() == Qt::LeftButton)
-    {
-        isPressed=true;
-        pressedPos=event->pos();
-    }
-    QWidget::mousePressEvent(event);
+    Q_UNUSED(block);
+    markUnit markInfo=data->getMarkInfo();
+    markInfo.marked^=1;   //exchange the state
+    data->setMarkInfo(markInfo);
+    update();
 }
 
-void KCDebugMarkPanel::mouseReleaseEvent(QMouseEvent *event)
+QTextBlock KCDebugMarkPanel::getFirstBlock() const
 {
-    if(isPressed)
-    {
-        QTextBlock block=getFirstBlock();
-        int lastBlockNumber=getLastBlock().blockNumber();
+    return firstBlock;
+}
 
-        for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
-        {
-            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-            if(data!=NULL)
-            {
-                QRect markRect=data->getRect();
-                if(markRect.contains(pressedPos) &&
-                   markRect.contains(event->pos()))
-                {
-                    markUnit markInfo=data->getMarkInfo();
-                    markInfo.marked^=1;   //exchange the state
-                    data->setMarkInfo(markInfo);
-                    update();
-                    break;  //mouse press in a rect and release in another rect
-                }
-            }
-        }
-        isPressed=false;
-    }
-    QWidget::mouseReleaseEvent(event);
+void KCDebugMarkPanel::setFirstBlock(const QTextBlock &value)
+{
+    firstBlock = value;
+}
+
+void KCDebugMarkPanel::paintEvent(QPaintEvent *event)
+{
+    emit requireRepaintPanel(this, event);
 }

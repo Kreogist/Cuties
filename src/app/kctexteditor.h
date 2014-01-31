@@ -1,20 +1,27 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cuties.
+ *  This file is part of Kreogist Cuties.
  *
- *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *    Kreogist Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *    Kreogist Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*!
+ * \copyright GNU Public License v3
+ * \details
+ *    This file is the function implementation file of class KCTextEditor.
+ *    KCTextEditor is the basic editor class to all other language.
  */
 
 #ifndef CODEEDITOR_H
@@ -49,7 +56,6 @@ public:
     void setCursorPosition(int lineNumber,
                            int columnNumber);
     void backupSearchTextCursor();
-    QRectF blockRect(const QTextBlock &block);
     void setVerticalScrollValue(int value);
     void setHorizontalScrollValue(int value);
     int verticalScrollValue();
@@ -62,6 +68,7 @@ public:
     void resetDebugCursor();
     void setDebugCursor(int lineNumber);
     int lineNumberPanelWidth();
+    void setLinePanelVisible(bool value);
 
 signals:
     void requireHideOthers();
@@ -102,7 +109,7 @@ private slots:
     void selectBlock(int blockNumber);
 
 protected:
-    //void paintEvent(QPaintEvent *e);
+    void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
@@ -128,7 +135,8 @@ private:
                              const QTextBlock &block,
                              const bool forward);
     void initTextSearcher(QScopedPointer<KCTextSearcher> &searcher);
-    void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block);
+    void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
+                                              KCTextBlockData *data);
     int matchParentheses(const char &parenthesesA,
                          const char &parenthesesB,
                          QList<parenthesesInfo>::iterator startPos,

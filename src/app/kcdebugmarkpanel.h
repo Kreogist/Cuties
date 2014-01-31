@@ -19,13 +19,14 @@ public:
 signals:
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void panelItemClickEvent(QTextBlock *block,
+                               KCTextBlockData *data);
+    QTextBlock getFirstBlock() const;
+    void setFirstBlock(const QTextBlock &value);
+    void paintEvent(QPaintEvent *event);
 
 private:
     QPixmap markPix, debugArrow;
-    QPoint pressedPos;
-    bool isPressed;
     int markPanelHeight;
     int debugCursorLine=-1;
 };

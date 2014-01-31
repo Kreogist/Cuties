@@ -2,20 +2,20 @@
  *
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cuties.
+ *  This file is part of Kreogist Cuties.
  *
- *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *    Kreogist Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *    Kreogist Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <QErrorMessage>
@@ -55,7 +55,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     setLayout(mainLayout);
 
     editor=new KCTextEditor(this);
-
     mainLayout->addWidget(editor);
 
     currentCompileProgress=new KCCodeCompileProgress(editor);
@@ -117,7 +116,7 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setTabStopWidth(fontMetrics().width(' ')*settings.tabSpace);
     editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
     editor->setSpacePerTab(settings.spacePerTab);
-    //linePanel->setVisible(settings.lineNumberPanelVisible);
+    editor->setLinePanelVisible(settings.lineNumberPanelVisible);
 }
 
 bool KCCodeEditor::getOverwriteMode()
@@ -476,11 +475,9 @@ QList<int> KCCodeEditor::getBreakpoints()
     return editor->getBreakPoints();
 }
 
-void KCCodeEditor::onDebugJumpLine(int lineNum)
+void KCCodeEditor::onDebugJumpLine(int blockNumber)
 {
-    int realLineNum=lineNum-1;
-    setDocumentCursor(realLineNum, 0);
-    editor->setDebugCursor(realLineNum);
+    editor->setDebugCursor(blockNumber-1);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)

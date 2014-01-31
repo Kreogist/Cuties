@@ -19,14 +19,12 @@ signals:
 public slots:
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void panelItemClickEvent(QTextBlock *block,
+                               KCTextBlockData *data);
 
 private:
     QPixmap foldMark, foldEndMark, foldedMark;
     QPixmap compileErrorMark;
-    QPoint pressedPos;
-    bool isPressed=false;
     int foldMarkWidth, foldMarkHeight;
     int errorMarkWidth, errorMarkHeight;
 };
