@@ -49,13 +49,12 @@ void KCLineNumberPanel::drawContent(int x,
 
 void KCLineNumberPanel::setPanelWidth(int lineNumberPanelWidth)
 {
-    if(isVisible())
+    if(isVisible() || lineNumberPanelWidth>0)
     {
         setFixedWidth(lineNumberPanelWidth);
     }
     else
     {
-        currentWidth=lineNumberPanelWidth;
         setFixedWidth(0);
     }
 }

@@ -37,6 +37,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QList>
+#include <QShowEvent>
 #include <QResizeEvent>
 
 #include "kctextsearcher.h"
@@ -67,7 +68,7 @@ public:
     void zoomOut(int range = 1);
     void resetDebugCursor();
     void setDebugCursor(int lineNumber);
-    int lineNumberPanelWidth();
+    int lineNumberWidth();
     void setLinePanelVisible(bool value);
 
 signals:
@@ -102,12 +103,13 @@ private slots:
     void panelPaintEvent(KCTextPanel *panel,
                                   QPaintEvent *event);
 
-    void updatePanelAreaWidth(int newBlockCount);
+    void updatePanelAreaWidth();
     void foldCode(int startFoldBlockIndex);
     void unfoldCode(int startUnfoldBlockIndex);
     void selectBlock(int blockNumber);
 
 protected:
+    void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);

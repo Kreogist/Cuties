@@ -33,7 +33,7 @@
 KCTextPanel::KCTextPanel(QWidget *parent) :
     QWidget(parent)
 {
-    ;
+    setFixedWidth(0);
 }
 
 /*!

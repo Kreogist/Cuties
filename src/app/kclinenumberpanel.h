@@ -24,7 +24,7 @@ protected:
 
 private:
     QColor textColor;
-    int currentWidth;
+    int currentWidth=-1;
 };
 
 #endif // KCLINENUMBERPANEL_H
