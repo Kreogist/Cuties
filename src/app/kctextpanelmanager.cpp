@@ -51,7 +51,9 @@ void KCTextPanelManager::addPanel(KCTextPanel *panel)
     connect(panel, &KCTextPanel::requireRepaintPanel,
             this,  &KCTextPanelManager::requirePaintPanel);
     connect(panel, &KCTextPanel::requireUpdateAllPanel,
-            this,  &KCTextPanelManager::updateAllPanel);
+            this,  &KCTextPanelManager::requireUpdateAllPanel);
+    connect(this,  SIGNAL(requireUpdatePanel()),
+            panel, SLOT(update()));
     layout->addWidget(panel);
 }
 
@@ -80,19 +82,7 @@ int KCTextPanelManager::resizeManagerWidth(int lineNumberPanelWidth)
     return managerWidth;
 }
 
-/*!
- * \brief This function will repaint all the panels which beyond the
- *        KCTextPanelManager's control. In all the KCTextPanel, emit
- *        requireUpdateAllPanel() function can called this function.
- *        This function should not be called frequently, and you CAN'T called it
- *        inside paintEvent() function. Though Cuties won't crashed, it will
- *        caused a high CPU usage and stuck the UI.
- */
-void KCTextPanelManager::updateAllPanel()
+void KCTextPanelManager::updateAllPanels()
 {
-    int panelCount=layout->count();
-    while(panelCount--)
-    {
-        layout->itemAt(panelCount)->widget()->update();
-    }
+    emit requireUpdatePanel();
 }

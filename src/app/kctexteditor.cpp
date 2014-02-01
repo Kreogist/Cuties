@@ -89,10 +89,10 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
             this,SLOT(updateHighlights()));
 
     /****Panels****/
-    connect(this, &KCTextEditor::blockCountChanged,
-            this, &KCTextEditor::updateLineNumberAreaWidth);
-    connect(this, &KCTextEditor::updateRequest,
-            this, &KCTextEditor::updateLineNumberArea);
+    connect(this, SIGNAL(blockCountChanged(int)),
+            this, SLOT(updatePanelAreaWidth(int)));
+    connect(panelManager, &KCTextPanelManager::requireUpdateAllPanel,
+            this, &KCTextEditor::updateAllPanels);
     connect(panelManager, &KCTextPanelManager::requirePaintPanel,
             this, &KCTextEditor::panelPaintEvent);
     connect(unibodyPanel, &KCUnibodyPanel::requireFoldStartAt,
@@ -102,9 +102,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     connect(lineNumberPanel, &KCLineNumberPanel::requireSelectBlock,
             this, &KCTextEditor::selectBlock);
 
-    //Called initialize widget procedure.
-    updateLineNumberAreaWidth(0);
-    panelManager->update();
+    //Update the high lights
     updateHighlights();
 }
 
@@ -795,9 +793,12 @@ void KCTextEditor::updateHighlights()
     setExtraSelections(extraSelections);
 }
 
-void KCTextEditor::updatePanelManager()
+void KCTextEditor::updateAllPanels()
 {
-    panelManager->update();
+    /*debugMarkPanel->update();
+    lineNumberPanel->update();
+    unibodyPanel->update();*/
+    panelManager->updateAllPanels();
 }
 
 void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections)
@@ -1278,41 +1279,6 @@ void KCTextEditor::setDebugCursor(int lineNumber)
     debugMarkPanel->setDebugCursor(lineNumber);
 }
 
-int KCTextEditor::lineNumberPanelWidth()
-{
-    int digits = 1;
-    int max = qMax(1, blockCount());
-    while (max >= 10) {
-        max /= 10;
-        ++digits;
-    }
-
-    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
-
-    return space;
-}
-
-void KCTextEditor::setLinePanelVisible(bool value)
-{
-    lineNumberPanel->setVisible(value);
-    updateLineNumberAreaWidth(0);
-}
-
-void KCTextEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
-{
-    setViewportMargins(panelManager->resizeManagerWidth(lineNumberPanelWidth()), 0, 0, 0);
-}
-
-void KCTextEditor::updateLineNumberArea(const QRect &rect, int dy)
-{
-    Q_UNUSED(dy);
-    panelManager->update();
-    if (rect.contains(viewport()->rect()))
-    {
-        updateLineNumberAreaWidth(0);
-    }
-}
-
 void KCTextEditor::foldCode(int startFoldBlockIndex)
 {
     QTextBlock foldBlock=document()->findBlockByNumber(startFoldBlockIndex);
@@ -1363,7 +1329,32 @@ void KCTextEditor::selectBlock(int blockNumber)
 void KCTextEditor::paintEvent(QPaintEvent *e)
 {
     QPlainTextEdit::paintEvent(e);
-    debugMarkPanel->update();
+    updateAllPanels();
+}
+
+int KCTextEditor::lineNumberPanelWidth()
+{
+    int digits = 1;
+    int max = qMax(1, blockCount());
+    while (max >= 10) {
+        max /= 10;
+        ++digits;
+    }
+
+    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+
+    return space;
+}
+
+void KCTextEditor::setLinePanelVisible(bool value)
+{
+    lineNumberPanel->setVisible(value);
+    updatePanelAreaWidth(0);
+}
+
+void KCTextEditor::updatePanelAreaWidth(int /* newBlockCount */)
+{
+    setViewportMargins(panelManager->resizeManagerWidth(lineNumberPanelWidth()), 0, 0, 0);
 }
 
 void KCTextEditor::resizeEvent(QResizeEvent *e)

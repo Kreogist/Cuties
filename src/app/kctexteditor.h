@@ -80,7 +80,7 @@ signals:
 public slots:
     void updateHighlights();
     //void pasteFromeHistory();
-    void updatePanelManager();
+    void updateAllPanels();
     bool showPreviousSearchResult();
     bool showNextSearchResult();
     void searchString(QString searchTextSets,
@@ -102,8 +102,7 @@ private slots:
     void panelPaintEvent(KCTextPanel *panel,
                                   QPaintEvent *event);
 
-    void updateLineNumberAreaWidth(int newBlockCount);
-    void updateLineNumberArea(const QRect &, int);
+    void updatePanelAreaWidth(int newBlockCount);
     void foldCode(int startFoldBlockIndex);
     void unfoldCode(int startUnfoldBlockIndex);
     void selectBlock(int blockNumber);

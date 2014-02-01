@@ -47,9 +47,15 @@ public:
 signals:
     void requirePaintPanel(KCTextPanel *panel,
                            QPaintEvent *event);
+    /*!
+     * \brief This signal is used to ask text editor tell every panels to update
+     * themselves.
+     */
+    void requireUpdateAllPanel();
+    void requireUpdatePanel();
 
 public slots:
-    void updateAllPanel();
+    void updateAllPanels();
 
 protected:
 
