@@ -110,9 +110,23 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 }
 
 /***********Properies settings************/
+/*!
+ * \brief Set the tab width of the current text editor.
+ * \param width The number of the space width of the tab width.
+ */
 void KCTextEditor::setTabWidth(int width)
 {
-    setTabStopWidth(fontMetrics().width(' ')*width);
+    tabSpace=width;
+    setTabStopWidth(fontMetrics().width(' ')*tabSpace);
+}
+
+/*!
+ * \brief Set the word wrap mode of the current text editor.
+ * \param wrapMode The word wrap mode option.
+ */
+void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
+{
+    setWordWrapMode(wrapMode);
 }
 
 /***********Search & Replace************/
@@ -261,43 +275,6 @@ bool KCTextEditor::findLastSearchResult()
     QTextCursor searchCursor=textCursor();
     searchCursor.movePosition(QTextCursor::End);
     return showPreviousSearchResult(searchCursor);
-    /*
-    //Backup current cursor
-    QTextCursor searchCursor=textCursor();
-    //Simbol to match a string
-    bool hasMatch=false;
-    KCTextBlockData *blockData;
-    KCTextBlockData::matchedInfo currentMatch;
-    //Search from current place to next place
-    //Set the end block number, it will be the current block
-    //If search forward, to the last block, else to the first
-    for(QTextBlock i=document()->lastBlock();
-        //Here, we should check to the end block
-        i.isValid() && !hasMatch;
-        //Continue to the next one
-        i=i.previous())
-    {
-        blockData=static_cast<KCTextBlockData *>(i.userData());
-        checkWhetherBlockSearchedAndDealWith(i, blockData);
-
-        blockData->beginUsingSearchDatas();
-        if(blockData->hasMatched())
-        {
-            //If we search to the forward, do the same things.
-            currentMatch=blockData->getMatchedInfo(blockData->matchedCount()-1);
-            hasMatch=true;
-            searchCursor.setPosition(i.position()+currentMatch.pos);
-            searchCursor.movePosition(QTextCursor::NextCharacter,
-                                      QTextCursor::KeepAnchor,
-                                      currentMatch.matchedLength);
-        }
-        blockData->endUsingSearchDatas();
-    }
-    if(hasMatch)
-    {
-        setTextCursor(searchCursor);
-    }
-    return hasMatch;*/
 }
 
 void KCTextEditor::searchString(QString searchTextSets,
@@ -1174,11 +1151,6 @@ void KCTextEditor::wheelEvent(QWheelEvent *event)
         return;
     }
     QPlainTextEdit::wheelEvent(event);
-}
-
-void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
-{
-    setWordWrapMode(wrapMode);
 }
 
 void KCTextEditor::setTheCursorWidth(int width)

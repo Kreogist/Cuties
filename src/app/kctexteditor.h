@@ -56,21 +56,25 @@ class KCTextEditor : public QPlainTextEdit
     Q_OBJECT
 public:
     explicit KCTextEditor(QWidget *parent = 0);
+    //********** Properties **********
+    int horizontalScrollValue();
+    void resetDebugCursor();
     void setCursorPosition(int lineNumber,
                            int columnNumber);
-    void backupSearchTextCursor();
-    void setVerticalScrollValue(int value);
     void setHorizontalScrollValue(int value);
-    int verticalScrollValue();
-    int horizontalScrollValue();
-    QList<int> getBreakPoints();
-    void setUsingBlankInsteadTab(bool value);
     void setSpacePerTab(int value);
-    void zoomIn(int range = 1);
-    void zoomOut(int range = 1);
-    void resetDebugCursor();
-    void setDebugCursor(int lineNumber);
+    void setUsingBlankInsteadTab(bool value);
+    void setVerticalScrollValue(int value);
+    int verticalScrollValue();
+
+    //********** Functions **********
+    //Search & Replace
+    void backupSearchTextCursor();
+
+    //Panel values
+    QList<int> getBreakPoints();
     int lineNumberWidth();
+    void setDebugCursor(int lineNumber);
     void setLinePanelVisible(bool value);
 
 signals:
@@ -81,6 +85,8 @@ signals:
     void nomatchedResult();
 
 public slots:
+    void zoomIn(int range = 1);
+    void zoomOut(int range = 1);
     void updateHighlights();
     //void pasteFromeHistory();
     void updateAllPanels();
@@ -160,6 +166,7 @@ private:
 
     bool usingBlankInsteadTab=true;
     int spacePerTab=4;
+    int tabSpace=4;
 
     QString searchText;
     QString leftParenthesesLists=QString("([{");
