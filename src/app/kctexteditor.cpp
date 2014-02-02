@@ -479,31 +479,23 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
     removeTabCursor.clearSelection();
 
     //We have to judge whether we are using tab or space.
-    if(usingBlankInsteadTab)
+    int expectLength=usingBlankInsteadTab?tabCount*spacePerTab:tabCount;
+    if(expectLength > removeTabCursor.positionInBlock())
     {
-        int expectLength=tabCount*spacePerTab;
-        if(expectLength > removeTabCursor.positionInBlock())
-        {
-            /*
-             * Here means: we don't have so much space to remove,
-             * just remove all of them
-             */
-            removeTabCursor.movePosition(QTextCursor::Left,
-                                         QTextCursor::KeepAnchor,
-                                         removeTabCursor.positionInBlock());
-        }
-        else
-        {
-            //Remove the expect length
-            removeTabCursor.movePosition(QTextCursor::Left,
-                                         QTextCursor::KeepAnchor,
-                                         expectLength);
-        }
+        /*
+         * Here means: we don't have so much space to remove,
+         * just remove all of them
+         */
+        removeTabCursor.movePosition(QTextCursor::Left,
+                                     QTextCursor::KeepAnchor,
+                                     removeTabCursor.positionInBlock());
     }
     else
     {
-        //Test for first time.
-
+        //Remove the expect length
+        removeTabCursor.movePosition(QTextCursor::Left,
+                                     QTextCursor::KeepAnchor,
+                                     expectLength);
     }
     removeTabCursor.removeSelectedText();
 }
