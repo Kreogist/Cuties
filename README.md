@@ -58,7 +58,7 @@ For Qt 5.1.1, we suggest you to use Qt Creator 2.7.2. For Qt 5.2, we suggest you
 
 * **Qt Linguist**
 
-You may need Qt Linguist to release a translation file, or you have to release translation files by `lupdate` and `lupdate`. 
+You may need Qt Linguist to release a translation file, or you have to release translation files by `lupdate` and `lrelease`. 
 
 * **CMake**
 

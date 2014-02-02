@@ -442,8 +442,8 @@ void KCTextEditor::autoIndent()
 
     KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
     KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
-    int baseLevel=prevData->getCodeLevel();
-    int currLevel=currData->getCodeLevel();
+    int baseLevel=prevData!=NULL?prevData->getCodeLevel():0;
+    int currLevel=currData!=NULL?currData->getCodeLevel():0;
 
     if(currLevel>=baseLevel)
     {
