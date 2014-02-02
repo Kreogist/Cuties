@@ -27,7 +27,7 @@
 
 /*!
  * \brief Constructs a KCTextPanelManager with the given parent and the
- *        specified widget flags.
+ * specified widget flags.
  * \param parent Specifies the parent QWidget.
  */
 KCTextPanelManager::KCTextPanelManager(QWidget *parent) :
@@ -42,8 +42,8 @@ KCTextPanelManager::KCTextPanelManager(QWidget *parent) :
 
 /*!
  * \brief Add a panel to the panel manager, connect the repaint require signal
- *        to the manager's require signal, and repaint all the widget signal to
- *        the updateAllPanel() slot.
+ * to the manager's require signal, and repaint all the widget signal to the
+ * updateAllPanel() slot.
  * \param panel Specifies the panel will be add to the manager.
  */
 void KCTextPanelManager::addPanel(KCTextPanel *panel)
@@ -59,13 +59,13 @@ void KCTextPanelManager::addPanel(KCTextPanel *panel)
 
 /*!
  * \brief resizeManagerWidth() function will call all the virtual function
- *        setPanelWidth() of the panels which beyond its control to resize
- *        panels. And it will also calculate the manager's width, set the
- *        manager's width and return it.
- *        The manager will get the line number panel's width. Because there're
- *        only two kinds of panels: The width relate to the total line number
- *        and not. So tell every panel what the line number panel's width is,
- *        panels will auto calculate their owns.
+ * setPanelWidth() of the panels which beyond its control to resize panels. And
+ * it will also calculate the manager's width, set the manager's width and
+ * return it.
+ * The manager will get the line number panel's width. Because there're only two
+ * kinds of panels: The width relate to the total line number and not. So tell
+ * every panel what the line number panel's width is, panels will auto calculate
+ * their owns.
  * \param lineNumberPanelWidth The width of the line number panel width.
  * \return the width of KCTextPanelManager.
  */
@@ -82,6 +82,10 @@ int KCTextPanelManager::resizeManagerWidth(int lineNumberPanelWidth)
     return managerWidth;
 }
 
+/*!
+ * \brief This slot function is used to emit panel paint signal. To ask every
+ * panel to update themselves.
+ */
 void KCTextPanelManager::updateAllPanels()
 {
     emit requireUpdatePanel();

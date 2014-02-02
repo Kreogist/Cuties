@@ -17,14 +17,16 @@ Cuties is a cross-platform application. It is supported on a variety of 32-bit a
 - Intel GMA-HD / nVIDIA GeForce 6200LE / ATI Radeon X300 or better.
 - ??MB of disk space.
 - Microsoft® Windows® XP Service Pack 2 or later.
+
   Apple Mac OS X Lion 10.7 or later.
+  
   Linux/X11
 
 ## Building Prerequisites
 
 Cuties requires that various tools and packages be available for use in the build procedure. Modifying Cuties sources requires additional tools described below.
 
-If you think the following step is too advanced or too tedious, we provide you a [Quick preparing guide](https://github.com/Kreogist/Cuties/wiki/Quick-preparing-guide). And you can skip to [Downloading the source](https://github.com/Kreogist/Cuties/wiki/Build-&-Install-Cuties#downloading-the-source).
+If you think the following step is too advanced or too tedious, we provide you a [Quick preparing guide](https://github.com/Kreogist/Cuties/wiki/Quick-preparing-guide). And you can skip to Downloading the source.
 
 ### Tools/packages necessary for building Cuties
 
@@ -140,7 +142,7 @@ Then switch to the `src` folder which contains `Kreogist-Cuties.pro`, open `app`
 
 The copy the following files to the directory `(You build directory)/app/release`:
 
-ICU Libraries:
+International Components for Unicode(ICU) Libraries:
 
     icudt51.dll
     icuin51.dll

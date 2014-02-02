@@ -157,7 +157,7 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowNextResult,
                                  this, &KCCodeEditor::onShowNextSearchResult);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
-                                 editor, &KCTextEditor::showPreviousSearchResult);
+                                 this, &KCCodeEditor::onShowPreviousSearchResult);
     searcherConnections+=connect(editor, &KCTextEditor::matchedResult,
                                  widget, &KCSearchWidget::setResultMatchStyle);
     searcherConnections+=connect(editor, &KCTextEditor::nomatchedResult,
@@ -195,7 +195,13 @@ void KCCodeEditor::resetCompileErrorCache()
 
 void KCCodeEditor::onShowNextSearchResult()
 {
-    editor->showNextSearchResult();
+    editor->findNextSearchResult();
+    currentSearchWidget->setTextFocus();
+}
+
+void KCCodeEditor::onShowPreviousSearchResult()
+{
+    editor->findPreviousSearchResult();
     currentSearchWidget->setTextFocus();
 }
 

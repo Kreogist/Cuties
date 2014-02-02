@@ -234,7 +234,7 @@ void KCTabManager::prepareCodeEditor(KCCodeEditor *editor,
     emit tabAdded();
     if(count()==0)  //before the tab be added, count() == 1
     {
-        emit tabNonClear();
+        emit firstTabCreate();
     }
     editor->applyEditorSettings(editorSettings);
 }

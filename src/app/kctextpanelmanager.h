@@ -29,7 +29,6 @@
 #ifndef KCTEXTPANELMANAGER_H
 #define KCTEXTPANELMANAGER_H
 
-
 #include <QWidget>
 
 class QHBoxLayout;
@@ -45,6 +44,10 @@ public:
     int resizeManagerWidth(int lineNumberPanelWidth);
 
 signals:
+    /*!
+     * \brief This signal is used to ask text editor to paint every panel,
+     * because the text editor knows all the panel should paint at where.
+     */
     void requirePaintPanel(KCTextPanel *panel,
                            QPaintEvent *event);
     /*!
@@ -52,6 +55,9 @@ signals:
      * themselves.
      */
     void requireUpdateAllPanel();
+    /*!
+     * \brief This signal is used to ask every panels to update themselves.
+     */
     void requireUpdatePanel();
 
 public slots:

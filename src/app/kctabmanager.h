@@ -58,7 +58,7 @@ signals:
     void rewriteDataChanged(bool bRewriteMode);
     void rewriteDisVisible();
     void tabAdded();
-    void tabNonClear();
+    void firstTabCreate();
     void tabClear();
     void requiredHideDocks();
     void requireDisconnectDebug();

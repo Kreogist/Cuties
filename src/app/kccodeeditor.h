@@ -139,6 +139,7 @@ private slots:
                       bool caseSensitivelySets,
                       bool wholeWordSets);
     void onShowNextSearchResult();
+    void onShowPreviousSearchResult();
     void setUseLastCuror();
     void addErrorsToStack(int lineNum);
     void redrawSmartPanel();

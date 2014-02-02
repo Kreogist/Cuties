@@ -85,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Welcome window event.
     connect(hideWelcomeWindow, &QPropertyAnimation::finished,
             welcomeWindow, &KCWelcomeWindow::hide);
-    connect(tabManager, &KCTabManager::tabNonClear,
+    connect(tabManager, &KCTabManager::firstTabCreate,
             this, &MainWindow::animateHideWelcomeWindow);
     connect(tabManager, &KCTabManager::tabClear,
             this, &MainWindow::animateShowWelcomeWindow);
@@ -714,7 +714,7 @@ void MainWindow::createDocks()
             tabManager, SLOT(insertToCurrentEditor(QString)));
     connect(sideBar, SIGNAL(requireSetCurrentEditorFocus()),
             tabManager, SLOT(setFocus()));
-    connect(tabManager, &KCTabManager::tabNonClear,
+    connect(tabManager, &KCTabManager::firstTabCreate,
             sideBar, &KCSideBar::show);
     connect(tabManager, &KCTabManager::tabClear,
             sideBar, &KCSideBar::hide);

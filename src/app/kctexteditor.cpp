@@ -32,6 +32,11 @@
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
 
+/*!
+ * \brief Constructs a KCTextEditor with the given parent and the specified
+ * widget flags.
+ * \param parent Specifies the parent QWidget.
+ */
 KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
@@ -77,9 +82,9 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 
     //Connect signals and signals/slots.
     /****Highlight****/
-/*    connect(this, &KCTextEditor::cursorPositionChanged,
+    connect(this, &KCTextEditor::cursorPositionChanged,
             this, &KCTextEditor::updateHighlights);
-    connect(this, &KCTextEditor::textChanged,
+/*    connect(this, &KCTextEditor::textChanged,
             this, &KCTextEditor::updateHighlights);*/
 
     /****Search & Replace****/
@@ -104,6 +109,13 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     updateHighlights();
 }
 
+/***********Properies settings************/
+void KCTextEditor::setTabWidth(int width)
+{
+    setTabStopWidth(fontMetrics().width(' ')*width);
+}
+
+/***********Search & Replace************/
 void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
                                                         KCTextBlockData *data)
 {
@@ -120,17 +132,12 @@ void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
     data->endUsingSearchDatas();
 }
 
-void KCTextEditor::setTabWidth(int width)
+bool KCTextEditor::showPreviousSearchResult(const QTextCursor &cursor)
 {
-    setTabStopWidth(fontMetrics().width(' ')*width);
-}
-
-bool KCTextEditor::showPreviousSearchResult()
-{
+    //Backup current cursor
+    QTextCursor searchCursor=cursor;
     //Simbol to match a string
     bool hasMatch=false, isCursorLine;
-    //Backup current cursor
-    QTextCursor searchCursor=textCursor();
     //Check search position
     int currentCursorPostion=searchCursor.selectionStart(),
         matchedCount;
@@ -172,12 +179,12 @@ bool KCTextEditor::showPreviousSearchResult()
         setTextCursor(searchCursor);
         return true;
     }
-    return findLastSearchResult();
+    return false;
 }
 
-bool KCTextEditor::showNextSearchResult()
+bool KCTextEditor::showNextSearchResult(const QTextCursor &cursor)
 {
-    QTextCursor searchCursor=textCursor();
+    QTextCursor searchCursor=cursor;
     //Simbol to match a string
     bool hasMatch=false, isCursorLine;
     //Backup current cursor
@@ -221,45 +228,40 @@ bool KCTextEditor::showNextSearchResult()
         setTextCursor(searchCursor);
         return true;
     }
-    return findFirstSeachResult();
+    return false;
+}
+
+bool KCTextEditor::findNextSearchResult()
+{
+    if(!showNextSearchResult(textCursor()))
+    {
+        return findFirstSeachResult();
+    }
+    return true;
+}
+
+bool KCTextEditor::findPreviousSearchResult()
+{
+    if(!showPreviousSearchResult(textCursor()))
+    {
+        return findLastSearchResult();
+    }
+    return false;
 }
 
 bool KCTextEditor::findFirstSeachResult()
 {
-    //Backup current cursor
     QTextCursor searchCursor=textCursor();
-    //Simbol to match a string
-    bool hasMatch=false;
-    KCTextBlockData *blockData;
-    KCTextBlockData::matchedInfo currentMatch;
-    //Search from current place to next place
-    for(QTextBlock i=document()->begin();
-        i.isValid() && !hasMatch;
-        i=i.next())
-    {
-        blockData=static_cast<KCTextBlockData *>(i.userData());
-        checkWhetherBlockSearchedAndDealWith(i, blockData);
-        blockData->beginUsingSearchDatas();
-        if(blockData->hasMatched())         //If current have search result
-        {
-            hasMatch=true;
-            currentMatch=blockData->getMatchedInfo(0);
-            searchCursor.setPosition(i.position()+currentMatch.pos);
-            searchCursor.movePosition(QTextCursor::NextCharacter,
-                                     QTextCursor::KeepAnchor,
-                                     currentMatch.matchedLength);
-        }
-        blockData->endUsingSearchDatas();
-    }
-    if(hasMatch)
-    {
-        setTextCursor(searchCursor);
-    }
-    return hasMatch;
+    searchCursor.movePosition(QTextCursor::Start);
+    return showNextSearchResult(searchCursor);
 }
 
 bool KCTextEditor::findLastSearchResult()
 {
+    QTextCursor searchCursor=textCursor();
+    searchCursor.movePosition(QTextCursor::End);
+    return showPreviousSearchResult(searchCursor);
+    /*
     //Backup current cursor
     QTextCursor searchCursor=textCursor();
     //Simbol to match a string
@@ -295,7 +297,7 @@ bool KCTextEditor::findLastSearchResult()
     {
         setTextCursor(searchCursor);
     }
-    return hasMatch;
+    return hasMatch;*/
 }
 
 void KCTextEditor::searchString(QString searchTextSets,
@@ -330,7 +332,7 @@ void KCTextEditor::searchString(QString searchTextSets,
         updateSearchResults();
         searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
         searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
-        showNextSearchResult();
+        findNextSearchResult();
     }
 }
 
@@ -409,7 +411,7 @@ bool KCTextEditor::replace(const QString &oldText, const QString &newText)
 bool KCTextEditor::replaceAndFind(const QString &oldText,
                                   const QString &newText)
 {
-    return replace(oldText,newText)|showNextSearchResult();
+    return replace(oldText,newText)|findNextSearchResult();
 }
 
 bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
@@ -579,7 +581,6 @@ void KCTextEditor::setUsingBlankInsteadTab(bool value)
 {
     usingBlankInsteadTab = value;
 }
-
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
 {

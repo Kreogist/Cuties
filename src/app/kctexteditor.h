@@ -20,8 +20,10 @@
 /*!
  * \copyright GNU Public License v3
  * \details
- *    This file is the function implementation file of class KCTextEditor.
- *    KCTextEditor is the basic editor class to all other language.
+ * This file is the function implementation file of class KCTextEditor.
+ * KCTextEditor is the basic editor class to all other language. All the other
+ * language's text editor will be inherited this class and rewrite
+ * keyPressEvent().
  */
 
 #ifndef CODEEDITOR_H
@@ -82,8 +84,10 @@ public slots:
     void updateHighlights();
     //void pasteFromeHistory();
     void updateAllPanels();
-    bool showPreviousSearchResult();
-    bool showNextSearchResult();
+    bool findNextSearchResult();
+    bool findPreviousSearchResult();
+    bool findFirstSeachResult();
+    bool findLastSearchResult();
     void searchString(QString searchTextSets,
                       bool regularExpressionSets,
                       bool caseSensitivelySets,
@@ -119,6 +123,8 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    bool showPreviousSearchResult(const QTextCursor &cursor);
+    bool showNextSearchResult(const QTextCursor &cursor);
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection> &selections);
     int highlightParentheses(QList<QTextEdit::ExtraSelection> &selections);
@@ -126,8 +132,6 @@ private:
                                    int matchedParentheses,
                                    QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
-    bool findFirstSeachResult();
-    bool findLastSearchResult();
     void generalSearch(const QTextBlock &block,
                        const int &lines,
                        const bool forward);
