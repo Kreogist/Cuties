@@ -17,6 +17,9 @@
 #
 #-------------------------------------------------
 
-TEMPLATE = subdirs
+TEMPLATE=subdirs
 
-SUBDIRS += app tests tools/ConsoleRunner
+SUBDIRS += \
+    kcconfigure
+
+

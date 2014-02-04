@@ -86,7 +86,7 @@ private:
 
     static KCColorConfigure *instance;
     static QString colorConfigFilePath;
-    QMap<QString,QVector<ColorInfo>> colorInfoMap;
+    QMap<QString,QVector<ColorInfo> > colorInfoMap;
     QMap<QString,Color> colorSheet;
 };
 

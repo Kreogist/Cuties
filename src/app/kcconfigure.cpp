@@ -18,6 +18,7 @@
  */
 
 #include <QApplication>
+#include <QDebug>
 
 #include "kcconfigure.h"
 
@@ -66,9 +67,16 @@ void KCConfigure::writeConfigure()
     settings.endGroup();
 }
 
-QVariant KCConfigure::getValue(const QString &key)
+QVariant KCConfigure::getValue(const QString &key) const
 {
-    return configureMap[key];
+    auto mapIterator=configureMap.find(key);
+    if(Q_UNLIKELY(mapIterator==configureMap.end()))
+    {
+        qDebug()<<"KCConfigure: unknow key value: "<<key;
+        return QVariant();
+    }
+
+    return mapIterator.value();
 }
 
 void KCConfigure::setValue(const QString &key, const QVariant &value)
@@ -76,8 +84,7 @@ void KCConfigure::setValue(const QString &key, const QVariant &value)
     configureMap[key]=value;
 }
 
-void KCConfigure::setPathValue(const QString &key,
-                                       const QString &value)
+void KCConfigure::setPathValue(const QString &key, const QString &value)
 {
     QString recordValue;
     if(value.left(qApp->applicationDirPath().length())==qApp->applicationDirPath())
@@ -91,7 +98,7 @@ void KCConfigure::setPathValue(const QString &key,
     setValue(key, recordValue);
 }
 
-QString KCConfigure::getPathValue(const QString &key)
+QString KCConfigure::getPathValue(const QString &key) const
 {
     QString pathValue=getValue(key).toString();
 #ifdef Q_OS_WIN32

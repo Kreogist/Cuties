@@ -13,16 +13,6 @@ endif ()
 # Find the QtWidgets library
 find_package(Qt5Widgets)
 
-#check C++11 support
-include(cxx11.cmake)
-check_for_cxx11_compiler(CXX11_COMPILER)
-# If a C++11 compiler is available, then set the appropriate flags
-if(CXX11_COMPILER)
-    enable_cxx11()
-else(CXX11_COMPILER)
-    MESSAGE(FATAL_ERROR "Can not enable C++11 support.")
-endif(CXX11_COMPILER)
-
 set(SRC_LIST main.cpp )
 set(SRC_LIST ${SRC_LIST} Controls/GraphicButtons/kcgraphicbuttonbase.cpp )
 set(SRC_LIST ${SRC_LIST} Controls/GraphicButtons/kcgraphicbuttoncancel.cpp )

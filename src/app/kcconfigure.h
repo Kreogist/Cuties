@@ -33,14 +33,14 @@ public:
     virtual void readConfigure();
     virtual void writeConfigure();
 
-    virtual QVariant getValue(const QString &key);
+    virtual QVariant getValue(const QString &key) const;
     virtual void setValue(const QString &key, const QVariant &value);
 
     static QString getCfgFileName();
     static void setCfgFileName(const QString &value);
 
     virtual void setPathValue(const QString &key, const QString &value);
-    virtual QString getPathValue(const QString &key);
+    virtual QString getPathValue(const QString &key) const;
 
     void setGroupName(const QString &value);
 

@@ -2,12 +2,28 @@ cmake_minimum_required(VERSION 2.8.9)
 
 project(cuties)
 
+set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb ")
+set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O2 -Wall")
+
+#check C++11 support
+include(cxx11.cmake)
+check_for_cxx11_compiler(CXX11_COMPILER)
+# If a C++11 compiler is available, then set the appropriate flags
+if(CXX11_COMPILER)
+    enable_cxx11()
+else(CXX11_COMPILER)
+    MESSAGE(FATAL_ERROR "Can not enable C++11 support.")
+endif(CXX11_COMPILER)
+
 add_subdirectory(src)
 add_subdirectory(font)
 add_definitions(-Wall)
 
-set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb ")
-set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O2 -Wall")
+#build unit test
+option(BUILD_TESTS "Build unit tests" OFF)
+if(BUILD_TESTS)
+    enable_testing()
+endif()
 
 #build documentation
 option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
