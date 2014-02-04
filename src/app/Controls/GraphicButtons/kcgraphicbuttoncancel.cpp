@@ -19,6 +19,11 @@
 
 #include "kcgraphicbuttoncancel.h"
 
+/*!
+ * \brief Constructs a KCGraphicButtonCancel with the given parent and the
+ * specified widget flags.
+ * \param parent Specifies the parent QWidget.
+ */
 KCGraphicButtonCancel::KCGraphicButtonCancel(QWidget *parent) :
     KCGraphicButtonBase(parent)
 {

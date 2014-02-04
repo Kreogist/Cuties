@@ -11,16 +11,19 @@ Copyright © 2013 Kreogist Dev Team. All rights reserved.
 * License
 
 ## Recommended System Requirements
-Cuties is a cross-platform application. It is supported on a variety of 32-bit and 64-bit platforms. You can use Cuites on the following desktop platforms:
+Cuties is a cross-platform application. It is supported on a variety of 32-bit and 64-bit platforms. 
+
+# Hardware platform
 - Intel® Pentium™ III M processor or better.
 - 64MB of RAM or better(DDR or better recommended).
-- Intel GMA-HD / nVIDIA GeForce 6200LE / ATI Radeon X300 or better.
-- ??MB of disk space.
-- Microsoft® Windows® XP Service Pack 2 or later.
+- Intel GMA X4500 / nVIDIA GeForce3 Ti500 / ATI Radeon 9100 or better.
+- 60 MB of disk space. You need more disk space to store compilers.
 
-  Apple Mac OS X Lion 10.7 or later.
-  
-  Linux/X11
+# Operating system
+You should using one of the following operating system:
+- Microsoft® Windows® XP Service Pack 2 or later, both 32-bit and 64-bit.
+- Apple® Mac OS X Lion 10.7 or later, 64-bit. 
+- Linux/X11, 64-bit.
 
 ## Building Prerequisites
 

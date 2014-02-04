@@ -20,8 +20,6 @@
 #ifndef KCGRAPHICBUTTONBASE_H
 #define KCGRAPHICBUTTONBASE_H
 
-#include <QWidget>
-
 /*!
  * \details
  * This file is the function implementation file of class KCGraphicButtonBase.
@@ -31,6 +29,8 @@
  * you'd like to add some other functions, inherited this class and write your
  * own.
  */
+
+#include <QWidget>
 
 class QLabel;
 class QMouseEvent;

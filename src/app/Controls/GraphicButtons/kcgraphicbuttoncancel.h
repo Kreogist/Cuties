@@ -20,6 +20,13 @@
 #ifndef KCGRAPHICBUTTONCANCEL_H
 #define KCGRAPHICBUTTONCANCEL_H
 
+/*!
+ * \details
+ * This file is the cancel button, inherits KCGraphicButtonBase.
+ * KCGraphicButtonCancel is very simple. If you want to do actions when pressing
+ * Esc key, please connect them manually.
+ */
+
 #include "kcgraphicbuttonbase.h"
 
 class KCGraphicButtonCancel : public KCGraphicButtonBase
