@@ -13,13 +13,13 @@ Copyright © 2013 Kreogist Dev Team. All rights reserved.
 ## Recommended System Requirements
 Cuties is a cross-platform application. It is supported on a variety of 32-bit and 64-bit platforms. 
 
-# Hardware platform
+### Hardware platform
 - Intel® Pentium™ III M processor or better.
 - 64MB of RAM or better(DDR or better recommended).
 - Intel GMA X4500 / nVIDIA GeForce3 Ti500 / ATI Radeon 9100 or better.
 - 60 MB of disk space. You need more disk space to store compilers.
 
-# Operating system
+### Operating system
 You should using one of the following operating system:
 - Microsoft® Windows® XP Service Pack 2 or later, both 32-bit and 64-bit.
 - Apple® Mac OS X Lion 10.7 or later, 64-bit. 

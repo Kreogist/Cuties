@@ -148,6 +148,11 @@ void KCRunner::run()
          */
         QString argExecuteFilePath=executeFilePath;
 
+#ifdef Q_OS_WIN32
+        argExecuteFilePath.prepend("\"");
+        argExecuteFilePath.append("\"");
+#endif
+
         /*
          * For Mac OS X, no terminal to execute. For others, use terminal to
          * launch terminal and solve the Qt Background Running problem.
@@ -161,10 +166,11 @@ void KCRunner::run()
 
 #ifdef Q_OS_WIN32
         //For Windows, we have to launch terminal by:
-        // cmd /c start cmd /c kciExecutor.exe C:\cppName.exe
+        // cmd /c start cmd /c "kciExecutor.exe" "C:\cppName.exe"
                 <<"start"<<terminal.terminal_name<<terminal.arg
 #endif
-                <<qApp->applicationDirPath()+'/'+consoleRunnerPath<<argExecuteFilePath;
+                <<qApp->applicationDirPath()+'/'+consoleRunnerPath
+                <<argExecuteFilePath;
         connect(executeProcess,SIGNAL(finished(int)),
                 this,SLOT(quit()));
         connect(this,SIGNAL(finished()),
