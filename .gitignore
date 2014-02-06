@@ -12,12 +12,17 @@
 
 # Qt-es
 
-*.pro.user
-*.pro.user.*
 moc_*.cpp
 qrc_*.cpp
 Makefile
 *-build-*
+
+# temp-es
+*.tmp
+
+# user-es
+*.user
+*.user.*
 
 # build dir
 /build

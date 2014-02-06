@@ -18,4 +18,5 @@ TEMPLATE = app
 SOURCES += tst_kcconfiguretest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-HEADERS +=
+HEADERS += \
+    tst_kcconfiguretest.h
