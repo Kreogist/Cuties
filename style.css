@@ -149,7 +149,7 @@ p{margin-top:2em;}
     background-image:url("ok_hover.png");
 }
 #dialog-windows{}
-#dialog-mac{display:none;}
+#dialog-mac{}
 #dialog-linux{display:none;}
 .menu-link-wrapper{
     padding:0;

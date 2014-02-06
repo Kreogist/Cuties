@@ -63,12 +63,11 @@
 			var osString = navigator.platform.toLowerCase();
 			if(osString.indexOf("win")>-1)
 			{
-			    document.write("<a href=\"https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-fpc-offline.zip\"><p class=\"normal-font center-text\"><img src=\"../package_download.png\" /><br />带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB)</p></a>");
+			    document.write("<a href=\"http://dl.vmall.com/c089qgludy\"><p class=\"normal-font center-text\"><img src=\"../package_download.png\" /><br />带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB)</p></a>");
 			}
 			else if(osString.indexOf("mac")>-1)
 			{
-			    document.write("<p class=\"normal-font center-text\"><img src=\"../package_download_unavaliable.png\" /></p>")
-				document.write("<p class=\"normal-font center-text\">暂时无法提供 " + navigator.platform + " 的安装包</p>");
+			    document.write("<a href=\"http://dl.vmall.com/c0wyo9i05m\"><p class=\"normal-font center-text\"><img src=\"../package_download.png\" /><br />适用于 Mac OS X 的 Cuties (需要 Command Line Tools need, dmg, 11.22MB)</p></a>");
 			}
 			else if(osString.indexOf("linux")>-1)
 			{
@@ -89,7 +88,7 @@
             </div>
             <div class="download-context-box">
             <h1 class="platform">Mac</h1>
-            <a class="menu-link center-text"  onclick=ShowDialog("dialog-mac") >即将到来</a>
+            <a class="menu-link center-text"  onclick=ShowDialog("dialog-mac") >下载</a>
             </div>
             
             <div class="download-context-box">
@@ -98,9 +97,6 @@
             </div>
             </div>
             
-			<p class="normal-font center-text"><br /><br />我们在这些网站提供 Cuties 安装包的镜像</p>
-			<a href="downloads_mirror_1.html" class="mirror-link normal-font center-text"><img src="../huawei.png" alt="华为网盘镜像">华为网盘镜像</a>
-			<a href="downloads_mirror_2.html" class="mirror-link normal-font center-text"><img src="../baidu.png" alt="百度云镜像">百度云镜像</a>
 			<p class="normal-font"><br />这些版本间的区别</p>
 			<p class="normal-font">带有 MinGW 和 FPC 编译器的 Cuties：提供了一个带有 MinGW 编译器和 FPC 编译器的 Cuties。将使用 MinGW 套件中的 GDB 作为调试器。<br />
 			带有 TDM-GCC 和 FPC 编译器的 Cuties： 提供了一个带有 TDM-GCC MinGW 编译器和 FPC 编译器的 Cuties。将使用 TDM-GCC MinGW 中附带的 GDB 作为调试器。<br />
@@ -130,25 +126,43 @@
     <h1>Windows</h1>
     <p>
     <ul class="menu-link-wrapper">
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-fpc-offline.7z">带有 MinGW 和 FPC 编译器的 Cuties (7z, 95.03MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-fpc-offline.zip">带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-fpc-offline.7z">带有 TDM-GCC 和 FPC 编译器的 Cuties (7z, 66.71MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-fpc-offline.zip">带有 TDM-GCC 和 FPC 编译器的 Cuties (zip, 143.56MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-offline.7z">带有 MinGW 编译器的 Cuties (7z, 67.93MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-mingw-offline.zip">带有 MinGW 编译器的 Cuties (zip, 305.46MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-offline.7z">带有 TDM-GCC 编译器的 Cuties (7z, 40.31MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-tdmgcc-offline.zip">带有 TDM-GCC 编译器的 Cuties (zip, 98.92MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-fpc-offline.7z">带有 FPC 编译器的 Cuties  (7z, 46.74MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-fpc-offline.zip">带有 FPC 编译器的 Cuties  (zip, 73.77MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-offline.7z">没有编译器的 Cuties (7z, 20.02MB)</a></li>
-    <li ><a class="menu-link" href="https://github.com/Kreogist/Cuties/releases/download/0.2.6.3/cuties-windows-0.2.6.3-offline.zip">没有编译器的 Cuties (zip, 29.13MB)</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c089qgludy">带有 MinGW 和 FPC 编译器的 Cuties (7z, 95.03MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1bn9Zg0B">带有 MinGW 和 FPC 编译器的 Cuties (7z, 95.03MB) 百度云镜像</a></li>
+	<li ><a class="menu-link" href="http://dl.vmall.com/c0iduyqxqf">带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1qWydqGG">带有 MinGW 和 FPC 编译器的 Cuties (zip, 350.11MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0vs6v76rj">带有 TDM-GCC 和 FPC 编译器的 Cuties (7z, 66.71MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1ntwN4zn">带有 TDM-GCC 和 FPC 编译器的 Cuties (7z, 66.71MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0vudh71li">带有 TDM-GCC 和 FPC 编译器的 Cuties (zip, 143.56MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1sjyHlNJ">带有 TDM-GCC 和 FPC 编译器的 Cuties (zip, 143.56MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0y6qkpkd1">带有 MinGW 编译器的 Cuties (7z, 67.93MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1eQzJ93k">带有 MinGW 编译器的 Cuties (7z, 67.93MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0fntf1wnx">带有 MinGW 编译器的 Cuties (zip, 305.46MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1kTE26BP">带有 MinGW 编译器的 Cuties (zip, 305.46MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0yhkuo9ms">带有 TDM-GCC 编译器的 Cuties (7z, 40.31MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1o60Pm7S">带有 TDM-GCC 编译器的 Cuties (7z, 40.31MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0o0tt7k3m">带有 TDM-GCC 编译器的 Cuties (zip, 98.92MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/13V77S">带有 TDM-GCC 编译器的 Cuties (zip, 98.92MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0m9lm2tk0">带有 FPC 编译器的 Cuties  (7z, 46.74MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1gdspYF5">带有 FPC 编译器的 Cuties  (7z, 46.74MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c05qzq0v23">带有 FPC 编译器的 Cuties  (zip, 73.77MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1bn492EV">带有 FPC 编译器的 Cuties  (zip, 73.77MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0h3nafqhh">没有编译器的 Cuties (7z, 20.02MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1i3oikWt">没有编译器的 Cuties (7z, 20.02MB) 百度云镜像</a></li>
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0gdw2j71n">没有编译器的 Cuties (zip, 29.13MB) 华为网盘镜像</a></li>
+    <li ><a class="menu-link" href="http://pan.baidu.com/s/1i3r5Xy9">没有编译器的 Cuties (zip, 29.13MB) 百度云镜像</a></li>
     </ul>
     </p>
     <h1 class="dialog-bottom"><span class="dialog-button"></span></h1>
     </div>
     <div id="dialog-mac" class="dialog" onclick=HideDialogs()>
     <h1>Mac</h1>
-    <p></p>
+    <p>
+	<ul class="menu-link-wrapper">
+    <li ><a class="menu-link" href="http://dl.vmall.com/c0wyo9i05m">没有编译器的 Cuties(需要 Command Line Tools need, dmg, 11.22MB) 华为网盘镜像</a></li>
+	<li ><a class="menu-link" href="http://pan.baidu.com/s/1eQiPmPO">没有编译器的 Cuties(需要 Command Line Tools, dmg, 11.22MB) 百度云镜像</a></li>
+	<li ><a class="menu-link" href="http://pan.baidu.com/s/1qWPOnpU">Command Line Tools(适用于 Mavericks 系统，XCode 组件之一), 2013年9月(dmg, 97.4MB) 百度云镜像</a></li>
+    </ul>
+	</p>
     <h1 class="dialog-bottom"><span class="dialog-button"></span></h1>
     </div>
     <div id="dialog-linux" class="dialog" onclick=HideDialogs()>
