@@ -65,7 +65,6 @@ public:
 
 signals:
     void requireHideOthers();
-    void updated();
     void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);
     void matchedResult();

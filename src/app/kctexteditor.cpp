@@ -103,7 +103,6 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 void KCTextEditor::paintEvent(QPaintEvent *e)
 {   
     QPlainTextEdit::paintEvent(e);
-    emit updated();
 }
 
 void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block)
