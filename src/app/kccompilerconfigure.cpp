@@ -36,9 +36,9 @@ KCCompilerConfigure::KCCompilerConfigure()
 #endif
 
 #ifdef Q_OS_WIN32
-    setValue("GPP-Path","/Compiler/MinGW/bin/g++.exe");
-    setValue("GCC-Path","/Compiler/MinGW/bin/gcc.exe");
-    setValue("FPC-Path","/Compiler/FPC/bin/i386-win32/fpc.exe");
+    setValue("GPP-Path","/Compilers/MinGW/bin/g++.exe");
+    setValue("GCC-Path","/Compilers/MinGW/bin/gcc.exe");
+    setValue("FPC-Path","/Compilers/FPC/bin/i386-win32/fpc.exe");
 #endif
 
     setValue("delayCompile", false);

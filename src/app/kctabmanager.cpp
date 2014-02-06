@@ -252,9 +252,10 @@ int KCTabManager::newFile()
         setCurrentIndex(newTabIndex);
         return newTabIndex;
     }
-    QErrorMessage error(this);
-    error.showMessage(tr("out of memmory!"));
-    error.exec();
+    KCMessageBox *error=new KCMessageBox(this->parentWidget());
+    error->setTitle("Error");
+    error->addText(tr("Out of memmory."));
+    error->exec();
     return -1;
 }
 

@@ -28,6 +28,8 @@
 #include <QFontDatabase>
 #include <QMessageBox>
 
+#include "kcmessagebox.h"
+
 KCFontConfigure *KCFontConfigure::instance=nullptr;
 
 KCFontConfigure *KCFontConfigure::getInstance()

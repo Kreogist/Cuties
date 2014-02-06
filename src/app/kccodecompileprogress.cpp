@@ -225,6 +225,7 @@ void KCCodeCompileProgress::setCompileState(KCCodeCompileProgress::CompileState 
     case errorCantFindCompiler:
         setText(tr("Can't find compiler."));
         setValue(100);
+        delayHide();
         break;
     default:
         break;

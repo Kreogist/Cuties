@@ -136,9 +136,7 @@ void KCRunner::run()
     else
     {
         QStringList executorArgv;
-        QFileInfo info(executeFilePath);
-
-        executeProcess->setWorkingDirectory(info.absoluteDir().absolutePath());
+        executeProcess->setWorkingDirectory(qApp->applicationDirPath());
         /*
          * Here we have to launch terminal program.
          *
@@ -167,10 +165,12 @@ void KCRunner::run()
 #ifdef Q_OS_WIN32
         //For Windows, we have to launch terminal by:
         // cmd /c start cmd /c "kciExecutor.exe" "C:\cppName.exe"
-                <<"start"<<terminal.terminal_name<<terminal.arg
+               <<"start"<<terminal.terminal_name<<terminal.arg
+               <<consoleRunnerPath
+#else
+               <<qApp->applicationDirPath()+'/'+consoleRunnerPath
 #endif
-                <<qApp->applicationDirPath()+'/'+consoleRunnerPath
-                <<argExecuteFilePath;
+               <<argExecuteFilePath;
         connect(executeProcess,SIGNAL(finished(int)),
                 this,SLOT(quit()));
         connect(this,SIGNAL(finished()),

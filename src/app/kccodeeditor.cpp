@@ -18,7 +18,6 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QErrorMessage>
 #include <QTextStream>
 #include <QFileInfo>
 #include <QFileDialog>
@@ -35,6 +34,8 @@
 #include "kchistoryconfigure.h"
 #include "kcgeneralconfigure.h"
 #include "kccolorconfigure.h"
+
+#include "kcmessagebox.h"
 
 #include "kctexteditor.h"
 #include "kcsearchwindow.h"
@@ -396,9 +397,10 @@ bool KCCodeEditor::processSaveAsAction(const QString &dialogCaption)
     {
         if(fileError!=QFileDevice::AbortError)
         {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
+            KCMessageBox *error=new KCMessageBox(this);
+            error->setTitle("Error");
+            error->addText(tr("Saving file failed."));
+            error->exec();
         }
         return false;
     }

@@ -28,7 +28,6 @@
 #include <QTextCursor>
 #include <QPropertyAnimation>
 #include <QTextDocument>
-#include <QErrorMessage>
 #include <QSettings>
 #include <QPalette>
 #include <QUrl>
