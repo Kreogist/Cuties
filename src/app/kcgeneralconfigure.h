@@ -59,6 +59,9 @@ public slots:
     void retranslate();
     void retranslateAndSet();
 
+protected:
+    QString getGroupName();
+
 private:
     KCGeneralConfigure();
     static KCGeneralConfigure *instance;

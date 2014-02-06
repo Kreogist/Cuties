@@ -31,10 +31,14 @@ KCGeneralConfigure *KCGeneralConfigure::getInstance()
     return instance==nullptr?instance=new KCGeneralConfigure:instance;
 }
 
+QString KCGeneralConfigure::getGroupName()
+{
+    return "General";
+}
+
 KCGeneralConfigure::KCGeneralConfigure()
 {
     retranslate();
-    setGroupName("General");
 
     QString defaultSearchEngineURL[SearchEngineCount];
     defaultSearchEngineURL[Google]="https://www.google.com.hk/#newwindow=1&safe=strict&q=";

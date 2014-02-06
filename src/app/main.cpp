@@ -31,7 +31,7 @@
 #include <QDebug>
 #include <QTimer>
 
-#include <cstdlib>
+#include <iostream>
 
 #include "mainwindow.h"
 #include "kcglobal.h"
@@ -145,60 +145,53 @@ static inline void processArg()
  */
 void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+    QString message;
+
+    switch(type)
+    {
+    case QtDebugMsg:
+        message.sprintf("Debug: (%s:%u\n%s)\n",
+                                 context.file,
+                                 context.line,
+                                 context.function);
+        break;
+    case QtWarningMsg:
+        message.sprintf("Warning: (%s:%u\n%s)\n",
+                                 context.file,
+                                 context.line,
+                                 context.function);
+        break;
+    case QtCriticalMsg:
+        message.sprintf("Critical: (%s:%u\n%s)\n",
+                                 context.file,
+                                 context.line,
+                                 context.function);
+        break;
+    case QtFatalMsg:
+        message.sprintf("Fatal: (%s:%u\n%s)\n",
+                                 context.file,
+                                 context.line,
+                                 context.function);
+    default:
+        message.sprintf("Unknow Message Type: (%s:%u\n%s)\n",
+                                 context.file,
+                                 context.line,
+                                 context.function);
+    }
+
+    std::cerr<<message.toStdString()<<msg.toStdString()<<std::endl<<std::endl;
 
     QFile file(QApplication::applicationDirPath()+"/log.txt");
     if(file.open(QIODevice::WriteOnly))
     {
         QTextStream out(&file);
-        out<<(QTime::currentTime().toString().toUtf8()+" ");
-        switch(type)
-        {
-        case QtDebugMsg:
-            out<<QString("").sprintf("Debug: (%s:%u, %s)\n",
-                                     context.file,
-                                     context.line,
-                                     context.function);
-            break;
-        case QtWarningMsg:
-            out<<QString("").sprintf("Warning: (%s:%u, %s)\n",
-                                     context.file,
-                                     context.line,
-                                     context.function);
-            break;
-        case QtCriticalMsg:
-            out<<QString("").sprintf("Critical: (%s:%u, %s)\n",
-                                     context.file,
-                                     context.line,
-                                     context.function);
-            break;
-        case QtFatalMsg:
-            out<<QString("").sprintf("Fatal: (%s:%u, %s)\n",
-                                     context.file,
-                                     context.line,
-                                     context.function);
-            out<<msg<<"\n";
-            abort();
-        }
-        out<<msg<<"\n";
-    }
+        out<<QTime::currentTime().toString().toUtf8()<<endl;
+        out<<message;
 
-    QByteArray localMsg = msg.toUtf8();
-    switch(type)
-    {
-    case QtDebugMsg:
-        fprintf(stderr, "Debug: (%s:%u, %s)\n", context.file, context.line, context.function);
-        break;
-    case QtWarningMsg:
-        fprintf(stderr, "Warning: (%s:%u, %s)\n", context.file, context.line, context.function);
-        break;
-    case QtCriticalMsg:
-        fprintf(stderr, "Critical: (%s:%u, %s)\n", context.file, context.line, context.function);
-        break;
-    case QtFatalMsg:
-        fprintf(stderr, "Fatal: (%s:%u, %s)\n", context.file, context.line, context.function);
-        abort();
+        if(type==QtFatalMsg)
+            abort();
+        out<<msg<<endl<<endl;
     }
-    fprintf(stderr,"%s", localMsg.constData());
 }
 
 /*!
@@ -209,7 +202,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
  */
 int main(int argc, char *argv[])
 {
-    //qInstallMessageHandler(KCMessageHandler);
+    qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
     loadApplicationInfo();

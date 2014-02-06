@@ -23,9 +23,9 @@
 
 KCEditorConfigure *KCEditorConfigure::instance=nullptr;
 
-KCEditorConfigure::KCEditorConfigure()
+QString KCEditorConfigure::getGroupName() const
 {
-    setGroupName("Editor");
+    return "Editor";
 }
 
 KCEditorConfigure *KCEditorConfigure::getInstance()

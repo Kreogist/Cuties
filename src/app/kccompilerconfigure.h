@@ -32,6 +32,9 @@ class KCCompilerConfigure : public KCConfigure
 public:
     static KCCompilerConfigure *getInstance();
 
+protected:
+    QString getGroupName();
+
 private:
     KCCompilerConfigure();
     static KCCompilerConfigure *instance;
