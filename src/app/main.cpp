@@ -220,9 +220,7 @@ int main(int argc, char *argv[])
 
     //Initalize Application Palette.
     QPalette pal=app.palette();
-    pal.setColor(QPalette::Text,QColor(0,0,0));
-    pal.setColor(QPalette::Highlight,QColor(0xf7,0xcf,0x3d));
-    pal.setColor(QPalette::HighlightedText,QColor(0,0,0));
+    KCColorConfigure::getInstance()->getPalette(pal,"Global");
     app.setPalette(pal);
 
     //Initalize Application Style
