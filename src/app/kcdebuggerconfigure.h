@@ -30,6 +30,9 @@ class KCDebuggerConfigure : public KCConfigure
 public:
     static KCDebuggerConfigure *getInstance();
 
+protected:
+    QString getGroupName();
+
 private:
     KCDebuggerConfigure();
     static KCDebuggerConfigure *instance;

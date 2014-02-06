@@ -30,6 +30,7 @@ class KCConfigure : public QObject
     Q_OBJECT
 
 public:
+    KCConfigure();
     virtual void readConfigure();
     virtual void writeConfigure();
 
@@ -42,14 +43,13 @@ public:
     virtual void setPathValue(const QString &key, const QString &value);
     virtual QString getPathValue(const QString &key) const;
 
-    void setGroupName(const QString &value);
-
 protected:
+    virtual QString getGroupName() const {return "";}
     QMap<QString, QVariant> configureMap;
 
 private:
+    void readConfigure(const QString& filePath);
     static QString cfgFileName;
-    QString groupName;
 
 };
 

@@ -28,7 +28,6 @@ KCCompilerConfigure *KCCompilerConfigure::getInstance()
 
 KCCompilerConfigure::KCCompilerConfigure()
 {
-    setGroupName("Compiler");
 #ifdef Q_OS_UNIX
     setValue("GPP-Path","/usr/bin/gcc");
     setValue("GCC-Path","/usr/bin/g++");
@@ -43,4 +42,9 @@ KCCompilerConfigure::KCCompilerConfigure()
 
     setValue("delayCompile", false);
     setValue("delayTimeout", 20);
+}
+
+QString KCCompilerConfigure::getGroupName()
+{
+    return "Compiler";
 }

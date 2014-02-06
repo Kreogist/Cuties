@@ -22,12 +22,12 @@
 #include "kccolorconfigure.h"
 
 KCColorConfigure *KCColorConfigure::instance=nullptr;
-QString KCColorConfigure::colorConfigFilePath("DefaultColorConfig.ini");
+QString KCColorConfigure::colorConfigFilePath(":/DefaultSettings/default_settings/DefaultColorConfig.ini");
 
 KCColorConfigure *KCColorConfigure::getInstance()
 {
     return instance==nullptr?
-           instance=new KCColorConfigure:instance;
+           instance=new KCColorConfigure : instance;
 }
 
 KCColorConfigure::Color KCColorConfigure::parseColor(const QString &content)
@@ -399,7 +399,8 @@ void KCColorConfigure::registerColorInfo(QPalette::ColorRole role,
 
 KCColorConfigure::KCColorConfigure()
 {
-
+    readConfigure();
+    colorConfigFilePath="DefaultColorConfig.ini";
 }
 
 QString KCColorConfigure::getColorConfigFilePath()

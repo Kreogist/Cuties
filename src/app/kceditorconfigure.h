@@ -38,11 +38,14 @@ public:
     QTextOption::WrapMode indexToWrapMode(int index);
     int getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const;
 
+protected:
+    QString getGroupName() const;
+
 signals:
     void editorConfigureRefresh();
 
 private:
-    KCEditorConfigure();
+    KCEditorConfigure(){}
     static KCEditorConfigure *instance;
 };
 

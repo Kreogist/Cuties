@@ -128,4 +128,9 @@
         <file>image/debugarrow.png</file>
         <file>image/folded.png</file>
     </qresource>
+    <qresource prefix="/DefaultSettings">
+        <file>default_settings/DefaultColorConfig.ini</file>
+        <file>default_settings/default.style</file>
+        <file>default_settings/Cuties_Unix.ini</file>
+    </qresource>
 </RCC>

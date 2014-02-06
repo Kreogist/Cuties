@@ -24,6 +24,10 @@
 
 QString KCConfigure::cfgFileName;
 
+KCConfigure::KCConfigure()
+{
+}
+
 QString KCConfigure::getCfgFileName()
 {
     return cfgFileName;
@@ -34,21 +38,28 @@ void KCConfigure::setCfgFileName(const QString &value)
     cfgFileName = value;
 }
 
-void KCConfigure::setGroupName(const QString &value)
-{
-    groupName = value;
-}
-
 void KCConfigure::readConfigure()
 {
-    QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup(groupName);
+    //load default config
+#ifndef Q_OS_WIN32
+    readConfigure(":/DefaultSettings/default_settings/Cuties_Unix.ini");
+#else
+    // TODO: need to load win32 default config here!
+#endif
+
+    readConfigure(getCfgFileName());
+}
+
+void KCConfigure::readConfigure(const QString &filePath)
+{
+    QSettings settings(filePath, QSettings::IniFormat);
+    settings.beginGroup(getGroupName());
     QStringList currentKeys=settings.childKeys();
     for(QStringList::const_iterator i=currentKeys.begin();
         i!=currentKeys.end();
         i++)
     {
-        configureMap[*i]=settings.value(*i);
+        configureMap[*i]=settings.value(*i,configureMap[*i]);
     }
     settings.endGroup();
 }
@@ -56,7 +67,7 @@ void KCConfigure::readConfigure()
 void KCConfigure::writeConfigure()
 {
     QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup(groupName);
+    settings.beginGroup(getGroupName());
     QList<QString> keys=configureMap.keys();
     for(QList<QString>::iterator i=keys.begin();
         i!=keys.end();
@@ -72,7 +83,7 @@ QVariant KCConfigure::getValue(const QString &key) const
     auto mapIterator=configureMap.find(key);
     if(Q_UNLIKELY(mapIterator==configureMap.end()))
     {
-        qDebug()<<"KCConfigure: unknow key value: "<<key;
+        qDebug()<<"KCConfigure: unknow key value: "<<getGroupName()<<key;
         return QVariant();
     }
 

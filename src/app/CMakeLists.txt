@@ -113,9 +113,7 @@ endif(WIN32)
 # Use the Widgets module from Qt 5.
 qt5_use_modules(${PROJECT_NAME} Widgets Network)
 
-configure_file(default.style ${PROJECT_BINARY_DIR}/default.style COPYONLY)
-configure_file(DefaultColorConfig.ini ${PROJECT_BINARY_DIR}/DefaultColorConfig.ini COPYONLY)
-
+add_subdirectory(default_settings)
 add_subdirectory(translations)
 
 #install
