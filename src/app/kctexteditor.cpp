@@ -1,20 +1,20 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cuties.
+ *  This file is part of Kreogist Cuties.
  *
- *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *    Kreogist Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *    Kreogist Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <QScrollBar>
@@ -32,51 +32,47 @@
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
 
+/*!
+ * \brief Constructs a KCTextEditor with the given parent and the specified
+ * widget flags.
+ * \param parent Specifies the parent QWidget.
+ */
 KCTextEditor::KCTextEditor(QWidget *parent) :
     QPlainTextEdit(parent)
 {
-    setContentsMargins(0, 0, 0, 0);
+    //Initialize properties.
     setObjectName("KCTextEditor");
-    setFrameStyle(QFrame::NoFrame);
     setAcceptDrops(false);
 
+    //Initialize visual properties.
+    setContentsMargins(0,0,0,0);
+    setFrameShape(QFrame::NoFrame);
     QFont editorFont=KCFontConfigure::getInstance()->getCodeFont();
     setFont(editorFont);
+    QPalette pal=palette();
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
+    setPalette(pal);
 
+    //Initialize variables.
+    /***Colors***/
+    lineColor = QColor(0x40,0x40,0x40);
+    searchResultColor = QColor(98,147,221);
+    searchResultColor = QColor(0x5A,0x86,0xCA);
+    noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
+    matchedParenthesesColor = QColor(0xf8,0x9b,0x9b);
+    /***Search code***/
+    searchCode=0;
+    /***Clipboard Menu***/
     /*clipboard=KCClipboard::getInstance();
     clipboardHistoryMenuSignalMapper=new QSignalMapper(this);
     connect(clipboardHistoryMenuSignalMapper,SIGNAL(mapped(QString)),
             this,SLOT(insertPlainText(QString)));*/
 
-    textFloatToolBar=new KCFloatToolBar(this);
-
-    QPalette pal = palette();
-    KCColorConfigure::getInstance()->getPalette(pal,objectName());
-    setPalette(pal);
-    setFrameStyle(0);
-
-    lineColor = QColor(0x40,0x40,0x40,200);
-    searchResultColor = QColor(98,147,221);
-    searchResultColor = QColor(0x5A,0x86,0xCA);
-    noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
-    matchedParenthesesColor = QColor(0xf8,0x9b,0x9b);
-
-    searchCode=0;
-
-    //Solve the default line's bug.
-    updateHighlights();
-
-    connect(this, &KCTextEditor::cursorPositionChanged,
-            this, &KCTextEditor::updateHighlights);
-    connect(this, &KCTextEditor::textChanged,
-            this, &KCTextEditor::updateHighlights);
-    connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
-            this,SLOT(updateSearchResults()));
-    connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
-            this,SLOT(updateHighlights()));
-
+    //Initial child widgets
+    /***Float toolbar***/
+    //textFloatToolBar=new KCFloatToolBar(this);
+    /***Panel Manager & Panels***/
     panelManager=new KCTextPanelManager(this);
-
     debugMarkPanel=new KCDebugMarkPanel(this);
     panelManager->addPanel(debugMarkPanel);
     lineNumberPanel=new KCLineNumberPanel(this);
@@ -84,69 +80,91 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     unibodyPanel=new KCUnibodyPanel(this);
     panelManager->addPanel(unibodyPanel);
 
-    connect(this, &KCTextEditor::blockCountChanged,
-            this, &KCTextEditor::updateLineNumberAreaWidth);
-    connect(this, &KCTextEditor::updateRequest,
-            this, &KCTextEditor::updateLineNumberArea);
+    //Connect signals and signals/slots.
+    /****Highlight****/
+    connect(this, &KCTextEditor::cursorPositionChanged,
+            this, &KCTextEditor::updateHighlights);
+/*    connect(this, &KCTextEditor::textChanged,
+            this, &KCTextEditor::updateHighlights);*/
+
+    /****Search & Replace****/
+    connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
+            this,SLOT(updateSearchResults()));
+    /*connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
+            this,SLOT(updateHighlights()));*/
+
+    /****Panels****/
+    connect(panelManager, &KCTextPanelManager::requireUpdateAllPanel,
+            this, &KCTextEditor::updateAllPanels);
     connect(panelManager, &KCTextPanelManager::requirePaintPanel,
             this, &KCTextEditor::panelPaintEvent);
     connect(unibodyPanel, &KCUnibodyPanel::requireFoldStartAt,
             this, &KCTextEditor::foldCode);
     connect(unibodyPanel, &KCUnibodyPanel::requireUnfoldStartAt,
             this, &KCTextEditor::unfoldCode);
-    connect(lineNumberPanel, &KCLineNumberPanel::requireSelectLine,
+    connect(lineNumberPanel, &KCLineNumberPanel::requireSelectBlock,
             this, &KCTextEditor::selectBlock);
 
-    updateLineNumberAreaWidth(0);
+    //Update the high lights
+    updateHighlights();
 }
 
-void KCTextEditor::paintEvent(QPaintEvent *e)
-{   
-    QPlainTextEdit::paintEvent(e);
-}
-
-void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block)
+/***********Properies settings************/
+/*!
+ * \brief Set the tab width of the current text editor.
+ * \param width The number of the space width of the tab width.
+ */
+void KCTextEditor::setTabWidth(int width)
 {
-    KCTextBlockData *data=(KCTextBlockData *)block.userData();
+    tabSpace=width;
+    setTabStopWidth(fontMetrics().width(' ')*tabSpace);
+}
+
+/*!
+ * \brief Set the word wrap mode of the current text editor.
+ * \param wrapMode The word wrap mode option.
+ */
+void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
+{
+    setWordWrapMode(wrapMode);
+}
+
+/***********Search & Replace************/
+void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
+                                                        KCTextBlockData *data)
+{
     //check whether the block has been searched
     data->beginUsingSearchDatas();
     if(!data->isSearched(searchCode))
     {
         data->endUsingSearchDatas();
-        generalSearch(block,height()/fontMetrics().lineSpacing()+2,true);    //search 50 lines
-        return;
+        generalSearch(block,
+                      height()/fontMetrics().lineSpacing()+2,
+                      true);    //search a screen lines.
+        data->beginUsingSearchDatas();
     }
     data->endUsingSearchDatas();
 }
 
-void KCTextEditor::setTabWidth(int width)
+bool KCTextEditor::showPreviousSearchResult(const QTextCursor &cursor)
 {
-    setTabStopWidth(fontMetrics().width(' ')*width);
-}
-
-bool KCTextEditor::showPreviousSearchResult()
-{
-    QTextCursor searchCursor;
-
-    //Simbol to match a string
-    bool hasMatch=false,
-         isCursorLine;
     //Backup current cursor
-    searchCursor=textCursor();
+    QTextCursor searchCursor=cursor;
+    //Simbol to match a string
+    bool hasMatch=false, isCursorLine;
     //Check search position
     int currentCursorPostion=searchCursor.selectionStart(),
         matchedCount;
     searchCursor.setPosition(currentCursorPostion);
     KCTextBlockData::matchedInfo currentMatch;
+    KCTextBlockData *blockData;
     //Search from current place to next place
     for(QTextBlock i=searchCursor.block();   //From current block
         i.isValid() && !hasMatch;           //to the destination block
         i=i.previous())  //If search forward, to previous
     {                                       //otherwise to the next.
-        KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-
-        checkWhetherBlockSearchedAndDealWith(i);
-
+        blockData=static_cast<KCTextBlockData *>(i.userData());
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
         if(blockData->hasMatched())         //If current have search result
         {
@@ -175,29 +193,28 @@ bool KCTextEditor::showPreviousSearchResult()
         setTextCursor(searchCursor);
         return true;
     }
-    return findLastSearchResult();
+    return false;
 }
 
-bool KCTextEditor::showNextSearchResult()
+bool KCTextEditor::showNextSearchResult(const QTextCursor &cursor)
 {
-    QTextCursor searchCursor=textCursor();
-
+    QTextCursor searchCursor=cursor;
     //Simbol to match a string
-    bool hasMatch=false,
-         isCursorLine;
+    bool hasMatch=false, isCursorLine;
     //Backup current cursor
     //Check search position
     int currentCursorPostion=searchCursor.position(),
         matchedCount, comparePosition;
     searchCursor.setPosition(currentCursorPostion);
+    KCTextBlockData *blockData;
     KCTextBlockData::matchedInfo currentMatch;
     //Search from current place to next place
     for(QTextBlock i=searchCursor.block();
         i.isValid() && !hasMatch;
         i=i.next())
     {
-        KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
+        blockData=static_cast<KCTextBlockData *>(i.userData());
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
         if(blockData->hasMatched())         //If current have search result
         {
@@ -225,79 +242,39 @@ bool KCTextEditor::showNextSearchResult()
         setTextCursor(searchCursor);
         return true;
     }
-    return findFirstSeachResult();
+    return false;
+}
+
+bool KCTextEditor::findNextSearchResult()
+{
+    if(!showNextSearchResult(textCursor()))
+    {
+        return findFirstSeachResult();
+    }
+    return true;
+}
+
+bool KCTextEditor::findPreviousSearchResult()
+{
+    if(!showPreviousSearchResult(textCursor()))
+    {
+        return findLastSearchResult();
+    }
+    return false;
 }
 
 bool KCTextEditor::findFirstSeachResult()
 {
-    //Backup current cursor
     QTextCursor searchCursor=textCursor();
-    //Simbol to match a string
-    bool hasMatch=false;
-    KCTextBlockData::matchedInfo currentMatch;
-    //Search from current place to next place
-    for(QTextBlock i=document()->begin();
-        i.isValid() && !hasMatch;
-        i=i.next())
-    {
-        KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
-        blockData->beginUsingSearchDatas();
-        if(blockData->hasMatched())         //If current have search result
-        {
-            hasMatch=true;
-            currentMatch=blockData->getMatchedInfo(0);
-            searchCursor.setPosition(i.position()+currentMatch.pos);
-            searchCursor.movePosition(QTextCursor::NextCharacter,
-                                     QTextCursor::KeepAnchor,
-                                     currentMatch.matchedLength);
-        }
-        blockData->endUsingSearchDatas();
-    }
-    if(hasMatch)
-    {
-        setTextCursor(searchCursor);
-    }
-    return hasMatch;
+    searchCursor.movePosition(QTextCursor::Start);
+    return showNextSearchResult(searchCursor);
 }
 
 bool KCTextEditor::findLastSearchResult()
 {
-    //Backup current cursor
     QTextCursor searchCursor=textCursor();
-    //Simbol to match a string
-    bool hasMatch=false;
-    KCTextBlockData::matchedInfo currentMatch;
-    //Search from current place to next place
-    //Set the end block number, it will be the current block
-    //If search forward, to the last block, else to the first
-    for(QTextBlock i=document()->lastBlock();
-        //Here, we should check to the end block
-        i.isValid() && !hasMatch;
-        //Continue to the next one
-        i=i.previous())
-    {
-        KCTextBlockData *blockData=(KCTextBlockData *)i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
-
-        blockData->beginUsingSearchDatas();
-        if(blockData->hasMatched())
-        {
-            //If we search to the forward, do the same things.
-            currentMatch=blockData->getMatchedInfo(blockData->matchedCount()-1);
-            hasMatch=true;
-            searchCursor.setPosition(i.position()+currentMatch.pos);
-            searchCursor.movePosition(QTextCursor::NextCharacter,
-                                      QTextCursor::KeepAnchor,
-                                      currentMatch.matchedLength);
-        }
-        blockData->endUsingSearchDatas();
-    }
-    if(hasMatch)
-    {
-        setTextCursor(searchCursor);
-    }
-    return hasMatch;
+    searchCursor.movePosition(QTextCursor::End);
+    return showPreviousSearchResult(searchCursor);
 }
 
 void KCTextEditor::searchString(QString searchTextSets,
@@ -332,7 +309,7 @@ void KCTextEditor::searchString(QString searchTextSets,
         updateSearchResults();
         searchOnOtherThread(searcherForNext,threadNext,firstVisibleBlock(),true);
         searchOnOtherThread(searcherForPrev,threadPrev,firstVisibleBlock(),false);
-        showNextSearchResult();
+        findNextSearchResult();
     }
 }
 
@@ -405,15 +382,13 @@ bool KCTextEditor::replace(const QString &oldText, const QString &newText)
         setTextCursor(_cursor);
         return true;
     }
-
     return false;
 }
 
 bool KCTextEditor::replaceAndFind(const QString &oldText,
                                   const QString &newText)
 {
-    bool ret=replace(oldText,newText);
-    return ret|showNextSearchResult();
+    return replace(oldText,newText)|findNextSearchResult();
 }
 
 bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
@@ -425,7 +400,7 @@ bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
         i=i.next())
     {
         KCTextBlockData *blockData=(KCTextBlockData *) i.userData();
-        checkWhetherBlockSearchedAndDealWith(i);
+        checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
         matchedCount+=blockData->matchedCount();
         blockData->endUsingSearchDatas();
@@ -467,8 +442,8 @@ void KCTextEditor::autoIndent()
 
     KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
     KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
-    int baseLevel=prevData->getCodeLevel();
-    int currLevel=currData->getCodeLevel();
+    int baseLevel=prevData!=NULL?prevData->getCodeLevel():0;
+    int currLevel=currData!=NULL?currData->getCodeLevel():0;
 
     if(currLevel>=baseLevel)
     {
@@ -504,31 +479,23 @@ void KCTextEditor::removeTab(QTextCursor removeTabCursor, int tabCount)
     removeTabCursor.clearSelection();
 
     //We have to judge whether we are using tab or space.
-    if(usingBlankInsteadTab)
+    int expectLength=usingBlankInsteadTab?tabCount*spacePerTab:tabCount;
+    if(expectLength > removeTabCursor.positionInBlock())
     {
-        int expectLength=tabCount*spacePerTab;
-        if(expectLength > removeTabCursor.positionInBlock())
-        {
-            /*
-             * Here means: we don't have so much space to remove,
-             * just remove all of them
-             */
-            removeTabCursor.movePosition(QTextCursor::Left,
-                                         QTextCursor::KeepAnchor,
-                                         removeTabCursor.positionInBlock());
-        }
-        else
-        {
-            //Remove the expect length
-            removeTabCursor.movePosition(QTextCursor::Left,
-                                         QTextCursor::KeepAnchor,
-                                         expectLength);
-        }
+        /*
+         * Here means: we don't have so much space to remove,
+         * just remove all of them
+         */
+        removeTabCursor.movePosition(QTextCursor::Left,
+                                     QTextCursor::KeepAnchor,
+                                     removeTabCursor.positionInBlock());
     }
     else
     {
-        //Test for first time.
-
+        //Remove the expect length
+        removeTabCursor.movePosition(QTextCursor::Left,
+                                     QTextCursor::KeepAnchor,
+                                     expectLength);
     }
     removeTabCursor.removeSelectedText();
 }
@@ -584,7 +551,6 @@ void KCTextEditor::setUsingBlankInsteadTab(bool value)
     usingBlankInsteadTab = value;
 }
 
-
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
 {
     return block.text().indexOf(QRegularExpression("\\S"));
@@ -615,11 +581,6 @@ void KCTextEditor::setCursorPosition(int lineNumber,
 void KCTextEditor::backupSearchTextCursor()
 {
     searchBackupCursor=textCursor();
-}
-
-QRectF KCTextEditor::blockRect(const QTextBlock &block)
-{
-    return blockBoundingGeometry(block);
 }
 
 int KCTextEditor::highlightParentheses(QList<QTextEdit::ExtraSelection> &selections)
@@ -799,9 +760,13 @@ void KCTextEditor::updateHighlights()
     setExtraSelections(extraSelections);
 }
 
-void KCTextEditor::updatePanelManager()
+void KCTextEditor::updateAllPanels()
 {
-    panelManager->update();
+    /*debugMarkPanel->update();
+    lineNumberPanel->update();
+    unibodyPanel->update();*/
+    panelManager->updateAllPanels();
+    updatePanelAreaWidth();
 }
 
 void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections)
@@ -832,7 +797,7 @@ void KCTextEditor::highlightSearchResult(QList<QTextEdit::ExtraSelection> &selec
         {
             continue;
         }
-        checkWhetherBlockSearchedAndDealWith(block);
+        checkWhetherBlockSearchedAndDealWith(block, currBlockData);
         currBlockData->beginUsingSearchDatas();
         if(currBlockData->hasMatched())
         {
@@ -1058,31 +1023,40 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Return:
     case Qt::Key_Enter:
     {
+        KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
+        if(currData->getHasFolded())
+        {
+            unfoldCode(_textCursor.block().blockNumber());
+            updateAllPanels();
+        }
         if(_textCursor.position()>0)
         {
             QChar previousChar=_textCursor.document()->characterAt(_textCursor.position()-1),
                   currentChar=_textCursor.document()->characterAt(_textCursor.position());
-            if(previousChar == '{' && currentChar == '}')
+            if(previousChar == '{')
             {
-                //It's a pair of char '{}'
-                // Indent it!
-                QPlainTextEdit::keyPressEvent(e);
-                _textCursor.insertBlock();
-                QTextBlock nextBlock=_textCursor.block();
-                QTextBlock currBlock=nextBlock.previous();
-                QTextBlock prevBlock=currBlock.previous();
-                KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
-                KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
-                KCTextBlockData *nextData=static_cast<KCTextBlockData *>(nextBlock.userData());
-                currData->setCodeLevel(prevData->getCodeLevel() + 1);
-                nextData->setCodeLevel(prevData->getCodeLevel() + 1);
-                _textCursor.setPosition(nextBlock.position());
-                setTextCursor(_textCursor);
-                insertTab(_textCursor, prevData->getCodeLevel() + 1);
-                _textCursor.movePosition(QTextCursor::PreviousBlock);
-                setTextCursor(_textCursor);
-                insertTab(_textCursor, prevData->getCodeLevel() + 1);
-                break;
+                if(currentChar == '}')
+                {
+                    //It's a pair of char '{}'
+                    // Indent it!
+                    QPlainTextEdit::keyPressEvent(e);
+                    _textCursor.insertBlock();
+                    QTextBlock nextBlock=_textCursor.block();
+                    QTextBlock currBlock=nextBlock.previous();
+                    QTextBlock prevBlock=currBlock.previous();
+                    KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
+                    KCTextBlockData *currData=static_cast<KCTextBlockData *>(currBlock.userData());
+                    KCTextBlockData *nextData=static_cast<KCTextBlockData *>(nextBlock.userData());
+                    currData->setCodeLevel(prevData->getCodeLevel() + 1);
+                    nextData->setCodeLevel(prevData->getCodeLevel() + 1);
+                    _textCursor.setPosition(nextBlock.position());
+                    setTextCursor(_textCursor);
+                    insertTab(_textCursor, prevData->getCodeLevel() + 1);
+                    _textCursor.movePosition(QTextCursor::PreviousBlock);
+                    setTextCursor(_textCursor);
+                    insertTab(_textCursor, prevData->getCodeLevel() + 1);
+                    break;
+                }
             }
             if(currentChar == ')' || currentChar == ']')
             {
@@ -1169,11 +1143,6 @@ void KCTextEditor::wheelEvent(QWheelEvent *event)
         return;
     }
     QPlainTextEdit::wheelEvent(event);
-}
-
-void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
-{
-    setWordWrapMode(wrapMode);
 }
 
 void KCTextEditor::setTheCursorWidth(int width)
@@ -1269,43 +1238,8 @@ void KCTextEditor::resetDebugCursor()
 
 void KCTextEditor::setDebugCursor(int lineNumber)
 {
+    setCursorPosition(lineNumber, 0);
     debugMarkPanel->setDebugCursor(lineNumber);
-}
-
-int KCTextEditor::lineNumberPanelWidth()
-{
-    int digits = 1;
-    int max = qMax(1, blockCount());
-    while (max >= 10) {
-        max /= 10;
-        ++digits;
-    }
-
-    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
-
-    return space;
-}
-
-void KCTextEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
-{
-    setViewportMargins(panelManager->resizePanel(lineNumberPanelWidth()), 0, 0, 0);
-}
-
-void KCTextEditor::updateLineNumberArea(const QRect &rect, int dy)
-{
-    if(dy)
-    {
-        //panelManager->scroll(0, dy);
-    }
-    else
-    {
-        panelManager->update(0, rect.y(), panelManager->width(), rect.height());
-    }
-
-    if (rect.contains(viewport()->rect()))
-    {
-        updateLineNumberAreaWidth(0);
-    }
 }
 
 void KCTextEditor::foldCode(int startFoldBlockIndex)
@@ -1324,10 +1258,7 @@ void KCTextEditor::foldCode(int startFoldBlockIndex)
         foldBlock.setVisible(false);
         foldBlock=foldBlock.next();
     }
-    panelManager->update();
-    update();
-    hide();
-    show();
+    viewport()->update();
 }
 
 void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
@@ -1343,10 +1274,7 @@ void KCTextEditor::unfoldCode(int startUnfoldBlockIndex)
         foldBlock.setVisible(true);
         foldBlock=foldBlock.next();
     }
-    panelManager->update();
-    update();
-    hide();
-    show();
+    viewport()->update();
 }
 
 void KCTextEditor::selectBlock(int blockNumber)
@@ -1361,15 +1289,45 @@ void KCTextEditor::selectBlock(int blockNumber)
     setHorizontalScrollValue(0);
 }
 
-void KCTextEditor::resizeEvent(QResizeEvent *e)
+void KCTextEditor::showEvent(QShowEvent *event)
 {
-    QPlainTextEdit::resizeEvent(e);
+    QPlainTextEdit::showEvent(event);
+    updateAllPanels();
+}
 
+void KCTextEditor::paintEvent(QPaintEvent *e)
+{
+    QPlainTextEdit::paintEvent(e);
+    updateAllPanels();
+}
+
+int KCTextEditor::lineNumberWidth()
+{
+    return (2+fontMetrics().width(QLatin1Char('9')))*QString::number(qMax(1, blockCount())).count();
+}
+
+void KCTextEditor::setLinePanelVisible(bool value)
+{
+    lineNumberPanel->setVisible(value);
+    updatePanelAreaWidth();
+}
+
+void KCTextEditor::updatePanelAreaWidth()
+{
+    setViewportMargins(panelManager->resizeManagerWidth(lineNumberWidth()), 0, 0, 0);
+}
+
+void KCTextEditor::resizeEvent(QResizeEvent *event)
+{
+    QPlainTextEdit::resizeEvent(event);
+    updateHighlights();
+    updateSearchResults();
     QRect cr = contentsRect();
     panelManager->setGeometry(QRect(cr.left(),
                                     cr.top(),
-                                    panelManager->resizePanel(lineNumberPanelWidth()),
+                                    panelManager->resizeManagerWidth(lineNumberWidth()),
                                     cr.height()));
+    //updatePanelAreaWidth();
 }
 
 void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
@@ -1380,16 +1338,17 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     int top=(int)blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom=top+(int)blockBoundingRect(block).height();
     panel->setFirstBlock(block);
+    KCTextBlockData *data;
     while (block.isValid() && top <= event->rect().bottom())
     {
+        panel->setLastBlock(block);
+        data=static_cast<KCTextBlockData *>(block.userData());
+        data->setRect(blockBoundingGeometry(block).toAlignedRect());
         if (block.isVisible() && bottom >= event->rect().top())
         {
-            panel->drawContent(0, top, panel->width(), fontMetrics().height()*block.lineCount(),
-                               block, textCursor());
-        }
-        if(block.next().isValid())
-        {
-            panel->setLastBlock(block);
+            panel->drawContent(0, top, panel->width(),
+                               fontMetrics().height()*block.lineCount(),
+                               &block, data, textCursor());
         }
         block=block.next();
         top=bottom;

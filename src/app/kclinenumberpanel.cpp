@@ -9,6 +9,7 @@
 KCLineNumberPanel::KCLineNumberPanel(QWidget *parent) :
     KCTextPanel(parent)
 {
+    setObjectName("KCLineNumberPanel");
     textColor.setRgb(120,120,120);
 }
 
@@ -16,11 +17,13 @@ void KCLineNumberPanel::drawContent(int x,
                                     int y,
                                     int width,
                                     int height,
-                                    QTextBlock block,
+                                    QTextBlock *block,
+                                    KCTextBlockData *data,
                                     QTextCursor cursor)
 {
+    Q_UNUSED(data);
     QPainter painter(this);
-    bool isCurrentLine=cursor.blockNumber()==block.blockNumber();
+    bool isCurrentLine=cursor.blockNumber()==block->blockNumber();
     if(isCurrentLine)
     {
         QFont font=painter.font();
@@ -29,18 +32,11 @@ void KCLineNumberPanel::drawContent(int x,
 
         textColor.setRgb(255,255,255);
     }
-    KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-    QRect lineNumberRect;
-    QPoint lineNumberBegin(x, y);
-    lineNumberRect.setTopLeft(lineNumberBegin);
-    lineNumberRect.setWidth(width);
-    lineNumberRect.setHeight(height);
-    data->setLineNumberRect(lineNumberRect);
     QPen pen(painter.pen());
     pen.setColor(textColor);
     painter.setPen(pen);
     painter.drawText(x, y+(height-fontMetrics().height())/2, width, height,
-                     Qt::AlignRight, QString::number(block.blockNumber() + 1));
+                     Qt::AlignRight, QString::number(block->blockNumber() + 1));
     if(isCurrentLine)
     {
         QFont font=painter.font();
@@ -53,41 +49,32 @@ void KCLineNumberPanel::drawContent(int x,
 
 void KCLineNumberPanel::setPanelWidth(int lineNumberPanelWidth)
 {
-    setFixedWidth(lineNumberPanelWidth);
+    if(isVisible() || lineNumberPanelWidth>0)
+    {
+        setFixedWidth(lineNumberPanelWidth);
+    }
+    else
+    {
+        setFixedWidth(0);
+    }
 }
 
-void KCLineNumberPanel::mousePressEvent(QMouseEvent *event)
+void KCLineNumberPanel::setVisible(bool visible)
 {
-    if(event->buttons() == Qt::LeftButton)
+    KCTextPanel::setVisible(visible);
+    if(visible)
     {
-        isPressed=true;
-        pressedPos=event->pos();
+        setFixedWidth(currentWidth);
     }
-    QWidget::mousePressEvent(event);
+    else
+    {
+        setFixedWidth(0);
+    }
 }
 
-void KCLineNumberPanel::mouseReleaseEvent(QMouseEvent *event)
+void KCLineNumberPanel::panelItemClickEvent(QTextBlock *block,
+                                              KCTextBlockData *data)
 {
-    if(isPressed)
-    {
-        QTextBlock block=getFirstBlock();
-        int lastBlockNumber=getLastBlock().blockNumber();
-
-        for(; block.blockNumber() <= lastBlockNumber && block.isValid(); block=block.next())
-        {
-            KCTextBlockData *data=static_cast<KCTextBlockData *>(block.userData());
-            if(block.isVisible() && data!=NULL)
-            {
-                QRect lineNumberRect=data->getLineNumberRect();
-                if(lineNumberRect.contains(pressedPos) &&
-                   lineNumberRect.contains(event->pos()))
-                {
-                    emit requireSelectLine(block.blockNumber());
-                    break;
-                }
-            }
-        }
-        isPressed=false;
-    }
-    QWidget::mouseReleaseEvent(event);
+    Q_UNUSED(data);
+    emit requireSelectBlock(block->blockNumber());
 }

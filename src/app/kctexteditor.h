@@ -1,20 +1,29 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cuties.
+ *  This file is part of Kreogist Cuties.
  *
- *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *    Kreogist Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *    Kreogist Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*!
+ * \copyright GNU Public License v3
+ * \details
+ * This file is the function implementation file of class KCTextEditor.
+ * KCTextEditor is the basic editor class to all other language. All the other
+ * language's text editor will be inherited this class and rewrite
+ * keyPressEvent().
  */
 
 #ifndef CODEEDITOR_H
@@ -30,6 +39,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QList>
+#include <QShowEvent>
 #include <QResizeEvent>
 
 #include "kctextsearcher.h"
@@ -46,22 +56,26 @@ class KCTextEditor : public QPlainTextEdit
     Q_OBJECT
 public:
     explicit KCTextEditor(QWidget *parent = 0);
+    //********** Properties **********
+    int horizontalScrollValue();
+    void resetDebugCursor();
     void setCursorPosition(int lineNumber,
                            int columnNumber);
-    void backupSearchTextCursor();
-    QRectF blockRect(const QTextBlock &block);
-    void setVerticalScrollValue(int value);
     void setHorizontalScrollValue(int value);
-    int verticalScrollValue();
-    int horizontalScrollValue();
-    QList<int> getBreakPoints();
-    void setUsingBlankInsteadTab(bool value);
     void setSpacePerTab(int value);
-    void zoomIn(int range = 1);
-    void zoomOut(int range = 1);
-    void resetDebugCursor();
+    void setUsingBlankInsteadTab(bool value);
+    void setVerticalScrollValue(int value);
+    int verticalScrollValue();
+
+    //********** Functions **********
+    //Search & Replace
+    void backupSearchTextCursor();
+
+    //Panel values
+    QList<int> getBreakPoints();
+    int lineNumberWidth();
     void setDebugCursor(int lineNumber);
-    int lineNumberPanelWidth();
+    void setLinePanelVisible(bool value);
 
 signals:
     void requireHideOthers();
@@ -71,11 +85,15 @@ signals:
     void nomatchedResult();
 
 public slots:
+    void zoomIn(int range = 1);
+    void zoomOut(int range = 1);
     void updateHighlights();
     //void pasteFromeHistory();
-    void updatePanelManager();
-    bool showPreviousSearchResult();
-    bool showNextSearchResult();
+    void updateAllPanels();
+    bool findNextSearchResult();
+    bool findPreviousSearchResult();
+    bool findFirstSeachResult();
+    bool findLastSearchResult();
     void searchString(QString searchTextSets,
                       bool regularExpressionSets,
                       bool caseSensitivelySets,
@@ -95,13 +113,13 @@ private slots:
     void panelPaintEvent(KCTextPanel *panel,
                                   QPaintEvent *event);
 
-    void updateLineNumberAreaWidth(int newBlockCount);
-    void updateLineNumberArea(const QRect &, int);
+    void updatePanelAreaWidth();
     void foldCode(int startFoldBlockIndex);
     void unfoldCode(int startUnfoldBlockIndex);
     void selectBlock(int blockNumber);
 
 protected:
+    void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
     void keyPressEvent(QKeyEvent *e);
@@ -111,6 +129,8 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    bool showPreviousSearchResult(const QTextCursor &cursor);
+    bool showNextSearchResult(const QTextCursor &cursor);
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
     void highlightSearchResult(QList<QTextEdit::ExtraSelection> &selections);
     int highlightParentheses(QList<QTextEdit::ExtraSelection> &selections);
@@ -118,8 +138,6 @@ private:
                                    int matchedParentheses,
                                    QTextCursor cursor);
     QString parenthesesPair(const QString &parenthesesChar);
-    bool findFirstSeachResult();
-    bool findLastSearchResult();
     void generalSearch(const QTextBlock &block,
                        const int &lines,
                        const bool forward);
@@ -128,7 +146,8 @@ private:
                              const QTextBlock &block,
                              const bool forward);
     void initTextSearcher(QScopedPointer<KCTextSearcher> &searcher);
-    void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block);
+    void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
+                                              KCTextBlockData *data);
     int matchParentheses(const char &parenthesesA,
                          const char &parenthesesB,
                          QList<parenthesesInfo>::iterator startPos,
@@ -147,6 +166,7 @@ private:
 
     bool usingBlankInsteadTab=true;
     int spacePerTab=4;
+    int tabSpace=4;
 
     QString searchText;
     QString leftParenthesesLists=QString("([{");

@@ -10,7 +10,8 @@ class KCDebugMarkPanel : public KCTextPanel
     Q_OBJECT
 public:
     explicit KCDebugMarkPanel(QWidget *parent = 0);
-    void drawContent(int x, int y, int width, int height, QTextBlock block, QTextCursor cursor);
+    void drawContent(int x, int y, int width, int height,
+                     QTextBlock *block, KCTextBlockData *data, QTextCursor cursor);
     void setPanelWidth(int lineNumberPanelWidth);
     void setDebugCursor(int lineNum);
     void resetDebugCursor();
@@ -18,13 +19,14 @@ public:
 signals:
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void panelItemClickEvent(QTextBlock *block,
+                               KCTextBlockData *data);
+    QTextBlock getFirstBlock() const;
+    void setFirstBlock(const QTextBlock &value);
+    void paintEvent(QPaintEvent *event);
 
 private:
     QPixmap markPix, debugArrow;
-    QPoint pressedPos;
-    bool isPressed;
     int markPanelHeight;
     int debugCursorLine=-1;
 };

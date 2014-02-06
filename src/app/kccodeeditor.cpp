@@ -2,23 +2,22 @@
  *
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cuties.
+ *  This file is part of Kreogist Cuties.
  *
- *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *    Kreogist Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *    Kreogist Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QErrorMessage>
 #include <QTextStream>
 #include <QFileInfo>
 #include <QFileDialog>
@@ -35,6 +34,8 @@
 #include "kchistoryconfigure.h"
 #include "kcgeneralconfigure.h"
 #include "kccolorconfigure.h"
+
+#include "kcmessagebox.h"
 
 #include "kctexteditor.h"
 #include "kcsearchwindow.h"
@@ -55,7 +56,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     setLayout(mainLayout);
 
     editor=new KCTextEditor(this);
-
     mainLayout->addWidget(editor);
 
     currentCompileProgress=new KCCodeCompileProgress(editor);
@@ -117,7 +117,7 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setTabStopWidth(fontMetrics().width(' ')*settings.tabSpace);
     editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
     editor->setSpacePerTab(settings.spacePerTab);
-    //linePanel->setVisible(settings.lineNumberPanelVisible);
+    editor->setLinePanelVisible(settings.lineNumberPanelVisible);
 }
 
 bool KCCodeEditor::getOverwriteMode()
@@ -158,7 +158,7 @@ void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowNextResult,
                                  this, &KCCodeEditor::onShowNextSearchResult);
     searcherConnections+=connect(widget, &KCSearchWidget::requireShowPreviousResult,
-                                 editor, &KCTextEditor::showPreviousSearchResult);
+                                 this, &KCCodeEditor::onShowPreviousSearchResult);
     searcherConnections+=connect(editor, &KCTextEditor::matchedResult,
                                  widget, &KCSearchWidget::setResultMatchStyle);
     searcherConnections+=connect(editor, &KCTextEditor::nomatchedResult,
@@ -196,7 +196,13 @@ void KCCodeEditor::resetCompileErrorCache()
 
 void KCCodeEditor::onShowNextSearchResult()
 {
-    editor->showNextSearchResult();
+    editor->findNextSearchResult();
+    currentSearchWidget->setTextFocus();
+}
+
+void KCCodeEditor::onShowPreviousSearchResult()
+{
+    editor->findPreviousSearchResult();
     currentSearchWidget->setTextFocus();
 }
 
@@ -391,9 +397,10 @@ bool KCCodeEditor::processSaveAsAction(const QString &dialogCaption)
     {
         if(fileError!=QFileDevice::AbortError)
         {
-            QErrorMessage error(this);
-            error.showMessage(tr("Saving file failed!"));
-            error.exec();
+            KCMessageBox *error=new KCMessageBox(this);
+            error->setTitle("Error");
+            error->addText(tr("Saving file failed."));
+            error->exec();
         }
         return false;
     }
@@ -476,11 +483,9 @@ QList<int> KCCodeEditor::getBreakpoints()
     return editor->getBreakPoints();
 }
 
-void KCCodeEditor::onDebugJumpLine(int lineNum)
+void KCCodeEditor::onDebugJumpLine(int blockNumber)
 {
-    int realLineNum=lineNum-1;
-    setDocumentCursor(realLineNum, 0);
-    editor->setDebugCursor(realLineNum);
+    editor->setDebugCursor(blockNumber-1);
 }
 
 void KCCodeEditor::closeEvent(QCloseEvent *e)

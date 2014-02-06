@@ -1,20 +1,20 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cuties.
+ *  This file is part of Kreogist Cuties.
  *
- *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *    Kreogist Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *    Kreogist Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef KCTEXTBLOCKDATA_H
@@ -39,7 +39,6 @@ struct parenthesesInfo
 
 struct markUnit
 {
-    QRect rect;
     bool marked;
     markUnit()
     {
@@ -49,7 +48,6 @@ struct markUnit
 
 struct codeLevelUnit
 {
-    QRect codeLevelRect;
     bool codeLevelUp;
     bool codeLevelDown;
     bool hasFolded;
@@ -111,8 +109,8 @@ public:
     bool getHasFolded() const;
     void setHasFolded(bool value);
     void setHasError(bool value);
-    QRect getLineNumberRect() const;
-    void setLineNumberRect(const QRect &value);
+    QRect getRect() const;
+    void setRect(const QRect &value);
 
 private:
     unsigned long long int searchCode;
@@ -125,7 +123,7 @@ private:
     int quotationStatus;
     markUnit markInfo;
     codeLevelUnit codeLevelInfo;
-    QRect lineNumberRect;
+    QRect rect;
 };
 
 #endif // KCTEXTBLOCKDATA_H

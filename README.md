@@ -4,31 +4,32 @@ Copyright © 2013 Kreogist Dev Team. All rights reserved.
 
 ##Menu
 * Recommended System Requirements
-* Required OS
+* Building Prerequisites
+* Downloading the source
 * Building
 * Install
 * License
 
-##Recommended System Requirements
+## Recommended System Requirements
+Cuties is a cross-platform application. It is supported on a variety of 32-bit and 64-bit platforms. 
 
+### Hardware platform
 - Intel® Pentium™ III M processor or better.
 - 64MB of RAM or better(DDR or better recommended).
-- Intel GMA-HD / nVIDIA GeForce 6200LE / ATI Radeon X300 or better.
-- ??MB of disk space.
+- Intel GMA X4500 / nVIDIA GeForce3 Ti500 / ATI Radeon 9100 or better.
+- 60 MB of disk space. You need more disk space to store compilers.
 
-##Required OS
+### Operating system
+You should using one of the following operating system:
+- Microsoft® Windows® XP Service Pack 2 or later, both 32-bit and 64-bit.
+- Apple® Mac OS X Lion 10.7 or later, 64-bit. 
+- Linux/X11, 64-bit.
 
-Cuties is a cross-platform application. It is supported on a variety of 32-bit and 64-bit platforms. You can use Cuites on the following desktop platforms:
-
-- Microsoft® Windows® XP Service Pack 2 or later.
-- Apple Mac OS X Lion 10.7 or later.
-- Linux/X11
-
-## Prerequisites
+## Building Prerequisites
 
 Cuties requires that various tools and packages be available for use in the build procedure. Modifying Cuties sources requires additional tools described below.
 
-If you think the following step is too advanced or too tedious, we provide you a [Quick preparing guide](https://github.com/Kreogist/Cuties/wiki/Quick-preparing-guide). And you can skip to [Downloading the source](https://github.com/Kreogist/Cuties/wiki/Build-&-Install-Cuties#downloading-the-source).
+If you think the following step is too advanced or too tedious, we provide you a [Quick preparing guide](https://github.com/Kreogist/Cuties/wiki/Quick-preparing-guide). And you can skip to Downloading the source.
 
 ### Tools/packages necessary for building Cuties
 
@@ -50,7 +51,7 @@ For Ubuntu Linux or other Linux user, you should provide your own compilers. You
 
 If you have trouble with set up Qt, please visit [Download Qt](http://qt-project.org/downloads) for binary packages, [Getting Started with Qt](http://qt-project.org/doc/qt-5/gettingstarted.html) for Downloading and Installing Qt guide.
 
-### Tools/packages additional for building GCC
+### Tools/packages additional for building Cuties
 
 * **Qt Creator 2.7 or above**
 
@@ -60,7 +61,7 @@ For Qt 5.1.1, we suggest you to use Qt Creator 2.7.2. For Qt 5.2, we suggest you
 
 * **Qt Linguist**
 
-You may need Qt Linguist to release a translation file, or you have to release translation files by `lupdate` and `lupdate`. 
+You may need Qt Linguist to release a translation file, or you have to release translation files by `lupdate` and `lrelease`. 
 
 * **CMake**
 
@@ -144,7 +145,7 @@ Then switch to the `src` folder which contains `Kreogist-Cuties.pro`, open `app`
 
 The copy the following files to the directory `(You build directory)/app/release`:
 
-ICU Libraries:
+International Components for Unicode(ICU) Libraries:
 
     icudt51.dll
     icuin51.dll

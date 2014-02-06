@@ -1,20 +1,20 @@
 /*
  *  Copyright 2013 Kreogist Dev Team
  *
- *  This file is part of Kreogist-Cuties.
+ *  This file is part of Kreogist Cuties.
  *
- *    Kreogist-Cuties is free software: you can redistribute it and/or modify
+ *    Kreogist Cuties is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *    Kreogist-Cuties is distributed in the hope that it will be useful,
+ *    Kreogist Cuties is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist-Cuties.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <QProcessEnvironment>
@@ -136,9 +136,7 @@ void KCRunner::run()
     else
     {
         QStringList executorArgv;
-        QFileInfo info(executeFilePath);
-
-        executeProcess->setWorkingDirectory(info.absoluteDir().absolutePath());
+        executeProcess->setWorkingDirectory(qApp->applicationDirPath());
         /*
          * Here we have to launch terminal program.
          *
@@ -147,6 +145,11 @@ void KCRunner::run()
          * For Linux: launch Different Terminal program and send them args.
          */
         QString argExecuteFilePath=executeFilePath;
+
+#ifdef Q_OS_WIN32
+        argExecuteFilePath.prepend("\"");
+        argExecuteFilePath.append("\"");
+#endif
 
         /*
          * For Mac OS X, no terminal to execute. For others, use terminal to
@@ -161,10 +164,13 @@ void KCRunner::run()
 
 #ifdef Q_OS_WIN32
         //For Windows, we have to launch terminal by:
-        // cmd /c start cmd /c kciExecutor.exe C:\cppName.exe
-                <<"start"<<terminal.terminal_name<<terminal.arg
+        // cmd /c start cmd /c "kciExecutor.exe" "C:\cppName.exe"
+               <<"start"<<terminal.terminal_name<<terminal.arg
+               <<consoleRunnerPath
+#else
+               <<qApp->applicationDirPath()+'/'+consoleRunnerPath
 #endif
-                <<qApp->applicationDirPath()+'/'+consoleRunnerPath<<argExecuteFilePath;
+               <<argExecuteFilePath;
         connect(executeProcess,SIGNAL(finished(int)),
                 this,SLOT(quit()));
         connect(this,SIGNAL(finished()),

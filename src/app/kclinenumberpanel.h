@@ -8,22 +8,23 @@ class KCLineNumberPanel : public KCTextPanel
     Q_OBJECT
 public:
     explicit KCLineNumberPanel(QWidget *parent = 0);
-    void drawContent(int x, int y, int width, int height, QTextBlock block, QTextCursor cursor);
+    void drawContent(int x, int y, int width, int height,
+                     QTextBlock *block, KCTextBlockData *data, QTextCursor cursor);
     void setPanelWidth(int lineNumberPanelWidth);
 
 signals:
-    void requireSelectLine(int blockNumber);
+    void requireSelectBlock(int blockNumber);
 
 public slots:
+    void setVisible(bool visible);
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void panelItemClickEvent(QTextBlock *block,
+                               KCTextBlockData *data);
 
 private:
     QColor textColor;
-    QPoint pressedPos;
-    bool isPressed;
+    int currentWidth=-1;
 };
 
 #endif // KCLINENUMBERPANEL_H
