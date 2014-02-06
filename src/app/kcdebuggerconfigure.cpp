@@ -28,13 +28,7 @@ KCDebuggerConfigure *KCDebuggerConfigure::getInstance()
 
 KCDebuggerConfigure::KCDebuggerConfigure()
 {
-#ifdef Q_OS_UNIX
-    setValue("GDBPath", "/usr/bin/gdb");
-#endif
-
-#ifdef Q_OS_WIN32
-    setValue("GDBPath", "/Compiler/MinGW/bin/gdb.exe");
-#endif
+    ;
 }
 
 QString KCDebuggerConfigure::getGroupName()

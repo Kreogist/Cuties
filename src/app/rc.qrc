@@ -132,5 +132,6 @@
         <file>default_settings/DefaultColorConfig.ini</file>
         <file>default_settings/default.style</file>
         <file>default_settings/Cuties_Unix.ini</file>
+        <file>default_settings/Cuties_Win32.ini</file>
     </qresource>
 </RCC>

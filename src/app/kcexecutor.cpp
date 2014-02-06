@@ -136,7 +136,15 @@ void KCRunner::run()
     else
     {
         QStringList executorArgv;
-        executeProcess->setWorkingDirectory(qApp->applicationDirPath());
+        QFileInfo info(executeFilePath);
+        executeProcess->setWorkingDirectory(info.absolutePath());
+
+#ifdef Q_OS_WIN32
+        QStringList executeEnvironment=QProcess::systemEnvironment();
+        executeEnvironment.replaceInStrings(QRegExp("^PATH=(.*)", Qt::CaseInsensitive),
+                                            QString("PATH=\\1;"+qApp->applicationDirPath()));
+        executeProcess->setEnvironment(executeEnvironment);
+#endif
         /*
          * Here we have to launch terminal program.
          *

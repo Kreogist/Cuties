@@ -41,12 +41,13 @@ void KCConfigure::setCfgFileName(const QString &value)
 void KCConfigure::readConfigure()
 {
     //load default config
-#ifndef Q_OS_WIN32
-    readConfigure(":/DefaultSettings/default_settings/Cuties_Unix.ini");
+#ifdef Q_OS_WIN32
+    //Test.
+    qDebug()<<"Default loaded.";
+    readConfigure(":/DefaultSettings/default_settings/Cuties_Win32.ini");
 #else
-    // TODO: need to load win32 default config here!
+    readConfigure(":/DefaultSettings/default_settings/Cuties_Unix.ini");
 #endif
-
     readConfigure(getCfgFileName());
 }
 

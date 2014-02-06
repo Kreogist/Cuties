@@ -21,6 +21,7 @@
 #include <QStyle>
 #include <QProcess>
 #include <QDebug>
+#include <QDesktopServices>
 
 #include "kcgeneralconfigure.h"
 #include "kceditorconfigure.h"

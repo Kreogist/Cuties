@@ -28,20 +28,7 @@ KCCompilerConfigure *KCCompilerConfigure::getInstance()
 
 KCCompilerConfigure::KCCompilerConfigure()
 {
-#ifdef Q_OS_UNIX
-    setValue("GPP-Path","/usr/bin/gcc");
-    setValue("GCC-Path","/usr/bin/g++");
-    setValue("FPC-Path","/usr/bin/fpc");
-#endif
-
-#ifdef Q_OS_WIN32
-    setValue("GPP-Path","/Compilers/MinGW/bin/g++.exe");
-    setValue("GCC-Path","/Compilers/MinGW/bin/gcc.exe");
-    setValue("FPC-Path","/Compilers/FPC/bin/i386-win32/fpc.exe");
-#endif
-
-    setValue("delayCompile", false);
-    setValue("delayTimeout", 20);
+    ;
 }
 
 QString KCCompilerConfigure::getGroupName()
