@@ -19,4 +19,4 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS += app tests tools/ConsoleRunner
+SUBDIRS += app tools/ConsoleRunner
