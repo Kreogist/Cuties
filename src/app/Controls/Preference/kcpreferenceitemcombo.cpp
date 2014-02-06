@@ -107,9 +107,9 @@ void KCPreferenceItemCombo::refreshValueDisplay()
         return;
     }
     originalValueDisplayer->setText(QString(" (" +
-                                    originalValueIs +
-                                    comboTextList.at(originalValue.toInt()) +
-                                    ")"));
+                                            originalValueIs +
+                                            comboTextList.at(originalValue.toInt()) +
+                                            ")"));
     setOriginalDisplayVisible(true);
 }
 

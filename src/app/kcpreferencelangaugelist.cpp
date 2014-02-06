@@ -117,7 +117,7 @@ KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
     int languageCount=instance->getLanguageList().count();
     if(languageCount>0)
     {
-        for(int i=0;i<languageCount;i++)
+        for(int i=0; i<languageCount; i++)
         {
             languageItems.append(addLanguageItem(instance->getLanguageCaption().at(i),
                                                  instance->getLanguageFileIcon().at(i)));
@@ -134,7 +134,7 @@ KCPreferenceLangaugeList::KCPreferenceLangaugeList(QWidget *parent) :
 }
 
 KCPreferenceLangaugeListItem *KCPreferenceLangaugeList::addLanguageItem(const QString &languageName,
-                                                                        const QPixmap &languageIcon)
+        const QPixmap &languageIcon)
 {
     KCPreferenceLangaugeListItem *newLanguageItem=new KCPreferenceLangaugeListItem(this);
     newLanguageItem->setLanguageName(languageName);

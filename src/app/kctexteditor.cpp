@@ -84,8 +84,8 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     /****Highlight****/
     connect(this, &KCTextEditor::cursorPositionChanged,
             this, &KCTextEditor::updateHighlights);
-/*    connect(this, &KCTextEditor::textChanged,
-            this, &KCTextEditor::updateHighlights);*/
+    /*    connect(this, &KCTextEditor::textChanged,
+                this, &KCTextEditor::updateHighlights);*/
 
     /****Search & Replace****/
     connect(verticalScrollBar(),SIGNAL(valueChanged(int)),
@@ -131,7 +131,7 @@ void KCTextEditor::setWordWrap(QTextOption::WrapMode wrapMode)
 
 /***********Search & Replace************/
 void KCTextEditor::checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
-                                                        KCTextBlockData *data)
+        KCTextBlockData *data)
 {
     //check whether the block has been searched
     data->beginUsingSearchDatas();
@@ -162,7 +162,8 @@ bool KCTextEditor::showPreviousSearchResult(const QTextCursor &cursor)
     for(QTextBlock i=searchCursor.block();   //From current block
         i.isValid() && !hasMatch;           //to the destination block
         i=i.previous())  //If search forward, to previous
-    {                                       //otherwise to the next.
+    {
+        //otherwise to the next.
         blockData=static_cast<KCTextBlockData *>(i.userData());
         checkWhetherBlockSearchedAndDealWith(i, blockData);
         blockData->beginUsingSearchDatas();
@@ -175,7 +176,7 @@ bool KCTextEditor::showPreviousSearchResult(const QTextCursor &cursor)
             {
                 currentMatch=blockData->getMatchedInfo(j);
                 if((isCursorLine && currentMatch.pos<searchCursor.positionInBlock())
-                        || !isCursorLine)
+                   || !isCursorLine)
                 {
                     hasMatch=true;
                     searchCursor.setPosition(i.position()+currentMatch.pos);
@@ -229,8 +230,8 @@ bool KCTextEditor::showNextSearchResult(const QTextCursor &cursor)
                     hasMatch=true;
                     searchCursor.setPosition(i.position()+currentMatch.pos);
                     searchCursor.movePosition(QTextCursor::NextCharacter,
-                                             QTextCursor::KeepAnchor,
-                                             currentMatch.matchedLength);
+                                              QTextCursor::KeepAnchor,
+                                              currentMatch.matchedLength);
                     break;
                 }
             }
@@ -413,7 +414,7 @@ bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
 }
 
 void KCTextEditor::autoIndent()
-{   
+{
     QTextCursor _textCursor=textCursor();
     QTextBlock currBlock=_textCursor.block();
     QTextBlock prevBlock=currBlock.previous();
@@ -504,7 +505,8 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
 {
     tabPressCursor.beginEditBlock();
 
-    if (tabPressCursor.hasSelection()) {
+    if(tabPressCursor.hasSelection())
+    {
         // Indent or unindent the selected lines
         int pos = tabPressCursor.position();
         int anchor = tabPressCursor.anchor();
@@ -515,15 +517,19 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
         QTextBlock startBlock = doc->findBlock(start);
         QTextBlock endBlock = doc->findBlock(end-1).next();
 
-        if (startBlock.next() == endBlock
-                && (start > startBlock.position() || end < endBlock.position() - 1)) {
+        if(startBlock.next() == endBlock
+           && (start > startBlock.position() || end < endBlock.position() - 1))
+        {
             // Only one line partially selected.
             tabPressCursor.removeSelectedText();
-        } else {
+        }
+        else
+        {
             QString spaceChar=usingBlankInsteadTab?
                               QString(" ").repeated(spacePerTab):
                               "\t";
-            for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+            for(QTextBlock block = startBlock; block != endBlock; block = block.next())
+            {
                 int indentPosition = findFirstCharacter(block);
                 if(indentPosition<0)
                 {
@@ -611,11 +617,11 @@ int KCTextEditor::highlightParentheses(QList<QTextEdit::ExtraSelection> &selecti
                         cursor.movePosition(QTextCursor::Left,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                            all[j],
-                                            all[len-j-1],
-                                            i,
-                                            cursor.block(),
-                                            true);
+                                               all[j],
+                                               all[len-j-1],
+                                               i,
+                                               cursor.block(),
+                                               true);
                         break;
                     }
                 }
@@ -629,11 +635,11 @@ int KCTextEditor::highlightParentheses(QList<QTextEdit::ExtraSelection> &selecti
                         cursor.movePosition(QTextCursor::Right,
                                             QTextCursor::KeepAnchor);
                         matchedParentheses=matchParentheses(
-                                           all[j],
-                                           all[len-j-1],
-                                           i,
-                                           cursor.block(),
-                                           false);
+                                               all[j],
+                                               all[len-j-1],
+                                               i,
+                                               cursor.block(),
+                                               false);
                         break;
                     }
                 }
@@ -656,8 +662,8 @@ int KCTextEditor::highlightParentheses(QList<QTextEdit::ExtraSelection> &selecti
 }
 
 void KCTextEditor::highlightParenthesisPairs(QList<QTextEdit::ExtraSelection> &selections,
-                                             int matchedParentheses,
-                                             QTextCursor cursor)
+        int matchedParentheses,
+        QTextCursor cursor)
 {
     switch(matchedParentheses)
     {
@@ -770,7 +776,7 @@ void KCTextEditor::updateAllPanels()
 }
 
 void KCTextEditor::highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections)
-{ 
+{
     if(!isReadOnly())
     {
         QTextEdit::ExtraSelection selection;
@@ -870,7 +876,8 @@ QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
 
 void KCTextEditor::keyPressEvent(QKeyEvent *e)
 {
-    switch (e->key()) {
+    switch(e->key())
+    {
     case Qt::Key_Escape:
         QPlainTextEdit::keyPressEvent(e);
         emit requireHideOthers();
@@ -951,7 +958,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         {
             KCTextBlockData *currData=static_cast<KCTextBlockData *>(_textCursor.block().userData());
             if(_textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
-                    currData->getQuotationStatus()!=-1)
+               currData->getQuotationStatus()!=-1)
             {
                 _textCursor.movePosition(QTextCursor::Right);
                 setTextCursor(_textCursor);
@@ -959,7 +966,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             }
             QPlainTextEdit::keyPressEvent(e);
             if(_textCursor.document()->characterAt(_textCursor.position()-1)!=QChar('\\') &&
-                    currData->getQuotationStatus()==-1)
+               currData->getQuotationStatus()==-1)
             {
                 insertPlainText("\"");
                 _textCursor.movePosition(QTextCursor::Left);
@@ -1339,12 +1346,12 @@ void KCTextEditor::panelPaintEvent(KCTextPanel *panel,
     int bottom=top+(int)blockBoundingRect(block).height();
     panel->setFirstBlock(block);
     KCTextBlockData *data;
-    while (block.isValid() && top <= event->rect().bottom())
+    while(block.isValid() && top <= event->rect().bottom())
     {
         panel->setLastBlock(block);
         data=static_cast<KCTextBlockData *>(block.userData());
         data->setRect(blockBoundingGeometry(block).toAlignedRect());
-        if (block.isVisible() && bottom >= event->rect().top())
+        if(block.isVisible() && bottom >= event->rect().top())
         {
             panel->drawContent(0, top, panel->width(),
                                fontMetrics().height()*block.lineCount(),

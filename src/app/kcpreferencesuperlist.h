@@ -88,7 +88,7 @@ public:
                                     int minValue=0);
     KCPreferenceItemInt *addItemInt(KCPreferenceItemInt *newIntItem);
     KCPreferenceItemBooleanGroup *addItemBooleanGroup(const QString &captionText,
-                                                      const QString &key);
+            const QString &key);
     KCPreferenceItemPath *addItemPath(KCPreferenceItemPath *newPathItem);
     KCPreferenceItemPath *addItemPath(const QString &captionText,
                                       const QString &key,

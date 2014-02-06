@@ -177,7 +177,7 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
             setFormat(match.capturedStart(),
                       match.capturedLength(),
                       instance->getTextCharFormat(rules[i].type_name));
-                      //QTextCharFormat());
+            //QTextCharFormat());
         }
     }
 

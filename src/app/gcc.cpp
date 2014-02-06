@@ -38,7 +38,7 @@ gcc::gcc(QObject *parent, bool compileCpp) :
 QString gcc::compilerPath()
 {
     return isCompileCpp?instance->getPathValue("GPP-Path"):
-                        instance->getPathValue("GCC-Path");
+           instance->getPathValue("GCC-Path");
 }
 
 QStringList gcc::getVersionArg()

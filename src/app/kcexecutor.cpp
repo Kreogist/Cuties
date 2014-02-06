@@ -173,12 +173,12 @@ void KCRunner::run()
 #ifdef Q_OS_WIN32
         //For Windows, we have to launch terminal by:
         // cmd /c start cmd /c "kciExecutor.exe" "C:\cppName.exe"
-               <<"start"<<terminal.terminal_name<<terminal.arg
-               <<consoleRunnerPath
+                <<"start"<<terminal.terminal_name<<terminal.arg
+                <<consoleRunnerPath
 #else
-               <<qApp->applicationDirPath()+'/'+consoleRunnerPath
+                <<qApp->applicationDirPath()+'/'+consoleRunnerPath
 #endif
-               <<argExecuteFilePath;
+                <<argExecuteFilePath;
         connect(executeProcess,SIGNAL(finished(int)),
                 this,SLOT(quit()));
         connect(this,SIGNAL(finished()),

@@ -63,16 +63,16 @@ QRect KCStatusRecorder::getWidgetRect(const QString &currentWidgetName)
 }
 
 void KCStatusRecorder::setWidgetGeometry(const QString &widgetName,
-                                         const QRect &widgetGeometry,
-                                         Qt::WindowStates windowState)
+        const QRect &widgetGeometry,
+        Qt::WindowStates windowState)
 {
     int widgetIndex=widgetNames.indexOf(widgetName);
     setWidgetGeometry(widgetIndex, widgetGeometry, windowState);
 }
 
 void KCStatusRecorder::setWidgetGeometry(const int &widgetIndex,
-                                         const QRect &widgetGeometry,
-                                         Qt::WindowStates windowState)
+        const QRect &widgetGeometry,
+        Qt::WindowStates windowState)
 {
     KCGeometry currentWidgetGeometry=widgetGeometries.at(widgetIndex);
     currentWidgetGeometry.WindowState=windowStateToInt(windowState);
@@ -181,7 +181,7 @@ void KCStatusRecorder::readRecord()
     settings.beginGroup("WidgetStatus");
     int widgetNum=settings.beginReadArray("Widgets");
     QRect itemGeometry;
-    for(int i=0;i<widgetNum;i++)
+    for(int i=0; i<widgetNum; i++)
     {
         settings.setArrayIndex(i);
         widgetNames.append(settings.value("ObjectName", "NoName" + QString::number(i)).toString());
@@ -222,7 +222,7 @@ void KCStatusRecorder::writeRecord()
     //Write widget status
     settings.beginGroup("WidgetStatus");
     settings.beginWriteArray("Widgets", widgetNames.count());
-    for(int i=0;i<widgetNames.count();i++)
+    for(int i=0; i<widgetNames.count(); i++)
     {
         settings.setArrayIndex(i);
         settings.setValue("ObjectName", widgetNames.at(i));

@@ -72,7 +72,7 @@ void KCTextPanelManager::addPanel(KCTextPanel *panel)
 int KCTextPanelManager::resizeManagerWidth(int lineNumberPanelWidth)
 {
     int panelCount=layout->count(), managerWidth=0;
-    for(int i=0;i<panelCount;i++)
+    for(int i=0; i<panelCount; i++)
     {
         KCTextPanel *panel=static_cast<KCTextPanel *>(layout->itemAt(i)->widget());
         panel->setPanelWidth(lineNumberPanelWidth);

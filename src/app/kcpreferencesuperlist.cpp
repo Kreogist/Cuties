@@ -136,8 +136,8 @@ QLabel *KCPreferenceSuperList::addTitle(const QString &titleText)
 }
 
 KCPreferenceItemCombo *KCPreferenceSuperList::addItemCombo(const QString &captionText,
-                                                           const QList<QString> &comboItemList,
-                                                           const QString &key)
+        const QList<QString> &comboItemList,
+        const QString &key)
 {
     KCPreferenceItemCombo *newComboItem=new KCPreferenceItemCombo(contents);
     newComboItem->setComboCaptionText(captionText);
@@ -156,7 +156,7 @@ KCPreferenceItemCombo *KCPreferenceSuperList::addItemCombo(KCPreferenceItemCombo
 }
 
 KCPreferenceItemBoolean *KCPreferenceSuperList::addItemBoolean(const QString &captionText,
-                                                               const QString &key)
+        const QString &key)
 {
     KCPreferenceItemBoolean *newBooleanItem=new KCPreferenceItemBoolean(contents);
     newBooleanItem->setBooleanCaptionText(captionText);
@@ -173,9 +173,9 @@ KCPreferenceItemBoolean *KCPreferenceSuperList::addItemBoolean(KCPreferenceItemB
 }
 
 KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(const QString &captionText,
-                                                       const QString &key,
-                                                       int maxValue,
-                                                       int minValue)
+        const QString &key,
+        int maxValue,
+        int minValue)
 {
     KCPreferenceItemInt *newIntItem=new KCPreferenceItemInt(contents);
     newIntItem->setIntCaptionText(captionText);
@@ -194,7 +194,7 @@ KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(KCPreferenceItemInt *newI
 }
 
 KCPreferenceItemBooleanGroup *KCPreferenceSuperList::addItemBooleanGroup(const QString &captionText,
-                                                                         const QString &key)
+        const QString &key)
 {
     KCPreferenceItemBooleanGroup *newBooleanGroupItem=new KCPreferenceItemBooleanGroup(contents);
     newBooleanGroupItem->setBooleanCaptionText(captionText);
@@ -211,8 +211,8 @@ KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(KCPreferenceItemPath *n
 }
 
 KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionText,
-                                                         const QString &key,
-                                                         QString defaultTitleValue)
+        const QString &key,
+        QString defaultTitleValue)
 {
     KCPreferenceItemPath *newPathItem=new KCPreferenceItemPath(this);
     newPathItem->setPathCaptionText(captionText);
@@ -231,7 +231,7 @@ void KCPreferenceSuperList::addStretch()
 void KCPreferenceSuperList::applyPreference()
 {
     int itemCount=contents->getItemCount();
-    for(int i=0;i<itemCount;i++)
+    for(int i=0; i<itemCount; i++)
     {
         instance->setValue(contents->getItemKey(i), contents->getItemValue(i));
     }

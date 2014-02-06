@@ -81,7 +81,7 @@ private:
         debugCursorControlButtonCount
     };
 
-    GdbController* gdbController;
+    GdbController *gdbController;
 
     QToolBar *toolBar;
     QToolButton *debugControlButton[debugControlButtonCount];

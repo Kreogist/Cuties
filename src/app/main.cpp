@@ -14,7 +14,7 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
- *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>. *  
+ *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>. *
  */
 
 /*!
@@ -78,9 +78,9 @@ static inline void loadApplicationSettings()
 static inline void printVersion()
 {
     printf("Kreogist %s %s\n",qApp->applicationName().toLocal8Bit().constData(),
-                              qApp->applicationVersion().toLocal8Bit().constData());
+           qApp->applicationVersion().toLocal8Bit().constData());
     printf("Copyright (C) 2013 %s. <%s>\n", qApp->organizationName().toLocal8Bit().constData(),
-                                            qApp->organizationDomain().toLocal8Bit().constData());
+           qApp->organizationDomain().toLocal8Bit().constData());
     printf("License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n");
     printf("This is free software: you are free to change and redistribute it.\n");
     printf("There is NO WARRANTY, to the extent permitted by law.\n");
@@ -108,7 +108,7 @@ static inline void processArg()
     //remove the application name
     argList.removeFirst();
 
-    for(int i=0,l=argList.size();i<l;i++)
+    for(int i=0,l=argList.size(); i<l; i++)
     {
         const QString &arg=argList.at(i);
         if(arg == "--version" || arg == "-v")
@@ -151,32 +151,32 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
     {
     case QtDebugMsg:
         message.sprintf("Debug: (%s:%u\n%s)\n",
-                                 context.file,
-                                 context.line,
-                                 context.function);
+                        context.file,
+                        context.line,
+                        context.function);
         break;
     case QtWarningMsg:
         message.sprintf("Warning: (%s:%u\n%s)\n",
-                                 context.file,
-                                 context.line,
-                                 context.function);
+                        context.file,
+                        context.line,
+                        context.function);
         break;
     case QtCriticalMsg:
         message.sprintf("Critical: (%s:%u\n%s)\n",
-                                 context.file,
-                                 context.line,
-                                 context.function);
+                        context.file,
+                        context.line,
+                        context.function);
         break;
     case QtFatalMsg:
         message.sprintf("Fatal: (%s:%u\n%s)\n",
-                                 context.file,
-                                 context.line,
-                                 context.function);
+                        context.file,
+                        context.line,
+                        context.function);
     default:
         message.sprintf("Unknow Message Type: (%s:%u\n%s)\n",
-                                 context.file,
-                                 context.line,
-                                 context.function);
+                        context.file,
+                        context.line,
+                        context.function);
     }
 
     std::cerr<<message.toStdString()<<msg.toStdString()<<std::endl<<std::endl;
@@ -189,7 +189,9 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
         out<<message;
 
         if(type==QtFatalMsg)
+        {
             abort();
+        }
         out<<msg<<endl<<endl;
     }
 }

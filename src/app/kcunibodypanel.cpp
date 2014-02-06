@@ -41,10 +41,10 @@ void KCUnibodyPanel::drawContent(int x,
         if(codeLevelInfo.hasError)
         {
             painter.drawPixmap((width-errorMarkWidth)/2,
-                                y+(height-errorMarkHeight)/2,
-                                errorMarkWidth,
-                                errorMarkHeight,
-                                compileErrorMark);
+                               y+(height-errorMarkHeight)/2,
+                               errorMarkWidth,
+                               errorMarkHeight,
+                               compileErrorMark);
         }
 
         if(codeLevelInfo.codeLevelUp)
@@ -76,7 +76,7 @@ void KCUnibodyPanel::setPanelWidth(int lineNumberPanelWidth)
 }
 
 void KCUnibodyPanel::panelItemClickEvent(QTextBlock *block,
-                                           KCTextBlockData *data)
+        KCTextBlockData *data)
 {
     codeLevelUnit codeLevelInfo=data->getCodeLevelInfo();
     if(codeLevelInfo.codeLevelUp)

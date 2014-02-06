@@ -97,7 +97,7 @@ void KCGlobal::showInGraphicalShell(const QString &filePath)
     QStringList scriptArgs;
     scriptArgs << QLatin1String("-e")
                << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
-                                     .arg(filePath);
+               .arg(filePath);
     QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
     scriptArgs.clear();
     scriptArgs << QLatin1String("-e")

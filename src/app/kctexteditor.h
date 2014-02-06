@@ -111,7 +111,7 @@ public slots:
 private slots:
     void updateSearchResults();
     void panelPaintEvent(KCTextPanel *panel,
-                                  QPaintEvent *event);
+                         QPaintEvent *event);
 
     void updatePanelAreaWidth();
     void foldCode(int startFoldBlockIndex);
@@ -147,7 +147,7 @@ private:
                              const bool forward);
     void initTextSearcher(QScopedPointer<KCTextSearcher> &searcher);
     void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
-                                              KCTextBlockData *data);
+            KCTextBlockData *data);
     int matchParentheses(const char &parenthesesA,
                          const char &parenthesesB,
                          QList<parenthesesInfo>::iterator startPos,

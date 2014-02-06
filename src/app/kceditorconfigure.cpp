@@ -55,7 +55,7 @@ void KCEditorConfigure::readConfigure()
 {
     KCConfigure::readConfigure();
     KCClipboard::getInstance()->setMaxDataCount(
-                getValue("ClipboardMax").toInt());
+        getValue("ClipboardMax").toInt());
 }
 
 int KCEditorConfigure::getWrapModeNumber(QTextOption::WrapMode destinationWrapMode) const

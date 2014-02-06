@@ -59,9 +59,9 @@ void GdbThread::run()
     QStringList _arg;
     _arg<<filePath<<"--interpreter"<<"mi"
 #ifdef Q_OS_WIN32
-          ;
+        ;
 #else
-       <<"-tty"<<(tty=KCExecutor::getInstance()->getNewConsole());
+        <<"-tty"<<(tty=KCExecutor::getInstance()->getNewConsole());
 #endif
     readProcessData+=connect(gdbProcess.data(),
                              SIGNAL(readyReadStandardOutput()),
@@ -507,12 +507,12 @@ void GdbController::setBreakPointList(QList<int> breakpointLine)
  *!The breakpoint number is not in effect until it has been hit count times.
  *! */
 void GdbController::setBreakPoint(const QString &fileName,
-                        const int &lineNum,
-                        const int &count)
+                                  const int &lineNum,
+                                  const int &count)
 {
     execGdbCommand(QString("-break-insert ")+
-                     fileName+":"+
-                     QString::number(lineNum)+" "+
+                   fileName+":"+
+                   QString::number(lineNum)+" "+
                    QString::number(count));
 }
 
@@ -537,8 +537,8 @@ void GdbController::setBreakPoint(const QString &functionName)
 void GdbController::setBreakCondition(const int &number, const QString &expr)
 {
     execGdbCommand(QString("-break-condition ")+
-                     QString::number(number)+" "
-                     +expr);
+                   QString::number(number)+" "
+                   +expr);
 }
 
 /*!

@@ -371,7 +371,7 @@ void KCMessageBox::showEvent(QShowEvent *e)
 {
     QRect parentGeometry=parentWidget()->geometry();
     int originalX, originalY, expectedX, expectedY, originalWidth,
-            beginY, cacheExpected, minimumHeight=190;
+        beginY, cacheExpected, minimumHeight=190;
     originalWidth=width();
     beginHeight=height();
     cacheExpected=title->getTitleWidthHint();

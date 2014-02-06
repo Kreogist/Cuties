@@ -58,7 +58,7 @@ class KCPreferenceLangaugeList : public QScrollArea
 public:
     explicit KCPreferenceLangaugeList(QWidget *parent = 0);
     KCPreferenceLangaugeListItem *addLanguageItem(const QString &languageName,
-                                                  const QPixmap &languageIcon);
+            const QPixmap &languageIcon);
 
 signals:
     void requireChangeLanguage(int languageIndex);

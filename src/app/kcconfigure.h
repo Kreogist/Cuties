@@ -44,11 +44,14 @@ public:
     virtual QString getPathValue(const QString &key) const;
 
 protected:
-    virtual QString getGroupName() const {return "";}
+    virtual QString getGroupName() const
+    {
+        return "";
+    }
     QMap<QString, QVariant> configureMap;
 
 private:
-    void readConfigure(const QString& filePath);
+    void readConfigure(const QString &filePath);
     static QString cfgFileName;
 
 };

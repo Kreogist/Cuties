@@ -170,7 +170,7 @@ void KCLanguageConfigure::loadLanguageList()
             localeName=localeFileName.left(localeFileName.length()-3);
             languageName.append(localeName);
             languageCaption.append(languageNameTranslate.value(localeName,
-                                                               localeName).toString());
+                                   localeName).toString());
             localeIconFileName=localeFileDir+localeName+".png";
             localeIcon.setFileName(localeIconFileName);
             if(localeIcon.exists())

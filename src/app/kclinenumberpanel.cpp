@@ -73,7 +73,7 @@ void KCLineNumberPanel::setVisible(bool visible)
 }
 
 void KCLineNumberPanel::panelItemClickEvent(QTextBlock *block,
-                                              KCTextBlockData *data)
+        KCTextBlockData *data)
 {
     Q_UNUSED(data);
     emit requireSelectBlock(block->blockNumber());

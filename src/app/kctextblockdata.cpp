@@ -50,7 +50,7 @@ int KCTextBlockData::matchedCount()
 }
 
 void KCTextBlockData::insertMatchedTextPositions(const int &pos,
-                                                 const int &matchedLen)
+        const int &matchedLen)
 {
     matchedInfo newElement;
     newElement.pos=pos;
@@ -67,7 +67,7 @@ void KCTextBlockData::insertMatchedTextPositions(const int &pos,
     default:
         int finalPosition=matchedTextPositions.count()-1;
         bool insertFlag=false;
-        for(int i=0;i<finalPosition;i++)
+        for(int i=0; i<finalPosition; i++)
         {
             if(matchedTextPositions.at(i).pos<=pos &&
                matchedTextPositions.at(i+1).pos>=pos)

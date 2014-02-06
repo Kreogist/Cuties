@@ -159,7 +159,7 @@ void KCTabManager::openAndJumpTo(const QString &filePath)
 
 void KCTabManager::open()
 {
-    KCGeneralConfigure* instance=KCGeneralConfigure::getInstance();
+    KCGeneralConfigure *instance=KCGeneralConfigure::getInstance();
     QStringList fileNameList;
     QString historyDirPath=KCHistoryConfigure::getInstance()->getHistoryDir();
     QFileInfo historyDirDetect(historyDirPath);
@@ -185,17 +185,17 @@ void KCTabManager::open()
             defaultSelectFilter=instance->getFilter(KCGeneralConfigure::allFiles);
         }
         fileNameList=QFileDialog::getOpenFileNames(this,
-                       tr("Open File"),
-                       historyDirPath,
-                       instance->getTotalFileFilter(),
-                       &defaultSelectFilter);
+                     tr("Open File"),
+                     historyDirPath,
+                     instance->getTotalFileFilter(),
+                     &defaultSelectFilter);
     }
     else
     {
         fileNameList=QFileDialog::getOpenFileNames(this,
-                       tr("Open File"),
-                       historyDirPath,
-                       instance->getTotalFileFilter());
+                     tr("Open File"),
+                     historyDirPath,
+                     instance->getTotalFileFilter());
     }
 
     QString name;
@@ -470,7 +470,7 @@ void KCTabManager::closeEvent(QCloseEvent *e)
         //Save the current opened file.
         KCCodeEditor *editor=qobject_cast<KCCodeEditor *>(page);
         if(KCGeneralConfigure::getInstance()->getValue("RememberUnclosed").toBool()
-                && editor!=NULL)
+           && editor!=NULL)
         {
             editor->setCacheNewFileMode(true);
             if(editor->getFilePath().isEmpty())

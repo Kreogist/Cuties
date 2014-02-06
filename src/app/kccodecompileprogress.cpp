@@ -128,7 +128,7 @@ void KCCodeCompileProgress::showCompileError(int errors)
 {
     setCompileState(errorCompileError);
     setText(QString(QString::number(errors) + " " +
-                     tr("errors occured.")));
+                    tr("errors occured.")));
     setValue(100);
     setProgressColor(QColor(255,0,0));
     delayHide();

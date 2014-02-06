@@ -115,11 +115,11 @@ void KCStatusCursorInfo::refresh()
     if(!lineNumString.isEmpty())
     {
         cursorPosition->setText(QString(lineTextBegin+
-                                lineNumString+
-                                lineTextEnd+
-                                colTextBegin+
-                                columnNumString+
-                                colTextEnd));
+                                        lineNumString+
+                                        lineTextEnd+
+                                        colTextBegin+
+                                        columnNumString+
+                                        colTextEnd));
     }
     else
     {

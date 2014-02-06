@@ -188,24 +188,24 @@ void KCDebugControlPanel::retranslate()
     debugCursorControlCaption[debugReturn]=tr("Step Over");
 
     debugCursorControlToolTips[debugNext]=debugCursorControlCaption[debugNext] + "\n" +
-            debugCode + "next\n" +
-            tr("Continue to the next source line in the current (innermost) stack frame.") + "\n" +
-            tr("This is similar to Step Into, but function calls that appear within the line of code are executed without stopping.");
+                                          debugCode + "next\n" +
+                                          tr("Continue to the next source line in the current (innermost) stack frame.") + "\n" +
+                                          tr("This is similar to Step Into, but function calls that appear within the line of code are executed without stopping.");
     debugCursorControlToolTips[debugContinue]=debugCursorControlCaption[debugContinue] + "\n" +
             debugCode + "continue\n" +
             tr("Resume program execution, at the address where your program last stopped; any breakpoints set at that address are bypassed. ");
     debugCursorControlToolTips[debugStep]=debugCursorControlCaption[debugStep] + "\n" +
-            debugCode + "step\n" +
-            tr("Continue running your program until control reaches a different source line, then stop it and return control to GDB.");
+                                          debugCode + "step\n" +
+                                          tr("Continue running your program until control reaches a different source line, then stop it and return control to GDB.");
     debugCursorControlToolTips[debugNexti]=debugCursorControlCaption[debugNexti]+ "\n" +
-            debugCode + "nexti\n" +
-            tr("Execute one machine instruction, but if it is a function call, proceed until the function returns.");
+                                           debugCode + "nexti\n" +
+                                           tr("Execute one machine instruction, but if it is a function call, proceed until the function returns.");
     debugCursorControlToolTips[debugStepi]=debugCursorControlCaption[debugStepi] + "\n" +
-            debugCode + "stepi\n" +
-            tr("Execute one machine instruction, then stop and return to the debugger.");
+                                           debugCode + "stepi\n" +
+                                           tr("Execute one machine instruction, then stop and return to the debugger.");
     debugCursorControlToolTips[debugReturn]=debugCursorControlCaption[debugReturn] + "\n" +
-            debugCode + "return\n" +
-            tr("Cancel execution of a function call.");
+                                            debugCode + "return\n" +
+                                            tr("Cancel execution of a function call.");
 }
 
 void KCDebugControlPanel::retranslateAndSet()
@@ -256,7 +256,7 @@ void KCDebugControlPanel::onDebugStopClicked()
  * \brief KCDebugControlPanel::setGdbController sets the pointer of GdbController.
  * \param controller
  */
-void KCDebugControlPanel::setGdbController(GdbController* controller)
+void KCDebugControlPanel::setGdbController(GdbController *controller)
 {
     gdbController=controller;
 }

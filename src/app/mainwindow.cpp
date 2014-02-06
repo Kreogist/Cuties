@@ -824,7 +824,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     menuMainWindowItem[menuEdit]->menuAction()->setVisible(state);
 
     //View Menu
-    for(i=actionViewSidebar;i<=actionViewDebugWatch;i++)
+    for(i=actionViewSidebar; i<=actionViewDebugWatch; i++)
     {
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
@@ -849,7 +849,7 @@ void MainWindow::setDocOpenMenuState(bool state)
     menuMainWindowItem[menuExecute]->menuAction()->setVisible(state);
 
     //Debug Menu
-    for(i=actionDebugStart;i<=actionDebugRemoveWatch;i++)
+    for(i=actionDebugStart; i<=actionDebugRemoveWatch; i++)
     {
         actionMainWindowItem[i]->setEnabled(state);
         actionMainWindowItem[i]->setVisible(state);
@@ -900,8 +900,8 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
     //Recording window state
     KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
-                                                       geometry(),
-                                                       windowState());
+            geometry(),
+            windowState());
 
     //Welcome window state sets.
     if(showWelcomeWindow->state()==QPropertyAnimation::Running)
@@ -943,8 +943,8 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 void MainWindow::saveSettings()
 {
     KCStatusRecorder::getInstance()->setWidgetGeometry(objectName(),
-                                                       geometry(),
-                                                       windowState());
+            geometry(),
+            windowState());
     KCStatusRecorder::getInstance()->writeRecord();
     KCColorConfigure::getInstance()->writeConfigure();
 }
@@ -1241,8 +1241,8 @@ void MainWindow::retranslate()
     actionMainWindowText[actionViewDebugCommandIO]=tr("Debug Command Dock");
     actionMainWindowText[actionViewDebugWatch]=tr("Debug Watch Dock");
     actionMainWindowText[actionViewFullscreen]=isFullScreen()?
-                                               fullScreenStateString[normalScreen]:
-                                               fullScreenStateString[fullScreen];
+            fullScreenStateString[normalScreen]:
+            fullScreenStateString[fullScreen];
     actionMainWindowText[actionSearchFind]=tr("Find");
     actionMainWindowText[actionSearchReplace]=tr("Replace");
     actionMainWindowText[actionSearchSearchOnline]=tr("Search Online");

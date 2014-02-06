@@ -213,7 +213,7 @@ void KCDebugWatch::onActionAddWatch()
             else
             {
                 gdbController->getDbgOutputs()->insertExpr(currentIndex,
-                                                           equation->text());
+                        equation->text());
             }
         }
     }
@@ -248,7 +248,7 @@ void KCDebugWatch::onActionModifyWatch()
         if(!equation->text().isEmpty())
         {
             gdbController->getDbgOutputs()->modifyExpr(currentIndex,
-                                                       equation->text());
+                    equation->text());
         }
     }
 }

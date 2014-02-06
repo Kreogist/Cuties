@@ -39,7 +39,7 @@ void KCMailProcessObject::sendMail()
 {
     socket.connectToHost(hostNameAddress, hostPort);
     emit statusChanged(ConnectingServer);
-    if (socket.waitForConnected(timeoutCount))
+    if(socket.waitForConnected(timeoutCount))
     {
         readWelcome();
         createMail();

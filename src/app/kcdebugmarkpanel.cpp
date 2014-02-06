@@ -36,10 +36,10 @@ void KCDebugMarkPanel::drawContent(int x, int y, int width, int height,
     if(block->blockNumber()==debugCursorLine)
     {
         painter.drawPixmap(x,
-                            y+(height-debugArrow.height())/2,
-                            debugArrow.width(),
-                            debugArrow.height(),
-                            debugArrow);
+                           y+(height-debugArrow.height())/2,
+                           debugArrow.width(),
+                           debugArrow.height(),
+                           debugArrow);
     }
 }
 
@@ -61,7 +61,7 @@ void KCDebugMarkPanel::resetDebugCursor()
 }
 
 void KCDebugMarkPanel::panelItemClickEvent(QTextBlock *block,
-                                             KCTextBlockData *data)
+        KCTextBlockData *data)
 {
     Q_UNUSED(block);
     markUnit markInfo=data->getMarkInfo();

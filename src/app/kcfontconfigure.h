@@ -29,7 +29,7 @@ public:
     void readConfigure();
     void writeConfigure();
     static KCFontConfigure *getInstance();
-    
+
     void initCustomFonts();
     void applyConfigure();
     void setApplicationFont();
@@ -41,9 +41,9 @@ public:
     void setMenuFont(const QFont &value);
 
 signals:
-    
+
 public slots:
-    
+
 private:
     KCFontConfigure();
     static KCFontConfigure *instance;

@@ -257,7 +257,7 @@ void KCHistoryConfigure::setHistoryFileName(const QString &value)
 void KCHistoryConfigure::refreshHistoryModel()
 {
     recentOpenedFileModel->clear();
-    for(int i=0;i<recentFileList.count();i++)
+    for(int i=0; i<recentFileList.count(); i++)
     {
         recentOpenedFileModel->appendRow(createRecentFileItem(i));
     }

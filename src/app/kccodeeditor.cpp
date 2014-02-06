@@ -412,7 +412,7 @@ bool KCCodeEditor::processSaveAsAction(const QString &dialogCaption)
 
 bool KCCodeEditor::requireSaveAs(const QString &caption)
 {
-    KCGeneralConfigure* instance=KCGeneralConfigure::getInstance();
+    KCGeneralConfigure *instance=KCGeneralConfigure::getInstance();
     if(instance->getValue("UseDefaultLanguageModeWhenSave").toBool())
     {
         QString defaultSelectFilter;

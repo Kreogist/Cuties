@@ -45,7 +45,7 @@ signals:
     void editorConfigureRefresh();
 
 private:
-    KCEditorConfigure(){}
+    KCEditorConfigure() {}
     static KCEditorConfigure *instance;
 };
 

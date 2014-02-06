@@ -60,7 +60,7 @@ class GdbThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit GdbThread(QObject * parent = 0);
+    explicit GdbThread(QObject *parent = 0);
     ~GdbThread();
     void run() Q_DECL_OVERRIDE;
 

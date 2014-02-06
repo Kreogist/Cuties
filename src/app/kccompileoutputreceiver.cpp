@@ -182,10 +182,10 @@ void KCCompileOutputReceiver::expandItem(QStandardItem *itemModelIndex)
         if(compileErrorInfoList[itemErrorIndex].errorColumn != -1)
         {
             expandItemInfo+= QString("\n" +
-                             tr("Line ") + QString::number(compileErrorInfoList[itemErrorIndex].errorLine) +
-                             tr(", ") +
-                             tr("Column ") + QString::number(compileErrorInfoList[itemErrorIndex].errorColumn) +
-                             tr("."));
+                                     tr("Line ") + QString::number(compileErrorInfoList[itemErrorIndex].errorLine) +
+                                     tr(", ") +
+                                     tr("Column ") + QString::number(compileErrorInfoList[itemErrorIndex].errorColumn) +
+                                     tr("."));
         }
         else
         {

@@ -126,7 +126,7 @@ void KCMailSendingStatus::setProgressPalette(QColor progressColor)
 
 KCMailReports::KCMailReports(QWidget *parent) :
     QDialog(parent)
-{   
+{
     setMinimumSize(480,320);
     mode=BugReportMode;
     titlePrefix[BugReportMode]="Bug: ";
@@ -264,8 +264,8 @@ void KCMailReports::sendReports()
     QString reportContent;
     reportContent.clear();
     for(QTextBlock textBlock=mailContent->document()->begin();
-                   textBlock!=mailContent->document()->end();
-                   textBlock=textBlock.next() )
+        textBlock!=mailContent->document()->end();
+        textBlock=textBlock.next())
     {
         reportContent+=textBlock.text()+"\n";
     }

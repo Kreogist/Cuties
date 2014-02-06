@@ -142,11 +142,11 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
 
     editorTitles[titleViewOptions]=addTitle(editorTitleText[titleViewOptions]);
     editorBooleans[booleanShowLinePanel]=addItemBoolean(booleanItemCaption[booleanShowLinePanel],
-                                                        "LineNumVisible");
+                                         "LineNumVisible");
 
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]=
-            addItemBooleanGroup(booleanGroupCaption[booleanGroupSpacingInsteadOfTab],
-                                "isUsingBlankInsteadTab");
+        addItemBooleanGroup(booleanGroupCaption[booleanGroupSpacingInsteadOfTab],
+                            "isUsingBlankInsteadTab");
     editorInts[intSpacePerTab]=addItemInt(intItemCaption[intSpacePerTab],
                                           "SpacePerTab",
                                           10,
@@ -158,8 +158,8 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addTrueValueGroupItem(editorInts[intSpacePerTab]);
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]->addFalseValueGroupItem(editorInts[intTabSpacing]);
     editorCombos[comboWordWrapMode]=addItemCombo(comboItemCaption[comboWordWrapMode],
-                                                 comboItemText[comboWordWrapMode],
-                                                 "WordWrap");
+                                    comboItemText[comboWordWrapMode],
+                                    "WordWrap");
     editorInts[intCursorWidth]=addItemInt(intItemCaption[intCursorWidth],
                                           "CursorWidth",
                                           10,
@@ -167,15 +167,15 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
 
     editorTitles[titleMultipleTabs]=addTitle(editorTitleText[titleMultipleTabs]);
     editorBooleans[booleanTabMoveable]=addItemBoolean(booleanItemCaption[booleanTabMoveable],
-                                                      "TabMoveable");
+                                       "TabMoveable");
     editorBooleans[booleanTabCloseable]=addItemBoolean(booleanItemCaption[booleanTabCloseable],
-                                                       "TabCloseable");
+                                        "TabCloseable");
 
     editorTitles[titleClipboard]=addTitle(editorTitleText[titleClipboard]);
     editorInts[intClipboardTrackingMax]=addItemInt(intItemCaption[intClipboardTrackingMax],
-                                                   "ClipboardMax",
-                                                   1000,
-                                                   5);
+                                        "ClipboardMax",
+                                        1000,
+                                        5);
     addStretch();
 
     connect(KCLanguageConfigure::getInstance(), SIGNAL(newLanguageSet()),
@@ -275,12 +275,12 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
 
     compilerTitles[titleCompilerOptions]=addTitle(compilerTitleText[titleCompilerOptions]);
     compilerBooleanGroups[booleanGroupDelayCompile]=
-            addItemBooleanGroup(booleanGroupCaption[booleanGroupDelayCompile],
-                                "delayCompile");
+        addItemBooleanGroup(booleanGroupCaption[booleanGroupDelayCompile],
+                            "delayCompile");
     compilerInts[intDelayTimeout]=addItemInt(intItemCaption[intDelayTimeout],
-                                             "delayTimeout",
-                                             500,
-                                             20);
+                                  "delayTimeout",
+                                  500,
+                                  20);
     compilerBooleanGroups[booleanGroupDelayCompile]->addTrueValueGroupItem(compilerInts[intDelayTimeout]);
 
     compilerTitles[titleCompilerPath]=addTitle(compilerTitleText[titleCompilerPath]);
@@ -356,7 +356,7 @@ void KCPreferenceEmbeddedCompiler::applyPreference()
 {
     KCCompilerConfigure *compilerInstance=static_cast<KCCompilerConfigure *>(instance);
     int itemCount=contents->getItemCount();
-    for(int i=0;i<itemCount;i++)
+    for(int i=0; i<itemCount; i++)
     {
         if(contents->getItemKey(i).toLower().contains("path"))
         {
@@ -383,8 +383,8 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
     debuggerTitles[titleGDBSettings]=addTitle(debuggerTitleText[titleGDBSettings]);
 
     debuggerPathItems[pathGDBDebugger]=addItemPath(pathItemCaption[pathGDBDebugger],
-                                                   "GDBPath",
-                                                   pathItemTitleCaption[pathGDBDebugger]);
+                                       "GDBPath",
+                                       pathItemTitleCaption[pathGDBDebugger]);
 
     addStretch();
 

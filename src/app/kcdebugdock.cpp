@@ -25,7 +25,7 @@ KCDebugDock::KCDebugDock(QWidget *parent) :
 
 KCDebugWidget::KCDebugWidget(QWidget *parent) :
     QWidget(parent)
-{   
+{
     m_parent=qobject_cast<KCDebugDock *>(parent);
     setContentsMargins(0,0,0,0);
 

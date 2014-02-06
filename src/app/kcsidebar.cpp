@@ -448,7 +448,7 @@ void KCSideBar::setUnlockState(bool value)
         pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
         setPalette(pal);
         if(expandAnimation->state()==QTimeLine::Running ||
-                foldAnimation->state()==QTimeLine::Running)
+           foldAnimation->state()==QTimeLine::Running)
         {
             animationHide=connect(foldAnimation, SIGNAL(finished()),
                                   this, SLOT(hideDock()));
@@ -484,8 +484,8 @@ void KCSideBar::enterEvent(QEvent *e)
     if(unlockState)
     {
         if(!expandState &&
-                expandAnimation->state()!=QTimeLine::Running &&
-                foldAnimation->state()!=QTimeLine::Running)
+           expandAnimation->state()!=QTimeLine::Running &&
+           foldAnimation->state()!=QTimeLine::Running)
         {
             pal.setBrush(QPalette::Window, QBrush(QColor(130,130,130)));
             setPalette(pal);
@@ -504,7 +504,7 @@ void KCSideBar::leaveEvent(QEvent *e)
             pal.setBrush(QPalette::Window, QBrush(QColor(95,95,95)));
             setPalette(pal);
             if(expandAnimation->state()==QTimeLine::Running ||
-                    foldAnimation->state()==QTimeLine::Running)
+               foldAnimation->state()==QTimeLine::Running)
             {
                 animationHide=connect(foldAnimation, SIGNAL(finished()),
                                       this, SLOT(hideDock()));

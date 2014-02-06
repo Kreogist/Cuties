@@ -33,7 +33,7 @@ bool KCVisibleRecorder::getWidgetVisible(int widgetIndex)
 
 void KCVisibleRecorder::backupWidgetVisible()
 {
-    for(int i=0;i<recorderList.count();i++)
+    for(int i=0; i<recorderList.count(); i++)
     {
         visibleRecordItem widgetRecord=recorderList.at(i);
         widgetRecord.recordVisible=recorderList.at(i).widget->isVisible();
@@ -44,7 +44,7 @@ void KCVisibleRecorder::backupWidgetVisible()
 
 void KCVisibleRecorder::restoreWidgetVisible()
 {
-    for(int i=0;i<recorderList.count();i++)
+    for(int i=0; i<recorderList.count(); i++)
     {
         recorderList.at(i).widget->setVisible(recorderList.at(i).recordVisible);
     }
@@ -52,7 +52,7 @@ void KCVisibleRecorder::restoreWidgetVisible()
 
 void KCVisibleRecorder::hideAll()
 {
-    for(int i=0;i<recorderList.count();i++)
+    for(int i=0; i<recorderList.count(); i++)
     {
         recorderList.at(i).widget->setVisible(false);
     }

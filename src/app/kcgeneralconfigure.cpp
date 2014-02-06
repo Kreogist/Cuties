@@ -67,7 +67,7 @@ void KCGeneralConfigure::writeConfigure()
 {
     KCConfigure::writeConfigure();
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(
-                getValue("MaxRecentFilesSize").toInt());
+        getValue("MaxRecentFilesSize").toInt());
 }
 
 QString KCGeneralConfigure::getDefaultLanguageModeString()
@@ -98,7 +98,7 @@ QString KCGeneralConfigure::getFilter(int fileTypeIndex) const
 void KCGeneralConfigure::retranslate()
 {
     fileTypeFilters[allSupportFiles] = tr("All Support Files")+
-                "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas)";
+                                       "(*.txt *.h *.hpp *.rh *.hh *.c *.cpp *.cc *.cxx *.c++ *.cp *.pas)";
     fileTypeFilters[plainTextFiles] = tr("Plain Text Files")+"(*.txt)";
     fileTypeFilters[headerFiles] = tr("Hearder Files")+"(*.h *.hpp *.rh *.hh)";
     fileTypeFilters[cFiles] = tr("C Source Files")+"(*.c)";
@@ -107,12 +107,12 @@ void KCGeneralConfigure::retranslate()
     fileTypeFilters[allFiles] = tr("All Files")+"(*.*)";
 
     totalFileFilter = fileTypeFilters[allSupportFiles] + ";;" +
-                 fileTypeFilters[plainTextFiles] + ";;" +
-                 fileTypeFilters[headerFiles] + ";;" +
-                 fileTypeFilters[cFiles] + ";;" +
-                 fileTypeFilters[cppFiles] + ";;" +
-                 fileTypeFilters[pascalFiles] + ";;" +
-                 fileTypeFilters[allFiles];
+                      fileTypeFilters[plainTextFiles] + ";;" +
+                      fileTypeFilters[headerFiles] + ";;" +
+                      fileTypeFilters[cFiles] + ";;" +
+                      fileTypeFilters[cppFiles] + ";;" +
+                      fileTypeFilters[pascalFiles] + ";;" +
+                      fileTypeFilters[allFiles];
 
     defaultSearchEngine[Google]=tr("Google");
     defaultSearchEngine[Yahoo]=tr("Yahoo!");
@@ -123,7 +123,7 @@ void KCGeneralConfigure::retranslate()
 void KCGeneralConfigure::retranslateAndSet()
 {
     retranslate();
-    for(int i=0;i<SearchEngineCount;i++)
+    for(int i=0; i<SearchEngineCount; i++)
     {
         searchEngine translateEngine=searchEngineList.at(i);
         translateEngine.name=defaultSearchEngine[i];

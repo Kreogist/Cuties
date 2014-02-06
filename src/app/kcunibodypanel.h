@@ -20,7 +20,7 @@ public slots:
 
 protected:
     void panelItemClickEvent(QTextBlock *block,
-                               KCTextBlockData *data);
+                             KCTextBlockData *data);
 
 private:
     QPixmap foldMark, foldEndMark, foldedMark;

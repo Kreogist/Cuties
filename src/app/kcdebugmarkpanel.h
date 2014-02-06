@@ -20,7 +20,7 @@ signals:
 
 protected:
     void panelItemClickEvent(QTextBlock *block,
-                               KCTextBlockData *data);
+                             KCTextBlockData *data);
     QTextBlock getFirstBlock() const;
     void setFirstBlock(const QTextBlock &value);
     void paintEvent(QPaintEvent *event);
