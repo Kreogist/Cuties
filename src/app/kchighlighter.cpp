@@ -51,7 +51,7 @@ void KCHighlighter::highlightBlock(const QString &text)
      */
 
     data->resetQuotationInfos();
-    quotationPaired=parseQuotationInfo(text, data);
+    parseQuotationInfo(text, data);
 
     data->resetParentheseInfos();
     for(int i=0,l=strlen(charNeedParentheses);
@@ -64,7 +64,7 @@ void KCHighlighter::highlightBlock(const QString &text)
     KCHighlightBlock(text);
 }
 
-int KCHighlighter::parseQuotationInfo(const QString &text,
+void KCHighlighter::parseQuotationInfo(const QString &text,
                                       KCTextBlockData *data)
 {
     int firstIndex=text.indexOf('\"');
@@ -128,11 +128,9 @@ int KCHighlighter::parseQuotationInfo(const QString &text,
         }
         data->setLineCommentPos(singleCommentPos);
         data->setQuotationStatus(secondIndex);
-        return secondIndex;
     }
     data->setLineCommentPos(singleCommentPos);
     data->setQuotationStatus(-1);
-    return -1;
 }
 
 void KCHighlighter::parseParenthesesInfo(const QString &text,

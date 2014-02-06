@@ -3,11 +3,11 @@
 #include "tst_kcconfiguretest.h"
 #include "kcconfigure.h"
 
-KCConfigureTest::KCConfigureTest()
+KCHighlighterTest::KCHighlighterTest()
 {
 }
 
-void KCConfigureTest::getAndSetValueTest()
+void KCHighlighterTest::getAndSetValueTest()
 {
     KCConfigure configure;
 
@@ -25,7 +25,7 @@ void KCConfigureTest::getAndSetValueTest()
     QCOMPARE(configure.getValue("test").toString(),QString("testvalue2"));
 }
 
-void KCConfigureTest::getAndSetPathValueTest()
+void KCHighlighterTest::getAndSetPathValueTest()
 {
     KCConfigure configure;
 
@@ -33,6 +33,6 @@ void KCConfigureTest::getAndSetPathValueTest()
     QCOMPARE(configure.getValue("aaapath").toString(),QString("testpath"));
 }
 
-QTEST_MAIN(KCConfigureTest)
+QTEST_MAIN(KCHighlighterTest)
 
 //#include "tst_kcconfiguretest.moc"

@@ -3,12 +3,12 @@
 
 #include <QtTest>
 
-class KCConfigureTest : public QObject
+class KCHighlighterTest : public QObject
 {
     Q_OBJECT
 
 public:
-    KCConfigureTest();
+    KCHighlighterTest();
 
 private Q_SLOTS:
     void getAndSetValueTest();

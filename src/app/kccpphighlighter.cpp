@@ -104,10 +104,9 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
         startIndex=text.indexOf(startExpression);
     }
 
-    bool searchNext;
     while(startIndex > -1)
     {
-        searchNext=false;
+        bool searchNext=false;
         if(data->getLineCommentPos()>-1 &&
            startIndex > data->getLineCommentPos())
         {

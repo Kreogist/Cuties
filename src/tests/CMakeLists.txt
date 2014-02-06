@@ -1,1 +1,2 @@
 add_subdirectory(kcconfigure)
+add_subdirectory(kchighlighter)

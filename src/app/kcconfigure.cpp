@@ -58,7 +58,7 @@ void KCConfigure::readConfigure(const QString &filePath)
     QStringList currentKeys=settings.childKeys();
     for(QStringList::const_iterator i=currentKeys.begin();
         i!=currentKeys.end();
-        i++)
+        ++i)
     {
         configureMap[*i]=settings.value(*i,configureMap[*i]);
     }
@@ -72,7 +72,7 @@ void KCConfigure::writeConfigure()
     QList<QString> keys=configureMap.keys();
     for(QList<QString>::iterator i=keys.begin();
         i!=keys.end();
-        i++)
+        ++i)
     {
         settings.setValue(*i, configureMap[*i]);
     }
