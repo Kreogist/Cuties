@@ -33,7 +33,7 @@ public:
     static KCCompilerConfigure *getInstance();
 
 protected:
-    QString getGroupName();
+    QString getGroupName() const;
 
 private:
     KCCompilerConfigure();

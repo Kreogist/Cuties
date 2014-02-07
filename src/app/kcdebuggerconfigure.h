@@ -31,7 +31,7 @@ public:
     static KCDebuggerConfigure *getInstance();
 
 protected:
-    QString getGroupName();
+    QString getGroupName() const;
 
 private:
     KCDebuggerConfigure();

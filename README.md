@@ -21,6 +21,7 @@ Cuties is a cross-platform application. It is supported on a variety of 32-bit a
 
 ### Operating system
 You should using one of the following operating system:
+
 - Microsoft® Windows® XP Service Pack 2 or later, both 32-bit and 64-bit.
 - Apple® Mac OS X Lion 10.7 or later, 64-bit. 
 - Linux/X11, 64-bit.
@@ -94,8 +95,6 @@ And you have to add MinGW compiler path to your system environment variables %PA
 
 * Mac OS X
 
-FIXME: check the path!
-
 You should know the basic operate of vi or any text editor you'd like to use. To learn the basic operate of vi, please visit [Vim documentation: help](http://vimdoc.sourceforge.net/htmldoc/help.html) for moving the text cursor, text insert and file saving in vi. These means are the same in both vi and vim.
 
 Launch your terminal, input:
@@ -104,7 +103,9 @@ Launch your terminal, input:
 
 and input your password to launch `vi` editor to edit `path` file. You should check whether the Qt directory is in the file. It should be like a path below:
 
-    Applications/Qt5.2.0/5.2.0/clang64/bin
+    /Applications/Qt5.2.0/5.2.0/clang_64/
+
+There should have some other paths there, like `/usr/bin`, `/bin`, `/usr/sbin`, `/sbin` and `/usr/local/bin`. 
 
 ## Downloading the source
 
@@ -123,13 +124,17 @@ The source code includes Cuties and KciConsoleRunner. For previous versions ther
 
 ## Building
 
-Here we will use Qt Creator to build Cuties. We will show you how to build Cuties in Windows platform. It is nearly the same as what it will be in Mac OS X and Linux.
+Here we will use Qt Creator to build Cuties. We will show you how to build Cuties on Windows, Mac OS X and Ubuntu Linux.
 
 Launch Qt Creator and open the `Kreogist-Cuties.pro` in `src` folder. 
 
 Select kit Release > app for the project. Choose Build > Build Project or press Ctrl+B to build Cuties. Wait for it finished.
 
 Select kit Release > ConsoleRunner. And Choose Build > Build Project or press Ctrl+B to build command line application executor. Wait for it finished.
+
+Launch Linguist, open `translations` folder in the `app` folder. Open the language file you want in Linguist, release the .qm file wherever you can easily find. Open `image` folder then open `Locale`. Rename the .qm file to the corresponding .png file's name. 
+
+### Windows
 
 Open your build directory in your file browser. You can find `app` directory, `tools` directory and `Makefile` file. Open `tools` folder, there will be only one folder named `ConsoleRunner`. Open ConsoleRunner folder. You will find several folders and files:
 
@@ -141,7 +146,7 @@ Open your build directory in your file browser. You can find `app` directory, `t
 
 Open release folder, you will find a binary file `KciConsoleRunner.exe`, others will be `KciConsoleRunner`. Copy this file to directory `(You build directory)/app/release`.
 
-Then switch to the `src` folder which contains `Kreogist-Cuties.pro`, open `app` folder, copy file `default.style` and `DefaultColorConfig.ini` file to the directory `(You build directory)/app/release`. These two files are color configure file.
+Then switch to the `src` folder which contains `Kreogist-Cuties.pro`, open `app` folder and `default_settings` folder, copy file `default.style` and `DefaultColorConfig.ini` file to the directory `(You build directory)/app/release`. These two files are color configure file.
 
 The copy the following files to the directory `(You build directory)/app/release`:
 
@@ -165,6 +170,18 @@ Qt 5 Libraries:
     Qt5Widgets.dll
 
 Now, try to launch Cuties.exe, It should can be used.
+
+### Mac OS X
+
+Open your build directory in your file browser. You can find `app` and `tools` in the folder, open `tools` folder. There should be only one folder named `ConsoleRunner`. Open `ConsoleRunner` and copy executable file `KciConsoleRunner`.
+
+Back to `Release` Folder, open `app` folder. There's a folder `Cuties.app`, right click `Cuties.app` and select `Show Package Contents`. Then open `Contents` and `MacOS` folder. 
+ 
+Then switch to the `src` folder which contains `Kreogist-Cuties.pro`, open `app` folder and `default_settings` folder, copy file `default.style` and `DefaultColorConfig.ini` file to the directory `(You build directory)/app/Cuties.app/Contents/MacOS/`. These two files are color configure file.
+
+Copy `openTerminal.command` from `mac_terminal` folder to `(You build directory)/app/Cuties.app/Contents/MacOS/`.
+
+Make a folder named `Locale`, copy `Locale` folder in the `image` folder from the source code directory to the new `Locale` folder. Now there should have a language database file `Locale.db` and several .png image files. Copy those .qm files to the new `Locale` folder.
 
 ##Install
 

@@ -31,7 +31,7 @@ KCDebuggerConfigure::KCDebuggerConfigure()
     ;
 }
 
-QString KCDebuggerConfigure::getGroupName()
+QString KCDebuggerConfigure::getGroupName() const
 {
     return "Debugger";
 }

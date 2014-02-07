@@ -31,7 +31,7 @@ KCCompilerConfigure::KCCompilerConfigure()
     ;
 }
 
-QString KCCompilerConfigure::getGroupName()
+QString KCCompilerConfigure::getGroupName() const
 {
     return "Compiler";
 }
