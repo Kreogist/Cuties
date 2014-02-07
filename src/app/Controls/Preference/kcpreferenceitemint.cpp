@@ -17,22 +17,27 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QLabel>
+#include <QSpinBox>
+#include <QSlider>
+#include <QDial>
+
 #include "kcpreferenceitemint.h"
 
 KCPreferenceItemInt::KCPreferenceItemInt(QWidget *parent) :
     KCPreferenceItemBase(parent)
 {
     //Set Edit Mode Layout
-    dialLayout=new QHBoxLayout(this);
+    dialLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     dialLayout->setContentsMargins(0,0,0,0);
     dialLayout->setSpacing(0);
     setLayout(dialLayout);
 
-    editLayout=new QVBoxLayout();
+    editLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     editLayout->setContentsMargins(5,5,5,5);
     editLayout->setSpacing(2);
 
-    intLayout=new QHBoxLayout();
+    intLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     intLayout->setContentsMargins(0,0,0,0);
     intLayout->setSpacing(0);
 
@@ -45,7 +50,7 @@ KCPreferenceItemInt::KCPreferenceItemInt(QWidget *parent) :
 
     editLayout->addLayout(intLayout);
 
-    intSliderLayout=new QHBoxLayout();
+    intSliderLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     intSliderLayout->setContentsMargins(0,0,0,0);
     intSliderLayout->setSpacing(0);
     intSpinValueChanger=new QSpinBox(this);

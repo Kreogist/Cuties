@@ -20,24 +20,20 @@
 #ifndef KCSIDEBAR_H
 #define KCSIDEBAR_H
 
-#include <QDockWidget>
-#include <QLabel>
-#include <QTimeLine>
-#include <QIcon>
-#include <QToolButton>
-#include <QPushButton>
-#include <QButtonGroup>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QSignalMapper>
-
-#include <QStackedWidget>
 #include <QListView>
+#include <QDockWidget>
 
 #include "kchistoryconfigure.h"
 #include "kcclipboard.h"
+
+class QLabel;
+class QTimeLine;
+class QSignalMapper;
+class QMouseEvent;
+class QStackedWidget;
+class QBoxLayout;
+class QIcon;
+class QPixmap;
 
 class KCClipboardHistoryStack : public QListView
 {
@@ -94,7 +90,7 @@ protected:
 private:
     QPalette pal;
     QColor buttonBackcolor;
-    QVBoxLayout *mainLayout;
+    QBoxLayout *mainLayout;
     QLabel *iconDisplayer;
 
     bool buttonPressed;
@@ -126,8 +122,8 @@ public slots:
     void listButtonClicked(int Index);
 
 private:
-    QHBoxLayout *mainLayout;
-    QVBoxLayout *buttonGroupLayout;
+    QBoxLayout *mainLayout,
+               *buttonGroupLayout;
     enum sidebarButtons
     {
         sideButtonHistory,

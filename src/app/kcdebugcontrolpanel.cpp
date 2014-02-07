@@ -36,33 +36,25 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     retranslate();
 
     //Set properties.
+    setObjectName("KCDebugControlPanel");
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
     setWindowTitle(windowTitleString);
-    setObjectName("DebugPanel");
     setAllowedAreas(Qt::RightDockWidgetArea |
                     Qt::BottomDockWidgetArea);
-    //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     //Set compile dock palette
     QPalette pal=palette();
-    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Window, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     QWidget *centralWidget=new QWidget(this);
+    centralWidget->setObjectName("KCDebugControlPanelContainer");
     centralWidget->setAutoFillBackground(true);
     centralWidget->setContentsMargins(0,0,0,0);
     pal=centralWidget->palette();
-    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    KCColorConfigure::getInstance()->getPalette(pal,
+                                                centralWidget->objectName());
     centralWidget->setPalette(pal);
 
     QVBoxLayout *mainLayout=new QVBoxLayout(centralWidget);
@@ -73,14 +65,12 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     setWidget(centralWidget);
 
     toolBar=new QToolBar(toolbarTitle, this);
+    toolBar->setObjectName("KCDebugControlPanelToolbar");
     toolBar->setContentsMargins(0,0,0,0);
     toolBar->setAutoFillBackground(true);
     pal=toolBar->palette();
-    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    KCColorConfigure::getInstance()->getPalette(pal,
+                                                toolBar->objectName());
     toolBar->setPalette(pal);
 
     QString debugControlIconPath[debugControlButtonCount];
@@ -116,13 +106,11 @@ KCDebugControlPanel::KCDebugControlPanel(QWidget *parent) :
     for(i=debugNext; i<debugCursorControlButtonCount; i++)
     {
         debugCursorControlButton[i]=new QToolButton(this);
+        debugCursorControlButton[i]->setObjectName("KCDebugCursorControlButton");
         debugCursorControlButton[i]->setAutoFillBackground(true);
         pal=debugCursorControlButton[i]->palette();
-        pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-        pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
-        pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-        pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-        pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+        KCColorConfigure::getInstance()->getPalette(pal,
+                                                    debugCursorControlButton[i]->objectName());
         debugCursorControlButton[i]->setPalette(pal);
         debugCursorControlButton[i]->setAutoRaise(true);
         debugCursorControlButton[i]->setFixedHeight(25);

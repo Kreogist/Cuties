@@ -27,6 +27,7 @@
 #include "gdbcontroller.h"
 #include "kclanguageconfigure.h"
 #include "kcfontconfigure.h"
+#include "kccolorconfigure.h"
 
 #include "kcdebugcommandio.h"
 
@@ -62,18 +63,13 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
     retranslate();
 
     //Set properties.
-    setObjectName("DebugCommandIO");
+    setObjectName("KCDebugCommandIO");
     setWindowTitle(windowTitleString);
     setContentsMargins(0,0,0,0);
 
     //Set palette.
     QPalette pal=palette();
-    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Window, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     QWidget *contentWidget=new QWidget(this);

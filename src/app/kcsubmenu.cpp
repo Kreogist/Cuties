@@ -27,6 +27,7 @@ KCMenuIndicator::KCMenuIndicator(QWidget *parent) :
     QWidget(parent)
 {
     //Set properties
+    setObjectName("KCMenuIndicator");
     setAutoFillBackground(true);
     setWindowFlags(Qt::ToolTip |
                    Qt::FramelessWindowHint);

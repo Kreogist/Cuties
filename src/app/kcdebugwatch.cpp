@@ -31,6 +31,7 @@
 #include "kcdebugwatch.h"
 #include "kclanguageconfigure.h"
 #include "kcmessagebox.h"
+#include "kccolorconfigure.h"
 
 KCDebugWatch::KCDebugWatch(QWidget *parent) :
     QDockWidget(parent)
@@ -42,18 +43,13 @@ KCDebugWatch::KCDebugWatch(QWidget *parent) :
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
     setWindowTitle(windowTitleString);
-    setObjectName("DebugWatchPanel");
+    setObjectName("KCDebugWatchPanel");
     setAllowedAreas(Qt::RightDockWidgetArea |
                     Qt::BottomDockWidgetArea);
 
     //Set compile dock palette
     QPalette pal=palette();
-    pal.setColor(QPalette::Base, QColor(0x35, 0x35, 0x35));
-    pal.setColor(QPalette::Window, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::Button, QColor(0x53, 0x53, 0x53));
-    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     //Set central widget

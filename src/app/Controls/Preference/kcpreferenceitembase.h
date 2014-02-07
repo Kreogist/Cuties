@@ -21,12 +21,11 @@
 #define KCPREFERENCEITEMBASE_H
 
 #include <QVariant>
-#include <QWidget>
-#include <QTimeLine>
 #include <QLabel>
-#include <QMouseEvent>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QTimeLine>
+#include <QBoxLayout>
+
+class QMouseEvent;
 
 class KCPreferenceOriginalLabel : public QLabel
 {
@@ -94,7 +93,7 @@ protected:
     QTimeLine *showAnimation, *hideAnimation;
     QPalette pal;
     QColor backgroundColor;
-    QVBoxLayout *editLayout;
+    QBoxLayout *editLayout;
     QLabel *valueDisplayer;
     KCPreferenceOriginalLabel *originalValueDisplayer;
     QString originalValueIs, keyNames;

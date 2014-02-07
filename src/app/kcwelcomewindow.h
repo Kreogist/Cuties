@@ -20,7 +20,6 @@
 #ifndef KCWELCOMEWINDOW_H
 #define KCWELCOMEWINDOW_H
 
-#include <QStackedWidget>
 #include <QModelIndex>
 #include <QWidget>
 

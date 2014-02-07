@@ -787,11 +787,12 @@ void MainWindow::createMenu()
 void MainWindow::createStatusbar()
 {
     statusBar=new KCStatusBar(this);
+    statusBar->setObjectName("MainWindowStatusBar");
     setStatusBar(statusBar);
 
     QPalette pal=statusBar->palette();
-    pal.setColor(QPalette::Window,QColor(0x89,0x89,0x89));
-    pal.setColor(QPalette::Foreground,QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,
+                                                statusBar->objectName());
     statusBar->setPalette(pal);
 
     connect(tabManager,SIGNAL(rewriteDataChanged(bool)),

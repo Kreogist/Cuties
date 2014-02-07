@@ -22,11 +22,11 @@
 
 #include <QList>
 #include <QWidget>
-#include <QResizeEvent>
-#include <QPropertyAnimation>
-#include <QParallelAnimationGroup>
 
-#include "kcpreferencesuperlist.h"
+class QParallelAnimationGroup;
+class QPropertyAnimation;
+class QResizeEvent;
+class KCPreferenceSuperList;
 
 class KCPreferencePager : public QWidget
 {

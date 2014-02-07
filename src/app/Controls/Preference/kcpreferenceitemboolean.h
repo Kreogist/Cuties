@@ -20,11 +20,10 @@
 #ifndef KCPREFERENCEITEMBOOLEAN_H
 #define KCPREFERENCEITEMBOOLEAN_H
 
-#include <QLabel>
-#include <QCheckBox>
-
 #include "kcpreferenceitembase.h"
-#include "kclanguageconfigure.h"
+
+class QCheckBox;
+class QLabel;
 
 class KCPreferenceItemBoolean : public KCPreferenceItemBase
 {

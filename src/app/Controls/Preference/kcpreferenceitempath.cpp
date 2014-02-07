@@ -17,8 +17,13 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QLineEdit>
+#include <QPushButton>
+#include <QFileInfo>
 #include <QCompleter>
 #include <QDirModel>
+#include <QFileDialog>
+#include "kclanguageconfigure.h"
 
 #include "kcpreferenceitempath.h"
 
@@ -34,7 +39,7 @@ KCPreferenceItemPath::KCPreferenceItemPath(QWidget *parent) :
     retranslate();
 
     //Set Edit Mode Layout
-    editLayout=new QVBoxLayout(this);
+    editLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     editLayout->setContentsMargins(5,5,5,5);
     editLayout->setSpacing(3);
     setLayout(editLayout);

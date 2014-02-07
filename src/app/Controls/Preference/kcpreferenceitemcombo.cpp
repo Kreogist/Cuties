@@ -17,7 +17,8 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
+#include <QComboBox>
+#include <QLabel>
 
 #include "kcpreferenceitemcombo.h"
 
@@ -25,12 +26,12 @@ KCPreferenceItemCombo::KCPreferenceItemCombo(QWidget *parent) :
     KCPreferenceItemBase(parent)
 {
     //Set Edit Mode Layout
-    editLayout=new QVBoxLayout(this);
+    editLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     editLayout->setContentsMargins(5,5,5,5);
     editLayout->setSpacing(2);
     setLayout(editLayout);
 
-    comboLayout=new QHBoxLayout();
+    comboLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     comboLayout->setContentsMargins(0,0,0,0);
     comboLayout->setSpacing(0);
 

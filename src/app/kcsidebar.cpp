@@ -17,14 +17,25 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QPixmap>
+#include <QIcon>
+#include <QLabel>
+#include <QTimeLine>
+#include <QSignalMapper>
+#include <QMouseEvent>
+#include <QStackedWidget>
+#include <QBoxLayout>
+
 #include "kcsidebar.h"
 #include "kclanguageconfigure.h"
+#include "kccolorconfigure.h"
 
 KCClipboardHistoryStack::KCClipboardHistoryStack(QWidget *parent) :
     QListView(parent)
 {
+    setObjectName("KCClipboardHistoryStack");
     QPalette pal=palette();
-    pal.setColor(QPalette::Window, QColor(69,69,69));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     setModel(KCClipboard::getInstance()->getClipboardTextsModel());
@@ -41,8 +52,9 @@ void KCClipboardHistoryStack::dblClickClipboardItems(QModelIndex ItemID)
 KCHistoryStack::KCHistoryStack(QWidget *parent) :
     QListView(parent)
 {
+    setObjectName("KCHistoryStack");
     QPalette pal=palette();
-    pal.setColor(QPalette::Window, QColor(69,69,69));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     setModel(KCHistoryConfigure::getInstance()->getRecentOpenedFileModel());
@@ -64,7 +76,7 @@ KCSidebarButton::KCSidebarButton(QWidget *parent) :
     setFixedSize(30,35);
 
     //Set Layout;
-    mainLayout=new QVBoxLayout(this);
+    mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
@@ -149,13 +161,13 @@ KCSideBarContent::KCSideBarContent(QWidget *parent) :
     sidebarButtonIndex=-1;
 
     //Set Main Layout.
-    mainLayout=new QHBoxLayout(this);
+    mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
     //Set Button Group Layout.
-    buttonGroupLayout=new QVBoxLayout();
+    buttonGroupLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     buttonGroupLayout->setContentsMargins(0,0,0,0);
     buttonGroupLayout->setSpacing(0);
 
@@ -300,12 +312,7 @@ KCSideBar::KCSideBar(QWidget *parent) :
     setContentsMargins(0,0,0,0);
     setAutoFillBackground(true);
     pal=palette();
-    pal.setBrush(QPalette::Window, QBrush(QColor(100,100,100)));
-    pal.setColor(QPalette::Base,QColor(0x35,0x35,0x35));
-    pal.setColor(QPalette::WindowText,QColor(255,255,255));
-    pal.setColor(QPalette::Button,QColor(83,83,83));
-    pal.setColor(QPalette::Text,QColor(255,255,255));
-    pal.setColor(QPalette::ButtonText,QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
     setWindowTitle(" " + windowTitleString + " ");
 

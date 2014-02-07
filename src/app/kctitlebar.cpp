@@ -35,14 +35,12 @@ KCTitleBar::KCTitleBar(QWidget *parent) :
 
 #ifndef Q_OS_MACX
     mainButton=new QToolButton(this);
+    mainButton->setObjectName("KCTitleBarMainButton");
     mainButton->setAutoRaise(true);
     mainButton->setFixedSize(32,32);
     pal=mainButton->palette();
-    pal.setColor(QPalette::Window, QColor(0x9c, 0x9c, 0x9c));
-    pal.setColor(QPalette::Button, QColor(0x9c, 0x9c, 0x9c));
-    pal.setColor(QPalette::ButtonText, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    KCColorConfigure::getInstance()->getPalette(pal,
+                                                mainButton->objectName());
     mainButton->setPalette(pal);
     mainButton->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_1));
     connect(mainButton, &QToolButton::pressed,

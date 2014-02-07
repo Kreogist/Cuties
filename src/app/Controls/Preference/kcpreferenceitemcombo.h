@@ -20,10 +20,11 @@
 #ifndef KCPREFERENCEITEMCOMBO_H
 #define KCPREFERENCEITEMCOMBO_H
 
-#include <QLabel>
-#include <QComboBox>
 #include <QList>
 #include "kcpreferenceitembase.h"
+
+class QLabel;
+class QComboBox;
 
 class KCPreferenceItemCombo : public KCPreferenceItemBase
 {
@@ -52,7 +53,7 @@ protected:
 private:
     QList<QString> comboTextList;
 
-    QHBoxLayout *comboLayout;
+    QBoxLayout *comboLayout;
     QLabel *comboCaption;
     QComboBox *comboData;
 };

@@ -17,9 +17,11 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
+#include <QLabel>
+#include <QCheckBox>
 
 #include "kcpreferenceitemboolean.h"
+#include "kclanguageconfigure.h"
 
 KCPreferenceItemBoolean::KCPreferenceItemBoolean(QWidget *parent) :
     KCPreferenceItemBase(parent)
@@ -30,7 +32,7 @@ KCPreferenceItemBoolean::KCPreferenceItemBoolean(QWidget *parent) :
     disabledColor=QColor(254, 0, 0);
 
     //Set Edit Mode Layout
-    editLayout=new QVBoxLayout(this);
+    editLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     editLayout->setContentsMargins(5,5,5,5);
     editLayout->setSpacing(2);
     setLayout(editLayout);

@@ -42,8 +42,6 @@ void KCConfigure::readConfigure()
 {
     //load default config
 #ifdef Q_OS_WIN32
-    //Test.
-    qDebug()<<"Default loaded.";
     readConfigure(":/DefaultSettings/default_settings/Cuties_Win32.ini");
 #else
     readConfigure(":/DefaultSettings/default_settings/Cuties_Unix.ini");

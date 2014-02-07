@@ -20,13 +20,12 @@
 #ifndef KCPREFERENCEITEMINT_H
 #define KCPREFERENCEITEMINT_H
 
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QSpinBox>
-#include <QSlider>
-#include <QDial>
-
 #include "kcpreferenceitembase.h"
+
+class QLabel;
+class QSpinBox;
+class QSlider;
+class QDial;
 
 class KCPreferenceItemInt : public KCPreferenceItemBase
 {
@@ -56,7 +55,7 @@ private:
     QString intCaptionText;
 
     QLabel *intCaption;
-    QHBoxLayout *intLayout, *dialLayout, *intSliderLayout;
+    QBoxLayout *intLayout, *dialLayout, *intSliderLayout;
     QSpinBox *intSpinValueChanger;
     QSlider *intSliderValueChanger;
     QDial *intDialValueChanger;

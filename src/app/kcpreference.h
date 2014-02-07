@@ -20,17 +20,17 @@
 #ifndef KCPREFERENCE_H
 #define KCPREFERENCE_H
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QDialog>
-#include <QTimeLine>
-#include <QToolButton>
-#include <QPropertyAnimation>
 
 #include "kcpreferencepager.h"
 #include "kcpreferenceembedded.h"
 #include "kcglobal.h"
+
+class QLabel;
+class QTimeLine;
+class QToolButton;
+class QBoxLayout;
+class QPropertyAnimation;
 
 enum KCPreferenceCategory
 {
@@ -150,7 +150,7 @@ public slots:
     void retranslateAndSet();
 
 private:
-    QHBoxLayout *commanderLayout;
+    QBoxLayout *commanderLayout;
     enum commanderEnum
     {
         commanderYes,
@@ -187,7 +187,7 @@ protected:
 
 private:
     //Layouts.
-    QHBoxLayout *contentLayout;
+    QBoxLayout *contentLayout;
     //Widgets:
     KCPreferenceBannerWidget *bannerWidget;
     KCPreferenceCategoryList *categoryList;

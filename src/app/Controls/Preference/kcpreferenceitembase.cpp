@@ -17,9 +17,10 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QDebug>
+#include <QMouseEvent>
 
 #include "kcpreferenceitembase.h"
+#include "kccolorconfigure.h"
 
 KCPreferenceOriginalLabel::KCPreferenceOriginalLabel(QWidget *parent) :
     QLabel(parent)
@@ -37,6 +38,7 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
     QWidget(parent)
 {
     //Set properties
+    setObjectName("KCPreferenceItemBase");
     setAutoFillBackground(true);
     setContentsMargins(0,0,0,0);
     setFixedHeight(27);
@@ -47,10 +49,12 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
     //Set the original value displayer.
     valueDisplayer=new QLabel(this);
     originalValueDisplayer=new KCPreferenceOriginalLabel(this);
+    originalValueDisplayer->setObjectName("OriginalValueDisplayer");
     setOriginalDisplayVisible(false);
 
     pal=originalValueDisplayer->palette();
-    pal.setColor(QPalette::WindowText, QColor(150,150,150));
+    KCColorConfigure::getInstance()->getPalette(pal,
+                                                originalValueDisplayer->objectName());
     originalValueDisplayer->setPalette(pal);
 
     connect(originalValueDisplayer, SIGNAL(requireResetCurrentValue()),
@@ -63,7 +67,10 @@ KCPreferenceItemBase::KCPreferenceItemBase(QWidget *parent) :
     //Set palette
     valueChangedAlpha=100;
     pal=palette();
-    backgroundColor=QColor(0xf7,0xcf,0x3d,0);
+    KCColorConfigure::getInstance()->getPalette(pal,
+                                                objectName());
+    backgroundColor=pal.color(QPalette::Window);
+    backgroundColor.setAlpha(0);
     setBackgroundAlpha(0);
 
     //Init animation

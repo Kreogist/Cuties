@@ -30,6 +30,7 @@
 #include "kcwelcomewindow.h"
 #include "kchistoryconfigure.h"
 #include "kclanguageconfigure.h"
+#include "kccolorconfigure.h"
 
 KCWelcomeWindowNewFileButton::KCWelcomeWindowNewFileButton(QWidget *parent) :
     QWidget(parent)
@@ -213,10 +214,13 @@ KCWelcomeWindowOpenFile::KCWelcomeWindowOpenFile(QWidget *parent) :
 {
     retranslate();
 
+    setObjectName("KCWelcomeWindowOpenFile");
     setAutoFillBackground(true);
 
     pal=palette();
-    backgroundColor=QColor(0xf7,0xcf,0x3d);
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
+    backgroundColor=pal.color(QPalette::Window);
+    backgroundColor.setAlpha(0);
 
     QHBoxLayout *openFileLayout=new QHBoxLayout(this);
     openFileLayout->setSpacing(0);
@@ -349,6 +353,7 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     QWidget(parent)
 {
     //Set properties
+    setObjectName("KCWelcomeWindow");
     setAutoFillBackground(true);
 
     QVBoxLayout *welcomeLayout=new QVBoxLayout(this);
@@ -357,8 +362,7 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     setLayout(welcomeLayout);
 
     QPalette pal=palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
-    pal.setColor(QPalette::WindowText, QColor(0,0,0));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     QWidget *welcomeBanner=new QWidget(this);
@@ -384,6 +388,7 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     bannerLayout->addWidget(cutiesLogo);
 
     QFont titleFont=font();
+    titleFont.setBold(true);
     titleFont.setPixelSize(15);
 
     captionLayout=new QVBoxLayout();
@@ -391,11 +396,12 @@ KCWelcomeWindow::KCWelcomeWindow(QWidget *parent) :
     captionLayout->setSpacing(0);
 
     QLabel *kreogistCaption=new QLabel(this);
-    titleFont.setBold(true);
+    kreogistCaption->setObjectName("KCWelcomeWindowTitle");
     kreogistCaption->setFont(titleFont);
     kreogistCaption->setText("Kreogist Cuties " + qApp->applicationVersion());
     pal=kreogistCaption->palette();
-    pal.setColor(QPalette::WindowText, QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,
+                                                kreogistCaption->objectName());
     kreogistCaption->setPalette(pal);
     QLabel *cutiesCaption=new QLabel(this);
     titleFont.setPixelSize(30);

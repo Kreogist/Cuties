@@ -20,13 +20,10 @@
 #ifndef KCPREFERENCEITEMPATH_H
 #define KCPREFERENCEITEMPATH_H
 
-#include <QLineEdit>
-#include <QPushButton>
-#include <QFileInfo>
-#include <QFileDialog>
-
 #include "kcpreferenceitembase.h"
-#include "kclanguageconfigure.h"
+
+class QLineEdit;
+class QPushButton;
 
 class KCPreferenceItemPath : public KCPreferenceItemBase
 {

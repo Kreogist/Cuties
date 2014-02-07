@@ -16,10 +16,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 #include <QSignalMapper>
 #include <QIcon>
+#include <QLabel>
+#include <QTimeLine>
+#include <QToolButton>
+#include <QPropertyAnimation>
+#include <QBoxLayout>
 
 #include "kclanguageconfigure.h"
 #include "kccolorconfigure.h"
@@ -241,16 +244,13 @@ KCPreferenceCategoryList::KCPreferenceCategoryList(QWidget *parent) :
     instance=KCLanguageConfigure::getInstance();
 
     localeSettings=new QToolButton(this);
+    localeSettings->setObjectName("KCLocaleSettings");
     localeSettings->setAutoRaise(true);
     localeSettings->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     localeSettings->setFixedHeight(32);
     localeSettings->setFixedWidth(width());
     QPalette pal=localeSettings->palette();
-    pal.setColor(QPalette::Base, QColor(0xf7,0xcf,0x3d));
-    pal.setColor(QPalette::Button, QColor(0xf7,0xcf,0x3d));
-    pal.setColor(QPalette::ButtonText, QColor(0,0,0));
-    pal.setColor(QPalette::Text, QColor(0xff, 0xff, 0xff));
-    pal.setColor(QPalette::WindowText, QColor(0xff, 0xff, 0xff));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     localeSettings->setPalette(pal);
     categoryListLayout->addWidget(localeSettings);
 
@@ -338,7 +338,7 @@ KCPreferenceCommander::KCPreferenceCommander(QWidget *parent) :
     setContentsMargins(8,8,8,8);
     setAutoFillBackground(true);
 
-    commanderLayout=new QHBoxLayout(this);
+    commanderLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     commanderLayout->setContentsMargins(0,0,0,0);
     commanderLayout->setSpacing(0);
     setLayout(commanderLayout);
@@ -405,7 +405,7 @@ KCPreference::KCPreference(QWidget *parent) :
     setMinimumSize(800, 400);
 
     //Banner Layout
-    QVBoxLayout *bannerLayout=new QVBoxLayout(this);
+    QBoxLayout *bannerLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     bannerLayout->setContentsMargins(0,0,0,0);
     bannerLayout->setSpacing(0);
     setLayout(bannerLayout);
@@ -415,7 +415,7 @@ KCPreference::KCPreference(QWidget *parent) :
     bannerLayout->addWidget(bannerWidget);
 
     //Content Layout
-    contentLayout=new QHBoxLayout();
+    contentLayout=new QBoxLayout(QBoxLayout::LeftToRight);
     contentLayout->setContentsMargins(0,0,0,0);
     contentLayout->setSpacing(0);
     bannerLayout->addLayout(contentLayout, 1);

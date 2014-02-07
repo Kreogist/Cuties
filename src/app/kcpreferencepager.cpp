@@ -17,20 +17,26 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <QDebug>
 
+#include <QResizeEvent>
+#include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
+
+#include "kcpreferencesuperlist.h"
 #include "kcpreferencepager.h"
+#include "kccolorconfigure.h"
 
 KCPreferencePager::KCPreferencePager(QWidget *parent) :
     QWidget(parent)
 {
     //Set basic content
+    setObjectName("KCPreferencePager");
     setAutoFillBackground(true);
 
     //Set palette
     QPalette pal=this->palette();
-    pal.setColor(QPalette::Window, QColor(255,255,255));
+    KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
     //Set current page index
