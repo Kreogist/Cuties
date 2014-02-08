@@ -17,6 +17,7 @@
         <file>image/Splash.png</file>
         <file>image/Banner.png</file>
         <file>image/indicator.png</file>
+        <file>image/ColorPointer.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>

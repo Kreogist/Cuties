@@ -23,6 +23,7 @@
 #include "kchistoryconfigure.h"
 #include "kcstatusrecorder.h"
 #include "kcmailreports.h"
+#include "kccolorselector.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     KCMainWindow(parent)
@@ -601,6 +602,9 @@ void MainWindow::createActions()
 
 void MainWindow::aboutCuties()
 {
+    KCColorSelector *selector=new KCColorSelector(this);
+    selector->exec();
+    return;
     KCMessageBox *aboutCuties=new KCMessageBox(this);
     aboutCuties->setTitle("About Cuties");
     aboutCuties->addImage(":/mainicon/image/Cuties.png",

@@ -17,7 +17,7 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
+#include <QColorDialog>
 #include "textcharformatmap.h"
 
 textCharFormatMap *textCharFormatMap::instance=nullptr;
