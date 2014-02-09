@@ -83,6 +83,8 @@ public:
 
 signals:
     void valueChanged(int value);
+    void sliderPressed();
+    void sliderReleased();
 
 public slots:
     void renderRed(const QColor &color);
@@ -117,16 +119,19 @@ public:
 
 signals:
     void requireSyncColor(QColor color);
+    void sliderPressed();
+    void sliderReleased();
+    void valueChanged(int value);
 
 public slots:
-    void focusOnElement(QString elementName,
-                        int value,
-                        QColor color);
-    void syncColor(QColor color);
+    void focusOnElement(QString elementName);
+    void colorUpdate(const QColor &color);
+    void setValue(int value, int maximum=255);
+    int getValue(int maximum=255);
 
 private slots:
     void slide(int position, int maximum=255);
-    void colorUpdate(int element);
+    void valueUpdate(int element);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -192,11 +197,7 @@ public:
     explicit KCColorSliderItemBase(QWidget *parent = 0,
                                    bool autoBuild = true);
     virtual void setCaption(const QString &value);
-    virtual void setMinimum(const int &value);
-    virtual void setMaximum(const int &value);
-    virtual void setRange(const int &minimumValue,
-                          const int &maximumValue);
-    int getValue();
+    virtual int getValue(int maximum=255);
 
 signals:
     void requireElementChanged(QString elementName,
@@ -205,7 +206,8 @@ signals:
                                int value);
 
 public slots:
-    virtual void syncValue(const int &value);
+    virtual void syncValue(const int &value,
+                           const QColor &color);
     virtual void setValue(int value);
     virtual void setEraseFocus();
 
@@ -217,8 +219,9 @@ protected:
     QBoxLayout *mainLayout;
     QRadioButton *elementCaption;
     KCColorSpinBox *elementSpinBox;
-    QSlider *elementSlider;
-    bool syncMode=false;
+    KCColorLevelSelector *levelSelector;
+    bool valueSetMode=false, syncMode=false;
+    bool syncRequireSentByMe=false;
     bool focusSignalSent=false;
 };
 
@@ -227,18 +230,15 @@ class KCColorSliderItemPercent : public KCColorSliderItemBase
     Q_OBJECT
 public:
     explicit KCColorSliderItemPercent(QWidget *parent = 0);
-    void setRealRange(int min, int max);
-    int getOriginalValue();
 
 public slots:
     void buildSlider();
-    void syncValue(const int &value);
+    void syncValue(const int &value,
+                   const QColor &color);
     void setValue(int value);
-    void syncOriginalValue(const int &value);
-    void setOriginalValue(int value);
+    void setValueFromLevel(int value);
 
 private:
-    int calculateValue(int percent);
     QLabel *percentCaption;
     int realMinimum=0, realMaximum=0, delta=0;
     bool signalSentByMe=false;
@@ -249,9 +249,7 @@ class KCColorSliderBase : public QWidget
     Q_OBJECT
 public:
     explicit KCColorSliderBase(QWidget *parent = 0);
-    virtual KCColorSliderItemBase *addElement(const QString &name,
-                                              const int &min,
-                                              const int &max);
+    virtual KCColorSliderItemBase *addElement(const QString &name);
 
 signals:
     void requireSyncColor(QColor color);
@@ -261,13 +259,14 @@ signals:
     void requireClearElementsFocus();
 
 public slots:
-    virtual void syncElement(QString elementName,
+    virtual void onElementChanged(QString elementName,
                              int value)=0;
     virtual void syncColor(QColor color);
     virtual void focusRequire(QString elementName,
                               int value);
 
 protected:
+    virtual void syncElement()=0;
     QBoxLayout *mainLayout;
     QColor currentColor;
     bool signalSentByMe=false;
@@ -278,16 +277,17 @@ class KCColorSliderCMYKP : public KCColorSliderBase
     Q_OBJECT
 public:
     explicit KCColorSliderCMYKP(QWidget *parent = 0);
-    KCColorSliderItemPercent *addElement(const QString &name,
-                                         const int &min,
-                                         const int &max);
+    KCColorSliderItemPercent *addElement(const QString &name);
 
 public slots:
-    void syncElement(QString elementName,
+    void onElementChanged(QString elementName,
                      int value);
     void syncColor(QColor color);
     void focusRequire(QString elementName,
                       int value);
+
+protected:
+    void syncElement();
 
 private:
     KCColorSliderItemPercent *cyanElement,
@@ -303,9 +303,12 @@ public:
     explicit KCColorSliderCMYK(QWidget *parent = 0);
 
 public slots:
-    void syncElement(QString elementName,
+    void onElementChanged(QString elementName,
                      int value);
     void syncColor(QColor color);
+
+protected:
+    void syncElement();
 
 private:
     KCColorSliderItemBase *cyanElement,
@@ -321,31 +324,17 @@ public:
     explicit KCColorSliderRGB(QWidget *parent = 0);
 
 public slots:
-    void syncElement(QString elementName,
+    void onElementChanged(QString elementName,
                      int value);
     void syncColor(QColor color);
+
+protected:
+    void syncElement();
 
 private:
     KCColorSliderItemBase *redElement,
                           *greenElement,
                           *blueElement;
-};
-
-class KCColorSliderHSL : public KCColorSliderBase
-{
-    Q_OBJECT
-public:
-    explicit KCColorSliderHSL(QWidget *parent = 0);
-
-public slots:
-    void syncElement(QString elementName,
-                     int value);
-    void syncColor(QColor color);
-
-private:
-    KCColorSliderItemBase *hueElement,
-                          *saturationElement,
-                          *lightnessElement;
 };
 
 class KCColorSliderHSV : public KCColorSliderBase
@@ -355,9 +344,12 @@ public:
     explicit KCColorSliderHSV(QWidget *parent = 0);
 
 public slots:
-    void syncElement(QString elementName,
+    void onElementChanged(QString elementName,
                      int value);
     void syncColor(QColor color);
+
+protected:
+    void syncElement();
 
 private:
     KCColorSliderItemBase *hueElement,

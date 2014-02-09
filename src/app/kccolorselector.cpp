@@ -234,6 +234,9 @@ void KCColorHSVRing::syncColor(QColor color)
     doubleBoard->syncColor(color);
 }
 
+/*!
+ *\brief KCColorLevelRenderBase is a color slider.
+ */
 KCColorLevelRenderBase::KCColorLevelRenderBase(QWidget *parent) :
     QWidget(parent)
 {
@@ -379,6 +382,7 @@ void KCColorLevelRenderBase::resizeEvent(QResizeEvent *event)
 void KCColorLevelRenderBase::mousePressEvent(QMouseEvent *event)
 {
     QWidget::mousePressEvent(event);
+    emit sliderPressed();
     isPressed=true;
     int haruka=event->pos().x()-2;
     if(haruka>-1 && haruka<257)
@@ -412,6 +416,7 @@ void KCColorLevelRenderBase::mouseReleaseEvent(QMouseEvent *event)
 {
     QWidget::mouseReleaseEvent(event);
     isPressed=false;
+    emit sliderReleased();
 }
 
 KCColorLevelSelector::KCColorLevelSelector(QWidget *parent) :
@@ -422,86 +427,67 @@ KCColorLevelSelector::KCColorLevelSelector(QWidget *parent) :
     colorRender->move(2,8);
     colorSelector=new QLabel(this);
     colorSelector->setPixmap(QPixmap(":/img/image/ColorPointer.png"));
-    connect(colorRender, SIGNAL(valueChanged(int)),
-            this, SLOT(colorUpdate(int)));
+
+    //Selector will update it self when the parent call the update itself.
+
+    connect(colorRender, &KCColorLevelRenderBase::sliderPressed,
+            this, &KCColorLevelSelector::sliderPressed);
+    connect(colorRender, &KCColorLevelRenderBase::sliderReleased,
+            this, &KCColorLevelSelector::sliderReleased);
+    connect(colorRender, &KCColorLevelRenderBase::valueChanged,
+            this, &KCColorLevelSelector::valueChanged);
 }
 
-void KCColorLevelSelector::focusOnElement(QString elementName,
-                                          int value,
-                                          QColor color)
+void KCColorLevelSelector::focusOnElement(QString elementName)
 {
-    syncMode=true;
-    currentColor=color;
     if(elementName=="H:")
     {
         currentMode=hueMode;
-        colorRender->renderHue(color);
-        slide(value, 360);
-        syncMode=false;
-        return;
     }
-    if(elementName=="R:")
+    else if(elementName=="R:")
     {
         currentMode=redMode;
-        colorRender->renderRed(color);
     }
     else if(elementName=="G:")
     {
         currentMode=greenMode;
-        colorRender->renderGreen(color);
     }
     else if(elementName=="B:")
     {
         currentMode=blueMode;
-        colorRender->renderBlue(color);
     }
     else if(elementName=="S:")
     {
         currentMode=saturationMode;
-        colorRender->renderSaturation(color);
     }
     else if(elementName=="L:")
     {
         currentMode=lightnessMode;
-        colorRender->renderLightness(color);
     }
     else if(elementName=="V:")
     {
         currentMode=valueMode;
-        colorRender->renderValue(color);
     }
     else if(elementName=="C:")
     {
         currentMode=cyanMode;
-        colorRender->renderCyan(color);
     }
     else if(elementName=="M:")
     {
         currentMode=magentaMode;
-        colorRender->renderMagenta(color);
     }
     else if(elementName=="Y:")
     {
         currentMode=yellowMode;
-        colorRender->renderYellow(color);
     }
     else if(elementName=="K:")
     {
         currentMode=blackMode;
-        colorRender->renderBlack(color);
     }
-    slide(value);
-    syncMode=false;
 }
 
-void KCColorLevelSelector::syncColor(QColor color)
+void KCColorLevelSelector::colorUpdate(const QColor &color)
 {
-    if(syncSentByMe)
-    {
-        syncSentByMe=false;
-        return;
-    }
-    syncMode=true;
     currentColor=color;
     switch(currentMode)
     {
@@ -550,7 +536,21 @@ void KCColorLevelSelector::syncColor(QColor color)
         slide(color.black());
         break;
     }
-    syncMode=false;
+}
+
+void KCColorLevelSelector::setValue(int value, int maximum)
+{
+    slide(value, maximum);
+}
+
+int KCColorLevelSelector::getValue(int maximum)
+{
+    int outPosition=colorSelector->x();
+    if(maximum!=255)
+    {
+        outPosition=outPosition*maximum/255;
+    }
+    return outPosition;
 }
 
 void KCColorLevelSelector::slide(int position, int maximum)
@@ -563,7 +563,7 @@ void KCColorLevelSelector::slide(int position, int maximum)
     colorSelector->move(innerPosition, 0);
 }
 
-void KCColorLevelSelector::colorUpdate(int element)
+void KCColorLevelSelector::valueUpdate(int element)
 {
     switch(currentMode)
     {
@@ -689,7 +689,8 @@ KCColorSliderItemBase::KCColorSliderItemBase(QWidget *parent,
 
     elementCaption=new QRadioButton(this);
     elementSpinBox=new KCColorSpinBox(this);
-    elementSlider=new QSlider(Qt::Horizontal, this);
+    elementSpinBox->setRange(0, 255);
+    levelSelector=new KCColorLevelSelector(this);
 
     connect(elementCaption, SIGNAL(clicked()),
             this, SLOT(onActionClickElement()));
@@ -704,49 +705,40 @@ void KCColorSliderItemBase::buildSlider()
 {
     mainLayout->addWidget(elementCaption);
     mainLayout->addWidget(elementSpinBox);
-    mainLayout->addWidget(elementSlider,1);
+    mainLayout->addWidget(levelSelector);
     connect(elementSpinBox, SIGNAL(valueChanged(int)),
             this, SLOT(setValue(int)));
-    connect(elementSlider, SIGNAL(valueChanged(int)),
+    connect(levelSelector, SIGNAL(valueChanged(int)),
             this, SLOT(setValue(int)));
-    connect(elementSlider, SIGNAL(sliderPressed()),
-            this, SLOT(onActionClickElement()));
     connect(elementSpinBox, SIGNAL(spinPressed()),
+            this, SLOT(onActionClickElement()));
+    connect(levelSelector, SIGNAL(sliderPressed()),
             this, SLOT(onActionClickElement()));
 }
 
 void KCColorSliderItemBase::setCaption(const QString &value)
 {
     elementCaption->setText(value);
+    levelSelector->focusOnElement(value);
 }
 
-void KCColorSliderItemBase::setMinimum(const int &value)
+int KCColorSliderItemBase::getValue(int maximum)
 {
-    elementSlider->setMinimum(value);
-    elementSpinBox->setMinimum(value);
+    return levelSelector->getValue(maximum);
 }
 
-void KCColorSliderItemBase::setMaximum(const int &value)
+void KCColorSliderItemBase::syncValue(const int &value,
+                                      const QColor &color)
 {
-    elementSlider->setMaximum(value);
-    elementSpinBox->setMaximum(value);
-}
-
-void KCColorSliderItemBase::setRange(const int &minimumValue,
-                                     const int &maximumValue)
-{
-    elementSlider->setRange(minimumValue, maximumValue);
-    elementSpinBox->setMinimum(minimumValue);
-    elementSpinBox->setMaximum(maximumValue);
-}
-
-int KCColorSliderItemBase::getValue()
-{
-    return elementSpinBox->value();
-}
-
-void KCColorSliderItemBase::syncValue(const int &value)
-{
+    //The new color must rerender.
+    levelSelector->colorUpdate(color);
+    //Check the signal sender.
+    if(syncRequireSentByMe)
+    {
+        syncRequireSentByMe=false;
+        return;
+    }
+    //Sync all the value.
     syncMode=true;
     setValue(value);
     syncMode=false;
@@ -754,13 +746,20 @@ void KCColorSliderItemBase::syncValue(const int &value)
 
 void KCColorSliderItemBase::setValue(int value)
 {
+    if(valueSetMode)
+    {
+        return;
+    }
+    valueSetMode=true;
     elementSpinBox->setValue(value);
-    elementSlider->setValue(value);
+    levelSelector->setValue(value);
+    syncRequireSentByMe=true;
     if(!syncMode)
     {
         emit requireElementChanged(elementCaption->text(),
                                    value);
     }
+    valueSetMode=false;
 }
 
 void KCColorSliderItemBase::setEraseFocus()
@@ -786,25 +785,8 @@ void KCColorSliderItemBase::onActionClickElement()
 KCColorSliderItemPercent::KCColorSliderItemPercent(QWidget *parent) :
     KCColorSliderItemBase(parent, false)
 {
-    setRange(0, 100);
+    elementSpinBox->setRange(0, 100);
     buildSlider();
-}
-
-void KCColorSliderItemPercent::setRealRange(int min, int max)
-{
-    if(max<min || min > max)
-    {
-        qWarning()<<"Invaild value.";
-        return;
-    }
-    realMinimum=min;
-    realMaximum=max;
-    delta=realMaximum-realMinimum;
-}
-
-int KCColorSliderItemPercent::getOriginalValue()
-{
-    return calculateValue(elementSpinBox->value());
 }
 
 void KCColorSliderItemPercent::buildSlider()
@@ -813,56 +795,75 @@ void KCColorSliderItemPercent::buildSlider()
     mainLayout->addWidget(elementCaption);
     mainLayout->addWidget(elementSpinBox);
     mainLayout->addWidget(percentCaption);
-    mainLayout->addWidget(elementSlider,1);
+    mainLayout->addWidget(levelSelector);
     connect(elementSpinBox, SIGNAL(valueChanged(int)),
-            this, SLOT(setOriginalValue(int)));
-    connect(elementSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(setOriginalValue(int)));
-    connect(elementSlider, SIGNAL(sliderPressed()),
-            this, SLOT(onActionClickElement()));
+            this, SLOT(setValue(int)));
+    connect(levelSelector, SIGNAL(valueChanged(int)),
+            this, SLOT(setValueFromLevel(int)));
     connect(elementSpinBox, SIGNAL(spinPressed()),
+            this, SLOT(onActionClickElement()));
+    connect(levelSelector, SIGNAL(sliderPressed()),
             this, SLOT(onActionClickElement()));
 }
 
-void KCColorSliderItemPercent::syncValue(const int &value)
+void KCColorSliderItemPercent::syncValue(const int &value,
+                                      const QColor &color)
 {
+    if(syncRequireSentByMe)
+    {
+        syncRequireSentByMe=false;
+    }
     syncMode=true;
-    setValue(value);
+    levelSelector->colorUpdate(color);
+    setValueFromLevel(value);
     syncMode=false;
 }
 
 void KCColorSliderItemPercent::setValue(int value)
 {
-    if(signalSentByMe)
+    /*
+     * This value is greater than 0 and smaller than 100, translate this value
+     * to 0-255, set to levelSelector.
+     * All the signal will be the 255 mode, so save the result at the beginning.
+     */
+    if(valueSetMode)
     {
-        signalSentByMe=false;
+        return;
     }
-    else
-    {
-        setOriginalValue((value-realMinimum)*100/delta);
-    }
-}
-
-void KCColorSliderItemPercent::syncOriginalValue(const int &value)
-{
-    KCColorSliderItemBase::syncValue(value);
-}
-
-void KCColorSliderItemPercent::setOriginalValue(int value)
-{
+    int irori=value*51/20;
+    valueSetMode=true;
     elementSpinBox->setValue(value);
-    elementSlider->setValue(value);
+    levelSelector->setValue(irori);
+    syncRequireSentByMe=true;
     if(!syncMode)
     {
-        signalSentByMe=true;
         emit requireElementChanged(elementCaption->text(),
-                                   calculateValue(value));
+                                   irori);
     }
+    valueSetMode=false;
 }
 
-int KCColorSliderItemPercent::calculateValue(int percent)
+void KCColorSliderItemPercent::setValueFromLevel(int value)
 {
-    return realMinimum+percent*delta/100;
+    /*
+     * This value is greater than 0 and smaller than 255, translate this value
+     * to 0-100, set to elementSpinBox.
+     * emit value as the param of the signal.
+     */
+    if(valueSetMode)
+    {
+        return;
+    }
+    valueSetMode=true;
+    elementSpinBox->setValue(value*20/51);
+    levelSelector->setValue(value);
+    syncRequireSentByMe=true;
+    if(!syncMode)
+    {
+        emit requireElementChanged(elementCaption->text(),
+                                   value);
+    }
+    valueSetMode=false;
 }
 
 KCColorSliderBase::KCColorSliderBase(QWidget *parent) :
@@ -871,22 +872,20 @@ KCColorSliderBase::KCColorSliderBase(QWidget *parent) :
     ;
 }
 
-KCColorSliderItemBase *KCColorSliderBase::addElement(const QString &name,
-                                                     const int &min,
-                                                     const int &max)
+KCColorSliderItemBase *KCColorSliderBase::addElement(const QString &name)
 {
     KCColorSliderItemBase *currentElement=new KCColorSliderItemBase(this);
     currentElement->setCaption(name);
-    currentElement->setRange(min, max);
     connect(currentElement, &KCColorSliderItemBase::requireFocusOnElement,
             this, &KCColorSliderBase::focusRequire);
-    connect(this, SIGNAL(requireClearElementsFocus()),
-            currentElement, SLOT(setEraseFocus()));
+    connect(this, &KCColorSliderBase::requireClearElementsFocus,
+            currentElement, &KCColorSliderItemBase::setEraseFocus);
     return currentElement;
 }
 
 void KCColorSliderBase::syncColor(QColor color)
 {
+    //Just save the color, all the other things should do in the inhreit class.
     currentColor=color;
 }
 
@@ -901,19 +900,19 @@ KCColorSliderCMYKP::KCColorSliderCMYKP(QWidget *parent) :
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     setLayout(mainLayout);
-    cyanElement=addElement("C:", 0, 255);
-    magentaElement=addElement("M:", 0, 255);
-    yellowElement=addElement("Y:", 0, 255);
-    blackElement=addElement("K:", 0, 255);
+    cyanElement=addElement("C:");
+    magentaElement=addElement("M:");
+    yellowElement=addElement("Y:");
+    blackElement=addElement("K:");
 
     connect(cyanElement, &KCColorSliderItemPercent::requireElementChanged,
-            this, &KCColorSliderCMYKP::syncElement);
+            this, &KCColorSliderCMYKP::onElementChanged);
     connect(magentaElement, &KCColorSliderItemPercent::requireElementChanged,
-            this, &KCColorSliderCMYKP::syncElement);
+            this, &KCColorSliderCMYKP::onElementChanged);
     connect(yellowElement, &KCColorSliderItemPercent::requireElementChanged,
-            this, &KCColorSliderCMYKP::syncElement);
+            this, &KCColorSliderCMYKP::onElementChanged);
     connect(blackElement, &KCColorSliderItemPercent::requireElementChanged,
-            this, &KCColorSliderCMYKP::syncElement);
+            this, &KCColorSliderCMYKP::onElementChanged);
 
     mainLayout->addWidget(cyanElement);
     mainLayout->addWidget(magentaElement);
@@ -921,13 +920,10 @@ KCColorSliderCMYKP::KCColorSliderCMYKP(QWidget *parent) :
     mainLayout->addWidget(blackElement);
 }
 
-KCColorSliderItemPercent *KCColorSliderCMYKP::addElement(const QString &name,
-                                                         const int &min,
-                                                         const int &max)
+KCColorSliderItemPercent *KCColorSliderCMYKP::addElement(const QString &name)
 {
     KCColorSliderItemPercent *currentElement=new KCColorSliderItemPercent(this);
     currentElement->setCaption(name);
-    currentElement->setRealRange(min,max);
     connect(currentElement, &KCColorSliderItemPercent::requireFocusOnElement,
             this, &KCColorSliderCMYKP::focusRequire);
     connect(this, SIGNAL(requireClearElementsFocus()),
@@ -935,34 +931,34 @@ KCColorSliderItemPercent *KCColorSliderCMYKP::addElement(const QString &name,
     return currentElement;
 }
 
-void KCColorSliderCMYKP::syncElement(QString elementName, int value)
+void KCColorSliderCMYKP::onElementChanged(QString elementName, int value)
 {
     if(elementName=="C:")
     {
         currentColor.setCmyk(value,
-                             magentaElement->getOriginalValue(),
-                             yellowElement->getOriginalValue(),
-                             blackElement->getOriginalValue());
+                             magentaElement->getValue(),
+                             yellowElement->getValue(),
+                             blackElement->getValue());
     }
     else if(elementName=="M:")
     {
-        currentColor.setCmyk(cyanElement->getOriginalValue(),
+        currentColor.setCmyk(cyanElement->getValue(),
                              value,
-                             yellowElement->getOriginalValue(),
-                             blackElement->getOriginalValue());
+                             yellowElement->getValue(),
+                             blackElement->getValue());
     }
     else if(elementName=="Y:")
     {
-        currentColor.setCmyk(cyanElement->getOriginalValue(),
-                             magentaElement->getOriginalValue(),
+        currentColor.setCmyk(cyanElement->getValue(),
+                             magentaElement->getValue(),
                              value,
-                             blackElement->getOriginalValue());
+                             blackElement->getValue());
     }
     else if(elementName=="K:")
     {
-        currentColor.setCmyk(cyanElement->getOriginalValue(),
-                             magentaElement->getOriginalValue(),
-                             yellowElement->getOriginalValue(),
+        currentColor.setCmyk(cyanElement->getValue(),
+                             magentaElement->getValue(),
+                             yellowElement->getValue(),
                              value);
     }
     else
@@ -971,6 +967,7 @@ void KCColorSliderCMYKP::syncElement(QString elementName, int value)
         qWarning()<<"Unexpected elements occur.";
         return;
     }
+    syncElement();
     signalSentByMe=true;
     emit requireSyncColor(currentColor);
 }
@@ -983,10 +980,7 @@ void KCColorSliderCMYKP::syncColor(QColor color)
         return;
     }
     KCColorSliderBase::syncColor(color);
-    cyanElement->syncValue(color.cyan());
-    magentaElement->syncValue(color.magenta());
-    yellowElement->syncValue(color.yellow());
-    blackElement->syncValue(color.black());
+    syncElement();
 }
 
 void KCColorSliderCMYKP::focusRequire(QString elementName, int value)
@@ -996,24 +990,32 @@ void KCColorSliderCMYKP::focusRequire(QString elementName, int value)
                                currentColor);
 }
 
+void KCColorSliderCMYKP::syncElement()
+{
+    cyanElement->syncValue(currentColor.cyan(), currentColor);
+    magentaElement->syncValue(currentColor.magenta(), currentColor);
+    yellowElement->syncValue(currentColor.yellow(), currentColor);
+    blackElement->syncValue(currentColor.black(), currentColor);
+}
+
 KCColorSliderCMYK::KCColorSliderCMYK(QWidget *parent) :
     KCColorSliderBase(parent)
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     setLayout(mainLayout);
-    cyanElement=addElement("C:", 0, 255);
-    magentaElement=addElement("M:", 0, 255);
-    yellowElement=addElement("Y:", 0, 255);
-    blackElement=addElement("K:", 0, 255);
+    cyanElement=addElement("C:");
+    magentaElement=addElement("M:");
+    yellowElement=addElement("Y:");
+    blackElement=addElement("K:");
 
     connect(cyanElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderCMYK::syncElement);
+            this, &KCColorSliderCMYK::onElementChanged);
     connect(magentaElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderCMYK::syncElement);
+            this, &KCColorSliderCMYK::onElementChanged);
     connect(yellowElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderCMYK::syncElement);
+            this, &KCColorSliderCMYK::onElementChanged);
     connect(blackElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderCMYK::syncElement);
+            this, &KCColorSliderCMYK::onElementChanged);
 
     mainLayout->addWidget(cyanElement);
     mainLayout->addWidget(magentaElement);
@@ -1021,7 +1023,7 @@ KCColorSliderCMYK::KCColorSliderCMYK(QWidget *parent) :
     mainLayout->addWidget(blackElement);
 }
 
-void KCColorSliderCMYK::syncElement(QString elementName, int value)
+void KCColorSliderCMYK::onElementChanged(QString elementName, int value)
 {
     if(elementName=="C:")
     {
@@ -1057,6 +1059,8 @@ void KCColorSliderCMYK::syncElement(QString elementName, int value)
         qWarning()<<"Unexpected elements occur.";
         return;
     }
+    //Update self element.
+    syncElement();
     signalSentByMe=true;
     emit requireSyncColor(currentColor);
 }
@@ -1069,10 +1073,15 @@ void KCColorSliderCMYK::syncColor(QColor color)
         return;
     }
     KCColorSliderBase::syncColor(color);
-    cyanElement->syncValue(color.cyan());
-    magentaElement->syncValue(color.magenta());
-    yellowElement->syncValue(color.yellow());
-    blackElement->syncValue(color.black());
+    syncElement();
+}
+
+void KCColorSliderCMYK::syncElement()
+{
+    cyanElement->syncValue(currentColor.cyan(), currentColor);
+    magentaElement->syncValue(currentColor.magenta(), currentColor);
+    yellowElement->syncValue(currentColor.yellow(), currentColor);
+    blackElement->syncValue(currentColor.black(), currentColor);
 }
 
 KCColorSliderRGB::KCColorSliderRGB(QWidget *parent) :
@@ -1080,23 +1089,23 @@ KCColorSliderRGB::KCColorSliderRGB(QWidget *parent) :
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     setLayout(mainLayout);
-    redElement=addElement("R:", 0, 255);
-    greenElement=addElement("G:", 0, 255);
-    blueElement=addElement("B:", 0, 255);
+    redElement=addElement("R:");
+    greenElement=addElement("G:");
+    blueElement=addElement("B:");
 
     connect(redElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderRGB::syncElement);
+            this, &KCColorSliderRGB::onElementChanged);
     connect(greenElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderRGB::syncElement);
+            this, &KCColorSliderRGB::onElementChanged);
     connect(blueElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderRGB::syncElement);
+            this, &KCColorSliderRGB::onElementChanged);
 
     mainLayout->addWidget(redElement);
     mainLayout->addWidget(greenElement);
     mainLayout->addWidget(blueElement);
 }
 
-void KCColorSliderRGB::syncElement(QString elementName, int value)
+void KCColorSliderRGB::onElementChanged(QString elementName, int value)
 {
     if(elementName=="R:")
     {
@@ -1116,6 +1125,7 @@ void KCColorSliderRGB::syncElement(QString elementName, int value)
         qWarning()<<"Unexpected elements occur.";
         return;
     }
+    syncElement();
     signalSentByMe=true;
     emit requireSyncColor(currentColor);
 }
@@ -1128,74 +1138,14 @@ void KCColorSliderRGB::syncColor(QColor color)
         return;
     }
     KCColorSliderBase::syncColor(color);
-    redElement->syncValue(color.red());
-    greenElement->syncValue(color.green());
-    blueElement->syncValue(color.blue());
+    syncElement();
 }
 
-
-KCColorSliderHSL::KCColorSliderHSL(QWidget *parent) :
-    KCColorSliderBase(parent)
+void KCColorSliderRGB::syncElement()
 {
-    mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
-    setLayout(mainLayout);
-    hueElement=addElement("H:", 0, 359);
-    saturationElement=addElement("S:", 0, 255);
-    lightnessElement=addElement("L:", 0, 255);
-
-    connect(hueElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderHSL::syncElement);
-    connect(saturationElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderHSL::syncElement);
-    connect(lightnessElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderHSL::syncElement);
-
-    mainLayout->addWidget(hueElement);
-    mainLayout->addWidget(saturationElement);
-    mainLayout->addWidget(lightnessElement);
-}
-
-void KCColorSliderHSL::syncElement(QString elementName, int value)
-{
-    if(elementName=="H:")
-    {
-        currentColor.setHsl(value,
-                            saturationElement->getValue(),
-                            lightnessElement->getValue());
-    }
-    else if(elementName=="S:")
-    {
-        currentColor.setHsl(hueElement->getValue(),
-                            value,
-                            lightnessElement->getValue());
-    }
-    else if(elementName=="L:")
-    {
-        currentColor.setHsl(hueElement->getValue(),
-                            saturationElement->getValue(),
-                            value);
-    }
-    else
-    {
-        //Here should never comes.
-        qWarning()<<"Unexpected elements occur.";
-        return;
-    }
-    signalSentByMe=true;
-    emit requireSyncColor(currentColor);
-}
-
-void KCColorSliderHSL::syncColor(QColor color)
-{
-    if(signalSentByMe)
-    {
-        signalSentByMe=false;
-        return;
-    }
-    KCColorSliderBase::syncColor(color);
-    hueElement->syncValue(color.hue());
-    saturationElement->syncValue(color.saturation());
-    lightnessElement->syncValue(color.lightness());
+    redElement->syncValue(currentColor.red(), currentColor);
+    greenElement->syncValue(currentColor.green(), currentColor);
+    blueElement->syncValue(currentColor.blue(), currentColor);
 }
 
 KCColorSliderHSV::KCColorSliderHSV(QWidget *parent) :
@@ -1203,23 +1153,23 @@ KCColorSliderHSV::KCColorSliderHSV(QWidget *parent) :
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     setLayout(mainLayout);
-    hueElement=addElement("H:", 0, 359);
-    saturationElement=addElement("S:", 0, 255);
-    valueElement=addElement("V:", 0, 255);
+    hueElement=addElement("H:");//, 0, 359);
+    saturationElement=addElement("S:");
+    valueElement=addElement("V:");
 
     connect(hueElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderHSV::syncElement);
+            this, &KCColorSliderHSV::onElementChanged);
     connect(saturationElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderHSV::syncElement);
+            this, &KCColorSliderHSV::onElementChanged);
     connect(valueElement, &KCColorSliderItemBase::requireElementChanged,
-            this, &KCColorSliderHSV::syncElement);
+            this, &KCColorSliderHSV::onElementChanged);
 
     mainLayout->addWidget(hueElement);
     mainLayout->addWidget(saturationElement);
     mainLayout->addWidget(valueElement);;
 }
 
-void KCColorSliderHSV::syncElement(QString elementName, int value)
+void KCColorSliderHSV::onElementChanged(QString elementName, int value)
 {
     if(elementName=="H:")
     {
@@ -1245,6 +1195,7 @@ void KCColorSliderHSV::syncElement(QString elementName, int value)
         qWarning()<<"Unexpected elements occur.";
         return;
     }
+    syncElement();
     signalSentByMe=true;
     emit requireSyncColor(currentColor);
 }
@@ -1257,9 +1208,14 @@ void KCColorSliderHSV::syncColor(QColor color)
         return;
     }
     KCColorSliderBase::syncColor(color);
-    hueElement->syncValue(color.hue());
-    saturationElement->syncValue(color.saturation());
-    valueElement->syncValue(color.value());
+    syncElement();
+}
+
+void KCColorSliderHSV::syncElement()
+{
+    hueElement->syncValue(currentColor.hue(), currentColor);
+    saturationElement->syncValue(currentColor.saturation(), currentColor);
+    valueElement->syncValue(currentColor.value(), currentColor);
 }
 
 KCColorSelector::KCColorSelector(QWidget *parent) :
@@ -1272,65 +1228,22 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     KCColorHSVRing *colorRing=new KCColorHSVRing(this);
     registerHSVRing(colorRing);
     colorRingLayout->addWidget(colorRing);
-    KCColorLevelSelector *levelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(levelSelector);
-    colorRingLayout->addWidget(levelSelector);
     mainLayout->addLayout(colorRingLayout);
 
     iroriModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     KCColorSliderHSV *hsv=new KCColorSliderHSV(this);
     registerSelector(hsv);
     iroriModelLayout->addWidget(hsv);
-    KCColorLevelSelector *hLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(hLevelSelector);
-    hLevelSelector->focusOnElement("H:",0,QColor(255,0,0));
-    iroriModelLayout->addWidget(hLevelSelector);
-    KCColorLevelSelector *sLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(sLevelSelector);
-    sLevelSelector->focusOnElement("S:",0,QColor(255,0,0));
-    iroriModelLayout->addWidget(sLevelSelector);
-    KCColorLevelSelector *vLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(vLevelSelector);
-    vLevelSelector->focusOnElement("V:",0,QColor(255,0,0));
-    iroriModelLayout->addWidget(vLevelSelector);
     KCColorSliderCMYK *cmyk=new KCColorSliderCMYK(this);
     registerSelector(cmyk);
     iroriModelLayout->addWidget(cmyk);
     iroriModelLayout->addStretch();
-    KCColorLevelSelector *cLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(cLevelSelector);
-    cLevelSelector->focusOnElement("C:",0,QColor(255,0,0));
-    iroriModelLayout->addWidget(cLevelSelector);
-    KCColorLevelSelector *mLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(mLevelSelector);
-    mLevelSelector->focusOnElement("M:",0,QColor(255,0,0));
-    iroriModelLayout->addWidget(mLevelSelector);
-    KCColorLevelSelector *yLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(yLevelSelector);
-    yLevelSelector->focusOnElement("Y:",0,QColor(255,0,0));
-    iroriModelLayout->addWidget(yLevelSelector);
-    KCColorLevelSelector *kLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(kLevelSelector);
-    kLevelSelector->focusOnElement("K:",0,QColor(255,0,0));
-    iroriModelLayout->addWidget(kLevelSelector);
     mainLayout->addLayout(iroriModelLayout);
 
     yayaModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     KCColorSliderRGB *rgb=new KCColorSliderRGB(this);
     registerSelector(rgb);
     yayaModelLayout->addWidget(rgb);
-    KCColorLevelSelector *rLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(rLevelSelector);
-    rLevelSelector->focusOnElement("R:",0,QColor(255,0,0));
-    yayaModelLayout->addWidget(rLevelSelector);
-    KCColorLevelSelector *gLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(gLevelSelector);
-    gLevelSelector->focusOnElement("G:",0,QColor(255,0,0));
-    yayaModelLayout->addWidget(gLevelSelector);
-    KCColorLevelSelector *bLevelSelector=new KCColorLevelSelector(this);
-    registerLevelSelector(bLevelSelector);
-    bLevelSelector->focusOnElement("B:",0,QColor(255,0,0));
-    yayaModelLayout->addWidget(bLevelSelector);
     KCColorSliderCMYKP *cmykp=new KCColorSliderCMYKP(this);
     registerSelector(cmykp);
     yayaModelLayout->addWidget(cmykp);
@@ -1353,14 +1266,17 @@ KCColorSelector::~KCColorSelector()
 
 void KCColorSelector::registerSelector(KCColorSliderBase *selector)
 {
+    //**Ask every one to sync color to the selector, and apply others require**
     connect(selector, &KCColorSliderBase::requireSyncColor,
             this, &KCColorSelector::requireSyncColor);
+    connect(this, &KCColorSelector::requireSyncColor,
+            selector, &KCColorSliderBase::syncColor);
+
+    //**Ask every one to focus on the the element, and apply others require**
     connect(selector, &KCColorSliderBase::requireFocusOnElement,
             this, &KCColorSelector::requireFocusOnElement);
     connect(selector, SIGNAL(requireFocusOnElement(QString,int,QColor)),
             this, SIGNAL(requireClearFocus()));
-    connect(this, SIGNAL(requireSyncColor(QColor)),
-            selector, SLOT(syncColor(QColor)));
     connect(this, &KCColorSelector::requireClearFocus,
             selector, &KCColorSliderBase::requireClearElementsFocus);
 }
@@ -1369,16 +1285,6 @@ void KCColorSelector::registerViewer(KCColorViewerBase *viewer)
 {
     connect(this, SIGNAL(requireSyncColor(QColor)),
             viewer, SLOT(setCurrentColor(QColor)));
-}
-
-void KCColorSelector::registerLevelSelector(KCColorLevelSelector *levelSelector)
-{
-    /*connect(this, &KCColorSelector::requireFocusOnElement,
-            levelSelector, &KCColorLevelSelector::focusOnElement);*/
-    connect(this, &KCColorSelector::requireSyncColor,
-            levelSelector, &KCColorLevelSelector::syncColor);
-    connect(levelSelector, &KCColorLevelSelector::requireSyncColor,
-            this, &KCColorSelector::requireSyncColor);
 }
 
 void KCColorSelector::registerHSVRing(KCColorHSVRing *hsvRing)
