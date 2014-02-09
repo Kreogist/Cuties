@@ -383,7 +383,7 @@ void KCColorLevelRenderBase::mousePressEvent(QMouseEvent *event)
     int haruka=event->pos().x()-2;
     if(haruka>-1 && haruka<257)
     {
-        valueChanged(haruka);
+        emit valueChanged(haruka);
     }
 }
 
@@ -395,15 +395,15 @@ void KCColorLevelRenderBase::mouseMoveEvent(QMouseEvent *event)
         int haruka=event->pos().x()-2;
         if(haruka<0)
         {
-            valueChanged(0);
+            emit valueChanged(0);
         }
-        else if(haruka>256)
+        else if(haruka>255)
         {
-            valueChanged(256);
+            emit valueChanged(255);
         }
         else
         {
-            valueChanged(haruka);
+            emit valueChanged(haruka);
         }
     }
 }
@@ -423,13 +423,23 @@ KCColorLevelSelector::KCColorLevelSelector(QWidget *parent) :
     colorSelector=new QLabel(this);
     colorSelector->setPixmap(QPixmap(":/img/image/ColorPointer.png"));
     connect(colorRender, SIGNAL(valueChanged(int)),
-            this, SLOT(slide(int)));
+            this, SLOT(colorUpdate(int)));
 }
 
 void KCColorLevelSelector::focusOnElement(QString elementName,
                                           int value,
                                           QColor color)
 {
+    syncMode=true;
+    currentColor=color;
+    if(elementName=="H:")
+    {
+        currentMode=hueMode;
+        colorRender->renderHue(color);
+        slide(value, 360);
+        syncMode=false;
+        return;
+    }
     if(elementName=="R:")
     {
         currentMode=redMode;
@@ -444,11 +454,6 @@ void KCColorLevelSelector::focusOnElement(QString elementName,
     {
         currentMode=blueMode;
         colorRender->renderBlue(color);
-    }
-    else if(elementName=="H:")
-    {
-        currentMode=hueMode;
-        colorRender->renderHue(color);
     }
     else if(elementName=="S:")
     {
@@ -486,10 +491,18 @@ void KCColorLevelSelector::focusOnElement(QString elementName,
         colorRender->renderBlack(color);
     }
     slide(value);
+    syncMode=false;
 }
 
 void KCColorLevelSelector::syncColor(QColor color)
 {
+    if(syncSentByMe)
+    {
+        syncSentByMe=false;
+        return;
+    }
+    syncMode=true;
+    currentColor=color;
     switch(currentMode)
     {
     case redMode:
@@ -506,7 +519,7 @@ void KCColorLevelSelector::syncColor(QColor color)
         break;
     case hueMode:
         colorRender->renderHue(color);
-        slide(color.hue());
+        slide(color.hue(), 359);
         break;
     case saturationMode:
         colorRender->renderSaturation(color);
@@ -537,11 +550,84 @@ void KCColorLevelSelector::syncColor(QColor color)
         slide(color.black());
         break;
     }
+    syncMode=false;
 }
 
 void KCColorLevelSelector::slide(int position, int maximum)
 {
-    colorSelector->move(position, 0);
+    int innerPosition=position;
+    if(maximum!=255)
+    {
+        innerPosition=position*255/maximum;
+    }
+    colorSelector->move(innerPosition, 0);
+}
+
+void KCColorLevelSelector::colorUpdate(int element)
+{
+    switch(currentMode)
+    {
+    case redMode:
+        currentColor.setRed(element);
+        break;
+    case greenMode:
+        currentColor.setGreen(element);
+        break;
+    case blueMode:
+        currentColor.setBlue(element);
+        break;
+    case saturationMode:
+        currentColor.setHsv(currentColor.hue(),
+                            element,
+                            currentColor.value());
+        break;
+    case lightnessMode:
+        currentColor.setHsl(currentColor.hue(),
+                            currentColor.saturation(),
+                            element);
+        break;
+    case valueMode:
+        currentColor.setHsv(currentColor.hue(),
+                            currentColor.saturation(),
+                            element);
+        break;
+    case cyanMode:
+        currentColor.setCmyk(element,
+                             currentColor.magenta(),
+                             currentColor.yellow(),
+                             currentColor.black());
+        break;
+    case magentaMode:
+        currentColor.setCmyk(currentColor.cyan(),
+                             element,
+                             currentColor.yellow(),
+                             currentColor.black());
+        break;
+    case yellowMode:
+        currentColor.setCmyk(currentColor.cyan(),
+                             currentColor.magenta(),
+                             element,
+                             currentColor.black());
+        break;
+    case blackMode:
+        currentColor.setCmyk(currentColor.cyan(),
+                             currentColor.magenta(),
+                             currentColor.yellow(),
+                             element);
+        break;
+    case hueMode:
+        int hueValue=element*359/255;
+        currentColor.setHsv(hueValue,
+                            currentColor.saturation(),
+                            currentColor.value());
+        slide(element);
+        syncSentByMe=true;
+        emit requireSyncColor(currentColor);
+        return;
+    }
+    slide(element);
+    syncSentByMe=true;
+    emit requireSyncColor(currentColor);
 }
 
 void KCColorLevelSelector::resizeEvent(QResizeEvent *event)
@@ -1195,29 +1281,66 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     KCColorSliderHSV *hsv=new KCColorSliderHSV(this);
     registerSelector(hsv);
     iroriModelLayout->addWidget(hsv);
+    KCColorLevelSelector *hLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(hLevelSelector);
+    hLevelSelector->focusOnElement("H:",0,QColor(255,0,0));
+    iroriModelLayout->addWidget(hLevelSelector);
+    KCColorLevelSelector *sLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(sLevelSelector);
+    sLevelSelector->focusOnElement("S:",0,QColor(255,0,0));
+    iroriModelLayout->addWidget(sLevelSelector);
+    KCColorLevelSelector *vLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(vLevelSelector);
+    vLevelSelector->focusOnElement("V:",0,QColor(255,0,0));
+    iroriModelLayout->addWidget(vLevelSelector);
     KCColorSliderCMYK *cmyk=new KCColorSliderCMYK(this);
     registerSelector(cmyk);
     iroriModelLayout->addWidget(cmyk);
-    KCColorSliderRGB *rgb=new KCColorSliderRGB(this);
-    registerSelector(rgb);
-    iroriModelLayout->addWidget(rgb);
     iroriModelLayout->addStretch();
+    KCColorLevelSelector *cLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(cLevelSelector);
+    cLevelSelector->focusOnElement("C:",0,QColor(255,0,0));
+    iroriModelLayout->addWidget(cLevelSelector);
+    KCColorLevelSelector *mLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(mLevelSelector);
+    mLevelSelector->focusOnElement("M:",0,QColor(255,0,0));
+    iroriModelLayout->addWidget(mLevelSelector);
+    KCColorLevelSelector *yLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(yLevelSelector);
+    yLevelSelector->focusOnElement("Y:",0,QColor(255,0,0));
+    iroriModelLayout->addWidget(yLevelSelector);
+    KCColorLevelSelector *kLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(kLevelSelector);
+    kLevelSelector->focusOnElement("K:",0,QColor(255,0,0));
+    iroriModelLayout->addWidget(kLevelSelector);
     mainLayout->addLayout(iroriModelLayout);
 
     yayaModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
-    KCColorSliderHSL *hsl=new KCColorSliderHSL(this);
-    registerSelector(hsl);
-    yayaModelLayout->addWidget(hsl);
+    KCColorSliderRGB *rgb=new KCColorSliderRGB(this);
+    registerSelector(rgb);
+    yayaModelLayout->addWidget(rgb);
+    KCColorLevelSelector *rLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(rLevelSelector);
+    rLevelSelector->focusOnElement("R:",0,QColor(255,0,0));
+    yayaModelLayout->addWidget(rLevelSelector);
+    KCColorLevelSelector *gLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(gLevelSelector);
+    gLevelSelector->focusOnElement("G:",0,QColor(255,0,0));
+    yayaModelLayout->addWidget(gLevelSelector);
+    KCColorLevelSelector *bLevelSelector=new KCColorLevelSelector(this);
+    registerLevelSelector(bLevelSelector);
+    bLevelSelector->focusOnElement("B:",0,QColor(255,0,0));
+    yayaModelLayout->addWidget(bLevelSelector);
     KCColorSliderCMYKP *cmykp=new KCColorSliderCMYKP(this);
     registerSelector(cmykp);
     yayaModelLayout->addWidget(cmykp);
-    yayaModelLayout->addStretch();
-    mainLayout->addLayout(yayaModelLayout);
-    /*
+    //yayaModelLayout->addStretch();
+
     KCColorViewerBase *viewer=new KCColorViewerBase(this);
     registerViewer(viewer);
-    mainLayout->addWidget(viewer);
-    */
+    yayaModelLayout->addWidget(viewer);
+    mainLayout->addLayout(yayaModelLayout);
+
     emit requireSyncColor(QColor(0,0,0));
 }
 
@@ -1250,10 +1373,12 @@ void KCColorSelector::registerViewer(KCColorViewerBase *viewer)
 
 void KCColorSelector::registerLevelSelector(KCColorLevelSelector *levelSelector)
 {
-    connect(this, &KCColorSelector::requireFocusOnElement,
-            levelSelector, &KCColorLevelSelector::focusOnElement);
+    /*connect(this, &KCColorSelector::requireFocusOnElement,
+            levelSelector, &KCColorLevelSelector::focusOnElement);*/
     connect(this, &KCColorSelector::requireSyncColor,
             levelSelector, &KCColorLevelSelector::syncColor);
+    connect(levelSelector, &KCColorLevelSelector::requireSyncColor,
+            this, &KCColorSelector::requireSyncColor);
 }
 
 void KCColorSelector::registerHSVRing(KCColorHSVRing *hsvRing)

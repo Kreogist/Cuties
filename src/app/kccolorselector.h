@@ -116,6 +116,7 @@ public:
     explicit KCColorLevelSelector(QWidget *parent = 0);
 
 signals:
+    void requireSyncColor(QColor color);
 
 public slots:
     void focusOnElement(QString elementName,
@@ -125,6 +126,7 @@ public slots:
 
 private slots:
     void slide(int position, int maximum=255);
+    void colorUpdate(int element);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -145,8 +147,10 @@ private:
         blackMode
     };
 
+    bool syncMode=false, syncSentByMe=false;
     RenderMode currentMode;
     KCColorLevelRenderBase *colorRender;
+    QColor currentColor;
     QLabel *colorSelector;
 };
 
