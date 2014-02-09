@@ -422,11 +422,12 @@ void KCColorLevelRenderBase::mouseReleaseEvent(QMouseEvent *event)
 KCColorLevelSelector::KCColorLevelSelector(QWidget *parent) :
     QWidget(parent)
 {
-    setFixedSize(259,50);
     colorRender=new KCColorLevelRenderBase(this);
     colorRender->move(2,8);
+    QPixmap colorPointer(":/img/image/ColorPointer.png");
     colorSelector=new QLabel(this);
-    colorSelector->setPixmap(QPixmap(":/img/image/ColorPointer.png"));
+    colorSelector->setPixmap(colorPointer);
+    setFixedSize(264,colorPointer.height());
 
     //Selector will update it self when the parent call the update itself.
 
