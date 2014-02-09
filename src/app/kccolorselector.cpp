@@ -422,7 +422,7 @@ void KCColorLevelRenderBase::mouseReleaseEvent(QMouseEvent *event)
 KCColorLevelSelector::KCColorLevelSelector(QWidget *parent) :
     QWidget(parent)
 {
-    setMinimumSize(300,50);
+    setFixedSize(259,50);
     colorRender=new KCColorLevelRenderBase(this);
     colorRender->move(2,8);
     colorSelector=new QLabel(this);
@@ -435,7 +435,7 @@ KCColorLevelSelector::KCColorLevelSelector(QWidget *parent) :
     connect(colorRender, &KCColorLevelRenderBase::sliderReleased,
             this, &KCColorLevelSelector::sliderReleased);
     connect(colorRender, &KCColorLevelRenderBase::valueChanged,
-            this, &KCColorLevelSelector::valueChanged);
+            this, &KCColorLevelSelector::valueUpdate);
 }
 
 void KCColorLevelSelector::focusOnElement(QString elementName)
@@ -505,7 +505,7 @@ void KCColorLevelSelector::colorUpdate(const QColor &color)
         break;
     case hueMode:
         colorRender->renderHue(color);
-        slide(color.hue(), 359);
+        slide(color.hue());
         break;
     case saturationMode:
         colorRender->renderSaturation(color);
@@ -538,12 +538,12 @@ void KCColorLevelSelector::colorUpdate(const QColor &color)
     }
 }
 
-void KCColorLevelSelector::setValue(int value, int maximum)
+void KCColorLevelSelector::setValue(int value)
 {
-    slide(value, maximum);
+    slide(value);
 }
 
-int KCColorLevelSelector::getValue(int maximum)
+int KCColorLevelSelector::getValue()
 {
     int outPosition=colorSelector->x();
     if(maximum!=255)
@@ -553,7 +553,7 @@ int KCColorLevelSelector::getValue(int maximum)
     return outPosition;
 }
 
-void KCColorLevelSelector::slide(int position, int maximum)
+void KCColorLevelSelector::slide(int position)
 {
     int innerPosition=position;
     if(maximum!=255)
@@ -565,74 +565,26 @@ void KCColorLevelSelector::slide(int position, int maximum)
 
 void KCColorLevelSelector::valueUpdate(int element)
 {
-    switch(currentMode)
+    int outPosition=element;
+    if(maximum!=255)
     {
-    case redMode:
-        currentColor.setRed(element);
-        break;
-    case greenMode:
-        currentColor.setGreen(element);
-        break;
-    case blueMode:
-        currentColor.setBlue(element);
-        break;
-    case saturationMode:
-        currentColor.setHsv(currentColor.hue(),
-                            element,
-                            currentColor.value());
-        break;
-    case lightnessMode:
-        currentColor.setHsl(currentColor.hue(),
-                            currentColor.saturation(),
-                            element);
-        break;
-    case valueMode:
-        currentColor.setHsv(currentColor.hue(),
-                            currentColor.saturation(),
-                            element);
-        break;
-    case cyanMode:
-        currentColor.setCmyk(element,
-                             currentColor.magenta(),
-                             currentColor.yellow(),
-                             currentColor.black());
-        break;
-    case magentaMode:
-        currentColor.setCmyk(currentColor.cyan(),
-                             element,
-                             currentColor.yellow(),
-                             currentColor.black());
-        break;
-    case yellowMode:
-        currentColor.setCmyk(currentColor.cyan(),
-                             currentColor.magenta(),
-                             element,
-                             currentColor.black());
-        break;
-    case blackMode:
-        currentColor.setCmyk(currentColor.cyan(),
-                             currentColor.magenta(),
-                             currentColor.yellow(),
-                             element);
-        break;
-    case hueMode:
-        int hueValue=element*359/255;
-        currentColor.setHsv(hueValue,
-                            currentColor.saturation(),
-                            currentColor.value());
-        slide(element);
-        syncSentByMe=true;
-        emit requireSyncColor(currentColor);
-        return;
+        outPosition=outPosition*maximum/255;
     }
-    slide(element);
-    syncSentByMe=true;
-    emit requireSyncColor(currentColor);
+    emit valueChanged(outPosition);
 }
 
 void KCColorLevelSelector::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
+}
+int KCColorLevelSelector::getMaximum() const
+{
+    return maximum;
+}
+
+void KCColorLevelSelector::setMaximum(int value)
+{
+    maximum = value;
 }
 
 KCColorSpinBox::KCColorSpinBox(QWidget *parent) :
@@ -722,9 +674,15 @@ void KCColorSliderItemBase::setCaption(const QString &value)
     levelSelector->focusOnElement(value);
 }
 
-int KCColorSliderItemBase::getValue(int maximum)
+int KCColorSliderItemBase::getValue()
 {
-    return levelSelector->getValue(maximum);
+    return levelSelector->getValue();
+}
+
+void KCColorSliderItemBase::setMaximum(const int &value)
+{
+    elementSpinBox->setRange(0, value);
+    levelSelector->setMaximum(value);
 }
 
 void KCColorSliderItemBase::syncValue(const int &value,
@@ -1153,7 +1111,8 @@ KCColorSliderHSV::KCColorSliderHSV(QWidget *parent) :
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     setLayout(mainLayout);
-    hueElement=addElement("H:");//, 0, 359);
+    hueElement=addElement("H:");
+    hueElement->setMaximum(359);
     saturationElement=addElement("S:");
     valueElement=addElement("V:");
 

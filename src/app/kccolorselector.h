@@ -116,6 +116,8 @@ class KCColorLevelSelector : public QWidget
     Q_OBJECT
 public:
     explicit KCColorLevelSelector(QWidget *parent = 0);
+    int getMaximum() const;
+    void setMaximum(int value);
 
 signals:
     void requireSyncColor(QColor color);
@@ -126,11 +128,11 @@ signals:
 public slots:
     void focusOnElement(QString elementName);
     void colorUpdate(const QColor &color);
-    void setValue(int value, int maximum=255);
-    int getValue(int maximum=255);
+    void setValue(int value);
+    int getValue();
 
 private slots:
-    void slide(int position, int maximum=255);
+    void slide(int position);
     void valueUpdate(int element);
 
 protected:
@@ -153,6 +155,7 @@ private:
     };
 
     bool syncMode=false, syncSentByMe=false;
+    int maximum=255;
     RenderMode currentMode;
     KCColorLevelRenderBase *colorRender;
     QColor currentColor;
@@ -197,7 +200,8 @@ public:
     explicit KCColorSliderItemBase(QWidget *parent = 0,
                                    bool autoBuild = true);
     virtual void setCaption(const QString &value);
-    virtual int getValue(int maximum=255);
+    virtual int getValue();
+    void setMaximum(const int &value);
 
 signals:
     void requireElementChanged(QString elementName,
