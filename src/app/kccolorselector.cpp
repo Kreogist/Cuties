@@ -36,9 +36,13 @@ void KCColorDoubleBoardBase::setColor(const QString &elementName,
     {
         currentMode=valueMode;
     }
-    else
+    else if(elementName=="H:")
     {
         currentMode=hueMode;
+    }
+    else if(elementName=="R:")
+    {
+        currentMode=redMode;
     }
     syncColor(color);
 }
@@ -87,7 +91,7 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         hsvGreyGradient.setColorAt(0, QColor(255,255,255,0));
         hsvGreyGradient.setColorAt(1, QColor(255,255,255,255));
     }
-    else
+    else if(currentMode==hueMode)
     {
         hueLevelGradient=QRadialGradient(width(),0,width(),width(),0);
         QColor startColor, endColor;
@@ -98,6 +102,15 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         hsvGreyGradient.setColorAt(0, QColor(0,0,0,0));
         hsvGreyGradient.setColorAt(1, QColor(0,0,0,255));
     }
+    else if(currentMode==redMode)
+    {
+        rgbHorizontalGradient=QLinearGradient(0,0,width(),0);
+        rgbHorizontalGradient.setColorAt(0,QColor(color.red(),0,0));
+        rgbHorizontalGradient.setColorAt(1,QColor(color.red(),0,255));
+        rgbVerticalGradient=QLinearGradient(0,0,0,width());
+        rgbVerticalGradient.setColorAt(0,QColor(color.red(),255,0));
+        rgbVerticalGradient.setColorAt(1,QColor(color.red(),0,0));
+    }
     update();
 }
 
@@ -107,7 +120,7 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     QRect renderRect(2,2,255,255);
     painter.setPen(QColor(0xcf, 0xcf, 0xcf));
-    painter.drawRect(0,0,258,258);
+    //painter.drawRect(0,0,258,258);
     painter.setPen(Qt::NoPen);
     switch(currentMode)
     {
@@ -132,6 +145,13 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
         painter.setBrush(QBrush(hsvGreyGradient));
         painter.drawRect(renderRect);
         break;
+    case redMode:
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setBrush(QBrush(rgbHorizontalGradient));
+        painter.drawRect(renderRect);
+        painter.setCompositionMode(QPainter::CompositionMode_Plus);
+        painter.setBrush(QBrush(rgbVerticalGradient));
+        painter.drawRect(renderRect);
     }
 }
 
@@ -153,7 +173,8 @@ void KCColorDoubleBoardBase::resizeEvent(QResizeEvent *event)
     hueLevelGradient.setRadius(widthElement);
     hsvGreyGradient.setFinalStop(0,widthElement);
     saturationGradient.setFinalStop(widthElement,0);
-    rgbHorizontalGradient.setFinalStop(widthElement, widthElement);
+    rgbHorizontalGradient.setFinalStop(widthElement, 0);
+    rgbVerticalGradient.setFinalStop(0, widthElement);
     QWidget::resizeEvent(event);
 }
 
@@ -272,13 +293,14 @@ void KCColorLevelRenderBase::renderBlue(const QColor &color)
 
 void KCColorLevelRenderBase::renderHue(const QColor &color)
 {
+    Q_UNUSED(color);
     levelGradient=QLinearGradient(0,0,width(),height());
     levelGradient.setColorAt(0.00, QColor(255,0,0));
-    levelGradient.setColorAt(0.16, QColor(255,0,255));
-    levelGradient.setColorAt(0.33, QColor(0,0,255));
+    levelGradient.setColorAt(0.16, QColor(255,255,0));
+    levelGradient.setColorAt(0.33, QColor(0,255,0));
     levelGradient.setColorAt(0.50, QColor(0,255,255));
-    levelGradient.setColorAt(0.66, QColor(0,255,0));
-    levelGradient.setColorAt(0.83, QColor(255,255,0));
+    levelGradient.setColorAt(0.66, QColor(0,0,255));
+    levelGradient.setColorAt(0.83, QColor(255,0,255));
     levelGradient.setColorAt(1.00, QColor(255,0,0));
     update();
 }
@@ -461,10 +483,6 @@ void KCColorLevelSelector::focusOnElement(QString elementName)
     {
         currentMode=saturationMode;
     }
-    else if(elementName=="L:")
-    {
-        currentMode=lightnessMode;
-    }
     else if(elementName=="V:")
     {
         currentMode=valueMode;
@@ -511,10 +529,6 @@ void KCColorLevelSelector::colorUpdate(const QColor &color)
     case saturationMode:
         colorRender->renderSaturation(color);
         slide(color.saturation());
-        break;
-    case lightnessMode:
-        colorRender->renderLightness(color);
-        slide(color.lightness());
         break;
     case valueMode:
         colorRender->renderValue(color);
@@ -613,9 +627,16 @@ KCColorViewerBase::KCColorViewerBase(QWidget *parent) :
 
 void KCColorViewerBase::buildViewer()
 {
-    mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
-    mainLayout->addWidget(currentViewer);
-    mainLayout->addWidget(originalViewer);
+    mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+    QLabel *currentColor=new QLabel(tr("Current Color"), this);
+    mainLayout->addWidget(currentColor,0,Qt::AlignCenter);
+    mainLayout->addWidget(currentViewer,1);
+    mainLayout->addWidget(originalViewer,1);
+    QLabel *originalColor=new QLabel(tr("Original Color"), this);
+    mainLayout->addWidget(originalColor,0,Qt::AlignCenter);
 }
 
 void KCColorViewerBase::setOriginalColor(QColor color)
@@ -755,6 +776,7 @@ void KCColorSliderItemPercent::buildSlider()
     mainLayout->addWidget(elementSpinBox);
     mainLayout->addWidget(percentCaption);
     mainLayout->addWidget(levelSelector);
+    levelSelector->setVisible(false);
     connect(elementSpinBox, SIGNAL(valueChanged(int)),
             this, SLOT(setValue(int)));
     connect(levelSelector, SIGNAL(valueChanged(int)),
@@ -858,6 +880,8 @@ KCColorSliderCMYKP::KCColorSliderCMYKP(QWidget *parent) :
     KCColorSliderBase(parent)
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
     setLayout(mainLayout);
     cyanElement=addElement("C:");
     magentaElement=addElement("M:");
@@ -961,6 +985,8 @@ KCColorSliderCMYK::KCColorSliderCMYK(QWidget *parent) :
     KCColorSliderBase(parent)
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
     setLayout(mainLayout);
     cyanElement=addElement("C:");
     magentaElement=addElement("M:");
@@ -1047,6 +1073,8 @@ KCColorSliderRGB::KCColorSliderRGB(QWidget *parent) :
     KCColorSliderBase(parent)
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
     setLayout(mainLayout);
     redElement=addElement("R:");
     greenElement=addElement("G:");
@@ -1111,6 +1139,8 @@ KCColorSliderHSV::KCColorSliderHSV(QWidget *parent) :
     KCColorSliderBase(parent)
 {
     mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
     setLayout(mainLayout);
     hueElement=addElement("H:");
     hueElement->setMaximum(359);
@@ -1190,29 +1220,31 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     colorRingLayout->addWidget(colorRing);
     mainLayout->addLayout(colorRingLayout);
 
-    iroriModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    yayaModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    yayaModelLayout->setContentsMargins(0,0,0,0);
+    yayaModelLayout->setSpacing(0);
     KCColorSliderHSV *hsv=new KCColorSliderHSV(this);
     registerSelector(hsv);
-    iroriModelLayout->addWidget(hsv);
+    yayaModelLayout->addWidget(hsv);
     KCColorSliderCMYK *cmyk=new KCColorSliderCMYK(this);
     registerSelector(cmyk);
-    iroriModelLayout->addWidget(cmyk);
-    iroriModelLayout->addStretch();
-    mainLayout->addLayout(iroriModelLayout);
-
-    yayaModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    yayaModelLayout->addWidget(cmyk);
     KCColorSliderRGB *rgb=new KCColorSliderRGB(this);
     registerSelector(rgb);
     yayaModelLayout->addWidget(rgb);
+    yayaModelLayout->addStretch();
+    mainLayout->addLayout(yayaModelLayout);
+
+    iroriModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     KCColorSliderCMYKP *cmykp=new KCColorSliderCMYKP(this);
     registerSelector(cmykp);
-    yayaModelLayout->addWidget(cmykp);
+    iroriModelLayout->addWidget(cmykp);
     //yayaModelLayout->addStretch();
 
     KCColorViewerBase *viewer=new KCColorViewerBase(this);
     registerViewer(viewer);
-    yayaModelLayout->addWidget(viewer);
-    mainLayout->addLayout(yayaModelLayout);
+    iroriModelLayout->addWidget(viewer);
+    mainLayout->addLayout(iroriModelLayout);
 
     emit requireSyncColor(QColor(0,0,0));
 }
@@ -1220,8 +1252,8 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
 KCColorSelector::~KCColorSelector()
 {
     colorRingLayout->deleteLater();
-    iroriModelLayout->deleteLater();
     yayaModelLayout->deleteLater();
+    iroriModelLayout->deleteLater();
 }
 
 void KCColorSelector::registerSelector(KCColorSliderBase *selector)

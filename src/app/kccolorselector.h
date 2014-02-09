@@ -36,9 +36,16 @@ private:
     QString elementName;
     enum DoubleRenderMode
     {
+        redMode,
+        greenMode,
+        blueMode,
         hueMode,
         saturationMode,
         valueMode,
+        cyanMode,
+        magentaMode,
+        yellowMode,
+        blackMode
     };
     DoubleRenderMode currentMode=hueMode;
 };
@@ -146,7 +153,6 @@ private:
         blueMode,
         hueMode,
         saturationMode,
-        lightnessMode,
         valueMode,
         cyanMode,
         magentaMode,
@@ -385,7 +391,7 @@ private slots:
 
 private:
     QBoxLayout *mainLayout, *colorRingLayout,
-               *iroriModelLayout, *yayaModelLayout;
+               *yayaModelLayout, *iroriModelLayout;
 };
 
 #endif // KCCOLORSELECTOR_H
