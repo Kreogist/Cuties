@@ -243,92 +243,117 @@ KCColorLevelRenderBase::KCColorLevelRenderBase(QWidget *parent) :
                                height());
 }
 
-void KCColorLevelRenderBase::focusOnElement(QString elementName,
-                                            QColor color)
+void KCColorLevelRenderBase::renderRed(const QColor &color)
 {
     levelGradient=QLinearGradient(0,0,width(),height());
-    //**RGB Mode**
-    if(elementName=="R:")
-    {
-        levelGradient.setColorAt(0.0, QColor(0,color.green(),color.blue()));
-        levelGradient.setColorAt(1.0, QColor(255,color.green(),color.blue()));
-    }
-    else if(elementName=="G:")
-    {
-        levelGradient.setColorAt(0.0, QColor(color.red(),0,color.blue()));
-        levelGradient.setColorAt(1.0, QColor(color.red(),255,color.blue()));
-    }
-    else if(elementName=="B:")
-    {
-        levelGradient.setColorAt(0.0, QColor(color.red(),color.green(),0));
-        levelGradient.setColorAt(1.0, QColor(color.red(),color.green(),255));
-    }
-    else if(elementName=="H:")
-    {
-        levelGradient.setColorAt(0.00, QColor(255,0,0));
-        levelGradient.setColorAt(0.16, QColor(255,0,255));
-        levelGradient.setColorAt(0.33, QColor(0,0,255));
-        levelGradient.setColorAt(0.50, QColor(0,255,255));
-        levelGradient.setColorAt(0.66, QColor(0,255,0));
-        levelGradient.setColorAt(0.83, QColor(255,255,0));
-        levelGradient.setColorAt(1.00, QColor(255,0,0));
-    }
-    else if(elementName=="S:")
-    {
-        QColor startColor, endColor;
-        startColor.setHsl(color.hue(), 0, color.lightness());
-        endColor.setHsl(color.hue(), 255, color.lightness());
-        levelGradient.setColorAt(0.0, startColor);
-        levelGradient.setColorAt(1.0, endColor);
-    }
-    else if(elementName=="L:")
-    {
-        QColor startColor, endColor;
-        startColor.setHsl(color.hue(), color.saturation(), 0);
-        endColor.setHsl(color.hue(), color.saturation(), 255);
-        levelGradient.setColorAt(0.0, startColor);
-        levelGradient.setColorAt(1.0, endColor);
-    }
-    else if(elementName=="V:")
-    {
-        QColor startColor, endColor;
-        startColor.setHsv(color.hue(), color.saturation(), 0);
-        endColor.setHsv(color.hue(), color.saturation(), 255);
-        levelGradient.setColorAt(0.0, startColor);
-        levelGradient.setColorAt(1.0, endColor);
-    }
-    else if(elementName=="C:")
-    {
-        QColor startColor, endColor;
-        startColor.setCmyk(0, color.magenta(), color.yellow(), color.black());
-        endColor.setCmyk(255, color.magenta(), color.yellow(), color.black());
-        levelGradient.setColorAt(0.0, startColor);
-        levelGradient.setColorAt(1.0, endColor);
-    }
-    else if(elementName=="M:")
-    {
-        QColor startColor, endColor;
-        startColor.setCmyk(color.cyan(), 0, color.yellow(), color.black());
-        endColor.setCmyk(color.cyan(), 255, color.yellow(), color.black());
-        levelGradient.setColorAt(0.0, startColor);
-        levelGradient.setColorAt(1.0, endColor);
-    }
-    else if(elementName=="Y:")
-    {
-        QColor startColor, endColor;
-        startColor.setCmyk(color.cyan(), color.magenta(), 0, color.black());
-        endColor.setCmyk(color.cyan(), color.magenta(), 255, color.black());
-        levelGradient.setColorAt(0.0, startColor);
-        levelGradient.setColorAt(1.0, endColor);
-    }
-    else if(elementName=="K:")
-    {
-        QColor startColor, endColor;
-        startColor.setCmyk(color.cyan(), color.magenta(), color.yellow(), 0);
-        endColor.setCmyk(color.cyan(), color.magenta(), color.yellow(), 255);
-        levelGradient.setColorAt(0.0, startColor);
-        levelGradient.setColorAt(1.0, endColor);
-    }
+    levelGradient.setColorAt(0.0, QColor(0,color.green(),color.blue()));
+    levelGradient.setColorAt(1.0, QColor(255,color.green(),color.blue()));
+    update();
+}
+
+void KCColorLevelRenderBase::renderGreen(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    levelGradient.setColorAt(0.0, QColor(color.red(),0,color.blue()));
+    levelGradient.setColorAt(1.0, QColor(color.red(),255,color.blue()));
+    update();
+}
+
+void KCColorLevelRenderBase::renderBlue(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    levelGradient.setColorAt(0.0, QColor(color.red(),color.green(),0));
+    levelGradient.setColorAt(1.0, QColor(color.red(),color.green(),255));
+    update();
+}
+
+void KCColorLevelRenderBase::renderHue(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    levelGradient.setColorAt(0.00, QColor(255,0,0));
+    levelGradient.setColorAt(0.16, QColor(255,0,255));
+    levelGradient.setColorAt(0.33, QColor(0,0,255));
+    levelGradient.setColorAt(0.50, QColor(0,255,255));
+    levelGradient.setColorAt(0.66, QColor(0,255,0));
+    levelGradient.setColorAt(0.83, QColor(255,255,0));
+    levelGradient.setColorAt(1.00, QColor(255,0,0));
+    update();
+}
+
+void KCColorLevelRenderBase::renderSaturation(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    QColor startColor, endColor;
+    startColor.setHsv(color.hue(), 0, color.value());
+    endColor.setHsv(color.hue(), 255, color.value());
+    levelGradient.setColorAt(0.0, startColor);
+    levelGradient.setColorAt(1.0, endColor);
+    update();
+}
+
+void KCColorLevelRenderBase::renderValue(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    QColor startColor, endColor;
+    startColor.setHsv(color.hue(), color.saturation(), 0);
+    endColor.setHsv(color.hue(), color.saturation(), 255);
+    levelGradient.setColorAt(0.0, startColor);
+    levelGradient.setColorAt(1.0, endColor);
+    update();
+}
+
+void KCColorLevelRenderBase::renderLightness(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    QColor startColor, endColor;
+    startColor.setHsl(color.hue(), color.saturation(), 0);
+    endColor.setHsl(color.hue(), color.saturation(), 255);
+    levelGradient.setColorAt(0.0, startColor);
+    levelGradient.setColorAt(1.0, endColor);
+    update();
+}
+
+void KCColorLevelRenderBase::renderCyan(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    QColor startColor, endColor;
+    startColor.setCmyk(0, color.magenta(), color.yellow(), color.black());
+    endColor.setCmyk(255, color.magenta(), color.yellow(), color.black());
+    levelGradient.setColorAt(0.0, startColor);
+    levelGradient.setColorAt(1.0, endColor);
+    update();
+}
+
+void KCColorLevelRenderBase::renderMagenta(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    QColor startColor, endColor;
+    startColor.setCmyk(color.cyan(), 0, color.yellow(), color.black());
+    endColor.setCmyk(color.cyan(), 255, color.yellow(), color.black());
+    levelGradient.setColorAt(0.0, startColor);
+    levelGradient.setColorAt(1.0, endColor);
+    update();
+}
+
+void KCColorLevelRenderBase::renderYellow(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    QColor startColor, endColor;
+    startColor.setCmyk(color.cyan(), color.magenta(), 0, color.black());
+    endColor.setCmyk(color.cyan(), color.magenta(), 255, color.black());
+    levelGradient.setColorAt(0.0, startColor);
+    levelGradient.setColorAt(1.0, endColor);
+    update();
+}
+
+void KCColorLevelRenderBase::renderBlack(const QColor &color)
+{
+    levelGradient=QLinearGradient(0,0,width(),height());
+    QColor startColor, endColor;
+    startColor.setCmyk(color.cyan(), color.magenta(), color.yellow(), 0);
+    endColor.setCmyk(color.cyan(), color.magenta(), color.yellow(), 255);
+    levelGradient.setColorAt(0.0, startColor);
+    levelGradient.setColorAt(1.0, endColor);
     update();
 }
 
@@ -405,11 +430,116 @@ void KCColorLevelSelector::focusOnElement(QString elementName,
                                           int value,
                                           QColor color)
 {
+    if(elementName=="R:")
+    {
+        currentMode=redMode;
+        colorRender->renderRed(color);
+    }
+    else if(elementName=="G:")
+    {
+        currentMode=greenMode;
+        colorRender->renderGreen(color);
+    }
+    else if(elementName=="B:")
+    {
+        currentMode=blueMode;
+        colorRender->renderBlue(color);
+    }
+    else if(elementName=="H:")
+    {
+        currentMode=hueMode;
+        colorRender->renderHue(color);
+    }
+    else if(elementName=="S:")
+    {
+        currentMode=saturationMode;
+        colorRender->renderSaturation(color);
+    }
+    else if(elementName=="L:")
+    {
+        currentMode=lightnessMode;
+        colorRender->renderLightness(color);
+    }
+    else if(elementName=="V:")
+    {
+        currentMode=valueMode;
+        colorRender->renderValue(color);
+    }
+    else if(elementName=="C:")
+    {
+        currentMode=cyanMode;
+        colorRender->renderCyan(color);
+    }
+    else if(elementName=="M:")
+    {
+        currentMode=magentaMode;
+        colorRender->renderMagenta(color);
+    }
+    else if(elementName=="Y:")
+    {
+        currentMode=yellowMode;
+        colorRender->renderYellow(color);
+    }
+    else if(elementName=="K:")
+    {
+        currentMode=blackMode;
+        colorRender->renderBlack(color);
+    }
     slide(value);
-    colorRender->focusOnElement(elementName, color);
 }
 
-void KCColorLevelSelector::slide(int position)
+void KCColorLevelSelector::syncColor(QColor color)
+{
+    switch(currentMode)
+    {
+    case redMode:
+        colorRender->renderRed(color);
+        slide(color.red());
+        break;
+    case greenMode:
+        colorRender->renderGreen(color);
+        slide(color.green());
+        break;
+    case blueMode:
+        colorRender->renderBlue(color);
+        slide(color.blue());
+        break;
+    case hueMode:
+        colorRender->renderHue(color);
+        slide(color.hue());
+        break;
+    case saturationMode:
+        colorRender->renderSaturation(color);
+        slide(color.saturation());
+        break;
+    case lightnessMode:
+        colorRender->renderLightness(color);
+        slide(color.lightness());
+        break;
+    case valueMode:
+        colorRender->renderValue(color);
+        slide(color.value());
+        break;
+    case cyanMode:
+        colorRender->renderCyan(color);
+        slide(color.cyan());
+        break;
+    case magentaMode:
+        colorRender->renderMagenta(color);
+        slide(color.magenta());
+        break;
+    case yellowMode:
+        colorRender->renderYellow(color);
+        slide(color.yellow());
+        break;
+    case blackMode:
+        colorRender->renderBlack(color);
+        slide(color.black());
+        break;
+    }
+}
+
+void KCColorLevelSelector::slide(int position, int maximum)
 {
     colorSelector->move(position, 0);
 }
@@ -1122,8 +1252,8 @@ void KCColorSelector::registerLevelSelector(KCColorLevelSelector *levelSelector)
 {
     connect(this, &KCColorSelector::requireFocusOnElement,
             levelSelector, &KCColorLevelSelector::focusOnElement);
-    /*connect(this, &KCColorSelector::requireSyncColor,
-            levelSelector, &KCColorLevelSelector);*/
+    connect(this, &KCColorSelector::requireSyncColor,
+            levelSelector, &KCColorLevelSelector::syncColor);
 }
 
 void KCColorSelector::registerHSVRing(KCColorHSVRing *hsvRing)

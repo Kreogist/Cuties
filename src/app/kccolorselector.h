@@ -85,7 +85,17 @@ signals:
     void valueChanged(int value);
 
 public slots:
-    void focusOnElement(QString elementName, QColor color);
+    void renderRed(const QColor &color);
+    void renderGreen(const QColor &color);
+    void renderBlue(const QColor &color);
+    void renderHue(const QColor &color);
+    void renderSaturation(const QColor &color);
+    void renderValue(const QColor &color);
+    void renderLightness(const QColor &color);
+    void renderCyan(const QColor &color);
+    void renderMagenta(const QColor &color);
+    void renderYellow(const QColor &color);
+    void renderBlack(const QColor &color);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -114,12 +124,28 @@ public slots:
     void syncColor(QColor color);
 
 private slots:
-    void slide(int position);
+    void slide(int position, int maximum=255);
 
 protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    enum RenderMode
+    {
+        redMode,
+        greenMode,
+        blueMode,
+        hueMode,
+        saturationMode,
+        lightnessMode,
+        valueMode,
+        cyanMode,
+        magentaMode,
+        yellowMode,
+        blackMode
+    };
+
+    RenderMode currentMode;
     KCColorLevelRenderBase *colorRender;
     QLabel *colorSelector;
 };
