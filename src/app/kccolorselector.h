@@ -44,7 +44,7 @@ private:
     int cursorX=2, cursorY=2;
     int cursorSize=5;
     bool isPressed=false;
-    QColor valueColor;
+    QColor valueColor, baseColor;
     QString elementName;
     enum DoubleRenderMode
     {
@@ -82,6 +82,9 @@ class KCColorHSVRing : public QWidget
     Q_OBJECT
 public:
     explicit KCColorHSVRing(QWidget *parent = 0);
+
+signals:
+    void requireUpdateColor(QColor color);
 
 public slots:
     void setColorMode(QString elementName,

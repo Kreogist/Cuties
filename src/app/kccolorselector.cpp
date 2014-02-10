@@ -57,6 +57,7 @@ void KCColorDoubleBoardBase::setColor(const QString &elementName,
 
 void KCColorDoubleBoardBase::syncColor(const QColor &color)
 {
+    baseColor=color;
     QColor color0, color16, color33, color50, color66, color83, color100;
     switch(currentMode)
     {
@@ -149,7 +150,7 @@ void KCColorDoubleBoardBase::setColorCursor(const QColor &color)
     case valueMode:
         //Horizontal: Hue, Vertical: Saturation
         cursorX+=color.hue()*51/72;
-        cursorY+=color.saturation();
+        cursorY+=255-color.saturation();
         break;
     case redMode:
         //Horizontal: Blue, Vertical: Green
@@ -285,30 +286,64 @@ void KCColorDoubleBoardBase::valueProcess(const int &x, const int &y)
 {
     if(x<2)
     {
-        cursorX=2;
+        cursorX=0;
     }
     else if(x>257)
     {
-        cursorX=257;
+        cursorX=255;
     }
     else
     {
-        cursorX=x;
+        cursorX=x-2;
     }
     if(y<2)
     {
-        cursorY=2;
+        cursorY=0;
     }
     else if(y>257)
     {
-        cursorY=257;
+        cursorY=255;
     }
     else
     {
-        cursorY=y;
+        cursorY=y-2;
     }
     //Emit signal:
-    ;
+    QColor currentColor;
+    switch(currentMode)
+    {
+    case saturationMode:
+        currentColor.setHsv(cursorX*72/51,
+                            baseColor.saturation(),
+                            255-cursorY);
+        break;
+    case valueMode:
+        currentColor.setHsv(cursorX*72/51,
+                            255-cursorY,
+                            baseColor.value());
+        break;
+    case redMode:
+        currentColor.setRgb(baseColor.red(),
+                            255-cursorY,
+                            cursorX);
+    case greenMode:
+        currentColor.setRgb(255-cursorY,
+                            baseColor.green(),
+                            cursorX);
+    case blueMode:
+        currentColor.setRgb(cursorX,
+                            255-cursorY,
+                            baseColor.blue());
+        break;
+    default:
+        currentColor.setHsv(baseColor.hue(),
+                            cursorX,
+                            255-cursorY);
+        break;
+    }
+    emit requireUpdateColor(currentColor);
+    cursorX+=2;
+    cursorY+=2;
 }
 
 KCColorRingBoard::KCColorRingBoard(QWidget *parent) :
@@ -372,6 +407,8 @@ KCColorHSVRing::KCColorHSVRing(QWidget *parent) :
     setFixedSize(424,424);
     ringBoard=new KCColorRingBoard(this);
     doubleBoard=new KCColorDoubleBoardBase(this);
+    connect(doubleBoard, SIGNAL(requireUpdateColor(QColor)),
+            this, SIGNAL(requireUpdateColor(QColor)));
     doubleBoard->move(83,83);
 }
 
@@ -1427,4 +1464,6 @@ void KCColorSelector::registerHSVRing(KCColorHSVRing *hsvRing)
             hsvRing, &KCColorHSVRing::setColorMode);
     connect(this, &KCColorSelector::requireSyncColor,
             hsvRing, &KCColorHSVRing::syncColor);
+    connect(hsvRing, SIGNAL(requireUpdateColor(QColor)),
+            this, SIGNAL(requireSyncColor(QColor)));
 }
