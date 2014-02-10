@@ -44,15 +44,24 @@ void KCColorDoubleBoardBase::setColor(const QString &elementName,
     {
         currentMode=redMode;
     }
+    else if(elementName=="G:")
+    {
+        currentMode=greenMode;
+    }
+    else if(elementName=="B:")
+    {
+        currentMode=blueMode;
+    }
     syncColor(color);
 }
 
 void KCColorDoubleBoardBase::syncColor(const QColor &color)
 {
-    if(currentMode==saturationMode)
+    QColor color0, color16, color33, color50, color66, color83, color100;
+    switch(currentMode)
     {
+    case saturationMode:
         saturationGradient=QLinearGradient(0,0,width(),0);
-        QColor color0, color16, color33, color50, color66, color83, color100;
         color0.setHsv(0, color.saturation(), 255);
         color16.setHsv(60, color.saturation(), 255);
         color33.setHsv(120, color.saturation(), 255);
@@ -69,11 +78,9 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         saturationGradient.setColorAt(1.00, color100);
         hsvGreyGradient.setColorAt(0, QColor(0,0,0,0));
         hsvGreyGradient.setColorAt(1, QColor(0,0,0,255));
-    }
-    else if(currentMode==valueMode)
-    {
+        break;
+    case valueMode:
         saturationGradient=QLinearGradient(0,0,width(),0);
-        QColor color0, color16, color33, color50, color66, color83, color100;
         color0.setHsv(0, 255, color.value());
         color16.setHsv(60, 255, color.value());
         color33.setHsv(120, 255, color.value());
@@ -90,26 +97,40 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         saturationGradient.setColorAt(1.00, color100);
         hsvGreyGradient.setColorAt(0, QColor(255,255,255,0));
         hsvGreyGradient.setColorAt(1, QColor(255,255,255,255));
-    }
-    else if(currentMode==hueMode)
-    {
+        break;
+    case hueMode:
         hueLevelGradient=QRadialGradient(width(),0,width(),width(),0);
-        QColor startColor, endColor;
-        startColor.setHsv(color.hue(), 255, 255);
-        endColor.setHsv(color.hue(), 0, 255);
-        hueLevelGradient.setColorAt(0, startColor);
-        hueLevelGradient.setColorAt(1, endColor);
+        color0.setHsv(color.hue(), 255, 255);
+        color100.setHsv(color.hue(), 0, 255);
+        hueLevelGradient.setColorAt(0, color0);
+        hueLevelGradient.setColorAt(1, color100);
         hsvGreyGradient.setColorAt(0, QColor(0,0,0,0));
         hsvGreyGradient.setColorAt(1, QColor(0,0,0,255));
-    }
-    else if(currentMode==redMode)
-    {
+        break;
+    case redMode:
         rgbHorizontalGradient=QLinearGradient(0,0,width(),0);
         rgbHorizontalGradient.setColorAt(0,QColor(color.red(),0,0));
         rgbHorizontalGradient.setColorAt(1,QColor(color.red(),0,255));
         rgbVerticalGradient=QLinearGradient(0,0,0,width());
-        rgbVerticalGradient.setColorAt(0,QColor(color.red(),255,0));
-        rgbVerticalGradient.setColorAt(1,QColor(color.red(),0,0));
+        rgbVerticalGradient.setColorAt(0,QColor(0,255,0));
+        rgbVerticalGradient.setColorAt(1,QColor(0,0,0));
+        break;
+    case greenMode:
+        rgbHorizontalGradient=QLinearGradient(0,0,width(),0);
+        rgbHorizontalGradient.setColorAt(0,QColor(0,color.green(),0));
+        rgbHorizontalGradient.setColorAt(1,QColor(0,color.green(),255));
+        rgbVerticalGradient=QLinearGradient(0,0,0,width());
+        rgbVerticalGradient.setColorAt(0,QColor(255,0,0));
+        rgbVerticalGradient.setColorAt(1,QColor(0,0,0));
+        break;
+    case blueMode:
+        rgbHorizontalGradient=QLinearGradient(0,0,width(),0);
+        rgbHorizontalGradient.setColorAt(0,QColor(0,0,color.blue()));
+        rgbHorizontalGradient.setColorAt(1,QColor(255,0,color.blue()));
+        rgbVerticalGradient=QLinearGradient(0,0,0,width());
+        rgbVerticalGradient.setColorAt(0,QColor(0,255,0));
+        rgbVerticalGradient.setColorAt(1,QColor(0,0,0));
+        break;
     }
     update();
 }
@@ -146,6 +167,8 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
         painter.drawRect(renderRect);
         break;
     case redMode:
+    case greenMode:
+    case blueMode:
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setBrush(QBrush(rgbHorizontalGradient));
         painter.drawRect(renderRect);
