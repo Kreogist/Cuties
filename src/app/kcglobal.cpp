@@ -18,6 +18,7 @@
  */
 
 #include <QProcess>
+#include <QDir>
 #include <QDebug>
 
 #include "kcglobal.h"
