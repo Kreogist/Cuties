@@ -18,6 +18,7 @@
  */
 
 #include <QApplication>
+#include <QSettings>
 
 #include "kccolorconfigure.h"
 
@@ -28,6 +29,11 @@ KCColorConfigure *KCColorConfigure::getInstance()
 {
     return instance==nullptr?
            instance=new KCColorConfigure : instance;
+}
+
+QString KCColorConfigure::getGroupName() const
+{
+    return "Color";
 }
 
 KCColorConfigure::Color KCColorConfigure::parseColor(const QString &content)
@@ -280,7 +286,7 @@ bool KCColorConfigure::isValidColor(const Color &color)
 
 void KCColorConfigure::readConfigure()
 {
-    QSettings settings(qApp->applicationDirPath() + "/" + colorConfigFilePath,QSettings::IniFormat);
+    QSettings settings(colorConfigFilePath,QSettings::IniFormat);
 
     //ColorSheet part
     QStringList colorNames;
@@ -400,7 +406,13 @@ void KCColorConfigure::registerColorInfo(QPalette::ColorRole role,
 KCColorConfigure::KCColorConfigure()
 {
     readConfigure();
-    colorConfigFilePath="DefaultColorConfig.ini";
+    colorConfigFilePath=qApp->applicationDirPath() + "/""DefaultColorConfig.ini";
+    readConfigure();
+}
+
+KCColorConfigure::~KCColorConfigure()
+{
+    writeConfigure();
 }
 
 QString KCColorConfigure::getColorConfigFilePath()

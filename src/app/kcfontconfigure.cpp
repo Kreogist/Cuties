@@ -37,53 +37,51 @@ KCFontConfigure *KCFontConfigure::getInstance()
     return instance==nullptr?instance=new KCFontConfigure:instance;
 }
 
+QString KCFontConfigure::getGroupName() const
+{
+    return "Font";
+}
+
 KCFontConfigure::KCFontConfigure()
 {
     //Initalize Default Font
     initCustomFonts();
-#ifdef Q_OS_WIN32
-    applicationFont=QFont("Hiragino Sans GB W3");
-    applicationFont.setPixelSize(13);
-    applicationFont.setStyleStrategy(QFont::PreferAntialias);
-    codeFontName="Monaco";
-    codeFont=QFont(codeFontName);
-    codeFont.setStyleStrategy(QFont::PreferAntialias);
-    codeFont.setPixelSize(12);
-    menuFont=applicationFont;
-    menuFont.setStyleStrategy(QFont::PreferAntialias);
-#endif
-#ifdef Q_OS_UNIX
-    applicationFont=QFont("Hiragino Sans GB W3");
-    applicationFont.setPixelSize(13);
-    applicationFont.setStyleStrategy(QFont::PreferAntialias);
-    codeFontName="Monaco";
-    codeFont=QFont(codeFontName);
-    codeFont.setStyleStrategy(QFont::PreferAntialias);
-    codeFont.setPixelSize(12);
-    menuFont.setPixelSize(16);
-    menuFont.setStyleStrategy(QFont::PreferAntialias);
-#endif
+
+    readConfigure();
+
     applyConfigure();
 }
 
-QFont KCFontConfigure::getMenuFont() const
+QString KCFontConfigure::getFontName(const QString &key) const
 {
-    return menuFont;
+    return getValue(key+"Font").toString();
 }
 
-void KCFontConfigure::setMenuFont(const QFont &value)
+void KCFontConfigure::setFontName(const QString &key, const QString &value)
 {
-    menuFont = value;
+    setValue(key+"Font",value);
+    fonts[key].setFamily(value);
 }
 
-QFont KCFontConfigure::getCodeFont() const
+QFont KCFontConfigure::getFont(const QString &key)
 {
-    return codeFont;
+    auto iterator=fonts.find(key);
+    if(Q_UNLIKELY(iterator == fonts.end()))
+    {
+        QFont font(getValue(key+"Font").toString());
+        font.setPixelSize(getValue(key+"FontSize").toInt());
+        font.setStyleStrategy(QFont::PreferAntialias);
+        fonts[key]=font;
+    }
+
+    return fonts[key];
 }
 
-void KCFontConfigure::setCodeFont(const QFont &value)
+void KCFontConfigure::setFont(const QString &key, const QFont &value)
 {
-    codeFont = value;
+    fonts[key]=value;
+    setValue(key+"Font",value.family());
+    setValue(key+"FontSize",value.pixelSize());
 }
 
 void KCFontConfigure::applyConfigure()
@@ -91,19 +89,9 @@ void KCFontConfigure::applyConfigure()
     setApplicationFont();
 }
 
-void KCFontConfigure::readConfigure()
-{
-    ;
-}
-
-void KCFontConfigure::writeConfigure()
-{
-    ;
-}
-
 void KCFontConfigure::setApplicationFont()
 {
-    qApp->setFont(applicationFont);
+    qApp->setFont(getFont("application"));
 }
 
 void KCFontConfigure::initCustomFonts()
@@ -151,15 +139,5 @@ void KCFontConfigure::initCustomFonts()
             }
         }
     }
-}
-
-QString KCFontConfigure::getCodeFontName() const
-{
-    return codeFontName;
-}
-
-void KCFontConfigure::setCodeFontName(const QString &value)
-{
-    codeFontName = value;
 }
 

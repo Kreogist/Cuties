@@ -21,36 +21,29 @@
 #define KCFONTCONFIGURE_H
 
 #include <QFont>
+#include <QMap>
 #include "kcconfigure.h"
 
 class KCFontConfigure : public KCConfigure
 {
 public:
-    void readConfigure();
-    void writeConfigure();
     static KCFontConfigure *getInstance();
 
     void initCustomFonts();
     void applyConfigure();
     void setApplicationFont();
-    QString getCodeFontName() const;
-    void setCodeFontName(const QString &value);
-    QFont getCodeFont() const;
-    void setCodeFont(const QFont &value);
-    QFont getMenuFont() const;
-    void setMenuFont(const QFont &value);
+    QString getFontName(const QString &key) const;
+    void setFontName(const QString &key, const QString &value);
+    QFont getFont(const QString &key);
+    void setFont(const QString &key, const QFont &value);
 
-signals:
-
-public slots:
+protected:
+    QString getGroupName() const;
 
 private:
     KCFontConfigure();
     static KCFontConfigure *instance;
-    QFont applicationFont;
-    QFont codeFont;
-    QFont menuFont;
-    QString codeFontName;
+    QMap<QString,QFont> fonts;
 };
 
 #endif // KCFONTCONFIGURE_H

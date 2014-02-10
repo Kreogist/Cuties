@@ -28,7 +28,7 @@ KCDebuggerConfigure *KCDebuggerConfigure::getInstance()
 
 KCDebuggerConfigure::KCDebuggerConfigure()
 {
-    ;
+    readConfigure();
 }
 
 QString KCDebuggerConfigure::getGroupName() const

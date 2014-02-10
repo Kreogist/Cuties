@@ -17,6 +17,8 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QSettings>
+
 #include "kclanguageconfigure.h"
 
 KCLanguageConfigure *KCLanguageConfigure::instance=nullptr;
@@ -24,6 +26,16 @@ KCLanguageConfigure *KCLanguageConfigure::instance=nullptr;
 KCLanguageConfigure *KCLanguageConfigure::getInstance()
 {
     return instance==nullptr?instance=new KCLanguageConfigure:instance;
+}
+
+QString KCLanguageConfigure::getGroupName() const
+{
+    return "Language";
+}
+
+void KCLanguageConfigure::readConfigureCustomSteps()
+{
+    currentLanguageName=getValue("Language").toString();
 }
 
 KCLanguageConfigure::KCLanguageConfigure()
@@ -42,29 +54,12 @@ KCLanguageConfigure::KCLanguageConfigure()
     setLanguage(defaultLanguageName);
 }
 
-void KCLanguageConfigure::readConfigure()
-{
-    QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup("Language");
-    currentLanguageName=settings.value("Language",
-                                       currentLanguageName).toString();
-    setLanguage(currentLanguageName);
-    settings.endGroup();
-}
-
-void KCLanguageConfigure::writeConfigure()
-{
-    QSettings settings(getCfgFileName(), QSettings::IniFormat);
-    settings.beginGroup("Language");
-    settings.setValue("Language", currentLanguageName);
-    settings.endGroup();
-}
-
 void KCLanguageConfigure::setLanguage(const QString &newLanguageName)
 {
     int newLanguageIndex=languageName.indexOf(newLanguageName);
     if(newLanguageIndex==-1)
     {
+        qDebug()<<"Unknow language name: "<<newLanguageName;
         return;
     }
     setLanguageIndex(newLanguageIndex);
@@ -74,12 +69,15 @@ void KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)
 {
     currentLanguageIndex=newLanguageIndex;
     currentLanguageName=languageName.at(currentLanguageIndex);
+    setValue("Language",currentLanguageName);
+    writeConfigure();
     applyLangaugeSet(currentLanguageIndex);
 }
 
 void KCLanguageConfigure::applyLangaugeSet(int languageIndex)
 {
     qApp->removeTranslator(&appTrans);
+    qDebug()<<languageFileList.at(languageIndex);
     appTrans.load(languageFileList.at(languageIndex));
     qApp->installTranslator(&appTrans);
     emit newLanguageSet();

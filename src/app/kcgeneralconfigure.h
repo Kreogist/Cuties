@@ -36,7 +36,6 @@ class KCGeneralConfigure : public KCConfigure
 {
     Q_OBJECT
 public:
-    void writeConfigure();
     static KCGeneralConfigure *getInstance();
 
     QString getDefaultLanguageModeString();
@@ -60,7 +59,8 @@ public slots:
     void retranslateAndSet();
 
 protected:
-    QString getGroupName();
+    QString getGroupName() const;
+    void writeConfigureCustomSteps();
 
 private:
     KCGeneralConfigure();

@@ -70,7 +70,6 @@ KCTabManager::KCTabManager(QWidget *parent) :
 
     newFileCount=1;
     currentEditor=NULL;
-    globalInstance=KCGlobal::getInstance();
 }
 
 void KCTabManager::restoreUnclosedFiles()
@@ -670,7 +669,7 @@ void KCTabManager::popupTabMenu(const QPoint &point)
 
 void KCTabManager::browseCurrentFile()
 {
-    globalInstance->showInGraphicalShell(currentEditor->getFilePath());
+    KCGlobalFunctions::showInGraphicalShell(currentEditor->getFilePath());
 }
 
 void KCTabManager::copyFilePathToClipboard()

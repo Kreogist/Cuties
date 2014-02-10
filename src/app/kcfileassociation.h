@@ -26,9 +26,10 @@ class KCFileAssociationConfigure : public KCConfigure
 {
     Q_OBJECT
 public:
-    void readConfigure();
-    void writeConfigure();
     static KCFileAssociationConfigure *getInstance();
+
+protected:
+    QString getGroupName() const;
 
 private:
     KCFileAssociationConfigure();

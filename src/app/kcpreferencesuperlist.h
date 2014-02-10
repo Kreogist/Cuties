@@ -106,7 +106,6 @@ protected:
     QFont titleFont;
     KCPreferenceSuperListContent *contents;
     KCConfigure *instance;
-
 };
 
 #endif // KCPREFERENCESUPERLIST_H

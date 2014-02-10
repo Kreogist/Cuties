@@ -34,12 +34,12 @@
 #include <iostream>
 
 #include "mainwindow.h"
-#include "kcglobal.h"
 #include "kcsplashscreen.h"
 #include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 #include "kcstatusrecorder.h"
 #include "kcdocumentrecorder.h"
+#include "kclanguageconfigure.h"
 
 /*!
  * \brief setApplicationInfo function is used to set basic information of Cuties
@@ -72,7 +72,7 @@ static inline void loadApplicationSettings()
 {
     KCStatusRecorder::getInstance()->readRecord();
     KCDocumentRecorder::getInstance()->readSettings();
-    KCGlobal::getInstance()->readSettings();
+    KCLanguageConfigure::getInstance()->readConfigure();
 }
 
 static inline void printVersion()
@@ -204,7 +204,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
  */
 int main(int argc, char *argv[])
 {
-    //qInstallMessageHandler(KCMessageHandler);
+    qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
     loadApplicationInfo();

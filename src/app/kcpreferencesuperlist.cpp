@@ -235,6 +235,7 @@ void KCPreferenceSuperList::applyPreference()
     {
         instance->setValue(contents->getItemKey(i), contents->getItemValue(i));
     }
+    instance->writeConfigure();
 }
 
 void KCPreferenceSuperList::resetCurrentIndex()

@@ -23,28 +23,16 @@
 #include <QString>
 #include <QList>
 
-class KCConfigure;
+class KCAbstractConfigure;
 
-//Global Variables
-class KCGlobal
+//Global Functions
+class KCGlobalFunctions
 {
 public:
-    void readSettings();
-    void writeSettings();
-    QString getSettingsFileName() const;
-    void setSettingsFileName(const QString &filePath);
-    static KCGlobal *getInstance();
-    void showInGraphicalShell(const QString &filePath);
+    static void showInGraphicalShell(const QString &filePath);
 
 private:
-    KCGlobal();
-
-    //Environment Variables.
-    QString settingsFileName;
-
-    //QSettings *KCMainConfig;
-    static KCGlobal *instance;
-    QList<KCConfigure *> cfgConfiger;
+    KCGlobalFunctions();
 };
 
 #endif // KCGLOBAL_H

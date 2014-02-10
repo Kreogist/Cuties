@@ -31,8 +31,6 @@ class KCEditorConfigure : public KCConfigure
     Q_OBJECT
 
 public:
-    void readConfigure();
-    void writeConfigure();
     static KCEditorConfigure *getInstance();
 
     QTextOption::WrapMode indexToWrapMode(int index);
@@ -40,12 +38,14 @@ public:
 
 protected:
     QString getGroupName() const;
+    void readConfigureCustomSteps();
+    void writeConfigureCustomSteps();
 
 signals:
     void editorConfigureRefresh();
 
 private:
-    KCEditorConfigure() {}
+    KCEditorConfigure();
     static KCEditorConfigure *instance;
 };
 

@@ -109,7 +109,7 @@ bool textCharFormatMap::parseStyleFileLine(char *str_line)
             define[i]=define[i].simplified();
             if(define[i] == "bold")
             {
-                QFont font=KCFontConfigure::getInstance()->getCodeFont();
+                QFont font=KCFontConfigure::getInstance()->getFont("code");
                 font.setBold(true);
                 textFormat.setFont(font);
             }

@@ -18,14 +18,21 @@
  */
 
 #include <QApplication>
+#include <QSettings>
 #include <QDebug>
 
 #include "kcconfigure.h"
 
-QString KCConfigure::cfgFileName;
+QString KCConfigure::cfgFileName(QApplication::applicationName()+".ini");
 
-KCConfigure::KCConfigure()
+KCAbstractConfigure::~KCAbstractConfigure()
 {
+
+}
+
+KCConfigure::~KCConfigure()
+{
+    writeConfigure();
 }
 
 QString KCConfigure::getCfgFileName()
@@ -38,18 +45,7 @@ void KCConfigure::setCfgFileName(const QString &value)
     cfgFileName = value;
 }
 
-void KCConfigure::readConfigure()
-{
-    //load default config
-#ifdef Q_OS_WIN32
-    readConfigure(":/DefaultSettings/default_settings/Cuties_Win32.ini");
-#else
-    readConfigure(":/DefaultSettings/default_settings/Cuties_Unix.ini");
-#endif
-    readConfigure(getCfgFileName());
-}
-
-void KCConfigure::readConfigure(const QString &filePath)
+void KCConfigure::doReadConfigure(const QString &filePath)
 {
     QSettings settings(filePath, QSettings::IniFormat);
     settings.beginGroup(getGroupName());
@@ -61,6 +57,20 @@ void KCConfigure::readConfigure(const QString &filePath)
         configureMap[*i]=settings.value(*i,configureMap[*i]);
     }
     settings.endGroup();
+}
+
+void KCConfigure::readConfigure()
+{
+    //load default config
+#ifdef Q_OS_WIN32
+    doReadConfigure(":/DefaultSettings/default_settings/Cuties_Win32.ini");
+#else
+    doReadConfigure(":/DefaultSettings/default_settings/Cuties_Unix.ini");
+#endif
+
+    doReadConfigure(getCfgFileName());
+
+    readConfigureCustomSteps();
 }
 
 void KCConfigure::writeConfigure()
@@ -75,6 +85,8 @@ void KCConfigure::writeConfigure()
         settings.setValue(*i, configureMap[*i]);
     }
     settings.endGroup();
+
+    writeConfigureCustomSteps();
 }
 
 QVariant KCConfigure::getValue(const QString &key) const
