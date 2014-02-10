@@ -35,7 +35,8 @@ KCLanguageConfigure::KCLanguageConfigure()
     //Load Language File List.
     loadLanguageList();
     //Set Default Language.
-    QLocale::setDefault(QLocale(QLocale::system().language(), QLocale::system().country()));
+    QLocale::setDefault(QLocale(QLocale::system().language(),
+                                QLocale::system().country()));
     //Get system default language name.
     defaultLanguageName=getLanguageString(QLocale::system().language());
     setLanguage(defaultLanguageName);

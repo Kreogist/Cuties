@@ -1635,6 +1635,8 @@ void KCColorSelector::registerSelector(KCColorSliderBase *selector)
             this, &KCColorSelector::requireSyncColor);
     connect(this, &KCColorSelector::requireSyncColor,
             selector, &KCColorSliderBase::syncColor);
+    connect(this, &KCColorSelector::requireSetOriginalColor,
+            selector, &KCColorSliderBase::syncColor);
 
     //**Ask every one to focus on the the element, and apply others require**
     connect(selector, &KCColorSliderBase::requireFocusOnElement,
