@@ -326,10 +326,12 @@ void KCColorDoubleBoardBase::valueProcess(const int &x, const int &y)
         currentColor.setRgb(baseColor.red(),
                             255-cursorY,
                             cursorX);
+        break;
     case greenMode:
         currentColor.setRgb(255-cursorY,
                             baseColor.green(),
                             cursorX);
+        break;
     case blueMode:
         currentColor.setRgb(cursorX,
                             255-cursorY,
@@ -342,8 +344,6 @@ void KCColorDoubleBoardBase::valueProcess(const int &x, const int &y)
         break;
     }
     emit requireUpdateColor(currentColor);
-    cursorX+=2;
-    cursorY+=2;
 }
 
 KCColorRingBoard::KCColorRingBoard(QWidget *parent) :
