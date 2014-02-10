@@ -107,6 +107,9 @@ class KCColorRingBoard : public QWidget
 public:
     explicit KCColorRingBoard(QWidget *parent = 0);
 
+signals:
+    void requireSyncColor(QColor color);
+
 public slots:
     void syncColor(const QColor &color);
 
@@ -119,7 +122,9 @@ protected:
 
 private:
     int calculateLength(int posX, int posY);
+    int calculateHue(int posX, int posY);
     QConicalGradient ringGradient;
+    QColor currentColor;
     bool isPressed=false;
     int ringWidth=30, cursorRing=197, cursorCenter=212;
     int cursorX=409, cursorY=212;

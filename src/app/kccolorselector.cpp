@@ -429,6 +429,7 @@ KCColorRingBoard::KCColorRingBoard(QWidget *parent) :
 
 void KCColorRingBoard::syncColor(const QColor &color)
 {
+    currentColor=color;
     double angle=(double)(color.hue()+90)*3.141/180;
     cursorX=cursorCenter+(double)cursorRing*sin(angle);
     cursorY=cursorCenter+(double)cursorRing*cos(angle);
@@ -499,7 +500,11 @@ void KCColorRingBoard::mousePressEvent(QMouseEvent *event)
     if(centerLength>182 && centerLength<212)
     {
         isPressed=true;
-        qDebug()<<"WTF?!";
+        currentColor.setHsv(calculateHue(event->pos().x(),
+                                         event->pos().y()),
+                            currentColor.saturation(),
+                            currentColor.value());
+        emit requireSyncColor(currentColor);
     }
     QWidget::mousePressEvent(event);
 }
@@ -514,20 +519,49 @@ void KCColorRingBoard::mouseMoveEvent(QMouseEvent *event)
 {
     if(isPressed)
     {
-        qDebug()<<"WTF?!";
+        currentColor.setHsv(calculateHue(event->pos().x(),
+                                         event->pos().y()),
+                            currentColor.saturation(),
+                            currentColor.value());
+        emit requireSyncColor(currentColor);
     }
     QWidget::mouseMoveEvent(event);
 }
 
 int KCColorRingBoard::calculateLength(int posX, int posY)
 {
-    int paramX, paramY;
-    paramX=posX-cursorCenter;
+    int paramX=posX-cursorCenter, paramY=posY-cursorCenter;
     paramX*=paramX;
-    paramY=posY-cursorCenter;
     paramY*=paramY;
     double distance=sqrt((double)paramX+(double)paramY);
     return (int)distance;
+}
+
+int KCColorRingBoard::calculateHue(int posX, int posY)
+{
+    int paramX=posX-cursorCenter, paramL=calculateLength(posX, posY);
+    if(paramL==0)
+    {
+        paramL=1;
+    }
+    qreal sineValue=double(paramX)/double(paramL);
+    qreal halfAngle=asin(sineValue)*180/3.141;
+    if(posX>cursorCenter)
+    {
+        if(posY<cursorCenter)
+        {
+            //It is at I.
+            return (int)90-halfAngle;
+        }
+        //It is at IIII.
+        return (int)270+halfAngle;
+    }
+    if(posY<cursorCenter)
+    {
+        //It is at II.
+        return (int)90-halfAngle;
+    }
+    return (int)270+halfAngle;
 }
 
 KCColorHSVRing::KCColorHSVRing(QWidget *parent) :
@@ -538,6 +572,8 @@ KCColorHSVRing::KCColorHSVRing(QWidget *parent) :
     ringBoard=new KCColorRingBoard(this);
     doubleBoard=new KCColorDoubleBoardBase(this);
     connect(doubleBoard, SIGNAL(requireUpdateColor(QColor)),
+            this, SIGNAL(requireUpdateColor(QColor)));
+    connect(ringBoard, SIGNAL(requireSyncColor(QColor)),
             this, SIGNAL(requireUpdateColor(QColor)));
     doubleBoard->move(83,83);
 }
@@ -1093,7 +1129,7 @@ void KCColorSliderItemPercent::buildSlider()
 }
 
 void KCColorSliderItemPercent::syncValue(const int &value,
-                                      const QColor &color)
+                                         const QColor &color)
 {
     if(syncRequireSentByMe)
     {
