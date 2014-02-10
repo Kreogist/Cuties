@@ -50,7 +50,7 @@ struct recentFileInfo
     QString fileFullPath;
 };
 
-class KCHistoryConfigure : public KCConfigure
+class KCHistoryConfigure : public KCAbstractConfigure
 {
     Q_OBJECT
 
@@ -86,6 +86,9 @@ public:
 public slots:
     void retranslate();
     void retranslateAndSet();
+
+protected:
+    QString getGroupName() const;
 
 private:
     KCHistoryConfigure();

@@ -31,7 +31,7 @@ KCGeneralConfigure *KCGeneralConfigure::getInstance()
     return instance==nullptr?instance=new KCGeneralConfigure:instance;
 }
 
-QString KCGeneralConfigure::getGroupName()
+QString KCGeneralConfigure::getGroupName() const
 {
     return "General";
 }
@@ -56,6 +56,8 @@ KCGeneralConfigure::KCGeneralConfigure()
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCGeneralConfigure::retranslateAndSet);
+
+    readConfigure();
 }
 
 QString KCGeneralConfigure::getTotalFileFilter() const
@@ -63,9 +65,8 @@ QString KCGeneralConfigure::getTotalFileFilter() const
     return totalFileFilter;
 }
 
-void KCGeneralConfigure::writeConfigure()
+void KCGeneralConfigure::writeConfigureCustomSteps()
 {
-    KCConfigure::writeConfigure();
     KCHistoryConfigure::getInstance()->setMaxRecentFilesSize(
         getValue("MaxRecentFilesSize").toInt());
 }

@@ -17,6 +17,8 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QSettings>
+
 #include "kchistoryconfigure.h"
 #include "kclanguageconfigure.h"
 
@@ -42,6 +44,8 @@ KCHistoryConfigure::KCHistoryConfigure()
 
     connect(KCLanguageConfigure::getInstance(), &KCLanguageConfigure::newLanguageSet,
             this, &KCHistoryConfigure::retranslateAndSet);
+
+    readConfigure();
 }
 
 KCHistoryConfigure *KCHistoryConfigure::getInstance()
@@ -49,6 +53,11 @@ KCHistoryConfigure *KCHistoryConfigure::getInstance()
     return instance==nullptr?
            instance=new KCHistoryConfigure:
     instance;
+}
+
+QString KCHistoryConfigure::getGroupName() const
+{
+    return "History";
 }
 
 void KCHistoryConfigure::readConfigure()

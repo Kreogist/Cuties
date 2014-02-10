@@ -128,7 +128,6 @@ private:
     QAction *tabMenuActionItem[TabMenuActionCount];
     QString tabMenuActionCaption[TabMenuActionCount];
 
-    KCGlobal *globalInstance;
     KCCodeEditor::KCCodeEditorSettings editorSettings;
 };
 

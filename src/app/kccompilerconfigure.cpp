@@ -28,7 +28,7 @@ KCCompilerConfigure *KCCompilerConfigure::getInstance()
 
 KCCompilerConfigure::KCCompilerConfigure()
 {
-    ;
+    readConfigure();
 }
 
 QString KCCompilerConfigure::getGroupName() const

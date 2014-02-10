@@ -62,7 +62,7 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     compileOutputTextInfo=new KCPlainTextBrowser(this);
     compileOutputTextInfo->setContentsMargins(0,0,0,0);
     compileOutputTextInfo->setMinimumWidth(0);
-    compileOutputTextInfo->setFont(KCFontConfigure::getInstance()->getCodeFont());
+    compileOutputTextInfo->setFont(KCFontConfigure::getInstance()->getFont("code"));
     compileOutputTextInfo->setWordWrapMode(QTextOption::NoWrap);
     compileOutputInfoSplitter->addWidget(compileOutputTextInfo);
     //Set treeview output widget
@@ -73,7 +73,7 @@ KCCompileDock::KCCompileDock(QWidget *parent):
     compileOutputErrorInfoTree->setRootIsDecorated(false);
     compileOutputErrorInfoTree->setHeaderHidden(true);
     compileOutputErrorInfoTree->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    compileOutputErrorInfoTree->setFont(KCFontConfigure::getInstance()->getCodeFont());
+    compileOutputErrorInfoTree->setFont(KCFontConfigure::getInstance()->getFont("code"));
     pal=compileOutputErrorInfoTree->palette();
     KCColorConfigure::getInstance()->getPalette(pal,compileOutputErrorInfoTree->objectName());
     compileOutputErrorInfoTree->setPalette(pal);

@@ -27,10 +27,11 @@
 
 #include "kcconfigure.h"
 
-class KCColorConfigure : public KCConfigure
+class KCColorConfigure : public KCAbstractConfigure
 {
     Q_OBJECT
 public:
+    ~KCColorConfigure();
     static KCColorConfigure *getInstance();
     void readConfigure();
     void writeConfigure();
@@ -43,9 +44,8 @@ public:
     static QString getColorConfigFilePath();
     static void setColorConfigFilePath(const QString &filePath);
 
-signals:
-
-public slots:
+protected:
+    QString getGroupName() const;
 
 private:
     struct Color

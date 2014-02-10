@@ -22,38 +22,54 @@
 
 #include <QObject>
 #include <QMap>
-#include <QSettings>
 #include <QString>
+#include <QVariant>
 
-class KCConfigure : public QObject
+class KCAbstractConfigure : public QObject
 {
     Q_OBJECT
 
 public:
-    KCConfigure();
-    virtual void readConfigure();
-    virtual void writeConfigure();
+    virtual ~KCAbstractConfigure() = 0;
 
-    virtual QVariant getValue(const QString &key) const;
-    virtual void setValue(const QString &key, const QVariant &value);
+signals:
+    void configureChanged(QString groupName);
 
+public slots:
+    virtual void readConfigure() = 0;
+    virtual void writeConfigure() = 0;
+
+protected:
+    virtual QString getGroupName() const = 0;
+};
+
+class KCConfigure : public KCAbstractConfigure
+{
+    Q_OBJECT
+
+public:
+    ~KCConfigure();
     static QString getCfgFileName();
     static void setCfgFileName(const QString &value);
 
-    virtual void setPathValue(const QString &key, const QString &value);
-    virtual QString getPathValue(const QString &key) const;
+public slots:
+    void readConfigure() final;
+    void writeConfigure() final;
+
+    QVariant getValue(const QString &key) const;
+    void setValue(const QString &key, const QVariant &value);
+
+    void setPathValue(const QString &key, const QString &value);
+    QString getPathValue(const QString &key) const;
 
 protected:
-    virtual QString getGroupName() const
-    {
-        return "";
-    }
-    QMap<QString, QVariant> configureMap;
+    virtual void readConfigureCustomSteps(){}
+    virtual void writeConfigureCustomSteps(){}
 
 private:
-    void readConfigure(const QString &filePath);
+    void doReadConfigure(const QString &filePath);
+    QMap<QString, QVariant> configureMap;
     static QString cfgFileName;
-
 };
 
 #endif // KCCONFIGURE_H

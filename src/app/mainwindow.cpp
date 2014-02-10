@@ -169,7 +169,7 @@ void MainWindow::createActions()
     //Create File Menu
 #ifndef Q_OS_MACX
     QIcon *MenuIconAddor=new QIcon;
-    QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
+    QFont menuFont=KCFontConfigure::getInstance()->getFont("menu");
     MenuIconAddor->addFile(QString(":/img/image/FileMenuIcon.png"));
     menuMainWindowItem[menuFile]->setIcon(*MenuIconAddor);
 #endif
@@ -772,7 +772,7 @@ void MainWindow::createMenu()
 
     QIcon *MenuIconAddor=new QIcon;
 
-    QFont menuFont=KCFontConfigure::getInstance()->getMenuFont();
+    QFont menuFont=KCFontConfigure::getInstance()->getFont("menu");
     _mainMenu->setFont(menuFont);
 #endif
     for(i=menuFile; i<menuMainItemsCount; i++)

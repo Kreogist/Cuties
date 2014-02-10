@@ -27,7 +27,6 @@
 #include <QToolButton>
 #include <QMessageBox>
 #include <QDesktopServices>
-#include <QSettings>
 #include <QSize>
 #include <QRect>
 #include <QDesktopWidget>
@@ -38,7 +37,6 @@
 #include <QMenuBar>
 #endif
 
-#include "kcglobal.h"
 #include "kcwelcomewindow.h"
 #include "kcsidebar.h"
 #include "kccompiledock.h"

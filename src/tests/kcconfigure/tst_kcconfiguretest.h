@@ -3,12 +3,20 @@
 
 #include <QtTest>
 
-class KCHighlighterTest : public QObject
+#include "kcconfigure.h"
+
+class KCConfigureForTest : public KCConfigure
+{
+protected:
+    QString getGroupName() const;
+};
+
+class KCConfigureTest : public QObject
 {
     Q_OBJECT
 
 public:
-    KCHighlighterTest();
+    KCConfigureTest();
 
 private Q_SLOTS:
     void getAndSetValueTest();

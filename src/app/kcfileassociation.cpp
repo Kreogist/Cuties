@@ -9,15 +9,10 @@ KCFileAssociationConfigure *KCFileAssociationConfigure::getInstance()
 
 KCFileAssociationConfigure::KCFileAssociationConfigure()
 {
-    ;
+    readConfigure();
 }
 
-void KCFileAssociationConfigure::readConfigure()
+QString KCFileAssociationConfigure::getGroupName() const
 {
-    ;
-}
-
-void KCFileAssociationConfigure::writeConfigure()
-{
-    ;
+    return "FileAssociation";
 }

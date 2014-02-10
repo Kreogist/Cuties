@@ -37,8 +37,6 @@ class KCLanguageConfigure : public KCConfigure
 {
     Q_OBJECT
 public:
-    void readConfigure();
-    void writeConfigure();
     static KCLanguageConfigure *getInstance();
 
     QStringList getLanguageList() const;
@@ -57,6 +55,10 @@ signals:
 public slots:
     void setLanguage(const QString &newLanguageName);
     void setLanguageIndex(int newLangaugeIndex);
+
+protected:
+    QString getGroupName() const;
+    void readConfigureCustomSteps();
 
 private:
     void applyLangaugeSet(int languageIndex);

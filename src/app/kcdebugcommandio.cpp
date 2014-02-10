@@ -87,7 +87,7 @@ KCDebugCommandIO::KCDebugCommandIO(QWidget *parent) :
 
     //Set output text browser.
     debugOutputTextBrowser=new KCPlainTextBrowser(this);
-    debugOutputTextBrowser->setFont(KCFontConfigure::getInstance()->getCodeFont());
+    debugOutputTextBrowser->setFont(KCFontConfigure::getInstance()->getFont("code"));
     mainLayout->addWidget(debugOutputTextBrowser,1);
     connect(debugInput,SIGNAL(execCommand(QString)),
             this,SLOT(onCurrentIndexChanged(QString)));

@@ -27,7 +27,6 @@
 #include <QPalette>
 #include <QPlainTextEdit>
 #include <QScrollBar>
-#include <QSettings>
 #include <QTimeLine>
 #include <QShowEvent>
 

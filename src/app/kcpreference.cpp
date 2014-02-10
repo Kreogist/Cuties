@@ -328,7 +328,6 @@ void KCPreferenceContents::applyAllSettings()
     {
         embeddedSuperList[i]->applyPreference();
     }
-    KCGlobal::getInstance()->writeSettings();
 }
 
 KCPreferenceCommander::KCPreferenceCommander(QWidget *parent) :

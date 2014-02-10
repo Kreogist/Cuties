@@ -23,6 +23,11 @@
 
 KCEditorConfigure *KCEditorConfigure::instance=nullptr;
 
+KCEditorConfigure::KCEditorConfigure()
+{
+    readConfigure();
+}
+
 QString KCEditorConfigure::getGroupName() const
 {
     return "Editor";
@@ -51,9 +56,8 @@ QTextOption::WrapMode KCEditorConfigure::indexToWrapMode(int index)
     return QTextOption::NoWrap;
 }
 
-void KCEditorConfigure::readConfigure()
+void KCEditorConfigure::readConfigureCustomSteps()
 {
-    KCConfigure::readConfigure();
     KCClipboard::getInstance()->setMaxDataCount(
         getValue("ClipboardMax").toInt());
 }
@@ -75,9 +79,8 @@ int KCEditorConfigure::getWrapModeNumber(QTextOption::WrapMode destinationWrapMo
     return 0;
 }
 
-void KCEditorConfigure::writeConfigure()
+void KCEditorConfigure::writeConfigureCustomSteps()
 {
-    KCConfigure::writeConfigure();
     KCClipboard::getInstance()->setMaxDataCount(getValue("ClipboardMax").toInt());
     emit editorConfigureRefresh();
 }

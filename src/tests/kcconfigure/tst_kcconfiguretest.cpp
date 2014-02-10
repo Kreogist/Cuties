@@ -1,15 +1,19 @@
 #include <QCoreApplication>
 
 #include "tst_kcconfiguretest.h"
-#include "kcconfigure.h"
 
-KCHighlighterTest::KCHighlighterTest()
+QString KCConfigureForTest::getGroupName() const
+{
+    return "ForTest";
+}
+
+KCConfigureTest::KCConfigureTest()
 {
 }
 
-void KCHighlighterTest::getAndSetValueTest()
+void KCConfigureTest::getAndSetValueTest()
 {
-    KCConfigure configure;
+    KCConfigureForTest configure;
 
     configure.setValue("test","testvalue");
     QCOMPARE(configure.getValue("test").toString(),QString("testvalue"));
@@ -25,14 +29,14 @@ void KCHighlighterTest::getAndSetValueTest()
     QCOMPARE(configure.getValue("test").toString(),QString("testvalue2"));
 }
 
-void KCHighlighterTest::getAndSetPathValueTest()
+void KCConfigureTest::getAndSetPathValueTest()
 {
-    KCConfigure configure;
+    KCConfigureForTest configure;
 
     configure.setPathValue("aaapath","testpath");
     QCOMPARE(configure.getValue("aaapath").toString(),QString("testpath"));
 }
 
-QTEST_MAIN(KCHighlighterTest)
+QTEST_MAIN(KCConfigureTest)
 
 //#include "tst_kcconfiguretest.moc"

@@ -36,8 +36,6 @@
 
 #endif
 
-#include "kcglobal.h"
-
 #include "kcexecutor.h"
 
 #ifdef Q_OS_WIN32
@@ -69,12 +67,15 @@ static const Terminal knownTerminals[terminalCount] =
 
 Terminal KCRunner::getDefaultTerminal()
 {
-    QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
+    /*QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
     settings.beginGroup("DefaultTerminal");
     Terminal ret(
         settings.value("name", knownTerminals[0].terminal_name).toByteArray().constData(),
         settings.value("arg",knownTerminals[0].arg).toByteArray().constData());
-    settings.endGroup();
+    settings.endGroup();*/
+
+    Terminal ret(knownTerminals[0].terminal_name,
+            knownTerminals[0].arg);
 
     return ret;
 }
@@ -91,13 +92,18 @@ QStringList KCExecutor::getSupportTerminalList()
 
 void KCExecutor::setDefaultTerminal(const int &num)
 {
+    // TODO: Need to accomplish this function
     if(Q_LIKELY(num<terminalCount))
     {
-        QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
+        /*QSettings settings(KCGlobal::getInstance()->getSettingsFileName(),QSettings::IniFormat);
         settings.beginGroup("DefaultTerminal");
         settings.setValue("name",knownTerminals[num].terminal_name);
         settings.value("arg",knownTerminals[num].arg);
-        settings.endGroup();
+        settings.endGroup();*/
+    }
+    else
+    {
+        qDebug()<<"Unknow Terminal Number!";
     }
 }
 

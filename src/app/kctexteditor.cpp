@@ -47,7 +47,7 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     //Initialize visual properties.
     setContentsMargins(0,0,0,0);
     setFrameShape(QFrame::NoFrame);
-    QFont editorFont=KCFontConfigure::getInstance()->getCodeFont();
+    QFont editorFont=KCFontConfigure::getInstance()->getFont("code");
     setFont(editorFont);
     QPalette pal=palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
