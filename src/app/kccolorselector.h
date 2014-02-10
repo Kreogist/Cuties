@@ -113,9 +113,14 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 private:
+    int calculateLength(int posX, int posY);
     QConicalGradient ringGradient;
+    bool isPressed=false;
     int ringWidth=30, cursorRing=197, cursorCenter=212;
     int cursorX=409, cursorY=212;
     int cursorSize=5;

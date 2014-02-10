@@ -492,6 +492,44 @@ void KCColorRingBoard::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
+void KCColorRingBoard::mousePressEvent(QMouseEvent *event)
+{
+    int centerLength=calculateLength(event->pos().x(),
+                                     event->pos().y());
+    if(centerLength>182 && centerLength<212)
+    {
+        isPressed=true;
+        qDebug()<<"WTF?!";
+    }
+    QWidget::mousePressEvent(event);
+}
+
+void KCColorRingBoard::mouseReleaseEvent(QMouseEvent *event)
+{
+    isPressed=false;
+    QWidget::mouseReleaseEvent(event);
+}
+
+void KCColorRingBoard::mouseMoveEvent(QMouseEvent *event)
+{
+    if(isPressed)
+    {
+        qDebug()<<"WTF?!";
+    }
+    QWidget::mouseMoveEvent(event);
+}
+
+int KCColorRingBoard::calculateLength(int posX, int posY)
+{
+    int paramX, paramY;
+    paramX=posX-cursorCenter;
+    paramX*=paramX;
+    paramY=posY-cursorCenter;
+    paramY*=paramY;
+    double distance=sqrt((double)paramX+(double)paramY);
+    return (int)distance;
+}
+
 KCColorHSVRing::KCColorHSVRing(QWidget *parent) :
     QWidget(parent)
 {
