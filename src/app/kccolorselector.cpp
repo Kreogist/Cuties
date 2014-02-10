@@ -429,6 +429,11 @@ KCColorRingBoard::KCColorRingBoard(QWidget *parent) :
 
 void KCColorRingBoard::syncColor(const QColor &color)
 {
+    if(syncSignalSentByMe)
+    {
+        syncSignalSentByMe=false;
+        return;
+    }
     currentColor=color;
     double angle=(double)(color.hue()+90)*3.141/180;
     cursorX=cursorCenter+(double)cursorRing*sin(angle);
@@ -539,6 +544,13 @@ int KCColorRingBoard::calculateLength(int posX, int posY)
 
 int KCColorRingBoard::calculateHue(int posX, int posY)
 {
+    int mouseLength=calculateLength(posX, posY);
+    qreal times=1.0-(double)(cursorRing-mouseLength)/(double)cursorRing;
+    qreal expectX=(double)times*(double)posX,
+          expectY=(double)times*(double)posY;
+    cursorX=expectX;
+    cursorY=expectY;
+    update();
     int paramX=posX-cursorCenter, paramL=calculateLength(posX, posY);
     if(paramL==0)
     {
@@ -546,6 +558,7 @@ int KCColorRingBoard::calculateHue(int posX, int posY)
     }
     qreal sineValue=double(paramX)/double(paramL);
     qreal halfAngle=asin(sineValue)*180/3.141;
+    syncSignalSentByMe=false;
     if(posX>cursorCenter)
     {
         if(posY<cursorCenter)
