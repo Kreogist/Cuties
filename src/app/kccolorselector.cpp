@@ -36,10 +36,6 @@ void KCColorDoubleBoardBase::setColor(const QString &elementName,
     {
         currentMode=valueMode;
     }
-    else if(elementName=="H:")
-    {
-        currentMode=hueMode;
-    }
     else if(elementName=="R:")
     {
         currentMode=redMode;
@@ -51,6 +47,10 @@ void KCColorDoubleBoardBase::setColor(const QString &elementName,
     else if(elementName=="B:")
     {
         currentMode=blueMode;
+    }
+    else
+    {
+        currentMode=hueMode;
     }
     syncColor(color);
 }
@@ -99,15 +99,6 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         hsvGreyGradient.setColorAt(1, QColor(255,255,255,255));
         valueColor=QColor(0,0,0,255-color.value());
         break;
-    case hueMode:
-        hueLevelGradient=QLinearGradient(0,0,width(),0);
-        color0.setHsv(color.hue(), 0, 255);
-        color100.setHsv(color.hue(), 255, 255);
-        hueLevelGradient.setColorAt(0, color0);
-        hueLevelGradient.setColorAt(1, color100);
-        hsvGreyGradient.setColorAt(0, QColor(0,0,0,0));
-        hsvGreyGradient.setColorAt(1, QColor(0,0,0,255));
-        break;
     case redMode:
         rgbHorizontalGradient=QLinearGradient(0,0,width(),0);
         rgbHorizontalGradient.setColorAt(0,QColor(color.red(),0,0));
@@ -132,6 +123,14 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         rgbVerticalGradient.setColorAt(0,QColor(0,255,0));
         rgbVerticalGradient.setColorAt(1,QColor(0,0,0));
         break;
+    default:
+        hueLevelGradient=QLinearGradient(0,0,width(),0);
+        color0.setHsv(color.hue(), 0, 255);
+        color100.setHsv(color.hue(), 255, 255);
+        hueLevelGradient.setColorAt(0, color0);
+        hueLevelGradient.setColorAt(1, color100);
+        hsvGreyGradient.setColorAt(0, QColor(0,0,0,0));
+        hsvGreyGradient.setColorAt(1, QColor(0,0,0,255));
     }
     update();
 }
