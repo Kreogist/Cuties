@@ -22,6 +22,7 @@ public slots:
     virtual void setColor(const QString &elementName,
                           const QColor &color);
     virtual void syncColor(const QColor &color);
+    virtual void setColorCursor(const QColor &color);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -33,6 +34,8 @@ private:
     QLinearGradient hsvGreyGradient;
     QLinearGradient rgbHorizontalGradient;
     QLinearGradient rgbVerticalGradient;
+    int cursorX=0, cursorY=0;
+    int cursorSize=5;
     QColor valueColor;
     QString elementName;
     enum DoubleRenderMode
@@ -366,6 +369,7 @@ private:
     KCColorSliderItemBase *hueElement,
                           *saturationElement,
                           *valueElement;
+    bool ignoreHue=false;
 };
 
 class KCColorSelector : public QDialog

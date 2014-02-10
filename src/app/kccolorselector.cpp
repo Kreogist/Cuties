@@ -132,7 +132,45 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         hsvGreyGradient.setColorAt(0, QColor(0,0,0,0));
         hsvGreyGradient.setColorAt(1, QColor(0,0,0,255));
     }
+    setColorCursor(color);
     update();
+}
+
+void KCColorDoubleBoardBase::setColorCursor(const QColor &color)
+{
+    switch(currentMode)
+    {
+    case saturationMode:
+        //Horizontal: Hue, Vertical: Value
+        cursorX=color.hue()*51/72;
+        cursorY=255-color.value();
+        break;
+    case valueMode:
+        //Horizontal: Hue, Vertical: Saturation
+        cursorX=color.hue()*51/72;
+        cursorY=color.saturation();
+        break;
+    case redMode:
+        //Horizontal: Blue, Vertical: Green
+        cursorX=color.blue();
+        cursorY=255-color.green();
+        break;
+    case greenMode:
+        //Horizontal: Blue, Vertical: Red
+        cursorX=color.blue();
+        cursorY=255-color.red();
+        break;
+    case blueMode:
+        //Horizontal: Red, Vertical: Green
+        cursorX=color.red();
+        cursorY=255-color.green();
+        break;
+    default:
+        //Horizontal: Saturation, Vertical: Value
+        cursorX=color.saturation();
+        cursorY=255-color.value();
+        break;
+    }
 }
 
 void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
@@ -142,16 +180,9 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
     QRect renderRect(2,2,255,255);
     painter.setPen(QColor(0xcf, 0xcf, 0xcf));
     //painter.drawRect(0,0,258,258);
-    painter.setPen(Qt::NoPen);
+    //painter.setPen(Qt::NoPen);
     switch(currentMode)
     {
-    case hueMode:
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.setBrush(QBrush(hueLevelGradient));
-        painter.drawRect(renderRect);
-        painter.setBrush(QBrush(hsvGreyGradient));
-        painter.drawRect(renderRect);
-        break;
     case saturationMode:
         painter.setRenderHint(QPainter::Antialiasing);
         painter.setBrush(QBrush(saturationGradient));
@@ -177,7 +208,21 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
         painter.setCompositionMode(QPainter::CompositionMode_Plus);
         painter.setBrush(QBrush(rgbVerticalGradient));
         painter.drawRect(renderRect);
+        break;
+    default:
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setBrush(QBrush(hueLevelGradient));
+        painter.drawRect(renderRect);
+        painter.setBrush(QBrush(hsvGreyGradient));
+        painter.drawRect(renderRect);
     }
+    //Update cursor:
+    painter.setBrush(QBrush(QColor(0,0,0,0)));
+    painter.setPen(QPen(QColor(0,0,0)));
+    painter.drawEllipse(cursorX-cursorSize,
+                        cursorY-cursorSize,
+                        cursorSize*2,
+                        cursorSize*2);
 }
 
 void KCColorDoubleBoardBase::resizeEvent(QResizeEvent *event)
@@ -1195,12 +1240,14 @@ void KCColorSliderHSV::onElementChanged(QString elementName, int value)
         currentColor.setHsv(hueElement->getValue(),
                             value,
                             valueElement->getValue());
+        ignoreHue=true;
     }
     else if(elementName=="V:")
     {
         currentColor.setHsv(hueElement->getValue(),
                             saturationElement->getValue(),
                             value);
+        ignoreHue=true;
     }
     else
     {
@@ -1226,7 +1273,14 @@ void KCColorSliderHSV::syncColor(QColor color)
 
 void KCColorSliderHSV::syncElement()
 {
-    hueElement->syncValue(currentColor.hue(), currentColor);
+    if(ignoreHue)
+    {
+        ignoreHue=false;
+    }
+    else
+    {
+        hueElement->syncValue(currentColor.hue(), currentColor);
+    }
     saturationElement->syncValue(currentColor.saturation(), currentColor);
     valueElement->syncValue(currentColor.value(), currentColor);
 }
