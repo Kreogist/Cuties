@@ -13,9 +13,71 @@
 #include <QConicalGradient>
 #include <QRadialGradient>
 #include <QPainter>
+#include <QKeyEvent>
 
 #include "kccolorselector.h"
 
+KCHexColorLineEdit::KCHexColorLineEdit(QWidget *parent) :
+    QLineEdit(parent)
+{
+    setMaxLength(6);
+    setInputMask("hhhhhh;0");
+    connect(this, &KCHexColorLineEdit::textChanged,
+            this, &KCHexColorLineEdit::onTextChanged);
+}
+
+void KCHexColorLineEdit::onTextChanged(QString value)
+{
+    if(syncMode)
+    {
+        return;
+    }
+    QString redTest, greenTest, blueTest;
+    bool error;
+    redTest=value.left(2);
+    greenTest=value.mid(2,2);
+    blueTest=value.mid(4,2);
+    syncSentByMe=true;
+    emit requireSyncColor(QColor(redTest.toInt(&error, 16),
+                                 greenTest.toInt(&error, 16),
+                                 blueTest.toInt(&error, 16)));
+}
+
+void KCHexColorLineEdit::syncColor(const QColor &color)
+{
+    if(syncSentByMe)
+    {
+        syncSentByMe=false;
+        return;
+    }
+    syncMode=true;
+    QString currentValue=QString::number(color.red(),16)+
+                        QString::number(color.green(),16)+
+                        QString::number(color.blue(),16);
+    setText(currentValue);
+    syncMode=false;
+}
+
+KCHexColorEditor::KCHexColorEditor(QWidget *parent) :
+    QWidget(parent)
+{
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+
+    QLabel *hashHint=new QLabel("#", this);
+    mainLayout->addWidget(hashHint);
+    hexColor=new KCHexColorLineEdit(this);
+    connect(hexColor, SIGNAL(requireSyncColor(QColor)),
+            this, SIGNAL(requireSyncColor(QColor)));
+    mainLayout->addWidget(hexColor);
+}
+
+void KCHexColorEditor::syncColor(const QColor &color)
+{
+    hexColor->syncColor(color);
+}
 
 KCColorDoubleBoardBase::KCColorDoubleBoardBase(QWidget *parent) :
     QWidget(parent)
@@ -280,6 +342,12 @@ void KCColorDoubleBoardBase::mouseMoveEvent(QMouseEvent *event)
         update();
     }
     QWidget::mouseMoveEvent(event);
+}
+
+void KCColorDoubleBoardBase::enterEvent(QEvent *event)
+{
+    setCursor(QCursor(Qt::CrossCursor));
+    QWidget::enterEvent(event);
 }
 
 void KCColorDoubleBoardBase::valueProcess(const int &x, const int &y)
@@ -789,7 +857,9 @@ KCColorViewerBase::KCColorViewerBase(QWidget *parent) :
 {
     currentViewer=new QWidget(this);
     currentViewer->setAutoFillBackground(true);
+    currentViewer->setFixedHeight(33);
     originalViewer=new QWidget(this);
+    originalViewer->setFixedHeight(33);
     originalViewer->setAutoFillBackground(true);
     currentPalette=currentViewer->palette();
     buildViewer();
@@ -1405,24 +1475,27 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     KCColorSliderHSV *hsv=new KCColorSliderHSV(this);
     registerSelector(hsv);
     yayaModelLayout->addWidget(hsv);
-    KCColorSliderCMYK *cmyk=new KCColorSliderCMYK(this);
-    registerSelector(cmyk);
-    yayaModelLayout->addWidget(cmyk);
     KCColorSliderRGB *rgb=new KCColorSliderRGB(this);
     registerSelector(rgb);
     yayaModelLayout->addWidget(rgb);
+    KCColorSliderCMYK *cmyk=new KCColorSliderCMYK(this);
+    registerSelector(cmyk);
+    yayaModelLayout->addWidget(cmyk);
+    KCHexColorEditor *hexEditor=new KCHexColorEditor(this);
+    registerHexEditor(hexEditor);
+    yayaModelLayout->addWidget(hexEditor);
     yayaModelLayout->addStretch();
     mainLayout->addLayout(yayaModelLayout);
 
     iroriModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
-    KCColorSliderCMYKP *cmykp=new KCColorSliderCMYKP(this);
-    registerSelector(cmykp);
-    iroriModelLayout->addWidget(cmykp);
-    //yayaModelLayout->addStretch();
-
     KCColorViewerBase *viewer=new KCColorViewerBase(this);
     registerViewer(viewer);
     iroriModelLayout->addWidget(viewer);
+    iroriModelLayout->addStretch();
+    KCColorSliderCMYKP *cmykp=new KCColorSliderCMYKP(this);
+    registerSelector(cmykp);
+    iroriModelLayout->addWidget(cmykp);
+
     mainLayout->addLayout(iroriModelLayout);
 
     emit requireSyncColor(QColor(0,0,0));
@@ -1433,6 +1506,12 @@ KCColorSelector::~KCColorSelector()
     colorRingLayout->deleteLater();
     yayaModelLayout->deleteLater();
     iroriModelLayout->deleteLater();
+}
+
+void KCColorSelector::setOriginalColor(const QColor &color)
+{
+    emit requireSetOriginalColor(color);
+    emit requireSyncColor(color);
 }
 
 void KCColorSelector::registerSelector(KCColorSliderBase *selector)
@@ -1454,8 +1533,10 @@ void KCColorSelector::registerSelector(KCColorSliderBase *selector)
 
 void KCColorSelector::registerViewer(KCColorViewerBase *viewer)
 {
-    connect(this, SIGNAL(requireSyncColor(QColor)),
-            viewer, SLOT(setCurrentColor(QColor)));
+    connect(this, &KCColorSelector::requireSyncColor,
+            viewer, &KCColorViewerBase::setCurrentColor);
+    connect(this, &KCColorSelector::requireSetOriginalColor,
+            viewer, &KCColorViewerBase::setOriginalColor);
 }
 
 void KCColorSelector::registerHSVRing(KCColorHSVRing *hsvRing)
@@ -1466,4 +1547,12 @@ void KCColorSelector::registerHSVRing(KCColorHSVRing *hsvRing)
             hsvRing, &KCColorHSVRing::syncColor);
     connect(hsvRing, SIGNAL(requireUpdateColor(QColor)),
             this, SIGNAL(requireSyncColor(QColor)));
+}
+
+void KCColorSelector::registerHexEditor(KCHexColorEditor *editor)
+{
+    connect(this, &KCColorSelector::requireSyncColor,
+            editor, &KCHexColorEditor::syncColor);
+    connect(editor, &KCHexColorEditor::requireSyncColor,
+            this, &KCColorSelector::requireSyncColor);
 }

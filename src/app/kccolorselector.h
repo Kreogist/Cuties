@@ -1,6 +1,7 @@
 #ifndef KCCOLORSELECTOR_H
 #define KCCOLORSELECTOR_H
 
+#include <QLineEdit>
 #include <QSpinBox>
 #include <QDialog>
 
@@ -9,8 +10,45 @@ class QSlider;
 class QRadioButton;
 class QLabel;
 class QMouseEvent;
+class QKeyEvent;
 class QPaintEvent;
 class QResizeEvent;
+
+class KCHexColorLineEdit : public QLineEdit
+{
+    Q_OBJECT
+public:
+    explicit KCHexColorLineEdit(QWidget *parent = 0);
+
+signals:
+    void requireSyncColor(QColor color);
+
+public slots:
+    void syncColor(const QColor &color);
+
+private slots:
+    void onTextChanged(QString value);
+
+private:
+    bool syncSentByMe=false;
+    bool syncMode=false;
+};
+
+class KCHexColorEditor : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCHexColorEditor(QWidget *parent = 0);
+
+signals:
+    void requireSyncColor(QColor color);
+
+public slots:
+    void syncColor(const QColor &color);
+
+private:
+    KCHexColorLineEdit *hexColor;
+};
 
 class KCColorDoubleBoardBase : public QWidget
 {
@@ -33,6 +71,7 @@ protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void enterEvent(QEvent *event);
 
 private:
     void valueProcess(const int &x, const int &y);
@@ -389,13 +428,16 @@ class KCColorSelector : public QDialog
 public:
     explicit KCColorSelector(QWidget *parent = 0);
     ~KCColorSelector();
+    void setOriginalColor(const QColor &color);
     void registerSelector(KCColorSliderBase *selector);
     void registerViewer(KCColorViewerBase *viewer);
     void registerLevelSelector(KCColorLevelSelector *levelSelector);
     void registerHSVRing(KCColorHSVRing *hsvRing);
+    void registerHexEditor(KCHexColorEditor *editor);
 
 signals:
     void requireSyncColor(QColor color);
+    void requireSetOriginalColor(QColor color);
     void requireFocusOnElement(QString elementName,
                                int value,
                                QColor color);
