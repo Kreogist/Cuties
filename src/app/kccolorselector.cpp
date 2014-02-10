@@ -81,13 +81,13 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         break;
     case valueMode:
         saturationGradient=QLinearGradient(0,0,width(),0);
-        color0.setHsv(0, 255, color.value());
-        color16.setHsv(60, 255, color.value());
-        color33.setHsv(120, 255, color.value());
-        color50.setHsv(180, 255, color.value());
-        color66.setHsv(240, 255, color.value());
-        color83.setHsv(300, 255, color.value());
-        color100.setHsv(0, 255, color.value());
+        color0.setHsv(0, 255, 255);
+        color16.setHsv(60, 255, 255);
+        color33.setHsv(120, 255, 255);
+        color50.setHsv(180, 255, 255);
+        color66.setHsv(240, 255, 255);
+        color83.setHsv(300, 255, 255);
+        color100.setHsv(0, 255, 255);
         saturationGradient.setColorAt(0.00, color0);
         saturationGradient.setColorAt(0.16, color16);
         saturationGradient.setColorAt(0.33, color33);
@@ -97,11 +97,12 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
         saturationGradient.setColorAt(1.00, color100);
         hsvGreyGradient.setColorAt(0, QColor(255,255,255,0));
         hsvGreyGradient.setColorAt(1, QColor(255,255,255,255));
+        valueColor=QColor(0,0,0,255-color.value());
         break;
     case hueMode:
-        hueLevelGradient=QRadialGradient(width(),0,width(),width(),0);
-        color0.setHsv(color.hue(), 255, 255);
-        color100.setHsv(color.hue(), 0, 255);
+        hueLevelGradient=QLinearGradient(0,0,width(),0);
+        color0.setHsv(color.hue(), 0, 255);
+        color100.setHsv(color.hue(), 255, 255);
         hueLevelGradient.setColorAt(0, color0);
         hueLevelGradient.setColorAt(1, color100);
         hsvGreyGradient.setColorAt(0, QColor(0,0,0,0));
@@ -165,6 +166,8 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
         painter.drawRect(renderRect);
         painter.setBrush(QBrush(hsvGreyGradient));
         painter.drawRect(renderRect);
+        painter.setBrush(QBrush(valueColor));
+        painter.drawRect(renderRect);
         break;
     case redMode:
     case greenMode:
@@ -191,9 +194,7 @@ void KCColorDoubleBoardBase::resizeEvent(QResizeEvent *event)
         resize(minimumElement,minimumElement);
         return;
     }
-    hueLevelGradient.setCenter(widthElement,0);
-    hueLevelGradient.setFocalPoint(widthElement,0);
-    hueLevelGradient.setRadius(widthElement);
+    hueLevelGradient.setFinalStop(widthElement,0);
     hsvGreyGradient.setFinalStop(0,widthElement);
     saturationGradient.setFinalStop(widthElement,0);
     rgbHorizontalGradient.setFinalStop(widthElement, 0);

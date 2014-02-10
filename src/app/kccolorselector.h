@@ -28,11 +28,12 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    QRadialGradient hueLevelGradient;
+    QLinearGradient hueLevelGradient;
     QLinearGradient saturationGradient;
     QLinearGradient hsvGreyGradient;
     QLinearGradient rgbHorizontalGradient;
     QLinearGradient rgbVerticalGradient;
+    QColor valueColor;
     QString elementName;
     enum DoubleRenderMode
     {
