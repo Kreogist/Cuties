@@ -107,13 +107,18 @@ class KCColorRingBoard : public QWidget
 public:
     explicit KCColorRingBoard(QWidget *parent = 0);
 
+public slots:
+    void syncColor(const QColor &color);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
 
 private:
     QConicalGradient ringGradient;
-    int ringWidth=30;
+    int ringWidth=30, cursorRing=197, cursorCenter=212;
+    int cursorX=409, cursorY=212;
+    int cursorSize=5;
 };
 
 class KCColorHSVRing : public QWidget

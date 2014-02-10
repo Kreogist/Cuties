@@ -419,12 +419,20 @@ KCColorRingBoard::KCColorRingBoard(QWidget *parent) :
 {
     setFixedSize(424,424);
     ringGradient.setColorAt(0.00, QColor(255,0,0));
-    ringGradient.setColorAt(0.16, QColor(255,0,255));
-    ringGradient.setColorAt(0.33, QColor(0,0,255));
+    ringGradient.setColorAt(0.16, QColor(255,255,0));
+    ringGradient.setColorAt(0.33, QColor(0,255,0));
     ringGradient.setColorAt(0.50, QColor(0,255,255));
-    ringGradient.setColorAt(0.66, QColor(0,255,0));
-    ringGradient.setColorAt(0.83, QColor(255,255,0));
+    ringGradient.setColorAt(0.66, QColor(0,0,255));
+    ringGradient.setColorAt(0.83, QColor(255,0,255));
     ringGradient.setColorAt(1.00, QColor(255,0,0));
+}
+
+void KCColorRingBoard::syncColor(const QColor &color)
+{
+    double angle=(double)(color.hue()+90)*3.141/180;
+    cursorX=cursorCenter+(double)cursorRing*sin(angle);
+    cursorY=cursorCenter+(double)cursorRing*cos(angle);
+    update();
 }
 
 void KCColorRingBoard::paintEvent(QPaintEvent *event)
@@ -448,6 +456,22 @@ void KCColorRingBoard::paintEvent(QPaintEvent *event)
     paintRect.setBottomRight(QPoint(width()-ringWidth,
                                     width()-ringWidth));
     painter.drawEllipse(paintRect);
+    //Update cursor:
+    int cursorWidth=cursorSize*2,
+        positionX=cursorX-cursorSize,
+        positionY=cursorY-cursorSize;
+    painter.setBrush(QBrush(QColor(0,0,0,0)));
+    painter.setPen(QPen(QColor(0,0,0)));
+    painter.drawEllipse(positionX,
+                        positionY,
+                        cursorWidth,
+                        cursorWidth);
+    cursorWidth-=2;
+    painter.setPen(QPen(QColor(255,255,255)));
+    painter.drawEllipse(positionX+1,
+                        positionY+1,
+                        cursorWidth,
+                        cursorWidth);
 }
 
 void KCColorRingBoard::resizeEvent(QResizeEvent *event)
@@ -484,12 +508,15 @@ void KCColorHSVRing::setColorMode(QString elementName,
                                   int value,
                                   QColor color)
 {
+    Q_UNUSED(value);
     doubleBoard->setColor(elementName,
                           color);
+    ringBoard->syncColor(color);
 }
 
 void KCColorHSVRing::syncColor(QColor color)
 {
+    ringBoard->syncColor(color);
     doubleBoard->syncColor(color);
 }
 
