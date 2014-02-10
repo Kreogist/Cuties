@@ -18,6 +18,9 @@ class KCColorDoubleBoardBase : public QWidget
 public:
     explicit KCColorDoubleBoardBase(QWidget *parent = 0);
 
+signals:
+    void requireUpdateColor(QColor color);
+
 public slots:
     virtual void setColor(const QString &elementName,
                           const QColor &color);
@@ -27,15 +30,20 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 
 private:
+    void valueProcess(const int &x, const int &y);
     QLinearGradient hueLevelGradient;
     QLinearGradient saturationGradient;
     QLinearGradient hsvGreyGradient;
     QLinearGradient rgbHorizontalGradient;
     QLinearGradient rgbVerticalGradient;
-    int cursorX=0, cursorY=0;
+    int cursorX=2, cursorY=2;
     int cursorSize=5;
+    bool isPressed=false;
     QColor valueColor;
     QString elementName;
     enum DoubleRenderMode

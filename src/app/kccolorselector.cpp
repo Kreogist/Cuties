@@ -138,37 +138,38 @@ void KCColorDoubleBoardBase::syncColor(const QColor &color)
 
 void KCColorDoubleBoardBase::setColorCursor(const QColor &color)
 {
+    cursorX=2;cursorY=2;
     switch(currentMode)
     {
     case saturationMode:
         //Horizontal: Hue, Vertical: Value
-        cursorX=color.hue()*51/72;
-        cursorY=255-color.value();
+        cursorX+=color.hue()*51/72;
+        cursorY+=255-color.value();
         break;
     case valueMode:
         //Horizontal: Hue, Vertical: Saturation
-        cursorX=color.hue()*51/72;
-        cursorY=color.saturation();
+        cursorX+=color.hue()*51/72;
+        cursorY+=color.saturation();
         break;
     case redMode:
         //Horizontal: Blue, Vertical: Green
-        cursorX=color.blue();
-        cursorY=255-color.green();
+        cursorX+=color.blue();
+        cursorY+=255-color.green();
         break;
     case greenMode:
         //Horizontal: Blue, Vertical: Red
-        cursorX=color.blue();
-        cursorY=255-color.red();
+        cursorX+=color.blue();
+        cursorY+=255-color.red();
         break;
     case blueMode:
         //Horizontal: Red, Vertical: Green
-        cursorX=color.red();
-        cursorY=255-color.green();
+        cursorX+=color.red();
+        cursorY+=255-color.green();
         break;
     default:
         //Horizontal: Saturation, Vertical: Value
-        cursorX=color.saturation();
-        cursorY=255-color.value();
+        cursorX+=color.saturation();
+        cursorY+=255-color.value();
         break;
     }
 }
@@ -178,9 +179,7 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
     QPainter painter(this);
     QRect renderRect(2,2,255,255);
-    painter.setPen(QColor(0xcf, 0xcf, 0xcf));
-    //painter.drawRect(0,0,258,258);
-    //painter.setPen(Qt::NoPen);
+    painter.setPen(Qt::NoPen);
     switch(currentMode)
     {
     case saturationMode:
@@ -217,12 +216,24 @@ void KCColorDoubleBoardBase::paintEvent(QPaintEvent *event)
         painter.drawRect(renderRect);
     }
     //Update cursor:
+    int cursorWidth=cursorSize*2,
+        positionX=cursorX-cursorSize,
+        positionY=cursorY-cursorSize;
     painter.setBrush(QBrush(QColor(0,0,0,0)));
     painter.setPen(QPen(QColor(0,0,0)));
-    painter.drawEllipse(cursorX-cursorSize,
-                        cursorY-cursorSize,
-                        cursorSize*2,
-                        cursorSize*2);
+    painter.drawEllipse(positionX,
+                        positionY,
+                        cursorWidth,
+                        cursorWidth);
+    cursorWidth-=2;
+    painter.setPen(QPen(QColor(255,255,255)));
+    painter.drawEllipse(positionX+1,
+                        positionY+1,
+                        cursorWidth,
+                        cursorWidth);
+    painter.setPen(QColor(0xcf, 0xcf, 0xcf));
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(rect());
 }
 
 void KCColorDoubleBoardBase::resizeEvent(QResizeEvent *event)
@@ -244,6 +255,60 @@ void KCColorDoubleBoardBase::resizeEvent(QResizeEvent *event)
     rgbHorizontalGradient.setFinalStop(widthElement, 0);
     rgbVerticalGradient.setFinalStop(0, widthElement);
     QWidget::resizeEvent(event);
+}
+
+void KCColorDoubleBoardBase::mousePressEvent(QMouseEvent *event)
+{
+    isPressed=true;
+    valueProcess(event->pos().x(),event->pos().y());
+    update();
+    QWidget::mousePressEvent(event);
+}
+
+void KCColorDoubleBoardBase::mouseReleaseEvent(QMouseEvent *event)
+{
+    isPressed=false;
+    QWidget::mouseReleaseEvent(event);
+}
+
+void KCColorDoubleBoardBase::mouseMoveEvent(QMouseEvent *event)
+{
+    if(isPressed)
+    {
+        valueProcess(event->pos().x(),event->pos().y());
+        update();
+    }
+    QWidget::mouseMoveEvent(event);
+}
+
+void KCColorDoubleBoardBase::valueProcess(const int &x, const int &y)
+{
+    if(x<2)
+    {
+        cursorX=2;
+    }
+    else if(x>257)
+    {
+        cursorX=257;
+    }
+    else
+    {
+        cursorX=x;
+    }
+    if(y<2)
+    {
+        cursorY=2;
+    }
+    else if(y>257)
+    {
+        cursorY=257;
+    }
+    else
+    {
+        cursorY=y;
+    }
+    //Emit signal:
+    ;
 }
 
 KCColorRingBoard::KCColorRingBoard(QWidget *parent) :
