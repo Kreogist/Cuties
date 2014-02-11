@@ -18,6 +18,10 @@
         <file>image/Banner.png</file>
         <file>image/indicator.png</file>
         <file>image/ColorPointer.png</file>
+        <file>image/ColorRingMode.png</file>
+        <file>image/ColorRingModeSelect.png</file>
+        <file>image/ColorDatabaseMode.png</file>
+        <file>image/ColorDatabaseModeSelect.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>

@@ -1,7 +1,11 @@
 
 #include <QDebug>
 
+#include <QScrollArea>
+#include <QFocusEvent>
+#include <QStackedWidget>
 #include <QGradient>
+#include <QSignalMapper>
 #include <QRadioButton>
 #include <QSlider>
 #include <QLabel>
@@ -77,6 +81,19 @@ KCHexColorEditor::KCHexColorEditor(QWidget *parent) :
 void KCHexColorEditor::syncColor(const QColor &color)
 {
     hexColor->syncColor(color);
+}
+
+KCColorDatabaseViewer::KCColorDatabaseViewer(QWidget *parent) :
+    QWidget(parent)
+{
+    ;
+}
+
+
+KCColorDatabaseBrowser::KCColorDatabaseBrowser(QWidget *parent) :
+    QWidget(parent)
+{
+    viewerScoller=new QScrollArea;
 }
 
 KCColorDoubleBoardBase::KCColorDoubleBoardBase(QWidget *parent) :
@@ -966,13 +983,13 @@ void KCColorLevelSelector::setMaximum(int value)
 KCColorSpinBox::KCColorSpinBox(QWidget *parent) :
     QSpinBox(parent)
 {
-    ;
+    setFixedWidth(50);
 }
 
-void KCColorSpinBox::mousePressEvent(QMouseEvent *event)
+void KCColorSpinBox::focusInEvent(QFocusEvent *event)
 {
-    QSpinBox::mousePressEvent(event);
-    emit spinPressed();
+    QSpinBox::focusInEvent(event);
+    emit spinGetFocus();
 }
 
 KCColorViewerBase::KCColorViewerBase(QWidget *parent) :
@@ -1025,6 +1042,7 @@ KCColorSliderItemBase::KCColorSliderItemBase(QWidget *parent,
     setLayout(mainLayout);
 
     elementCaption=new QRadioButton(this);
+    elementCaption->setFixedWidth(40);
     elementSpinBox=new KCColorSpinBox(this);
     elementSpinBox->setRange(0, 255);
     levelSelector=new KCColorLevelSelector(this);
@@ -1047,8 +1065,8 @@ void KCColorSliderItemBase::buildSlider()
             this, SLOT(setValue(int)));
     connect(levelSelector, SIGNAL(valueChanged(int)),
             this, SLOT(setValue(int)));
-    connect(elementSpinBox, SIGNAL(spinPressed()),
-            this, SLOT(onActionClickElement()));
+    connect(elementSpinBox, &KCColorSpinBox::spinGetFocus,
+            this, &KCColorSliderItemBase::onActionClickElement);
     connect(levelSelector, SIGNAL(sliderPressed()),
             this, SLOT(onActionClickElement()));
 }
@@ -1144,7 +1162,7 @@ void KCColorSliderItemPercent::buildSlider()
             this, SLOT(setValue(int)));
     connect(levelSelector, SIGNAL(valueChanged(int)),
             this, SLOT(setValueFromLevel(int)));
-    connect(elementSpinBox, SIGNAL(spinPressed()),
+    connect(elementSpinBox, SIGNAL(spinGetFocus()),
             this, SLOT(onActionClickElement()));
     connect(levelSelector, SIGNAL(sliderPressed()),
             this, SLOT(onActionClickElement()));
@@ -1580,55 +1598,132 @@ void KCColorSliderHSV::syncElement()
     valueElement->syncValue(currentColor.value(), currentColor);
 }
 
+KCColorFunctionButton::KCColorFunctionButton(const QString &focusPixmapPath,
+                                             const QString &noFocusPixmapPath,
+                                             QWidget *parent) :
+    QToolButton(parent)
+{
+    setCheckable(true);
+    setAutoRaise(true);
+    noFocusIcon=QIcon(noFocusPixmapPath);
+    focusIcon=QIcon(focusPixmapPath);
+    setIcon(noFocusIcon);
+}
+
+void KCColorFunctionButton::setChecked(bool value)
+{
+    QToolButton::setChecked(value);
+    if(value)
+    {
+        setIcon(focusIcon);
+    }
+    else
+    {
+        setIcon(noFocusIcon);
+    }
+}
+
+KCColorFunctionSelector::KCColorFunctionSelector(QWidget *parent) :
+    QWidget(parent)
+{
+    mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+
+    mapper=new QSignalMapper(this);
+    connect(mapper, SIGNAL(mapped(int)),this, SLOT(focusOnFunction(int)));
+    addFunctionButton(":/img/image/ColorRingModeSelect.png",
+                      ":/img/image/ColorRingMode.png");
+    addFunctionButton(":/img/image/ColorDatabaseModeSelect.png",
+                      ":/img/image/ColorDatabaseMode.png");
+    mainLayout->addStretch();
+}
+
+void KCColorFunctionSelector::focusOnFunction(int index)
+{
+    emit requireLostFocus(false);
+    KCColorFunctionButton *button=static_cast<KCColorFunctionButton *>(mapper->mapping(index));
+    button->setChecked(true);
+    emit requireFocusOn(index);
+}
+
+KCColorFunctionButton *KCColorFunctionSelector::addFunctionButton(const QString &focusPixmapPath,
+                                                                  const QString &noFocusPixmapPath)
+{
+    KCColorFunctionButton *button=new KCColorFunctionButton(focusPixmapPath,
+                                                            noFocusPixmapPath,
+                                                            this);
+    mainLayout->addWidget(button);
+    connect(button, SIGNAL(clicked(bool)), mapper, SLOT(map()));
+    connect(this, &KCColorFunctionSelector::requireLostFocus,
+            button, &KCColorFunctionButton::setChecked);
+    mapper->setMapping(button, buttonCounter);
+    if(buttonCounter==0)
+    {
+        button->setChecked(true);
+    }
+    buttonCounter++;
+    return button;
+}
+
 KCColorSelector::KCColorSelector(QWidget *parent) :
     QDialog(parent)
 {
     mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     setLayout(mainLayout);
 
-    colorRingLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    colorFunctionsLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    KCColorFunctionSelector *functionList=new KCColorFunctionSelector(this);
+    colorFunctionsLayout->addWidget(functionList);
+    QStackedWidget *functionStack=new QStackedWidget(this);
+    colorFunctionsLayout->addWidget(functionStack);
     KCColorHSVRing *colorRing=new KCColorHSVRing(this);
     registerHSVRing(colorRing);
-    colorRingLayout->addWidget(colorRing);
-    mainLayout->addLayout(colorRingLayout);
+    functionStack->addWidget(colorRing);
+    KCColorDatabaseBrowser *databaseBrower=new KCColorDatabaseBrowser(this);
+    functionStack->addWidget(databaseBrower);
+    connect(functionList, SIGNAL(requireFocusOn(int)),
+            functionStack, SLOT(setCurrentIndex(int)));
+    mainLayout->addLayout(colorFunctionsLayout);
 
-    yayaModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
-    yayaModelLayout->setContentsMargins(0,0,0,0);
-    yayaModelLayout->setSpacing(0);
+    yayaLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    yayaLayout->setContentsMargins(0,0,0,0);
+    yayaLayout->setSpacing(0);
     KCColorSliderHSV *hsv=new KCColorSliderHSV(this);
     registerSelector(hsv);
-    yayaModelLayout->addWidget(hsv);
+    yayaLayout->addWidget(hsv);
     KCColorSliderRGB *rgb=new KCColorSliderRGB(this);
     registerSelector(rgb);
-    yayaModelLayout->addWidget(rgb);
+    yayaLayout->addWidget(rgb);
     KCColorSliderCMYK *cmyk=new KCColorSliderCMYK(this);
     registerSelector(cmyk);
-    yayaModelLayout->addWidget(cmyk);
-    KCHexColorEditor *hexEditor=new KCHexColorEditor(this);
-    registerHexEditor(hexEditor);
-    yayaModelLayout->addWidget(hexEditor);
-    yayaModelLayout->addStretch();
-    mainLayout->addLayout(yayaModelLayout);
+    yayaLayout->addWidget(cmyk);
+    yayaLayout->addStretch();
+    mainLayout->addLayout(yayaLayout);
 
-    iroriModelLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    iroriLayout=new QBoxLayout(QBoxLayout::TopToBottom);
     KCColorViewerBase *viewer=new KCColorViewerBase(this);
     registerViewer(viewer);
-    iroriModelLayout->addWidget(viewer);
-    iroriModelLayout->addStretch();
+    iroriLayout->addWidget(viewer);
+    iroriLayout->addStretch();
+    KCHexColorEditor *hexEditor=new KCHexColorEditor(this);
+    registerHexEditor(hexEditor);
+    iroriLayout->addWidget(hexEditor);
     KCColorSliderCMYKP *cmykp=new KCColorSliderCMYKP(this);
     registerSelector(cmykp);
-    iroriModelLayout->addWidget(cmykp);
+    iroriLayout->addWidget(cmykp);
 
-    mainLayout->addLayout(iroriModelLayout);
+    mainLayout->addLayout(iroriLayout);
 
     emit requireSyncColor(QColor(0,0,0));
 }
 
 KCColorSelector::~KCColorSelector()
 {
-    colorRingLayout->deleteLater();
-    yayaModelLayout->deleteLater();
-    iroriModelLayout->deleteLater();
+    colorFunctionsLayout->deleteLater();
+    yayaLayout->deleteLater();
+    iroriLayout->deleteLater();
 }
 
 void KCColorSelector::setOriginalColor(const QColor &color)

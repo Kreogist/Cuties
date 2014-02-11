@@ -1,16 +1,19 @@
 #ifndef KCCOLORSELECTOR_H
 #define KCCOLORSELECTOR_H
 
+#include <QToolButton>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDialog>
 
+class QSignalMapper;
 class QBoxLayout;
 class QSlider;
 class QRadioButton;
 class QLabel;
 class QMouseEvent;
 class QKeyEvent;
+class QScrollArea;
 class QPaintEvent;
 class QResizeEvent;
 
@@ -48,6 +51,26 @@ public slots:
 
 private:
     KCHexColorLineEdit *hexColor;
+};
+
+class KCColorDatabaseViewer : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCColorDatabaseViewer(QWidget *parent = 0);
+    void loadColorDataBase(const QString &fileName);
+
+private:
+};
+
+class KCColorDatabaseBrowser : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCColorDatabaseBrowser(QWidget *parent = 0);
+
+private:
+    QScrollArea *viewerScoller;
 };
 
 class KCColorDoubleBoardBase : public QWidget
@@ -244,10 +267,10 @@ public:
     explicit KCColorSpinBox(QWidget *parent = 0);
 
 signals:
-    void spinPressed();
+    void spinGetFocus();
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
+    void focusInEvent(QFocusEvent *event);
 };
 
 class KCColorViewerBase : public QWidget
@@ -437,6 +460,42 @@ private:
     bool ignoreHue=false;
 };
 
+class KCColorFunctionButton : public QToolButton
+{
+    Q_OBJECT
+public:
+    explicit KCColorFunctionButton(const QString &focusPixmapPath,
+                                   const QString &noFocusPixmapPath,
+                                   QWidget *parent = 0);
+
+public slots:
+    void setChecked(bool value);
+
+private:
+    QIcon noFocusIcon, focusIcon;
+};
+
+class KCColorFunctionSelector : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit KCColorFunctionSelector(QWidget *parent = 0);
+
+signals:
+    void requireFocusOn(int index);
+    void requireLostFocus(bool value);
+
+private slots:
+    void focusOnFunction(int index);
+
+private:
+    KCColorFunctionButton *addFunctionButton(const QString &focusPixmapPath,
+                                             const QString &noFocusPixmapPath);
+    QBoxLayout *mainLayout;
+    QSignalMapper *mapper;
+    int buttonCounter=0;
+};
+
 class KCColorSelector : public QDialog
 {
     Q_OBJECT
@@ -463,8 +522,8 @@ public slots:
 private slots:
 
 private:
-    QBoxLayout *mainLayout, *colorRingLayout,
-               *yayaModelLayout, *iroriModelLayout;
+    QBoxLayout *mainLayout, *colorFunctionsLayout,
+               *yayaLayout, *iroriLayout;
 };
 
 #endif // KCCOLORSELECTOR_H
