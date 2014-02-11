@@ -6,6 +6,7 @@
 #include <QSpinBox>
 #include <QDialog>
 
+class QComboBox;
 class QSignalMapper;
 class QBoxLayout;
 class QSlider;
@@ -15,6 +16,7 @@ class QMouseEvent;
 class QKeyEvent;
 class QScrollArea;
 class QPaintEvent;
+class QGridLayout;
 class QResizeEvent;
 
 class KCHexColorLineEdit : public QLineEdit
@@ -61,6 +63,16 @@ public:
     void loadColorDataBase(const QString &fileName);
 
 private:
+    struct colorInfo
+    {
+        QString colorName;
+        QColor color;
+    };
+
+    QGridLayout *mainLayout;
+    int maximumColumn=0;
+    QList<colorInfo> colorDatabase;
+    QList<int> lineInfo;
 };
 
 class KCColorDatabaseBrowser : public QWidget
@@ -70,6 +82,7 @@ public:
     explicit KCColorDatabaseBrowser(QWidget *parent = 0);
 
 private:
+    QComboBox *databaseSelector;
     QScrollArea *viewerScoller;
 };
 

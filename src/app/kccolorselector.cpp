@@ -1,6 +1,9 @@
 
 #include <QDebug>
 
+#include <QFile>
+#include <QTextStream>
+#include <QComboBox>
 #include <QScrollArea>
 #include <QFocusEvent>
 #include <QStackedWidget>
@@ -17,6 +20,7 @@
 #include <QConicalGradient>
 #include <QRadialGradient>
 #include <QPainter>
+#include <QGridLayout>
 #include <QKeyEvent>
 
 #include "kccolorselector.h"
@@ -86,14 +90,72 @@ void KCHexColorEditor::syncColor(const QColor &color)
 KCColorDatabaseViewer::KCColorDatabaseViewer(QWidget *parent) :
     QWidget(parent)
 {
-    ;
+    mainLayout=new QGridLayout(this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+    loadColorDataBase("D:/Cuties/Cuties/src/app/colordatabase/PANTON_solid_coated.cdb");
 }
 
+void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
+{
+    QFile database(fileName);
+    if(!database.open(QIODevice::ReadOnly))
+    {
+        //Failed.
+        return;
+    }
+    QTextStream colorData(&database);
+    QString currentData=colorData.readLine();
+    int currentIndex=0,lastLineIndex=0,currentColumn;
+    colorDatabase.clear();
+    lineInfo.clear();
+    while(!currentData.isNull())
+    {
+        if(currentData=="EOL")
+        {
+            currentColumn=currentIndex-lastLineIndex;
+            if(currentIndex-lastLineIndex>maximumColumn)
+            {
+                maximumColumn=currentColumn;
+            }
+            lastLineIndex=currentIndex;
+            lineInfo.append(currentColumn);
+        }
+        else
+        {
+            QStringList elements=currentData.split("=");
+            QString redTest, greenTest, blueTest;
+            bool error;
+            redTest=elements.at(0).mid(1,2);
+            greenTest=elements.at(0).mid(3,2);
+            blueTest=elements.at(0).mid(5,2);
+            colorInfo currentColor;
+            currentColor.colorName=elements.at(1);
+            currentColor.color=QColor(redTest.toInt(&error, 16),
+                                      greenTest.toInt(&error, 16),
+                                      blueTest.toInt(&error, 16));
+            colorDatabase.append(currentColor);
+            currentIndex++;
+        }
+        currentData=colorData.readLine();
+    }
+}
 
 KCColorDatabaseBrowser::KCColorDatabaseBrowser(QWidget *parent) :
     QWidget(parent)
 {
-    viewerScoller=new QScrollArea;
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+
+    databaseSelector=new QComboBox(this);
+    mainLayout->addWidget(databaseSelector);
+    viewerScoller=new QScrollArea(this);
+    mainLayout->addWidget(viewerScoller);
+    KCColorDatabaseViewer *test=new KCColorDatabaseViewer(this);
+    viewerScoller->setWidget(test);
 }
 
 KCColorDoubleBoardBase::KCColorDoubleBoardBase(QWidget *parent) :
