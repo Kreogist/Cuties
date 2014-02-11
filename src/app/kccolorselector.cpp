@@ -1222,8 +1222,8 @@ KCColorViewerBase::KCColorViewerBase(QWidget *parent) :
     currentViewer->setAutoFillBackground(true);
     currentViewer->setFixedHeight(33);
     originalViewer=new QWidget(this);
-    originalViewer->setFixedHeight(33);
     originalViewer->setAutoFillBackground(true);
+    originalViewer->setFixedHeight(33);
     currentPalette=currentViewer->palette();
     buildViewer();
 }
@@ -1236,8 +1236,8 @@ void KCColorViewerBase::buildViewer()
     setLayout(mainLayout);
     QLabel *currentColor=new QLabel(tr("Current Color"), this);
     mainLayout->addWidget(currentColor,0,Qt::AlignCenter);
-    mainLayout->addWidget(currentViewer,1);
-    mainLayout->addWidget(originalViewer,1);
+    mainLayout->addWidget(currentViewer);
+    mainLayout->addWidget(originalViewer);
     QLabel *originalColor=new QLabel(tr("Original Color"), this);
     mainLayout->addWidget(originalColor,0,Qt::AlignCenter);
 }
