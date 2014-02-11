@@ -125,7 +125,7 @@ private:
     int calculateHue(int posX, int posY);
     QConicalGradient ringGradient;
     QColor currentColor;
-    bool isPressed=false, syncSignalSentByMe=false;
+    bool isPressed=false;
     int ringWidth=30, cursorRing=197, cursorCenter=212;
     int cursorX=409, cursorY=212;
     int cursorSize=5;

@@ -429,11 +429,6 @@ KCColorRingBoard::KCColorRingBoard(QWidget *parent) :
 
 void KCColorRingBoard::syncColor(const QColor &color)
 {
-    if(syncSignalSentByMe)
-    {
-        syncSignalSentByMe=false;
-        return;
-    }
     currentColor=color;
     double angle=(double)(color.hue()+90)*3.141/180;
     cursorX=cursorCenter+(double)cursorRing*sin(angle);
@@ -544,37 +539,51 @@ int KCColorRingBoard::calculateLength(int posX, int posY)
 
 int KCColorRingBoard::calculateHue(int posX, int posY)
 {
-    int mouseLength=calculateLength(posX, posY);
-    qreal times=1.0-(double)(cursorRing-mouseLength)/(double)cursorRing;
-    qreal expectX=(double)times*(double)posX,
-          expectY=(double)times*(double)posY;
-    cursorX=expectX;
-    cursorY=expectY;
-    update();
-    int paramX=posX-cursorCenter, paramL=calculateLength(posX, posY);
+    int paramX=posX-cursorCenter,
+        paramY=posY-cursorCenter,
+        paramL=calculateLength(posX, posY),
+        paramAbsX=paramX>0?paramX:-paramX,
+        paramAbsY=paramY>0?paramY:-paramY;
     if(paramL==0)
     {
         paramL=1;
     }
-    qreal sineValue=double(paramX)/double(paramL);
-    qreal halfAngle=asin(sineValue)*180/3.141;
-    syncSignalSentByMe=false;
-    if(posX>cursorCenter)
+    qreal sineValue,coseValue;
+    qreal halfAngle;
+    if(paramAbsX<paramAbsY)
     {
+        sineValue=double(paramX)/double(paramL);
+        halfAngle=asin(sineValue)*180/3.141;
+        if(posX>cursorCenter)
+        {
+            if(posY<cursorCenter)
+            {
+                //It is at I.
+                return (int)90-halfAngle;
+            }
+            //It is at IIII.
+            return (int)270+halfAngle;
+        }
         if(posY<cursorCenter)
         {
-            //It is at I.
+            //It is at II.
             return (int)90-halfAngle;
         }
-        //It is at IIII.
         return (int)270+halfAngle;
     }
-    if(posY<cursorCenter)
+    coseValue=double(paramY)/double(paramL);
+    halfAngle=acos(coseValue)*180/3.141;
+    if(posX>cursorCenter)
     {
-        //It is at II.
-        return (int)90-halfAngle;
+        if(posY>cursorCenter)
+        {
+            //It is at IIII.
+            return (int)270+halfAngle;
+        }
+        //It is at I.
+        return (int)halfAngle-90;
     }
-    return (int)270+halfAngle;
+    return (int)270-halfAngle;
 }
 
 KCColorHSVRing::KCColorHSVRing(QWidget *parent) :
