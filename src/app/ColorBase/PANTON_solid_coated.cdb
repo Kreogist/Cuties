@@ -1,3 +1,4 @@
+﻿PANTON® solid coated
 #f5de00=yellow C
 #f6d400=yellow 012C
 #e05800=orange 021C
@@ -229,7 +230,7 @@ EOL
 #ddbbd6=217C
 #c86eaf=218C
 #b82481=219C
-#ab005c=RubineRedC
+#ab005c=Rubine Red C
 #8a0050=220C
 #7b004b=221C
 #5c2042=222C
@@ -245,7 +246,7 @@ EOL
 #e2a2d2=230C
 #d874c2=231C
 #ca3ea9=232C
-#c01899=RhodamineRedC
+#c01899=Rhodamine Red C
 #a70080=233C
 #890069=234C
 #720056=235C
@@ -277,7 +278,7 @@ EOL
 #dcbfe1=250C
 #cb9cda=251C
 #b266c9=252C
-#9d37b6=PurpleC
+#9d37b6=Purple C
 #8f2ba5=253C
 #813094=254C
 #613069=255C
@@ -326,7 +327,7 @@ EOL
 #a597d8=2645C
 #8a77cd=2655C
 #745cc2=2665C
-#42119c=VioletC
+#42119c=Violet C
 #34007f=2685C
 #312254=2695C
 EOL
@@ -357,7 +358,7 @@ EOL
 #c9d6ea=2707C
 #b0c4e9=2717C
 #567dd7=2727C
-#001ea3=Blue072C
+#001ea3=Blue 072C
 #0f2977=2747C
 #182b62=2757C
 #242f49=2767C
@@ -373,7 +374,7 @@ EOL
 #b3c9e4=277C
 #9bb9e3=278C
 #6690d8=279C
-#002891=ReflexBlueC
+#002891=Reflex Blue C
 #002b74=280C
 #0d2b61=281C
 #152648=282C
@@ -421,7 +422,7 @@ EOL
 #b4dde8=304C
 #8dcee7=305C
 #57b8e2=306C
-#0086ca=ProcessBlueC
+#0086ca=Process Blue C
 #0074ad=307C
 #005b7f=308C
 #183f4d=309C
@@ -485,7 +486,7 @@ EOL
 #c1e8da=331C
 #b7e6d7=332C
 #88dac2=333C
-#00ac84=GreenC
+#00ac84=Green C
 #1b9977=334C
 #2d7e65=335C
 #2e6753=336C
@@ -584,7 +585,7 @@ EOL
 #8f8a81=403C
 #746e66=404C
 #5d5850=405C
-#2d2b28=BlackC
+#2d2b28=Black C
 EOL
 #cac5bf=406C
 #b1aba4=407C
@@ -660,12 +661,12 @@ EOL
 #616365=Cool Gray 10C
 #4e5053=Cool Gray 11C
 EOL
-#3d392a=Black2C
-#2c302b=Black3C
-#383129=Black4C
-#413538=Black5C
-#1b2228=Black6C
-#393837=Black7C
+#3d392a=Black 2C
+#2c302b=Black 3C
+#383129=Black 4C
+#413538=Black 5C
+#1b2228=Black 6C
+#393837=Black 7C
 EOL
 #4a4631=448C
 #4c492c=449C
@@ -1019,7 +1020,7 @@ EOL
 #00388e=661C
 #002274=662C
 EOL
-#dedbe2"height="34=663C
+#dedbe2=663C
 #dad7e1=664C
 #c2bcd0=665C
 #9b91b1=666C

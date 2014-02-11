@@ -1,10 +1,15 @@
 
 #include <QDebug>
 
+#include <QDir>
 #include <QFile>
+#include <QFileInfo>
+#include <QFileInfoList>
+#include <QScopedPointer>
+#include <QScrollBar>
 #include <QTextStream>
+#include <QTextCodec>
 #include <QComboBox>
-#include <QScrollArea>
 #include <QFocusEvent>
 #include <QStackedWidget>
 #include <QGradient>
@@ -16,6 +21,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QBoxLayout>
+#include <QApplication>
 #include <QLinearGradient>
 #include <QConicalGradient>
 #include <QRadialGradient>
@@ -90,11 +96,24 @@ void KCHexColorEditor::syncColor(const QColor &color)
 KCColorDatabaseViewer::KCColorDatabaseViewer(QWidget *parent) :
     QWidget(parent)
 {
-    mainLayout=new QGridLayout(this);
+    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
-    loadColorDataBase("D:/Cuties/Cuties/src/app/colordatabase/PANTON_solid_coated.cdb");
+    colorLayout=new QGridLayout();
+    colorLayout->setContentsMargins(0,0,0,0);
+    colorLayout->setSpacing(0);
+    mainLayout->addLayout(colorLayout, 1);
+    colorScrollBar=new QScrollBar(Qt::Vertical, this);
+    colorScrollBar->setVisible(false);
+    mainLayout->addWidget(colorScrollBar);
+    connect(colorScrollBar, &QScrollBar::valueChanged,
+            this, &KCColorDatabaseViewer::updateColorLayout);
+}
+
+KCColorDatabaseViewer::~KCColorDatabaseViewer()
+{
+    colorLayout->deleteLater();
 }
 
 void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
@@ -106,12 +125,24 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
         return;
     }
     QTextStream colorData(&database);
+    QTextCodec *codec=QTextCodec::codecForName("UTF-8");
+    colorData.setCodec(codec);
     QString currentData=colorData.readLine();
+    //Ignore the first name line.
+    currentData=colorData.readLine();
     int currentIndex=0,lastLineIndex=0,currentColumn;
     colorDatabase.clear();
     lineInfo.clear();
+    maximumColumn=0;
+    colorLineInfo currentLineInfo;
+    currentLineInfo.beginAt=0;
     while(!currentData.isNull())
     {
+        if(currentData.isEmpty())
+        {
+            currentData=colorData.readLine();
+            continue;
+        }
         if(currentData=="EOL")
         {
             currentColumn=currentIndex-lastLineIndex;
@@ -120,7 +151,10 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
                 maximumColumn=currentColumn;
             }
             lastLineIndex=currentIndex;
-            lineInfo.append(currentColumn);
+            currentLineInfo.endAt=currentIndex;
+            currentLineInfo.lineCount=currentColumn;
+            lineInfo.append(currentLineInfo);
+            currentLineInfo.beginAt=currentIndex;
         }
         else
         {
@@ -140,22 +174,149 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
         }
         currentData=colorData.readLine();
     }
+    int i,j;
+    //Prepare scroll bar.
+    if(lineInfo.count()<columnPerPage)
+    {
+        colorScrollBar->setVisible(false);
+    }
+    else
+    {
+        colorScrollBar->setVisible(true);
+        colorScrollBar->setRange(0, lineInfo.count()-columnPerPage);
+    }
+    //Prepare labels.
+    for(i=0;i<columnPerPage;i++)
+    {
+        for(j=0;j<maximumColumn;j++)
+        {
+            QLabel *colorSlot=new QLabel(this);
+            colorSlot->setAutoFillBackground(true);
+            colorSlot->setWordWrap(true);
+            colorSlot->setAlignment(Qt::AlignCenter);
+            colorLayout->addWidget(colorSlot,i,j,1,1);
+            colorViewer.append(colorSlot);
+        }
+    }
+    updateColorLayout(0);
+}
+
+void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
+{
+    int i,j,currentLabelIndex;
+    QPalette pal;
+    for(i=0; i<columnPerPage; i++)
+    {
+        currentLabelIndex=i*maximumColumn;
+        colorLineInfo currentColorLineInfo=lineInfo.at(topLine+i);
+        for(j=currentColorLineInfo.beginAt;
+            j<currentColorLineInfo.endAt;
+            j++)
+        {
+            colorInfo currentColorInfo=colorDatabase.at(j);
+            QLabel *currentColor=colorViewer.at(currentLabelIndex);
+            currentColor->setText(currentColorInfo.colorName);
+            pal=currentColor->palette();
+            pal.setColor(QPalette::Window, currentColorInfo.color);
+            currentColor->setPalette(pal);
+            currentLabelIndex++;
+        }
+        for(j=currentColorLineInfo.lineCount;
+            j<maximumColumn;
+            j++)
+        {
+            QLabel *currentColor=colorViewer.at(currentLabelIndex);
+            currentColor->setText("");
+            pal=currentColor->palette();
+            pal.setColor(QPalette::Window, QColor(0,0,0,0));
+            currentColor->setPalette(pal);
+            currentLabelIndex++;
+        }
+    }
 }
 
 KCColorDatabaseBrowser::KCColorDatabaseBrowser(QWidget *parent) :
     QWidget(parent)
 {
-    QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
+    setFixedSize(424,424);
+    mainLayout=new QBoxLayout(QBoxLayout::TopToBottom, this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
     databaseSelector=new QComboBox(this);
     mainLayout->addWidget(databaseSelector);
-    viewerScoller=new QScrollArea(this);
-    mainLayout->addWidget(viewerScoller);
-    KCColorDatabaseViewer *test=new KCColorDatabaseViewer(this);
-    viewerScoller->setWidget(test);
+    mainLayout->addStretch();
+
+    //Load color database.
+    loadColorDatabase();
+}
+
+void KCColorDatabaseBrowser::requireShowDatabase(int databaseIndex)
+{
+    if(!viewer.isNull())
+    {
+        //KCColorDatabaseViewer might exsist.
+        if(mainLayout->count()>2)
+        {
+            //Remove from layout.
+            mainLayout->takeAt(1);
+        }
+    }
+    viewer.reset(new KCColorDatabaseViewer);
+    viewer->loadColorDataBase(databaseList.at(databaseIndex));
+    mainLayout->insertWidget(1, viewer.data(), 1);
+}
+
+void KCColorDatabaseBrowser::loadColorDatabase()
+{
+    databaseList.clear();
+    QString databaseDirPath=qApp->applicationDirPath()+"/ColorBase";
+    QTextCodec *codec=QTextCodec::codecForName("UTF-8");
+    QStringList fileFilter;
+    fileFilter<<"*.cdb";
+    QDir databaseDir(databaseDirPath);
+    if(!databaseDir.exists())
+    {
+        databaseSelector->setVisible(false);
+        //Display not exsist.
+        return;
+    }
+    QFileInfoList list=databaseDir.entryInfoList(fileFilter);
+    for(int i=0;i<list.count();i++)
+    {
+        QFileInfo item=list.at(i);
+        if(item.fileName().length()<4)
+        {
+            continue;
+        }
+        //Add to color database
+        //databaseSelector->addItem(item.fileName());
+        QString testFilePath=databaseDirPath+"/"+item.fileName();
+        QFile testFile(testFilePath);
+        if(!testFile.open(QIODevice::ReadOnly))
+        {
+            //Failed try next.
+            continue;
+        }
+        QTextStream testData(&testFile);
+        testData.setCodec(codec);
+        QString currentData=testData.readLine();
+        if(currentData.isNull())
+        {
+            //Failed, try next.
+            continue;
+        }
+        //Add this file to file stream.
+        databaseList.append(testFilePath);
+        databaseSelector->addItem(currentData);
+    }
+    if(databaseList.count()>0)
+    {
+        connect(databaseSelector, SIGNAL(currentIndexChanged(int)),
+                this, SLOT(requireShowDatabase(int)));
+        requireShowDatabase(0);
+    }
 }
 
 KCColorDoubleBoardBase::KCColorDoubleBoardBase(QWidget *parent) :
@@ -1739,6 +1900,7 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     KCColorFunctionSelector *functionList=new KCColorFunctionSelector(this);
     colorFunctionsLayout->addWidget(functionList);
     QStackedWidget *functionStack=new QStackedWidget(this);
+    functionStack->setFixedSize(424,424);
     colorFunctionsLayout->addWidget(functionStack);
     KCColorHSVRing *colorRing=new KCColorHSVRing(this);
     registerHSVRing(colorRing);

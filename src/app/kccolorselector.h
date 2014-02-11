@@ -14,7 +14,7 @@ class QRadioButton;
 class QLabel;
 class QMouseEvent;
 class QKeyEvent;
-class QScrollArea;
+class QScrollBar;
 class QPaintEvent;
 class QGridLayout;
 class QResizeEvent;
@@ -60,7 +60,11 @@ class KCColorDatabaseViewer : public QWidget
     Q_OBJECT
 public:
     explicit KCColorDatabaseViewer(QWidget *parent = 0);
+    ~KCColorDatabaseViewer();
     void loadColorDataBase(const QString &fileName);
+
+private slots:
+    void updateColorLayout(const int &topLine);
 
 private:
     struct colorInfo
@@ -68,11 +72,19 @@ private:
         QString colorName;
         QColor color;
     };
+    struct colorLineInfo
+    {
+        int beginAt;
+        int endAt;
+        int lineCount;
+    };
 
-    QGridLayout *mainLayout;
-    int maximumColumn=0;
+    QGridLayout *colorLayout;
+    QScrollBar *colorScrollBar;
+    int maximumColumn=0, columnPerPage=5;
     QList<colorInfo> colorDatabase;
-    QList<int> lineInfo;
+    QList<colorLineInfo> lineInfo;
+    QList<QLabel *> colorViewer;
 };
 
 class KCColorDatabaseBrowser : public QWidget
@@ -81,9 +93,15 @@ class KCColorDatabaseBrowser : public QWidget
 public:
     explicit KCColorDatabaseBrowser(QWidget *parent = 0);
 
+private slots:
+    void requireShowDatabase(int databaseIndex);
+
 private:
+    void loadColorDatabase();
+    QBoxLayout *mainLayout;
     QComboBox *databaseSelector;
-    QScrollArea *viewerScoller;
+    QStringList databaseList;
+    QScopedPointer<KCColorDatabaseViewer> viewer;
 };
 
 class KCColorDoubleBoardBase : public QWidget
