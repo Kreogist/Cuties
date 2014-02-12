@@ -32,6 +32,9 @@ signals:
 public slots:
     void syncColor(const QColor &color);
 
+protected:
+    void keyPressEvent(QKeyEvent *event);
+
 private slots:
     void onTextChanged(QString value);
 

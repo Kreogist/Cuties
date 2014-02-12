@@ -35,7 +35,6 @@ KCHexColorLineEdit::KCHexColorLineEdit(QWidget *parent) :
     QLineEdit(parent)
 {
     setMaxLength(6);
-    setInputMask("hhhhhh;0");
     connect(this, &KCHexColorLineEdit::textChanged,
             this, &KCHexColorLineEdit::onTextChanged);
 }
@@ -51,6 +50,7 @@ void KCHexColorLineEdit::onTextChanged(QString value)
     redTest=value.left(2);
     greenTest=value.mid(2,2);
     blueTest=value.mid(4,2);
+    qDebug()<<text()<<redTest<<greenTest<<blueTest;
     syncSentByMe=true;
     emit requireSyncColor(QColor(redTest.toInt(&error, 16),
                                  greenTest.toInt(&error, 16),
@@ -70,6 +70,24 @@ void KCHexColorLineEdit::syncColor(const QColor &color)
                         QString::number(color.blue(),16);
     setText(currentValue);
     syncMode=false;
+}
+
+void KCHexColorLineEdit::keyPressEvent(QKeyEvent *event)
+{
+    if(event->text().length()==1)
+    {
+        QChar inputChar=event->text().at(0).toLower();
+        if((inputChar >= '0' && inputChar <= '9') ||
+           (inputChar >= 'a' && inputChar <= 'f') ||
+            inputChar < 32 || inputChar == 127)
+        {
+            QLineEdit::keyPressEvent(event);
+            return;
+        }
+        event->ignore();
+        return;
+    }
+    QLineEdit::keyPressEvent(event);
 }
 
 KCHexColorEditor::KCHexColorEditor(QWidget *parent) :

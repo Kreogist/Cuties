@@ -787,9 +787,6 @@ void KCTextEditor::updateHighlights()
 
 void KCTextEditor::updateAllPanels()
 {
-    /*debugMarkPanel->update();
-    lineNumberPanel->update();
-    unibodyPanel->update();*/
     panelManager->updateAllPanels();
     updatePanelAreaWidth();
 }

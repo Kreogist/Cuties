@@ -121,6 +121,7 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setSearchResultColor(settings.searchResultColor);
     editor->setNoMatchedParenthesesColor(settings.noMatchedParenthesesColor);
     editor->setMatchedParenthesesColor(settings.matchedParenthesesColor);
+    editor->updateHighlights();
 }
 
 bool KCCodeEditor::getOverwriteMode()
