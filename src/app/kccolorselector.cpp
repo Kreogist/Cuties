@@ -2,6 +2,7 @@
 #include <QDebug>
 
 #include <QDir>
+#include <QPushButton>
 #include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
@@ -16,7 +17,6 @@
 #include <QSignalMapper>
 #include <QRadioButton>
 #include <QSlider>
-#include <QLabel>
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QResizeEvent>
@@ -91,6 +91,30 @@ KCHexColorEditor::KCHexColorEditor(QWidget *parent) :
 void KCHexColorEditor::syncColor(const QColor &color)
 {
     hexColor->syncColor(color);
+}
+
+KCColorSlot::KCColorSlot(QWidget *parent) :
+    QLabel(parent)
+{
+    setAutoFillBackground(true);
+    setWordWrap(true);
+    setAlignment(Qt::AlignCenter);
+    pal=palette();
+}
+
+void KCColorSlot::setBackgroundColor(const QColor &color)
+{
+    pal.setColor(QPalette::Window, color);
+    setPalette(pal);
+}
+
+void KCColorSlot::mousePressEvent(QMouseEvent *event)
+{
+    QLabel::mousePressEvent(event);
+    if(!text().isEmpty())
+    {
+        emit requireSyncColor(pal.color(QPalette::Window));
+    }
 }
 
 KCColorDatabaseViewer::KCColorDatabaseViewer(QWidget *parent) :
@@ -190,10 +214,9 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
     {
         for(j=0;j<maximumColumn;j++)
         {
-            QLabel *colorSlot=new QLabel(this);
-            colorSlot->setAutoFillBackground(true);
-            colorSlot->setWordWrap(true);
-            colorSlot->setAlignment(Qt::AlignCenter);
+            KCColorSlot *colorSlot=new KCColorSlot(this);
+            connect(colorSlot, SIGNAL(requireSyncColor(QColor)),
+                    this, SIGNAL(requireSyncColor(QColor)));
             colorLayout->addWidget(colorSlot,i,j,1,1);
             colorViewer.append(colorSlot);
         }
@@ -204,7 +227,6 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
 void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
 {
     int i,j,currentLabelIndex;
-    QPalette pal;
     for(i=0; i<columnPerPage; i++)
     {
         currentLabelIndex=i*maximumColumn;
@@ -214,22 +236,18 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
             j++)
         {
             colorInfo currentColorInfo=colorDatabase.at(j);
-            QLabel *currentColor=colorViewer.at(currentLabelIndex);
+            KCColorSlot *currentColor=colorViewer.at(currentLabelIndex);
             currentColor->setText(currentColorInfo.colorName);
-            pal=currentColor->palette();
-            pal.setColor(QPalette::Window, currentColorInfo.color);
-            currentColor->setPalette(pal);
+            currentColor->setBackgroundColor(currentColorInfo.color);
             currentLabelIndex++;
         }
         for(j=currentColorLineInfo.lineCount;
             j<maximumColumn;
             j++)
         {
-            QLabel *currentColor=colorViewer.at(currentLabelIndex);
+            KCColorSlot *currentColor=colorViewer.at(currentLabelIndex);
             currentColor->setText("");
-            pal=currentColor->palette();
-            pal.setColor(QPalette::Window, QColor(0,0,0,0));
-            currentColor->setPalette(pal);
+            currentColor->setBackgroundColor(QColor(0,0,0,0));
             currentLabelIndex++;
         }
     }
@@ -254,6 +272,7 @@ KCColorDatabaseBrowser::KCColorDatabaseBrowser(QWidget *parent) :
 
 void KCColorDatabaseBrowser::requireShowDatabase(int databaseIndex)
 {
+    disconnect(syncSignal);
     if(!viewer.isNull())
     {
         //KCColorDatabaseViewer might exsist.
@@ -265,6 +284,8 @@ void KCColorDatabaseBrowser::requireShowDatabase(int databaseIndex)
     }
     viewer.reset(new KCColorDatabaseViewer);
     viewer->loadColorDataBase(databaseList.at(databaseIndex));
+    syncSignal=connect(viewer.data(), &KCColorDatabaseViewer::requireSyncColor,
+                       this, &KCColorDatabaseBrowser::requireSyncColor);
     mainLayout->insertWidget(1, viewer.data(), 1);
 }
 
@@ -1255,6 +1276,11 @@ void KCColorViewerBase::setCurrentColor(QColor color)
     currentViewer->setPalette(currentPalette);
 }
 
+void KCColorViewerBase::updateCurrentColor()
+{
+    emit requireSetCurrentColor(currentPalette.color(QPalette::Window));
+}
+
 KCColorSliderItemBase::KCColorSliderItemBase(QWidget *parent,
                                              bool autoBuild) :
     QWidget(parent)
@@ -1906,6 +1932,7 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     registerHSVRing(colorRing);
     functionStack->addWidget(colorRing);
     KCColorDatabaseBrowser *databaseBrower=new KCColorDatabaseBrowser(this);
+    registerColorDatabase(databaseBrower);
     functionStack->addWidget(databaseBrower);
     connect(functionList, SIGNAL(requireFocusOn(int)),
             functionStack, SLOT(setCurrentIndex(int)));
@@ -1927,6 +1954,11 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     mainLayout->addLayout(yayaLayout);
 
     iroriLayout=new QBoxLayout(QBoxLayout::TopToBottom);
+    okButton=new QPushButton(tr("&Ok"), this);
+    okButton->setDefault(true);
+    iroriLayout->addWidget(okButton);
+    cancelButton=new QPushButton(tr("&Cancel"), this);
+    iroriLayout->addWidget(cancelButton);
     KCColorViewerBase *viewer=new KCColorViewerBase(this);
     registerViewer(viewer);
     iroriLayout->addWidget(viewer);
@@ -1939,6 +1971,11 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     iroriLayout->addWidget(cmykp);
 
     mainLayout->addLayout(iroriLayout);
+
+    connect(okButton, SIGNAL(clicked()),
+            this, SLOT(onActionOkPressed()));
+    connect(cancelButton, SIGNAL(clicked()),
+            this, SLOT(onActionCancelPressed()));
 
     emit requireSyncColor(QColor(0,0,0));
 }
@@ -1954,6 +1991,7 @@ void KCColorSelector::setOriginalColor(const QColor &color)
 {
     emit requireSetOriginalColor(color);
     emit requireSyncColor(color);
+    setCurrentColor(color);
 }
 
 void KCColorSelector::registerSelector(KCColorSliderBase *selector)
@@ -1981,6 +2019,10 @@ void KCColorSelector::registerViewer(KCColorViewerBase *viewer)
             viewer, &KCColorViewerBase::setCurrentColor);
     connect(this, &KCColorSelector::requireSetOriginalColor,
             viewer, &KCColorViewerBase::setOriginalColor);
+    connect(viewer, &KCColorViewerBase::requireSetCurrentColor,
+            this, &KCColorSelector::setCurrentColor);
+    connect(this, &KCColorSelector::requireGetCurrentColor,
+            viewer, &KCColorViewerBase::updateCurrentColor);
 }
 
 void KCColorSelector::registerHSVRing(KCColorHSVRing *hsvRing)
@@ -1999,4 +2041,31 @@ void KCColorSelector::registerHexEditor(KCHexColorEditor *editor)
             editor, &KCHexColorEditor::syncColor);
     connect(editor, &KCHexColorEditor::requireSyncColor,
             this, &KCColorSelector::requireSyncColor);
+}
+
+void KCColorSelector::registerColorDatabase(KCColorDatabaseBrowser *browser)
+{
+    connect(browser, &KCColorDatabaseBrowser::requireSyncColor,
+            this, &KCColorSelector::requireSyncColor);
+}
+
+QColor KCColorSelector::getCurrentColor() const
+{
+    return currentColor;
+}
+
+void KCColorSelector::setCurrentColor(QColor color)
+{
+    currentColor=color;
+}
+
+void KCColorSelector::onActionOkPressed()
+{
+    emit requireGetCurrentColor();
+    close();
+}
+
+void KCColorSelector::onActionCancelPressed()
+{
+    close();
 }

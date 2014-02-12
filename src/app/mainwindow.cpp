@@ -602,10 +602,6 @@ void MainWindow::createActions()
 
 void MainWindow::aboutCuties()
 {
-    KCColorSelector *selector=new KCColorSelector(this);
-    selector->setOriginalColor(QColor(QColor(0x5A,0x86,0xCA)));
-    selector->exec();
-    return;
     KCMessageBox *aboutCuties=new KCMessageBox(this);
     aboutCuties->setTitle("About Cuties");
     aboutCuties->addImage(":/mainicon/image/Cuties.png",

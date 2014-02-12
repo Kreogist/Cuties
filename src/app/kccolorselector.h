@@ -5,19 +5,20 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDialog>
+#include <QLabel>
 
 class QComboBox;
 class QSignalMapper;
 class QBoxLayout;
 class QSlider;
 class QRadioButton;
-class QLabel;
 class QMouseEvent;
 class QKeyEvent;
 class QScrollBar;
 class QPaintEvent;
 class QGridLayout;
 class QResizeEvent;
+class QPushButton;
 
 class KCHexColorLineEdit : public QLineEdit
 {
@@ -55,6 +56,23 @@ private:
     KCHexColorLineEdit *hexColor;
 };
 
+class KCColorSlot : public QLabel
+{
+    Q_OBJECT
+public:
+    explicit KCColorSlot(QWidget *parent = 0);
+    void setBackgroundColor(const QColor &color);
+
+signals:
+    void requireSyncColor(QColor color);
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+
+private:
+    QPalette pal;
+};
+
 class KCColorDatabaseViewer : public QWidget
 {
     Q_OBJECT
@@ -62,6 +80,9 @@ public:
     explicit KCColorDatabaseViewer(QWidget *parent = 0);
     ~KCColorDatabaseViewer();
     void loadColorDataBase(const QString &fileName);
+
+signals:
+    void requireSyncColor(QColor color);
 
 private slots:
     void updateColorLayout(const int &topLine);
@@ -84,7 +105,7 @@ private:
     int maximumColumn=0, columnPerPage=5;
     QList<colorInfo> colorDatabase;
     QList<colorLineInfo> lineInfo;
-    QList<QLabel *> colorViewer;
+    QList<KCColorSlot *> colorViewer;
 };
 
 class KCColorDatabaseBrowser : public QWidget
@@ -92,6 +113,9 @@ class KCColorDatabaseBrowser : public QWidget
     Q_OBJECT
 public:
     explicit KCColorDatabaseBrowser(QWidget *parent = 0);
+
+signals:
+    void requireSyncColor(QColor color);
 
 private slots:
     void requireShowDatabase(int databaseIndex);
@@ -102,6 +126,7 @@ private:
     QComboBox *databaseSelector;
     QStringList databaseList;
     QScopedPointer<KCColorDatabaseViewer> viewer;
+    QMetaObject::Connection syncSignal;
 };
 
 class KCColorDoubleBoardBase : public QWidget
@@ -310,9 +335,13 @@ class KCColorViewerBase : public QWidget
 public:
     explicit KCColorViewerBase(QWidget *parent = 0);
 
+signals:
+    void requireSetCurrentColor(QColor color);
+
 public slots:
     virtual void setOriginalColor(QColor color);
     virtual void setCurrentColor(QColor color);
+    void updateCurrentColor();
 
 protected:
     virtual void buildViewer();
@@ -539,6 +568,8 @@ public:
     void registerLevelSelector(KCColorLevelSelector *levelSelector);
     void registerHSVRing(KCColorHSVRing *hsvRing);
     void registerHexEditor(KCHexColorEditor *editor);
+    void registerColorDatabase(KCColorDatabaseBrowser *browser);
+    QColor getCurrentColor() const;
 
 signals:
     void requireSyncColor(QColor color);
@@ -547,14 +578,21 @@ signals:
                                int value,
                                QColor color);
     void requireClearFocus();
+    void requireGetCurrentColor();
 
 public slots:
 
 private slots:
+    void setCurrentColor(QColor color);
+    void onActionOkPressed();
+    void onActionCancelPressed();
 
 private:
     QBoxLayout *mainLayout, *colorFunctionsLayout,
                *yayaLayout, *iroriLayout;
+    QPushButton *okButton, *cancelButton;
+    QColor currentColor;
+
 };
 
 #endif // KCCOLORSELECTOR_H
