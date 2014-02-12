@@ -37,6 +37,7 @@ KCHexColorLineEdit::KCHexColorLineEdit(QWidget *parent) :
     QLineEdit(parent)
 {
     setMaxLength(6);
+    setInputMask("HHHHHH;0");
     connect(this, &KCHexColorLineEdit::textChanged,
             this, &KCHexColorLineEdit::onTextChanged);
 }
@@ -47,15 +48,10 @@ void KCHexColorLineEdit::onTextChanged(QString value)
     {
         return;
     }
-    QString redTest, greenTest, blueTest;
-    bool error;
-    redTest=value.left(2);
-    greenTest=value.mid(2,2);
-    blueTest=value.mid(4,2);
+    QColor testColor;
+    testColor.setNamedColor("#"+value);
     syncSentByMe=true;
-    emit requireSyncColor(QColor(redTest.toInt(&error, 16),
-                                 greenTest.toInt(&error, 16),
-                                 blueTest.toInt(&error, 16)));
+    emit requireSyncColor(testColor);
 }
 
 void KCHexColorLineEdit::syncColor(const QColor &color)
@@ -66,29 +62,9 @@ void KCHexColorLineEdit::syncColor(const QColor &color)
         return;
     }
     syncMode=true;
-    QString currentValue=QString::number(color.red(),16)+
-                        QString::number(color.green(),16)+
-                        QString::number(color.blue(),16);
+    QString currentValue=color.name().remove(0,1);
     setText(currentValue);
     syncMode=false;
-}
-
-void KCHexColorLineEdit::keyPressEvent(QKeyEvent *event)
-{
-    if(event->text().length()==1)
-    {
-        QChar inputChar=event->text().at(0).toLower();
-        if((inputChar >= '0' && inputChar <= '9') ||
-           (inputChar >= 'a' && inputChar <= 'f') ||
-            inputChar < 32 || inputChar == 127)
-        {
-            QLineEdit::keyPressEvent(event);
-            return;
-        }
-        event->ignore();
-        return;
-    }
-    QLineEdit::keyPressEvent(event);
 }
 
 KCHexColorEditor::KCHexColorEditor(QWidget *parent) :
@@ -1363,12 +1339,6 @@ void KCColorSliderItemBase::syncValue(const int &value,
 {
     //The new color must rerender.
     levelSelector->colorUpdate(color);
-    //Check the signal sender.
-    if(syncRequireSentByMe)
-    {
-        syncRequireSentByMe=false;
-        return;
-    }
     //Sync all the value.
     syncMode=true;
     setValue(value);
@@ -1384,7 +1354,6 @@ void KCColorSliderItemBase::setValue(int value)
     valueSetMode=true;
     elementSpinBox->setValue(value);
     levelSelector->setValue(value);
-    syncRequireSentByMe=true;
     if(!syncMode)
     {
         emit requireElementChanged(elementCaption->text(),
@@ -1441,10 +1410,6 @@ void KCColorSliderItemPercent::buildSlider()
 void KCColorSliderItemPercent::syncValue(const int &value,
                                          const QColor &color)
 {
-    if(syncRequireSentByMe)
-    {
-        syncRequireSentByMe=false;
-    }
     syncMode=true;
     levelSelector->colorUpdate(color);
     setValueFromLevel(value);
@@ -1466,7 +1431,6 @@ void KCColorSliderItemPercent::setValue(int value)
     valueSetMode=true;
     elementSpinBox->setValue(value);
     levelSelector->setValue(irori);
-    syncRequireSentByMe=true;
     if(!syncMode)
     {
         emit requireElementChanged(elementCaption->text(),
@@ -1489,7 +1453,6 @@ void KCColorSliderItemPercent::setValueFromLevel(int value)
     valueSetMode=true;
     elementSpinBox->setValue(value*20/51);
     levelSelector->setValue(value);
-    syncRequireSentByMe=true;
     if(!syncMode)
     {
         emit requireElementChanged(elementCaption->text(),
@@ -1626,6 +1589,7 @@ void KCColorSliderCMYKP::focusRequire(QString elementName, int value)
 
 void KCColorSliderCMYKP::syncElement()
 {
+    currentColor=currentColor.toCmyk();
     cyanElement->syncValue(currentColor.cyan(), currentColor);
     magentaElement->syncValue(currentColor.magenta(), currentColor);
     yellowElement->syncValue(currentColor.yellow(), currentColor);
@@ -1781,7 +1745,6 @@ void KCColorSliderRGB::syncColor(QColor color)
 
 void KCColorSliderRGB::syncElement()
 {
-    qDebug()<<"I fucked do this!";
     redElement->syncValue(currentColor.red(), currentColor);
     greenElement->syncValue(currentColor.green(), currentColor);
     blueElement->syncValue(currentColor.blue(), currentColor);

@@ -32,9 +32,6 @@ signals:
 public slots:
     void syncColor(const QColor &color);
 
-protected:
-    void keyPressEvent(QKeyEvent *event);
-
 private slots:
     void onTextChanged(QString value);
 
@@ -386,7 +383,6 @@ protected:
     KCColorSpinBox *elementSpinBox;
     KCColorLevelSelector *levelSelector;
     bool valueSetMode=false, syncMode=false;
-    bool syncRequireSentByMe=false;
     bool focusSignalSent=false;
 };
 
