@@ -3,6 +3,8 @@
 
 #include <QDir>
 #include <QPushButton>
+#include <QDesktopWidget>
+#include <QScreen>
 #include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
@@ -1936,9 +1938,64 @@ KCColorFunctionButton *KCColorFunctionSelector::addFunctionButton(const QString 
     return button;
 }
 
+KCColorPicker::KCColorPicker(QWidget *parent) :
+    QToolButton(parent)
+{
+    setIcon(QIcon(":/img/image/straw.png"));
+}
+
+void KCColorPicker::mousePressEvent(QMouseEvent *event)
+{
+    QToolButton::mousePressEvent(event);
+    isPressed=true;
+    setCursor(QCursor(Qt::CrossCursor));
+    getPositionColor();
+}
+
+void KCColorPicker::mouseMoveEvent(QMouseEvent *event)
+{
+    QToolButton::mouseMoveEvent(event);
+    if(isPressed)
+    {
+        getPositionColor();
+    }
+}
+
+void KCColorPicker::mouseReleaseEvent(QMouseEvent *event)
+{
+    QToolButton::mouseReleaseEvent(event);
+    isPressed=false;
+    getPositionColor();
+}
+
+void KCColorPicker::getPositionColor()
+{
+    int posX = QCursor::pos().x();
+    int posY = QCursor::pos().y();
+    QPixmap snapshot=QPixmap::grabWindow(QApplication::desktop()->winId(),
+                                         posX,
+                                         posY,
+                                         1,
+                                         1);
+    if(!snapshot.isNull())
+    {
+        QImage image = snapshot.toImage();
+        if(!image.isNull())
+        {
+            if(image.valid(0,0))
+            {
+                QColor color=image.pixel(0, 0);
+                emit requireSyncColor(color);
+            }
+        }
+    }
+}
+
 KCColorSelector::KCColorSelector(QWidget *parent) :
     QDialog(parent)
 {
+    setWindowTitle(tr("Color Selector"));
+
     mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     setLayout(mainLayout);
 
@@ -1982,6 +2039,9 @@ KCColorSelector::KCColorSelector(QWidget *parent) :
     KCColorViewerBase *viewer=new KCColorViewerBase(this);
     registerViewer(viewer);
     iroriLayout->addWidget(viewer);
+    KCColorPicker *picker=new KCColorPicker(this);
+    registerColorPicker(picker);
+    iroriLayout->addWidget(picker, 0, Qt::AlignCenter);
     iroriLayout->addStretch();
     KCHexColorEditor *hexEditor=new KCHexColorEditor(this);
     registerHexEditor(hexEditor);
@@ -2067,6 +2127,12 @@ void KCColorSelector::registerColorDatabase(KCColorDatabaseBrowser *browser)
 {
     connect(browser, &KCColorDatabaseBrowser::requireSyncColor,
             this, &KCColorSelector::requireSyncColor);
+}
+
+void KCColorSelector::registerColorPicker(KCColorPicker *picker)
+{
+    connect(picker, SIGNAL(requireSyncColor(QColor)),
+            this, SIGNAL(requireSyncColor(QColor)));
 }
 
 QColor KCColorSelector::getCurrentColor() const

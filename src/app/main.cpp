@@ -70,6 +70,10 @@ static inline void loadApplicationInfo()
  */
 static inline void loadApplicationSettings()
 {
+    KCConfigure::setCfgFileName(qApp->applicationDirPath()+
+                                "/Settings/"+
+                                qApp->applicationName()+
+                                ".ini");
     KCStatusRecorder::getInstance()->readRecord();
     KCDocumentRecorder::getInstance()->readSettings();
     KCLanguageConfigure::getInstance()->readConfigure();

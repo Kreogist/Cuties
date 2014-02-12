@@ -54,11 +54,6 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     setPalette(pal);
 
     //Initialize variables.
-    /***Colors***/
-    lineColor = QColor(0x40,0x40,0x40);
-    searchResultColor = QColor(0x5A,0x86,0xCA);
-    noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
-    matchedParenthesesColor = QColor(0xf8,0x9b,0x9b);
     /***Search code***/
     searchCode=0;
     /***Clipboard Menu***/

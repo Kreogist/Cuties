@@ -559,6 +559,25 @@ private:
     int buttonCounter=0;
 };
 
+class KCColorPicker : public QToolButton
+{
+    Q_OBJECT
+public:
+    explicit KCColorPicker(QWidget *parent = 0);
+
+signals:
+    void requireSyncColor(QColor color);
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private:
+    void getPositionColor();
+    bool isPressed=false;
+};
+
 class KCColorSelector : public QDialog
 {
     Q_OBJECT
@@ -572,6 +591,7 @@ public:
     void registerHSVRing(KCColorHSVRing *hsvRing);
     void registerHexEditor(KCHexColorEditor *editor);
     void registerColorDatabase(KCColorDatabaseBrowser *browser);
+    void registerColorPicker(KCColorPicker *picker);
     QColor getCurrentColor() const;
 
 signals:

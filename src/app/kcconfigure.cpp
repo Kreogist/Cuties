@@ -23,11 +23,11 @@
 
 #include "kcconfigure.h"
 
-QString KCConfigure::cfgFileName(QApplication::applicationName()+".ini");
+QString KCConfigure::cfgFileName(qApp->applicationName()+".ini");
 
 KCAbstractConfigure::~KCAbstractConfigure()
 {
-
+    ;
 }
 
 KCConfigure::~KCConfigure()

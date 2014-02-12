@@ -22,6 +22,7 @@
         <file>image/ColorRingModeSelect.png</file>
         <file>image/ColorDatabaseMode.png</file>
         <file>image/ColorDatabaseModeSelect.png</file>
+        <file>image/straw.png</file>
     </qresource>
     <qresource prefix="/toolbutton">
         <file>image/Close.png</file>
