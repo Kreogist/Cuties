@@ -52,7 +52,6 @@ void KCHexColorLineEdit::onTextChanged(QString value)
     redTest=value.left(2);
     greenTest=value.mid(2,2);
     blueTest=value.mid(4,2);
-    qDebug()<<text()<<redTest<<greenTest<<blueTest;
     syncSentByMe=true;
     emit requireSyncColor(QColor(redTest.toInt(&error, 16),
                                  greenTest.toInt(&error, 16),
@@ -1782,6 +1781,7 @@ void KCColorSliderRGB::syncColor(QColor color)
 
 void KCColorSliderRGB::syncElement()
 {
+    qDebug()<<"I fucked do this!";
     redElement->syncValue(currentColor.red(), currentColor);
     greenElement->syncValue(currentColor.green(), currentColor);
     blueElement->syncValue(currentColor.blue(), currentColor);

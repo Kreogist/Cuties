@@ -23,6 +23,7 @@ set(SRC_LIST ${SRC_LIST} Controls/Preference/kcpreferenceitembooleangroup.cpp )
 set(SRC_LIST ${SRC_LIST} Controls/Preference/kcpreferenceitemcombo.cpp )
 set(SRC_LIST ${SRC_LIST} Controls/Preference/kcpreferenceitemint.cpp )
 set(SRC_LIST ${SRC_LIST} Controls/Preference/kcpreferenceitempath.cpp )
+set(SRC_LIST ${SRC_LIST} Controls/Preference/kcpreferenceitemcolor.cpp )
 set(SRC_LIST ${SRC_LIST} dbgoutputreceiver.cpp )
 set(SRC_LIST ${SRC_LIST} fpc.cpp )
 set(SRC_LIST ${SRC_LIST} gcc.cpp )
@@ -116,6 +117,7 @@ qt5_use_modules(${PROJECT_NAME} Widgets Network)
 
 add_subdirectory(default_settings)
 add_subdirectory(translations)
+add_subdirectory(ColorBase)
 
 #install
 install(TARGETS ${PROJECT_NAME}

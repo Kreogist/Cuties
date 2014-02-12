@@ -1,0 +1,2 @@
+configure_file(PANTON_solid_coated.cdb ${PROJECT_BINARY_DIR}/ColorBase/PANTON_solid_coated.cdb COPYONLY)
+configure_file(PANTON_solid_uncoated.cdb ${PROJECT_BINARY_DIR}/ColorBase/PANTON_solid_uncoated.cdb COPYONLY)
