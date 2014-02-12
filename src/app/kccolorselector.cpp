@@ -1257,9 +1257,11 @@ void KCColorViewerBase::buildViewer()
     setLayout(mainLayout);
     QLabel *currentColor=new QLabel(tr("Current Color"), this);
     mainLayout->addWidget(currentColor,0,Qt::AlignCenter);
+    mainLayout->addSpacing(2);
     mainLayout->addWidget(currentViewer);
     mainLayout->addWidget(originalViewer);
     QLabel *originalColor=new QLabel(tr("Original Color"), this);
+    mainLayout->addSpacing(2);
     mainLayout->addWidget(originalColor,0,Qt::AlignCenter);
 }
 

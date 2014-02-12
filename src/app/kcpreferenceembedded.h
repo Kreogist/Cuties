@@ -107,6 +107,7 @@ private:
     enum EditorTitleEnum
     {
         titleViewOptions,
+        titleColorSets,
         titleMultipleTabs,
         titleClipboard,
         titleCount
@@ -151,6 +152,17 @@ private:
     };
     QString intItemCaption[intItemCount];
     KCPreferenceItemInt *editorInts[intItemCount];
+
+    enum EditorColorEnum
+    {
+        colorLine,
+        colorSearchResult,
+        colorNoMatchedParentheses,
+        colorMatchedParentheses,
+        colorItemCount
+    };
+    QString colorItemCaption[colorItemCount];
+    KCPreferenceItemColor *editorColors[colorItemCount];
 
     KCPreferenceItemBooleanGroup *tabSpacingItem;
 };

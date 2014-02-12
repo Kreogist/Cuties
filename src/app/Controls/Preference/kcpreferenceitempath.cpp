@@ -116,6 +116,7 @@ void KCPreferenceItemPath::retranslate()
 void KCPreferenceItemPath::retranslateAndSet()
 {
     retranslate();
+    browseFileAction->setText(browseText);
 }
 
 void KCPreferenceItemPath::heightState(bool newState)

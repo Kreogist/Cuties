@@ -194,7 +194,7 @@ KCPreferenceItemInt *KCPreferenceSuperList::addItemInt(KCPreferenceItemInt *newI
 }
 
 KCPreferenceItemBooleanGroup *KCPreferenceSuperList::addItemBooleanGroup(const QString &captionText,
-        const QString &key)
+                                                                         const QString &key)
 {
     KCPreferenceItemBooleanGroup *newBooleanGroupItem=new KCPreferenceItemBooleanGroup(contents);
     newBooleanGroupItem->setBooleanCaptionText(captionText);
@@ -211,8 +211,8 @@ KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(KCPreferenceItemPath *n
 }
 
 KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionText,
-        const QString &key,
-        QString defaultTitleValue)
+                                                         const QString &key,
+                                                         const QString &defaultTitleValue)
 {
     KCPreferenceItemPath *newPathItem=new KCPreferenceItemPath(this);
     newPathItem->setPathCaptionText(captionText);
@@ -221,6 +221,23 @@ KCPreferenceItemPath *KCPreferenceSuperList::addItemPath(const QString &captionT
     newPathItem->setDialogTitle(defaultTitleValue);
     contents->appendItem(newPathItem);
     return newPathItem;
+}
+
+KCPreferenceItemColor *KCPreferenceSuperList::addItemColor(KCPreferenceItemColor *newColorItem)
+{
+    contents->appendItem(newColorItem);
+    return newColorItem;
+}
+
+KCPreferenceItemColor *KCPreferenceSuperList::addItemColor(const QString &captionText,
+                                                           const QString &key)
+{
+    KCPreferenceItemColor *newColorItem=new KCPreferenceItemColor(this);
+    newColorItem->setColorCaptionText(captionText);
+    newColorItem->setKeyNames(key);
+    newColorItem->setOriginalValue(instance->getValue(key).value<QColor>());
+    contents->appendItem(newColorItem);
+    return newColorItem;
 }
 
 void KCPreferenceSuperList::addStretch()

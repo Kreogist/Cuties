@@ -76,6 +76,10 @@ public:
     int lineNumberWidth();
     void setDebugCursor(int lineNumber);
     void setLinePanelVisible(bool value);
+    void setLineColor(const QColor &value);
+    void setSearchResultColor(const QColor &value);
+    void setNoMatchedParenthesesColor(const QColor &value);
+    void setMatchedParenthesesColor(const QColor &value);
 
 signals:
     void requireHideOthers();

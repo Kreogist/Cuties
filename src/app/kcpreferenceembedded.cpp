@@ -165,6 +165,16 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
                                           10,
                                           1);
 
+    editorTitles[titleColorSets]=addTitle(editorTitleText[titleColorSets]);
+    editorColors[colorLine]=addItemColor(colorItemCaption[colorLine],
+                                         "LineColor");
+    editorColors[colorSearchResult]=addItemColor(colorItemCaption[colorSearchResult],
+                                                 "SearchResultColor");
+    editorColors[colorNoMatchedParentheses]=addItemColor(colorItemCaption[colorNoMatchedParentheses],
+                                                         "NoMatchedParenthesesColor");
+    editorColors[colorMatchedParentheses]=addItemColor(colorItemCaption[colorMatchedParentheses],
+                                                       "MatchedParenthesesColor");
+
     editorTitles[titleMultipleTabs]=addTitle(editorTitleText[titleMultipleTabs]);
     editorBooleans[booleanTabMoveable]=addItemBoolean(booleanItemCaption[booleanTabMoveable],
                                        "TabMoveable");
@@ -185,6 +195,7 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
 void KCPreferenceEmbeddedEditor::retranslate()
 {
     editorTitleText[titleViewOptions]=QString(" " + tr("View Option"));
+    editorTitleText[titleColorSets]=QString(" " + tr("Color Sets"));
     editorTitleText[titleMultipleTabs]=QString(" " + tr("Multiple Tabs Option"));
     editorTitleText[titleClipboard]=QString(" " + tr("Clipboard"));
 
@@ -198,6 +209,11 @@ void KCPreferenceEmbeddedEditor::retranslate()
     intItemCaption[intSpacePerTab]=tr("Space per tab:");
     intItemCaption[intCursorWidth]=tr("Cursor Width:");
     intItemCaption[intClipboardTrackingMax]=tr("Maximum Clipboard Tracking Items:");
+
+    colorItemCaption[colorLine]=tr("Current Line Color:");
+    colorItemCaption[colorSearchResult]=tr("Search Result Color:");
+    colorItemCaption[colorMatchedParentheses]=tr("Matched Parentheses Color:");
+    colorItemCaption[colorNoMatchedParentheses]=tr("Failed Matched Parentheses Color:");
 
     comboItemCaption[comboWordWrapMode]=tr("Word Wrap Mode:");
     comboItemText[comboWordWrapMode].clear();
@@ -235,6 +251,11 @@ void KCPreferenceEmbeddedEditor::retranslateAndSet()
     for(i=intTabSpacing; i<intItemCount; i++)
     {
         editorInts[i]->setIntCaptionText(intItemCaption[i]);
+    }
+    //Reset color items
+    for(i=colorLine; i<colorItemCount; i++)
+    {
+        editorColors[i]->setColorCaptionText(colorItemCaption[i]);
     }
     //Reset boolean group
     for(i=booleanGroupSpacingInsteadOfTab; i<booleanGroupCount; i++)

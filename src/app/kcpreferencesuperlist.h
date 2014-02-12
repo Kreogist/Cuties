@@ -37,6 +37,7 @@
 #include "Controls/Preference/kcpreferenceitemint.h"
 #include "Controls/Preference/kcpreferenceitembooleangroup.h"
 #include "Controls/Preference/kcpreferenceitempath.h"
+#include "Controls/Preference/kcpreferenceitemcolor.h"
 
 class KCPreferenceSuperListContent : public QWidget
 {
@@ -92,7 +93,10 @@ public:
     KCPreferenceItemPath *addItemPath(KCPreferenceItemPath *newPathItem);
     KCPreferenceItemPath *addItemPath(const QString &captionText,
                                       const QString &key,
-                                      QString defaultTitleValue=QString(""));
+                                      const QString &defaultTitleValue="");
+    KCPreferenceItemColor *addItemColor(KCPreferenceItemColor *newColorItem);
+    KCPreferenceItemColor *addItemColor(const QString &captionText,
+                                        const QString &key);
     void addStretch();
 
 signals:

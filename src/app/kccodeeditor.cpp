@@ -117,6 +117,10 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
     editor->setSpacePerTab(settings.spacePerTab);
     editor->setLinePanelVisible(settings.lineNumberPanelVisible);
+    editor->setLineColor(settings.lineColor);
+    editor->setSearchResultColor(settings.searchResultColor);
+    editor->setNoMatchedParenthesesColor(settings.noMatchedParenthesesColor);
+    editor->setMatchedParenthesesColor(settings.matchedParenthesesColor);
 }
 
 bool KCCodeEditor::getOverwriteMode()

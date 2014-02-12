@@ -66,6 +66,10 @@ public:
         QTextOption::WrapMode wrapMode;
         int cursorWidth;
         bool lineNumberPanelVisible;
+        QColor lineColor;
+        QColor searchResultColor;
+        QColor noMatchedParenthesesColor;
+        QColor matchedParenthesesColor;
     };
 
     void applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settings);

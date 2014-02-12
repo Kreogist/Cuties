@@ -112,7 +112,8 @@ SOURCES += \
     kclinenumberpanel.cpp \
     kcunibodypanel.cpp \
     kcdebugmarkpanel.cpp \
-    kccolorselector.cpp
+    kccolorselector.cpp \
+    Controls/Preference/kcpreferenceitemcolor.cpp
 
 HEADERS += \
     Controls/GraphicButtons/kcgraphicbuttonbase.h \
@@ -200,7 +201,8 @@ HEADERS += \
     kclinenumberpanel.h \
     kcunibodypanel.h \
     kcdebugmarkpanel.h \
-    kccolorselector.h
+    kccolorselector.h \
+    Controls/Preference/kcpreferenceitemcolor.h
 
 
 # Enable C++11

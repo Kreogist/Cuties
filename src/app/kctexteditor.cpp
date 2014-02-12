@@ -56,7 +56,6 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
     //Initialize variables.
     /***Colors***/
     lineColor = QColor(0x40,0x40,0x40);
-    searchResultColor = QColor(98,147,221);
     searchResultColor = QColor(0x5A,0x86,0xCA);
     noMatchedParenthesesColor = QColor(0xdb,0x3a,0x42);
     matchedParenthesesColor = QColor(0xf8,0x9b,0x9b);
@@ -545,6 +544,26 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
     }
     insertTab(tabPressCursor, 1, true);
     tabPressCursor.endEditBlock();
+}
+
+void KCTextEditor::setMatchedParenthesesColor(const QColor &value)
+{
+    matchedParenthesesColor = value;
+}
+
+void KCTextEditor::setNoMatchedParenthesesColor(const QColor &value)
+{
+    noMatchedParenthesesColor = value;
+}
+
+void KCTextEditor::setSearchResultColor(const QColor &value)
+{
+    searchResultColor = value;
+}
+
+void KCTextEditor::setLineColor(const QColor &value)
+{
+    lineColor = value;
 }
 
 void KCTextEditor::setSpacePerTab(int value)

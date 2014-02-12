@@ -97,7 +97,6 @@ QVariant KCConfigure::getValue(const QString &key) const
         qDebug()<<"KCConfigure: unknow key value: "<<getGroupName()<<key;
         return QVariant();
     }
-
     return mapIterator.value();
 }
 
