@@ -24,18 +24,13 @@
  */
 
 #include <QApplication>
-#include <QTranslator>
-#include <QStyle>
 #include <QString>
-#include <QStyleFactory>
 #include <QDebug>
-#include <QTimer>
 
 #include <iostream>
 
 #include "mainwindow.h"
 #include "kcsplashscreen.h"
-#include "kcmessagebox.h"
 #include "kreogistcutestyle.h"
 #include "kcstatusrecorder.h"
 #include "kcdocumentrecorder.h"
@@ -208,7 +203,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
  */
 int main(int argc, char *argv[])
 {
-    //qInstallMessageHandler(KCMessageHandler);
+    qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
     loadApplicationInfo();

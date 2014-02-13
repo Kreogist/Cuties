@@ -17,6 +17,40 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QAction>
+#include <QMenu>
+#include <QPalette>
+#include <QToolButton>
+#include <QMessageBox>
+#include <QDesktopServices>
+#include <QSize>
+#include <QRect>
+#include <QDebug>
+#include <QGraphicsDropShadowEffect>
+#include <QVariant>
+#ifdef Q_OS_MACX
+#include <QMenuBar>
+#endif
+
+#include "kcwelcomewindow.h"
+#include "kcsidebar.h"
+#include "kccompiledock.h"
+#include "kcjudgedock.h"
+#include "kctitlebar.h"
+#include "kcstatusbar.h"
+#include "kctabmanager.h"
+#include "kctexteditor.h"
+#include "kcpreference.h"
+#include "kcexecutor.h"
+#include "kreogistcutestyle.h"
+#include "kcmessagebox.h"
+#include "kcdebugcontrolpanel.h"
+#include "kcdebugcommandio.h"
+#include "kcdebugwatch.h"
+#include "kcmailreports.h"
+#include "kcmainmenu.h"
+#include "kcsubmenu.h"
+#include "kcvisiblerecorder.h"
 #include "mainwindow.h"
 #include "kcfontconfigure.h"
 #include "kclanguageconfigure.h"

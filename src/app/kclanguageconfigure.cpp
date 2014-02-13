@@ -52,6 +52,11 @@ KCLanguageConfigure::KCLanguageConfigure()
     //Get system default language name.
     defaultLanguageName=getLanguageString(QLocale::system().language());
     setLanguage(defaultLanguageName);
+
+    //try readconfigure
+    readConfigure();
+    if(!currentLanguageName.isEmpty())
+        setLanguage(currentLanguageName);
 }
 
 void KCLanguageConfigure::setLanguage(const QString &newLanguageName)

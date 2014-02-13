@@ -20,44 +20,21 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QAction>
-#include <QMenu>
-#include <QPalette>
-#include <QApplication>
-#include <QToolButton>
-#include <QMessageBox>
-#include <QDesktopServices>
-#include <QSize>
-#include <QRect>
-#include <QDesktopWidget>
-#include <QDebug>
-#include <QGraphicsDropShadowEffect>
-#include <QVariant>
-#ifdef Q_OS_MACX
-#include <QMenuBar>
-#endif
-
-#include "kcwelcomewindow.h"
-#include "kcsidebar.h"
-#include "kccompiledock.h"
-#include "kcjudgedock.h"
-#include "kctitlebar.h"
-#include "kcstatusbar.h"
-#include "kctabmanager.h"
-#include "kctexteditor.h"
 #include "kcmainwindow.h"
-#include "kcpreference.h"
-#include "kcexecutor.h"
-#include "kreogistcutestyle.h"
-#include "kcmessagebox.h"
 #include "kcconnectionhandler.h"
-#include "kcdebugcontrolpanel.h"
-#include "kcdebugcommandio.h"
-#include "kcdebugwatch.h"
-#include "kcmailreports.h"
-#include "kcmainmenu.h"
-#include "kcsubmenu.h"
-#include "kcvisiblerecorder.h"
+
+class KCWelcomeWindow;
+class KCSubMenu;
+class KCTabManager;
+class KCSideBar;
+class KCCompileDock;
+class KCJudgeDock;
+class KCStatusBar;
+class KCDebugControlPanel;
+class KCDebugCommandIO;
+class KCDebugWatch;
+class KCVisibleRecorder;
+class GdbController;
 
 /*!
  * \brief The MainWindow class is the mainwindow for program.
