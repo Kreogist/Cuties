@@ -208,10 +208,10 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
     }
 
     quint32 colorNameLength;
-    int i,j;
-    colorInfo currentColor;
+    int i,j,euqalTest;
     for(i=0; i<colorNumber; i++)
     {
+        colorInfo currentColor;
         colorStream>>colorNameLength;
         while(colorNameLength--)
         {
@@ -219,6 +219,11 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
             colorStream>>currentUTF16Data;
             QChar currentChar(currentUTF16Data);
             currentColor.colorName+=currentChar;
+        }
+        euqalTest=currentColor.colorName.indexOf("=");
+        if(euqalTest!=-1)
+        {
+            currentColor.colorName=currentColor.colorName.mid(euqalTest+1);
         }
         colorStream>>currentColor.code[0]>>currentColor.code[1]
                    >>currentColor.code[2]>>currentColor.code[3]
@@ -232,6 +237,18 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
             currentColor.color.setRgb(dataRed, dataGreen, dataBlue);
             break;
         case 2:
+            quint8 dataC, dataM, dataY, dataK;
+            qreal c,m,y,k;
+            colorStream>>dataC>>dataM>>dataY>>dataK;
+            c = (qreal)(255 - dataC) / 2.55 + 0.5; // 0% thru 100%
+            m = (qreal)(255 - dataM) / 2.55 + 0.5; // 0% thru 100%
+            y = (qreal)(255 - dataY) / 2.55 + 0.5; // 0% thru 100%
+            k = (qreal)(255 - dataK) / 2.55 + 0.5; // 0% thru 100%
+            dataC=(quint8)(255.0*c);
+            dataM=(quint8)(255.0*m);
+            dataY=(quint8)(255.0*y);
+            dataK=(quint8)(255.0*k);
+            currentColor.color.setCmyk(dataC, dataM, dataY, dataK);
             break;
         case 7:
             quint8 dataL, dataA, dataB;
@@ -260,7 +277,7 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
     else
     {
         colorScrollBar->setVisible(true);
-        colorScrollBar->setRange(0, lineCount-pageSize);
+        colorScrollBar->setRange(0, lineCount-pageSize+1);
     }
 
     //Prepare labels.
@@ -282,6 +299,7 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
 {
     int i,j,currentColorOffset=0, baseIndex=topLine*pageSize, currentColorIndex;
     bool indexOverflow=false;
+    QString combineColorName;
     for(i=0; i<screenHeight; i++)
     {
         if(indexOverflow)
@@ -300,7 +318,7 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
         {
             KCColorSlot *currentColor=colorViewer.at(currentColorOffset);
             currentColorIndex=baseIndex+currentColorOffset;
-            if(currentColorIndex>colorNumber)
+            if(indexOverflow || currentColorIndex>=colorNumber)
             {
                 indexOverflow=true;
                 currentColor->setText("");
@@ -310,9 +328,12 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
                 break;
             }
             colorInfo currentColorInfo=colorDatabase.at(currentColorIndex);
-            currentColor->setText(currentColorInfo.colorName);
+            combineColorName=bookPrefix+
+                             currentColorInfo.colorName+
+                             bookSuffix;
+            currentColor->setText(combineColorName);
             currentColor->setBackgroundColor(currentColorInfo.color);
-            currentColor->setToolTip(currentColorInfo.colorName);
+            currentColor->setToolTip(combineColorName);
             currentColorOffset++;
         }
     }
