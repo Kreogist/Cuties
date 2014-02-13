@@ -10,8 +10,7 @@
 #include <QFileInfoList>
 #include <QScopedPointer>
 #include <QScrollBar>
-#include <QTextStream>
-#include <QTextCodec>
+#include <QDataStream>
 #include <QComboBox>
 #include <QFocusEvent>
 #include <QStackedWidget>
@@ -143,75 +142,135 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
         //Failed.
         return;
     }
-    QTextStream colorData(&database);
-    QTextCodec *codec=QTextCodec::codecForName("UTF-8");
-    colorData.setCodec(codec);
-    QString currentData=colorData.readLine();
-    //Ignore the first name line.
-    currentData=colorData.readLine();
-    int currentIndex=0,lastLineIndex=0,currentColumn;
-    colorDatabase.clear();
-    lineInfo.clear();
-    maximumColumn=0;
-    colorLineInfo currentLineInfo;
-    currentLineInfo.beginAt=0;
-    while(!currentData.isNull())
+    QDataStream colorStream(&database);
+    char header[4];
+    colorStream.readRawData(header, 4);
+    //The header should be checked later.
+    if(header[0]!='8' || header[1]!='B' || header[2]!='C' || header[3]!='B')
     {
-        if(currentData.isEmpty())
-        {
-            currentData=colorData.readLine();
-            continue;
-        }
-        if(currentData=="EOL")
-        {
-            currentColumn=currentIndex-lastLineIndex;
-            if(currentIndex-lastLineIndex>maximumColumn)
-            {
-                maximumColumn=currentColumn;
-            }
-            lastLineIndex=currentIndex;
-            currentLineInfo.endAt=currentIndex;
-            currentLineInfo.lineCount=currentColumn;
-            lineInfo.append(currentLineInfo);
-            currentLineInfo.beginAt=currentIndex;
-        }
-        else
-        {
-            QStringList elements=currentData.split("=");
-            QString redTest, greenTest, blueTest;
-            bool error;
-            redTest=elements.at(0).mid(1,2);
-            greenTest=elements.at(0).mid(3,2);
-            blueTest=elements.at(0).mid(5,2);
-            colorInfo currentColor;
-            currentColor.colorName=elements.at(1);
-            currentColor.color=QColor(redTest.toInt(&error, 16),
-                                      greenTest.toInt(&error, 16),
-                                      blueTest.toInt(&error, 16));
-            colorDatabase.append(currentColor);
-            currentIndex++;
-        }
-        currentData=colorData.readLine();
+        //Failed.
+        return;
     }
+    colorStream>>bookVersion>>bookIdentifier;
+
+    quint32 stringLength;
+
+    colorStream>>stringLength;
+    while(stringLength--)
+    {
+        quint16 currentUTF16Data;
+        colorStream>>currentUTF16Data;
+        QChar currentChar(currentUTF16Data);
+        bookTitle+=currentChar;
+    }
+    bookTitle=bookTitle.mid(bookTitle.indexOf("=")+1);
+
+    colorStream>>stringLength;
+    while(stringLength--)
+    {
+        quint16 currentUTF16Data;
+        colorStream>>currentUTF16Data;
+        QChar currentChar(currentUTF16Data);
+        bookPrefix+=currentChar;
+    }
+    bookPrefix=bookPrefix.mid(bookPrefix.indexOf("=")+1);
+
+    colorStream>>stringLength;
+    while(stringLength--)
+    {
+        quint16 currentUTF16Data;
+        colorStream>>currentUTF16Data;
+        QChar currentChar(currentUTF16Data);
+        bookSuffix+=currentChar;
+    }
+    bookSuffix=bookSuffix.mid(bookSuffix.indexOf("=")+1);
+
+    colorStream>>stringLength;
+    while(stringLength--)
+    {
+        quint16 currentUTF16Data;
+        colorStream>>currentUTF16Data;
+        QChar currentChar(currentUTF16Data);
+        bookDescription+=currentChar;
+    }
+    bookDescription=bookDescription.mid(bookDescription.indexOf("=")+1);
+
+    colorStream>>colorNumber>>pageSize>>pageOffset>>colorModel;
+    switch(colorModel)
+    {
+    case 0:
+    case 2:
+    case 7:
+        break;
+    default:
+        //Unknown color Model;
+        return;
+    }
+
+    quint32 colorNameLength;
     int i,j;
+    colorInfo currentColor;
+    for(i=0; i<colorNumber; i++)
+    {
+        colorStream>>colorNameLength;
+        while(colorNameLength--)
+        {
+            quint16 currentUTF16Data;
+            colorStream>>currentUTF16Data;
+            QChar currentChar(currentUTF16Data);
+            currentColor.colorName+=currentChar;
+        }
+        colorStream>>currentColor.code[0]>>currentColor.code[1]
+                   >>currentColor.code[2]>>currentColor.code[3]
+                   >>currentColor.code[4]>>currentColor.code[5];
+        //Read color components.
+        switch(colorModel)
+        {
+        case 0:
+            quint8 dataRed, dataGreen, dataBlue;
+            colorStream>>dataRed>>dataGreen>>dataBlue;
+            currentColor.color.setRgb(dataRed, dataGreen, dataBlue);
+            break;
+        case 2:
+            break;
+        case 7:
+            quint8 dataL, dataA, dataB;
+            qreal l, a, b;
+            colorStream>>dataL>>dataA>>dataB;
+            l=(qreal)dataL/2.55+0.5;
+            a=(qreal)dataA-128;
+            b=(qreal)dataB-128;
+            currentColor.color=lab2rgb(l,a,b);
+            break;
+        }
+        colorDatabase.append(currentColor);
+    }
+
     //Prepare scroll bar.
-    if(lineInfo.count()<columnPerPage)
+    lineCount=colorNumber/pageSize;
+    if(colorNumber%pageSize>0)
+    {
+        lineCount++;
+    }
+
+    if(lineCount<pageSize)
     {
         colorScrollBar->setVisible(false);
     }
     else
     {
         colorScrollBar->setVisible(true);
-        colorScrollBar->setRange(0, lineInfo.count()-columnPerPage);
+        colorScrollBar->setRange(0, lineCount-pageSize);
     }
+
     //Prepare labels.
-    for(i=0;i<columnPerPage;i++)
+    for(i=0;i<screenHeight;i++)
     {
-        for(j=0;j<maximumColumn;j++)
+        for(j=0;j<pageSize;j++)
         {
             KCColorSlot *colorSlot=new KCColorSlot(this);
-            connect(colorSlot, SIGNAL(requireSyncColor(QColor)),
-                    this, SIGNAL(requireSyncColor(QColor)));
+            connect(colorSlot, &KCColorSlot::requireSyncColor,
+                    this, &KCColorDatabaseViewer::requireSyncColor);
             colorLayout->addWidget(colorSlot,i,j,1,1);
             colorViewer.append(colorSlot);
         }
@@ -221,31 +280,101 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
 
 void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
 {
-    int i,j,currentLabelIndex;
-    for(i=0; i<columnPerPage; i++)
+    int i,j,currentColorOffset=0, baseIndex=topLine*pageSize, currentColorIndex;
+    bool indexOverflow=false;
+    for(i=0; i<screenHeight; i++)
     {
-        currentLabelIndex=i*maximumColumn;
-        colorLineInfo currentColorLineInfo=lineInfo.at(topLine+i);
-        for(j=currentColorLineInfo.beginAt;
-            j<currentColorLineInfo.endAt;
-            j++)
+        if(indexOverflow)
         {
-            colorInfo currentColorInfo=colorDatabase.at(j);
-            KCColorSlot *currentColor=colorViewer.at(currentLabelIndex);
+            for(j=0; j<pageSize; j++)
+            {
+                KCColorSlot *currentColor=colorViewer.at(currentColorOffset);
+                currentColor->setText("");
+                currentColor->setBackgroundColor(QColor(0,0,0,0));
+                currentColor->setToolTip("");
+                currentColorOffset++;
+            }
+            continue;
+        }
+        for(j=0; j<pageSize; j++)
+        {
+            KCColorSlot *currentColor=colorViewer.at(currentColorOffset);
+            currentColorIndex=baseIndex+currentColorOffset;
+            if(currentColorIndex>colorNumber)
+            {
+                indexOverflow=true;
+                currentColor->setText("");
+                currentColor->setBackgroundColor(QColor(0,0,0,0));
+                currentColor->setToolTip("");
+                currentColorOffset++;
+                break;
+            }
+            colorInfo currentColorInfo=colorDatabase.at(currentColorIndex);
             currentColor->setText(currentColorInfo.colorName);
             currentColor->setBackgroundColor(currentColorInfo.color);
-            currentLabelIndex++;
-        }
-        for(j=currentColorLineInfo.lineCount;
-            j<maximumColumn;
-            j++)
-        {
-            KCColorSlot *currentColor=colorViewer.at(currentLabelIndex);
-            currentColor->setText("");
-            currentColor->setBackgroundColor(QColor(0,0,0,0));
-            currentLabelIndex++;
+            currentColor->setToolTip(currentColorInfo.colorName);
+            currentColorOffset++;
         }
     }
+}
+
+QColor KCColorDatabaseViewer::lab2rgb(qreal L, qreal a, qreal b)
+{
+    qreal X, Y, Z, fX, fY, fZ;
+    qreal RR, GG, BB;
+    int R, G, B;
+
+    fY = pow((L + 16.0) / 116.0, 3.0);
+    if (fY < 0.008856)
+    {
+        fY = L / 903.3;
+    }
+    Y = fY;
+
+    if (fY > 0.008856)
+    {
+        fY = pow(fY, 1.0/3.0);
+    }
+    else
+    {
+        fY = 7.787 * fY + 16.0/116.0;
+    }
+
+    fX = a / 500.0 + fY;
+    if (fX > 0.206893)
+    {
+        X = pow(fX, 3.0);
+    }
+    else
+    {
+        X = (fX - 16.0/116.0) / 7.787;
+    }
+
+    fZ = fY - b /200.0;
+    if (fZ > 0.206893)
+    {
+        Z = pow(fZ, 3.0);
+    }
+    else
+    {
+        Z = (fZ - 16.0/116.0) / 7.787;
+    }
+
+    X *= (0.950456 * 255);
+    Y *=             255;
+    Z *= (1.088754 * 255);
+
+    RR =  3.240479*X - 1.537150*Y - 0.498535*Z;
+    GG = -0.969256*X + 1.875992*Y + 0.041556*Z;
+    BB =  0.055648*X - 0.204043*Y + 1.057311*Z;
+
+    R = (int)(RR < 0 ? 0 : RR > 255 ? 255 : RR);
+    G = (int)(GG < 0 ? 0 : GG > 255 ? 255 : GG);
+    B = (int)(BB < 0 ? 0 : BB > 255 ? 255 : BB);
+
+    QColor tempoaryColor;
+    tempoaryColor.setRgb(R, G, B);
+    return tempoaryColor;
 }
 
 KCColorDatabaseBrowser::KCColorDatabaseBrowser(QWidget *parent) :
@@ -288,9 +417,8 @@ void KCColorDatabaseBrowser::loadColorDatabase()
 {
     databaseList.clear();
     QString databaseDirPath=qApp->applicationDirPath()+"/ColorBase";
-    QTextCodec *codec=QTextCodec::codecForName("UTF-8");
     QStringList fileFilter;
-    fileFilter<<"*.cdb";
+    fileFilter<<"*.acb";
     QDir databaseDir(databaseDirPath);
     if(!databaseDir.exists())
     {
@@ -299,6 +427,7 @@ void KCColorDatabaseBrowser::loadColorDatabase()
         return;
     }
     QFileInfoList list=databaseDir.entryInfoList(fileFilter);
+    QStringList listNameList;
     for(int i=0;i<list.count();i++)
     {
         QFileInfo item=list.at(i);
@@ -307,7 +436,6 @@ void KCColorDatabaseBrowser::loadColorDatabase()
             continue;
         }
         //Add to color database
-        //databaseSelector->addItem(item.fileName());
         QString testFilePath=databaseDirPath+"/"+item.fileName();
         QFile testFile(testFilePath);
         if(!testFile.open(QIODevice::ReadOnly))
@@ -315,17 +443,35 @@ void KCColorDatabaseBrowser::loadColorDatabase()
             //Failed try next.
             continue;
         }
-        QTextStream testData(&testFile);
-        testData.setCodec(codec);
-        QString currentData=testData.readLine();
-        if(currentData.isNull())
+
+        QDataStream testData(&testFile);
+        char header[4];
+        testData.readRawData(header, 4);
+        if(header[0]!='8' || header[1]!='B' || header[2]!='C' || header[3]!='B')
         {
-            //Failed, try next.
+            //Failed try next.
             continue;
         }
-        //Add this file to file stream.
-        databaseList.append(testFilePath);
-        databaseSelector->addItem(currentData);
+        quint16 bookVersion, bookIdentifier;
+        testData>>bookVersion>>bookIdentifier;
+        quint32 titleLength;
+        testData>>titleLength;
+        QString testString;
+        while(titleLength--)
+        {
+            quint16 currentUTF16Data;
+            testData>>currentUTF16Data;
+            QChar currentChar(currentUTF16Data);
+            testString+=currentChar;
+        }
+        testString=testString.mid(testString.indexOf("=")+1);
+        if(listNameList.indexOf(testString)==-1)
+        {
+            //Add this file to file stream.
+            databaseList.append(testFilePath);
+            databaseSelector->addItem(testString);
+            listNameList.append(testString);
+        }
     }
     if(databaseList.count()>0)
     {

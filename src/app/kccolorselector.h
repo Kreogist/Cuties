@@ -92,20 +92,21 @@ private:
     {
         QString colorName;
         QColor color;
+        quint8 code[6];
     };
-    struct colorLineInfo
-    {
-        int beginAt;
-        int endAt;
-        int lineCount;
-    };
+    QColor lab2rgb(qreal L, qreal a, qreal b);
 
     QGridLayout *colorLayout;
     QScrollBar *colorScrollBar;
-    int maximumColumn=0, columnPerPage=5;
     QList<colorInfo> colorDatabase;
-    QList<colorLineInfo> lineInfo;
     QList<KCColorSlot *> colorViewer;
+    int lineCount;
+
+    //Current book info.
+    int screenHeight=5;
+    quint16 bookVersion, bookIdentifier, colorNumber,
+            pageSize, pageOffset, colorModel;
+    QString bookTitle, bookPrefix, bookSuffix, bookDescription;
 };
 
 class KCColorDatabaseBrowser : public QWidget
