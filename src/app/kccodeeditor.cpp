@@ -112,7 +112,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
 void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settings)
 {
     editor->setCursorWidth(settings.cursorWidth);
-    editor->setWordWrap(settings.wrapMode);
+    editor->setWordWrapMode(settings.wrapMode);
     editor->setTabStopWidth(fontMetrics().width(' ')*settings.tabSpace);
     editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
     editor->setSpacePerTab(settings.spacePerTab);

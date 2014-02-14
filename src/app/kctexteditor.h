@@ -76,13 +76,19 @@ public:
     int lineNumberWidth();
     void setDebugCursor(int lineNumber);
     void setLinePanelVisible(bool value);
+
+    //Programming Colors
     void setLineColor(const QColor &value);
     void setSearchResultColor(const QColor &value);
     void setNoMatchedParenthesesColor(const QColor &value);
     void setMatchedParenthesesColor(const QColor &value);
 
 signals:
+    /*!
+     * \brief This signal is designed to hide all other widgets.
+     */
     void requireHideOthers();
+
     void searchStringChangedByShortCut(QString searchText);
     void overwriteModeChanged(bool newValue);
     void matchedResult();
@@ -105,10 +111,8 @@ public slots:
     bool replace(const QString &oldText,const QString &newText);
     bool replaceAndFind(const QString &oldText, const QString &newText);
     bool replaceAll(const QString &oldText, const QString &newText);
-    void autoIndent();
+    void autoIndent(const QTextBlock &b);
     void setTabWidth(int width);
-    void setWordWrap(QTextOption::WrapMode wrapMode);
-    void setTheCursorWidth(int width);
     void setLineErrorState(QList<int> errorList);
     void setCursorAtLine(int blockNumber);
 
@@ -133,6 +137,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    KCTextBlockData *getBlockData(const QTextBlock &b);
     bool showPreviousSearchResult(const QTextCursor &cursor);
     bool showNextSearchResult(const QTextCursor &cursor);
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
@@ -158,7 +163,7 @@ private:
                          QTextBlock block,
                          bool forward);
     int findFirstCharacter(const QTextBlock &block);
-    void insertTab(QTextCursor insertTabCursor, int tabCount = 1, bool forceInsert = false);
+    void insertTab(QTextCursor insertTabCursor, int tabCount = 1);
     void removeTab(QTextCursor removeTabCursor, int tabCount = 1);
     void tabPressEvent(QTextCursor tabPressCursor);
 

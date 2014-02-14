@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QDesktopWidget>
 #include <QScreen>
+#include <QWheelEvent>
+#include <QStyleFactory>
 #include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
@@ -240,14 +242,14 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
             quint8 dataC, dataM, dataY, dataK;
             qreal c,m,y,k;
             colorStream>>dataC>>dataM>>dataY>>dataK;
-            c = (qreal)(255 - dataC) / 2.55 + 0.5; // 0% thru 100%
-            m = (qreal)(255 - dataM) / 2.55 + 0.5; // 0% thru 100%
-            y = (qreal)(255 - dataY) / 2.55 + 0.5; // 0% thru 100%
-            k = (qreal)(255 - dataK) / 2.55 + 0.5; // 0% thru 100%
-            dataC=(quint8)(255.0*c);
-            dataM=(quint8)(255.0*m);
-            dataY=(quint8)(255.0*y);
-            dataK=(quint8)(255.0*k);
+            c=(qreal)(255-dataC)/2.55+0.5; // 0% thru 100%
+            m=(qreal)(255-dataM)/2.55+0.5; // 0% thru 100%
+            y=(qreal)(255-dataY)/2.55+0.5; // 0% thru 100%
+            k=(qreal)(255-dataK)/2.55+0.5; // 0% thru 100%
+            dataC=(quint8)(2.55*c);
+            dataM=(quint8)(2.55*m);
+            dataY=(quint8)(2.55*y);
+            dataK=(quint8)(2.55*k);
             currentColor.color.setCmyk(dataC, dataM, dataY, dataK);
             break;
         case 7:
@@ -295,6 +297,13 @@ void KCColorDatabaseViewer::loadColorDataBase(const QString &fileName)
     updateColorLayout(0);
 }
 
+void KCColorDatabaseViewer::wheelEvent(QWheelEvent *event)
+{
+    colorScrollBar->setValue(colorScrollBar->value()-
+                             event->angleDelta().y()/56);
+    QWidget::wheelEvent(event);
+}
+
 void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
 {
     int i,j,currentColorOffset=0, baseIndex=topLine*pageSize, currentColorIndex;
@@ -307,9 +316,7 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
             for(j=0; j<pageSize; j++)
             {
                 KCColorSlot *currentColor=colorViewer.at(currentColorOffset);
-                currentColor->setText("");
-                currentColor->setBackgroundColor(QColor(0,0,0,0));
-                currentColor->setToolTip("");
+                currentColor->setVisible(false);
                 currentColorOffset++;
             }
             continue;
@@ -321,19 +328,25 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
             if(indexOverflow || currentColorIndex>=colorNumber)
             {
                 indexOverflow=true;
-                currentColor->setText("");
-                currentColor->setBackgroundColor(QColor(0,0,0,0));
-                currentColor->setToolTip("");
+                currentColor->setVisible(false);
                 currentColorOffset++;
                 break;
             }
             colorInfo currentColorInfo=colorDatabase.at(currentColorIndex);
-            combineColorName=bookPrefix+
-                             currentColorInfo.colorName+
-                             bookSuffix;
-            currentColor->setText(combineColorName);
-            currentColor->setBackgroundColor(currentColorInfo.color);
-            currentColor->setToolTip(combineColorName);
+            if(currentColorInfo.colorName.isEmpty())
+            {
+                currentColor->setVisible(false);
+            }
+            else
+            {
+                currentColor->setVisible(true);
+                combineColorName=bookPrefix+
+                        currentColorInfo.colorName+
+                        bookSuffix;
+                currentColor->setText(combineColorName);
+                currentColor->setBackgroundColor(currentColorInfo.color);
+                currentColor->setToolTip(combineColorName);
+            }
             currentColorOffset++;
         }
     }
@@ -427,6 +440,7 @@ void KCColorDatabaseBrowser::requireShowDatabase(int databaseIndex)
             mainLayout->takeAt(1);
         }
     }
+    viewer.take();
     viewer.reset(new KCColorDatabaseViewer);
     viewer->loadColorDataBase(databaseList.at(databaseIndex));
     syncSignal=connect(viewer.data(), &KCColorDatabaseViewer::requireSyncColor,

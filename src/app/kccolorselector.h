@@ -18,6 +18,7 @@ class QScrollBar;
 class QPaintEvent;
 class QGridLayout;
 class QResizeEvent;
+class QWheelEvent;
 class QPushButton;
 
 class KCHexColorLineEdit : public QLineEdit
@@ -83,6 +84,9 @@ public:
 
 signals:
     void requireSyncColor(QColor color);
+
+protected:
+    void wheelEvent(QWheelEvent *event);
 
 private slots:
     void updateColorLayout(const int &topLine);

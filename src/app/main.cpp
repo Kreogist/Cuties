@@ -203,7 +203,7 @@ void KCMessageHandler(QtMsgType type, const QMessageLogContext &context, const Q
  */
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(KCMessageHandler);
+    //qInstallMessageHandler(KCMessageHandler);
     //Load QApplication Object.
     QApplication app(argc,argv);
     loadApplicationInfo();

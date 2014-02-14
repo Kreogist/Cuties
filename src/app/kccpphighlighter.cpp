@@ -186,7 +186,7 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
 
     QTextBlock prevBlock=currentBlock().previous();
 
-    int baseLevel=0;
+    int baseLevel=0, prevLevel=0;
     if(prevBlock.isValid())
     {
         KCTextBlockData *prevData=static_cast<KCTextBlockData *>(prevBlock.userData());
@@ -202,22 +202,17 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
             if(i->character == '{')
             {
                 baseLevel++;
+                continue;
             }
-            else if(i->character == '}')
+            if(i->character == '}')
             {
                 baseLevel--;
             }
         }
-        prevCodeLevelInfo.codeLevelUp=false;
-        prevCodeLevelInfo.codeLevelDown=false;
-        if(baseLevel>prevCodeLevelInfo.codeLevel)
-        {
-            prevCodeLevelInfo.codeLevelUp=true;
-        }
-        else if(baseLevel<prevCodeLevelInfo.codeLevel)
-        {
-            prevCodeLevelInfo.codeLevelDown=true;
-        }
+        prevLevel=prevCodeLevelInfo.codeLevel;
+
+        prevCodeLevelInfo.codeLevelUp=(baseLevel>prevLevel);
+        prevCodeLevelInfo.codeLevelDown=(baseLevel<prevLevel);
         prevData->setCodeLevelInfo(prevCodeLevelInfo);
     }
     codeLevelInfo.codeLevel=baseLevel;
