@@ -143,6 +143,8 @@ KCPreferenceEmbeddedEditor::KCPreferenceEmbeddedEditor(QWidget *parent):
     editorTitles[titleViewOptions]=addTitle(editorTitleText[titleViewOptions]);
     editorBooleans[booleanShowLinePanel]=addItemBoolean(booleanItemCaption[booleanShowLinePanel],
                                          "LineNumVisible");
+    editorBooleans[booleanShowCodeLevel]=addItemBoolean(booleanItemCaption[booleanShowCodeLevel],
+                                                        "CodeLevelVisible");
 
     editorBooleanGroups[booleanGroupSpacingInsteadOfTab]=
         addItemBooleanGroup(booleanGroupCaption[booleanGroupSpacingInsteadOfTab],
@@ -200,6 +202,7 @@ void KCPreferenceEmbeddedEditor::retranslate()
     editorTitleText[titleClipboard]=QString(" " + tr("Clipboard"));
 
     booleanItemCaption[booleanShowLinePanel]=tr("Show code line panel:");
+    booleanItemCaption[booleanShowCodeLevel]=tr("Show code level:");
     booleanItemCaption[booleanTabMoveable]=tr("Tab moving:");
     booleanItemCaption[booleanTabCloseable]=tr("Tab closing:");
 

@@ -64,6 +64,7 @@ public:
         QTextOption::WrapMode wrapMode;
         int cursorWidth;
         bool lineNumberPanelVisible;
+        bool codeLevelVisible;
         QColor lineColor;
         QColor searchResultColor;
         QColor noMatchedParenthesesColor;

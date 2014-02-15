@@ -12,6 +12,8 @@ public:
                      QTextBlock *block, KCTextBlockData *data, QTextCursor cursor);
     void setPanelWidth(int lineNumberPanelWidth);
 
+    void setShowCodeLevel(bool value);
+
 signals:
     void requireFoldStartAt(int blockIndex);
     void requireUnfoldStartAt(int blockIndex);
@@ -27,6 +29,7 @@ private:
     QPixmap compileErrorMark;
     int foldMarkWidth, foldMarkHeight;
     int errorMarkWidth, errorMarkHeight;
+    bool showCodeLevel=false;
 };
 
 #endif // KCUNIBODYPANEL_H

@@ -127,6 +127,7 @@ private:
     enum EditorBooleanEnum
     {
         booleanShowLinePanel,
+        booleanShowCodeLevel,
         booleanTabMoveable,
         booleanTabCloseable,
         booleanItemCount

@@ -119,6 +119,7 @@ void KCCodeEditor::applyEditorSettings(KCCodeEditor::KCCodeEditorSettings settin
     editor->setUsingBlankInsteadTab(settings.usingBlankInsteadTab);
     editor->setSpacePerTab(settings.spacePerTab);
     editor->setLinePanelVisible(settings.lineNumberPanelVisible);
+    editor->setCodeLevelVisible(settings.codeLevelVisible);
     editor->setLineColor(settings.lineColor);
     editor->setSearchResultColor(settings.searchResultColor);
     editor->setNoMatchedParenthesesColor(settings.noMatchedParenthesesColor);

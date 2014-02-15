@@ -74,6 +74,7 @@ public:
     int lineNumberWidth();
     void setDebugCursor(int lineNumber);
     void setLinePanelVisible(bool value);
+    void setCodeLevelVisible(bool value);
 
     //Programming Colors
     void setLineColor(const QColor &value);

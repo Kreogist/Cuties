@@ -46,6 +46,11 @@ void KCUnibodyPanel::drawContent(int x,
                                errorMarkHeight,
                                compileErrorMark);
         }
+        if(showCodeLevel)
+        {
+            painter.drawText(x, y+(height-fontMetrics().height())/2, width, height,
+                             Qt::AlignRight, QString::number(data->getCodeLevel() + 1));
+        }
         if(codeLevelInfo.codeLevelUp)
         {
             if(codeLevelInfo.hasFolded)
@@ -96,4 +101,9 @@ void KCUnibodyPanel::panelItemClickEvent(QTextBlock *block,
         }
         data->setCodeLevelInfo(codeLevelInfo);
     }
+}
+
+void KCUnibodyPanel::setShowCodeLevel(bool value)
+{
+    showCodeLevel = value;
 }

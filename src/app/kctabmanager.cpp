@@ -575,6 +575,7 @@ void KCTabManager::editorConfigureRefresh()
     editorSettings.tabSpace=editorConfigure->getValue("TabWidth").toInt();
     editorSettings.wrapMode=editorConfigure->indexToWrapMode(editorConfigure->getValue("WordWrap").toInt());
     editorSettings.lineNumberPanelVisible=editorConfigure->getValue("LineNumVisible").toBool();
+    editorSettings.codeLevelVisible=editorConfigure->getValue("CodeLevelVisible").toBool();
     editorSettings.lineColor=editorConfigure->getValue("LineColor").value<QColor>();
     editorSettings.searchResultColor=editorConfigure->getValue("SearchResultColor").value<QColor>();
     editorSettings.noMatchedParenthesesColor=editorConfigure->getValue("NoMatchedParenthesesColor").value<QColor>();

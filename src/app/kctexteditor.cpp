@@ -477,6 +477,12 @@ bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
 //Tab process
 void KCTextEditor::autoIndent(const QTextBlock &b)
 {
+    if(!b.previous().isValid())
+    {
+        //First block, no need to judge.
+        return;
+    }
+
     QTextCursor indentCursor(b);
     int pos=findFirstCharacter(b);
     indentCursor.setPosition(b.position()+pos);
@@ -494,56 +500,19 @@ void KCTextEditor::autoIndent(const QTextBlock &b)
             insertTab(indentCursor,nextLevel);
             return;
         }
-        insertTab(indentCursor,currLevel);
-    }
-    /*if(!b.previous().isValid())
-    {
-        //First block, no need to judge.
-        return;
-    }
-
-    QTextCursor indentCursor=textCursor();
-    QTextBlock currBlock=b;
-    QTextBlock prevBlock=currBlock.previous();
-    indentCursor.setPosition(currBlock.position());
-    int basePos=findFirstCharacter(prevBlock);
-    int pos=findFirstCharacter(currBlock);
-    KCTextBlockData *prevData=getBlockData(prevBlock),
-                    *currData=getBlockData(currBlock);
-    int baseLevel=prevData!=NULL?prevData->getCodeLevel():0;
-    int currLevel=currData!=NULL?currData->getCodeLevel():0;
-
-    if(b.next().isValid())
-    {
-        QTextBlock nextBlock=currBlock.next();
-        int nextPos=findFirstCharacter(nextBlock);
-        KCTextBlockData *nextData=getBlockData(nextBlock);
-        int nextLevel=nextData!=NULL?nextData->getCodeLevel():0;
-        if(nextLevel<currLevel)
-        {
-            QTextCursor nextCursor(nextBlock);
-            nextCursor.movePosition(QTextCursor::Right,
-                                    QTextCursor::KeepAnchor,
-                                    nextPos);
-            QString tabs=nextCursor.selectedText();
-            indentCursor.setPosition(currBlock.position()+pos);
-            indentCursor.movePosition(QTextCursor::StartOfBlock,
-                                    QTextCursor::KeepAnchor);
-            indentCursor.removeSelectedText();
-            indentCursor.insertText(tabs);
-            insertTab(indentCursor,currLevel-nextLevel);
-            return;
-        }
     }
     else
     {
-        //Must be the last line, delete all in front spaces!
-        indentCursor.setPosition(currBlock.position()+pos);
-        indentCursor.movePosition(QTextCursor::StartOfBlock,
-                                  QTextCursor::KeepAnchor);
-        indentCursor.removeSelectedText();
+        //Last block, no need to judge.
         return;
     }
+
+    QTextBlock currBlock=b;
+    QTextBlock prevBlock=currBlock.previous();
+    indentCursor.setPosition(currBlock.position());
+    KCTextBlockData *prevData=getBlockData(prevBlock);
+    int basePos=findFirstCharacter(prevBlock),
+        baseLevel=prevData!=NULL?prevData->getCodeLevel():0;
 
     QTextCursor prevCursor(prevBlock);
     prevCursor.movePosition(QTextCursor::Right,
@@ -556,12 +525,7 @@ void KCTextEditor::autoIndent(const QTextBlock &b)
     indentCursor.removeSelectedText();
     indentCursor.insertText(tabs);
 
-    if(currLevel>baseLevel)
-    {
-        insertTab(indentCursor,currLevel-baseLevel);
-        return;
-    }*/
-
+    insertTab(indentCursor,currLevel-baseLevel);
 }
 
 void KCTextEditor::insertTab(QTextCursor insertTabCursor, int tabCount)
@@ -1387,6 +1351,11 @@ void KCTextEditor::setLinePanelVisible(bool value)
 {
     lineNumberPanel->setVisible(value);
     updatePanelAreaWidth();
+}
+
+void KCTextEditor::setCodeLevelVisible(bool value)
+{
+    unibodyPanel->setShowCodeLevel(value);
 }
 
 void KCTextEditor::updatePanelAreaWidth()
