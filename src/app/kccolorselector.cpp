@@ -330,7 +330,7 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
                 indexOverflow=true;
                 currentColor->setVisible(false);
                 currentColorOffset++;
-                break;
+                continue;
             }
             colorInfo currentColorInfo=colorDatabase.at(currentColorIndex);
             if(currentColorInfo.colorName.isEmpty())
@@ -350,6 +350,7 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
             currentColorOffset++;
         }
     }
+    update();
 }
 
 QColor KCColorDatabaseViewer::lab2rgb(qreal L, qreal a, qreal b)

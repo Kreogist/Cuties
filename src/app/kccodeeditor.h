@@ -18,14 +18,16 @@
  */
 
 /*!
- * \copyright GNU Public License v3
  * \details
- *    This file is the function implementation file of class KCCodeEditor.
- *    KCCodeEditor is the base class of KCTabManager. KCCodeEditor is a
+ * This file is the function implementation file of class KCCodeEditor.
+ * KCCodeEditor is the base class of KCTabManager. KCCodeEditor is a
  * combination of the following classes:
- *        KCTextEditor
- *        KCLanguageMode
- *    KCTextEditor is used to edit the code. And KCLanguageMode will process
+ *
+ * KCTextEditor
+ *
+ * KCLanguageMode
+ *
+ * KCTextEditor is used to edit the code. And KCLanguageMode will process
  * the compile and debug process.
  */
 
@@ -33,19 +35,15 @@
 #define TEXTEDITOR_H
 
 #include <QFile>
-#include <QTextCursor>
-#include <QString>
 #include <QWidget>
+#include <QTextCursor>
 #include <QList>
-
-#include <QDebug>
 
 #include "kclanguagemode.h"
 #include "kccodecompileprogress.h"
 #include "kcconnectionhandler.h"
 
-class QVBoxLayout;
-class QHBoxLayout;
+class QBoxLayout;
 class KCSearchWindow;
 class KCReplaceWindow;
 class KCLanguageMode;
@@ -164,7 +162,7 @@ private:
 
     KCCodeCompileProgress *currentCompileProgress;
 
-    QVBoxLayout *mainLayout;
+    QBoxLayout *mainLayout;
     KCTextEditor *editor;
 
     QString filePath;

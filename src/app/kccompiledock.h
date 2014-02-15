@@ -17,15 +17,19 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*!
+ * \details
+ * This file is the function implementation file of class KCCompileDock.
+ * KCCompileDock is the basic widget of the compiler output information
+ * displayer. It can display the plain text output and the tree view
+ * output of the compiler.
+ */
+
 #ifndef KCCOMPILEDOCK_H
 #define KCCOMPILEDOCK_H
 
 #include <QDockWidget>
 #include <QModelIndex>
-#include <QToolButton>
-#include <QHBoxLayout>
-#include <QProgressBar>
-#include <QLabel>
 
 #include "kcconnectionhandler.h"
 

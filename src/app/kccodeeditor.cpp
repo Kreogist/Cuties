@@ -18,10 +18,12 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include <QTextStream>
 #include <QFileInfo>
 #include <QFileDialog>
-#include <QHBoxLayout>
+#include <QBoxLayout>
 #include <QIcon>
 #include <QMessageBox>
 #include <QPalette>
@@ -49,7 +51,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     setFont(QString("Monaco"));
     setContentsMargins(0,0,0,0);
 
-    mainLayout=new QVBoxLayout(this);
+    mainLayout=new QBoxLayout(QBoxLayout::TopToBottom ,this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);

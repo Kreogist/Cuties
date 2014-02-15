@@ -20,17 +20,28 @@
 #include <QScrollBar>
 #include <QPainter>
 #include <QPalette>
+#include <QFont>
+#include <QFontMetrics>
 #include <QMenu>
 #include <QStyleFactory>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QDebug>
+#include <QShowEvent>
+#include <QResizeEvent>
+#include <QTextBlock>
+#include <QTextCursor>
 
 #include "kctextblockdata.h"
 #include "kcclipboard.h"
+#include "kcfloattoolbar.h"
 #include "kcfontconfigure.h"
 #include "kccolorconfigure.h"
 #include "kctexteditor.h"
+#include "kctextpanelmanager.h"
+#include "kclinenumberpanel.h"
+#include "kcunibodypanel.h"
+#include "kcdebugmarkpanel.h"
 
 /*!
  * \brief Constructs a KCTextEditor with the given parent and the specified
@@ -105,6 +116,40 @@ KCTextEditor::KCTextEditor(QWidget *parent) :
 
 /***********Properies settings************/
 /*!
+ * \brief Set the vertical scroll bar value.
+ * \param value The scroll bar value.
+ */
+void KCTextEditor::setVerticalScrollValue(int value)
+{
+    verticalScrollBar()->setValue(value);
+}
+
+/*!
+ * \brief Set the horizontal scroll bar value.
+ * \param value The scroll bar value.
+ */
+void KCTextEditor::setHorizontalScrollValue(int value)
+{
+    horizontalScrollBar()->setValue(value);
+}
+
+/*!
+ * \brief Get the vertical scroll bar value.
+ */
+int KCTextEditor::verticalScrollValue()
+{
+    return verticalScrollBar()->value();
+}
+
+/*!
+ * \brief Get the horizontal scroll bar value.
+ */
+int KCTextEditor::horizontalScrollValue()
+{
+    return horizontalScrollBar()->value();
+}
+
+/*!
  * \brief Set the tab width of the current text editor.
  * \param width The number of the space width of the tab width.
  */
@@ -112,6 +157,36 @@ void KCTextEditor::setTabWidth(int width)
 {
     tabSpace=width;
     setTabStopWidth(fontMetrics().width(' ')*tabSpace);
+}
+
+void KCTextEditor::setMatchedParenthesesColor(const QColor &value)
+{
+    matchedParenthesesColor = value;
+}
+
+void KCTextEditor::setNoMatchedParenthesesColor(const QColor &value)
+{
+    noMatchedParenthesesColor = value;
+}
+
+void KCTextEditor::setSearchResultColor(const QColor &value)
+{
+    searchResultColor = value;
+}
+
+void KCTextEditor::setLineColor(const QColor &value)
+{
+    lineColor = value;
+}
+
+void KCTextEditor::setSpacePerTab(int value)
+{
+    spacePerTab = value;
+}
+
+void KCTextEditor::setUsingBlankInsteadTab(bool value)
+{
+    usingBlankInsteadTab = value;
 }
 
 /***********Search & Replace************/
@@ -246,7 +321,7 @@ bool KCTextEditor::findPreviousSearchResult()
     {
         return findLastSearchResult();
     }
-    return false;
+    return true;
 }
 
 bool KCTextEditor::findFirstSeachResult()
@@ -398,9 +473,30 @@ bool KCTextEditor::replaceAll(const QString &oldText, const QString &newText)
     return true;
 }
 
+/***********Text process************/
+//Tab process
 void KCTextEditor::autoIndent(const QTextBlock &b)
 {
-    if(!b.previous().isValid())
+    QTextCursor indentCursor(b);
+    int pos=findFirstCharacter(b);
+    indentCursor.setPosition(b.position()+pos);
+    indentCursor.movePosition(QTextCursor::StartOfBlock,
+                              QTextCursor::KeepAnchor);
+    indentCursor.removeSelectedText();
+    KCTextBlockData *currData=getBlockData(b);
+    int currLevel=currData!=NULL?currData->getCodeLevel():0;
+    if(b.next().isValid())
+    {
+        KCTextBlockData *nextData=getBlockData(b.next());
+        int nextLevel=nextData!=NULL?nextData->getCodeLevel():0;
+        if(nextLevel<currLevel)
+        {
+            insertTab(indentCursor,nextLevel);
+            return;
+        }
+        insertTab(indentCursor,currLevel);
+    }
+    /*if(!b.previous().isValid())
     {
         //First block, no need to judge.
         return;
@@ -464,7 +560,7 @@ void KCTextEditor::autoIndent(const QTextBlock &b)
     {
         insertTab(indentCursor,currLevel-baseLevel);
         return;
-    }
+    }*/
 
 }
 
@@ -545,36 +641,6 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
     }
     insertTab(tabPressCursor, 1);
     tabPressCursor.endEditBlock();
-}
-
-void KCTextEditor::setMatchedParenthesesColor(const QColor &value)
-{
-    matchedParenthesesColor = value;
-}
-
-void KCTextEditor::setNoMatchedParenthesesColor(const QColor &value)
-{
-    noMatchedParenthesesColor = value;
-}
-
-void KCTextEditor::setSearchResultColor(const QColor &value)
-{
-    searchResultColor = value;
-}
-
-void KCTextEditor::setLineColor(const QColor &value)
-{
-    lineColor = value;
-}
-
-void KCTextEditor::setSpacePerTab(int value)
-{
-    spacePerTab = value;
-}
-
-void KCTextEditor::setUsingBlankInsteadTab(bool value)
-{
-    usingBlankInsteadTab = value;
 }
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
@@ -1206,40 +1272,6 @@ void KCTextEditor::setLineErrorState(QList<int> errorList)
 void KCTextEditor::setCursorAtLine(int blockNumber)
 {
     setCursorPosition(blockNumber,0);
-}
-
-/*!
- * \brief Set the vertical scroll bar value.
- * \param value The scroll bar value.
- */
-void KCTextEditor::setVerticalScrollValue(int value)
-{
-    verticalScrollBar()->setValue(value);
-}
-
-/*!
- * \brief Set the horizontal scroll bar value.
- * \param value The scroll bar value.
- */
-void KCTextEditor::setHorizontalScrollValue(int value)
-{
-    horizontalScrollBar()->setValue(value);
-}
-
-/*!
- * \brief Get the vertical scroll bar value.
- */
-int KCTextEditor::verticalScrollValue()
-{
-    return verticalScrollBar()->value();
-}
-
-/*!
- * \brief Get the horizontal scroll bar value.
- */
-int KCTextEditor::horizontalScrollValue()
-{
-    return horizontalScrollBar()->value();
 }
 
 QList<int> KCTextEditor::getBreakPoints()

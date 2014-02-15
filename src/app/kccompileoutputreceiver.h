@@ -22,7 +22,6 @@
 
 #include <QStandardItemModel>
 #include <QTime>
-#include <QDebug>
 
 #include "kccompilerbase.h"
 

@@ -30,26 +30,24 @@
 #define CODEEDITOR_H
 
 #include <QPlainTextEdit>
-#include <QTextCursor>
-#include <QTextBlock>
 #include <QScopedPointer>
-#include <QSignalMapper>
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
-#include <QFont>
-#include <QFontMetrics>
 #include <QList>
-#include <QShowEvent>
-#include <QResizeEvent>
 
 #include "kctextsearcher.h"
-#include "kcfloattoolbar.h"
-#include "kctextpanelmanager.h"
-#include "kclinenumberpanel.h"
-#include "kcunibodypanel.h"
-#include "kcdebugmarkpanel.h"
 
+class QShowEvent;
+class QResizeEvent;
+class QTextBlock;
+class QTextCursor;
 class KCClipboard;
+class KCTextPanel;
+class KCFloatToolBar;
+class KCTextPanelManager;
+class KCLineNumberPanel;
+class KCUnibodyPanel;
+class KCDebugMarkPanel;
 
 class KCTextEditor : public QPlainTextEdit
 {

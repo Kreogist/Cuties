@@ -18,7 +18,6 @@
  */
 
 #include <QTreeView>
-#include <QPalette>
 #include <QSplitter>
 #include <QList>
 #include <QTimeLine>

@@ -17,6 +17,8 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QDebug>
+
 #include "kccompileoutputreceiver.h"
 
 KCCompileOutputReceiver::KCCompileOutputReceiver(QObject *parent) :

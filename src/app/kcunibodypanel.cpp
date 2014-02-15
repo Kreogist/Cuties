@@ -46,8 +46,6 @@ void KCUnibodyPanel::drawContent(int x,
                                errorMarkHeight,
                                compileErrorMark);
         }
-        painter.drawText(x, y+(height-fontMetrics().height())/2, width, height,
-                         Qt::AlignRight, QString::number(codeLevelInfo.codeLevel));
         if(codeLevelInfo.codeLevelUp)
         {
             if(codeLevelInfo.hasFolded)
