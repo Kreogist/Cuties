@@ -922,23 +922,23 @@ QString KCTextEditor::parenthesesPair(const QString &parenthesesChar)
     return QString("");
 }
 
-void KCTextEditor::keyPressEvent(QKeyEvent *e)
+void KCTextEditor::keyPressEvent(QKeyEvent *event)
 {
-    switch(e->key())
+    switch(event->key())
     {
     case Qt::Key_Escape:
-        QPlainTextEdit::keyPressEvent(e);
+        QPlainTextEdit::keyPressEvent(event);
         emit requireHideOthers();
         return;
     }
     QTextCursor _textCursor=textCursor();
     QString pairParethesesChar;
-    pairParethesesChar=parenthesesPair(e->text());
+    pairParethesesChar=parenthesesPair(event->text());
     if(!pairParethesesChar.isEmpty())
     {
         if(_textCursor.selectedText().isEmpty())
         {
-            QPlainTextEdit::keyPressEvent(e);
+            QPlainTextEdit::keyPressEvent(event);
             insertPlainText(pairParethesesChar);
             _textCursor.movePosition(QTextCursor::Left);
             setTextCursor(_textCursor);
@@ -976,7 +976,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             _textCursor.beginEditBlock();
             _textCursor.clearSelection();
             _textCursor.setPosition(start);
-            _textCursor.insertText(e->text());
+            _textCursor.insertText(event->text());
             _textCursor.setPosition(end+1);
             _textCursor.insertText(pairParethesesChar);
             _textCursor.endEditBlock();
@@ -985,9 +985,9 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }
         return;
     }
-    if(e->text()==")" || e->text()=="]")
+    if(event->text()==")" || event->text()=="]")
     {
-        if(QString(_textCursor.document()->characterAt(_textCursor.position())) == e->text())
+        if(QString(_textCursor.document()->characterAt(_textCursor.position())) == event->text())
         {
             KCTextBlockData *blockData=getBlockData(_textCursor.block());
 
@@ -1000,8 +1000,8 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 {
                     if(i->pos == _textCursor.positionInBlock())
                     {
-                        if(matchParentheses(e->text().at(0).toLatin1(),
-                                            e->text()==")"?'(':'[',
+                        if(matchParentheses(event->text().at(0).toLatin1(),
+                                            event->text()==")"?'(':'[',
                                             i,
                                             _textCursor.block(),
                                             false) > -1)
@@ -1014,14 +1014,15 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 }
             }
         }
-        QPlainTextEdit::keyPressEvent(e);
+        QPlainTextEdit::keyPressEvent(event);
         return;
     }
-    if(e->text()=="\"")
+    if(event->text()=="\"")
     {
         if(_textCursor.selectedText().isEmpty())
         {
             KCTextBlockData *currData=getBlockData(_textCursor.block());
+            //qDebug()<<currData->getQuotationStatus();
             if(_textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
                currData->getQuotationStatus()!=-1)
             {
@@ -1029,7 +1030,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 setTextCursor(_textCursor);
                 return;
             }
-            QPlainTextEdit::keyPressEvent(e);
+            QPlainTextEdit::keyPressEvent(event);
             if(_textCursor.document()->characterAt(_textCursor.position()-1)!=QChar('\\') &&
                currData->getQuotationStatus()==-1)
             {
@@ -1053,7 +1054,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         }
         return;
     }
-    switch(e->key())
+    switch(event->key())
     {
     case Qt::Key_Tab:
     {
@@ -1065,7 +1066,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         //If there's text selected, just delete them.
         if(_textCursor.selectedText().length()>0)
         {
-            QPlainTextEdit::keyPressEvent(e);
+            QPlainTextEdit::keyPressEvent(event);
             break;
         }
         //Now we have to judge the status.
@@ -1076,7 +1077,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
         if(parenthesesPair(previousChar)==currentChar)
         {
             _textCursor.deleteChar();
-            QPlainTextEdit::keyPressEvent(e);
+            QPlainTextEdit::keyPressEvent(event);
             break;
         }
         //So as quotations.
@@ -1086,10 +1087,10 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
            currData->getQuotationStatus()!=0)
         {
             _textCursor.deleteChar();
-            QPlainTextEdit::keyPressEvent(e);
+            QPlainTextEdit::keyPressEvent(event);
             break;
         }
-        QPlainTextEdit::keyPressEvent(e);
+        QPlainTextEdit::keyPressEvent(event);
         break;
     }
     case Qt::Key_Return:
@@ -1111,7 +1112,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 {
                     //It's a pair of char '{}'
                     // Indent it!
-                    QPlainTextEdit::keyPressEvent(e);
+                    QPlainTextEdit::keyPressEvent(event);
                     _textCursor.insertBlock();
                     QTextBlock currentBlock=_textCursor.block().previous();
                     autoIndent(currentBlock);
@@ -1139,7 +1140,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
             }
             if(currentChar == ')' || currentChar == ']')
             {
-                QPlainTextEdit::keyPressEvent(e);
+                QPlainTextEdit::keyPressEvent(event);
                 QTextBlock currBlock=_textCursor.block();
                 QTextBlock prevBlock=currBlock.previous();
                 KCTextBlockData *prevData=getBlockData(prevBlock);
@@ -1171,7 +1172,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
                 break;
             }
         }
-        QPlainTextEdit::keyPressEvent(e);
+        QPlainTextEdit::keyPressEvent(event);
         autoIndent(_textCursor.block());
         break;
     }
@@ -1183,7 +1184,7 @@ void KCTextEditor::keyPressEvent(QKeyEvent *e)
     }
     default:
     {
-        QPlainTextEdit::keyPressEvent(e);
+        QPlainTextEdit::keyPressEvent(event);
         break;
     }
     }

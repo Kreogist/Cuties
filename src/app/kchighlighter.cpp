@@ -65,7 +65,7 @@ void KCHighlighter::highlightBlock(const QString &text)
 }
 
 void KCHighlighter::parseQuotationInfo(const QString &text,
-                                      KCTextBlockData *data)
+                                       KCTextBlockData *data)
 {
     int firstIndex=text.indexOf('\"');
     int singleCommentPos=text.indexOf("//");
@@ -128,6 +128,7 @@ void KCHighlighter::parseQuotationInfo(const QString &text,
         }
         data->setLineCommentPos(singleCommentPos);
         data->setQuotationStatus(secondIndex);
+        return;
     }
     data->setLineCommentPos(singleCommentPos);
     data->setQuotationStatus(-1);

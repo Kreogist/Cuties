@@ -34,6 +34,7 @@ class KCDebugControlPanel;
 class KCDebugCommandIO;
 class KCDebugWatch;
 class KCVisibleRecorder;
+class KCUniSearchWidget;
 class GdbController;
 
 /*!
@@ -240,6 +241,7 @@ private:
     KCDebugWatch *debugWatch;
 
     KCVisibleRecorder *visibleRecorder;
+    KCUniSearchWidget *uniSearch;
 
     void onActionDelayCompile();
 
@@ -252,6 +254,7 @@ private:
     void createMenu();
     void createStatusbar();
     void createToolBar();
+    void createTools();
 
     void setDocOpenMenuState(bool state);
 

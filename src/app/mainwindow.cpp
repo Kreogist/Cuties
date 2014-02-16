@@ -22,7 +22,6 @@
 #include <QPalette>
 #include <QToolButton>
 #include <QMessageBox>
-#include <QDesktopServices>
 #include <QSize>
 #include <QRect>
 #include <QDebug>
@@ -50,6 +49,7 @@
 #include "kcmailreports.h"
 #include "kcmainmenu.h"
 #include "kcsubmenu.h"
+#include "kcunisearchwidget.h"
 #include "kcvisiblerecorder.h"
 #include "mainwindow.h"
 #include "kcfontconfigure.h"
@@ -88,6 +88,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createMenu();
     createActions();
+
+    createTools();
 
     //Restore the last time running states
     retranslateAndSet();
@@ -715,6 +717,13 @@ void MainWindow::createToolBar()
 
 }
 
+void MainWindow::createTools()
+{
+    uniSearch=new KCUniSearchWidget(this);
+    connect(uniSearch, SIGNAL(requireLostFocus()),
+            tabManager, SLOT(setFocus()));
+}
+
 void MainWindow::createDocks()
 {
 
@@ -1106,9 +1115,8 @@ void MainWindow::onActionCompileAndRun()
 
 void MainWindow::onActionSearchOnline()
 {
-    KCGeneralConfigure *instance=KCGeneralConfigure::getInstance();
-    QDesktopServices::openUrl(QUrl(instance->getSearchEngineList().at(instance->getValue("SearchEngineIndex").toInt()).engineURL +
-                                   tabManager->textNowSelect()));
+    uniSearch->searchOnline(tabManager->textNowSelect());
+    uniSearch->setFocus();
 }
 
 void MainWindow::changeSidebarVisibleState()

@@ -328,8 +328,8 @@ KCPreferenceEmbeddedCompiler::KCPreferenceEmbeddedCompiler(QWidget *parent) :
 
 void KCPreferenceEmbeddedCompiler::retranslate()
 {
-    compilerTitleText[titleCompilerPath]=tr("Compiler Path");
-    compilerTitleText[titleCompilerOptions]=tr("Compiler Options");
+    compilerTitleText[titleCompilerOptions]=" " + tr("Compiler Options");
+    compilerTitleText[titleCompilerPath]=" " + tr("Compiler Path");
 
     booleanGroupCaption[booleanGroupDelayCompile]=tr("Delay Compile:");
 
@@ -418,7 +418,7 @@ KCPreferenceEmbeddedDebugger::KCPreferenceEmbeddedDebugger(QWidget *parent) :
 
 void KCPreferenceEmbeddedDebugger::retranslate()
 {
-    debuggerTitleText[titleGDBSettings]=tr("GDB Settings");
+    debuggerTitleText[titleGDBSettings]=" " + tr("GDB Settings");
 
     pathItemCaption[pathGDBDebugger]=tr("GDB Debugger:");
 

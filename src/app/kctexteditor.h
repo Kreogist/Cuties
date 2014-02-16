@@ -129,7 +129,7 @@ protected:
     void showEvent(QShowEvent *event);
     void paintEvent(QPaintEvent *e);
     void contextMenuEvent(QContextMenuEvent *event);
-    void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent *event);
     void mouseReleaseEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *event);
 
