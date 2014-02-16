@@ -7,10 +7,10 @@
 #include <QNetworkAccessManager>
 
 class QTimeLine;
-class QCompleter;
 class QNetworkReply;
 class QEvent;
 class QKeyEvent;
+class QTreeWidget;
 class QStringListModel;
 
 class KCGeneralConfigure;
@@ -47,6 +47,7 @@ private:
     QNetworkAccessManager m_networkManager;
     QString m_keyword;
     QString m_suggestionURL;
+    QTextCodec *gbkcodec;
 };
 
 class KCSearchSuggestion : public QObject
@@ -74,6 +75,7 @@ class KCUniSearchWidget : public QWidget
     Q_OBJECT
 public:
     explicit KCUniSearchWidget(QWidget *parent = 0);
+    ~KCUniSearchWidget();
 
 signals:
     void requireLostFocus();
@@ -101,8 +103,7 @@ private:
     KCUniSearchLineEdit *editor;
 
     QTimeLine *animation;
-    QCompleter *searchSuggestion;
-    QStringListModel *suggestionList;
+    QTreeWidget *searchSuggestion;
 
     KCSearchSuggestion *suggestionCatcher;
 
