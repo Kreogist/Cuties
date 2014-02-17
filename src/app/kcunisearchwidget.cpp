@@ -9,7 +9,7 @@
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QRegularExpressionMatch>
-#include <QTreeWidget>
+#include <QLineEdit>
 #include <QTreeWidgetItem>
 #include <QDesktopServices>
 #include <QTimeLine>
@@ -19,29 +19,22 @@
 
 #include "kcunisearchwidget.h"
 
-KCUniSearchLineEdit::KCUniSearchLineEdit(QWidget *parent) :
-    QLineEdit(parent)
+KCSearchSuggestionWidget::KCSearchSuggestionWidget(QWidget *parent) :
+    QTreeWidget(parent)
 {
     ;
 }
 
-void KCUniSearchLineEdit::keyPressEvent(QKeyEvent *event)
+void KCSearchSuggestionWidget::emulatePressedEvent(QEvent *keyPressEvent)
 {
-    switch(event->key())
-    {
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-        emit requireDoSearch();
-        return;
-    }
-
-    QLineEdit::keyPressEvent(event);
+    event(keyPressEvent);
 }
 
 KCSearchSuggestionProcessor::KCSearchSuggestionProcessor(QObject *parent) :
     QObject(parent)
 {
-    m_suggestionURL="http://suggestion.baidu.com/su?wd=%1&p=3&cb=window.bdsug.sug&t=1326789467239";
+    instance=KCGeneralConfigure::getInstance();
+    m_suggestionURL="http://bj1.api.bing.com/qsonhs.aspx?FORM=ASAPIH&mkt=zh-CN&type=cb&cb=sa_inst.apiCB&cp=12&q=%1&o=ds+ds+h+p";
     gbkcodec=QTextCodec::codecForName("GBK");
     connect(&m_networkManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));
@@ -53,26 +46,95 @@ void KCSearchSuggestionProcessor::handleNetworkData(QNetworkReply *networkReply)
     if(!networkReply->error())
     {
         QByteArray response(networkReply->readAll());
-        QString resultSuggestion=gbkcodec->toUnicode(response);
+        QString resultSuggestion(response);
         QString elements;
-        QRegularExpression regexp("\"[\\s\\S]+?\"");
-        QRegularExpressionMatchIterator matchIterator=regexp.globalMatch(resultSuggestion);
-        while(matchIterator.hasNext())
+        QRegularExpression regexp, regexp2;
+        QRegularExpressionMatchIterator matchIterator, elementIterator;
+        QRegularExpressionMatch match, match2;
+        switch(m_engineIndex)
         {
-            QRegularExpressionMatch match=matchIterator.next();
-            elements=resultSuggestion.mid(match.capturedStart()+1,
-                                          match.capturedLength()-2);
-            suggestion<<elements;
+        case 1:
+            //Yahoo
+            regexp.setPattern("\\[\"[\\s\\S]+?\",\\d\\]");
+            regexp2.setPattern("\"[\\s\\S]+?\"");
+            matchIterator=regexp.globalMatch(resultSuggestion);
+            if(matchIterator.hasNext())
+            {
+                match=matchIterator.next(); //Ignore a bug like string: ["k","m"].
+            }
+            else
+            {
+                break;
+            }
+            while(matchIterator.hasNext())
+            {
+                match=matchIterator.next();
+                elements=resultSuggestion.mid(match.capturedStart()+1,
+                                              match.capturedLength()-2);
+                elementIterator=regexp2.globalMatch(elements);
+                match2=elementIterator.next();
+                elements=elements.mid(match2.capturedStart()+1,
+                                      match2.capturedLength()-2);
+                elements.replace(QRegularExpression("<[\\s\\S]+?>"), QString(""));
+                suggestion<<elements;
+            }
+            break;
+        case 2:
+            //Bing
+            regexp.setPattern("\\{\"Txt\":\"[\\s\\S]+?\",\"Type\":\"AS\",\"Sk\":\"[\\s\\S]+?\",\"HCS\":[\\s\\S]+?\\}");
+            regexp2.setPattern("\"[\\s\\S]+?\"");
+            matchIterator=regexp.globalMatch(resultSuggestion);
+            while(matchIterator.hasNext())
+            {
+                match=matchIterator.next();
+                elements=resultSuggestion.mid(match.capturedStart()+1,
+                                              match.capturedLength()-2);
+                elementIterator=regexp2.globalMatch(elements);
+                match2=elementIterator.next();//Ignore the Txt string.
+                match2=elementIterator.next();
+                elements=elements.mid(match2.capturedStart()+1,
+                                      match2.capturedLength()-2);
+                elements.replace(QRegularExpression("<[\\s\\S]+?>"), QString(""));
+                suggestion<<elements;
+            }
+            break;
+        case 3:
+            //Baidu
+            resultSuggestion=gbkcodec->toUnicode(response);
+            regexp.setPattern("\"[\\s\\S]+?\"");
+            matchIterator=regexp.globalMatch(resultSuggestion);
+            while(matchIterator.hasNext())
+            {
+                match=matchIterator.next();
+                elements=resultSuggestion.mid(match.capturedStart()+1,
+                                              match.capturedLength()-2);
+                suggestion<<elements;
+            }
+            break;
+        default:
+            break;
         }
-        emit requireUpdateList(suggestion);
+        if(!suggestion.isEmpty())
+        {
+            emit requireUpdateList(suggestion);
+        }
     }
 }
 
 void KCSearchSuggestionProcessor::searchKeyWord(const QString &keyword)
 {
     m_keyword=keyword;
-    QString generateURL=gbkcodec->fromUnicode(QString(m_suggestionURL).arg(keyword));
-    m_networkManager.get(QNetworkRequest(generateURL));
+    m_engineIndex=instance->getValue("SearchEngineIndex").toInt();
+    QString originalURL=
+            instance->getSearchEngineList().at(m_engineIndex).suggestionURL;
+    if(originalURL.isEmpty())
+    {
+        return;
+    }
+    suggestionRequest.setUrl(QString(originalURL).arg(keyword));
+    suggestionConfig.setProtocol(QSsl::AnyProtocol);
+    suggestionRequest.setSslConfiguration(suggestionConfig);
+    m_networkManager.get(suggestionRequest);
 }
 
 KCSearchSuggestion::KCSearchSuggestion(QObject *parent) :
@@ -100,7 +162,7 @@ void KCSearchSuggestion::searchKeyWord(const QString &keyword)
 KCUniSearchWidget::KCUniSearchWidget(QWidget *parent) :
     QWidget(parent)
 {
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(7,7,7,7);
     setAutoFillBackground(true);
     setFixedSize(216, fixedHeight);
 
@@ -111,16 +173,16 @@ KCUniSearchWidget::KCUniSearchWidget(QWidget *parent) :
     layout->setSpacing(0);
     setLayout(layout);
 
-    editor=new KCUniSearchLineEdit(this);
-    editor->setFixedWidth(200);
+    editor=new QLineEdit(this);
+    //editor->setFixedWidth(200);
     editor->installEventFilter(this);
     layout->addWidget(editor);
 
-    searchSuggestion=new QTreeWidget;
-    searchSuggestion->setWindowFlags(Qt::Popup);
+    searchSuggestion=new KCSearchSuggestionWidget;
+    searchSuggestion->setWindowFlags(Qt::ToolTip);
     searchSuggestion->setFocusPolicy(Qt::NoFocus);
-    searchSuggestion->setFocusProxy(editor);
     searchSuggestion->setMouseTracking(true);
+    searchSuggestion->setFocusProxy(editor);
     searchSuggestion->setColumnCount(1);
     searchSuggestion->setUniformRowHeights(true);
     searchSuggestion->setRootIsDecorated(false);
@@ -135,7 +197,7 @@ KCUniSearchWidget::KCUniSearchWidget(QWidget *parent) :
 
     /*connect(searchSuggestion, SIGNAL(highlighted(QString)),
             this, SLOT(onActionHighlight()));*/
-    connect(editor, &KCUniSearchLineEdit::textChanged,
+    connect(editor, &QLineEdit::textChanged,
             this, &KCUniSearchWidget::onActionTextChanged);
     connect(suggestionCatcher, &KCSearchSuggestion::requireUpdateList,
             this, &KCUniSearchWidget::onActionNewList);
@@ -144,7 +206,7 @@ KCUniSearchWidget::KCUniSearchWidget(QWidget *parent) :
     closeButton->setObjectName("KCSearchWindowCloseButton");
     closeButton->setIcon(QIcon(":/toolbutton/image/TabCloseNormal.png"));
     closeButton->setAutoRaise(true);
-    closeButton->setFixedSize(16,fixedHeight);
+    closeButton->setFixedWidth(16);
     QPalette pal=closeButton->palette();
     KCColorConfigure::getInstance()->getPalette(pal,closeButton->objectName());
     closeButton->setPalette(pal);
@@ -191,10 +253,13 @@ bool KCUniSearchWidget::eventFilter(QObject *object, QEvent *event)
         {
         case Qt::Key_Enter:
         case Qt::Key_Return:
-            if(object==searchSuggestion)
+            if(searchSuggestion->isVisible())
             {
-                highlightTest=true; //Just fake to ignore get suggestion.
-                editor->setText(searchSuggestion->currentItem()->text(0));
+                if(searchSuggestion->model()->rowCount()>0)
+                {
+                    highlightTest=true; //Just fake to ignore get suggestion.
+                    editor->setText(searchSuggestion->currentItem()->text(0));
+                }
                 searchSuggestion->hide();
                 editor->setFocus();
             }
@@ -206,20 +271,20 @@ bool KCUniSearchWidget::eventFilter(QObject *object, QEvent *event)
 
         case Qt::Key_Escape:
             onActionClose();
-            return true;
         case Qt::Key_Up:
         case Qt::Key_Down:
         case Qt::Key_Home:
         case Qt::Key_End:
         case Qt::Key_PageUp:
         case Qt::Key_PageDown:
-            break;
+            searchSuggestion->emulatePressedEvent(keyPress);
+            return true;
         default:
             editor->event(event);
             if(editor->text().isEmpty())
             {
-                highlightTest=true; //Just fake to ignore get suggestion.
                 editor->clear();
+                highlightTest=true; //Just fake to ignore get suggestion.
                 searchSuggestion->hide();
             }
             editor->setFocus();
@@ -231,19 +296,29 @@ bool KCUniSearchWidget::eventFilter(QObject *object, QEvent *event)
 
 void KCUniSearchWidget::animateShow()
 {
+    if(showMark)
+    {
+        return;
+    }
     animation->stop();
     move(0, -fixedHeight);
     animation->setFrameRange(geometry().top(), 0);
     show();
     animation->start();
+    showMark=true;
 }
 
 void KCUniSearchWidget::animateHide()
 {
+    if(!showMark)
+    {
+        return;
+    }
     animation->stop();
     searchSuggestion->hide();
     animation->setFrameRange(geometry().top(), -fixedHeight);
     animation->start();
+    showMark=false;
 }
 
 void KCUniSearchWidget::setWidgetTop(int widgetTop)
@@ -290,7 +365,10 @@ void KCUniSearchWidget::onActionHighlight()
 void KCUniSearchWidget::onActionFinishedEdit()
 {
     searchSuggestion->hide();
-    doWebSearch(editor->text());
+    if(!editor->text().isEmpty())
+    {
+        doWebSearch(editor->text());
+    }
     animateHide();
 }
 
@@ -306,6 +384,5 @@ void KCUniSearchWidget::onActionTextChanged(const QString &text)
 
 void KCUniSearchWidget::doWebSearch(const QString &text)
 {
-    QDesktopServices::openUrl(QUrl(instance->getSearchEngineList().at(instance->getValue("SearchEngineIndex").toInt()).engineURL +
-                                   text));
+    QDesktopServices::openUrl(QUrl(instance->getSearchEngineList().at(instance->getValue("SearchEngineIndex").toInt()).engineURL.arg(text)));
 }

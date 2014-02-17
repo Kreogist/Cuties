@@ -3,29 +3,26 @@
 
 #include <QWidget>
 #include <QThread>
-#include <QLineEdit>
+#include <QTreeWidget>
 #include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QSslConfiguration>
 
 class QTimeLine;
 class QNetworkReply;
 class QEvent;
 class QKeyEvent;
-class QTreeWidget;
+class QLineEdit;
 class QStringListModel;
 
 class KCGeneralConfigure;
 
-class KCUniSearchLineEdit : public QLineEdit
+class KCSearchSuggestionWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
-    explicit KCUniSearchLineEdit(QWidget *parent = 0);
-
-signals:
-    void requireDoSearch();
-
-protected:
-    void keyPressEvent(QKeyEvent *event);
+    explicit KCSearchSuggestionWidget(QWidget *parent = 0);
+    void emulatePressedEvent(QEvent *keyPressEvent);
 
 private:
 };
@@ -48,6 +45,10 @@ private:
     QString m_keyword;
     QString m_suggestionURL;
     QTextCodec *gbkcodec;
+    KCGeneralConfigure *instance;
+    QNetworkRequest suggestionRequest;
+    QSslConfiguration suggestionConfig;
+    int m_engineIndex;
 };
 
 class KCSearchSuggestion : public QObject
@@ -100,15 +101,15 @@ private slots:
 private:
     void doWebSearch(const QString &text);
     KCGeneralConfigure *instance;
-    KCUniSearchLineEdit *editor;
+    QLineEdit *editor;
 
     QTimeLine *animation;
-    QTreeWidget *searchSuggestion;
+    KCSearchSuggestionWidget *searchSuggestion;
 
     KCSearchSuggestion *suggestionCatcher;
 
-    int fixedHeight=26;
-    bool highlightTest=false;
+    int fixedHeight=38;
+    bool highlightTest=false, showMark=false;
 };
 
 #endif // KCUNISEARCHWIDGET_H

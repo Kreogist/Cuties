@@ -30,6 +30,7 @@ struct searchEngine
 {
     QString name;
     QString engineURL;
+    QString suggestionURL;
 };
 
 class KCGeneralConfigure : public KCConfigure

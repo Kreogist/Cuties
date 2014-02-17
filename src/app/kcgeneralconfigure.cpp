@@ -41,16 +41,22 @@ KCGeneralConfigure::KCGeneralConfigure()
     retranslate();
 
     QString defaultSearchEngineURL[SearchEngineCount];
-    defaultSearchEngineURL[Google]="https://www.google.com.hk/#newwindow=1&safe=strict&q=";
-    defaultSearchEngineURL[Yahoo]="http://search.yahoo.com/search?toggle=1&cop=mss&ei=UTF-8&fr=yfp-t-900&p=";
-    defaultSearchEngineURL[Bing]="http://cn.bing.com/search?form=MXBTDF&pc=MXBR&q=";
-    defaultSearchEngineURL[Baidu]="http://www.baidu.com/s?wd=";
+    defaultSearchEngineURL[Google]="https://www.google.com.hk/#newwindow=1&safe=strict&q=%1";
+    defaultSearchEngineURL[Yahoo]="http://search.yahoo.com/search?toggle=1&cop=mss&ei=UTF-8&fr=yfp-t-900&p=%1";
+    defaultSearchEngineURL[Bing]="http://cn.bing.com/search?form=MXBTDF&pc=MXBR&q=%1";
+    defaultSearchEngineURL[Baidu]="http://www.baidu.com/s?wd=%1";
+
+    QString defaultSearchSuggestionURL[SearchEngineCount];
+    defaultSearchSuggestionURL[Yahoo]="http://search.yahoo.com/sugg/gossip/gossip-us-fp/?nresults=10&queryfirst=2&appid=fp&output=yjsonp&version=&command=%1";
+    defaultSearchSuggestionURL[Bing]="http://bj1.api.bing.com/qsonhs.aspx?FORM=ASAPIH&mkt=zh-CN&type=cb&cb=sa_inst.apiCB&cp=12&q=%1&o=ds+ds+h+p";
+    defaultSearchSuggestionURL[Baidu]="http://suggestion.baidu.com/su?wd=%1&p=3&cb=window.bdsug.sug&t=1326789467239";
 
     for(int i=0; i<SearchEngineCount; i++)
     {
         searchEngine defaultEngineAddor;
         defaultEngineAddor.name=defaultSearchEngine[i];
         defaultEngineAddor.engineURL=defaultSearchEngineURL[i];
+        defaultEngineAddor.suggestionURL=defaultSearchSuggestionURL[i];
         searchEngineList.append(defaultEngineAddor);
     }
 
