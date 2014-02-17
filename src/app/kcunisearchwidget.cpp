@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QUrl>
 #include <QTextCodec>
+#include <QFocusEvent>
 #include <QNetworkReply>
 #include <QHeaderView>
 #include <QKeyEvent>
@@ -162,9 +163,14 @@ void KCSearchSuggestion::searchKeyWord(const QString &keyword)
 KCUniSearchWidget::KCUniSearchWidget(QWidget *parent) :
     QWidget(parent)
 {
+    setObjectName("KCSearchWindow");
     setContentsMargins(7,7,7,7);
     setAutoFillBackground(true);
     setFixedSize(216, fixedHeight);
+
+    QPalette pal=palette();
+    KCColorConfigure::getInstance()->getPalette(pal, objectName());
+    setPalette(pal);
 
     instance=KCGeneralConfigure::getInstance();
 
@@ -206,13 +212,13 @@ KCUniSearchWidget::KCUniSearchWidget(QWidget *parent) :
     closeButton->setObjectName("KCSearchWindowCloseButton");
     closeButton->setIcon(QIcon(":/toolbutton/image/TabCloseNormal.png"));
     closeButton->setAutoRaise(true);
-    closeButton->setFixedWidth(16);
-    QPalette pal=closeButton->palette();
+    closeButton->setFixedSize(16,26);
+    pal=closeButton->palette();
     KCColorConfigure::getInstance()->getPalette(pal,closeButton->objectName());
     closeButton->setPalette(pal);
     layout->addWidget(closeButton);
     connect(closeButton, SIGNAL(clicked()),
-            this, SLOT(onActionClose()));
+            this, SLOT(animateHide()));
 
     animation=new QTimeLine(100, this);
     animation->setEasingCurve(QEasingCurve::OutCubic);
@@ -237,6 +243,7 @@ void KCUniSearchWidget::searchOnline(const QString &text)
     highlightTest=true; //Just fake to ignore get suggestion.
     editor->setText(text);
     doWebSearch(text);
+    emit requireLostFocus();
 }
 
 void KCUniSearchWidget::setFocus()
@@ -270,7 +277,8 @@ bool KCUniSearchWidget::eventFilter(QObject *object, QEvent *event)
             return true;
 
         case Qt::Key_Escape:
-            onActionClose();
+            animateHide();
+            return true;
         case Qt::Key_Up:
         case Qt::Key_Down:
         case Qt::Key_Home:
@@ -292,6 +300,12 @@ bool KCUniSearchWidget::eventFilter(QObject *object, QEvent *event)
         }
     }
     return QWidget::eventFilter(object, event);
+}
+
+void KCUniSearchWidget::focusOutEvent(QFocusEvent *event)
+{
+    QWidget::focusOutEvent(event);
+    searchSuggestion->hide();
 }
 
 void KCUniSearchWidget::animateShow()
@@ -319,6 +333,7 @@ void KCUniSearchWidget::animateHide()
     animation->setFrameRange(geometry().top(), -fixedHeight);
     animation->start();
     showMark=false;
+    emit requireLostFocus();
 }
 
 void KCUniSearchWidget::setWidgetTop(int widgetTop)
@@ -326,14 +341,12 @@ void KCUniSearchWidget::setWidgetTop(int widgetTop)
     move(0, widgetTop);
 }
 
-void KCUniSearchWidget::onActionClose()
-{
-    emit requireLostFocus();
-    animateHide();
-}
-
 void KCUniSearchWidget::onActionNewList(QStringList list)
 {
+    if(!showMark)
+    {
+        return;
+    }
     searchSuggestion->setUpdatesEnabled(false);
     searchSuggestion->clear();
     for (int i=0; i<list.count(); ++i)

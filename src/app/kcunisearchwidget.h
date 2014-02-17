@@ -12,6 +12,7 @@ class QTimeLine;
 class QNetworkReply;
 class QEvent;
 class QKeyEvent;
+class QFocusEvent;
 class QLineEdit;
 class QStringListModel;
 
@@ -87,12 +88,12 @@ public slots:
 
 protected:
     bool eventFilter(QObject *object, QEvent *event);
+    void focusOutEvent(QFocusEvent *event);
 
 private slots:
     void animateShow();
     void animateHide();
     void setWidgetTop(int widgetTop);
-    void onActionClose();
     void onActionNewList(QStringList list);
     void onActionHighlight();
     void onActionFinishedEdit();
