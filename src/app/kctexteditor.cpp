@@ -23,6 +23,8 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QFile>
+#include <QTextCodec>
+#include <QTextStream>
 #include <QMenu>
 #include <QStyleFactory>
 #include <QApplication>
@@ -142,6 +144,11 @@ int KCTextEditor::verticalScrollValue()
     return verticalScrollBar()->value();
 }
 
+void KCTextEditor::setFilePath(const QString &value)
+{
+    filePath=value;
+}
+
 /*!
  * \brief Get the horizontal scroll bar value.
  */
@@ -165,16 +172,31 @@ void KCTextEditor::setMatchedParenthesesColor(const QColor &value)
     matchedParenthesesColor = value;
 }
 
-bool KCTextEditor::readFile(const QString &filePath)
+bool KCTextEditor::readFile(const QString &filePath,
+                            QString codecName,
+                            bool cacheOpenMode)
 {
     QFile textFile(filePath);
 
     if(textFile.open(QIODevice::ReadOnly|QIODevice::Text))
     {
         QTextStream textStream(&textFile);
+        //QTextCodec *codec=QTextCodec::codecForName(codecName.);
+        //textStream.setCodec(codec);
 
         clear();
         setPlainText(QString(textStream.readAll()));
+
+        if(cacheOpenMode)
+        {
+            //Open a cache save file,
+            document()->setModified(true);
+            emit fileNameChanged(documentTitle());
+        }
+        else
+        {
+            ;
+        }
 
         textFile.close();
         return true;
@@ -624,6 +646,21 @@ void KCTextEditor::tabPressEvent(QTextCursor tabPressCursor)
     }
     insertTab(tabPressCursor, 1);
     tabPressCursor.endEditBlock();
+}
+
+QString KCTextEditor::getFilePath() const
+{
+    return filePath;
+}
+
+void KCTextEditor::setFileError(const QFileDevice::FileError &error)
+{
+    fileError=error;
+}
+
+QFileDevice::FileError KCTextEditor::getFileError() const
+{
+    return fileError;
 }
 
 int KCTextEditor::findFirstCharacter(const QTextBlock &block)
@@ -1399,6 +1436,18 @@ void KCTextEditor::resizeEvent(QResizeEvent *event)
                                     panelManager->resizeManagerWidth(lineNumberWidth()),
                                     cr.height()));
     //updatePanelAreaWidth();
+}
+
+void KCTextEditor::fileInfoChanged(const QFileInfo &_fileInfo)
+{
+    setDocumentTitle(_fileInfo.fileName());
+    emit requireChangeLanguage(_fileInfo.suffix());
+
+    filePath=_fileInfo.fileName();
+    fileError=QFileDevice::NoError;
+    document()->setModified(false);
+
+    ;
 }
 
 KCTextBlockData *KCTextEditor::getBlockData(const QTextBlock &b)

@@ -104,9 +104,6 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
     setPalette(pal);
 
-    filePath.clear();
-    fileError=QFileDevice::NoError;
-
     cacheNewFileMode=false;
     debugging=false;
 }
@@ -150,7 +147,7 @@ QTextDocument *KCCodeEditor::document()
 
 void KCCodeEditor::computeExecFileName()
 {
-    QFileInfo _fileInfo(filePath);
+    QFileInfo _fileInfo(editor->getFilePath());
     execFileName=_fileInfo.absolutePath()+QString("/")+_fileInfo.completeBaseName();
 #ifdef Q_OS_WIN32
     execFileName+=".exe";
@@ -362,12 +359,12 @@ bool KCCodeEditor::open(const QString &fileName,
         }
         else
         {
-            fileInfoChanged(_file);
-            emit requiredAddRecentRecord(filePath);
+            fileInfoChanged(QFileInfo(_file));
+            emit requiredAddRecentRecord(editor->getFilePath());
         }
         return true;
     }
-    fileError=_file.error();
+    editor->setFileError(_file.error());
     return false;
 }
 
@@ -378,14 +375,14 @@ bool KCCodeEditor::readCacheFile(const QString &cachedfilePath)
 
 QFileDevice::FileError KCCodeEditor::error()
 {
-    return fileError;
+    return editor->getFileError();
 }
 
 bool KCCodeEditor::save()
 {
-    if(!filePath.isEmpty())
+    if(!editor->getFilePath().isEmpty())
     {
-        return saveAs(filePath);
+        return saveAs(editor->getFilePath());
     }
     else
     {
@@ -402,7 +399,7 @@ bool KCCodeEditor::processSaveAsAction(const QString &dialogCaption)
 {
     if(!requireSaveAs(dialogCaption))
     {
-        if(fileError!=QFileDevice::AbortError)
+        if(editor->getFileError()!=QFileDevice::AbortError)
         {
             KCMessageBox *error=new KCMessageBox(this);
             error->setTitle("Error");
@@ -437,26 +434,26 @@ bool KCCodeEditor::requireSaveAs(const QString &caption)
         default:
             defaultSelectFilter=instance->getFilter(KCGeneralConfigure::allFiles);
         }
-        filePath=QFileDialog::getSaveFileName(this,
+        editor->setFilePath(QFileDialog::getSaveFileName(this,
                                               caption,
                                               KCHistoryConfigure::getInstance()->getHistoryDir(),
                                               instance->getTotalFileFilter(),
-                                              &defaultSelectFilter);
+                                              &defaultSelectFilter));
     }
     else
     {
-        filePath=QFileDialog::getSaveFileName(this,
+        editor->setFilePath(QFileDialog::getSaveFileName(this,
                                               caption,
                                               KCHistoryConfigure::getInstance()->getHistoryDir(),
-                                              instance->getTotalFileFilter());
+                                              instance->getTotalFileFilter()));
     }
-    if(!filePath.isEmpty())
+    if(!editor->getFilePath().isEmpty())
     {
-        return saveAs(filePath);
+        return saveAs(editor->getFilePath());
     }
     else
     {
-        fileError=QFileDevice::AbortError;
+        editor->setFileError(QFileDevice::AbortError);
         return false;
     }
 }
@@ -472,11 +469,11 @@ bool KCCodeEditor::saveAs(const QString &fileName,
         _textOut<<editor->toPlainText()<<flush;
         if(!cacheMode)
         {
-            fileInfoChanged(_file);
+            fileInfoChanged(QFileInfo(_file));
         }
         return true;
     }
-    fileError=_file.error();
+    editor->setFileError(_file.error());
     return false;
 }
 
@@ -498,19 +495,19 @@ void KCCodeEditor::onDebugJumpLine(int blockNumber)
 void KCCodeEditor::closeEvent(QCloseEvent *e)
 {
     if(editor->document()->isModified() &&
-       ((filePath.isEmpty() && !cacheNewFileMode) ||
-        !filePath.isEmpty()))
+       ((editor->getFilePath().isEmpty() && !cacheNewFileMode) ||
+        !editor->getFilePath().isEmpty()))
     {
         QMessageBox msgbox(this);
         QString strDisplayFileName;
 
-        if(filePath.isEmpty())
+        if(editor->getFilePath().isEmpty())
         {
             strDisplayFileName=editor->documentTitle();
         }
         else
         {
-            strDisplayFileName=filePath;
+            strDisplayFileName=editor->getFilePath();
         }
 
         msgbox.setText(tr("Will you save changes to the the following file?") + "\n" +
@@ -638,7 +635,7 @@ void KCCodeEditor::onHideOtherWidgets()
 
 QString KCCodeEditor::getFilePath()
 {
-    return filePath;
+    return editor->getFilePath();
 }
 
 QString KCCodeEditor::getSelectedText()
@@ -687,16 +684,15 @@ void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
     editor->setCursorPosition(nLine,linePos);
 }
 
-void KCCodeEditor::fileInfoChanged(const QFile &file)
+void KCCodeEditor::fileInfoChanged(const QFileInfo &_fileInfo)
 {
-    QFileInfo _fileInfo(file);
-    editor->setDocumentTitle(_fileInfo.fileName());
-    emit filenameChanged(_fileInfo.fileName());
+    setDocumentTitle(_fileInfo.fileName());
 
     languageMode->setFileSuffix(_fileInfo.suffix());
 
-    filePath=file.fileName();
-    fileError=QFileDevice::NoError;
+    //filePath=_fileInfo.fileName();
+    editor->setFilePath(_fileInfo.absoluteFilePath());
+    editor->setFileError(QFileDevice::NoError);
     editor->document()->setModified(false);
 
     computeExecFileName();

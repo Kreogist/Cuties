@@ -65,6 +65,13 @@ public:
     void setVerticalScrollValue(int value);
     int verticalScrollValue();
 
+    void setFilePath(const QString &value);
+    QString getFilePath() const;
+
+    void setFileError(const QFileDevice::FileError &error);
+    QFileDevice::FileError getFileError() const;
+
+
     //********** Functions **********
     //Search & Replace
     void backupSearchTextCursor();
@@ -83,8 +90,11 @@ public:
     void setMatchedParenthesesColor(const QColor &value);
 
     //Documents
-    bool readFile(const QString &filePath);
+    bool readFile(const QString &filePath,
+                  QString codecName="UTF-8",
+                  bool cacheOpenMode=false);
     bool writeToFile(const QString &filePath);
+
 signals:
     /*!
      * \brief This signal is designed to hide all other widgets.
@@ -96,6 +106,7 @@ signals:
     void matchedResult();
     void nomatchedResult();
     void fileNameChanged(QString value);
+    void requireChangeLanguage(QString suffix);
 
 public slots:
     void zoomIn(int range = 1);
@@ -140,7 +151,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void fileInfoChanged(const QFile &file);
+    void fileInfoChanged(const QFileInfo &_fileInfo);
     KCTextBlockData *getBlockData(const QTextBlock &b);
     bool showPreviousSearchResult(const QTextCursor &cursor);
     bool showNextSearchResult(const QTextCursor &cursor);
@@ -199,7 +210,7 @@ private:
     KCDebugMarkPanel *debugMarkPanel;
 
     QString filePath;
-    QFileDevice::FileError fileError;
+    QFileDevice::FileError fileError=QFileDevice::NoError;
 };
 
 #endif // CODEEDITOR_H

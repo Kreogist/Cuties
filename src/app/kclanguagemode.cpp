@@ -100,7 +100,7 @@ void KCLanguageMode::compile()
         msgBox.exec();
         return;
     }*/
-    compiler->startCompile(m_parent->filePath);
+    compiler->startCompile(m_parent->getFilePath());
 }
 
 void KCLanguageMode::stopCompile()

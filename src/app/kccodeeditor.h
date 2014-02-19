@@ -38,6 +38,7 @@
 #include <QWidget>
 #include <QTextCursor>
 #include <QList>
+#include <QFileInfo>
 
 #include "kclanguagemode.h"
 #include "kccodecompileprogress.h"
@@ -157,7 +158,7 @@ private:
     bool processSaveAsAction(const QString &dialogCaption);
     bool requireSaveAs(const QString &caption);
     void computeExecFileName();
-    void fileInfoChanged(const QFile &file);
+    void fileInfoChanged(const QFileInfo &_fileInfo);
     void connectSearchWidgetWithEditor(KCSearchWidget *widget);
 
     KCLanguageMode *languageMode;
@@ -167,10 +168,7 @@ private:
     QBoxLayout *mainLayout;
     KCTextEditor *editor;
 
-    QString filePath;
     QString execFileName;
-    QFileDevice::FileError fileError;
-    QTextCursor fileTextCursor;
 
     KCSearchWidget *currentSearchWidget;
     KCSearchWindow *searchBar;
