@@ -91,6 +91,8 @@ private slots:
     void setFullScreen();
     void disconnectDebugDock();
 
+    void signalDebugSlot();
+
 protected:
     void showEvent(QShowEvent *e);
     void resizeEvent(QResizeEvent *e);

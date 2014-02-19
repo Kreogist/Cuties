@@ -2117,11 +2117,11 @@ void KCColorPicker::getPositionColor()
 {
     int posX = QCursor::pos().x();
     int posY = QCursor::pos().y();
-    QPixmap snapshot=QPixmap::grabWindow(QApplication::desktop()->winId(),
-                                         posX,
-                                         posY,
-                                         1,
-                                         1);
+    QPixmap snapshot=QApplication::primaryScreen()->grabWindow(0,
+                                                               posX,
+                                                               posY,
+                                                               1,
+                                                               1);
     if(!snapshot.isNull())
     {
         QImage image = snapshot.toImage();

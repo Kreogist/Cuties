@@ -363,7 +363,7 @@ bool KCCodeEditor::open(const QString &fileName,
         else
         {
             fileInfoChanged(_file);
-            KCHistoryConfigure::getInstance()->addRecentFileRecord(filePath);
+            emit requiredAddRecentRecord(filePath);
         }
         return true;
     }

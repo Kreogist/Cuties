@@ -82,6 +82,9 @@ public:
     void setNoMatchedParenthesesColor(const QColor &value);
     void setMatchedParenthesesColor(const QColor &value);
 
+    //Documents
+    bool readFile(const QString &filePath);
+    bool writeToFile(const QString &filePath);
 signals:
     /*!
      * \brief This signal is designed to hide all other widgets.
@@ -92,6 +95,7 @@ signals:
     void overwriteModeChanged(bool newValue);
     void matchedResult();
     void nomatchedResult();
+    void fileNameChanged(QString value);
 
 public slots:
     void zoomIn(int range = 1);
@@ -114,6 +118,7 @@ public slots:
     void setTabWidth(int width);
     void setLineErrorState(QList<int> errorList);
     void setCursorAtLine(int blockNumber);
+    void emulatePressKey(QKeyEvent *keyEvent);
 
 private slots:
     void updateSearchResults();
@@ -132,10 +137,10 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void mouseReleaseEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *event);
-
     void resizeEvent(QResizeEvent *event);
 
 private:
+    void fileInfoChanged(const QFile &file);
     KCTextBlockData *getBlockData(const QTextBlock &b);
     bool showPreviousSearchResult(const QTextCursor &cursor);
     bool showNextSearchResult(const QTextCursor &cursor);
@@ -192,6 +197,9 @@ private:
     KCLineNumberPanel *lineNumberPanel;
     KCUnibodyPanel *unibodyPanel;
     KCDebugMarkPanel *debugMarkPanel;
+
+    QString filePath;
+    QFileDevice::FileError fileError;
 };
 
 #endif // CODEEDITOR_H

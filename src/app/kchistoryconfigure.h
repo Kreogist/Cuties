@@ -71,7 +71,7 @@ public:
     int getMaxRecentFilesSize() const;
     void setMaxRecentFilesSize(int value);
     void clearAllRecentFilesRecord();
-    void addRecentFileRecord(const QString &path);
+    void addRecentRecord(const QString &path);
     QStringList getAllRecentOpenedFilesRecord() const;
 
     QStandardItemModel *getRecentOpenedFileModel() const;

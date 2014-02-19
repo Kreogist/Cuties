@@ -139,6 +139,8 @@ int KCTabManager::open(const QString &filePath)
     }
     //File has not been opened, then open it and add tab.
     KCCodeEditor *tmp=new KCCodeEditor(this);
+    connect(tmp, &KCCodeEditor::requiredAddRecentRecord,
+            this, &KCTabManager::requiredAddRecentRecord);
     if(tmp->open(filePath))
     {
         prepareCodeEditor(tmp, name);
@@ -246,6 +248,8 @@ int KCTabManager::newFile()
         //tmp->setGeometry(0, -this->height(), this->width(), this->height());
         QString newFileTitle=
             tr("Untitled")+ " " +QString::number(newFileCount++);
+        connect(tmp, &KCCodeEditor::requiredAddRecentRecord,
+                this, &KCTabManager::requiredAddRecentRecord);
         prepareCodeEditor(tmp, newFileTitle);
         int newTabIndex=addTab(tmp,newFileTitle);
         setCurrentIndex(newTabIndex);

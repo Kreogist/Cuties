@@ -108,6 +108,7 @@ signals:
     void rewriteStateChanged(bool nowValue);
     void requiredHideDocks();
     void requiredCompileFile();
+    void requiredAddRecentRecord(QString newName);
 
 public slots:
     //KCTextEditor link slots

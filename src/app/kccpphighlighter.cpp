@@ -17,6 +17,8 @@
  *  along with Kreogist Cuties.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QKeyEvent>
+
 #include "textcharformatmap.h"
 
 #include "kccpphighlighter.h"
@@ -228,6 +230,20 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
 
     stringHighlightBlock(text);
     conmmentHighlightBlock(text);
+}
+
+bool KCCppHighlighter::eventFilter(QObject *object, QEvent *event)
+{
+    if(event->type()==QEvent::KeyPress)
+    {
+        QKeyEvent *keyPress=static_cast<QKeyEvent *>(event);
+        switch(keyPress->key())
+        {
+        qDebug()<<"Ate key: "<<keyPress->key();
+        return true;
+        }
+    }
+    return KCHighlighter::eventFilter(object, event);
 }
 
 void KCCppHighlighter::stringHighlightBlock(const QString &text)

@@ -222,7 +222,7 @@ QList<recentFileInfo> KCHistoryConfigure::getRecentFileList() const
     return recentFileList;
 }
 
-void KCHistoryConfigure::addRecentFileRecord(const QString &path)
+void KCHistoryConfigure::addRecentRecord(const QString &path)
 {
     QFileInfo historyFileInfo(path);
     QList<QStandardItem *> results=recentOpenedFileModel->findItems(historyFileInfo.fileName());

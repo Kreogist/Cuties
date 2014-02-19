@@ -62,6 +62,7 @@ signals:
     void requiredHideDocks();
     void requireDisconnectDebug();
     void requiredCompileFile();
+    void requiredAddRecentRecord(QString newName);
 
 public slots:
     void openAndJumpTo(const QString &filePath);

@@ -75,6 +75,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Set central widget.
     tabManager=new KCTabManager(this);
+    connect(tabManager, &KCTabManager::requiredAddRecentRecord,
+            KCHistoryConfigure::getInstance(), &KCHistoryConfigure::addRecentRecord);
     setCentralWidget(tabManager);
 
     //Create All Window Contents
@@ -1472,6 +1474,11 @@ void MainWindow::disconnectDebugDock()
     debugCommandIO->clearInstance();
     debugWatch->clearLocalWatchModel();
     debugWatch->clearCustomWatchModel();
+}
+
+void MainWindow::signalDebugSlot()
+{
+    qDebug()<<"Signal has been send.";
 }
 
 void MainWindow::setFullScreen()

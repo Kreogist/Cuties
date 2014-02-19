@@ -22,6 +22,7 @@
 #include <QPalette>
 #include <QFont>
 #include <QFontMetrics>
+#include <QFile>
 #include <QMenu>
 #include <QStyleFactory>
 #include <QApplication>
@@ -162,6 +163,24 @@ void KCTextEditor::setTabWidth(int width)
 void KCTextEditor::setMatchedParenthesesColor(const QColor &value)
 {
     matchedParenthesesColor = value;
+}
+
+bool KCTextEditor::readFile(const QString &filePath)
+{
+    QFile textFile(filePath);
+
+    if(textFile.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+        QTextStream textStream(&textFile);
+
+        clear();
+        setPlainText(QString(textStream.readAll()));
+
+        textFile.close();
+        return true;
+    }
+    fileError=textFile.error();
+    return false;
 }
 
 void KCTextEditor::setNoMatchedParenthesesColor(const QColor &value)
@@ -1237,6 +1256,11 @@ void KCTextEditor::setLineErrorState(QList<int> errorList)
 void KCTextEditor::setCursorAtLine(int blockNumber)
 {
     setCursorPosition(blockNumber,0);
+}
+
+void KCTextEditor::emulatePressKey(QKeyEvent *keyEvent)
+{
+    event(keyEvent);
 }
 
 QList<int> KCTextEditor::getBreakPoints()

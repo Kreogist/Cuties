@@ -32,6 +32,7 @@ public:
 
 protected:
     void KCHighlightBlock(const QString &text);
+    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     QList<highlight_rule> rules;
