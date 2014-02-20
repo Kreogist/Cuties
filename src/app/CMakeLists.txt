@@ -108,6 +108,7 @@ qt5_add_resources(RESOURCES_RCC rc.qrc)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
 if(WIN32)
+    set(SRC_LIST ${SRC_LIST} winico.rc )
     add_executable(${PROJECT_NAME} WIN32 ${SRC_LIST} ${RESOURCES_RCC})
 else(WIN32)
     add_executable(${PROJECT_NAME} ${SRC_LIST} ${RESOURCES_RCC})
