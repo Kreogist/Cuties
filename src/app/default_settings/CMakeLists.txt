@@ -5,3 +5,7 @@ if(WIN32)
 else(WIN32)
     configure_file(Cuties_Unix.ini ${PROJECT_BINARY_DIR}/Cuties.ini COPYONLY)
 endif(WIN32)
+
+
+install(FILES default.style DefaultColorConfig.ini
+        DESTINATION ${PROJECT_NAME})
