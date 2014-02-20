@@ -123,5 +123,3 @@ add_subdirectory(ColorBase)
 #install
 install(TARGETS ${PROJECT_NAME}
         RUNTIME DESTINATION ${PROJECT_NAME})
-install(FILES default.style DefaultColorConfig.ini
-        DESTINATION ${PROJECT_NAME})
