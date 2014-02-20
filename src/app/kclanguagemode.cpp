@@ -30,7 +30,8 @@
 
 #include "kclanguagemode.h"
 
-KCLanguageMode::KCLanguageMode(QWidget *parent) :
+KCLanguageMode::KCLanguageMode(KCTextEditor *e,
+                               QWidget *parent) :
     QObject(parent)
 {
     languageName[PlainText]="";
@@ -38,10 +39,10 @@ KCLanguageMode::KCLanguageMode(QWidget *parent) :
     languageName[C]="c";
     languageName[Pascal]="pascal";
 
-    m_parent=qobject_cast<KCCodeEditor *>(parent);
     compilerReceiver=NULL;
     setCompileState(uncompiled);
     m_type=Invalid;
+    editor=e;
     setFileSuffix(KCGeneralConfigure::getInstance()->getDefaultLanguageModeString());
 
     gdbControllerInstance=new GdbController(this);
@@ -49,7 +50,6 @@ KCLanguageMode::KCLanguageMode(QWidget *parent) :
             this, SIGNAL(requireDisconnectDebug()));
     connect(gdbControllerInstance, SIGNAL(requireLineJump(int)),
             this, SIGNAL(requireDebugJumpLine(int)));
-    Q_ASSERT(m_parent!=NULL);
 }
 
 bool KCLanguageMode::compilerIsNull()
@@ -100,7 +100,7 @@ void KCLanguageMode::compile()
         msgBox.exec();
         return;
     }*/
-    compiler->startCompile(m_parent->getFilePath());
+    compiler->startCompile(editor->getFilePath());
 }
 
 void KCLanguageMode::stopCompile()
@@ -162,7 +162,7 @@ void KCLanguageMode::setFileSuffix(const QString &suffix)
                 this ,&KCLanguageMode::compileFinished);
     }
     Q_ASSERT(!m_highlighter.isNull());
-    m_highlighter->setDocument(m_parent->document());
+    m_highlighter->setDocument(editor->document());
 }
 
 KCCompileOutputReceiver *KCLanguageMode::getCompilerReceiver() const
@@ -178,10 +178,10 @@ GdbController *KCLanguageMode::getGdbController() const
 GdbController *KCLanguageMode::startDebug(int lineNumber)
 {
     gdbControllerInstance->setFileType(languageName[m_type]);
-    gdbControllerInstance->runGDB(m_parent->execFileName);
+    gdbControllerInstance->runGDB(execFileName);
     if(lineNumber<0)
     {
-        gdbControllerInstance->setBreakPointList(m_parent->getBreakpoints());
+        gdbControllerInstance->setBreakPointList(editor->getBreakPoints());
     }
     else
     {
@@ -198,6 +198,15 @@ GdbController *KCLanguageMode::startDebug(int lineNumber)
 void KCLanguageMode::setBreakPointAtLine(int line)
 {
     ;
+}
+
+void KCLanguageMode::computeExecFileName()
+{
+    QFileInfo _fileInfo(editor->getFilePath());
+    execFileName=_fileInfo.absolutePath()+QString("/")+_fileInfo.completeBaseName();
+#ifdef Q_OS_WIN32
+    execFileName+=".exe";
+#endif
 }
 
 void KCLanguageMode::stopDebug()
@@ -224,7 +233,7 @@ void KCLanguageMode::onCompileFinished(bool hasError)
         {
             emit requireHideCompileDock();
         }
-        emit compileSuccessfully(m_parent->execFileName);
+        emit compileSuccessfully(execFileName);
     }
 }
 
@@ -271,3 +280,23 @@ void KCLanguageMode::setCompileState(const compileState &state)
     this->state=state;
     stateLock.unlock();
 }
+QString KCLanguageMode::getExecFileName() const
+{
+    return execFileName;
+}
+
+void KCLanguageMode::setExecFileName(const QString &value)
+{
+    execFileName = value;
+}
+
+KCTextEditor *KCLanguageMode::getEditor() const
+{
+    return editor;
+}
+
+void KCLanguageMode::setEditor(KCTextEditor *value)
+{
+    editor = value;
+}
+

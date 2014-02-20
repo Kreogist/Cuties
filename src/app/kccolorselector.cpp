@@ -116,6 +116,7 @@ void KCColorSlot::mousePressEvent(QMouseEvent *event)
 KCColorDatabaseViewer::KCColorDatabaseViewer(QWidget *parent) :
     QWidget(parent)
 {
+    setAutoFillBackground(true);
     QBoxLayout *mainLayout=new QBoxLayout(QBoxLayout::LeftToRight, this);
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(0);
@@ -317,6 +318,7 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
             {
                 KCColorSlot *currentColor=colorViewer.at(currentColorOffset);
                 currentColor->setVisible(false);
+                currentColor->setBackgroundColor(QColor(0,0,0));
                 currentColorOffset++;
             }
             continue;
@@ -329,6 +331,7 @@ void KCColorDatabaseViewer::updateColorLayout(const int &topLine)
             {
                 indexOverflow=true;
                 currentColor->setVisible(false);
+                currentColor->setBackgroundColor(QColor(0,0,0));
                 currentColorOffset++;
                 continue;
             }

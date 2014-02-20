@@ -39,15 +39,13 @@
 #include <QTextCursor>
 #include <QList>
 #include <QFileInfo>
-
-#include "kclanguagemode.h"
 #include "kccodecompileprogress.h"
 #include "kcconnectionhandler.h"
+#include "kclanguagemode.h"
 
 class QBoxLayout;
 class KCSearchWindow;
 class KCReplaceWindow;
-class KCLanguageMode;
 class KCTextEditor;
 class KCSearchWidget;
 
@@ -157,7 +155,6 @@ private:
     bool searchUseLastCursor;
     bool processSaveAsAction(const QString &dialogCaption);
     bool requireSaveAs(const QString &caption);
-    void computeExecFileName();
     void fileInfoChanged(const QFileInfo &_fileInfo);
     void connectSearchWidgetWithEditor(KCSearchWidget *widget);
 
@@ -168,15 +165,12 @@ private:
     QBoxLayout *mainLayout;
     KCTextEditor *editor;
 
-    QString execFileName;
-
     KCSearchWidget *currentSearchWidget;
     KCSearchWindow *searchBar;
     KCReplaceWindow *replaceBar;
 
     KCConnectionHandler searcherConnections;
 
-    friend class KCLanguageMode;
     bool cacheNewFileMode;
     bool debugging;
 

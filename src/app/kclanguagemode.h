@@ -23,13 +23,11 @@
 #include <QReadWriteLock>
 #include <QScopedPointer>
 
-#include "kccodeeditor.h"
-
 #include "kchighlighter.h"
 #include "kccompileoutputreceiver.h"
 #include "gdbcontroller.h"
 
-class KCCodeEditor;
+#include "kctexteditor.h"
 
 class KCLanguageMode : public QObject
 {
@@ -52,7 +50,8 @@ public:
         compiled
     };
 
-    explicit KCLanguageMode(QWidget *parent = 0);
+    explicit KCLanguageMode(KCTextEditor *e,
+                            QWidget *parent = 0);
     bool compilerIsNull();
     bool compilerIsExsist();
     void compile();
@@ -64,6 +63,12 @@ public:
 
     KCCompileOutputReceiver *getCompilerReceiver() const;
     GdbController *getGdbController() const;
+
+    KCTextEditor *getEditor() const;
+    void setEditor(KCTextEditor *value);
+
+    QString getExecFileName() const;
+    void setExecFileName(const QString &value);
 
 signals:
     void compileSuccessfully(QString execFileName);
@@ -78,6 +83,7 @@ signals:
 public slots:
     void onCompileFinished(bool hasError);
     void setBreakPointAtLine(int line);
+    void computeExecFileName();
 
 private:
     void resetCompilerAndHighlighter();
@@ -87,7 +93,7 @@ private:
     void setCompileState(const compileState &state);
 
     modeType m_type;
-    KCCodeEditor *m_parent;
+    KCTextEditor *editor;
     QScopedPointer<KCHighlighter> m_highlighter;
 
     QScopedPointer<KCCompilerBase> compiler;
@@ -100,6 +106,7 @@ private:
     GdbController *gdbControllerInstance;
 
     QMetaObject::Connection compilerFinishedConnection;
+    QString execFileName;
 };
 
 #endif // KCLANGUAGEMODE_H

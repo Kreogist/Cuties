@@ -83,7 +83,7 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
     editor->setOverwriteMode(false);
     searchUseLastCursor=false;
 
-    languageMode=new KCLanguageMode(this);
+    languageMode=new KCLanguageMode(editor, this);
 
     connect(languageMode, SIGNAL(compileSuccessfully(QString)),
             currentCompileProgress, SLOT(showCompileSuccess()));
@@ -137,21 +137,12 @@ void KCCodeEditor::setOverwriteMode(bool newValue)
 
 QString KCCodeEditor::getExecFileName()
 {
-    return execFileName;
+    return languageMode->getExecFileName();
 }
 
 QTextDocument *KCCodeEditor::document()
 {
     return editor->document();
-}
-
-void KCCodeEditor::computeExecFileName()
-{
-    QFileInfo _fileInfo(editor->getFilePath());
-    execFileName=_fileInfo.absolutePath()+QString("/")+_fileInfo.completeBaseName();
-#ifdef Q_OS_WIN32
-    execFileName+=".exe";
-#endif
 }
 
 void KCCodeEditor::connectSearchWidgetWithEditor(KCSearchWidget *widget)
@@ -695,7 +686,7 @@ void KCCodeEditor::fileInfoChanged(const QFileInfo &_fileInfo)
     editor->setFileError(QFileDevice::NoError);
     editor->document()->setModified(false);
 
-    computeExecFileName();
+    languageMode->computeExecFileName();
     KCHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
 }
 
