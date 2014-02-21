@@ -65,13 +65,11 @@ public:
     void setTrackUserHistoryEnabled(bool enabled);
     bool isTrackUserHistoryEnabled() const;
 
-    void setHistoryDir(const QString &dirPath);
     QString getHistoryDir() const;
 
     int getMaxRecentFilesSize() const;
     void setMaxRecentFilesSize(int value);
     void clearAllRecentFilesRecord();
-    void addRecentRecord(const QString &path);
     QStringList getAllRecentOpenedFilesRecord() const;
 
     QStandardItemModel *getRecentOpenedFileModel() const;
@@ -86,6 +84,8 @@ public:
 public slots:
     void retranslate();
     void retranslateAndSet();
+    void addRecentRecord(const QString &path);
+    void setHistoryDir(const QString &dirPath);
 
 protected:
     QString getGroupName() const;

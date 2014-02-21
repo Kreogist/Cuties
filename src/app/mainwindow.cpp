@@ -77,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
     tabManager=new KCTabManager(this);
     connect(tabManager, &KCTabManager::requiredAddRecentRecord,
             KCHistoryConfigure::getInstance(), &KCHistoryConfigure::addRecentRecord);
+    connect(tabManager, &KCTabManager::requireSetHistoryDir,
+            KCHistoryConfigure::getInstance(), &KCHistoryConfigure::setHistoryDir);
     setCentralWidget(tabManager);
 
     //Create All Window Contents

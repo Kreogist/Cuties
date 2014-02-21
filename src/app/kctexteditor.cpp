@@ -176,33 +176,58 @@ bool KCTextEditor::readFile(const QString &filePath,
                             QString codecName,
                             bool cacheOpenMode)
 {
-    QFile textFile(filePath);
+    QFile _file(filePath);
 
-    if(textFile.open(QIODevice::ReadOnly|QIODevice::Text))
+    if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
     {
-        QTextStream textStream(&textFile);
-        //QTextCodec *codec=QTextCodec::codecForName(codecName.);
-        //textStream.setCodec(codec);
+        QTextStream _textIn(&_file);
+        _textIn.setCodec(QTextCodec::codecForName(codecName.toUtf8()));
+        QString titleText=documentTitle();
 
         clear();
-        setPlainText(QString(textStream.readAll()));
+        setPlainText(QString(_textIn.readAll()));
 
         if(cacheOpenMode)
         {
-            //Open a cache save file,
+            emit fileNameChanged(titleText);
             document()->setModified(true);
-            emit fileNameChanged(documentTitle());
         }
         else
         {
-            ;
+            fileInfoChanged(QFileInfo(_file));
+            emit requiredAddRecentRecord(getFilePath());
         }
-
-        textFile.close();
         return true;
     }
-    fileError=textFile.error();
+    setFileError(_file.error());
     return false;
+}
+
+bool KCTextEditor::writeToFile(const QString &filePath,
+                               QString codecName,
+                               bool cacheOpenMode)
+{
+    QFile _file(filePath);
+
+    if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
+    {
+        QTextStream _textOut(&_file);
+        _textOut.setCodec(QTextCodec::codecForName(codecName.toUtf8()));
+        _textOut<<toPlainText()<<flush;
+        if(!cacheOpenMode)
+        {
+            fileInfoChanged(QFileInfo(_file));
+        }
+        return true;
+    }
+    setFileError(_file.error());
+    return false;
+}
+
+void KCTextEditor::setDocumentTitle(const QString &title)
+{
+    QPlainTextEdit::setDocumentTitle(title);
+    emit fileNameChanged(title);
 }
 
 void KCTextEditor::setNoMatchedParenthesesColor(const QColor &value)
@@ -1443,11 +1468,12 @@ void KCTextEditor::fileInfoChanged(const QFileInfo &_fileInfo)
     setDocumentTitle(_fileInfo.fileName());
     emit requireChangeLanguage(_fileInfo.suffix());
 
-    filePath=_fileInfo.fileName();
-    fileError=QFileDevice::NoError;
+    setFilePath(_fileInfo.absoluteFilePath());
+    setFileError(QFileDevice::NoError);
     document()->setModified(false);
 
-    ;
+    emit requireComputeExecFileName();
+    emit requireSetHistoryDir(_fileInfo.absolutePath());
 }
 
 KCTextBlockData *KCTextEditor::getBlockData(const QTextBlock &b)

@@ -93,7 +93,10 @@ public:
     bool readFile(const QString &filePath,
                   QString codecName="UTF-8",
                   bool cacheOpenMode=false);
-    bool writeToFile(const QString &filePath);
+    bool writeToFile(const QString &filePath,
+                     QString codecName="UTF-8",
+                     bool cacheOpenMode=false);
+    void setDocumentTitle(const QString &title);
 
 signals:
     /*!
@@ -107,6 +110,9 @@ signals:
     void nomatchedResult();
     void fileNameChanged(QString value);
     void requireChangeLanguage(QString suffix);
+    void requireComputeExecFileName();
+    void requireSetHistoryDir(QString dirPath);
+    void requiredAddRecentRecord(QString newName);
 
 public slots:
     void zoomIn(int range = 1);
@@ -130,6 +136,7 @@ public slots:
     void setLineErrorState(QList<int> errorList);
     void setCursorAtLine(int blockNumber);
     void emulatePressKey(QKeyEvent *keyEvent);
+    void fileInfoChanged(const QFileInfo &_fileInfo);
 
 private slots:
     void updateSearchResults();
@@ -151,7 +158,6 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void fileInfoChanged(const QFileInfo &_fileInfo);
     KCTextBlockData *getBlockData(const QTextBlock &b);
     bool showPreviousSearchResult(const QTextCursor &cursor);
     bool showNextSearchResult(const QTextCursor &cursor);

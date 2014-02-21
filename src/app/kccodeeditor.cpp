@@ -73,9 +73,14 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             this, &KCCodeEditor::cursorChanged);
     connect(editor, &KCTextEditor::overwriteModeChanged,
             this, &KCCodeEditor::rewriteStateChanged);
-
+    connect(editor, &KCTextEditor::fileNameChanged,
+            this, &KCCodeEditor::filenameChanged);
+    connect(editor, &KCTextEditor::requireSetHistoryDir,
+            this, &KCCodeEditor::requireSetHistoryDir);
     connect(editor, &KCTextEditor::requireHideOthers,
             this, &KCCodeEditor::onHideOtherWidgets);
+    connect(editor, &KCTextEditor::requiredAddRecentRecord,
+            this, &KCCodeEditor::requiredAddRecentRecord);
 
     currentCompileProgress->regeometry(width());
 
@@ -99,6 +104,10 @@ KCCodeEditor::KCCodeEditor(QWidget *parent) :
             this, &KCCodeEditor::onDebugJumpLine);
     connect(currentCompileProgress, SIGNAL(requireCompile()),
             this, SIGNAL(requiredCompileFile()));
+    connect(editor, &KCTextEditor::requireComputeExecFileName,
+            languageMode, &KCLanguageMode::computeExecFileName);
+    connect(editor, &KCTextEditor::requireChangeLanguage,
+            languageMode, &KCLanguageMode::setFileSuffix);
 
     QPalette pal = palette();
     KCColorConfigure::getInstance()->getPalette(pal,objectName());
@@ -333,30 +342,7 @@ void KCCodeEditor::showReplaceBar()
 bool KCCodeEditor::open(const QString &fileName,
                         bool cacheMode)
 {
-    QFile _file(fileName);
-
-    if(_file.open(QIODevice::ReadOnly |QIODevice::Text))
-    {
-        QTextStream _textIn(&_file);
-        QString titleText=editor->documentTitle();
-
-        editor->clear();
-        editor->setPlainText(QString(_textIn.readAll()));
-
-        if(cacheMode)
-        {
-            setDocumentTitle(titleText);
-            editor->document()->setModified(true);
-        }
-        else
-        {
-            fileInfoChanged(QFileInfo(_file));
-            emit requiredAddRecentRecord(editor->getFilePath());
-        }
-        return true;
-    }
-    editor->setFileError(_file.error());
-    return false;
+    return editor->readFile(fileName,"UTF-8", cacheMode);
 }
 
 bool KCCodeEditor::readCacheFile(const QString &cachedfilePath)
@@ -452,20 +438,7 @@ bool KCCodeEditor::requireSaveAs(const QString &caption)
 bool KCCodeEditor::saveAs(const QString &fileName,
                           bool cacheMode)
 {
-    QFile _file(fileName);
-
-    if(_file.open(QIODevice::WriteOnly |QIODevice::Text))
-    {
-        QTextStream _textOut(&_file);
-        _textOut<<editor->toPlainText()<<flush;
-        if(!cacheMode)
-        {
-            fileInfoChanged(QFileInfo(_file));
-        }
-        return true;
-    }
-    editor->setFileError(_file.error());
-    return false;
+    return editor->writeToFile(fileName, "UTF-8", cacheMode);
 }
 
 bool KCCodeEditor::writeCacheFile(const QString &filePath)
@@ -562,7 +535,6 @@ void KCCodeEditor::resizeEvent(QResizeEvent *e)
 void KCCodeEditor::setDocumentTitle(const QString &title)
 {
     editor->setDocumentTitle(title);
-    emit filenameChanged(title);
 }
 
 QString KCCodeEditor::getDocumentTitle()
@@ -673,21 +645,6 @@ int KCCodeEditor::getTextLines()
 void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
 {
     editor->setCursorPosition(nLine,linePos);
-}
-
-void KCCodeEditor::fileInfoChanged(const QFileInfo &_fileInfo)
-{
-    setDocumentTitle(_fileInfo.fileName());
-
-    languageMode->setFileSuffix(_fileInfo.suffix());
-
-    //filePath=_fileInfo.fileName();
-    editor->setFilePath(_fileInfo.absoluteFilePath());
-    editor->setFileError(QFileDevice::NoError);
-    editor->document()->setModified(false);
-
-    languageMode->computeExecFileName();
-    KCHistoryConfigure::getInstance()->setHistoryDir(_fileInfo.absolutePath());
 }
 
 KCLanguageMode *KCCodeEditor::langMode() const

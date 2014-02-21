@@ -59,7 +59,6 @@ public:
     GdbController *startDebug(int lineNumber);
     void stopDebug();
     void setMode(const modeType &type);
-    void setFileSuffix(const QString &suffix);
 
     KCCompileOutputReceiver *getCompilerReceiver() const;
     GdbController *getGdbController() const;
@@ -81,6 +80,7 @@ signals:
     void requireDebugJumpLine(int debugLine);
 
 public slots:
+    void setFileSuffix(const QString &suffix);
     void onCompileFinished(bool hasError);
     void setBreakPointAtLine(int line);
     void computeExecFileName();

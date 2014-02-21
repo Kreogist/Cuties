@@ -63,6 +63,7 @@ signals:
     void requireDisconnectDebug();
     void requiredCompileFile();
     void requiredAddRecentRecord(QString newName);
+    void requireSetHistoryDir(QString dirPath);
 
 public slots:
     void openAndJumpTo(const QString &filePath);

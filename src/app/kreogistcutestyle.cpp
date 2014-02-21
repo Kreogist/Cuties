@@ -36,7 +36,8 @@ void KreogistCuteStyle::drawControl(ControlElement element,
                                     QPainter *p,
                                     const QWidget *w) const
 {
-    p->setRenderHint(QPainter::HighQualityAntialiasing, true);
+    p->setRenderHint(QPainter::Antialiasing, true);
+    p->setRenderHint(QPainter::TextAntialiasing, true);
     switch(element)
     {
     case CE_MenuItem:

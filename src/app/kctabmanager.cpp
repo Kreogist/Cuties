@@ -141,6 +141,8 @@ int KCTabManager::open(const QString &filePath)
     KCCodeEditor *tmp=new KCCodeEditor(this);
     connect(tmp, &KCCodeEditor::requiredAddRecentRecord,
             this, &KCTabManager::requiredAddRecentRecord);
+    connect(tmp, &KCCodeEditor::requireSetHistoryDir,
+            this, &KCTabManager::requireSetHistoryDir);
     if(tmp->open(filePath))
     {
         prepareCodeEditor(tmp, name);
@@ -250,6 +252,8 @@ int KCTabManager::newFile()
             tr("Untitled")+ " " +QString::number(newFileCount++);
         connect(tmp, &KCCodeEditor::requiredAddRecentRecord,
                 this, &KCTabManager::requiredAddRecentRecord);
+        connect(tmp, &KCCodeEditor::requireSetHistoryDir,
+                this, &KCTabManager::requireSetHistoryDir);
         prepareCodeEditor(tmp, newFileTitle);
         int newTabIndex=addTab(tmp,newFileTitle);
         setCurrentIndex(newTabIndex);

@@ -108,6 +108,7 @@ signals:
     void requiredHideDocks();
     void requiredCompileFile();
     void requiredAddRecentRecord(QString newName);
+    void requireSetHistoryDir(QString dirPath);
 
 public slots:
     //KCTextEditor link slots
@@ -155,7 +156,6 @@ private:
     bool searchUseLastCursor;
     bool processSaveAsAction(const QString &dialogCaption);
     bool requireSaveAs(const QString &caption);
-    void fileInfoChanged(const QFileInfo &_fileInfo);
     void connectSearchWidgetWithEditor(KCSearchWidget *widget);
 
     KCLanguageMode *languageMode;
