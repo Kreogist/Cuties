@@ -42,7 +42,7 @@ static bool isAnsycChar(const char &c)
 }
 
 GdbThread::GdbThread(QObject *parent) :
-    QThread(parent)
+    QObject(parent)
 {
     messageCache.clear();
 }
@@ -55,7 +55,7 @@ GdbThread::~GdbThread()
 void GdbThread::run()
 {
     readProcessData.disConnectAll();
-    gdbProcess.reset(new QProcess(this));
+    gdbProcess.reset(new QProcess);
     QStringList _arg;
     _arg<<filePath<<"--interpreter"<<"mi"
 #ifdef Q_OS_WIN32
@@ -197,6 +197,11 @@ GdbController::GdbController(QObject *parent) :
     requestForceUpdateLocal=false;
 
     debugCodec=QTextCodec::codecForLocale();
+}
+
+GdbController::~GdbController()
+{
+    gdbProcessThread->deleteLater();
 }
 
 void GdbController::parseLine(const QString &_msg)
@@ -489,7 +494,8 @@ bool GdbController::runGDB(const QString &filePath)
 void GdbController::quitGDB()
 {
     gdbProcessThread->quitGDB();
-    gdbProcessThread->quit();
+    gdbWorkThread.quit();
+    gdbWorkThread.wait();
     //emit requireDisconnectDebug();
 }
 
@@ -674,13 +680,18 @@ void GdbController::configureGDB()
 
 void GdbController::createGDBThread()
 {
-    gdbProcessThread=new GdbThread(this);
-    connect(gdbProcessThread, SIGNAL(parseMessage(QString)),
-            this, SLOT(parseLine(QString)));
-    connect(gdbProcessThread, SIGNAL(parseError(QString)),
-            this, SLOT(parseError(QString)));
-    connect(gdbProcessThread, SIGNAL(addSystemMessage(QString)),
-            this, SLOT(parseCommand(QString)));
+    if(gdbProcessThread==nullptr)
+    {
+        gdbProcessThread=new GdbThread;
+        gdbProcessThread->moveToThread(&gdbWorkThread);
+        connect(gdbProcessThread, SIGNAL(parseMessage(QString)),
+                this, SLOT(parseLine(QString)));
+        connect(gdbProcessThread, SIGNAL(parseError(QString)),
+                this, SLOT(parseError(QString)));
+        connect(gdbProcessThread, SIGNAL(addSystemMessage(QString)),
+                this, SLOT(parseCommand(QString)));
+    }
+    gdbWorkThread.start();
 }
 
 QSharedPointer<dbgOutputReceiver> GdbController::getDbgOutputs()

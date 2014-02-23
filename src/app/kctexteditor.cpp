@@ -197,6 +197,7 @@ bool KCTextEditor::readFile(const QString &filePath,
             fileInfoChanged(QFileInfo(_file));
             emit requiredAddRecentRecord(getFilePath());
         }
+        _file.close();
         return true;
     }
     setFileError(_file.error());
@@ -218,6 +219,7 @@ bool KCTextEditor::writeToFile(const QString &filePath,
         {
             fileInfoChanged(QFileInfo(_file));
         }
+        _file.close();
         return true;
     }
     setFileError(_file.error());

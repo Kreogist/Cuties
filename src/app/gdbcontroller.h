@@ -56,13 +56,13 @@ struct bkpt_struct
     QString original_location;
 };
 
-class GdbThread : public QThread
+class GdbThread : public QObject
 {
     Q_OBJECT
 public:
     explicit GdbThread(QObject *parent = 0);
     ~GdbThread();
-    void run() Q_DECL_OVERRIDE;
+    void run();
 
     QString getFilePath() const;
     void setFilePath(const QString &value);
@@ -99,6 +99,7 @@ class GdbController : public QObject
     Q_OBJECT
 public:
     explicit GdbController(QObject *parent = 0);
+    ~GdbController();
 
     static void setGDBPath(const QString &path);
     static bool checkGDB();
@@ -168,7 +169,8 @@ private:
     static bool checkResult;
     QVector<bkpt_struct> bkptVec;
 
-    GdbThread *gdbProcessThread;
+    GdbThread *gdbProcessThread=nullptr;
+    QThread gdbWorkThread;
     QSharedPointer<dbgOutputReceiver> dbgOutputs;
     QTextCodec *debugCodec;
     QTextCodec::ConverterState debugCodecState;
