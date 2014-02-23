@@ -97,6 +97,11 @@ public:
                      QString codecName="UTF-8",
                      bool cacheOpenMode=false);
     void setDocumentTitle(const QString &title);
+    int matchParentheses(const char &parenthesesA,
+                         const char &parenthesesB,
+                         QList<parenthesesInfo>::iterator startPos,
+                         QTextBlock block,
+                         bool forward);
 
 signals:
     /*!
@@ -137,6 +142,7 @@ public slots:
     void setCursorAtLine(int blockNumber);
     void emulatePressKey(QKeyEvent *keyEvent);
     void fileInfoChanged(const QFileInfo &_fileInfo);
+    KCTextBlockData *getBlockData(const QTextBlock &b);
 
 private slots:
     void updateSearchResults();
@@ -158,7 +164,6 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    KCTextBlockData *getBlockData(const QTextBlock &b);
     bool showPreviousSearchResult(const QTextCursor &cursor);
     bool showNextSearchResult(const QTextCursor &cursor);
     void highlightCurrentLine(QList<QTextEdit::ExtraSelection> &selections);
@@ -178,11 +183,6 @@ private:
     void initTextSearcher(QScopedPointer<KCTextSearcher> &searcher);
     void checkWhetherBlockSearchedAndDealWith(const QTextBlock &block,
             KCTextBlockData *data);
-    int matchParentheses(const char &parenthesesA,
-                         const char &parenthesesB,
-                         QList<parenthesesInfo>::iterator startPos,
-                         QTextBlock block,
-                         bool forward);
     int findFirstCharacter(const QTextBlock &block);
     void insertTab(QTextCursor insertTabCursor, int tabCount = 1);
     void removeTab(QTextCursor removeTabCursor, int tabCount = 1);

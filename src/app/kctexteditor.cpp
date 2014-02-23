@@ -189,7 +189,7 @@ bool KCTextEditor::readFile(const QString &filePath,
 
         if(cacheOpenMode)
         {
-            emit fileNameChanged(titleText);
+            this->setDocumentTitle(titleText);
             document()->setModified(true);
         }
         else
@@ -1013,165 +1013,11 @@ void KCTextEditor::keyPressEvent(QKeyEvent *event)
         return;
     }
     QTextCursor _textCursor=textCursor();
-    QString pairParethesesChar;
-    pairParethesesChar=parenthesesPair(event->text());
-    if(!pairParethesesChar.isEmpty())
-    {
-        if(_textCursor.selectedText().isEmpty())
-        {
-            QPlainTextEdit::keyPressEvent(event);
-            insertPlainText(pairParethesesChar);
-            _textCursor.movePosition(QTextCursor::Left);
-            setTextCursor(_textCursor);
-        }
-        else
-        {
-            int start=_textCursor.selectionStart(),
-                end=_textCursor.selectionEnd();
-            /*//If pressed '{', we should do autoindent all lines.
-            if(e->text()=="{")
-            {
-                QTextBlock currBlock=_textCursor.block(),
-                           lastBlock, beginBlock;
-                _textCursor.setPosition(end);
-                currBlock=_textCursor.block();
-                _textCursor.insertBlock();
-                lastBlock=_textCursor.block();
-                _textCursor.insertText("}");
-
-                _textCursor.setPosition(start);
-                _textCursor.insertBlock();
-                currBlock=_textCursor.block();
-                beginBlock=currBlock.previous();
-                _textCursor.setPosition(beginBlock.position());
-                _textCursor.insertText("{");
-                for(QTextBlock i=beginBlock;
-                    i!=lastBlock;
-                    i=i.next())
-                {
-                    autoIndent(i);
-                }
-            }
-            else
-            {*/
-            _textCursor.beginEditBlock();
-            _textCursor.clearSelection();
-            _textCursor.setPosition(start);
-            _textCursor.insertText(event->text());
-            _textCursor.setPosition(end+1);
-            _textCursor.insertText(pairParethesesChar);
-            _textCursor.endEditBlock();
-            setTextCursor(_textCursor);
-            //}
-        }
-        return;
-    }
-    if(event->text()==")" || event->text()=="]")
-    {
-        if(QString(_textCursor.document()->characterAt(_textCursor.position())) == event->text())
-        {
-            KCTextBlockData *blockData=getBlockData(_textCursor.block());
-
-            if(blockData!=NULL)
-            {
-                for(auto i=blockData->getFirstParenthesesInfo(),
-                    l=blockData->getEndParenthesesInfo();
-                    i<l;
-                    i++)
-                {
-                    if(i->pos == _textCursor.positionInBlock())
-                    {
-                        if(matchParentheses(event->text().at(0).toLatin1(),
-                                            event->text()==")"?'(':'[',
-                                            i,
-                                            _textCursor.block(),
-                                            false) > -1)
-                        {
-                            _textCursor.movePosition(QTextCursor::Right);
-                            setTextCursor(_textCursor);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        QPlainTextEdit::keyPressEvent(event);
-        return;
-    }
-    if(event->text()=="\"")
-    {
-        if(_textCursor.selectedText().isEmpty())
-        {
-            KCTextBlockData *currData=getBlockData(_textCursor.block());
-            //qDebug()<<currData->getQuotationStatus();
-            if(_textCursor.document()->characterAt(_textCursor.position())==QChar('\"') &&
-               currData->getQuotationStatus()!=-1)
-            {
-                _textCursor.movePosition(QTextCursor::Right);
-                setTextCursor(_textCursor);
-                return;
-            }
-            QPlainTextEdit::keyPressEvent(event);
-            if(_textCursor.document()->characterAt(_textCursor.position()-1)!=QChar('\\') &&
-               currData->getQuotationStatus()==-1)
-            {
-                insertPlainText("\"");
-                _textCursor.movePosition(QTextCursor::Left);
-                setTextCursor(_textCursor);
-            }
-        }
-        else
-        {
-            int start=_textCursor.selectionStart(),
-                end=_textCursor.selectionEnd();
-            _textCursor.beginEditBlock();
-            _textCursor.clearSelection();
-            _textCursor.setPosition(start);
-            _textCursor.insertText("\"");
-            _textCursor.setPosition(end+1);
-            _textCursor.insertText("\"");
-            _textCursor.endEditBlock();
-            setTextCursor(_textCursor);
-        }
-        return;
-    }
     switch(event->key())
     {
     case Qt::Key_Tab:
     {
         tabPressEvent(_textCursor);
-        break;
-    }
-    case Qt::Key_Backspace:
-    {
-        //If there's text selected, just delete them.
-        if(_textCursor.selectedText().length()>0)
-        {
-            QPlainTextEdit::keyPressEvent(event);
-            break;
-        }
-        //Now we have to judge the status.
-        QChar previousChar=_textCursor.document()->characterAt(_textCursor.position()-1),
-              currentChar=_textCursor.document()->characterAt(_textCursor.position());
-        //If the previous is a panethese and there's the other part of the current panethese,
-        //Delete all of them.
-        if(parenthesesPair(previousChar)==currentChar)
-        {
-            _textCursor.deleteChar();
-            QPlainTextEdit::keyPressEvent(event);
-            break;
-        }
-        //So as quotations.
-        KCTextBlockData *currData=getBlockData(_textCursor.block());
-        if(previousChar==QChar('\"') &&
-           currentChar==QChar('\"') &&
-           currData->getQuotationStatus()!=0)
-        {
-            _textCursor.deleteChar();
-            QPlainTextEdit::keyPressEvent(event);
-            break;
-        }
-        QPlainTextEdit::keyPressEvent(event);
         break;
     }
     case Qt::Key_Return:
@@ -1201,21 +1047,6 @@ void KCTextEditor::keyPressEvent(QKeyEvent *event)
                     _textCursor.movePosition(QTextCursor::PreviousBlock);
                     _textCursor.movePosition(QTextCursor::EndOfBlock);
                     setTextCursor(_textCursor);
-                    /*
-                    QTextBlock nextBlock=_textCursor.block();
-                    QTextBlock currBlock=nextBlock.previous();
-                    QTextBlock prevBlock=currBlock.previous();
-                    KCTextBlockData *prevData=getBlockData(prevBlock);
-                    KCTextBlockData *currData=getBlockData(currBlock);
-                    KCTextBlockData *nextData=getBlockData(nextBlock);
-                    currData->setCodeLevel(prevData->getCodeLevel() + 1);
-                    nextData->setCodeLevel(prevData->getCodeLevel() + 1);
-                    _textCursor.setPosition(nextBlock.position());
-                    setTextCursor(_textCursor);
-                    insertTab(_textCursor, prevData->getCodeLevel() + 1);
-                    _textCursor.movePosition(QTextCursor::PreviousBlock);
-                    setTextCursor(_textCursor);
-                    insertTab(_textCursor, prevData->getCodeLevel() + 1);*/
                     break;
                 }
             }

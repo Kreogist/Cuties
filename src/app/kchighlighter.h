@@ -23,12 +23,16 @@
 #include <QSyntaxHighlighter>
 
 #include "kctextblockdata.h"
+#include "kctexteditor.h"
 
 class KCHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 public:
     explicit KCHighlighter(QObject *parent = 0);
+
+    KCTextEditor *editor() const;
+    void setEditor(KCTextEditor *editor);
 
 protected:
     void highlightBlock(const QString &text);
@@ -41,6 +45,7 @@ protected:
     {
         Q_UNUSED(text);
     }
+    KCTextEditor *m_editor;
 };
 
 #endif // KCHIGHLIGHTER_H

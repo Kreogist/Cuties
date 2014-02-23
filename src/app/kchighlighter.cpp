@@ -134,9 +134,19 @@ void KCHighlighter::parseQuotationInfo(const QString &text,
     data->setQuotationStatus(-1);
 }
 
+KCTextEditor *KCHighlighter::editor() const
+{
+    return m_editor;
+}
+
+void KCHighlighter::setEditor(KCTextEditor *editor)
+{
+    m_editor = editor;
+}
+
 void KCHighlighter::parseParenthesesInfo(const QString &text,
-        KCTextBlockData *data,
-        char character)
+                                         KCTextBlockData *data,
+                                         char character)
 {
     int index=text.indexOf(character);
     while(index!=-1)

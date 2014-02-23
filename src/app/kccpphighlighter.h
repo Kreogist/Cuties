@@ -40,6 +40,10 @@ private:
     textCharFormatMap *instance;
     void stringHighlightBlock(const QString &text);
     void conmmentHighlightBlock(const QString &text);
+
+    QString parenthesesPair(const QString &parenthesesChar);
+    QString leftParenthesesLists=QString("([{");
+    QString rightParenthesesLists=QString(")]}");
 };
 
 #endif // KCCPPHIGHLIGHTER_H

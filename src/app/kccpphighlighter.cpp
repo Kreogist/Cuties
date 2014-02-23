@@ -18,6 +18,7 @@
  */
 
 #include <QKeyEvent>
+#include <QTextCursor>
 
 #include "textcharformatmap.h"
 
@@ -166,6 +167,19 @@ void KCCppHighlighter::conmmentHighlightBlock(const QString &text)
     }
 }
 
+QString KCCppHighlighter::parenthesesPair(const QString &parenthesesChar)
+{
+    if(!parenthesesChar.isEmpty())
+    {
+        int parenthesesIndex=leftParenthesesLists.indexOf(parenthesesChar);
+        if(parenthesesIndex>-1)
+        {
+            return QString(rightParenthesesLists.at(parenthesesIndex));
+        }
+    }
+    return QString();
+}
+
 void KCCppHighlighter::KCHighlightBlock(const QString &text)
 {
     for(int i=0; i<rules.size(); i++)
@@ -234,13 +248,129 @@ void KCCppHighlighter::KCHighlightBlock(const QString &text)
 
 bool KCCppHighlighter::eventFilter(QObject *object, QEvent *event)
 {
-    if(event->type()==QEvent::KeyPress)
+    if(event->type()==QEvent::KeyPress && object==m_editor)
     {
         QKeyEvent *keyPress=static_cast<QKeyEvent *>(event);
+        QTextCursor codeCursor=m_editor->textCursor();
+
+        QString pairParethesesChar=parenthesesPair(keyPress->text());
+        if(!pairParethesesChar.isEmpty())
+        {
+            if(codeCursor.selectedText().isEmpty())
+            {
+                m_editor->emulatePressKey(keyPress);
+                m_editor->insertPlainText(pairParethesesChar);
+                codeCursor.movePosition(QTextCursor::Left);
+                m_editor->setTextCursor(codeCursor);
+            }
+            else
+            {
+                int start=codeCursor.selectionStart(),
+                    end=codeCursor.selectionEnd();
+                codeCursor.beginEditBlock();
+                codeCursor.clearSelection();
+                codeCursor.setPosition(start);
+                codeCursor.insertText(keyPress->text());
+                codeCursor.setPosition(end+1);
+                codeCursor.insertText(pairParethesesChar);
+                codeCursor.endEditBlock();
+                m_editor->setTextCursor(codeCursor);
+            }
+            return true;
+        }
+        KCTextBlockData *currentData=m_editor->getBlockData(codeCursor.block());
+        if(keyPress->text()==")" || keyPress->text()=="]")
+        {
+            if(QString(codeCursor.document()->characterAt(codeCursor.position()))
+                    == keyPress->text())
+            {
+                if(currentData!=NULL)
+                {
+                    for(auto i=currentData->getFirstParenthesesInfo(),
+                        l=currentData->getEndParenthesesInfo();
+                        i<l;
+                        i++)
+                    {
+                        if(i->pos==codeCursor.positionInBlock())
+                        {
+                            if(m_editor->matchParentheses(
+                                        keyPress->text().at(0).toLatin1(),
+                                        keyPress->text()==")"?'(':'[',
+                                        i,
+                                        codeCursor.block(),
+                                        false) > -1)
+                            {
+                                codeCursor.movePosition(QTextCursor::Right);
+                                m_editor->setTextCursor(codeCursor);
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return KCHighlighter::eventFilter(object, event);
+        }
+        if(keyPress->text()=="\"")
+        {
+            if(codeCursor.selectedText().isEmpty())
+            {
+                if(codeCursor.document()->characterAt(codeCursor.position())==QChar('\"') &&
+                   currentData->getQuotationStatus()!=-1)
+                {
+                    codeCursor.movePosition(QTextCursor::Right);
+                    m_editor->setTextCursor(codeCursor);
+                    return true;
+                }
+                m_editor->emulatePressKey(keyPress);
+                if(codeCursor.document()->characterAt(codeCursor.position()-1)!=QChar('\\') &&
+                   currentData->getQuotationStatus()==-1)
+                {
+                    m_editor->insertPlainText("\"");
+                    codeCursor.movePosition(QTextCursor::Left);
+                    m_editor->setTextCursor(codeCursor);
+                }
+            }
+            else
+            {
+                int start=codeCursor.selectionStart(),
+                    end=codeCursor.selectionEnd();
+                codeCursor.beginEditBlock();
+                codeCursor.clearSelection();
+                codeCursor.setPosition(start);
+                codeCursor.insertText("\"");
+                codeCursor.setPosition(end+1);
+                codeCursor.insertText("\"");
+                codeCursor.endEditBlock();
+                m_editor->setTextCursor(codeCursor);
+            }
+            return true;
+        }
         switch(keyPress->key())
         {
-        qDebug()<<"Ate key: "<<keyPress->key();
-        return true;
+        case Qt::Key_Backspace:
+        {
+            if(codeCursor.selectedText().length()>0)
+            {
+                return KCHighlighter::eventFilter(object, event);
+            }
+            //Now we have to judge the status.
+            QChar previousChar=codeCursor.document()->characterAt(codeCursor.position()-1),
+                  currentChar=codeCursor.document()->characterAt(codeCursor.position());
+            //If the previous is a panethese and there's the other part of the current panethese,
+            //Delete all of them.
+            if(parenthesesPair(previousChar)==currentChar)
+            {
+                codeCursor.deleteChar();
+                return KCHighlighter::eventFilter(object, event);
+            }
+            //So as quotations.
+            if(previousChar==QChar('\"') && currentChar==QChar('\"') &&
+               currentData->getQuotationStatus()!=0)
+            {
+                codeCursor.deleteChar();
+            }
+            return KCHighlighter::eventFilter(object, event);
+        }
         }
     }
     return KCHighlighter::eventFilter(object, event);

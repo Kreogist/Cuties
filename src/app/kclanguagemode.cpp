@@ -44,6 +44,7 @@ KCLanguageMode::KCLanguageMode(KCTextEditor *e,
     m_type=Invalid;
     editor=e;
     setFileSuffix(KCGeneralConfigure::getInstance()->getDefaultLanguageModeString());
+    m_highlighter->setEditor(editor);
 
     gdbControllerInstance=new GdbController(this);
     connect(gdbControllerInstance, SIGNAL(requireDisconnectDebug()),
@@ -163,6 +164,7 @@ void KCLanguageMode::setFileSuffix(const QString &suffix)
     }
     Q_ASSERT(!m_highlighter.isNull());
     m_highlighter->setDocument(editor->document());
+    editor->installEventFilter(m_highlighter.data());
 }
 
 KCCompileOutputReceiver *KCLanguageMode::getCompilerReceiver() const

@@ -234,7 +234,7 @@ void KCCodeEditor::setCacheNewFileMode(bool value)
 
 void KCCodeEditor::setLanguageMode(KCLanguageMode *value)
 {
-    languageMode = value;
+    languageMode=value;
 }
 
 void KCCodeEditor::showCompileBar()
