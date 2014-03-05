@@ -27,6 +27,31 @@ class QStandardItemModel;
 class QStandardItem;
 class QClipboard;
 
+class KCClipboardWorker : public QObject
+{
+    Q_OBJECT
+public:
+    explicit KCClipboardWorker(QObject *parent = 0);
+
+    QStandardItemModel *getClipboardTextsModel() const;
+    void setClipboardTextsModel(QStandardItemModel *value);
+    QString getHistoryClipboardText(int itemIndex);
+
+    int getMaxDataCount();
+    void setMaxDataCount(int value);
+
+private slots:
+    void onSystemClipboardChanged();
+
+private:
+    void addToClipboardStack(QString clipboardText);
+    int maxDataCount=10;
+    QStandardItemModel *clipboardTextsModel;
+
+    bool ignoreSignal=false;
+    QClipboard *systemClipboard;
+};
+
 class KCClipboard : public QObject
 {
     Q_OBJECT
@@ -39,22 +64,12 @@ public:
 
     int getMaxDataCount();
     void setMaxDataCount(int value);
-    void addToClipboardStack(QString _text);
-
-signals:
-
-public slots:
-    void onSystemClipboardChanged();
 
 private:
     KCClipboard();
     static KCClipboard *instance;
 
-    int maxDataCount=10;
-    QStandardItemModel *clipboardTextsModel;
-
-    bool ignoreSignal=false;
-    QClipboard *systemClipboard;
+    KCClipboardWorker *clipboardWorker;
 };
 
 #endif // KCCLIPBOARD_H

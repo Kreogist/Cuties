@@ -26,24 +26,18 @@
 
 #include "kcclipboard.h"
 
-KCClipboard *KCClipboard::instance=nullptr;
-
-KCClipboard::KCClipboard()
+KCClipboardWorker::KCClipboardWorker(QObject *parent) :
+    QObject(parent)
 {
     clipboardTextsModel=new QStandardItemModel(this);
 
     systemClipboard=qApp->clipboard();
 
     connect(systemClipboard,&QClipboard::dataChanged,
-            this, &KCClipboard::onSystemClipboardChanged);
+            this, &KCClipboardWorker::onSystemClipboardChanged);
 }
 
-KCClipboard *KCClipboard::getInstance()
-{
-    return instance==nullptr?instance=new KCClipboard:instance;
-}
-
-void KCClipboard::onSystemClipboardChanged()
+void KCClipboardWorker::onSystemClipboardChanged()
 {
     if(!ignoreSignal)
     {
@@ -58,17 +52,17 @@ void KCClipboard::onSystemClipboardChanged()
     }
 }
 
-QStandardItemModel *KCClipboard::getClipboardTextsModel() const
+QStandardItemModel *KCClipboardWorker::getClipboardTextsModel() const
 {
     return clipboardTextsModel;
 }
 
-void KCClipboard::setClipboardTextsModel(QStandardItemModel *value)
+void KCClipboardWorker::setClipboardTextsModel(QStandardItemModel *value)
 {
     clipboardTextsModel = value;
 }
 
-QString KCClipboard::getHistoryClipboardText(int itemIndex)
+QString KCClipboardWorker::getHistoryClipboardText(int itemIndex)
 {
     QString newClipData=clipboardTextsModel->item(itemIndex)->data().toString();
     ignoreSignal=true;
@@ -76,12 +70,12 @@ QString KCClipboard::getHistoryClipboardText(int itemIndex)
     return newClipData;
 }
 
-int KCClipboard::getMaxDataCount()
+int KCClipboardWorker::getMaxDataCount()
 {
     return maxDataCount;
 }
 
-void KCClipboard::setMaxDataCount(int value)
+void KCClipboardWorker::setMaxDataCount(int value)
 {
     if(maxDataCount>value)
     {
@@ -94,41 +88,91 @@ void KCClipboard::setMaxDataCount(int value)
     maxDataCount = value;
 }
 
-void KCClipboard::addToClipboardStack(QString _text)
+void KCClipboardWorker::addToClipboardStack(QString clipboardText)
 {
     QString currentCaption;
-    int firstEnterIndex=_text.indexOf("\n");
+    int firstEnterIndex=clipboardText.indexOf("\n");
     if(firstEnterIndex!=-1)
     {
-        currentCaption=_text.left(firstEnterIndex).simplified();
+        currentCaption=clipboardText.left(firstEnterIndex).simplified();
         if(currentCaption.isEmpty())
         {
             //This means the first line is empty.
-            currentCaption=_text.simplified();
+            currentCaption=clipboardText.simplified();
             if(!currentCaption.isEmpty() && currentCaption.length() > 10)
             {
                 currentCaption=currentCaption.left(10);
             }
-            currentCaption+=+"...";
+            currentCaption+="...";
         }
         else
         {
-            currentCaption+=+"...";
+            currentCaption+="...";
         }
     }
     else
     {
-        currentCaption=_text.simplified();
+        currentCaption=clipboardText.simplified();
     }
 
     QStandardItem *clipItem=new QStandardItem(currentCaption);
     clipItem->setEditable(false);
-    clipItem->setToolTip(_text);
-    clipItem->setData(_text);
+    int lineCount=5;
+    if(clipboardText.count('\n')>lineCount)
+    {
+        int previewLength=0;
+        while(lineCount--)
+        {
+            previewLength=clipboardText.indexOf('\n', previewLength+1);
+        }
+        clipItem->setToolTip(clipboardText.left(previewLength)+"...");
+    }
+    else
+    {
+        clipItem->setToolTip(clipboardText);
+    }
+    clipItem->setData(clipboardText);
     int removeItemCount=clipboardTextsModel->rowCount()-maxDataCount+1;
     if(removeItemCount>0)
     {
         clipboardTextsModel->removeRows(maxDataCount-1, removeItemCount);
     }
     clipboardTextsModel->insertRow(0, clipItem);
+}
+
+KCClipboard *KCClipboard::instance=nullptr;
+
+KCClipboard *KCClipboard::getInstance()
+{
+    return instance==nullptr?instance=new KCClipboard:instance;
+}
+
+QStandardItemModel *KCClipboard::getClipboardTextsModel() const
+{
+    return clipboardWorker->getClipboardTextsModel();
+}
+
+void KCClipboard::setClipboardTextsModel(QStandardItemModel *value)
+{
+    clipboardWorker->setClipboardTextsModel(value);
+}
+
+QString KCClipboard::getHistoryClipboardText(int itemIndex)
+{
+    return clipboardWorker->getHistoryClipboardText(itemIndex);
+}
+
+int KCClipboard::getMaxDataCount()
+{
+    return clipboardWorker->getMaxDataCount();
+}
+
+void KCClipboard::setMaxDataCount(int value)
+{
+    clipboardWorker->setMaxDataCount(value);
+}
+
+KCClipboard::KCClipboard()
+{
+    clipboardWorker=new KCClipboardWorker(this);
 }
