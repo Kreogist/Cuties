@@ -52,7 +52,6 @@ private:
 
     int maxDataCount=10;
     QStandardItemModel *clipboardTextsModel;
-    QStandardItem *clipboardTextsModelRoot;
 
     bool ignoreSignal=false;
     QClipboard *systemClipboard;

@@ -642,9 +642,9 @@ int KCCodeEditor::getTextLines()
     return editor->document()->blockCount();
 }
 
-void KCCodeEditor::setDocumentCursor(int nLine, int linePos)
+void KCCodeEditor::setDocumentCursor(int block, int column)
 {
-    editor->setCursorPosition(nLine,linePos);
+    editor->setCursorPosition(block,column);
 }
 
 KCLanguageMode *KCCodeEditor::langMode() const

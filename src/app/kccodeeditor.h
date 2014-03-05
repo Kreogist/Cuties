@@ -74,7 +74,7 @@ public:
     QFileDevice::FileError error();
     void setDocumentTitle(const QString &title);
     QString getDocumentTitle();
-    void setDocumentCursor(int nLine, int linePos);
+    void setDocumentCursor(int block, int column);
     void setTextFocus();
     QString getFilePath();
     QString getExecFileName();

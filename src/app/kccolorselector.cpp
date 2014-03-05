@@ -32,6 +32,7 @@
 #include <QGridLayout>
 #include <QKeyEvent>
 
+#include <cmath>
 #include "kccolorselector.h"
 
 KCHexColorLineEdit::KCHexColorLineEdit(QWidget *parent) :

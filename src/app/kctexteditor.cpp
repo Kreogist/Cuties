@@ -28,7 +28,6 @@
 #include <QMenu>
 #include <QStyleFactory>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QDebug>
 #include <QShowEvent>
 #include <QResizeEvent>

@@ -20,7 +20,6 @@
 
 #include <QClipboard>
 #include <QApplication>
-#include <QRegularExpression>
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QStandardItem>
@@ -32,12 +31,11 @@ KCClipboard *KCClipboard::instance=nullptr;
 KCClipboard::KCClipboard()
 {
     clipboardTextsModel=new QStandardItemModel(this);
-    clipboardTextsModelRoot=clipboardTextsModel->invisibleRootItem();
 
     systemClipboard=qApp->clipboard();
 
     connect(systemClipboard,&QClipboard::dataChanged,
-            this,&KCClipboard::onSystemClipboardChanged);
+            this, &KCClipboard::onSystemClipboardChanged);
 }
 
 KCClipboard *KCClipboard::getInstance()
@@ -49,7 +47,10 @@ void KCClipboard::onSystemClipboardChanged()
 {
     if(!ignoreSignal)
     {
-        addToClipboardStack(systemClipboard->text());
+        if(!systemClipboard->text().isEmpty())
+        {
+            addToClipboardStack(systemClipboard->text());
+        }
     }
     else
     {
@@ -69,7 +70,7 @@ void KCClipboard::setClipboardTextsModel(QStandardItemModel *value)
 
 QString KCClipboard::getHistoryClipboardText(int itemIndex)
 {
-    QString newClipData=clipboardTextsModel->item(itemIndex)->toolTip();
+    QString newClipData=clipboardTextsModel->item(itemIndex)->data().toString();
     ignoreSignal=true;
     systemClipboard->setText(newClipData);
     return newClipData;
@@ -84,35 +85,50 @@ void KCClipboard::setMaxDataCount(int value)
 {
     if(maxDataCount>value)
     {
-        do
+        int removeItemCount=clipboardTextsModel->rowCount()-value;
+        if(removeItemCount>0)
         {
-            clipboardTextsModelRoot->removeRow(clipboardTextsModelRoot->rowCount()-1);
+            clipboardTextsModel->removeRows(value, removeItemCount);
         }
-        while(clipboardTextsModelRoot->rowCount() > value);
     }
     maxDataCount = value;
 }
 
 void KCClipboard::addToClipboardStack(QString _text)
 {
-    QString _caption;
-    int firstChar=_text.indexOf(QRegularExpression("\\S"));
-    if(firstChar!=-1)
+    QString currentCaption;
+    int firstEnterIndex=_text.indexOf("\n");
+    if(firstEnterIndex!=-1)
     {
-        _caption=_text.mid(firstChar);
+        currentCaption=_text.left(firstEnterIndex).simplified();
+        if(currentCaption.isEmpty())
+        {
+            //This means the first line is empty.
+            currentCaption=_text.simplified();
+            if(!currentCaption.isEmpty() && currentCaption.length() > 10)
+            {
+                currentCaption=currentCaption.left(10);
+            }
+            currentCaption+=+"...";
+        }
+        else
+        {
+            currentCaption+=+"...";
+        }
     }
-    firstChar=_caption.indexOf("\n"); //firstChar now becomes firstNextLineChar.
-    if(firstChar!=-1)
+    else
     {
-        _caption=_caption.left(firstChar-1)+"...";
+        currentCaption=_text.simplified();
     }
 
-    QStandardItem *clipItem=new QStandardItem(_caption);
+    QStandardItem *clipItem=new QStandardItem(currentCaption);
     clipItem->setEditable(false);
     clipItem->setToolTip(_text);
-    if(clipboardTextsModelRoot->rowCount() >= maxDataCount)
+    clipItem->setData(_text);
+    int removeItemCount=clipboardTextsModel->rowCount()-maxDataCount+1;
+    if(removeItemCount>0)
     {
-        clipboardTextsModelRoot->removeRow(maxDataCount - 1);
+        clipboardTextsModel->removeRows(maxDataCount-1, removeItemCount);
     }
-    clipboardTextsModelRoot->insertRow(0, clipItem);
+    clipboardTextsModel->insertRow(0, clipItem);
 }
