@@ -82,7 +82,6 @@ void KCLanguageConfigure::setLanguageIndex(int newLanguageIndex)
 void KCLanguageConfigure::applyLangaugeSet(int languageIndex)
 {
     qApp->removeTranslator(&appTrans);
-    qDebug()<<languageFileList.at(languageIndex);
     appTrans.load(languageFileList.at(languageIndex));
     qApp->installTranslator(&appTrans);
     emit newLanguageSet();

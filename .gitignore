@@ -23,6 +23,7 @@ Makefile
 # user-es
 *.user
 *.user.*
+CMakeCache.txt
 
 # build dir
 /build
