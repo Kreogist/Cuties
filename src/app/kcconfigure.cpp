@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <QDebug>
+#include <QStringList>
 
 #include "kcconfigure.h"
 

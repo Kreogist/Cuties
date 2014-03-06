@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QThread>
 
 class QStandardItemModel;
 class QStandardItem;
@@ -67,9 +68,11 @@ public:
 
 private:
     KCClipboard();
+    ~KCClipboard();
     static KCClipboard *instance;
 
     KCClipboardWorker *clipboardWorker;
+    QThread clipboardThread;
 };
 
 #endif // KCCLIPBOARD_H

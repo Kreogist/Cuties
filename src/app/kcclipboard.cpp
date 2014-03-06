@@ -147,6 +147,19 @@ KCClipboard *KCClipboard::getInstance()
     return instance==nullptr?instance=new KCClipboard:instance;
 }
 
+KCClipboard::KCClipboard()
+{
+    clipboardWorker=new KCClipboardWorker(this);
+    clipboardWorker->moveToThread(&clipboardThread);
+    clipboardThread.start();
+}
+
+KCClipboard::~KCClipboard()
+{
+    clipboardThread.quit();
+    clipboardThread.wait();
+}
+
 QStandardItemModel *KCClipboard::getClipboardTextsModel() const
 {
     return clipboardWorker->getClipboardTextsModel();
@@ -170,9 +183,4 @@ int KCClipboard::getMaxDataCount()
 void KCClipboard::setMaxDataCount(int value)
 {
     clipboardWorker->setMaxDataCount(value);
-}
-
-KCClipboard::KCClipboard()
-{
-    clipboardWorker=new KCClipboardWorker(this);
 }
