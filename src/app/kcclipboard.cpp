@@ -149,7 +149,7 @@ KCClipboard *KCClipboard::getInstance()
 
 KCClipboard::KCClipboard()
 {
-    clipboardWorker=new KCClipboardWorker(this);
+    clipboardWorker=new KCClipboardWorker;
     clipboardWorker->moveToThread(&clipboardThread);
     clipboardThread.start();
 }
@@ -158,6 +158,7 @@ KCClipboard::~KCClipboard()
 {
     clipboardThread.quit();
     clipboardThread.wait();
+    clipboardWorker->deleteLater();
 }
 
 QStandardItemModel *KCClipboard::getClipboardTextsModel() const

@@ -201,6 +201,8 @@ GdbController::GdbController(QObject *parent) :
 
 GdbController::~GdbController()
 {
+    gdbWorkThread.quit();
+    gdbWorkThread.wait();
     gdbProcessThread->deleteLater();
 }
 
