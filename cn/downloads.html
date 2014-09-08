@@ -93,7 +93,7 @@
             
             <div class="download-context-box">
             <h1 class="platform">Linux</h1>
-            <a class="menu-link center-text"  onclick=ShowDialog("dialog-linux") >即将到来</a>
+            <a class="menu-link center-text"  reserve-onclick=ShowDialog("dialog-linux") >即将到来</a>
             </div>
             </div>
             
@@ -122,7 +122,7 @@
 
     </div>
     <div id="dialog-wrapper" >
-    <div id="dialog-windows" class="dialog" onclick=HideDialogs()>
+    <div id="dialog-windows" class="dialog">
     <h1>Windows</h1>
     <p>
     <ul class="menu-link-wrapper">
@@ -152,9 +152,9 @@
     <li ><a class="menu-link" href="http://pan.baidu.com/s/1i3r5Xy9">没有编译器的 Cuties (zip, 29.13MB) 百度云镜像</a></li>
     </ul>
     </p>
-    <h1 class="dialog-bottom"><span class="dialog-button"></span></h1>
+    <h1 class="dialog-bottom"><span class="dialog-button" onclick=HideDialogs()></span></h1>
     </div>
-    <div id="dialog-mac" class="dialog" onclick=HideDialogs()>
+    <div id="dialog-mac" class="dialog">
     <h1>Mac</h1>
     <p>
 	<ul class="menu-link-wrapper">
@@ -163,14 +163,15 @@
 	<li ><a class="menu-link" href="http://pan.baidu.com/s/1qWPOnpU">Command Line Tools(适用于 Mavericks 系统，XCode 组件之一), 2013年9月(dmg, 97.4MB) 百度云镜像</a></li>
     </ul>
 	</p>
-    <h1 class="dialog-bottom"><span class="dialog-button"></span></h1>
+    <h1 class="dialog-bottom"><span class="dialog-button" onclick=HideDialogs()></span></h1>
     </div>
-    <div id="dialog-linux" class="dialog" onclick=HideDialogs()>
+    <div id="dialog-linux" class="dialog">
     <h1>Linux</h1>
     <p></p>
-    <h1 class="dialog-bottom"><span class="dialog-button"></span></h1>
+    <h1 class="dialog-bottom"><span class="dialog-button" onclick=HideDialogs()></span></h1>
     </div>
     </div>
+    <div class="modal-overlay" onclick="HideDialogs()"></div>
 	<div class="footer_wrap">
     <footer class="inner">
       <p class="copyright exlight-font">© 2013-2014 <a href="http://kreogist.github.io/Cuties/">Kreogist Dev Team</a>. <br />
