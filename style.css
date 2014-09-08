@@ -1,4 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Exo+2);
+@font-face
+{
+    font-family: "Exo";
+    src: url('fonts/Exo-Regular.otf') format('OpenType');
+}
 @font-face
 {
 	font-family: "sao";
@@ -25,7 +29,7 @@
 body{
     background-color:#434343;
     font-size:18px;
-    font-family: 'Exo 2', "华文细黑";
+    font-family: 'Exo', "华文细黑";
     min-width:980px;
 }
 
@@ -58,7 +62,7 @@ footer a:hover {
 
 p{margin-top:2em;}
 /*==>common class<==*/
-.normal-font{font-family: 'Exo 2',"华文细黑";font-weight:400;}
+.normal-font{font-family: 'Exo',"华文细黑";font-weight:400;}
 .light-font{font-family:"SourceSansPro-Regular", "华文细黑";}
 .exlight-font{font-family:"SourceSansPro-ExtraLight", "华文细黑";}
 .center-text{text-align:center;}
@@ -85,16 +89,6 @@ p{margin-top:2em;}
 }
 .menu-link:active{color:#555;background:rgba(255,193,44,1);}
 
-#dialog-wrapper{
-    z-index:8888;
-    position:absolute;
-    margin:0;
-    padding:0;
-    left:0;
-    top:0;
-    width:0;
-    height:0;
-}
 .dialog{
     z-index:9000;
     display:inline-block;
@@ -119,6 +113,15 @@ p{margin-top:2em;}
     opacity:100;
     transform:scale(1,1);
     }
+.dialog.active~.modal-overlay{
+    position:fixed;
+    z-inde:8000;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background:rgba(0,0,0,0.2);
+}
 .dialog li{list-style:none;}
 .dialog h1{
     font-family:"sao";
