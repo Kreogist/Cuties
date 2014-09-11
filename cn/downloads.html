@@ -36,7 +36,7 @@
   <body>
 
   <div id="head-banner">
-    <span id="banner-title"></span>
+    <span id="banner-title"  onclick="javascript:window.location='http://kreogist.github.io/'"></span>
     <div id="head-banner-link" class="a-effect">
         <a href="https://github.com/Kreogist" target="_blank">Github</a>
         <a href="http://kreogist.longluntan.com/" target="_blank">社区</a>
@@ -80,7 +80,7 @@
 			}
 			</script>
 			<p class="normal-font"><br />所有版本的 Cuties 下载：</p>
-			
+
 			<div class="download-context">
 			<div class="download-context-box">
 			<h1 class="platform">Windows</h1>
@@ -90,13 +90,13 @@
             <h1 class="platform">Mac</h1>
             <a class="menu-link center-text"  onclick=ShowDialog("dialog-mac") >下载</a>
             </div>
-            
+
             <div class="download-context-box">
             <h1 class="platform">Linux</h1>
             <a class="menu-link center-text"  reserve-onclick=ShowDialog("dialog-linux") >即将到来</a>
             </div>
             </div>
-            
+
 			<p class="normal-font"><br />这些版本间的区别</p>
 			<p class="normal-font">带有 MinGW 和 FPC 编译器的 Cuties：提供了一个带有 MinGW 编译器和 FPC 编译器的 Cuties。将使用 MinGW 套件中的 GDB 作为调试器。<br />
 			带有 TDM-GCC 和 FPC 编译器的 Cuties： 提供了一个带有 TDM-GCC MinGW 编译器和 FPC 编译器的 Cuties。将使用 TDM-GCC MinGW 中附带的 GDB 作为调试器。<br />
@@ -121,8 +121,8 @@
     </div>
 
     </div>
-    <div id="dialog-wrapper" >
-    <div id="dialog-windows" class="dialog">
+
+  <div id="dialog-windows" class="dialog">
     <h1>Windows</h1>
     <p>
     <ul class="menu-link-wrapper">
@@ -154,7 +154,7 @@
     </p>
     <h1 class="dialog-bottom"><span class="dialog-button" onclick=HideDialogs()></span></h1>
     </div>
-    <div id="dialog-mac" class="dialog">
+  <div id="dialog-mac" class="dialog">
     <h1>Mac</h1>
     <p>
 	<ul class="menu-link-wrapper">
@@ -165,19 +165,19 @@
 	</p>
     <h1 class="dialog-bottom"><span class="dialog-button" onclick=HideDialogs()></span></h1>
     </div>
-    <div id="dialog-linux" class="dialog">
+  <div id="dialog-linux" class="dialog">
     <h1>Linux</h1>
     <p></p>
     <h1 class="dialog-bottom"><span class="dialog-button" onclick=HideDialogs()></span></h1>
     </div>
-    </div>
-    <div class="modal-overlay" onclick="HideDialogs()"></div>
-	<div class="footer_wrap">
+
+  <div class="modal-overlay" onclick="HideDialogs()"></div>
+  <div class="footer_wrap">
     <footer class="inner">
       <p class="copyright exlight-font">© 2013-2014 <a href="http://kreogist.github.io/Cuties/">Kreogist Dev Team</a>. <br />
   	  <p />
     </footer>
 	</div>
-	
+
 </body>
 </html>

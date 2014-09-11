@@ -235,6 +235,7 @@ p{margin-top:2em;}
     padding-left:13px;
     padding-top:0px;
     padding-bottom:0px;
+    cursor:pointer;
     background:rgba(0,0,0,0.8);
     background-position: center;
     background-image: url("kreogist.png");
@@ -414,7 +415,7 @@ p{margin-top:2em;}
     display:box;
 	box-flex:2;
 	box-orient:horizontal;
-    
+
 	padding-top:0px;
 	padding-left:0px;
 	padding-right:0px;
@@ -428,7 +429,7 @@ p{margin-top:2em;}
 	display:-moz-box;
 	-moz-box-flex:2;
 	-moz-box-orient:vertical;
-	
+
 	/* Safari, Opera, and Chrome */
 	display:-webkit-box;
 	-webkit-box-flex:1;
@@ -437,7 +438,7 @@ p{margin-top:2em;}
     display:box;
 	box-flex:1;
 	box-orient:vertical;
-	
+
 	padding-top:0px;
 	padding-left:20px;
 	padding-right:20px;
@@ -500,7 +501,7 @@ p{margin-top:2em;}
 	box-pack:justify;
 	box-align:stretch;
     box-orient:horizontal;
-    
+
     margin-left:0px;
     margin-right:40px;
     margin-bottom:0px;
@@ -529,7 +530,7 @@ p{margin-top:2em;}
 	box-pack:justify;
 	box-align:stretch;
     box-orient:vertical;
-    
+
     margin-left:8px;
     margin-right:8px;
     }
