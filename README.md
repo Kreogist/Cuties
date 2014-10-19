@@ -2,6 +2,8 @@
 
 Copyright © 2013 Kreogist Dev Team. All rights reserved.
 
+Cuties Kether is a light IDE writen in Python and C++(Qt). It is a rebuild version of Cuties project.
+
 ##Menu
 * Recommended System Requirements
 * Building Prerequisites

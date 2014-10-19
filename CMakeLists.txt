@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.9)
 
-project(cuties)
+project(CutiesKether)
 
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb ")
 set(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O2 -Wall")
@@ -26,7 +26,7 @@ if(BUILD_TESTS)
 endif()
 
 #build documentation
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" OFF)
 if(BUILD_DOCUMENTATION)
 
     include(FindDoxygen)
@@ -67,7 +67,7 @@ if(BUILD_RPM_PACKAGE)
     set(CPACK_GENERATOR ${CPACK_GENERATOR} "RPM")
 endif()
 
-option(BUILD_TGZ_PACKAGE "Create TGZ pakage" ON)
+option(BUILD_TGZ_PACKAGE "Create TGZ pakage" OFF)
 if(BUILD_TGZ_PACKAGE)
 	set(BUILD_PACKAGE ON)
     set(CPACK_GENERATOR ${CPACK_GENERATOR} "TGZ")
